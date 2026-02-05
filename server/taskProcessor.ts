@@ -96,6 +96,18 @@ async function processChunk(
       QA_EXTRACT_PROMPT
     );
     
+    // 调试日志: 记录LLM输出信息
+    console.log(`[Chunk ${chunkIndex}] LLM输出长度: ${llmOutput.length} 字符`);
+    if (chunkIndex === 0) {
+      // 第一个chunk打印前500字符的预览，帮助调试
+      console.log(`[Chunk 0 预览]: ${llmOutput.substring(0, 500)}`);
+    }
+    
+    // 检查是否为空输出
+    if (llmOutput.includes('<empty></empty>') || llmOutput.includes('<empty/>')) {
+      console.log(`[Chunk ${chunkIndex}] LLM返回空结果`);
+    }
+    
     const qaPairs = parseLLMOutput(
       llmOutput,
       ctx.convertedBlocks,
@@ -103,9 +115,17 @@ async function processChunk(
       mode
     );
     
+    // 调试日志: 记录解析结果
+    console.log(`[Chunk ${chunkIndex}] 解析出 ${qaPairs.length} 个QA对`);
+    if (qaPairs.length > 0) {
+      const withQuestion = qaPairs.filter(q => q.question).length;
+      const withAnswer = qaPairs.filter(q => q.answer || q.solution).length;
+      console.log(`[Chunk ${chunkIndex}] 其中: ${withQuestion} 个有题目, ${withAnswer} 个有答案/解答`);
+    }
+    
     return qaPairs;
   } catch (error: any) {
-    console.error(`Failed to process chunk ${chunkIndex}:`, error);
+    console.error(`[Chunk ${chunkIndex}] 处理失败:`, error.message || error);
     throw error;
   }
 }
@@ -157,8 +177,24 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
     }
   }
   
+  // 汇总日志: 记录提取结果统计
+  console.log(`[Summary] 共提取到:`);
+  console.log(`  - 题目数量: ${allQuestions.length}`);
+  console.log(`  - 答案/解答数量: ${allAnswers.length}`);
+  
   // 合并问题和答案
   const merged = mergeQAPairs(allQuestions, allAnswers, false);
+  
+  console.log(`[Summary] 合并后得到 ${merged.length} 个QA对`);
+  
+  // 统计合并结果
+  const withBoth = merged.filter(m => m.question && (m.answer || m.solution)).length;
+  const questionOnly = merged.filter(m => m.question && !m.answer && !m.solution).length;
+  const answerOnly = merged.filter(m => !m.question && (m.answer || m.solution)).length;
+  console.log(`[Summary] 其中:`);
+  console.log(`  - 完整QA对(题目+答案): ${withBoth}`);
+  console.log(`  - 仅有题目: ${questionOnly}`);
+  console.log(`  - 仅有答案: ${answerOnly}`);
   
   return merged;
 }

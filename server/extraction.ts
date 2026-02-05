@@ -245,8 +245,16 @@ export function idsToText(
 ): string {
   if (!idString || idString.trim() === '') return '';
   
+  // 检测LLM是否输出了文本而非ID列表
+  // 如果字符串不像ID列表（包含大量非数字字符），打印警告
+  const cleanedString = idString.replace(/\s/g, '');
+  if (!/^[\d,，]+$/.test(cleanedString) && cleanedString.length > 10) {
+    console.warn(`[Warning] LLM可能输出了文本而非ID: "${idString.substring(0, 50)}..."`);
+  }
+  
   const texts: string[] = [];
-  const idList = idString.replace(/\s/g, '').split(',');
+  // 支持中文逗号分隔
+  const idList = idString.replace(/\s/g, '').replace(/，/g, ',').split(',');
 
   for (const idStr of idList) {
     const id = parseInt(idStr, 10);
@@ -501,21 +509,45 @@ export function mergeQAPairs(
   }
 
   // 匹配问题和答案
+  // 修复: 无论是否匹配到答案，都保留题目
+  // 这样可以确保即使LLM没有正确提取答案，题目也不会丢失
   for (const [key, question] of Array.from(questionMap.entries())) {
     const answer = answerMap.get(key);
-    if (answer) {
-      const labelNum = normalizeLabel(question.label);
-      if (labelNum === null) continue;
+    const labelNum = normalizeLabel(question.label);
+    if (labelNum === null) continue;
 
-      merged.push({
-        label: labelNum,
-        question_chapter_title: question.chapter_title,
-        answer_chapter_title: answer.chapter_title,
-        question: question.question,
-        answer: answer.answer,
-        solution: answer.solution,
-        images: Array.from(new Set([...question.images, ...answer.images]))
-      });
+    merged.push({
+      label: labelNum,
+      question_chapter_title: question.chapter_title,
+      // 如果没有匹配到答案，使用题目的章节标题
+      answer_chapter_title: answer ? answer.chapter_title : question.chapter_title,
+      question: question.question,
+      // 如果没有匹配到答案，answer和solution设为空字符串
+      answer: answer ? answer.answer : '',
+      solution: answer ? answer.solution : '',
+      images: Array.from(new Set([...question.images, ...(answer ? answer.images : [])]))
+    });
+  }
+
+  // 可选: 处理"只有答案没有题目"的情况（如纯答案页）
+  // 遍历answerMap，找出没有被使用的答案
+  for (const [key, answer] of Array.from(answerMap.entries())) {
+    if (!questionMap.has(key)) {
+      const labelNum = normalizeLabel(answer.label);
+      if (labelNum === null) continue;
+      
+      // 只有当答案有实际内容时才添加
+      if (answer.answer || answer.solution) {
+        merged.push({
+          label: labelNum,
+          question_chapter_title: answer.chapter_title,
+          answer_chapter_title: answer.chapter_title,
+          question: '', // 没有题目文本
+          answer: answer.answer,
+          solution: answer.solution,
+          images: answer.images
+        });
+      }
     }
   }
 
