@@ -97,3 +97,21 @@ export const pageProcessingLogs = sqliteTable("page_processing_logs", {
 
 export type PageProcessingLog = typeof pageProcessingLogs.$inferSelect;
 export type InsertPageProcessingLog = typeof pageProcessingLogs.$inferInsert;
+
+/**
+ * 任务日志表 - 记录任务处理过程中的详细日志
+ */
+export const taskLogs = sqliteTable("task_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  taskId: integer("taskId").notNull(),
+  level: text("level", { enum: ["info", "warn", "error", "debug"] }).default("info").notNull(),
+  stage: text("stage", { length: 64 }), // 处理阶段: loading, chunking, extracting, merging, saving
+  chunkIndex: integer("chunkIndex"), // 当前处理的chunk索引
+  totalChunks: integer("totalChunks"), // 总 chunk数
+  message: text("message").notNull(), // 日志消息
+  details: text("details", { mode: "json" }), // 详细信息(JSON)
+  createdAt: integer("createdAt", { mode: "timestamp" }).defaultNow().notNull(),
+});
+
+export type TaskLog = typeof taskLogs.$inferSelect;
+export type InsertTaskLog = typeof taskLogs.$inferInsert;

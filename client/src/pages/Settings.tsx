@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { trpc } from "@/lib/trpc";
-import { Plus, Pencil, Trash2, Loader2, CheckCircle, XCircle, TestTube } from "lucide-react";
+import { Plus, Pencil, Trash2, Loader2, CheckCircle, XCircle, TestTube, ExternalLink, Sparkles } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import {
@@ -27,6 +27,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { API_PRESETS, type APIPreset } from "../../../shared/apiPresets";
 
 interface ConfigForm {
   name: string;
@@ -53,6 +61,8 @@ export default function Settings() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<ConfigForm>(defaultForm);
   const [testResult, setTestResult] = useState<{ success: boolean; message: string } | null>(null);
+  const [selectedPreset, setSelectedPreset] = useState<string>("");
+  const [selectedModel, setSelectedModel] = useState<string>("");
   
   const utils = trpc.useUtils();
   const { data: configs, isLoading } = trpc.llmConfig.list.useQuery();
@@ -62,6 +72,8 @@ export default function Settings() {
       toast.success("配置创建成功");
       setIsDialogOpen(false);
       setForm(defaultForm);
+      setSelectedPreset("");
+      setSelectedModel("");
       utils.llmConfig.list.invalidate();
     },
     onError: (error) => toast.error(error.message),
@@ -73,6 +85,8 @@ export default function Settings() {
       setIsDialogOpen(false);
       setForm(defaultForm);
       setEditingId(null);
+      setSelectedPreset("");
+      setSelectedModel("");
       utils.llmConfig.list.invalidate();
     },
     onError: (error) => toast.error(error.message),
@@ -105,6 +119,8 @@ export default function Settings() {
     setEditingId(null);
     setForm(defaultForm);
     setTestResult(null);
+    setSelectedPreset("");
+    setSelectedModel("");
     setIsDialogOpen(true);
   };
 
@@ -120,7 +136,53 @@ export default function Settings() {
       isDefault: config.isDefault,
     });
     setTestResult(null);
+    setSelectedPreset("custom");
+    setSelectedModel("");
     setIsDialogOpen(true);
+  };
+
+  const handlePresetChange = (presetId: string) => {
+    setSelectedPreset(presetId);
+    setSelectedModel("");
+    setTestResult(null);
+    
+    const preset = API_PRESETS.find(p => p.id === presetId);
+    if (preset && presetId !== "custom") {
+      // 自动填充预设配置
+      const recommendedModel = preset.models.find(m => m.recommended) || preset.models[0];
+      setForm({
+        ...form,
+        name: `${preset.name} - ${recommendedModel.name}`,
+        apiUrl: preset.apiUrl,
+        modelName: recommendedModel.id,
+      });
+      setSelectedModel(recommendedModel.id);
+    } else {
+      // 自定义配置,清空
+      setForm({
+        ...form,
+        name: "",
+        apiUrl: "",
+        modelName: "",
+      });
+    }
+  };
+
+  const handleModelChange = (modelId: string) => {
+    setSelectedModel(modelId);
+    setTestResult(null);
+    
+    const preset = API_PRESETS.find(p => p.id === selectedPreset);
+    if (preset) {
+      const model = preset.models.find(m => m.id === modelId);
+      if (model) {
+        setForm({
+          ...form,
+          name: `${preset.name} - ${model.name}`,
+          modelName: model.id,
+        });
+      }
+    }
   };
 
   const handleSubmit = () => {
@@ -161,6 +223,8 @@ export default function Settings() {
     });
   };
 
+  const currentPreset = API_PRESETS.find(p => p.id === selectedPreset);
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -175,9 +239,45 @@ export default function Settings() {
           </Button>
         </div>
 
+        {/* 推荐配置卡片 */}
+        <Card className="border-primary/20 bg-primary/5">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Sparkles className="h-5 w-5 text-primary" />
+              推荐配置
+            </CardTitle>
+            <CardDescription>
+              以下平台支持视觉理解能力,适合数学题目提取任务
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {API_PRESETS.filter(p => p.id !== "custom" && p.models.some(m => m.supportsVision)).slice(0, 6).map((preset) => {
+                const visionModel = preset.models.find(m => m.supportsVision && m.recommended) || preset.models.find(m => m.supportsVision);
+                return (
+                  <div
+                    key={preset.id}
+                    className="flex items-center justify-between p-3 bg-background rounded-lg border cursor-pointer hover:border-primary/50 transition-colors"
+                    onClick={() => {
+                      handleOpenCreate();
+                      setTimeout(() => handlePresetChange(preset.id), 100);
+                    }}
+                  >
+                    <div className="min-w-0">
+                      <p className="font-medium truncate">{preset.name}</p>
+                      <p className="text-xs text-muted-foreground truncate">{visionModel?.name}</p>
+                    </div>
+                    <Plus className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
-            <CardTitle>LLM API配置</CardTitle>
+            <CardTitle>已配置的API</CardTitle>
             <CardDescription>
               配置用于题目提取的视觉语言模型API。支持OpenAI兼容的API接口。
             </CardDescription>
@@ -189,7 +289,7 @@ export default function Settings() {
               </div>
             ) : !configs || configs.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-muted-foreground mb-4">暂无配置</p>
+                <p className="text-muted-foreground mb-4">暂无配置,请点击上方推荐配置快速添加</p>
                 <Button onClick={handleOpenCreate}>
                   <Plus className="mr-2 h-4 w-4" />
                   添加第一个配置
@@ -264,7 +364,7 @@ export default function Settings() {
 
         {/* 配置对话框 */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingId ? "编辑配置" : "添加配置"}</DialogTitle>
               <DialogDescription>
@@ -273,6 +373,98 @@ export default function Settings() {
             </DialogHeader>
             
             <div className="space-y-4 py-4">
+              {/* 预设选择 */}
+              {!editingId && (
+                <div className="space-y-2">
+                  <Label>选择API供应商</Label>
+                  <Select value={selectedPreset} onValueChange={handlePresetChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="选择预设配置或自定义..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="custom">
+                        <span className="font-medium">自定义配置</span>
+                      </SelectItem>
+                      <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                        国内平台
+                      </div>
+                      {API_PRESETS.filter(p => ["siliconflow", "aliyun-bailian", "zhipu", "moonshot", "deepseek", "baidu-qianfan"].includes(p.id)).map((preset) => (
+                        <SelectItem key={preset.id} value={preset.id}>
+                          <div className="flex items-center gap-2">
+                            <span>{preset.name}</span>
+                            {preset.models.some(m => m.supportsVision) && (
+                              <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">视觉</span>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                      <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                        国际平台
+                      </div>
+                      {API_PRESETS.filter(p => ["openai", "azure-openai", "anthropic", "google-gemini"].includes(p.id)).map((preset) => (
+                        <SelectItem key={preset.id} value={preset.id}>
+                          <div className="flex items-center gap-2">
+                            <span>{preset.name}</span>
+                            {preset.models.some(m => m.supportsVision) && (
+                              <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">视觉</span>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  
+                  {/* 预设说明 */}
+                  {currentPreset && selectedPreset !== "custom" && (
+                    <div className="p-3 bg-muted/50 rounded-lg text-sm">
+                      <p className="text-muted-foreground">{currentPreset.description}</p>
+                      {currentPreset.docUrl && (
+                        <a
+                          href={currentPreset.docUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 text-primary hover:underline mt-2"
+                        >
+                          查看文档 <ExternalLink className="h-3 w-3" />
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* 模型选择 */}
+              {selectedPreset && selectedPreset !== "custom" && currentPreset && (
+                <div className="space-y-2">
+                  <Label>选择模型</Label>
+                  <Select value={selectedModel} onValueChange={handleModelChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="选择模型..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentPreset.models.map((model) => (
+                        <SelectItem key={model.id} value={model.id}>
+                          <div className="flex items-center gap-2">
+                            <span>{model.name}</span>
+                            {model.supportsVision && (
+                              <span className="text-xs bg-green-100 text-green-700 px-1.5 py-0.5 rounded">视觉</span>
+                            )}
+                            {model.recommended && (
+                              <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">推荐</span>
+                            )}
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {selectedModel && (
+                    <p className="text-xs text-muted-foreground">
+                      {currentPreset.models.find(m => m.id === selectedModel)?.description}
+                    </p>
+                  )}
+                </div>
+              )}
+
               <div className="space-y-2">
                 <Label htmlFor="name">配置名称 *</Label>
                 <Input
@@ -290,6 +482,7 @@ export default function Settings() {
                   value={form.apiUrl}
                   onChange={(e) => setForm({ ...form, apiUrl: e.target.value })}
                   placeholder="https://api.openai.com/v1"
+                  disabled={selectedPreset !== "custom" && selectedPreset !== ""}
                 />
               </div>
               
@@ -302,7 +495,7 @@ export default function Settings() {
                   type="password"
                   value={form.apiKey}
                   onChange={(e) => setForm({ ...form, apiKey: e.target.value })}
-                  placeholder={editingId ? "留空保持原密钥" : "sk-..."}
+                  placeholder={currentPreset?.keyPlaceholder || (editingId ? "留空保持原密钥" : "sk-...")}
                 />
               </div>
               
@@ -313,6 +506,7 @@ export default function Settings() {
                   value={form.modelName}
                   onChange={(e) => setForm({ ...form, modelName: e.target.value })}
                   placeholder="gpt-4o"
+                  disabled={selectedPreset !== "custom" && selectedPreset !== "" && selectedModel !== ""}
                 />
               </div>
               

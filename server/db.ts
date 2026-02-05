@@ -5,7 +5,8 @@ import {
   InsertUser, users, 
   llmConfigs, InsertLLMConfig, LLMConfig,
   extractionTasks, InsertExtractionTask, ExtractionTask,
-  pageProcessingLogs, InsertPageProcessingLog, PageProcessingLog
+  pageProcessingLogs, InsertPageProcessingLog, PageProcessingLog,
+  taskLogs, InsertTaskLog, TaskLog
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -272,4 +273,60 @@ export async function getFailedPageLogs(taskId: number): Promise<PageProcessingL
       eq(pageProcessingLogs.status, "failed")
     ))
     .orderBy(pageProcessingLogs.pageIndex);
+}
+
+// ==================== Task Log Functions ====================
+
+export async function createTaskLog(log: InsertTaskLog): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(taskLogs).values(log).returning({ id: taskLogs.id });
+  return result[0].id;
+}
+
+export async function getTaskLogs(taskId: number, limit: number = 100): Promise<TaskLog[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(taskLogs)
+    .where(eq(taskLogs.taskId, taskId))
+    .orderBy(desc(taskLogs.createdAt))
+    .limit(limit);
+}
+
+export async function deleteTaskLogs(taskId: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.delete(taskLogs).where(eq(taskLogs.taskId, taskId));
+}
+
+/**
+ * 便捷的日志记录函数
+ */
+export async function logTaskProgress(
+  taskId: number,
+  level: "info" | "warn" | "error" | "debug",
+  stage: string,
+  message: string,
+  details?: Record<string, unknown>,
+  chunkIndex?: number,
+  totalChunks?: number
+): Promise<void> {
+  try {
+    await createTaskLog({
+      taskId,
+      level,
+      stage,
+      message,
+      details: details as any,
+      chunkIndex,
+      totalChunks,
+      createdAt: new Date()
+    });
+  } catch (error) {
+    // 日志记录失败不应影响主流程
+    console.error("Failed to log task progress:", error);
+  }
 }

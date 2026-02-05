@@ -76,7 +76,8 @@ describe("ID to Text Conversion", () => {
 
   it("should convert multiple IDs to text", () => {
     const result = idsToText("1,3", blocks);
-    expect(result).toBe("求解方程\nx + 2 = 5");
+    // 优化3: 智能拼接 - 短内容用空格连接
+    expect(result).toBe("求解方程 x + 2 = 5");
   });
 
   it("should handle image blocks", () => {

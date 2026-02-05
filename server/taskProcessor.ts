@@ -10,7 +10,9 @@ import {
   getPageProcessingLogsByTask,
   updatePageProcessingLog,
   getLLMConfigById,
-  getPendingPageLogs
+  getPendingPageLogs,
+  logTaskProgress,
+  deleteTaskLogs
 } from "./db";
 import { storageGet, storagePut } from "./storage";
 import {
@@ -39,6 +41,7 @@ interface ProcessingContext {
   imagesFolder: string;
   contentListPath: string;
   convertedBlocks: ConvertedBlock[];
+  totalChunks: number;
 }
 
 // ============= 核心处理逻辑 =============
@@ -46,7 +49,12 @@ interface ProcessingContext {
 /**
  * 加载并转换MinerU的content_list.json
  */
-async function loadAndConvertContentList(contentListPath: string): Promise<ConvertedBlock[]> {
+async function loadAndConvertContentList(
+  contentListPath: string,
+  taskId: number
+): Promise<ConvertedBlock[]> {
+  await logTaskProgress(taskId, "info", "loading", `开始加载content_list.json: ${contentListPath}`);
+  
   try {
     // 从S3获取content_list.json
     const { url } = await storageGet(contentListPath);
@@ -61,7 +69,7 @@ async function loadAndConvertContentList(contentListPath: string): Promise<Conve
        contentList = JSON.parse(fileContent);
     } else {
        // 远程URL，使用axios获取
-       const response = await axios.get(url, { timeout: 30000 });
+       const response = await axios.get(url, { timeout: 60000 });
        contentList = response.data;
     }
     
@@ -69,14 +77,24 @@ async function loadAndConvertContentList(contentListPath: string): Promise<Conve
       throw new Error("content_list.json should be an array");
     }
     
-    return convertMinerUContentList(contentList);
+    await logTaskProgress(taskId, "info", "loading", `成功加载content_list.json, 包含 ${contentList.length} 个原始内容块`);
+    
+    const convertedBlocks = convertMinerUContentList(contentList);
+    
+    await logTaskProgress(taskId, "info", "loading", `内容转换完成, 生成 ${convertedBlocks.length} 个处理块`, {
+      originalCount: contentList.length,
+      convertedCount: convertedBlocks.length
+    });
+    
+    return convertedBlocks;
   } catch (error: any) {
-    console.error(`Failed to load content_list.json: ${contentListPath}`, error);
+    await logTaskProgress(taskId, "error", "loading", `加载content_list.json失败: ${error.message}`, {
+      path: contentListPath,
+      error: error.message
+    });
     throw new Error(`无法加载content_list.json: ${error.message}`);
   }
 }
-
-// 使用extraction.ts中带Overlap的chunkContentBlocks函数
 
 /**
  * 处理单个内容块chunk
@@ -88,6 +106,17 @@ async function processChunk(
   mode: 'question' | 'answer' = 'question'
 ): Promise<ExtractedQAPair[]> {
   const chunkJson = JSON.stringify(chunk, null, 2);
+  const startTime = Date.now();
+  
+  await logTaskProgress(
+    ctx.taskId, 
+    "info", 
+    "extracting", 
+    `开始处理Chunk ${chunkIndex + 1}/${ctx.totalChunks}, 包含 ${chunk.length} 个内容块`,
+    { chunkSize: chunk.length, jsonLength: chunkJson.length },
+    chunkIndex,
+    ctx.totalChunks
+  );
   
   try {
     const llmOutput = await callLLMForTextExtraction(
@@ -96,17 +125,20 @@ async function processChunk(
       QA_EXTRACT_PROMPT
     );
     
-    // 调试日志: 记录LLM输出信息
-    console.log(`[Chunk ${chunkIndex}] LLM输出长度: ${llmOutput.length} 字符`);
-    if (chunkIndex === 0) {
-      // 第一个chunk打印前500字符的预览，帮助调试
-      console.log(`[Chunk 0 预览]: ${llmOutput.substring(0, 500)}`);
-    }
+    const llmTime = Date.now() - startTime;
     
     // 检查是否为空输出
-    if (llmOutput.includes('<empty></empty>') || llmOutput.includes('<empty/>')) {
-      console.log(`[Chunk ${chunkIndex}] LLM返回空结果`);
-    }
+    const isEmpty = llmOutput.includes('<empty></empty>') || llmOutput.includes('<empty/>');
+    
+    await logTaskProgress(
+      ctx.taskId,
+      isEmpty ? "warn" : "debug",
+      "extracting",
+      `Chunk ${chunkIndex + 1} LLM响应完成, 耗时 ${(llmTime / 1000).toFixed(1)}s, 输出 ${llmOutput.length} 字符${isEmpty ? ' (空结果)' : ''}`,
+      { llmTime, outputLength: llmOutput.length, isEmpty },
+      chunkIndex,
+      ctx.totalChunks
+    );
     
     const qaPairs = parseLLMOutput(
       llmOutput,
@@ -115,17 +147,36 @@ async function processChunk(
       mode
     );
     
-    // 调试日志: 记录解析结果
-    console.log(`[Chunk ${chunkIndex}] 解析出 ${qaPairs.length} 个QA对`);
-    if (qaPairs.length > 0) {
-      const withQuestion = qaPairs.filter(q => q.question).length;
-      const withAnswer = qaPairs.filter(q => q.answer || q.solution).length;
-      console.log(`[Chunk ${chunkIndex}] 其中: ${withQuestion} 个有题目, ${withAnswer} 个有答案/解答`);
-    }
+    // 统计结果
+    const withQuestion = qaPairs.filter(q => q.question).length;
+    const withAnswer = qaPairs.filter(q => q.answer || q.solution).length;
+    
+    await logTaskProgress(
+      ctx.taskId,
+      "info",
+      "extracting",
+      `Chunk ${chunkIndex + 1} 解析完成: 提取 ${qaPairs.length} 个QA对 (${withQuestion} 题目, ${withAnswer} 答案)`,
+      { 
+        totalPairs: qaPairs.length, 
+        questions: withQuestion, 
+        answers: withAnswer,
+        processingTime: Date.now() - startTime
+      },
+      chunkIndex,
+      ctx.totalChunks
+    );
     
     return qaPairs;
   } catch (error: any) {
-    console.error(`[Chunk ${chunkIndex}] 处理失败:`, error.message || error);
+    await logTaskProgress(
+      ctx.taskId,
+      "error",
+      "extracting",
+      `Chunk ${chunkIndex + 1} 处理失败: ${error.message}`,
+      { error: error.message, stack: error.stack },
+      chunkIndex,
+      ctx.totalChunks
+    );
     throw error;
   }
 }
@@ -136,14 +187,29 @@ async function processChunk(
 async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]> {
   // 将内容块分组
   const chunks = chunkContentBlocks(ctx.convertedBlocks);
-  console.log(`Split content into ${chunks.length} chunks`);
+  ctx.totalChunks = chunks.length;
+  
+  await logTaskProgress(
+    ctx.taskId,
+    "info",
+    "chunking",
+    `内容分块完成: 共 ${chunks.length} 个Chunk, 总计 ${ctx.convertedBlocks.length} 个内容块`,
+    { 
+      totalChunks: chunks.length, 
+      totalBlocks: ctx.convertedBlocks.length,
+      avgBlocksPerChunk: Math.round(ctx.convertedBlocks.length / chunks.length)
+    }
+  );
   
   const allQuestions: ExtractedQAPair[] = [];
   const allAnswers: ExtractedQAPair[] = [];
+  let failedChunks = 0;
   
   // 处理每个chunk
   for (let i = 0; i < chunks.length; i++) {
     if (shouldStopTask(ctx.taskId)) {
+      const reason = isTaskPaused(ctx.taskId) ? "用户暂停" : "用户取消";
+      await logTaskProgress(ctx.taskId, "warn", "extracting", `任务被${reason}, 已处理 ${i}/${chunks.length} 个Chunk`);
       throw new Error(isTaskPaused(ctx.taskId) ? "Task paused" : "Task cancelled");
     }
     
@@ -164,7 +230,6 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
       }
       
       // 更新进度
-      const progress = Math.round(((i + 1) / chunks.length) * 100);
       await updateExtractionTask(ctx.taskId, {
         processedPages: i + 1,
         currentPage: i,
@@ -172,29 +237,56 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
       });
       
     } catch (error: any) {
-      console.error(`Chunk ${i} processing failed:`, error);
-      // 继续处理下一个chunk
+      failedChunks++;
+      // 继续处理下一个chunk,但记录失败
+      await logTaskProgress(
+        ctx.taskId,
+        "warn",
+        "extracting",
+        `Chunk ${i + 1} 处理失败,继续处理下一个: ${error.message}`,
+        { chunkIndex: i, error: error.message },
+        i,
+        chunks.length
+      );
     }
   }
   
-  // 汇总日志: 记录提取结果统计
-  console.log(`[Summary] 共提取到:`);
-  console.log(`  - 题目数量: ${allQuestions.length}`);
-  console.log(`  - 答案/解答数量: ${allAnswers.length}`);
+  // 汇总日志
+  await logTaskProgress(
+    ctx.taskId,
+    "info",
+    "merging",
+    `所有Chunk处理完成: 成功 ${chunks.length - failedChunks}/${chunks.length}, 提取 ${allQuestions.length} 题目, ${allAnswers.length} 答案`,
+    {
+      totalChunks: chunks.length,
+      successChunks: chunks.length - failedChunks,
+      failedChunks,
+      totalQuestions: allQuestions.length,
+      totalAnswers: allAnswers.length
+    }
+  );
   
   // 合并问题和答案
   const merged = mergeQAPairs(allQuestions, allAnswers, false);
-  
-  console.log(`[Summary] 合并后得到 ${merged.length} 个QA对`);
   
   // 统计合并结果
   const withBoth = merged.filter(m => m.question && (m.answer || m.solution)).length;
   const questionOnly = merged.filter(m => m.question && !m.answer && !m.solution).length;
   const answerOnly = merged.filter(m => !m.question && (m.answer || m.solution)).length;
-  console.log(`[Summary] 其中:`);
-  console.log(`  - 完整QA对(题目+答案): ${withBoth}`);
-  console.log(`  - 仅有题目: ${questionOnly}`);
-  console.log(`  - 仅有答案: ${answerOnly}`);
+  
+  await logTaskProgress(
+    ctx.taskId,
+    "info",
+    "merging",
+    `问答合并完成: 共 ${merged.length} 个QA对 (完整配对: ${withBoth}, 仅题目: ${questionOnly}, 仅答案: ${answerOnly})`,
+    {
+      totalMerged: merged.length,
+      completeQA: withBoth,
+      questionOnly,
+      answerOnly,
+      matchRate: allQuestions.length > 0 ? (withBoth / allQuestions.length * 100).toFixed(1) + '%' : 'N/A'
+    }
+  );
   
   return merged;
 }
@@ -206,12 +298,22 @@ export async function executeTaskProcessing(taskId: number, userId: number): Pro
   // 注册任务状态
   registerTask(taskId);
   
+  // 清除旧的日志
+  await deleteTaskLogs(taskId);
+  
+  await logTaskProgress(taskId, "info", "init", "任务开始执行");
+  
   try {
     // 获取任务信息
     const task = await getExtractionTaskById(taskId, userId);
     if (!task) {
       throw new Error("Task not found");
     }
+    
+    await logTaskProgress(taskId, "info", "init", `任务信息: ${task.name}`, {
+      taskName: task.name,
+      sourceFolder: task.sourceFolder
+    });
     
     // 获取LLM配置
     if (!task.configId) {
@@ -222,6 +324,12 @@ export async function executeTaskProcessing(taskId: number, userId: number): Pro
     if (!config) {
       throw new Error("LLM config not found");
     }
+    
+    await logTaskProgress(taskId, "info", "init", `使用LLM配置: ${config.name} (${config.modelName})`, {
+      configName: config.name,
+      modelName: config.modelName,
+      apiUrl: config.apiUrl.replace(/\/[^/]*$/, '/***') // 隐藏敏感部分
+    });
     
     // 更新任务状态为处理中
     await updateExtractionTask(taskId, {
@@ -234,9 +342,10 @@ export async function executeTaskProcessing(taskId: number, userId: number): Pro
     const imagesFolder = task.imagesFolder || `${task.sourceFolder}/images`;
     
     // 加载并转换content_list.json
-    console.log(`Loading content list from: ${contentListPath}`);
-    const convertedBlocks = await loadAndConvertContentList(contentListPath);
-    console.log(`Loaded ${convertedBlocks.length} content blocks`);
+    const convertedBlocks = await loadAndConvertContentList(contentListPath, taskId);
+    
+    // 预计算chunk数量
+    const chunks = chunkContentBlocks(convertedBlocks);
     
     const ctx: ProcessingContext = {
       taskId,
@@ -251,20 +360,21 @@ export async function executeTaskProcessing(taskId: number, userId: number): Pro
       sourceFolder: task.sourceFolder,
       imagesFolder,
       contentListPath,
-      convertedBlocks
+      convertedBlocks,
+      totalChunks: chunks.length
     };
     
     // 更新总页数(使用chunk数量)
-    const chunks = chunkContentBlocks(convertedBlocks);
     await updateExtractionTask(taskId, {
       totalPages: chunks.length
     });
     
     // 执行提取
     const mergedQAPairs = await executeExtraction(ctx);
-    console.log(`Extracted ${mergedQAPairs.length} QA pairs`);
     
     // 生成结果文件
+    await logTaskProgress(taskId, "info", "saving", "开始生成结果文件...");
+    
     const { json: jsonOutput, markdown: mdOutput } = generateResults(mergedQAPairs, imagesFolder);
     
     // 上传结果到S3
@@ -273,6 +383,12 @@ export async function executeTaskProcessing(taskId: number, userId: number): Pro
     
     await storagePut(resultJsonKey, Buffer.from(JSON.stringify(jsonOutput, null, 2)), "application/json");
     await storagePut(resultMdKey, Buffer.from(mdOutput), "text/markdown");
+    
+    await logTaskProgress(taskId, "info", "saving", "结果文件已保存", {
+      jsonPath: resultJsonKey,
+      mdPath: resultMdKey,
+      totalQAPairs: mergedQAPairs.length
+    });
     
     // 更新任务为完成状态
     await updateExtractionTask(taskId, {
@@ -285,12 +401,19 @@ export async function executeTaskProcessing(taskId: number, userId: number): Pro
       estimatedTimeRemaining: 0
     });
     
-    console.log(`Task ${taskId} completed successfully`);
+    await logTaskProgress(taskId, "info", "completed", `任务完成! 共提取 ${mergedQAPairs.length} 个QA对`);
     
   } catch (error: any) {
-    console.error(`Task ${taskId} failed:`, error);
-    
     const status = error.message === "Task paused" ? "paused" : "failed";
+    
+    await logTaskProgress(
+      taskId,
+      status === "failed" ? "error" : "warn",
+      status,
+      status === "failed" ? `任务失败: ${error.message}` : "任务已暂停",
+      { error: error.message, stack: error.stack }
+    );
+    
     await updateExtractionTask(taskId, {
       status,
       errorMessage: status === "failed" ? (error.message || "Unknown error") : null

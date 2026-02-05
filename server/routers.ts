@@ -20,7 +20,9 @@ import {
   getPageProcessingLogsByTask,
   updatePageProcessingLog,
   getPendingPageLogs,
-  getFailedPageLogs
+  getFailedPageLogs,
+  getTaskLogs,
+  deleteTaskLogs
 } from "./db";
 import { storagePut, storageGet } from "./storage";
 import { pauseTask, resumeTask, cancelTask, isTaskPaused } from "./extraction";
@@ -172,6 +174,21 @@ const taskRouter = router({
         throw new TRPCError({ code: "NOT_FOUND", message: "任务不存在" });
       }
       return await getPageProcessingLogsByTask(input.taskId);
+    }),
+  
+  // 获取任务的详细处理日志
+  getLogs: protectedProcedure
+    .input(z.object({ 
+      taskId: z.number(),
+      limit: z.number().min(1).max(500).default(100)
+    }))
+    .query(async ({ ctx, input }) => {
+      // 先验证任务属于当前用户
+      const task = await getExtractionTaskById(input.taskId, ctx.user.id);
+      if (!task) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "任务不存在" });
+      }
+      return await getTaskLogs(input.taskId, input.limit);
     }),
   
   // 创建新任务

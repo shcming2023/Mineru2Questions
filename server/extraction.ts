@@ -237,6 +237,10 @@ export function convertMinerUContentList(contentList: any[]): ConvertedBlock[] {
 
 /**
  * 将ID列表转换回原始文本
+ * 
+ * 优化3: 智能文本拼接
+ * - 行内公式(短内容)使用空格连接而非换行
+ * - 避免句子被打断的问题
  */
 export function idsToText(
   idString: string, 
@@ -246,15 +250,16 @@ export function idsToText(
   if (!idString || idString.trim() === '') return '';
   
   // 检测LLM是否输出了文本而非ID列表
-  // 如果字符串不像ID列表（包含大量非数字字符），打印警告
   const cleanedString = idString.replace(/\s/g, '');
   if (!/^[\d,，]+$/.test(cleanedString) && cleanedString.length > 10) {
     console.warn(`[Warning] LLM可能输出了文本而非ID: "${idString.substring(0, 50)}..."`);
   }
   
-  const texts: string[] = [];
   // 支持中文逗号分隔
   const idList = idString.replace(/\s/g, '').replace(/，/g, ',').split(',');
+  
+  let resultText = '';
+  let prevBlock: ConvertedBlock | null = null;
 
   for (const idStr of idList) {
     const id = parseInt(idStr, 10);
@@ -263,16 +268,46 @@ export function idsToText(
     const block = blocks[id];
     if (!block) continue;
 
+    let content = '';
     if (block.text) {
-      texts.push(block.text);
+      content = block.text;
     } else if (block.img_path) {
       const imgName = block.img_path.split('/').pop() || block.img_path;
       const caption = block.image_caption || 'image';
-      texts.push(`![${caption}](${imagePrefix}/${imgName})`);
+      content = `![${caption}](${imagePrefix}/${imgName})`;
     }
+    
+    if (!content) continue;
+
+    // 智能拼接逻辑
+    if (resultText.length > 0) {
+      // 判断是否为行内公式或短内容
+      // 启发式规则: 公式类型、以$开头、或内容很短且不含换行
+      const isInlineContent = 
+        block.type === 'equation' || 
+        block.text?.startsWith('$') ||
+        (content.length < 50 && !content.includes('\n'));
+      
+      const prevIsInlineContent = prevBlock && (
+        prevBlock.type === 'equation' || 
+        prevBlock.text?.startsWith('$') ||
+        (prevBlock.text && prevBlock.text.length < 50 && !prevBlock.text.includes('\n'))
+      );
+      
+      // 如果当前或前一个是行内内容,用空格连接
+      if (isInlineContent || prevIsInlineContent) {
+        resultText += ' ' + content;
+      } else {
+        resultText += '\n' + content;
+      }
+    } else {
+      resultText = content;
+    }
+    
+    prevBlock = block;
   }
 
-  return texts.join('\n');
+  return resultText;
 }
 
 /**
@@ -404,10 +439,11 @@ export function normalizeTitle(title: string, strictMatch: boolean = false): str
 }
 
 /**
- * 规范化题号
+ * 规范化题号 - 用于排序
+ * 提取第一个数字用于排序比较
  */
 export function normalizeLabel(label: string): number | null {
-  // 提取数字部分
+  // 提取数字部分用于排序
   const match = label.match(/\d+/);
   if (match) {
     return parseInt(match[0], 10);
@@ -415,7 +451,48 @@ export function normalizeLabel(label: string): number | null {
   return null;
 }
 
+/**
+ * 获取题号的唯一标识Key
+ * 
+ * 优化1: 支持复合题号(1.1, 1.2, 1-2等)避免Hash冲突
+ * - "1.1" -> "1.1", "1.2" -> "1.2" (不会冲突)
+ * - "例1" -> "1", "习题1" -> "1"
+ * - 保留数字、点、横杠等用于区分
+ */
+export function getLabelKey(label: string): string {
+  // 移除空格
+  let normalized = label.replace(/\s/g, '');
+  // 去除前缀非数字字符 (如 "例", "习题", "Exercise")
+  normalized = normalized.replace(/^[^\d]+/, '');
+  // 如果结果为空,返回原始label作为兜底
+  return normalized || label;
+}
+
 // ============= 问答合并 =============
+
+/**
+ * 优化2: 择优保留策略
+ * 判断是否应该用新数据替换旧数据
+ * 
+ * 规则:
+ * 1. 新数据有更完整的内容(更长的question/solution)
+ * 2. 新数据有更多的字段填充
+ */
+function shouldReplaceQAPair(existing: ExtractedQAPair, newData: ExtractedQAPair): boolean {
+  // 计算内容完整度分数
+  const existingScore = 
+    (existing.question?.length || 0) + 
+    (existing.answer?.length || 0) + 
+    (existing.solution?.length || 0);
+  
+  const newScore = 
+    (newData.question?.length || 0) + 
+    (newData.answer?.length || 0) + 
+    (newData.solution?.length || 0);
+  
+  // 新数据更完整时替换
+  return newScore > existingScore;
+}
 
 /**
  * 合并问题和答案列表
@@ -455,7 +532,9 @@ export function mergeQAPairs(
     lastQuestionLabel = labelNum;
 
     const normalizedTitle = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
-    const key = `${normalizedTitle}:${labelNum}`;
+    // 优化1: 使用getLabelKey生成更精确的Key,支持复合题号
+    const labelKey = getLabelKey(q.label);
+    const key = `${normalizedTitle}:${labelKey}`;
 
     // 如果问题已经有答案,直接输出(已完整的题目)
     if (q.answer || q.solution) {
@@ -470,8 +549,12 @@ export function mergeQAPairs(
       });
     } else {
       // 未完整的题目,加入待匹配Map
-      // 如果已存在,不覆盖(保留第一个,因为Overlap可能导致重复)
-      if (!questionMap.has(key)) {
+      // 优化2: 使用"择优保留"策略,保留更完整的版本
+      const existing = questionMap.get(key);
+      if (!existing) {
+        questionMap.set(key, { ...q, chapter_title: normalizedTitle });
+      } else if (shouldReplaceQAPair(existing, q)) {
+        // 新数据更完整,替换旧数据
         questionMap.set(key, { ...q, chapter_title: normalizedTitle });
       }
     }
@@ -491,7 +574,9 @@ export function mergeQAPairs(
     lastAnswerLabel = labelNum;
 
     const normalizedTitle = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
-    const key = `${normalizedTitle}:${labelNum}`;
+    // 优化1: 使用getLabelKey生成更精确的Key
+    const labelKey = getLabelKey(a.label);
+    const key = `${normalizedTitle}:${labelKey}`;
 
     // 动态更新,防止错误的重复label覆盖掉之前的solution或answer
     const existing = answerMap.get(key);
