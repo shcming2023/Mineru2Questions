@@ -101,7 +101,6 @@ jspm_packages/
 tmp/
 temp/
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
+# Local uploads
+server/uploads/*
+!server/uploads/.gitkeep

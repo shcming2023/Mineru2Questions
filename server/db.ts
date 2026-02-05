@@ -1,5 +1,6 @@
 import { eq, and, desc } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
+import { drizzle } from "drizzle-orm/better-sqlite3";
+import Database from "better-sqlite3";
 import { 
   InsertUser, users, 
   llmConfigs, InsertLLMConfig, LLMConfig,
@@ -13,7 +14,8 @@ let _db: ReturnType<typeof drizzle> | null = null;
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      const sqlite = new Database(process.env.DATABASE_URL);
+      _db = drizzle(sqlite);
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
@@ -74,7 +76,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       updateSet.lastSignedIn = new Date();
     }
 
-    await db.insert(users).values(values).onDuplicateKeyUpdate({
+    await db.insert(users).values(values).onConflictDoUpdate({
+      target: users.openId,
       set: updateSet,
     });
   } catch (error) {
@@ -108,8 +111,8 @@ export async function createLLMConfig(config: InsertLLMConfig): Promise<number> 
       .where(eq(llmConfigs.userId, config.userId));
   }
   
-  const result = await db.insert(llmConfigs).values(config);
-  return result[0].insertId;
+  const result = await db.insert(llmConfigs).values(config).returning({ id: llmConfigs.id });
+  return result[0].id;
 }
 
 export async function getLLMConfigsByUser(userId: number): Promise<LLMConfig[]> {
@@ -173,8 +176,8 @@ export async function createExtractionTask(task: InsertExtractionTask): Promise<
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   
-  const result = await db.insert(extractionTasks).values(task);
-  return result[0].insertId;
+  const result = await db.insert(extractionTasks).values(task).returning({ id: extractionTasks.id });
+  return result[0].id;
 }
 
 export async function getExtractionTasksByUser(userId: number): Promise<ExtractionTask[]> {

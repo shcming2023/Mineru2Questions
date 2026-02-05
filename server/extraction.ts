@@ -580,8 +580,9 @@ export async function callLLMForTextExtraction(
   contentJson: string,
   systemPrompt: string = QA_EXTRACT_PROMPT
 ): Promise<string> {
+  const baseUrl = config.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
   const response = await axios.post(
-    `${config.apiUrl}/chat/completions`,
+    `${baseUrl}/chat/completions`,
     {
       model: config.modelName,
       messages: [
@@ -641,8 +642,9 @@ export async function callVLMForImageExtraction(
     }
   }
 
+  const baseUrl = config.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
   const response = await axios.post(
-    `${config.apiUrl}/chat/completions`,
+    `${baseUrl}/chat/completions`,
     {
       model: config.modelName,
       messages: [{ role: "user", content }],

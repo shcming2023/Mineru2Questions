@@ -50,8 +50,20 @@ async function loadAndConvertContentList(contentListPath: string): Promise<Conve
   try {
     // 从S3获取content_list.json
     const { url } = await storageGet(contentListPath);
-    const response = await axios.get(url, { timeout: 30000 });
-    const contentList = response.data;
+    let contentList;
+    
+    if (url.startsWith('/uploads/')) {
+       // 本地文件，直接读取
+       const fs = await import('node:fs');
+       const path = await import('node:path');
+       const filePath = path.resolve(process.cwd(), 'server', url.substring(1)); // Remove leading /
+       const fileContent = fs.readFileSync(filePath, 'utf-8');
+       contentList = JSON.parse(fileContent);
+    } else {
+       // 远程URL，使用axios获取
+       const response = await axios.get(url, { timeout: 30000 });
+       contentList = response.data;
+    }
     
     if (!Array.isArray(contentList)) {
       throw new Error("content_list.json should be an array");

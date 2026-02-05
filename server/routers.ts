@@ -26,6 +26,11 @@ import { storagePut, storageGet } from "./storage";
 import { pauseTask, resumeTask, cancelTask, isTaskPaused } from "./extraction";
 import { startTaskProcessing, pauseTaskProcessing, cancelTaskProcessing } from "./taskProcessor";
 
+// Helper to normalize API URL by removing trailing /chat/completions and slashes
+const normalizeApiUrl = (url: string) => {
+  return url.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
+};
+
 // LLM配置路由
 const llmConfigRouter = router({
   // 获取用户所有配置
@@ -67,6 +72,7 @@ const llmConfigRouter = router({
     .mutation(async ({ ctx, input }) => {
       const id = await createLLMConfig({
         ...input,
+        apiUrl: normalizeApiUrl(input.apiUrl),
         userId: ctx.user.id
       });
       return { id };
@@ -108,8 +114,9 @@ const llmConfigRouter = router({
     .mutation(async ({ input }) => {
       try {
         const axios = (await import("axios")).default;
+        const baseUrl = normalizeApiUrl(input.apiUrl);
         const response = await axios.post(
-          `${input.apiUrl}/chat/completions`,
+          `${baseUrl}/chat/completions`,
           {
             model: input.modelName,
             messages: [{ role: "user", content: "Hello, this is a test message. Please respond with 'OK'." }],
@@ -392,11 +399,21 @@ const resultRouter = router({
       
       try {
         const { url } = await storageGet(filePath);
+        
+        if (url.startsWith('/uploads/')) {
+          const fs = await import('node:fs');
+          const path = await import('node:path');
+          const localPath = path.resolve(process.cwd(), 'server', url.substring(1));
+          const content = fs.readFileSync(localPath, 'utf-8');
+          return { content, format: input.format };
+        }
+
         const axios = (await import("axios")).default;
         const response = await axios.get(url, { timeout: 30000 });
         return { content: typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2), format: input.format };
       } catch (error) {
-        return { content: "无法加载结果文件", format: input.format };
+        console.error("Failed to load result file:", error);
+        return { content: "无法加载结果文件: " + (error instanceof Error ? error.message : String(error)), format: input.format };
       }
     }),
 
