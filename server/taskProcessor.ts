@@ -250,11 +250,40 @@ async function processChunk(
       ctx.taskId,
       "error",
       "extracting",
-      `Chunk ${chunkIndex + 1} 处理失败: ${error.message}`,
+      `Chunk ${chunkIndex + 1} LLM调用失败: ${error.message}`,
       { error: error.message, stack: error.stack },
       chunkIndex,
       ctx.totalChunks
     );
+    
+    // LLM调用失败时也尝试使用Fallback拆分器
+    try {
+      const { splitMultiQuestionFallback } = await import('./extraction');
+      const fallbackPairs = splitMultiQuestionFallback(chunk, chunkIndex);
+      if (fallbackPairs.length > 0) {
+        await logTaskProgress(
+          ctx.taskId,
+          "warn",
+          "extracting",
+          `Chunk ${chunkIndex + 1} LLM失败后使用Fallback拆分器提取了 ${fallbackPairs.length} 个题目`,
+          { fallbackCount: fallbackPairs.length, originalError: error.message },
+          chunkIndex,
+          ctx.totalChunks
+        );
+        return fallbackPairs;
+      }
+    } catch (fallbackErr: any) {
+      await logTaskProgress(
+        ctx.taskId,
+        "error",
+        "extracting",
+        `Chunk ${chunkIndex + 1} Fallback拆分器也失败: ${fallbackErr.message}`,
+        { fallbackError: fallbackErr.message },
+        chunkIndex,
+        ctx.totalChunks
+      );
+    }
+    
     throw error;
   }
 }

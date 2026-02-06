@@ -826,27 +826,64 @@ export async function callLLMForTextExtraction(
   maxTokens: number = 16384  // 提高默认值,避免大量题目时输出被截断
 ): Promise<string> {
   const baseUrl = config.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
-  const response = await axios.post(
-    `${baseUrl}/chat/completions`,
-    {
-      model: config.modelName,
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: contentJson }
-      ],
-      temperature: 0,
-      max_tokens: maxTokens
-    },
-    {
-      headers: {
-        "Authorization": `Bearer ${config.apiKey}`,
-        "Content-Type": "application/json"
+  
+  let response;
+  try {
+    response = await axios.post(
+      `${baseUrl}/chat/completions`,
+      {
+        model: config.modelName,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: contentJson }
+        ],
+        temperature: 0,
+        max_tokens: maxTokens
       },
-      timeout: config.timeout * 1000
-    }
-  );
+      {
+        headers: {
+          "Authorization": `Bearer ${config.apiKey}`,
+          "Content-Type": "application/json"
+        },
+        timeout: config.timeout * 1000
+      }
+    );
+  } catch (axiosError: any) {
+    // 详细记录API调用失败的原因
+    const errorDetails = {
+      status: axiosError.response?.status,
+      statusText: axiosError.response?.statusText,
+      data: axiosError.response?.data,
+      message: axiosError.message,
+      code: axiosError.code
+    };
+    console.error('[LLM API Error]', JSON.stringify(errorDetails, null, 2));
+    throw new Error(`LLM API调用失败: ${axiosError.message} (status: ${errorDetails.status || 'N/A'})`);
+  }
 
-  return response.data.choices[0].message.content;
+  // 验证响应格式
+  if (!response.data) {
+    throw new Error('LLM API返回空响应');
+  }
+  
+  if (!response.data.choices || response.data.choices.length === 0) {
+    console.error('[LLM API Error] No choices in response:', JSON.stringify(response.data, null, 2));
+    throw new Error('LLM API返回空choices数组');
+  }
+  
+  const content = response.data.choices[0]?.message?.content;
+  if (content === null || content === undefined) {
+    console.error('[LLM API Error] No content in response:', JSON.stringify(response.data.choices[0], null, 2));
+    throw new Error('LLM API返回空content');
+  }
+  
+  // 检查是否被截断
+  const finishReason = response.data.choices[0]?.finish_reason;
+  if (finishReason === 'length') {
+    console.warn('[LLM API Warning] Response was truncated due to max_tokens limit');
+  }
+
+  return content;
 }
 
 /**
