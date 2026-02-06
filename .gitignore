@@ -101,9 +101,4 @@ jspm_packages/
 tmp/
 temp/
 
-# Database
-sqlite.db
-sqlite.db-journal
 
-# Uploads
-server/uploads/
