@@ -180,7 +180,8 @@ describe("Title Normalization", () => {
   
   it("should truncate long titles", () => {
     const longTitle = "这是一个非常长的标题用于测试截断功能是否正常工作并且不会导致问题";
-    expect(normalizeTitle(longTitle).length).toBeLessThanOrEqual(30);
+    // P2修复: 截断阈值从30放宽到50
+    expect(normalizeTitle(longTitle).length).toBeLessThanOrEqual(50);
   });
 });
 

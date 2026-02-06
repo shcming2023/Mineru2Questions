@@ -435,6 +435,14 @@ export function parseLLMOutput(
       // 合并图片
       const allImages = Array.from(new Set([...questionImages, ...solutionImages]));
 
+      // P0修复: 对齐DataFlow官方 - 至少有 label + (question 或 answer 或 solution)
+      // DataFlow的 LLMOutputParser._convert_response:
+      // if not ((q_match and label_match) or (a_match and label_match) or (s_match and label_match)): continue
+      const hasContent = questionText.trim() || answer.trim() || solutionText.trim();
+      if (!hasContent) {
+        continue; // 跳过完全空的 qa_pair
+      }
+
       qaPairs.push({
         label,
         question: questionText,
@@ -488,9 +496,9 @@ export function normalizeTitle(title: string, strictMatch: boolean = false): str
     }
     
     // 如果不是明确的章节标题,保留更多上下文
-    // 提取前30个字符作为标识
-    if (normalized.length > 30) {
-      return normalized.substring(0, 30);
+    // P2修复: 截断阈值从30放宽到50,解决"2025TheFirstSemesterG4FinalTes"截断问题
+    if (normalized.length > 50) {
+      return normalized.substring(0, 50);
     }
   }
 
@@ -578,6 +586,20 @@ function shouldReplaceQAPair(existing: ExtractedQAPair, newData: ExtractedQAPair
   
   // 新数据更完整时替换
   return newScore > existingScore;
+}
+
+/**
+ * 检查solution是否有效
+ * 对齐DataFlow官方: 过滤包含"Law:"等无效标记的solution
+ */
+function isValidSolution(solution: string): boolean {
+  if (!solution || !solution.trim()) return false;
+  // DataFlow官方的过滤规则
+  if (solution.includes('Law:')) return false;
+  // 扩展: 过滤其他明显无效的标记
+  if (solution.includes('Error:')) return false;
+  if (solution.includes('Invalid:')) return false;
+  return true;
 }
 
 /**
@@ -732,13 +754,18 @@ export function mergeQAPairs(
       }
     }
 
+    // P1修复: 对齐DataFlow官方 - solution有效性检查
+    // DataFlow的 merge_qa_pair:
+    // if "Law:" in a_match['solution']: a_match['solution'] = "" # 过滤无效solution
+    const finalSolution = answer && answer.solution && isValidSolution(answer.solution) ? answer.solution : '';
+    
     merged.push({
       label: labelNum,
       question_chapter_title: question.chapter_title,
       answer_chapter_title: answer ? answer.chapter_title : question.chapter_title,
       question: question.question,
       answer: answer ? answer.answer : '',
-      solution: answer ? answer.solution : '',
+      solution: finalSolution,
       images: Array.from(new Set([...question.images, ...(answer ? answer.images : [])]))
     });
   }
