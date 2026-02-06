@@ -1031,17 +1031,52 @@ export function splitMultiQuestionFallback(
   
   // 题号模式: 圆圈数字, 数字+点/顿号, 中文数字+点/顿号
   const questionPatterns = [
-    /^([①-⑳])\s*(.+)/,  // 圆圈数字 ①-⑳
-    /^(\d+)[\.、]\s*(.+)/,   // 数字+点/顿号
-    /^([一二三四五六七八九十]+)[\.、]\s*(.+)/,  // 中文数字
+    /^([①-⑳])\s*([\s\S]+)/,  // 圆圈数字 ①-⑳
+    /^(\d+)[\.\u3001]\s*([\s\S]+)/,   // 数字+点/顿号
+    /^([一二三四五六七八九十]+)[\.\u3001、]\s*([\s\S]+)/,  // 中文数字+点/顿号/、
   ];
   
-  let currentQuestion: { label: string; text: string; ids: number[] } | null = null;
+  // 章节标题模式
+  const chapterPattern = /^第(\d+)章|^第(\d+)节|^(\d+\.\d+)\s/;
+  
+  // 目录/导读类内容特征(需要过滤)
+  const tocPatterns = [
+    /本期导读/,
+    /本学期将学习/,
+    /习题\d+\.\d+\s+\d+$/,  // "习题20.2 44" 这样的目录条目
+    /复习\(\d+\)\s+\d+$/,    // "复习(1) 46" 这样的目录条目
+    /名校考题精选/,
+    /各区考题精选/,
+    /挑战压轴题/,
+  ];
+  
+  let currentChapter = '';
+  let currentQuestion: { label: string; text: string; ids: number[]; chapter: string } | null = null;
   
   for (const block of blocks) {
     if (!block.text) continue;
     
     const text = block.text.trim();
+    
+    // 检查是否是章节标题
+    const chapterMatch = text.match(chapterPattern);
+    if (chapterMatch) {
+      currentChapter = text.split('\n')[0].trim();  // 取第一行作为章节标题
+      if (currentChapter.length > 30) {
+        currentChapter = currentChapter.substring(0, 30);
+      }
+    }
+    
+    // 检查是否是目录/导读类内容(跳过)
+    let isToc = false;
+    for (const tocPattern of tocPatterns) {
+      if (tocPattern.test(text)) {
+        isToc = true;
+        break;
+      }
+    }
+    if (isToc) continue;
+    
     let matched = false;
     
     for (const pattern of questionPatterns) {
@@ -1049,16 +1084,20 @@ export function splitMultiQuestionFallback(
       if (match) {
         // 保存上一个题目
         if (currentQuestion && currentQuestion.text.length > 10) {
-          results.push({
-            label: currentQuestion.label,
-            question: currentQuestion.text,
-            answer: '',
-            solution: '',
-            chapter_title: '',
-            images: [],
-            questionIds: currentQuestion.ids.join(','),
-            chunkIndex
-          });
+          // 过滤掉目录类内容(包含多个页码的条目)
+          const pageNumberCount = (currentQuestion.text.match(/\s\d{2,3}$/gm) || []).length;
+          if (pageNumberCount < 3) {  // 如果包含3个以上页码,可能是目录
+            results.push({
+              label: currentQuestion.label,
+              question: currentQuestion.text,
+              answer: '',
+              solution: '',
+              chapter_title: currentQuestion.chapter || '',
+              images: [],
+              questionIds: currentQuestion.ids.join(','),
+              chunkIndex
+            });
+          }
         }
         
         // 开始新题目
@@ -1067,7 +1106,8 @@ export function splitMultiQuestionFallback(
         currentQuestion = {
           label: labelNum,
           text: match[2] || '',
-          ids: [block.id]
+          ids: [block.id],
+          chapter: currentChapter
         };
         matched = true;
         break;
@@ -1083,16 +1123,20 @@ export function splitMultiQuestionFallback(
   
   // 保存最后一个题目
   if (currentQuestion && currentQuestion.text.length > 10) {
-    results.push({
-      label: currentQuestion.label,
-      question: currentQuestion.text,
-      answer: '',
-      solution: '',
-      chapter_title: '',
-      images: [],
-      questionIds: currentQuestion.ids.join(','),
-      chunkIndex
-    });
+    // 过滤掉目录类内容
+    const pageNumberCount = (currentQuestion.text.match(/\s\d{2,3}$/gm) || []).length;
+    if (pageNumberCount < 3) {
+      results.push({
+        label: currentQuestion.label,
+        question: currentQuestion.text,
+        answer: '',
+        solution: '',
+        chapter_title: currentQuestion.chapter || '',
+        images: [],
+        questionIds: currentQuestion.ids.join(','),
+        chunkIndex
+      });
+    }
   }
   
   return results;

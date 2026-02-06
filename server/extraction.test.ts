@@ -342,3 +342,92 @@ describe('getLabelKey with circled numbers', () => {
     expect(getLabelKey('例①')).toBe('1');
   });
 });
+
+
+// 测试Fallback拆分器
+import { splitMultiQuestionFallback } from "./extraction";
+
+describe('splitMultiQuestionFallback', () => {
+  it('should extract questions with numbered format', () => {
+    const blocks: ConvertedBlock[] = [
+      { id: 0, type: 'text', text: '第19章 实数' },
+      { id: 1, type: 'text', text: '1. 求解方程 x + 2 = 5' },
+      { id: 2, type: 'text', text: '解: x = 3' },
+      { id: 3, type: 'text', text: '2. 计算 3 × 4 的值' },
+    ];
+    
+    const results = splitMultiQuestionFallback(blocks, 0);
+    
+    expect(results.length).toBe(2);
+    expect(results[0].label).toBe('1');
+    expect(results[0].question).toContain('求解方程');
+    expect(results[0].chapter_title).toBe('第19章 实数');
+    expect(results[1].label).toBe('2');
+    expect(results[1].chapter_title).toBe('第19章 实数');
+  });
+
+  it('should extract questions with circled numbers', () => {
+    const blocks: ConvertedBlock[] = [
+      { id: 0, type: 'text', text: '第20章 二次根式' },
+      { id: 1, type: 'text', text: '① 化简 √4 的值等于多少' },
+      { id: 2, type: 'text', text: '这是第一题的继续内容' },
+      { id: 3, type: 'text', text: '② 计算 √9 + √16 的结果' },
+      { id: 4, type: 'text', text: '这是第二题的继续内容' },
+    ];
+    
+    const results = splitMultiQuestionFallback(blocks, 0);
+    
+    // 第一题和第二题都应该被提取
+    expect(results.length).toBe(2);
+    expect(results[0].label).toBe('1');
+    expect(results[0].chapter_title).toBe('第20章 二次根式');
+    expect(results[1].label).toBe('2');
+  });
+
+  it('should filter out table of contents entries', () => {
+    const blocks: ConvertedBlock[] = [
+      { id: 0, type: 'text', text: '第19章 实数' },
+      { id: 1, type: 'text', text: '1. 这是一道真正的题目内容较长' },
+      { id: 2, type: 'text', text: '题目的继续内容包含更多信息' },
+    ];
+    
+    const results = splitMultiQuestionFallback(blocks, 0);
+    
+    // 应该提取真正的题目
+    expect(results.length).toBe(1);
+    expect(results[0].question).toContain('真正的题目');
+    expect(results[0].chapter_title).toBe('第19章 实数');
+  });
+
+  it('should handle Chinese number format', () => {
+    const blocks: ConvertedBlock[] = [
+      { id: 0, type: 'text', text: '一、选择题（每题分2分）' },
+      { id: 1, type: 'text', text: '这是选择题的内容和选项' },
+      { id: 2, type: 'text', text: '二、填空题（每题分3分）' },
+      { id: 3, type: 'text', text: '这是填空题的内容' },
+    ];
+    
+    const results = splitMultiQuestionFallback(blocks, 0);
+    
+    expect(results.length).toBe(2);
+    expect(results[0].label).toBe('一');
+    expect(results[1].label).toBe('二');
+  });
+
+  it('should track chapter changes', () => {
+    const blocks: ConvertedBlock[] = [
+      { id: 0, type: 'text', text: '第19章 实数' },
+      { id: 1, type: 'text', text: '1. 第一章的题目内容较长' },
+      { id: 2, type: 'text', text: '题目的继续内容' },
+      { id: 3, type: 'text', text: '第20章 二次根式' },
+      { id: 4, type: 'text', text: '2. 第二章的题目内容较长' },
+      { id: 5, type: 'text', text: '题目的继续内容' },
+    ];
+    
+    const results = splitMultiQuestionFallback(blocks, 0);
+    
+    expect(results.length).toBe(2);
+    expect(results[0].chapter_title).toBe('第19章 实数');
+    expect(results[1].chapter_title).toBe('第20章 二次根式');
+  });
+});
