@@ -106,6 +106,25 @@ async function loadAndConvertContentList(
 }
 
 /**
+ * 获取chunk的页码范围信息
+ */
+function getChunkPageRange(chunk: ConvertedBlock[]): { minPage: number; maxPage: number; pageCount: number } {
+  const pages = new Set<number>();
+  for (const block of chunk) {
+    // ConvertedBlock可能没有page_idx,需要从原始数据中获取
+    // 这里用ID估算页码(假设每页约20个块)
+    const estimatedPage = Math.floor(block.id / 20) + 1;
+    pages.add(estimatedPage);
+  }
+  const pageArray = Array.from(pages).sort((a, b) => a - b);
+  return {
+    minPage: pageArray[0] || 0,
+    maxPage: pageArray[pageArray.length - 1] || 0,
+    pageCount: pageArray.length
+  };
+}
+
+/**
  * 处理单个内容块chunk (返回Promise)
  */
 async function processChunk(
@@ -117,12 +136,22 @@ async function processChunk(
   const chunkJson = JSON.stringify(chunk, null, 2);
   const startTime = Date.now();
   
+  // 获取页码范围信息
+  const pageRange = getChunkPageRange(chunk);
+  const idRange = chunk.length > 0 ? `ID ${chunk[0].id}-${chunk[chunk.length - 1].id}` : 'N/A';
+  
   await logTaskProgress(
     ctx.taskId, 
     "info", 
     "extracting", 
-    `开始处理Chunk ${chunkIndex + 1}/${ctx.totalChunks}, 包含 ${chunk.length} 个内容块`,
-    { chunkSize: chunk.length, jsonLength: chunkJson.length },
+    `开始处理Chunk ${chunkIndex + 1}/${ctx.totalChunks}: ${chunk.length}个内容块, ${idRange}, 估计页码 ${pageRange.minPage}-${pageRange.maxPage}`,
+    { 
+      chunkSize: chunk.length, 
+      jsonLength: chunkJson.length,
+      idStart: chunk[0]?.id,
+      idEnd: chunk[chunk.length - 1]?.id,
+      estimatedPageRange: `${pageRange.minPage}-${pageRange.maxPage}`
+    },
     chunkIndex,
     ctx.totalChunks
   );
@@ -159,16 +188,27 @@ async function processChunk(
     // 统计结果
     const withQuestion = qaPairs.filter(q => q.question).length;
     const withAnswer = qaPairs.filter(q => q.answer || q.solution).length;
+    const withImages = qaPairs.filter(q => q.images && q.images.length > 0).length;
+    const totalImages = qaPairs.reduce((sum, q) => sum + (q.images?.length || 0), 0);
+    
+    // 提取题号列表用于日志
+    const labels = qaPairs.map(q => q.label).filter(Boolean).slice(0, 10);
+    const labelSummary = labels.length > 0 
+      ? `题号: ${labels.join(', ')}${qaPairs.length > 10 ? '...' : ''}`
+      : '无题号';
     
     await logTaskProgress(
       ctx.taskId,
       "info",
       "extracting",
-      `Chunk ${chunkIndex + 1} 解析完成: 提取 ${qaPairs.length} 个QA对 (${withQuestion} 题目, ${withAnswer} 答案)`,
+      `Chunk ${chunkIndex + 1} 解析完成: ${qaPairs.length}个QA对 (题目:${withQuestion}, 答案:${withAnswer}, 带图:${withImages}, 图片数:${totalImages}) | ${labelSummary}`,
       { 
         totalPairs: qaPairs.length, 
         questions: withQuestion, 
         answers: withAnswer,
+        withImages,
+        totalImages,
+        labels: labels,
         processingTime: Date.now() - startTime
       },
       chunkIndex,
@@ -324,40 +364,56 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
     throw new Error(isTaskPaused(ctx.taskId) ? "Task paused" : "Task cancelled");
   }
   
+  // 统计提取阶段的图片关联情况
+  const questionsWithImages = allQuestions.filter(q => q.images && q.images.length > 0).length;
+  const totalQuestionImages = allQuestions.reduce((sum, q) => sum + (q.images?.length || 0), 0);
+  
   // 汇总日志
   await logTaskProgress(
     ctx.taskId,
     "info",
     "merging",
-    `所有Chunk处理完成: 成功 ${chunks.length - failedChunks}/${chunks.length}, 提取 ${allQuestions.length} 题目, ${allAnswers.length} 答案`,
+    `所有Chunk处理完成: 成功 ${chunks.length - failedChunks}/${chunks.length}, 提取 ${allQuestions.length} 题目, ${allAnswers.length} 答案, ${questionsWithImages} 题带图片(${totalQuestionImages}张)`,
     {
       totalChunks: chunks.length,
       successChunks: chunks.length - failedChunks,
       failedChunks,
       totalQuestions: allQuestions.length,
-      totalAnswers: allAnswers.length
+      totalAnswers: allAnswers.length,
+      questionsWithImages,
+      totalQuestionImages
     }
   );
   
   // 合并问题和答案
+  await logTaskProgress(ctx.taskId, "info", "merging", `开始合并问题和答案...`);
   const merged = mergeQAPairs(allQuestions, allAnswers, false);
   
   // 统计合并结果
   const withBoth = merged.filter(m => m.question && (m.answer || m.solution)).length;
   const questionOnly = merged.filter(m => m.question && !m.answer && !m.solution).length;
   const answerOnly = merged.filter(m => !m.question && (m.answer || m.solution)).length;
+  const mergedWithImages = merged.filter(m => m.images && m.images.length > 0).length;
+  const totalMergedImages = merged.reduce((sum, m) => sum + (m.images?.length || 0), 0);
+  
+  // 计算匹配率
+  const answerMatchRate = allQuestions.length > 0 ? (withBoth / allQuestions.length * 100).toFixed(1) : 'N/A';
+  const imageAssocRate = merged.length > 0 ? (mergedWithImages / merged.length * 100).toFixed(1) : 'N/A';
   
   await logTaskProgress(
     ctx.taskId,
     "info",
     "merging",
-    `问答合并完成: 共 ${merged.length} 个QA对 (完整配对: ${withBoth}, 仅题目: ${questionOnly}, 仅答案: ${answerOnly})`,
+    `问答合并完成: ${merged.length}个QA对 | 完整配对:${withBoth}(匹配率${answerMatchRate}%) | 仅题目:${questionOnly} | 仅答案:${answerOnly} | 带图片:${mergedWithImages}(关联率${imageAssocRate}%, ${totalMergedImages}张)`,
     {
       totalMerged: merged.length,
       completeQA: withBoth,
       questionOnly,
       answerOnly,
-      matchRate: allQuestions.length > 0 ? (withBoth / allQuestions.length * 100).toFixed(1) + '%' : 'N/A'
+      answerMatchRate: answerMatchRate + '%',
+      mergedWithImages,
+      totalMergedImages,
+      imageAssocRate: imageAssocRate + '%'
     }
   );
   
