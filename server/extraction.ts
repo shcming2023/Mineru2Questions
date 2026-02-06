@@ -90,11 +90,12 @@ export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and 
 ## Your Tasks:
 1. Every JSON item has an "id" field. Your main task is to output these IDs.
 2. Segment the content into multiple <qa_pair>...</qa_pair> blocks, each containing a question and its corresponding answer/solution.
-3. If a problem or answer/solution is incomplete (e.g., continues to next chunk), omit it. An answer/solution is complete if either the answer or solution exists.
-4. Put image IDs into proper positions based on context or captions.
-5. Extract chapter titles and each problem's label/number from the text.
-6. Only output "id" fields for chapter titles, questions, and solutions. DO NOT OUTPUT ORIGINAL TEXT. Use ',' to separate different IDs.
-7. However, use original labels/numbers for labels, and extract original text for short answers.
+3. **CRITICAL: ONE QUESTION PER <qa_pair> ONLY. NEVER merge multiple questions into a single <qa_pair> block.**
+4. If a problem or answer/solution is incomplete (e.g., continues to next chunk), omit it. An answer/solution is complete if either the answer or solution exists.
+5. Put image IDs into proper positions based on context or captions.
+6. Extract chapter titles and each problem's label/number from the text.
+7. Only output "id" fields for chapter titles, questions, and solutions. DO NOT OUTPUT ORIGINAL TEXT. Use ',' to separate different IDs.
+8. However, use original labels/numbers for labels, and extract original text for short answers.
 
 ## CRITICAL: Consecutive ID Handling
 - When a question or solution spans multiple consecutive blocks, you MUST include ALL consecutive IDs.
@@ -409,6 +410,128 @@ export function extractImagesFromIds(
 // ============= LLM输出解析 =============
 
 /**
+ * 清洗chapter_title,过滤节标记和目录类内容
+ * 
+ * 需要过滤的内容:
+ * - 节标记: "名校考题精选", "各区考题精选", "挑战压轴题", "思维与拓展"
+ * - 目录类: "本期导读", "本学期将学习"
+ * - 题型标记: "一、选择题", "二、填空题", "三、解答题"
+ */
+function cleanChapterTitle(title: string): string {
+  if (!title) return '';
+  
+  const trimmed = title.trim();
+  
+  // 过滤节标记和目录类内容
+  const filterPatterns = [
+    /^名校考题精选/,
+    /^各区考题精选/,
+    /^挑战压轴题/,
+    /^思维与拓展/,
+    /^本期导读/,
+    /^本学期将学习/,
+    /^[一二三四五六七八九十]+、[选择填空解答计算应用证明]题/,  // "一、选择题"
+  ];
+  
+  for (const pattern of filterPatterns) {
+    if (pattern.test(trimmed)) {
+      return '';  // 返回空字符串,表示过滤掉该标题
+    }
+  }
+  
+  return trimmed;
+}
+
+/**
+ * 检测并拆分合并的多题
+ * 
+ * 检测question中是否包含多个题号标记:
+ * - 数字题号: "1.", "2.", "3." 等
+ * - 圆圈题号: "①", "②", "③" 等
+ * - 括号题号: "(1)", "(2)", "(3)" 等
+ * 
+ * 如果检测到多个题号,按题号边界拆分成多个独立的QA对
+ */
+function splitMergedQuestion(
+  qa: ExtractedQAPair,
+  blocks: ConvertedBlock[],
+  imagePrefix: string
+): ExtractedQAPair[] {
+  const questionText = qa.question.trim();
+  
+  // 题号模式(匹配行首或换行后的题号)
+  const labelPatterns = [
+    /(?:^|\n)(\d+)[\.\.、]\s/g,  // 数字+点/顿号: "1. ", "2. "
+    /(?:^|\n)([①-⑳])\s/g,      // 圆圈数字: "① ", "② "
+    /(?:^|\n)\((\d+)\)\s/g,    // 括号数字: "(1) ", "(2) "
+    /(?:^|\n)([一二三四五六七八九十]+)[\.\.、]\s/g,  // 中文数字: "一. ", "二. "
+  ];
+  
+  // 查找所有题号位置
+  const labelPositions: Array<{ index: number; label: string }> = [];
+  
+  for (const pattern of labelPatterns) {
+    let match;
+    while ((match = pattern.exec(questionText)) !== null) {
+      const label = match[1];
+      const index = match.index + (match[0].startsWith('\n') ? 1 : 0);
+      labelPositions.push({ index, label });
+    }
+  }
+  
+  // 如果只有0-1个题号,不需要拆分
+  if (labelPositions.length <= 1) {
+    return [qa];
+  }
+  
+  // 按位置排序
+  labelPositions.sort((a, b) => a.index - b.index);
+  
+  // 检查是否是选择题选项(A/B/C/D)而非真正的题号
+  // 如果题号都是连续的单个字母且只有4个以内,可能是选项
+  const allSingleDigit = labelPositions.every(p => /^\d$/.test(p.label) && parseInt(p.label) <= 4);
+  if (allSingleDigit && labelPositions.length <= 4) {
+    // 检查是否紧跟选项内容(A/B/C/D模式)
+    const hasOptions = /[\(\uff08][A-D][\)\uff09]/.test(questionText);
+    if (hasOptions) {
+      return [qa]; // 这是选择题选项,不拆分
+    }
+  }
+  
+  // 按题号边界拆分
+  const splitResults: ExtractedQAPair[] = [];
+  
+  for (let i = 0; i < labelPositions.length; i++) {
+    const start = labelPositions[i].index;
+    const end = i < labelPositions.length - 1 ? labelPositions[i + 1].index : questionText.length;
+    const segmentText = questionText.substring(start, end).trim();
+    
+    // 移除题号前缀
+    const cleanedText = segmentText.replace(/^\d+[\.、]\s*/, '')
+                                   .replace(/^[①-⑳]\s*/, '')
+                                   .replace(/^\(\d+\)\s*/, '')
+                                   .replace(/^[一二三四五六七八九十]+[\.、]\s*/, '');
+    
+    if (cleanedText.length > 10) {  // 过滤太短的片段
+      splitResults.push({
+        label: labelPositions[i].label,
+        question: cleanedText,
+        answer: i === 0 ? qa.answer : '',  // 只有第一题保留原answer
+        solution: i === 0 ? qa.solution : '',  // 只有第一题保留原solution
+        chapter_title: qa.chapter_title,
+        images: i === 0 ? qa.images : [],  // 只有第一题保留图片
+        questionIds: qa.questionIds,
+        solutionIds: qa.solutionIds,
+        chunkIndex: qa.chunkIndex
+      });
+    }
+  }
+  
+  // 如果拆分失败(结果为空),返回原QA对
+  return splitResults.length > 0 ? splitResults : [qa];
+}
+
+/**
  * 解析LLM的XML格式输出
  * 参考DataFlow的LLMOutputParser实现
  */
@@ -435,6 +558,9 @@ export function parseLLMOutput(
     if (titleMatch) {
       const titleIds = titleMatch[1].trim();
       chapterTitle = idsToText(titleIds, blocks, imagePrefix);
+      
+      // P1修复: 清洗chapter_title,过滤节标记和目录类内容
+      chapterTitle = cleanChapterTitle(chapterTitle);
     }
 
     // 提取所有qa_pair块
@@ -499,7 +625,15 @@ export function parseLLMOutput(
     return true;
   });
 
-  return qaPairs;
+  // P0修复: 第三层处理 - 检测并拆分合并的多题
+  // 如果一个question中包含多个题号标记,说明LLM错误地合并了多题
+  const splitPairs: ExtractedQAPair[] = [];
+  for (const qa of qaPairs) {
+    const splitResults = splitMergedQuestion(qa, blocks, imagePrefix);
+    splitPairs.push(...splitResults);
+  }
+
+  return splitPairs;
 }
 
 // ============= 章节标题规范化 =============
@@ -1209,6 +1343,16 @@ export function splitMultiQuestionFallback(
       }
     }
     if (isToc) continue;
+    
+    // P0修复: 检查是否是选择题选项(A/B/C/D),避免误判为新题目
+    // 选项模式: "(A) 内容" 或 "A. 内容" 或 "A) 内容"
+    const isOption = /^[\(\uff08]?[A-D][\)\uff09\.]\s/.test(text);
+    if (isOption && currentQuestion) {
+      // 这是选项,追加到当前题目
+      currentQuestion.text += '\n' + text;
+      currentQuestion.ids.push(block.id);
+      continue;
+    }
     
     let matched = false;
     
