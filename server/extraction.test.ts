@@ -10,6 +10,8 @@ import {
   parseLLMOutput,
   normalizeTitle,
   normalizeLabel,
+  convertCircledNumbers,
+  getLabelKey,
   mergeQAPairs,
   generateResults,
   chunkContentBlocks,
@@ -295,5 +297,48 @@ describe("Content Block Chunking with Overlap", () => {
     
     expect(chunks).toHaveLength(1);
     expect(chunks[0]).toHaveLength(2);
+  });
+});
+
+// 测试圆圈数字转换
+describe('convertCircledNumbers', () => {
+  it('should convert circled numbers to Arabic numbers', () => {
+    expect(convertCircledNumbers('①')).toBe('1');
+    expect(convertCircledNumbers('②')).toBe('2');
+    expect(convertCircledNumbers('⑩')).toBe('10');
+    expect(convertCircledNumbers('⑳')).toBe('20');
+  });
+
+  it('should convert multiple circled numbers in text', () => {
+    expect(convertCircledNumbers('①②③')).toBe('123');
+    expect(convertCircledNumbers('题目①和题目②')).toBe('题目1和题目2');
+  });
+
+  it('should not change text without circled numbers', () => {
+    expect(convertCircledNumbers('123')).toBe('123');
+    expect(convertCircledNumbers('题目1')).toBe('题目1');
+  });
+});
+
+// 测试normalizeLabel对圆圈数字的支持
+describe('normalizeLabel with circled numbers', () => {
+  it('should normalize circled number labels', () => {
+    expect(normalizeLabel('①')).toBe(1);
+    expect(normalizeLabel('②')).toBe(2);
+    expect(normalizeLabel('⑩')).toBe(10);
+  });
+
+  it('should normalize mixed labels', () => {
+    expect(normalizeLabel('例①')).toBe(1);
+    expect(normalizeLabel('题目②')).toBe(2);
+  });
+});
+
+// 测试getLabelKey对圆圈数字的支持
+describe('getLabelKey with circled numbers', () => {
+  it('should convert circled numbers in label key', () => {
+    expect(getLabelKey('①')).toBe('1');
+    expect(getLabelKey('②')).toBe('2');
+    expect(getLabelKey('例①')).toBe('1');
   });
 });

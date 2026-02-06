@@ -116,4 +116,18 @@
 - [x] 修复1: 修改QA_EXTRACT_PROMPT明确①②③是独立题目
 - [x] 修复2: 添加正确和错误示例对比
 - [x] 单元测试通过 (33/33)
+- [x] 同步到GitHub
+
+## 对比官方DataFlow仓库实现 (2026-02-06)
+- [x] 阅读官方DataFlow仓库的QA提取提示词 (pdf2vqa.py)
+- [x] 阅读官方DataFlow仓库的处理逻辑 (llm_output_parser.py, qa_merger.py, format_utils.py)
+- [x] 对比当前项目与官方实现的差异
+  - 官方使用 re.search(r'\d+') 提取label数字
+  - 官方没有处理①②③圆圈数字!
+  - 当前项目需要补充这个功能
+- [x] 根据官方实现修正当前项目
+  - 添加 convertCircledNumbers 函数
+  - 修改 normalizeLabel 支持①②③
+  - 修改 getLabelKey 支持①②③
+- [x] 单元测试通过 (39/39)
 - [ ] 同步到GitHub

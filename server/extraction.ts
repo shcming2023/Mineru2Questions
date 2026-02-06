@@ -492,14 +492,37 @@ export function normalizeTitle(title: string, strictMatch: boolean = false): str
 /**
  * 规范化题号 - 用于排序
  * 提取第一个数字用于排序比较
+ * 
+ * 优化: 支持圆圈数字①②③的转换
+ * 参考官方DataFlow的label处理逻辑
  */
 export function normalizeLabel(label: string): number | null {
+  // 首先尝试将圆圈数字转换为阿拉伯数字
+  const convertedLabel = convertCircledNumbers(label);
+  
   // 提取数字部分用于排序
-  const match = label.match(/\d+/);
+  const match = convertedLabel.match(/\d+/);
   if (match) {
     return parseInt(match[0], 10);
   }
   return null;
+}
+
+/**
+ * 将圆圈数字转换为阿拉伯数字
+ * ① -> 1, ② -> 2, ..., ⑳ -> 20
+ * 
+ * 这是对官方DataFlow的补充,官方没有处理这种情况
+ */
+export function convertCircledNumbers(text: string): string {
+  // 圆圈数字字符集 (Unicode: U+2460 - U+2473)
+  const circledNumbers = '①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳';
+  
+  let result = text;
+  for (let i = 0; i < circledNumbers.length; i++) {
+    result = result.replace(new RegExp(circledNumbers[i], 'g'), String(i + 1));
+  }
+  return result;
 }
 
 /**
@@ -509,13 +532,17 @@ export function normalizeLabel(label: string): number | null {
  * - "1.1" -> "1.1", "1.2" -> "1.2" (不会冲突)
  * - "例1" -> "1", "习题1" -> "1"
  * - 保留数字、点、横杠等用于区分
+ * 
+ * 优化2: 支持圆圈数字①②③的转换
  */
 export function getLabelKey(label: string): string {
+  // 首先将圆圈数字转换为阿拉伯数字
+  let normalized = convertCircledNumbers(label);
   // 移除空格
-  let normalized = label.replace(/\s/g, '');
+  normalized = normalized.replace(/\s/g, '');
   // 去除前缀非数字字符 (如 "例", "习题", "Exercise")
   normalized = normalized.replace(/^[^\d]+/, '');
-  // 如果结果为空,返回原始label作为兜底
+  // 如果结果为空,返回原始label作为兆底
   return normalized || label;
 }
 
