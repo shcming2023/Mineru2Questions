@@ -219,8 +219,34 @@ If no content found: <empty></empty>`;
 // ============= MinerU输出解析 =============
 
 /**
+ * 检测是否为目录列表
+ * 目录特征: 大部分条目以页码数字结尾 (如 "19.1 算术平方根(1) 2")
+ * 
+ * 改进: 避免误判选项列表 ("A. 选项1", "B. 选项2")
+ */
+function isTocList(items: string[]): boolean {
+  if (!items || items.length === 0) return false;
+  
+  // 排除选项列表: 以"A."/"B."/"C."/"D."开头的列表
+  const optionPattern = /^[A-D]\.\s/;
+  const optionCount = items.filter(item => optionPattern.test(item)).length;
+  if (optionCount >= items.length * 0.5) {
+    return false; // 这是选项列表,不是目录
+  }
+  
+  // 目录特征: 末尾是页码数字,且前面是中文或括号(不是选项字母)
+  const pageNumPattern = /[)\uff09\u4e00-\u9fff]\s*\d{1,3}\s*$/;
+  const matchCount = items.filter(item => pageNumPattern.test(item)).length;
+  
+  // 超过50%的条目符合页码格式,判定为目录
+  return matchCount >= items.length * 0.5;
+}
+
+/**
  * 解析MinerU的content_list.json并转换为带ID的格式
  * 参考DataFlow的MinerU2LLMInputOperator实现
+ * 
+ * P0修复: 增加目录页检测,避免目录条目被误识别为题目
  */
 export function convertMinerUContentList(contentList: any[]): ConvertedBlock[] {
   const convertedBlocks: ConvertedBlock[] = [];
@@ -235,8 +261,12 @@ export function convertMinerUContentList(contentList: any[]): ConvertedBlock[] {
       continue;
     }
     
-    // 处理列表类型 - 展平为多个文本块 (关键: 对选项A,B,C,D很重要)
+    // P0修复: 处理列表类型前先检测是否为目录
     if (item.type === 'list' && item.sub_type === 'text' && item.list_items) {
+      // 跳过目录列表
+      if (isTocList(item.list_items)) {
+        continue;
+      }
       for (const listItem of item.list_items) {
         convertedBlocks.push({
           id: currentId,
@@ -388,7 +418,7 @@ export function parseLLMOutput(
   imagePrefix: string = "images",
   mode: 'question' | 'answer' = 'question'
 ): ExtractedQAPair[] {
-  const qaPairs: ExtractedQAPair[] = [];
+  let qaPairs: ExtractedQAPair[] = [];
 
   // 检查是否为空
   if (output.includes('<empty></empty>') || output.includes('<empty/>')) {
@@ -450,12 +480,24 @@ export function parseLLMOutput(
         solution: solutionText,
         chapter_title: chapterTitle,
         images: allImages,
-        // 保存原始ID用于去重
+        // 保存原姛ID用于去重
         questionIds,
         solutionIds
       });
     }
   }
+
+  // P0修复: 第二层过滤 - 移除目录条目格式的question
+  // 目录格式: "数字.数字 + 中文 + (数字) + 页码"
+  // 例: "1 算术平方根(1) 2" 或 "19.1 算术平方根(1) 2"
+  qaPairs = qaPairs.filter(qa => {
+    const q = qa.question.trim();
+    // 目录条目特征: 以页码数字结尾且很短(<100字符)
+    if (q.length < 100 && /[)）\u4e00-\u9fff]\s*\d{1,3}\s*$/.test(q)) {
+      return false; // 这是目录条目,不是真题目
+    }
+    return true;
+  });
 
   return qaPairs;
 }
@@ -472,6 +514,10 @@ export function parseLLMOutput(
 export function normalizeTitle(title: string, strictMatch: boolean = false): string {
   // 删除空格和换行
   let normalized = title.replace(/\s+/g, '');
+
+  // P1修复: 剥离末尾页码 (如 "19.1算术平方根(1)2" -> "19.1算术平方根(1)")
+  // 页码格式: 末尾是1-3位数字,且前面是中文或括号
+  normalized = normalized.replace(/([)\uff09\u4e00-\u9fff])(\d{1,3})$/, '$1');
 
   if (!strictMatch) {
     // 检查是否是明确的章节标题格式
