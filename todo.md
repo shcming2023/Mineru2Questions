@@ -130,4 +130,20 @@
   - 修改 normalizeLabel 支持①②③
   - 修改 getLabelKey 支持①②③
 - [x] 单元测试通过 (39/39)
+- [x] 同步到GitHub
+
+## 测试任务202602061048分析 (2026-02-06)
+- [x] 拉取最新代码并查看测试任务输出 (10个题目, 无答案)
+- [x] 核查独立分析报告的各项观点
+  - [x] 问题2: mergeQAPairs的Key设计问题 - 确认是Bug, 已修复
+  - [x] 问题3: parseLLMOutput正则无法处理多行 - 确认是Bug, 已修复
+  - [x] 问题4: convertMinerUContentList丢失page_idx - 确认, 影响有限
+  - [x] 问题1: Overlap分块ID映射问题 - 部分正确, 不是主因
+  - [ ] 问题5: LLM调用缺少retry和限流 - 待修复
+  - [ ] 问题6: idsToText的LLM输出文本检测 - 待修复
+  - [ ] 问题7: db文件被提交到仓库 - 待处理
+- [x] 定位根因并实现修复
+  - [x] 修复正则: (.*?) -> ([\s\S]*?)
+  - [x] 重写mergeQAPairs: 两阶段匹配策略(精确+模糊)
+- [x] 单元测试通过 (39/39)
 - [ ] 同步到GitHub

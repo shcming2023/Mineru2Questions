@@ -404,22 +404,22 @@ export function parseLLMOutput(
 
     for (const pairBlock of pairMatches) {
       // 提取label
-      const labelMatch = pairBlock.match(/<label>(.*?)<\/label>/);
+      const labelMatch = pairBlock.match(/<label>([\s\S]*?)<\/label>/);
       if (!labelMatch) continue;
       const label = labelMatch[1].trim();
 
       // 提取question (ID列表)
-      const questionMatch = pairBlock.match(/<question>(.*?)<\/question>/);
+      const questionMatch = pairBlock.match(/<question>([\s\S]*?)<\/question>/);
       const questionIds = questionMatch ? questionMatch[1].trim() : '';
       const questionText = idsToText(questionIds, blocks, imagePrefix);
       const questionImages = extractImagesFromIds(questionIds, blocks);
 
       // 提取answer (直接文本,不是ID)
-      const answerMatch = pairBlock.match(/<answer>(.*?)<\/answer>/);
+      const answerMatch = pairBlock.match(/<answer>([\s\S]*?)<\/answer>/);
       const answer = answerMatch ? answerMatch[1].trim() : '';
 
       // 提取solution (ID列表)
-      const solutionMatch = pairBlock.match(/<solution>(.*?)<\/solution>/);
+      const solutionMatch = pairBlock.match(/<solution>([\s\S]*?)<\/solution>/);
       const solutionIds = solutionMatch ? solutionMatch[1].trim() : '';
       const solutionText = idsToText(solutionIds, blocks, imagePrefix);
       const solutionImages = extractImagesFromIds(solutionIds, blocks);
@@ -592,18 +592,16 @@ export function mergeQAPairs(
   const merged: MergedQAPair[] = [];
   // 优化: 使用questionIds作为主键进行去重
   const questionByIds = new Map<string, ExtractedQAPair>();
-  // 保留原有的chapter:label索引用于问答匹配
-  const questionMap = new Map<string, ExtractedQAPair>();
-  const answerMap = new Map<string, ExtractedQAPair>();
+  // 两级索引: 精确匹配(chapter:label) 和 模糊匹配(label only)
+  const questionMapExact = new Map<string, ExtractedQAPair>();  // chapter:label
+  const questionMapFuzzy = new Map<string, ExtractedQAPair[]>(); // label -> questions[]
+  const answerMapExact = new Map<string, ExtractedQAPair>();     // chapter:label
+  const answerMapFuzzy = new Map<string, ExtractedQAPair[]>();   // label -> answers[]
 
   let currentQuestionChapter = '';
   let currentAnswerChapter = '';
   let lastQuestionLabel = Infinity;
   let lastAnswerLabel = Infinity;
-  
-  // 记录章节计数器,用于生成唯一的章节标识
-  let chapterCounter = 0;
-  let lastChapterTitle = '';
 
   // 处理问题列表
   for (const q of questions) {
@@ -614,34 +612,23 @@ export function mergeQAPairs(
     if (q.chapter_title && q.chapter_title !== currentQuestionChapter) {
       if (labelNum < lastQuestionLabel) {
         currentQuestionChapter = q.chapter_title;
-        // 章节变化,增加计数器
-        if (q.chapter_title !== lastChapterTitle) {
-          chapterCounter++;
-          lastChapterTitle = q.chapter_title;
-        }
       }
-      // 如果题号增加但章节标题变化,可能是错误提取了子标题,继续使用之前的章节
     }
     lastQuestionLabel = labelNum;
 
     const normalizedTitle = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
-    // 优化1: 使用getLabelKey生成更精确的Key,支持复合题号
     const labelKey = getLabelKey(q.label);
-    // 优化2: 使用章节计数器作为前缀,避免不同章节的相同题号冲突
-    const key = `${normalizedTitle}:${labelKey}`;
+    const exactKey = `${normalizedTitle}:${labelKey}`;
 
-    // 优化3: 使用questionIds作为主键进行去重
-    // 这样可以避免不同章节的相同题号被覆盖
-    const primaryKey = q.questionIds || `${key}:${q.question?.substring(0, 50) || ''}`;
+    // 使用questionIds作为主键进行去重
+    const primaryKey = q.questionIds || `${exactKey}:${q.question?.substring(0, 50) || ''}`;
     
-    // 检查是否已经存在相同的题目(基于questionIds去重)
     if (questionByIds.has(primaryKey)) {
-      // 已存在,跳过(可能是Overlap导致的重复)
-      continue;
+      continue; // 跳过重复(Overlap导致)
     }
     questionByIds.set(primaryKey, q);
     
-    // 如果问题已经有答案,直接输出(已完整的题目)
+    // 如果问题已经有答案,直接输出
     if (q.answer || q.solution) {
       merged.push({
         label: labelNum,
@@ -654,23 +641,24 @@ export function mergeQAPairs(
       });
     } else {
       // 未完整的题目,加入待匹配Map
-      // 使用章节计数器作为key前缀,避免不同章节的相同题号冲突
-      const uniqueKey = `ch${chapterCounter}:${key}`;
-      const existing = questionMap.get(uniqueKey);
-      if (!existing) {
-        questionMap.set(uniqueKey, { ...q, chapter_title: normalizedTitle });
-      } else if (shouldReplaceQAPair(existing, q)) {
-        // 新数据更完整,替换旧数据
-        questionMap.set(uniqueKey, { ...q, chapter_title: normalizedTitle });
+      const qWithTitle = { ...q, chapter_title: normalizedTitle };
+      
+      // 精确索引
+      if (!questionMapExact.has(exactKey)) {
+        questionMapExact.set(exactKey, qWithTitle);
+      } else if (shouldReplaceQAPair(questionMapExact.get(exactKey)!, q)) {
+        questionMapExact.set(exactKey, qWithTitle);
       }
+      
+      // 模糊索引 (label only)
+      if (!questionMapFuzzy.has(labelKey)) {
+        questionMapFuzzy.set(labelKey, []);
+      }
+      questionMapFuzzy.get(labelKey)!.push(qWithTitle);
     }
   }
 
   // 处理答案列表
-  // 重置章节计数器用于答案匹配
-  let answerChapterCounter = 0;
-  let lastAnswerChapterTitle = '';
-  
   for (const a of answers) {
     const labelNum = normalizeLabel(a.label);
     if (labelNum === null || labelNum <= 0) continue;
@@ -679,70 +667,86 @@ export function mergeQAPairs(
     if (a.chapter_title && a.chapter_title !== currentAnswerChapter) {
       if (labelNum < lastAnswerLabel) {
         currentAnswerChapter = a.chapter_title;
-        // 章节变化,增加计数器
-        if (a.chapter_title !== lastAnswerChapterTitle) {
-          answerChapterCounter++;
-          lastAnswerChapterTitle = a.chapter_title;
-        }
       }
     }
     lastAnswerLabel = labelNum;
 
     const normalizedTitle = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
     const labelKey = getLabelKey(a.label);
-    // 使用章节计数器作为key前缀,与问题的key格式保持一致
-    const uniqueKey = `ch${answerChapterCounter}:${normalizedTitle}:${labelKey}`;
+    const exactKey = `${normalizedTitle}:${labelKey}`;
+    const aWithTitle = { ...a, chapter_title: normalizedTitle };
 
-    // 动态更新,防止错误的重复label覆盖掉之前的solution或answer
-    const existing = answerMap.get(uniqueKey);
+    // 精确索引
+    const existing = answerMapExact.get(exactKey);
     if (!existing) {
-      answerMap.set(uniqueKey, { ...a, chapter_title: normalizedTitle });
+      answerMapExact.set(exactKey, aWithTitle);
     } else {
-      // 补充缺失的字段
-      if (!existing.solution && a.solution) {
-        existing.solution = a.solution;
-      }
-      if (!existing.answer && a.answer) {
-        existing.answer = a.answer;
-      }
+      if (!existing.solution && a.solution) existing.solution = a.solution;
+      if (!existing.answer && a.answer) existing.answer = a.answer;
     }
+    
+    // 模糊索引
+    if (!answerMapFuzzy.has(labelKey)) {
+      answerMapFuzzy.set(labelKey, []);
+    }
+    answerMapFuzzy.get(labelKey)!.push(aWithTitle);
   }
 
-  // 匹配问题和答案
-  // 修复: 无论是否匹配到答案，都保留题目
-  // 这样可以确保即使LLM没有正确提取答案，题目也不会丢失
-  for (const [key, question] of Array.from(questionMap.entries())) {
-    const answer = answerMap.get(key);
+  // 匹配问题和答案 - 两阶段匹配策略
+  const usedAnswerKeys = new Set<string>();
+  
+  for (const [exactKey, question] of Array.from(questionMapExact.entries())) {
     const labelNum = normalizeLabel(question.label);
     if (labelNum === null) continue;
+    
+    const labelKey = getLabelKey(question.label);
+    let answer: ExtractedQAPair | undefined;
+    
+    // 第一阶段: 精确匹配 (chapter:label)
+    answer = answerMapExact.get(exactKey);
+    if (answer) {
+      usedAnswerKeys.add(exactKey);
+    }
+    
+    // 第二阶段: 模糊匹配 (label only) - 只在精确匹配失败时使用
+    if (!answer) {
+      const fuzzyAnswers = answerMapFuzzy.get(labelKey);
+      if (fuzzyAnswers && fuzzyAnswers.length > 0) {
+        // 找第一个还没被使用的答案
+        for (const fa of fuzzyAnswers) {
+          const faKey = `${fa.chapter_title}:${labelKey}`;
+          if (!usedAnswerKeys.has(faKey)) {
+            answer = fa;
+            usedAnswerKeys.add(faKey);
+            break;
+          }
+        }
+      }
+    }
 
     merged.push({
       label: labelNum,
       question_chapter_title: question.chapter_title,
-      // 如果没有匹配到答案，使用题目的章节标题
       answer_chapter_title: answer ? answer.chapter_title : question.chapter_title,
       question: question.question,
-      // 如果没有匹配到答案，answer和solution设为空字符串
       answer: answer ? answer.answer : '',
       solution: answer ? answer.solution : '',
       images: Array.from(new Set([...question.images, ...(answer ? answer.images : [])]))
     });
   }
 
-  // 可选: 处理"只有答案没有题目"的情况（如纯答案页）
-  // 遍历answerMap，找出没有被使用的答案
-  for (const [key, answer] of Array.from(answerMap.entries())) {
-    if (!questionMap.has(key)) {
+  // 处理"只有答案没有题目"的情况
+  for (const [exactKey, answer] of Array.from(answerMapExact.entries())) {
+    if (!usedAnswerKeys.has(exactKey)) {
       const labelNum = normalizeLabel(answer.label);
       if (labelNum === null) continue;
       
-      // 只有当答案有实际内容时才添加
       if (answer.answer || answer.solution) {
         merged.push({
           label: labelNum,
           question_chapter_title: answer.chapter_title,
           answer_chapter_title: answer.chapter_title,
-          question: '', // 没有题目文本
+          question: '',
           answer: answer.answer,
           solution: answer.solution,
           images: answer.images
