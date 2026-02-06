@@ -14,8 +14,11 @@ const requireUser = t.middleware(async opts => {
   const { ctx, next } = opts;
 
   if (!ctx.user) {
+    console.log("[TRPC] User is not authenticated");
     throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });
   }
+
+  console.log("[TRPC] User authenticated:", ctx.user.id);
 
   return next({
     ctx: {

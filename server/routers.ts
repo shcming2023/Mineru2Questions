@@ -109,8 +109,11 @@ const llmConfigRouter = router({
     .mutation(async ({ input }) => {
       try {
         const axios = (await import("axios")).default;
+        // 智能处理URL: 移除末尾的/chat/completions和斜杠, 确保只拼接一次
+        const baseUrl = input.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
+        
         const response = await axios.post(
-          `${input.apiUrl}/chat/completions`,
+          `${baseUrl}/chat/completions`,
           {
             model: input.modelName,
             messages: [{ role: "user", content: "Hello, this is a test message. Please respond with 'OK'." }],

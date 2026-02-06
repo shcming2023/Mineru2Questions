@@ -2,6 +2,21 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { appRouter } from "./routers";
 import type { TrpcContext } from "./_core/context";
 
+// Mock axios
+vi.mock("axios", () => ({
+  default: {
+    post: vi.fn().mockRejectedValue({
+      response: {
+        data: {
+          error: {
+            message: "Invalid API Key"
+          }
+        }
+      }
+    }),
+  },
+}));
+
 // Mock database functions
 vi.mock("./db", () => ({
   createLLMConfig: vi.fn().mockResolvedValue(1),
@@ -199,7 +214,7 @@ describe("llmConfig router", () => {
     expect(result).toHaveProperty("message");
     expect(typeof result.success).toBe("boolean");
     expect(typeof result.message).toBe("string");
-  });
+  }, 30000);
 });
 
 describe("task router", () => {

@@ -156,10 +156,16 @@ export default function Settings() {
     const lastConfig = loadLastConfig();
     const initialForm = { ...defaultForm, ...lastConfig };
     
-    setForm(initialForm);
-    
-    // 设置预设
+    // 如果有预设，确保apiUrl和modelName有值
+    // 特别是对于首次加载，defaultForm中的apiUrl为空，需要从预设填充
     const preset = getPresetById(initialForm.presetId);
+    if (preset) {
+      if (!initialForm.apiUrl) initialForm.apiUrl = preset.baseUrl;
+      if (!initialForm.modelName) initialForm.modelName = preset.defaultModel;
+      if (!initialForm.name) initialForm.name = preset.name;
+    }
+    
+    setForm(initialForm);
     setSelectedPreset(preset || null);
     
     setTestResult(null);

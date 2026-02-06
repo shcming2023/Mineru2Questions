@@ -23,7 +23,7 @@ export const LLM_PRESETS: LLMPreset[] = [
   {
     id: 'siliconflow',
     name: 'SiliconFlow (硅基流动)',
-    baseUrl: 'https://api.siliconflow.cn/v1/chat/completions',
+    baseUrl: 'https://api.siliconflow.cn/v1',
     models: [
       {
         id: 'Qwen/Qwen2.5-VL-72B-Instruct',
@@ -60,7 +60,7 @@ export const LLM_PRESETS: LLMPreset[] = [
   {
     id: 'openai',
     name: 'OpenAI',
-    baseUrl: 'https://api.openai.com/v1/chat/completions',
+    baseUrl: 'https://api.openai.com/v1',
     models: [
       {
         id: 'gpt-4o',
