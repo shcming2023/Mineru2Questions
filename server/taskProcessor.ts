@@ -294,10 +294,11 @@ async function processChunk(
 async function processChunkWithResult(
   ctx: ProcessingContext,
   chunk: ConvertedBlock[],
-  chunkIndex: number
+  chunkIndex: number,
+  mode: 'question' | 'answer' = 'question'
 ): Promise<ChunkResult> {
   try {
-    const qaPairs = await processChunk(ctx, chunk, chunkIndex, 'question');
+    const qaPairs = await processChunk(ctx, chunk, chunkIndex, mode);
     
     const questions: ExtractedQAPair[] = [];
     const answers: ExtractedQAPair[] = [];
@@ -334,9 +335,24 @@ async function processChunkWithResult(
  * 执行完整的提取流程 (支持并发)
  */
 async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]> {
-  // 将内容块分组
-  const chunks = chunkContentBlocks(ctx.convertedBlocks);
-  ctx.totalChunks = chunks.length;
+  // 对齐DataFlow: 分离题目和答案区域
+  const { separateQuestionAndAnswer } = await import('./answerDetection');
+  const { questionBlocks, answerBlocks } = separateQuestionAndAnswer(ctx.convertedBlocks);
+  
+  await logTaskProgress(
+    ctx.taskId,
+    "info",
+    "loading",
+    `内容区域分离完成: 题目区 ${questionBlocks.length} 块, 答案区 ${answerBlocks.length} 块`,
+    { questionBlocks: questionBlocks.length, answerBlocks: answerBlocks.length }
+  );
+  
+  // 将题目区域分组
+  const questionChunks = chunkContentBlocks(questionBlocks);
+  // 将答案区域分组(如果有)
+  const answerChunks = answerBlocks.length > 0 ? chunkContentBlocks(answerBlocks) : [];
+  
+  ctx.totalChunks = questionChunks.length + answerChunks.length;
   
   // 获取并发数配置
   const maxConcurrency = ctx.config.maxWorkers || 5;
@@ -345,11 +361,12 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
     ctx.taskId,
     "info",
     "chunking",
-    `内容分块完成: 共 ${chunks.length} 个Chunk, 总计 ${ctx.convertedBlocks.length} 个内容块, 最大并发数: ${maxConcurrency}`,
+    `内容分块完成: 题目 ${questionChunks.length} Chunk, 答案 ${answerChunks.length} Chunk, 总计 ${ctx.convertedBlocks.length} 个内容块, 最大并发数: ${maxConcurrency}`,
     { 
-      totalChunks: chunks.length, 
+      totalChunks: ctx.totalChunks,
+      questionChunks: questionChunks.length,
+      answerChunks: answerChunks.length,
       totalBlocks: ctx.convertedBlocks.length,
-      avgBlocksPerChunk: Math.round(ctx.convertedBlocks.length / chunks.length),
       maxConcurrency
     }
   );
@@ -365,11 +382,17 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
   
   await logTaskProgress(ctx.taskId, "info", "extracting", `启动并发处理: 最大并发数 ${maxConcurrency}`);
   
-  for (let i = 0; i < chunks.length; i++) {
+  // 合并所有chunk(题目+答案),并标记每个chunk的类型
+  const allChunks: Array<{ chunk: ConvertedBlock[]; mode: 'question' | 'answer'; index: number }> = [
+    ...questionChunks.map((chunk, i) => ({ chunk, mode: 'question' as const, index: i })),
+    ...answerChunks.map((chunk, i) => ({ chunk, mode: 'answer' as const, index: questionChunks.length + i }))
+  ];
+  
+  for (let i = 0; i < allChunks.length; i++) {
     // 1. 检查任务是否停止
     if (shouldStopTask(ctx.taskId)) {
       const reason = isTaskPaused(ctx.taskId) ? "用户暂停" : "用户取消";
-      await logTaskProgress(ctx.taskId, "warn", "extracting", `任务被${reason}, 已启动 ${i}/${chunks.length} 个Chunk`);
+        await logTaskProgress(ctx.taskId, "warn", "extracting", `任务被${reason}, 已启动 ${i}/${allChunks.length} 个Chunk`);
       // 等待已发出的请求完成
       if (activePromises.size > 0) {
         await logTaskProgress(ctx.taskId, "info", "extracting", `等待 ${activePromises.size} 个进行中的请求完成...`);
@@ -379,10 +402,11 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
       throw new Error(isTaskPaused(ctx.taskId) ? "Task paused" : "Task cancelled");
     }
     
-    const chunk = chunks[i];
+    const { chunk, mode, index } = allChunks[i];
     
     // 2. 创建异步任务 (不立即await)
-    const taskPromise = processChunkWithResult(ctx, chunk, i);
+    // 根据区域类型使用不同的mode
+    const taskPromise = processChunkWithResult(ctx, chunk, index, mode);
     activePromises.add(taskPromise);
     
     // 任务完成后的处理
@@ -433,10 +457,10 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
     ctx.taskId,
     "info",
     "merging",
-    `所有Chunk处理完成: 成功 ${chunks.length - failedChunks}/${chunks.length}, 提取 ${allQuestions.length} 题目, ${allAnswers.length} 答案, ${questionsWithImages} 题带图片(${totalQuestionImages}张)`,
+    `所有Chunk处理完成: 成功 ${allChunks.length - failedChunks}/${allChunks.length}, 提取 ${allQuestions.length} 题目, ${allAnswers.length} 答案, ${questionsWithImages} 题带图片(${totalQuestionImages}张)`,
     {
-      totalChunks: chunks.length,
-      successChunks: chunks.length - failedChunks,
+      totalChunks: allChunks.length,
+      successChunks: allChunks.length - failedChunks,
       failedChunks,
       totalQuestions: allQuestions.length,
       totalAnswers: allAnswers.length,

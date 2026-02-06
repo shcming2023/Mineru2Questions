@@ -814,10 +814,13 @@ export function chunkContentBlocks(
   return chunks;
 }
 
-// ============= LLM API调用 =============
-
 /**
- * 调用LLM API进行文本分析
+ * 带重试的LLM API调用(对齐DataFlow APILLMServing_request._api_chat_id_retry)
+ * @param config LLM配置
+ * @param contentJson 要分析的JSON内容
+ * @param systemPrompt 系统提示词
+ * @param maxTokens 最大token数
+ * @returns LLM输出的文本
  */
 export async function callLLMForTextExtraction(
   config: LLMConfig,
@@ -827,63 +830,82 @@ export async function callLLMForTextExtraction(
 ): Promise<string> {
   const baseUrl = config.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
   
-  let response;
-  try {
-    response = await axios.post(
-      `${baseUrl}/chat/completions`,
-      {
-        model: config.modelName,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: contentJson }
-        ],
-        temperature: 0,
-        max_tokens: maxTokens
-      },
-      {
-        headers: {
-          "Authorization": `Bearer ${config.apiKey}`,
-          "Content-Type": "application/json"
+  // 对齐DataFlow: max_retries=5, 指数退避 1s, 2s, 4s, 8s, 16s
+  const maxRetries = 5;
+  let lastError: Error | null = null;
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      // 强制最低timeout 120s(对齐DataFlow read_timeout)
+      const effectiveTimeout = Math.max(config.timeout || 120, 120) * 1000;
+      
+      const response = await axios.post(
+        `${baseUrl}/chat/completions`,
+        {
+          model: config.modelName,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: contentJson }
+          ],
+          temperature: 0,
+          max_tokens: maxTokens
         },
-        timeout: config.timeout * 1000
+        {
+          headers: {
+            "Authorization": `Bearer ${config.apiKey}`,
+            "Content-Type": "application/json"
+          },
+          timeout: effectiveTimeout
+        }
+      );
+      
+      // 验证响应格式
+      if (!response.data) {
+        throw new Error('LLM API返回空响应');
       }
-    );
-  } catch (axiosError: any) {
-    // 详细记录API调用失败的原因
-    const errorDetails = {
-      status: axiosError.response?.status,
-      statusText: axiosError.response?.statusText,
-      data: axiosError.response?.data,
-      message: axiosError.message,
-      code: axiosError.code
-    };
-    console.error('[LLM API Error]', JSON.stringify(errorDetails, null, 2));
-    throw new Error(`LLM API调用失败: ${axiosError.message} (status: ${errorDetails.status || 'N/A'})`);
-  }
-
-  // 验证响应格式
-  if (!response.data) {
-    throw new Error('LLM API返回空响应');
+      
+      if (!response.data.choices || response.data.choices.length === 0) {
+        console.error('[LLM API Error] No choices in response:', JSON.stringify(response.data, null, 2));
+        throw new Error('LLM API返回的choices为空');
+      }
+      
+      const content = response.data.choices[0].message?.content;
+      if (!content) {
+        throw new Error('LLM API返回的content为空');
+      }
+      
+      // 成功返回
+      return content;
+      
+    } catch (axiosError: any) {
+      lastError = axiosError;
+      
+      // 详细记录API调用失败的原因
+      const errorDetails = {
+        attempt: attempt + 1,
+        maxRetries,
+        status: axiosError.response?.status,
+        statusText: axiosError.response?.statusText,
+        data: axiosError.response?.data,
+        message: axiosError.message,
+        code: axiosError.code
+      };
+      console.error(`[LLM API Error] Attempt ${attempt + 1}/${maxRetries}:`, JSON.stringify(errorDetails, null, 2));
+      
+      // 如果是最后一次尝试,直接抛出错误
+      if (attempt === maxRetries - 1) {
+        throw new Error(`LLM API调用失败(已重试${maxRetries}次): ${axiosError.message} (status: ${errorDetails.status || 'N/A'})`);
+      }
+      
+      // 指数退避: 2^attempt 秒 (1s, 2s, 4s, 8s, 16s)
+      const backoffDelay = Math.pow(2, attempt) * 1000;
+      console.log(`[LLM API Retry] Waiting ${backoffDelay}ms before retry ${attempt + 2}/${maxRetries}...`);
+      await new Promise(resolve => setTimeout(resolve, backoffDelay));
+    }
   }
   
-  if (!response.data.choices || response.data.choices.length === 0) {
-    console.error('[LLM API Error] No choices in response:', JSON.stringify(response.data, null, 2));
-    throw new Error('LLM API返回空choices数组');
-  }
-  
-  const content = response.data.choices[0]?.message?.content;
-  if (content === null || content === undefined) {
-    console.error('[LLM API Error] No content in response:', JSON.stringify(response.data.choices[0], null, 2));
-    throw new Error('LLM API返回空content');
-  }
-  
-  // 检查是否被截断
-  const finishReason = response.data.choices[0]?.finish_reason;
-  if (finishReason === 'length') {
-    console.warn('[LLM API Warning] Response was truncated due to max_tokens limit');
-  }
-
-  return content;
+  // 理论上不会走到这里,但为了TypeScript类型安全
+  throw lastError || new Error('LLM API调用失败(未知错误)');
 }
 
 /**
