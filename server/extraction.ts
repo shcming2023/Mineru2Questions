@@ -822,7 +822,8 @@ export function chunkContentBlocks(
 export async function callLLMForTextExtraction(
   config: LLMConfig,
   contentJson: string,
-  systemPrompt: string = QA_EXTRACT_PROMPT
+  systemPrompt: string = QA_EXTRACT_PROMPT,
+  maxTokens: number = 16384  // 提高默认值,避免大量题目时输出被截断
 ): Promise<string> {
   const baseUrl = config.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
   const response = await axios.post(
@@ -834,7 +835,7 @@ export async function callLLMForTextExtraction(
         { role: "user", content: contentJson }
       ],
       temperature: 0,
-      max_tokens: 8192
+      max_tokens: maxTokens
     },
     {
       headers: {

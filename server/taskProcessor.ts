@@ -274,6 +274,8 @@ async function processChunkWithResult(
     const answers: ExtractedQAPair[] = [];
     
     for (const qa of qaPairs) {
+      // 标记来源chunk索引,用于后续排序
+      qa.chunkIndex = chunkIndex;
       if (qa.question) {
         questions.push(qa);
       }
@@ -415,6 +417,10 @@ async function executeExtraction(ctx: ProcessingContext): Promise<MergedQAPair[]
   );
   
   // 合并问题和答案
+  // 重要: 并发处理可能导致结果乱序,必须按chunkIndex排序以确保章节跟踪正确
+  allQuestions.sort((a, b) => (a.chunkIndex ?? 0) - (b.chunkIndex ?? 0));
+  allAnswers.sort((a, b) => (a.chunkIndex ?? 0) - (b.chunkIndex ?? 0));
+  
   await logTaskProgress(ctx.taskId, "info", "merging", `开始合并问题和答案...`);
   const merged = mergeQAPairs(allQuestions, allAnswers, false);
   
