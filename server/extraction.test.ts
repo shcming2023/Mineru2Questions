@@ -155,18 +155,30 @@ describe("LLM Output Parsing", () => {
 });
 
 describe("Title Normalization", () => {
-  it("should extract Arabic numbers", () => {
-    expect(normalizeTitle("第1章 代数")).toBe("1");
-    expect(normalizeTitle("1.2 方程")).toBe("1.2");
+  it("should preserve chapter context for better distinction", () => {
+    // 优化: 保留更多上下文信息,避免不同章节被规范化为相同的值
+    expect(normalizeTitle("第1章 代数")).toBe("第1章");
+    expect(normalizeTitle("第1单元 加法")).toBe("第1单元");
+    // 非章节标题保留完整内容
+    expect(normalizeTitle("1.2 方程")).toBe("1.2方程");
   });
 
-  it("should extract Chinese numbers", () => {
-    expect(normalizeTitle("第一章 代数")).toBe("一");
-    expect(normalizeTitle("六、选择题")).toBe("六");
+  it("should preserve Chinese chapter context", () => {
+    expect(normalizeTitle("第一章 代数")).toBe("第一章");
+    expect(normalizeTitle("第一单元 加法")).toBe("第一单元");
+    // 练习标题
+    expect(normalizeTitle("练习一")).toBe("练习一");
+    // 非章节标题保留完整内容
+    expect(normalizeTitle("六、选择题")).toBe("六、选择题");
   });
 
   it("should handle strict match mode", () => {
     expect(normalizeTitle("第一章 代数", true)).toBe("第一章代数");
+  });
+  
+  it("should truncate long titles", () => {
+    const longTitle = "这是一个非常长的标题用于测试截断功能是否正常工作并且不会导致问题";
+    expect(normalizeTitle(longTitle).length).toBeLessThanOrEqual(30);
   });
 });
 

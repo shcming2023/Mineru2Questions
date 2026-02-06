@@ -60,6 +60,10 @@ export interface ExtractedQAPair {
   // 用于去重的原始ID信息
   questionIds?: string;
   solutionIds?: string;
+  // 用于区分不同chunk的题目
+  chunkIndex?: number;
+  // 用于记录原始章节标题(未规范化)
+  rawChapterTitle?: string;
 }
 
 // 合并后的完整QA对
@@ -416,22 +420,40 @@ export function parseLLMOutput(
 /**
  * 规范化章节标题用于匹配
  * 参考DataFlow的refine_title实现
+ * 
+ * 优化: 保留更多区分信息,避免不同章节被规范化为相同的值
+ * 例如: "1. 退位减法" 和 "1. 用平十法..." 应该保留更多上下文
  */
 export function normalizeTitle(title: string, strictMatch: boolean = false): string {
   // 删除空格和换行
   let normalized = title.replace(/\s+/g, '');
 
   if (!strictMatch) {
-    // 优先提取阿拉伯数字章节编号 (如 1.1, 2)
-    const arabicMatch = normalized.match(/\d+\.\d+|\d+/);
-    if (arabicMatch) {
-      return arabicMatch[0];
+    // 检查是否是明确的章节标题格式
+    // 例如: "第1单元", "第一章", "Unit 1", "Chapter 2"
+    const chapterPatterns = [
+      /第(\d+)单元/,           // 第1单元
+      /第(\d+)章/,             // 第1章
+      /第([一二三四五六七八九十百]+)单元/, // 第一单元
+      /第([一二三四五六七八九十百]+)章/,   // 第一章
+      /Unit\s*(\d+)/i,          // Unit 1
+      /Chapter\s*(\d+)/i,       // Chapter 1
+      /练习([一二三四五六七八九十百]+)/,     // 练习一
+      /练习(\d+)/,              // 练习1
+    ];
+    
+    for (const pattern of chapterPatterns) {
+      const match = normalized.match(pattern);
+      if (match) {
+        // 返回完整的匹配结果,保留前缀
+        return match[0];
+      }
     }
-
-    // 其次提取中文数字章节编号 (如 六、二十四)
-    const chineseMatch = normalized.match(/[一二三四五六七八九零十百]+/);
-    if (chineseMatch) {
-      return chineseMatch[0];
+    
+    // 如果不是明确的章节标题,保留更多上下文
+    // 提取前30个字符作为标识
+    if (normalized.length > 30) {
+      return normalized.substring(0, 30);
     }
   }
 
@@ -500,8 +522,11 @@ function shouldReplaceQAPair(existing: ExtractedQAPair, newData: ExtractedQAPair
  * 
  * 关键特性:
  * 1. 支持跨Chunk的问答匹配(题目在第1页,答案在第50页)
- * 2. 基于chapter_title+label的Map去重,天然支持Overlap后的去重
+ * 2. 基于questionIds的精确去重,避免不同章节的相同题号被覆盖
  * 3. 已完整的题目(有question和answer/solution)直接输出
+ * 
+ * 优化: 使用questionIds作为主键,chapter_title:label作为辅助键
+ * 这样可以避免不同章节的相同题号被覆盖
  */
 export function mergeQAPairs(
   questions: ExtractedQAPair[],
@@ -509,6 +534,9 @@ export function mergeQAPairs(
   strictTitleMatch: boolean = false
 ): MergedQAPair[] {
   const merged: MergedQAPair[] = [];
+  // 优化: 使用questionIds作为主键进行去重
+  const questionByIds = new Map<string, ExtractedQAPair>();
+  // 保留原有的chapter:label索引用于问答匹配
   const questionMap = new Map<string, ExtractedQAPair>();
   const answerMap = new Map<string, ExtractedQAPair>();
 
@@ -516,6 +544,10 @@ export function mergeQAPairs(
   let currentAnswerChapter = '';
   let lastQuestionLabel = Infinity;
   let lastAnswerLabel = Infinity;
+  
+  // 记录章节计数器,用于生成唯一的章节标识
+  let chapterCounter = 0;
+  let lastChapterTitle = '';
 
   // 处理问题列表
   for (const q of questions) {
@@ -526,6 +558,11 @@ export function mergeQAPairs(
     if (q.chapter_title && q.chapter_title !== currentQuestionChapter) {
       if (labelNum < lastQuestionLabel) {
         currentQuestionChapter = q.chapter_title;
+        // 章节变化,增加计数器
+        if (q.chapter_title !== lastChapterTitle) {
+          chapterCounter++;
+          lastChapterTitle = q.chapter_title;
+        }
       }
       // 如果题号增加但章节标题变化,可能是错误提取了子标题,继续使用之前的章节
     }
@@ -534,8 +571,20 @@ export function mergeQAPairs(
     const normalizedTitle = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
     // 优化1: 使用getLabelKey生成更精确的Key,支持复合题号
     const labelKey = getLabelKey(q.label);
+    // 优化2: 使用章节计数器作为前缀,避免不同章节的相同题号冲突
     const key = `${normalizedTitle}:${labelKey}`;
 
+    // 优化3: 使用questionIds作为主键进行去重
+    // 这样可以避免不同章节的相同题号被覆盖
+    const primaryKey = q.questionIds || `${key}:${q.question?.substring(0, 50) || ''}`;
+    
+    // 检查是否已经存在相同的题目(基于questionIds去重)
+    if (questionByIds.has(primaryKey)) {
+      // 已存在,跳过(可能是Overlap导致的重复)
+      continue;
+    }
+    questionByIds.set(primaryKey, q);
+    
     // 如果问题已经有答案,直接输出(已完整的题目)
     if (q.answer || q.solution) {
       merged.push({
@@ -549,18 +598,23 @@ export function mergeQAPairs(
       });
     } else {
       // 未完整的题目,加入待匹配Map
-      // 优化2: 使用"择优保留"策略,保留更完整的版本
-      const existing = questionMap.get(key);
+      // 使用章节计数器作为key前缀,避免不同章节的相同题号冲突
+      const uniqueKey = `ch${chapterCounter}:${key}`;
+      const existing = questionMap.get(uniqueKey);
       if (!existing) {
-        questionMap.set(key, { ...q, chapter_title: normalizedTitle });
+        questionMap.set(uniqueKey, { ...q, chapter_title: normalizedTitle });
       } else if (shouldReplaceQAPair(existing, q)) {
         // 新数据更完整,替换旧数据
-        questionMap.set(key, { ...q, chapter_title: normalizedTitle });
+        questionMap.set(uniqueKey, { ...q, chapter_title: normalizedTitle });
       }
     }
   }
 
   // 处理答案列表
+  // 重置章节计数器用于答案匹配
+  let answerChapterCounter = 0;
+  let lastAnswerChapterTitle = '';
+  
   for (const a of answers) {
     const labelNum = normalizeLabel(a.label);
     if (labelNum === null || labelNum <= 0) continue;
@@ -569,19 +623,24 @@ export function mergeQAPairs(
     if (a.chapter_title && a.chapter_title !== currentAnswerChapter) {
       if (labelNum < lastAnswerLabel) {
         currentAnswerChapter = a.chapter_title;
+        // 章节变化,增加计数器
+        if (a.chapter_title !== lastAnswerChapterTitle) {
+          answerChapterCounter++;
+          lastAnswerChapterTitle = a.chapter_title;
+        }
       }
     }
     lastAnswerLabel = labelNum;
 
     const normalizedTitle = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
-    // 优化1: 使用getLabelKey生成更精确的Key
     const labelKey = getLabelKey(a.label);
-    const key = `${normalizedTitle}:${labelKey}`;
+    // 使用章节计数器作为key前缀,与问题的key格式保持一致
+    const uniqueKey = `ch${answerChapterCounter}:${normalizedTitle}:${labelKey}`;
 
     // 动态更新,防止错误的重复label覆盖掉之前的solution或answer
-    const existing = answerMap.get(key);
+    const existing = answerMap.get(uniqueKey);
     if (!existing) {
-      answerMap.set(key, { ...a, chapter_title: normalizedTitle });
+      answerMap.set(uniqueKey, { ...a, chapter_title: normalizedTitle });
     } else {
       // 补充缺失的字段
       if (!existing.solution && a.solution) {
