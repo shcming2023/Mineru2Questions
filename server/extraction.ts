@@ -104,11 +104,19 @@ export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and 
 
 ## Strict Extraction Rules:
 
+### CRITICAL: Question Numbering Recognition
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions, NOT sub-questions. Each ① or ② starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) or (i)(ii)(iii) WITHIN a question are sub-questions that belong together.
+- Example: "① 如图..." and "② 某校..." are TWO separate questions, not sub-questions of one question.
+
 ### About Questions and Answers/Solutions:
-- Preserve each problem's original label/number (e.g., "例1", "Example 3", "习题1", "11"). Do not include periods after numbers.
+- Preserve each problem's original label/number (e.g., "①", "②", "例1", "1", "11"). Do not include periods after numbers.
+- For circled numbers: use "1" for ①, "2" for ②, "3" for ③, etc.
 - Use Arabic numerals only. Convert "例一" to "例1", "IV" to "4".
 - If the full label is "三、16", keep only "16". If "5.4", keep only "4".
 - If there are multiple sub-questions (like "(1)", "(a)") under one main question, put them together in the same <qa_pair> block.
+- But ①②③ are NOT sub-questions - they are separate questions!
 - If a question and its answer/solution are contiguous, wrap them together as a single <qa_pair> block.
 - If only questions or only answers/solutions appear, wrap each in its own <qa_pair> block with the missing part left empty.
 - There are 7 possibilities: only question, only answer, only solution, question+answer, question+solution, answer+solution, full QA.
@@ -137,16 +145,37 @@ Otherwise output (all tags run together, no extra whitespace):
 <answer>ANSWER_TEXT</answer><solution>SOLUTION_IDS</solution></qa_pair>
 </chapter>
 
-## Example:
+## Example 1 (Standard numbered questions):
 <chapter><title>7</title>
 <qa_pair><label>1</label><question>2,3,4,5</question>
 <answer>Yes</answer><solution>8,9,10,11,12</solution></qa_pair>
 <qa_pair><label>2</label><question>13,14,15,16</question>
 <answer>3.14</answer><solution></solution></qa_pair>
 </chapter>
-<chapter><title>20</title>
-<qa_pair><label>1</label><question></question>
-<answer>2^6</answer><solution>25,26,27</solution></qa_pair>
+
+## Example 2 (Circled number questions - EACH ①②③ is a SEPARATE question):
+Input blocks:
+- id=10: "一、选择题"
+- id=11: "① 如图, 直线 l 与正五边形..."
+- id=12: image
+- id=13: "② 某校“智慧数学教室”..."
+- id=14: image
+- id=15: "③ 一个多边形切去一个角后..."
+
+Correct output (3 separate qa_pairs):
+<chapter><title>10</title>
+<qa_pair><label>1</label><question>11,12</question>
+<answer></answer><solution></solution></qa_pair>
+<qa_pair><label>2</label><question>13,14</question>
+<answer></answer><solution></solution></qa_pair>
+<qa_pair><label>3</label><question>15</question>
+<answer></answer><solution></solution></qa_pair>
+</chapter>
+
+WRONG output (treating ①②③ as sub-questions of one question):
+<chapter><title>10</title>
+<qa_pair><label>1</label><question>11,12,13,14,15</question>
+<answer></answer><solution></solution></qa_pair>
 </chapter>
 
 Please now process the provided JSON and output your result.`;
