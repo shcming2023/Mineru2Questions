@@ -102,5 +102,5 @@ tmp/
 temp/
 
 # Local uploads
-server/uploads/*
-!server/uploads/.gitkeep
+# server/uploads/*
+# !server/uploads/.gitkeep
