@@ -165,6 +165,18 @@ async function processChunk(
     
     const llmTime = Date.now() - startTime;
     
+    // 保存LLM原始响应到日志文件(便于调试)
+    try {
+      const fs = await import('node:fs');
+      const path = await import('node:path');
+      const logDir = path.resolve(process.cwd(), 'server', 'logs');
+      if (!fs.existsSync(logDir)) fs.mkdirSync(logDir, { recursive: true });
+      const logFile = path.join(logDir, `llm_raw_task_${ctx.taskId}_chunk_${chunkIndex}.txt`);
+      fs.writeFileSync(logFile, `=== Chunk ${chunkIndex + 1} LLM Response ===\nTime: ${new Date().toISOString()}\nLength: ${llmOutput.length} chars\n\n${llmOutput}`);
+    } catch (logErr) {
+      console.error('Failed to save LLM raw log:', logErr);
+    }
+    
     // 检查是否为空输出
     const isEmpty = llmOutput.includes('<empty></empty>') || llmOutput.includes('<empty/>');
     
@@ -178,12 +190,29 @@ async function processChunk(
       ctx.totalChunks
     );
     
-    const qaPairs = parseLLMOutput(
+    let qaPairs = parseLLMOutput(
       llmOutput,
       ctx.convertedBlocks,
       `${ctx.imagesFolder}`,
       mode
     );
+    
+    // Fallback: 如果LLM解析结果为空,尝试使用简易拆分器
+    if (qaPairs.length === 0) {
+      const { splitMultiQuestionFallback } = await import('./extraction');
+      qaPairs = splitMultiQuestionFallback(chunk, chunkIndex);
+      if (qaPairs.length > 0) {
+        await logTaskProgress(
+          ctx.taskId,
+          "warn",
+          "extracting",
+          `Chunk ${chunkIndex + 1} LLM解析为空,使用Fallback拆分器提取了 ${qaPairs.length} 个题目`,
+          { fallbackCount: qaPairs.length },
+          chunkIndex,
+          ctx.totalChunks
+        );
+      }
+    }
     
     // 统计结果
     const withQuestion = qaPairs.filter(q => q.question).length;

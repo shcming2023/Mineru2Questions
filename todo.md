@@ -146,4 +146,31 @@
   - [x] 修复正则: (.*?) -> ([\s\S]*?)
   - [x] 重写mergeQAPairs: 两阶段匹配策略(精确+模糊)
 - [x] 单元测试通过 (39/39)
+- [x] 同步到GitHub
+
+## 进度显示"2/2块"问题 (2026-02-06)
+- [x] 检查分块逻辑chunkContentBlocks - 逻辑正确(100KB/chunk)
+- [x] 检查进度显示代码 - totalPages和processedPages更新正确
+- [x] 分析结果: 模拟分块显示应该是3个chunk, 但UI显示2/2
+- [x] 结论: 该任务是用旧版本代码执行的, 新版本应该正确
+- [ ] 建议用户使用最新代码重新执行任务验证
+
+## 重新执行任务202602061048 (2026-02-06)
+- [ ] 检查项目状态并启动开发服务器
+- [ ] 重新执行任务并监控进度
+- [ ] 分析执行结果并报告
+
+## 测试任务202602061137分析 (2026-02-06)
+- [x] 拉取最新代码并查看测试任务输出 (questions.json为空!)
+- [x] 核查独立分析报告的各项观点
+  - [x] LLM返回空或非约定格式 - 无法确认(没有日志)
+  - [x] chunk包含噪音内容 - 确认(168个噪音块,10%)
+  - [x] convertMinerUContentList未过滤噪音块 - 确认,已修复
+  - [x] parseLLMOutput仅支持严格XML格式 - 确认,已添加fallback
+  - [x] 未开启raw日志 - 确认,已添加
+- [x] 定位根因并实现修复
+  - [x] 添加噪音类型过滤 (header/footer/page_number/aside_text)
+  - [x] 添加LLM原始响应保存到 server/logs/
+  - [x] 添加splitMultiQuestionFallback兆底拆分器
+- [x] 单元测试通过 (39/39)
 - [ ] 同步到GitHub

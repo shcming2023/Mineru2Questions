@@ -225,8 +225,16 @@ If no content found: <empty></empty>`;
 export function convertMinerUContentList(contentList: any[]): ConvertedBlock[] {
   const convertedBlocks: ConvertedBlock[] = [];
   let currentId = 0;
+  
+  // 噪音类型过滤: 这些类型不包含题目内容
+  const noisyTypes = new Set(['header', 'footer', 'page_number', 'aside_text']);
 
   for (const item of contentList) {
+    // 跳过噪音类型
+    if (noisyTypes.has(item.type)) {
+      continue;
+    }
+    
     // 处理列表类型 - 展平为多个文本块 (关键: 对选项A,B,C,D很重要)
     if (item.type === 'list' && item.sub_type === 'text' && item.list_items) {
       for (const listItem of item.list_items) {
@@ -1007,4 +1015,85 @@ export function unregisterTask(taskId: number): void {
 export function shouldStopTask(taskId: number): boolean {
   const task = runningTasks.get(taskId);
   return task?.paused || task?.cancelled || false;
+}
+
+// ============= Fallback拆分器 =============
+
+/**
+ * 简易后处理拆分器: 当LLM返回空结果时,尝试从文本中直接提取题目
+ * 这是一个兆底方案,用于实现基本的题目提取
+ */
+export function splitMultiQuestionFallback(
+  blocks: ConvertedBlock[],
+  chunkIndex: number = 0
+): ExtractedQAPair[] {
+  const results: ExtractedQAPair[] = [];
+  
+  // 题号模式: 圆圈数字, 数字+点/顿号, 中文数字+点/顿号
+  const questionPatterns = [
+    /^([①-⑳])\s*(.+)/,  // 圆圈数字 ①-⑳
+    /^(\d+)[\.、]\s*(.+)/,   // 数字+点/顿号
+    /^([一二三四五六七八九十]+)[\.、]\s*(.+)/,  // 中文数字
+  ];
+  
+  let currentQuestion: { label: string; text: string; ids: number[] } | null = null;
+  
+  for (const block of blocks) {
+    if (!block.text) continue;
+    
+    const text = block.text.trim();
+    let matched = false;
+    
+    for (const pattern of questionPatterns) {
+      const match = text.match(pattern);
+      if (match) {
+        // 保存上一个题目
+        if (currentQuestion && currentQuestion.text.length > 10) {
+          results.push({
+            label: currentQuestion.label,
+            question: currentQuestion.text,
+            answer: '',
+            solution: '',
+            chapter_title: '',
+            images: [],
+            questionIds: currentQuestion.ids.join(','),
+            chunkIndex
+          });
+        }
+        
+        // 开始新题目
+        const labelRaw = match[1];
+        const labelNum = convertCircledNumbers(labelRaw);
+        currentQuestion = {
+          label: labelNum,
+          text: match[2] || '',
+          ids: [block.id]
+        };
+        matched = true;
+        break;
+      }
+    }
+    
+    // 如果没有匹配到新题号,追加到当前题目
+    if (!matched && currentQuestion) {
+      currentQuestion.text += '\n' + text;
+      currentQuestion.ids.push(block.id);
+    }
+  }
+  
+  // 保存最后一个题目
+  if (currentQuestion && currentQuestion.text.length > 10) {
+    results.push({
+      label: currentQuestion.label,
+      question: currentQuestion.text,
+      answer: '',
+      solution: '',
+      chapter_title: '',
+      images: [],
+      questionIds: currentQuestion.ids.join(','),
+      chunkIndex
+    });
+  }
+  
+  return results;
 }
