@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle, Clock, Cpu, Zap } from "lucide-react";
 import { useLocation, useParams } from "wouter";
 import { toast } from "sonner";
 import { useState, useEffect, useRef } from "react";
@@ -20,18 +20,12 @@ const statusConfig = {
   paused: { label: "已暂停", variant: "outline" as const },
 };
 
-const logLevelIcons = {
-  info: <Info className="h-4 w-4 text-blue-500" />,
-  warn: <AlertTriangle className="h-4 w-4 text-yellow-500" />,
-  error: <AlertCircle className="h-4 w-4 text-red-500" />,
-  success: <CheckCircle className="h-4 w-4 text-green-500" />,
-};
-
-const logLevelColors = {
-  info: "text-blue-600 bg-blue-50",
-  warn: "text-yellow-600 bg-yellow-50",
-  error: "text-red-600 bg-red-50",
-  success: "text-green-600 bg-green-50",
+// 日志级别配置
+const logLevelConfig = {
+  info: { icon: Info, color: "text-blue-500", bg: "bg-blue-500/10" },
+  warn: { icon: AlertTriangle, color: "text-yellow-500", bg: "bg-yellow-500/10" },
+  error: { icon: AlertCircle, color: "text-red-500", bg: "bg-red-500/10" },
+  debug: { icon: Terminal, color: "text-gray-500", bg: "bg-gray-500/10" },
 };
 
 export default function TaskDetail() {
@@ -41,7 +35,8 @@ export default function TaskDetail() {
   const utils = trpc.useUtils();
   
   const [previewFormat, setPreviewFormat] = useState<"json" | "markdown">("json");
-  const [activeTab, setActiveTab] = useState<"progress" | "logs" | "result">("progress");
+  const [activeTab, setActiveTab] = useState<"status" | "logs" | "results">("status");
+  const [autoScroll, setAutoScroll] = useState(true);
   const logsEndRef = useRef<HTMLDivElement>(null);
   
   const { data: task, isLoading, refetch } = trpc.task.get.useQuery(
@@ -49,7 +44,7 @@ export default function TaskDetail() {
     { 
       enabled: taskId > 0,
       refetchInterval: (query) => {
-        return query.state.data?.status === "processing" ? 3000 : false;
+        return query.state.data?.status === "processing" ? 2000 : false;
       }
     }
   );
@@ -65,7 +60,6 @@ export default function TaskDetail() {
     { 
       enabled: taskId > 0,
       refetchInterval: (query) => {
-        // 处理中时自动刷新日志
         return task?.status === "processing" ? 2000 : false;
       }
     }
@@ -81,11 +75,17 @@ export default function TaskDetail() {
     { enabled: task?.status === "completed" }
   );
   
+  // 自动滚动到最新日志
+  useEffect(() => {
+    if (autoScroll && logsEndRef.current && activeTab === "logs") {
+      logsEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [taskLogs, autoScroll, activeTab]);
+  
   const startMutation = trpc.task.start.useMutation({
     onSuccess: () => {
       toast.success("任务已开始");
       utils.task.get.invalidate({ id: taskId });
-      setActiveTab("logs"); // 自动切换到日志标签
     },
     onError: (error) => toast.error(error.message),
   });
@@ -106,20 +106,6 @@ export default function TaskDetail() {
     onError: (error) => toast.error(error.message),
   });
 
-  // 自动滚动到最新日志
-  useEffect(() => {
-    if (task?.status === "processing" && activeTab === "logs") {
-      logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [taskLogs, task?.status, activeTab]);
-
-  // 任务完成时自动切换到结果标签
-  useEffect(() => {
-    if (task?.status === "completed" && activeTab === "logs") {
-      setActiveTab("result");
-    }
-  }, [task?.status]);
-
   const formatTime = (seconds: number | null | undefined) => {
     if (!seconds) return "--";
     const mins = Math.floor(seconds / 60);
@@ -131,14 +117,10 @@ export default function TaskDetail() {
     if (!date) return "--";
     return new Date(date).toLocaleString();
   };
-
-  const formatLogTime = (date: Date | string) => {
-    return new Date(date).toLocaleTimeString('zh-CN', { 
-      hour: '2-digit', 
-      minute: '2-digit', 
-      second: '2-digit',
-      hour12: false 
-    });
+  
+  const formatLogTime = (date: Date | string | null | undefined) => {
+    if (!date) return "--";
+    return new Date(date).toLocaleTimeString();
   };
 
   if (isLoading) {
@@ -164,6 +146,15 @@ export default function TaskDetail() {
 
   const status = statusConfig[task.status];
   const progress = task.totalPages > 0 ? (task.processedPages / task.totalPages) * 100 : 0;
+  
+  // 计算chunk统计
+  const chunkStats = taskLogs ? {
+    total: taskLogs.filter(l => l.message?.includes("开始处理Chunk")).length,
+    completed: taskLogs.filter(l => l.message?.includes("Chunk") && l.message?.includes("完成")).length,
+    failed: taskLogs.filter(l => l.level === "error" && l.message?.includes("Chunk")).length,
+    llmCalls: taskLogs.filter(l => l.message?.includes("LLM响应完成")).length,
+    fallbackUsed: taskLogs.filter(l => l.message?.includes("Fallback")).length,
+  } : { total: 0, completed: 0, failed: 0, llmCalls: 0, fallbackUsed: 0 };
 
   return (
     <DashboardLayout>
@@ -208,64 +199,48 @@ export default function TaskDetail() {
           </div>
         </div>
 
-        {/* 进度概览 */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <p className="text-sm text-muted-foreground">处理进度</p>
-                  <p className="text-2xl font-bold">{task.processedPages} / {task.totalPages} 块</p>
-                </div>
-                <div className="text-right space-y-1">
-                  <p className="text-sm text-muted-foreground">提取题目数</p>
-                  <p className="text-2xl font-bold text-primary">{task.extractedCount}</p>
-                </div>
-              </div>
-              <Progress value={progress} className="h-3" />
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>{progress.toFixed(1)}% 完成</span>
-                <span>预计剩余: {formatTime(task.estimatedTimeRemaining)}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* 主内容区域 - 标签页 */}
+        {/* 主要内容区域 - 使用Tabs */}
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
           <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="progress">
-              处理状态
-            </TabsTrigger>
-            <TabsTrigger value="logs" className="relative">
-              <Terminal className="mr-1 h-4 w-4" />
+            <TabsTrigger value="status">处理状态</TabsTrigger>
+            <TabsTrigger value="logs" className="flex items-center gap-2">
+              <Terminal className="h-4 w-4" />
               实时日志
               {task.status === "processing" && (
-                <span className="absolute -top-1 -right-1 h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
               )}
             </TabsTrigger>
-            <TabsTrigger value="result" disabled={task.status !== "completed"}>
-              提取结果
-            </TabsTrigger>
+            <TabsTrigger value="results">提取结果</TabsTrigger>
           </TabsList>
-
-          {/* 处理状态标签 */}
-          <TabsContent value="progress" className="mt-4">
+          
+          {/* 处理状态Tab */}
+          <TabsContent value="status" className="space-y-6 mt-6">
             <div className="grid gap-6 md:grid-cols-2">
-              {/* 详细信息卡片 */}
+              {/* 进度卡片 */}
               <Card>
                 <CardHeader>
-                  <CardTitle>任务详情</CardTitle>
+                  <CardTitle>处理进度</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>已处理: {task.processedPages}/{task.totalPages} 页</span>
+                      <span>{progress.toFixed(1)}%</span>
+                    </div>
+                    <Progress value={progress} className="h-3" />
+                  </div>
+                  
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
-                      <p className="text-muted-foreground">当前处理块</p>
+                      <p className="text-muted-foreground">当前页面</p>
                       <p className="font-medium">{task.currentPage || "--"}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground">重试次数</p>
-                      <p className="font-medium">{task.retryCount}</p>
+                      <p className="text-muted-foreground">预计剩余时间</p>
+                      <p className="font-medium">{formatTime(task.estimatedTimeRemaining)}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">开始时间</p>
@@ -274,6 +249,25 @@ export default function TaskDetail() {
                     <div>
                       <p className="text-muted-foreground">完成时间</p>
                       <p className="font-medium">{formatDate(task.completedAt)}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* 统计卡片 */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>提取统计</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-muted/50 rounded-lg text-center">
+                      <p className="text-3xl font-bold text-primary">{task.extractedCount}</p>
+                      <p className="text-sm text-muted-foreground">提取题目数</p>
+                    </div>
+                    <div className="p-4 bg-muted/50 rounded-lg text-center">
+                      <p className="text-3xl font-bold">{task.retryCount}</p>
+                      <p className="text-sm text-muted-foreground">重试次数</p>
                     </div>
                   </div>
                   
@@ -285,128 +279,162 @@ export default function TaskDetail() {
                   )}
                 </CardContent>
               </Card>
-
-              {/* 页面处理状态 */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>分块处理状态</CardTitle>
-                  <CardDescription>每个内容块的处理情况</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ScrollArea className="h-64">
-                    {pageLogs && pageLogs.length > 0 ? (
-                      <div className="space-y-2">
-                        {pageLogs.map((log) => (
-                          <div
-                            key={log.id}
-                            className="flex items-center justify-between p-2 rounded-lg bg-muted/30"
-                          >
-                            <div className="flex items-center gap-3">
-                              <span className="text-sm font-medium">Chunk {log.pageIndex + 1}</span>
-                              <Badge
-                                variant={
-                                  log.status === "completed"
-                                    ? "default"
-                                    : log.status === "failed"
-                                    ? "destructive"
-                                    : log.status === "processing"
-                                    ? "default"
-                                    : "secondary"
-                                }
-                                className="text-xs"
-                              >
-                                {log.status === "completed"
-                                  ? "已完成"
-                                  : log.status === "failed"
-                                  ? "失败"
-                                  : log.status === "processing"
-                                  ? "处理中"
-                                  : "等待中"}
-                              </Badge>
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              {log.processingTime ? `${(log.processingTime / 1000).toFixed(1)}秒` : "--"}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-center text-muted-foreground py-8">暂无处理记录</p>
-                    )}
-                  </ScrollArea>
-                </CardContent>
-              </Card>
             </div>
-          </TabsContent>
-
-          {/* 实时日志标签 */}
-          <TabsContent value="logs" className="mt-4">
+            
+            {/* 分块处理状态 */}
             <Card>
-              <CardHeader className="pb-3">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Cpu className="h-5 w-5" />
+                  分块处理状态
+                </CardTitle>
+                <CardDescription>每个内容块的处理情况</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-4">
+                  <div className="p-3 bg-muted/50 rounded-lg text-center">
+                    <p className="text-2xl font-bold">{chunkStats.total}</p>
+                    <p className="text-xs text-muted-foreground">总Chunk数</p>
+                  </div>
+                  <div className="p-3 bg-green-500/10 rounded-lg text-center">
+                    <p className="text-2xl font-bold text-green-600">{chunkStats.completed}</p>
+                    <p className="text-xs text-muted-foreground">已完成</p>
+                  </div>
+                  <div className="p-3 bg-red-500/10 rounded-lg text-center">
+                    <p className="text-2xl font-bold text-red-600">{chunkStats.failed}</p>
+                    <p className="text-xs text-muted-foreground">失败</p>
+                  </div>
+                  <div className="p-3 bg-blue-500/10 rounded-lg text-center">
+                    <p className="text-2xl font-bold text-blue-600">{chunkStats.llmCalls}</p>
+                    <p className="text-xs text-muted-foreground">LLM调用</p>
+                  </div>
+                  <div className="p-3 bg-yellow-500/10 rounded-lg text-center">
+                    <p className="text-2xl font-bold text-yellow-600">{chunkStats.fallbackUsed}</p>
+                    <p className="text-xs text-muted-foreground">Fallback使用</p>
+                  </div>
+                </div>
+                
+                {/* 最近的chunk处理记录 */}
+                <ScrollArea className="h-48">
+                  {taskLogs && taskLogs.filter(l => l.stage === "extracting").length > 0 ? (
+                    <div className="space-y-2">
+                      {taskLogs
+                        .filter(l => l.stage === "extracting")
+                        .slice(0, 20)
+                        .map((log, idx) => {
+                          const LevelIcon = logLevelConfig[log.level as keyof typeof logLevelConfig]?.icon || Info;
+                          const levelColor = logLevelConfig[log.level as keyof typeof logLevelConfig]?.color || "text-gray-500";
+                          return (
+                            <div
+                              key={log.id || idx}
+                              className="flex items-start gap-3 p-2 rounded-lg bg-muted/30 text-sm"
+                            >
+                              <LevelIcon className={`h-4 w-4 mt-0.5 ${levelColor}`} />
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-muted-foreground">{formatLogTime(log.createdAt)}</span>
+                                  {log.chunkIndex !== null && log.totalChunks && (
+                                    <Badge variant="outline" className="text-xs">
+                                      Chunk {(log.chunkIndex || 0) + 1}/{log.totalChunks}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm mt-1">{String(log.message)}</p>
+                                {log.details ? (
+                                  <pre className="text-xs text-muted-foreground mt-1 overflow-x-auto">
+                                    {typeof log.details === 'object' ? JSON.stringify(log.details, null, 2) : String(log.details)}
+                                  </pre>
+                                ) : null}
+                              </div>
+                            </div>
+                          );
+                        })}
+                    </div>
+                  ) : (
+                    <p className="text-center text-muted-foreground py-8">暂无处理记录</p>
+                  )}
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {/* 实时日志Tab */}
+          <TabsContent value="logs" className="mt-6">
+            <Card>
+              <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       <Terminal className="h-5 w-5" />
                       处理日志
                     </CardTitle>
-                    <CardDescription>
-                      实时查看任务处理的详细日志
-                    </CardDescription>
+                    <CardDescription>实时查看任务处理的详细日志</CardDescription>
                   </div>
-                  <Button variant="outline" size="sm" onClick={() => refetchLogs()}>
-                    <RefreshCw className="mr-1 h-4 w-4" />
-                    刷新
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => setAutoScroll(!autoScroll)}
+                    >
+                      {autoScroll ? "停止自动滚动" : "开启自动滚动"}
+                    </Button>
+                    <Button variant="outline" size="sm" onClick={() => refetchLogs()}>
+                      <RefreshCw className="mr-1 h-4 w-4" />
+                      刷新
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-[500px] w-full rounded-md border bg-muted/20 p-4">
+                <ScrollArea className="h-[500px] w-full rounded-md border p-4 bg-black/5 dark:bg-white/5">
                   {taskLogs && taskLogs.length > 0 ? (
                     <div className="space-y-2 font-mono text-sm">
-                      {[...taskLogs].reverse().map((log) => (
-                        <div
-                          key={log.id}
-                          className={`flex items-start gap-3 p-2 rounded ${logLevelColors[log.level as keyof typeof logLevelColors] || 'bg-muted/50'}`}
-                        >
-                          <span className="flex-shrink-0 mt-0.5">
-                            {logLevelIcons[log.level as keyof typeof logLevelIcons] || <Info className="h-4 w-4" />}
-                          </span>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 flex-wrap">
-                              <span className="text-xs text-muted-foreground">
-                                {formatLogTime(log.createdAt)}
-                              </span>
-                              <Badge variant="outline" className="text-xs">
-                                {log.stage}
-                              </Badge>
+                      {[...taskLogs].reverse().map((log, idx) => {
+                        const config = logLevelConfig[log.level as keyof typeof logLevelConfig] || logLevelConfig.info;
+                        const LevelIcon = config.icon;
+                        return (
+                          <div
+                            key={log.id || idx}
+                            className={`flex items-start gap-3 p-2 rounded ${config.bg}`}
+                          >
+                            <LevelIcon className={`h-4 w-4 mt-0.5 flex-shrink-0 ${config.color}`} />
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <span className="text-xs text-muted-foreground">{formatLogTime(log.createdAt)}</span>
+                                <Badge variant="secondary" className="text-xs">{log.stage}</Badge>
+                                {log.chunkIndex !== null && log.totalChunks && (
+                                  <Badge variant="outline" className="text-xs">
+                                    Chunk {(log.chunkIndex || 0) + 1}/{log.totalChunks}
+                                  </Badge>
+                                )}
+                              </div>
+                              <p className={`mt-1 ${config.color}`}>{String(log.message)}</p>
+                              {log.details ? (
+                                <details className="mt-2">
+                                  <summary className="text-xs text-muted-foreground cursor-pointer hover:text-foreground">
+                                    查看详情
+                                  </summary>
+                                  <pre className="text-xs text-muted-foreground mt-1 p-2 bg-black/10 dark:bg-white/10 rounded overflow-x-auto">
+                                    {typeof log.details === 'object' ? JSON.stringify(log.details, null, 2) : String(log.details)}
+                                  </pre>
+                                </details>
+                              ) : null}
                             </div>
-                            <p className="mt-1 break-words">{log.message}</p>
-                            {log.details && (
-                              <pre className="mt-1 text-xs text-muted-foreground overflow-x-auto">
-                                {typeof log.details === 'string' 
-                                  ? log.details 
-                                  : JSON.stringify(log.details, null, 2)}
-                              </pre>
-                            )}
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                       <div ref={logsEndRef} />
                     </div>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
-                      <Terminal className="h-12 w-12 mb-4 opacity-50" />
-                      <p>暂无日志</p>
-                      <p className="text-sm">启动任务后将显示处理日志</p>
-                    </div>
+                    <p className="text-center text-muted-foreground py-8">暂无日志记录</p>
                   )}
                 </ScrollArea>
               </CardContent>
             </Card>
           </TabsContent>
-
-          {/* 提取结果标签 */}
-          <TabsContent value="result" className="mt-4">
+          
+          {/* 提取结果Tab */}
+          <TabsContent value="results" className="mt-6">
             {task.status === "completed" ? (
               <Card>
                 <CardHeader>
@@ -476,9 +504,10 @@ export default function TaskDetail() {
             ) : (
               <Card>
                 <CardContent className="py-12">
-                  <div className="flex flex-col items-center justify-center text-muted-foreground">
-                    <FileText className="h-12 w-12 mb-4 opacity-50" />
-                    <p>任务完成后将显示提取结果</p>
+                  <div className="text-center text-muted-foreground">
+                    <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>任务尚未完成,暂无提取结果</p>
+                    <p className="text-sm mt-2">请等待任务处理完成后查看结果</p>
                   </div>
                 </CardContent>
               </Card>

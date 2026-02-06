@@ -21,17 +21,11 @@ import {
   updatePageProcessingLog,
   getPendingPageLogs,
   getFailedPageLogs,
-  getTaskLogs,
-  deleteTaskLogs
+  getTaskLogs
 } from "./db";
 import { storagePut, storageGet } from "./storage";
 import { pauseTask, resumeTask, cancelTask, isTaskPaused } from "./extraction";
 import { startTaskProcessing, pauseTaskProcessing, cancelTaskProcessing } from "./taskProcessor";
-
-// Helper to normalize API URL by removing trailing /chat/completions and slashes
-const normalizeApiUrl = (url: string) => {
-  return url.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
-};
 
 // LLM配置路由
 const llmConfigRouter = router({
@@ -74,7 +68,6 @@ const llmConfigRouter = router({
     .mutation(async ({ ctx, input }) => {
       const id = await createLLMConfig({
         ...input,
-        apiUrl: normalizeApiUrl(input.apiUrl),
         userId: ctx.user.id
       });
       return { id };
@@ -116,9 +109,8 @@ const llmConfigRouter = router({
     .mutation(async ({ input }) => {
       try {
         const axios = (await import("axios")).default;
-        const baseUrl = normalizeApiUrl(input.apiUrl);
         const response = await axios.post(
-          `${baseUrl}/chat/completions`,
+          `${input.apiUrl}/chat/completions`,
           {
             model: input.modelName,
             messages: [{ role: "user", content: "Hello, this is a test message. Please respond with 'OK'." }],
@@ -176,14 +168,13 @@ const taskRouter = router({
       return await getPageProcessingLogsByTask(input.taskId);
     }),
   
-  // 获取任务的详细处理日志
+  // 获取任务的详细处理日志(包含LLM调用信息)
   getLogs: protectedProcedure
     .input(z.object({ 
       taskId: z.number(),
-      limit: z.number().min(1).max(500).default(100)
+      limit: z.number().min(1).max(500).optional().default(100)
     }))
     .query(async ({ ctx, input }) => {
-      // 先验证任务属于当前用户
       const task = await getExtractionTaskById(input.taskId, ctx.user.id);
       if (!task) {
         throw new TRPCError({ code: "NOT_FOUND", message: "任务不存在" });
@@ -416,21 +407,11 @@ const resultRouter = router({
       
       try {
         const { url } = await storageGet(filePath);
-        
-        if (url.startsWith('/uploads/')) {
-          const fs = await import('node:fs');
-          const path = await import('node:path');
-          const localPath = path.resolve(process.cwd(), 'server', url.substring(1));
-          const content = fs.readFileSync(localPath, 'utf-8');
-          return { content, format: input.format };
-        }
-
         const axios = (await import("axios")).default;
         const response = await axios.get(url, { timeout: 30000 });
         return { content: typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2), format: input.format };
       } catch (error) {
-        console.error("Failed to load result file:", error);
-        return { content: "无法加载结果文件: " + (error instanceof Error ? error.message : String(error)), format: input.format };
+        return { content: "无法加载结果文件", format: input.format };
       }
     }),
 
