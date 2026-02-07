@@ -639,46 +639,37 @@ export function parseLLMOutput(
 // ============= 章节标题规范化 =============
 
 /**
- * 规范化章节标题用于匹配
- * 参考DataFlow的refine_title实现
+ * 规范化章节标题 - 用于匹配问题和答案
+ * 回归DataFlow官方refine_title逻辑:
+ * - 删除所有空格和换行
+ * - strictMatch=false时,只提取数字编号(如"19.1"或"19"),丢弃中文描述
+ * - 这确保同一章节的不同表述(如"19.1平方根与立方根"和"19.1(一)算术平方根")都匹配为"19.1"
  * 
- * 优化: 保留更多区分信息,避免不同章节被规范化为相同的值
- * 例如: "1. 退位减法" 和 "1. 用平十法..." 应该保留更多上下文
+ * 参考: OpenDCAI/DataFlow/dataflow/utils/pdf2vqa/format_utils.py::refine_title
  */
 export function normalizeTitle(title: string, strictMatch: boolean = false): string {
   // 删除空格和换行
   let normalized = title.replace(/\s+/g, '');
 
-  // P1修复: 剥离末尾页码 (如 "19.1算术平方根(1)2" -> "19.1算术平方根(1)")
-  // 页码格式: 末尾是1-3位数字,且前面是中文或括号
-  normalized = normalized.replace(/([)\uff09\u4e00-\u9fff])(\d{1,3})$/, '$1');
-
   if (!strictMatch) {
-    // 检查是否是明确的章节标题格式
-    // 例如: "第1单元", "第一章", "Unit 1", "Chapter 2"
-    const chapterPatterns = [
-      /第(\d+)单元/,           // 第1单元
-      /第(\d+)章/,             // 第1章
-      /第([一二三四五六七八九十百]+)单元/, // 第一单元
-      /第([一二三四五六七八九十百]+)章/,   // 第一章
-      /Unit\s*(\d+)/i,          // Unit 1
-      /Chapter\s*(\d+)/i,       // Chapter 1
-      /练习([一二三四五六七八九十百]+)/,     // 练习一
-      /练习(\d+)/,              // 练习1
-    ];
-    
-    for (const pattern of chapterPatterns) {
-      const match = normalized.match(pattern);
-      if (match) {
-        // 返回完整的匹配结果,保留前缀
-        return match[0];
+    try {
+      // 优先提取阿拉伯数字章节编号(如"19.1"、"23"等)
+      const arabicMatch = normalized.match(/\d+\.\d+|\d+/);
+      if (arabicMatch) {
+        return arabicMatch[0];
       }
+    } catch (e) {
+      // 忽略错误,继续尝试中文数字
     }
     
-    // 如果不是明确的章节标题,保留更多上下文
-    // P2修复: 截断阈值从30放宽到50,解决"2025TheFirstSemesterG4FinalTes"截断问题
-    if (normalized.length > 50) {
-      return normalized.substring(0, 50);
+    try {
+      // 其次提取中文数字章节编号(如"六"、"二十四"等)
+      const chineseMatch = normalized.match(/[一二三四五六七八九零十百]+/);
+      if (chineseMatch) {
+        return chineseMatch[0];
+      }
+    } catch (e) {
+      // 如果也失败,返回原始规范化后的标题
     }
   }
 

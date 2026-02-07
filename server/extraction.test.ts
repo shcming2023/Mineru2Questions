@@ -157,25 +157,28 @@ describe("LLM Output Parsing", () => {
 });
 
 describe("Title Normalization", () => {
-  it("should preserve chapter context for better distinction", () => {
-    // 优化: 保留更多上下文信息,避免不同章节被规范化为相同的值
-    expect(normalizeTitle("第1章 代数")).toBe("第1章");
-    expect(normalizeTitle("第1单元 加法")).toBe("第1单元");
-    // 非章节标题保留完整内容
-    expect(normalizeTitle("1.2 方程")).toBe("1.2方程");
+  it("should extract numeric chapter number only (DataFlow official logic)", () => {
+    // 回归DataFlow官方refine_title逻辑: 只提取数字编号,丢弃中文描述
+    // 这确保同一章节的不同表述都匹配为相同的编号
+    expect(normalizeTitle("第1章 代数")).toBe("1");
+    expect(normalizeTitle("第1单元 加法")).toBe("1");
+    expect(normalizeTitle("19.1平方根与立方根")).toBe("19.1");
+    expect(normalizeTitle("19.1(一)算术平方根")).toBe("19.1");
+    expect(normalizeTitle("23.1多边形(1)")).toBe("23.1");
   });
 
-  it("should preserve Chinese chapter context", () => {
-    expect(normalizeTitle("第一章 代数")).toBe("第一章");
-    expect(normalizeTitle("第一单元 加法")).toBe("第一单元");
-    // 练习标题
-    expect(normalizeTitle("练习一")).toBe("练习一");
-    // 非章节标题保留完整内容
-    expect(normalizeTitle("六、选择题")).toBe("六、选择题");
+  it("should extract Chinese numeric chapter number (DataFlow official logic)", () => {
+    // 当没有阿拉伯数字时,提取中文数字编号
+    expect(normalizeTitle("第一章 代数")).toBe("一");
+    expect(normalizeTitle("第一单元 加法")).toBe("一");
+    expect(normalizeTitle("练习一")).toBe("一");
+    expect(normalizeTitle("六、选择题")).toBe("六");
   });
 
   it("should handle strict match mode", () => {
+    // strictMatch=true时,保留完整规范化后的标题(只删除空格)
     expect(normalizeTitle("第一章 代数", true)).toBe("第一章代数");
+    expect(normalizeTitle("19.1 平方根与立方根", true)).toBe("19.1平方根与立方根");
   });
   
   it("should truncate long titles", () => {
