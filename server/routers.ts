@@ -109,11 +109,8 @@ const llmConfigRouter = router({
     .mutation(async ({ input }) => {
       try {
         const axios = (await import("axios")).default;
-        // 智能处理URL: 移除末尾的/chat/completions和斜杠, 确保只拼接一次
-        const baseUrl = input.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
-        
         const response = await axios.post(
-          `${baseUrl}/chat/completions`,
+          `${input.apiUrl}/chat/completions`,
           {
             model: input.modelName,
             messages: [{ role: "user", content: "Hello, this is a test message. Please respond with 'OK'." }],
@@ -409,12 +406,24 @@ const resultRouter = router({
       }
       
       try {
+        // 优先尝试从本地文件读取(用于测试任务)
+        const fs = await import('node:fs');
+        const path = await import('node:path');
+        const localPath = path.resolve(process.cwd(), 'server', 'uploads', 'tasks', task.sourceFolder, 'results', input.format === 'json' ? 'questions.json' : 'questions.md');
+        
+        if (fs.existsSync(localPath)) {
+          const content = fs.readFileSync(localPath, 'utf-8');
+          return { content, format: input.format };
+        }
+        
+        // 如果本地文件不存在,尝试从 S3 获取
         const { url } = await storageGet(filePath);
         const axios = (await import("axios")).default;
         const response = await axios.get(url, { timeout: 30000 });
         return { content: typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2), format: input.format };
       } catch (error) {
-        return { content: "无法加载结果文件", format: input.format };
+        console.error('[result.getContent] Failed to load result file:', error);
+        return { content: `无法加载结果文件: ${error instanceof Error ? error.message : String(error)}`, format: input.format };
       }
     }),
 
