@@ -808,33 +808,43 @@ export function mergeQAPairs(
   const merged: MergedQAPair[] = [];
   // 优化: 使用questionIds作为主键进行去重
   const questionByIds = new Map<string, ExtractedQAPair>();
-  // 两级索引: 精确匹配(chapter:label) 和 模糊匹配(label only)
-  const questionMapExact = new Map<string, ExtractedQAPair>();  // chapter:label
+  // 两级索引: 精确匹配(chapterId:chapter:label) 和 模糊匹配(label only)
+  const questionMapExact = new Map<string, ExtractedQAPair>();  // chapterId:chapter:label
   const questionMapFuzzy = new Map<string, ExtractedQAPair[]>(); // label -> questions[]
-  const answerMapExact = new Map<string, ExtractedQAPair>();     // chapter:label
+  const answerMapExact = new Map<string, ExtractedQAPair>();     // chapterId:chapter:label
   const answerMapFuzzy = new Map<string, ExtractedQAPair[]>();   // label -> answers[]
 
+  // P0修复: 对齐DataFlow官方 - 章节边界检测与chapter_id递增
+  // 当label回退时递增chapter_id,即使同一个chapter_title也能区分不同小节
   let currentQuestionChapter = '';
   let currentAnswerChapter = '';
   let lastQuestionLabel = Infinity;
   let lastAnswerLabel = Infinity;
+  let questionChapterId = 0;  // 递增的章节序号
+  let answerChapterId = 0;    // 递增的章节序号
 
   // 处理问题列表
   for (const q of questions) {
     const labelNum = normalizeLabel(q.label);
     if (labelNum === null || labelNum <= 0) continue;
 
-    // 更新章节标题 - 如果题号变小,说明进入新章节
-    if (q.chapter_title && q.chapter_title !== currentQuestionChapter) {
+    // P0修复: 章节边界检测 - 当label回退时递增chapter_id
+    // 对齐DataFlow官方format_utils.py::merge_qa_pair L138-L142
+    if (q.chapter_title && q.chapter_title !== '' && q.chapter_title !== currentQuestionChapter) {
       if (labelNum < lastQuestionLabel) {
+        // label回退,进入新章节
+        questionChapterId += 1;
         currentQuestionChapter = q.chapter_title;
+      } else {
+        // label递增但章节标题变化 -> 可能是子标题(如"一、选择题"),继续使用旧标题
+        // 不更新currentQuestionChapter
       }
     }
     lastQuestionLabel = labelNum;
 
     const normalizedTitle = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
     const labelKey = getLabelKey(q.label);
-    const exactKey = `${normalizedTitle}:${labelKey}`;
+    const exactKey = `${questionChapterId}:${normalizedTitle}:${labelKey}`;
 
     // 使用questionIds作为主键进行去重
     const primaryKey = q.questionIds || `${exactKey}:${q.question?.substring(0, 50) || ''}`;
@@ -879,9 +889,10 @@ export function mergeQAPairs(
     const labelNum = normalizeLabel(a.label);
     if (labelNum === null || labelNum <= 0) continue;
 
-    // 更新章节标题
-    if (a.chapter_title && a.chapter_title !== currentAnswerChapter) {
+    // P0修复: 章节边界检测 - 当label回退时递增chapter_id
+    if (a.chapter_title && a.chapter_title !== '' && a.chapter_title !== currentAnswerChapter) {
       if (labelNum < lastAnswerLabel) {
+        answerChapterId += 1;
         currentAnswerChapter = a.chapter_title;
       }
     }
@@ -889,7 +900,7 @@ export function mergeQAPairs(
 
     const normalizedTitle = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
     const labelKey = getLabelKey(a.label);
-    const exactKey = `${normalizedTitle}:${labelKey}`;
+    const exactKey = `${answerChapterId}:${normalizedTitle}:${labelKey}`;
     const aWithTitle = { ...a, chapter_title: normalizedTitle };
 
     // 精确索引
@@ -1185,16 +1196,41 @@ export async function callVLMForImageExtraction(
 /**
  * 生成JSON和Markdown格式的结果
  */
+/**
+ * P0修复: 判断是否为噪声条目(出版信息、目录、定义等)
+ */
+function isNoiseEntry(qa: MergedQAPair): boolean {
+  const q = qa.question.trim();
+  
+  // 出版信息特征
+  if (/ISBN\s*\d/.test(q)) return true;
+  if (/CIP数据/.test(q)) return true;
+  if (/出版说明/.test(q)) return true;
+  if (/责任编辑/.test(q)) return true;
+  
+  // 目录特征
+  if (q.startsWith('目录')) return true;
+  if (/^第\d+章/.test(q) && q.length < 50) return true; // 简短的章节标题
+  
+  // chapter_title为空且题目很短(可能是碎片)
+  if (!qa.question_chapter_title && q.length < 20) return true;
+  
+  return false;
+}
+
 export function generateResults(
   qaPairs: MergedQAPair[],
   imageBaseUrl: string = "images"
 ): { json: any[]; markdown: string } {
+  // P0修复: 在最终输出阶段统一过滤噪声
+  const filteredPairs = qaPairs.filter(qa => !isNoiseEntry(qa));
+  
   const jsonOutput: any[] = [];
   let markdownOutput = `# 提取的数学题目\n\n`;
-  markdownOutput += `共提取 ${qaPairs.length} 道题目\n\n---\n\n`;
+  markdownOutput += `共提取 ${filteredPairs.length} 道题目\n\n---\n\n`;
 
   // 按章节和题号排序
-  const sortedPairs = [...qaPairs].sort((a, b) => {
+  const sortedPairs = [...filteredPairs].sort((a, b) => {
     if (a.question_chapter_title !== b.question_chapter_title) {
       return a.question_chapter_title.localeCompare(b.question_chapter_title);
     }
