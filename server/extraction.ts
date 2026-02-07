@@ -89,13 +89,15 @@ export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and 
 
 ## Your Tasks:
 1. Every JSON item has an "id" field. Your main task is to output these IDs.
-2. Segment the content into multiple <qa_pair>...</qa_pair> blocks, each containing a question and its corresponding answer/solution.
+2. Extract ALL math problems (including examples marked as "例①", "例1", "Example 1", etc.) and their corresponding answers/solutions.
 3. **CRITICAL: ONE QUESTION PER <qa_pair> ONLY. NEVER merge multiple questions into a single <qa_pair> block.**
-4. If a problem or answer/solution is incomplete (e.g., continues to next chunk), omit it. An answer/solution is complete if either the answer or solution exists.
-5. Put image IDs into proper positions based on context or captions.
-6. Extract chapter titles and each problem's label/number from the text.
-7. Only output "id" fields for chapter titles, questions, and solutions. DO NOT OUTPUT ORIGINAL TEXT. Use ',' to separate different IDs.
-8. However, use original labels/numbers for labels, and extract original text for short answers.
+4. **INTERLEAVED CONTENT HANDLING**: If a problem and its answer/solution appear contiguously (e.g., "例① ...题干..." followed by "解: ...解答..."), wrap them together as a single <qa_pair> block.
+5. **DISTINGUISH DEFINITIONS FROM PROBLEMS**: Pure definition text (e.g., "如果一个数x的立方等于a...") without a problem number or question structure is NOT a problem - do not extract it.
+6. If a problem or answer/solution is incomplete (e.g., continues to next chunk), omit it. An answer/solution is complete if either the answer or solution exists.
+7. Put image IDs into proper positions based on context or captions.
+8. Extract chapter titles and each problem's label/number from the text.
+9. Only output "id" fields for chapter titles, questions, and solutions. DO NOT OUTPUT ORIGINAL TEXT. Use ',' to separate different IDs.
+10. However, use original labels/numbers for labels, and extract original text for short answers.
 
 ## CRITICAL: Consecutive ID Handling
 - When a question or solution spans multiple consecutive blocks, you MUST include ALL consecutive IDs.
@@ -112,6 +114,10 @@ export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and 
 - Example: "① 如图..." and "② 某校..." are TWO separate questions, not sub-questions of one question.
 
 ### About Questions and Answers/Solutions:
+- **EXAMPLES ARE PROBLEMS**: Problems marked as "例①", "例1", "Example 1" are valid problems and MUST be extracted.
+- **INTERLEAVED EXAMPLES**: When an example (e.g., "例①") is immediately followed by its solution (e.g., "解:" or "分析:"), extract them together:
+  <qa_pair><label>1</label><question>EXAMPLE_IDS</question><answer></answer><solution>SOLUTION_IDS</solution></qa_pair>
+- **DEFINITION TEXT**: Pure definition or property statements (e.g., "如果一个数x的立方等于a...", "平方根与立方根的定义、性质对照表") without a problem number or question structure are NOT problems - do not extract them.
 - Preserve each problem's original label/number (e.g., "①", "②", "例1", "1", "11"). Do not include periods after numbers.
 - For circled numbers: use "1" for ①, "2" for ②, "3" for ③, etc.
 - Use Arabic numerals only. Convert "例一" to "例1", "IV" to "4".
@@ -633,7 +639,16 @@ export function parseLLMOutput(
     splitPairs.push(...splitResults);
   }
 
-  return splitPairs;
+  // 修复: 过滤chapter_title为空的条目(消除出版信息等噪声)
+  // 评审报告问题2: 出版信息被混入为label=7的"题目",chapter_title为空
+  const filteredPairs = splitPairs.filter(qa => {
+    if (!qa.chapter_title || qa.chapter_title.trim() === '') {
+      return false; // 过滤掉chapter_title为空的条目
+    }
+    return true;
+  });
+
+  return filteredPairs;
 }
 
 // ============= 章节标题规范化 =============

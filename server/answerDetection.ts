@@ -24,8 +24,9 @@ export function findAnswerSection(blocks: ConvertedBlock[]): number {
     /^Solutions?/i
   ];
   
-  // 从后往前搜索,因为答案通常在教材末尾
-  for (let i = Math.floor(blocks.length * 0.5); i < blocks.length; i++) {
+  // 从头开始搜索,因为答案区域可能出现在任何位置(如教材前面的"附录:参考答案")
+  // 修复: 移阄50%位置的硬编码限制,避免错过靠前的答案区域
+  for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
     
     // 检查title类型的块
