@@ -881,7 +881,7 @@ export function mergeQAPairs(
   
   // 合并问题和答案
   // 遍历所有的问题
-  for (const [key, q] of qaMap.entries()) {
+  for (const [key, q] of Array.from(qaMap.entries())) {
     const labelNum = normalizeLabel(q.label)!;
     
     let answerPair: ExtractedQAPair | undefined;
@@ -913,7 +913,7 @@ export function mergeQAPairs(
   }
   
   // 处理剩余的答案 (只有答案没有题目)
-  for (const [key, a] of answerMap.entries()) {
+  for (const [key, a] of Array.from(answerMap.entries())) {
       const labelNum = normalizeLabel(a.label)!;
       if (a.answer || a.solution) {
           merged.push({
@@ -1239,7 +1239,7 @@ export function generateResults(
     if (a.question_chapter_title !== b.question_chapter_title) {
       return a.question_chapter_title.localeCompare(b.question_chapter_title);
     }
-    return a.label - b.label;
+    return (parseInt(a.label) || 0) - (parseInt(b.label) || 0);
   });
 
   for (const qa of sortedPairs) {

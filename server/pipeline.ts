@@ -252,7 +252,7 @@ export class ExtractionPipeline {
         const shouldSkip = this.fallbackHandler.handleParseFailure(
           error,
           chunk.index,
-          this.config.llmConfig.onSoftFail || 'skip'
+          (this.config.llmConfig.onSoftFail === 'default' ? 'skip' : this.config.llmConfig.onSoftFail) || 'skip'
         );
 
         if (shouldSkip) {

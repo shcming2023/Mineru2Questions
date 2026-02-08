@@ -102,5 +102,13 @@ tmp/
 temp/
 
 
-# testouthistory
+# Task history (archived)
 server/uploads/taskshistory
+
+# Empty/legacy database files
+data.db
+
+# Temporary test scripts (use scripts/ for maintained scripts)
+test_*.mjs
+check_*.js
+seed_*.js

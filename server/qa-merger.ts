@@ -104,7 +104,7 @@ export class QAMerger {
     }
 
     // 3. 添加未被匹配的答案（例如只有答案没有题目的情况）
-    for (const ans of answerMap.values()) {
+    for (const ans of Array.from(answerMap.values())) {
       mergedPairs.push({
         label: ans.label,
         question_chapter_title: '',
@@ -236,7 +236,7 @@ export class QAMerger {
    * @returns 合并后的图片列表（去重）
    */
   private mergeImages(images1: string[], images2: string[]): string[] {
-    return [...new Set([...images1, ...images2])];
+    return Array.from(new Set([...images1, ...images2]));
   }
 
   /**

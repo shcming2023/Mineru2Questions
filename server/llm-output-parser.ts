@@ -51,7 +51,7 @@ export class LLMOutputParser {
 
     // 使用正则提取所有 <chapter>...</chapter> 块
     // 注意：使用 /gs 标志支持多行匹配和贪婪匹配
-    const chapterMatches = llmOutput.match(/<chapter>(.*?)<\/chapter>/gs);
+    const chapterMatches = llmOutput.match(/<chapter>([\s\S]*?)<\/chapter>/g);
     
     if (!chapterMatches || chapterMatches.length === 0) {
       throw new Error(
@@ -78,7 +78,7 @@ export class LLMOutputParser {
       const chapterTitle = this.getTextFromIds(chapterTitleIds);
 
       // 提取所有 <qa_pair>...</qa_pair> 块
-      const pairMatches = chapterMatch.match(/<qa_pair>(.*?)<\/qa_pair>/gs);
+      const pairMatches = chapterMatch.match(/<qa_pair>([\s\S]*?)<\/qa_pair>/g);
       
       if (!pairMatches || pairMatches.length === 0) {
         // 如果章节内没有 qa_pair，跳过（可能是纯标题章节）
