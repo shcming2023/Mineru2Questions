@@ -115,3 +115,20 @@ export const taskLogs = sqliteTable("task_logs", {
 
 export type TaskLog = typeof taskLogs.$inferSelect;
 export type InsertTaskLog = typeof taskLogs.$inferInsert;
+
+/**
+ * 审计日志表 - 用于Mineral-Aligner合规性审查
+ */
+export const auditLogs = sqliteTable("audit_logs", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  stage: text("stage", { length: 64 }).notNull(),
+  inputLen: integer("inputLen"),
+  outputLen: integer("outputLen"),
+  rejectReason: text("rejectReason"),
+  fallbackUsed: integer("fallbackUsed", { mode: "boolean" }),
+  timestamp: integer("timestamp").notNull(),
+  taskId: text("taskId"),
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = typeof auditLogs.$inferInsert;

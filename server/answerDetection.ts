@@ -4,6 +4,9 @@
  */
 
 import { ConvertedBlock } from './extraction';
+import { StrategyChain, DEFAULT_ANSWER_DETECTION } from './strategies';
+
+const answerDetector = new StrategyChain(DEFAULT_ANSWER_DETECTION);
 
 /**
  * 检测答案区域的起始位置
@@ -12,45 +15,24 @@ import { ConvertedBlock } from './extraction';
  * @returns 答案区域的起始索引,如果未找到则返回blocks.length
  */
 export function findAnswerSection(blocks: ConvertedBlock[]): number {
-  // 答案区域的常见标题模式
-  const answerPatterns = [
-    /^附\s*录/,
-    /^参考答案/,
-    /^习题答案/,
-    /^答\s*案/,
-    /^解\s*答/,
-    /^Appendix/i,
-    /^Answer\s*Key/i,
-    /^Solutions?/i
-  ];
-  
-  // 从头开始搜索,因为答案区域可能出现在任何位置(如教材前面的"附录:参考答案")
-  // 修复: 移阄50%位置的硬编码限制,避免错过靠前的答案区域
   for (let i = 0; i < blocks.length; i++) {
     const block = blocks[i];
     
-    // 检查title类型的块
+    // Check Title Blocks (Explicit Header)
     if (block.type === 'title' && block.text) {
-      const text = block.text.trim();
-      for (const pattern of answerPatterns) {
-        if (pattern.test(text)) {
-          console.log(`[Answer Detection] Found answer section at block ${i}: "${text}"`);
-          return i;
-        }
+      const result = answerDetector.execute("explicit_header_match", { text: block.text, block });
+      if (result.action === 'found') {
+        console.log(`[Answer Detection] Found answer section at block ${i}: "${block.text}"`);
+        return i;
       }
     }
     
-    // 检查text类型的块中是否有大标题特征
+    // Check Text Blocks (Short Header)
     if (block.type === 'text' && block.text) {
-      const text = block.text.trim();
-      // 如果文本很短(<20字符)且匹配答案标题模式,也认为是答案区域
-      if (text.length < 20) {
-        for (const pattern of answerPatterns) {
-          if (pattern.test(text)) {
-            console.log(`[Answer Detection] Found answer section at block ${i}: "${text}"`);
-            return i;
-          }
-        }
+      const result = answerDetector.execute("short_header_match", { text: block.text, block });
+      if (result.action === 'found') {
+        console.log(`[Answer Detection] Found answer section at block ${i}: "${block.text}"`);
+        return i;
       }
     }
   }

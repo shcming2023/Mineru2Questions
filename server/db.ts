@@ -6,7 +6,8 @@ import {
   llmConfigs, InsertLLMConfig, LLMConfig,
   extractionTasks, InsertExtractionTask, ExtractionTask,
   pageProcessingLogs, InsertPageProcessingLog, PageProcessingLog,
-  taskLogs, InsertTaskLog, TaskLog
+  taskLogs, InsertTaskLog, TaskLog,
+  auditLogs, InsertAuditLog, AuditLog
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -328,5 +329,21 @@ export async function logTaskProgress(
   } catch (error) {
     // 日志记录失败不应影响主流程
     console.error("Failed to log task progress:", error);
+  }
+}
+
+// ==================== Audit Log Functions ====================
+
+export async function insertAuditLog(log: InsertAuditLog): Promise<void> {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot insert audit log: database not available");
+    return;
+  }
+  
+  try {
+    await db.insert(auditLogs).values(log);
+  } catch (error) {
+    console.error("[Database] Failed to insert audit log:", error);
   }
 }

@@ -13,7 +13,8 @@ import {
   getLLMConfigById,
   getPendingPageLogs,
   logTaskProgress,
-  deleteTaskLogs
+  deleteTaskLogs,
+  insertAuditLog
 } from "./db";
 import { storageGet, storagePut } from "./storage";
 import {
@@ -31,7 +32,8 @@ import {
   registerTask,
   unregisterTask,
   shouldStopTask,
-  isTaskPaused
+  isTaskPaused,
+  AuditLogFn
 } from "./extraction";
 
 interface ProcessingContext {
@@ -160,7 +162,20 @@ async function processChunk(
     const llmOutput = await callLLMForTextExtraction(
       ctx.config,
       chunkJson,
-      QA_EXTRACT_PROMPT
+      QA_EXTRACT_PROMPT,
+      undefined, // 使用默认maxTokens
+      // 注入审计日志
+      (stage, inputLen, outputLen, rejectReason, fallbackUsed, timestamp) => {
+        insertAuditLog({
+          stage,
+          inputLen,
+          outputLen,
+          rejectReason: rejectReason || null,
+          fallbackUsed,
+          timestamp,
+          taskId: ctx.taskId.toString()
+        }).catch(err => console.error("Audit Log Error:", err));
+      }
     );
     
     const llmTime = Date.now() - startTime;

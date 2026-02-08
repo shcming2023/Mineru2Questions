@@ -15,6 +15,13 @@
       "when": 1770295526285,
       "tag": "0001_gigantic_moondragon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1770509097347,
+      "tag": "0002_mature_ser_duncan",
+      "breakpoints": true
     }
   ]
 }

@@ -15,6 +15,19 @@
  */
 
 import axios from "axios";
+import { StrategyChain, DEFAULT_TITLE_FILTERS } from "./strategies";
+
+// Initialize Quality Gate
+const titleQualityGate = new StrategyChain(DEFAULT_TITLE_FILTERS);
+
+export type AuditLogFn = (
+  stage: string,
+  inputLen: number,
+  outputLen: number,
+  rejectReason: string | null,
+  fallbackUsed: boolean,
+  timestamp: number
+) => void;
 
 // ============= 类型定义 =============
 
@@ -24,6 +37,9 @@ export interface LLMConfig {
   modelName: string;
   maxWorkers: number;
   timeout: number;
+  // Fault Tolerance
+  maxRetries?: number;
+  onSoftFail?: 'skip' | 'loosen' | 'default';
 }
 
 // MinerU content_list.json中的内容块类型
@@ -268,12 +284,8 @@ export function convertMinerUContentList(contentList: any[]): ConvertedBlock[] {
       continue;
     }
     
-    // P0修复: 处理列表类型前先检测是否为目录
+    // 处理列表类型
     if (item.type === 'list' && item.sub_type === 'text' && item.list_items) {
-      // 跳过目录列表
-      if (isTocList(item.list_items)) {
-        continue;
-      }
       for (const listItem of item.list_items) {
         convertedBlocks.push({
           id: currentId,
@@ -426,26 +438,8 @@ export function extractImagesFromIds(
 function cleanChapterTitle(title: string): string {
   if (!title) return '';
   
-  const trimmed = title.trim();
-  
-  // 过滤节标记和目录类内容
-  const filterPatterns = [
-    /^名校考题精选/,
-    /^各区考题精选/,
-    /^挑战压轴题/,
-    /^思维与拓展/,
-    /^本期导读/,
-    /^本学期将学习/,
-    /^[一二三四五六七八九十]+、[选择填空解答计算应用证明]题/,  // "一、选择题"
-  ];
-  
-  for (const pattern of filterPatterns) {
-    if (pattern.test(trimmed)) {
-      return '';  // 返回空字符串,表示过滤掉该标题
-    }
-  }
-  
-  return trimmed;
+  const result = titleQualityGate.execute("section_marker_filter", { text: title });
+  return result.action === 'drop' ? '' : title.trim();
 }
 
 /**
@@ -806,187 +800,150 @@ export function mergeQAPairs(
   strictTitleMatch: boolean = false
 ): MergedQAPair[] {
   const merged: MergedQAPair[] = [];
-  // 优化: 使用questionIds作为主键进行去重
-  const questionByIds = new Map<string, ExtractedQAPair>();
-  // 两级索引: 精确匹配(chapterId:chapter:label) 和 模糊匹配(label only)
-  const questionMapExact = new Map<string, ExtractedQAPair>();  // chapterId:chapter:label
-  const questionMapFuzzy = new Map<string, ExtractedQAPair[]>(); // label -> questions[]
-  const answerMapExact = new Map<string, ExtractedQAPair>();     // chapterId:chapter:label
-  const answerMapFuzzy = new Map<string, ExtractedQAPair[]>();   // label -> answers[]
-
-  // P0修复: 对齐DataFlow官方 - 章节边界检测与chapter_id递增
-  // 当label回退时递增chapter_id,即使同一个chapter_title也能区分不同小节
+  
+  // 单层索引：chapterId:chapter:label -> ExtractedQAPair
+  // 使用这个Map来存储所有的题目，并在后续进行字段合并
+  const qaMap = new Map<string, ExtractedQAPair>();
+  
+  // 章节边界检测
   let currentQuestionChapter = '';
-  let currentAnswerChapter = '';
   let lastQuestionLabel = Infinity;
-  let lastAnswerLabel = Infinity;
-  let questionChapterId = 0;  // 递增的章节序号
-  let answerChapterId = 0;    // 递增的章节序号
-
+  let questionChapterId = 0;
+  
   // 处理问题列表
   for (const q of questions) {
     const labelNum = normalizeLabel(q.label);
     if (labelNum === null || labelNum <= 0) continue;
-
-    // P0修复: 章节边界检测 - 当label回退时递增chapter_id
-    // 对齐DataFlow官方format_utils.py::merge_qa_pair L138-L142
+    
+    // 章节边界检测
     if (q.chapter_title && q.chapter_title !== '' && q.chapter_title !== currentQuestionChapter) {
       if (labelNum < lastQuestionLabel) {
-        // label回退,进入新章节
-        questionChapterId += 1;
+        questionChapterId++;
         currentQuestionChapter = q.chapter_title;
       } else {
-        // label递增但章节标题变化 -> 可能是子标题(如"一、选择题"),继续使用旧标题
-        // 不更新currentQuestionChapter
+        q.chapter_title = currentQuestionChapter;
       }
     }
     lastQuestionLabel = labelNum;
-
-    const normalizedTitle = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
+    
+    // 规范化章节标题
+    const normalizedChapter = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
     const labelKey = getLabelKey(q.label);
-    const exactKey = `${questionChapterId}:${normalizedTitle}:${labelKey}`;
-
-    // 使用questionIds作为主键进行去重
-    const primaryKey = q.questionIds || `${exactKey}:${q.question?.substring(0, 50) || ''}`;
+    const key = `${questionChapterId}:${normalizedChapter}:${labelKey}`;
     
-    if (questionByIds.has(primaryKey)) {
-      continue; // 跳过重复(Overlap导致)
-    }
-    questionByIds.set(primaryKey, q);
-    
-    // 如果问题已经有答案,直接输出
-    if (q.answer || q.solution) {
+    // 已完整的题目直接输出 (Interleaved模式)
+    if (q.question && (q.answer || q.solution)) {
       merged.push({
         label: labelNum,
-        question_chapter_title: normalizedTitle,
-        answer_chapter_title: normalizedTitle,
+        question_chapter_title: normalizedChapter,
+        answer_chapter_title: normalizedChapter,
         question: q.question,
         answer: q.answer,
         solution: q.solution,
         images: q.images
       });
     } else {
-      // 未完整的题目,加入待匹配Map
-      const qWithTitle = { ...q, chapter_title: normalizedTitle };
-      
-      // 精确索引
-      if (!questionMapExact.has(exactKey)) {
-        questionMapExact.set(exactKey, qWithTitle);
-      } else if (shouldReplaceQAPair(questionMapExact.get(exactKey)!, q)) {
-        questionMapExact.set(exactKey, qWithTitle);
-      }
-      
-      // 模糊索引 (label only)
-      if (!questionMapFuzzy.has(labelKey)) {
-        questionMapFuzzy.set(labelKey, []);
-      }
-      questionMapFuzzy.get(labelKey)!.push(qWithTitle);
+      // 未完整的题目缓存
+      // 如果key已存在，说明有重复提取，保留先前的还是覆盖？
+      // DataFlow逻辑中，如果是同一个位置的提取，通常不会有冲突。
+      // 这里我们简单覆盖，因为我们假设输入是顺序的。
+      qaMap.set(key, { ...q, chapter_title: normalizedChapter });
     }
   }
-
+  
   // 处理答案列表
+  let currentAnswerChapter = '';
+  let lastAnswerLabel = Infinity;
+  let answerChapterId = 0;
+  
+  // 临时存储答案，以便后续合并
+  const answerMap = new Map<string, ExtractedQAPair>();
+  
   for (const a of answers) {
     const labelNum = normalizeLabel(a.label);
     if (labelNum === null || labelNum <= 0) continue;
-
-    // P0修复: 章节边界检测 - 当label回退时递增chapter_id
+    
     if (a.chapter_title && a.chapter_title !== '' && a.chapter_title !== currentAnswerChapter) {
       if (labelNum < lastAnswerLabel) {
-        answerChapterId += 1;
+        answerChapterId++;
         currentAnswerChapter = a.chapter_title;
+      } else {
+        a.chapter_title = currentAnswerChapter;
       }
     }
     lastAnswerLabel = labelNum;
-
-    const normalizedTitle = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
+    
+    const normalizedChapter = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
     const labelKey = getLabelKey(a.label);
-    const exactKey = `${answerChapterId}:${normalizedTitle}:${labelKey}`;
-    const aWithTitle = { ...a, chapter_title: normalizedTitle };
-
-    // 精确索引
-    const existing = answerMapExact.get(exactKey);
-    if (!existing) {
-      answerMapExact.set(exactKey, aWithTitle);
+    const key = `${answerChapterId}:${normalizedChapter}:${labelKey}`;
+    
+    // 字段级别的增量更新
+    if (!answerMap.has(key)) {
+      answerMap.set(key, { ...a, chapter_title: normalizedChapter });
     } else {
-      if (!existing.solution && a.solution) existing.solution = a.solution;
-      if (!existing.answer && a.answer) existing.answer = a.answer;
-    }
-    
-    // 模糊索引
-    if (!answerMapFuzzy.has(labelKey)) {
-      answerMapFuzzy.set(labelKey, []);
-    }
-    answerMapFuzzy.get(labelKey)!.push(aWithTitle);
-  }
-
-  // 匹配问题和答案 - 两阶段匹配策略
-  const usedAnswerKeys = new Set<string>();
-  
-  for (const [exactKey, question] of Array.from(questionMapExact.entries())) {
-    const labelNum = normalizeLabel(question.label);
-    if (labelNum === null) continue;
-    
-    const labelKey = getLabelKey(question.label);
-    let answer: ExtractedQAPair | undefined;
-    
-    // 第一阶段: 精确匹配 (chapter:label)
-    answer = answerMapExact.get(exactKey);
-    if (answer) {
-      usedAnswerKeys.add(exactKey);
-    }
-    
-    // 第二阶段: 模糊匹配 (label only) - 只在精确匹配失败时使用
-    if (!answer) {
-      const fuzzyAnswers = answerMapFuzzy.get(labelKey);
-      if (fuzzyAnswers && fuzzyAnswers.length > 0) {
-        // 找第一个还没被使用的答案
-        for (const fa of fuzzyAnswers) {
-          const faKey = `${fa.chapter_title}:${labelKey}`;
-          if (!usedAnswerKeys.has(faKey)) {
-            answer = fa;
-            usedAnswerKeys.add(faKey);
-            break;
-          }
-        }
+      const existing = answerMap.get(key)!;
+      if (!existing.solution && a.solution) {
+        existing.solution = a.solution;
       }
+      if (!existing.answer && a.answer) {
+        existing.answer = a.answer;
+      }
+      // 合并图片
+      existing.images = Array.from(new Set([...existing.images, ...a.images]));
     }
-
-    // P1修复: 对齐DataFlow官方 - solution有效性检查
-    // DataFlow的 merge_qa_pair:
-    // if "Law:" in a_match['solution']: a_match['solution'] = "" # 过滤无效solution
-    const finalSolution = answer && answer.solution && isValidSolution(answer.solution) ? answer.solution : '';
+  }
+  
+  // 合并问题和答案
+  // 遍历所有的问题
+  for (const [key, q] of qaMap.entries()) {
+    const labelNum = normalizeLabel(q.label)!;
     
+    let answerPair: ExtractedQAPair | undefined;
+    
+    // 尝试精确匹配
+    if (answerMap.has(key)) {
+      answerPair = answerMap.get(key);
+    } 
+    // 这里可以添加模糊匹配逻辑，但为了严格对齐DataFlow，主要依赖精确匹配。
+    // DataFlow其实主要依赖 (chapter, label) 唯一键。
+    
+    const finalSolution = (answerPair && answerPair.solution && isValidSolution(answerPair.solution)) ? answerPair.solution : (q.solution && isValidSolution(q.solution) ? q.solution : '');
+    const finalAnswer = (answerPair && answerPair.answer) ? answerPair.answer : q.answer;
+    
+    const combinedImages = Array.from(new Set([...q.images, ...(answerPair ? answerPair.images : [])]));
+
     merged.push({
       label: labelNum,
-      question_chapter_title: question.chapter_title,
-      answer_chapter_title: answer ? answer.chapter_title : question.chapter_title,
-      question: question.question,
-      answer: answer ? answer.answer : '',
+      question_chapter_title: q.chapter_title,
+      answer_chapter_title: answerPair ? answerPair.chapter_title : q.chapter_title,
+      question: q.question,
+      answer: finalAnswer,
       solution: finalSolution,
-      images: Array.from(new Set([...question.images, ...(answer ? answer.images : [])]))
+      images: combinedImages
     });
-  }
-
-  // 处理"只有答案没有题目"的情况
-  for (const [exactKey, answer] of Array.from(answerMapExact.entries())) {
-    if (!usedAnswerKeys.has(exactKey)) {
-      const labelNum = normalizeLabel(answer.label);
-      if (labelNum === null) continue;
-      
-      if (answer.answer || answer.solution) {
-        merged.push({
-          label: labelNum,
-          question_chapter_title: answer.chapter_title,
-          answer_chapter_title: answer.chapter_title,
-          question: '',
-          answer: answer.answer,
-          solution: answer.solution,
-          images: answer.images
-        });
-      }
+    
+    // 标记该答案已被使用
+    if (answerPair) {
+        answerMap.delete(key);
     }
   }
-
+  
+  // 处理剩余的答案 (只有答案没有题目)
+  for (const [key, a] of answerMap.entries()) {
+      const labelNum = normalizeLabel(a.label)!;
+      if (a.answer || a.solution) {
+          merged.push({
+              label: labelNum,
+              question_chapter_title: a.chapter_title,
+              answer_chapter_title: a.chapter_title,
+              question: '', // 问题为空
+              answer: a.answer,
+              solution: a.solution,
+              images: a.images
+          });
+      }
+  }
+  
   return merged;
 }
 
@@ -1039,25 +996,25 @@ export function chunkContentBlocks(
 }
 
 /**
- * 带重试的LLM API调用(对齐DataFlow APILLMServing_request._api_chat_id_retry)
- * @param config LLM配置
- * @param contentJson 要分析的JSON内容
- * @param systemPrompt 系统提示词
- * @param maxTokens 最大token数
- * @returns LLM输出的文本
+ * 内部函数: 执行LLM API调用，包含网络错误重试逻辑
+ * (原 callLLMForTextExtraction 的核心逻辑)
  */
-export async function callLLMForTextExtraction(
+async function callLLMWithApiRetries(
   config: LLMConfig,
   contentJson: string,
-  systemPrompt: string = QA_EXTRACT_PROMPT,
-  maxTokens: number = 16384  // 提高默认值,避免大量题目时输出被截断
+  systemPrompt: string,
+  maxTokens: number,
+  auditLog?: AuditLogFn
 ): Promise<string> {
   const baseUrl = config.apiUrl.replace(/\/chat\/completions\/?$/, "").replace(/\/+$/, "");
   
-  // 对齐DataFlow: max_retries=5, 指数退避 1s, 2s, 4s, 8s, 16s
-  const maxRetries = 5;
+  // 对齐DataFlow: max_retries=5 (default), 指数退避 1s, 2s, 4s, 8s, 16s
+  const maxRetries = config.maxRetries ?? 5;
   let lastError: Error | null = null;
+  const start = Date.now();
   
+  auditLog?.('LLMExtract', contentJson.length, 0, null, false, start);
+
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       // 强制最低timeout 120s(对齐DataFlow read_timeout)
@@ -1099,6 +1056,7 @@ export async function callLLMForTextExtraction(
       }
       
       // 成功返回
+      auditLog?.('LLMExtract', contentJson.length, content.length, null, attempt > 0, Date.now());
       return content;
       
     } catch (axiosError: any) {
@@ -1118,6 +1076,11 @@ export async function callLLMForTextExtraction(
       
       // 如果是最后一次尝试,直接抛出错误
       if (attempt === maxRetries - 1) {
+        // Observability Exit (Failure)
+        auditLog?.('LLMExtract', contentJson.length, 0, axiosError.message, true, Date.now());
+        
+        if (config.onSoftFail === 'skip') return '';
+        
         throw new Error(`LLM API调用失败(已重试${maxRetries}次): ${axiosError.message} (status: ${errorDetails.status || 'N/A'})`);
       }
       
@@ -1128,8 +1091,63 @@ export async function callLLMForTextExtraction(
     }
   }
   
+  // Observability Exit (Failure - Unreachable)
+  auditLog?.('LLMExtract', contentJson.length, 0, lastError?.message || 'Unknown', true, Date.now());
+  
   // 理论上不会走到这里,但为了TypeScript类型安全
   throw lastError || new Error('LLM API调用失败(未知错误)');
+}
+
+/**
+ * 动态计算max_tokens
+ * 根据输入内容长度估算所需的输出token数
+ */
+function calculateMaxTokens(contentJson: string): number {
+  const inputLen = contentJson.length;
+  // 估算输入token (1 char ~ 0.3 tokens)
+  const inputTokens = Math.ceil(inputLen * 0.3);
+  
+  // 目标输出token: 输入的80% + 基础buffer
+  let targetOutputTokens = Math.max(4096, Math.ceil(inputTokens * 0.8));
+  
+  // 限制最大值 (假设模型支持32k context, 这里保守设置)
+  // 如果是128k模型可以更高
+  return Math.min(32768, targetOutputTokens);
+}
+
+/**
+ * 带重试的LLM API调用(对齐DataFlow APILLMServing_request._api_chat_id_retry)
+ * @param config LLM配置
+ * @param contentJson 要分析的JSON内容
+ * @param systemPrompt 系统提示词
+ * @param maxTokens 最大token数 (如果未提供，将自动计算)
+ * @returns LLM输出的文本
+ */
+export async function callLLMForTextExtraction(
+  config: LLMConfig,
+  contentJson: string,
+  systemPrompt: string = QA_EXTRACT_PROMPT,
+  maxTokens: number = 0,  // 0表示自动计算
+  auditLog?: AuditLogFn
+): Promise<string> {
+  // P1修复: 动态计算max_tokens
+  const effectiveMaxTokens = maxTokens > 0 ? maxTokens : calculateMaxTokens(contentJson);
+  
+  // 第一次尝试
+  let output = await callLLMWithApiRetries(config, contentJson, systemPrompt, effectiveMaxTokens, auditLog);
+  
+  // P0修复: 二次提示机制
+  // 如果返回空结果，进行二次提示
+  if (output.includes('<empty></empty>') || output.includes('<empty/>')) {
+    console.log('[LLM Retry] First attempt returned empty, retrying with enhanced prompt...');
+    
+    // 使用更详细的提示词
+    const enhancedPrompt = systemPrompt + `\n\n## IMPORTANT: This is a retry attempt. The previous attempt returned empty. Please carefully check if there are any math problems, examples (marked as "例①", "例1"), or exercises in the content. Even if the problems are incomplete or unclear, please try to extract them.`;
+    
+    output = await callLLMWithApiRetries(config, contentJson, enhancedPrompt, effectiveMaxTokens, auditLog);
+  }
+  
+  return output;
 }
 
 /**
