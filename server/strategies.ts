@@ -130,3 +130,63 @@ export const DEFAULT_ANSWER_DETECTION: Strategy[] = [
     }
   }
 ];
+
+// 3. Solution Validation (QualityGate)
+export const DEFAULT_SOLUTION_VALIDATION: Strategy[] = [
+  {
+    name: "keyword_block_filter",
+    threshold: 1,
+    apply: (ctx) => {
+      if (!ctx.text || !ctx.text.trim()) {
+        return { score: 1, action: 'drop', reason: 'Empty solution' };
+      }
+      // DataFlow官方的过滤规则 + 扩展
+      const blockKeywords = ['Law:', 'Error:', 'Invalid:'];
+      const match = blockKeywords.some(k => ctx.text.includes(k));
+      return {
+        score: match ? 1 : 0,
+        action: match ? 'drop' : 'keep',
+        reason: match ? 'Contains blocked keyword' : 'Valid'
+      };
+    }
+  }
+];
+
+// 4. Noise Entry Filters (QualityGate)
+export const DEFAULT_NOISE_FILTERS: Strategy[] = [
+  {
+    name: "publication_info_filter",
+    threshold: 1,
+    apply: (ctx) => {
+      const patterns = [/ISBN\s*\d/, /CIP数据/, /出版说明/, /责任编辑/];
+      const match = patterns.some(p => p.test(ctx.text));
+      return {
+        score: match ? 1 : 0,
+        action: match ? 'drop' : 'keep',
+        reason: match ? 'Matched publication info' : 'Valid'
+      };
+    }
+  },
+  {
+    name: "toc_filter",
+    threshold: 1,
+    apply: (ctx) => {
+      // 目录特征
+      if (ctx.text.startsWith('目录')) return { score: 1, action: 'drop', reason: 'Starts with 目录' };
+      if (/^第\d+章/.test(ctx.text) && ctx.text.length < 50) return { score: 1, action: 'drop', reason: 'Short chapter title like text' };
+      return { score: 0, action: 'keep', reason: 'Valid' };
+    }
+  },
+  {
+    name: "fragment_filter",
+    threshold: 1,
+    apply: (ctx) => {
+      // chapter_title为空且题目很短(可能是碎片)
+      const chapterTitle = ctx.metadata?.chapter_title;
+      if (!chapterTitle && ctx.text.length < 20) {
+        return { score: 1, action: 'drop', reason: 'Short fragment without chapter' };
+      }
+      return { score: 0, action: 'keep', reason: 'Valid' };
+    }
+  }
+];

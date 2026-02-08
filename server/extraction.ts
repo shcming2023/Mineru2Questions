@@ -15,10 +15,12 @@
  */
 
 import axios from "axios";
-import { StrategyChain, DEFAULT_TITLE_FILTERS } from "./strategies";
+import { StrategyChain, DEFAULT_TITLE_FILTERS, DEFAULT_SOLUTION_VALIDATION, DEFAULT_NOISE_FILTERS } from "./strategies";
 
 // Initialize Quality Gate
 const titleQualityGate = new StrategyChain(DEFAULT_TITLE_FILTERS);
+const solutionValidator = new StrategyChain(DEFAULT_SOLUTION_VALIDATION);
+const noiseFilter = new StrategyChain(DEFAULT_NOISE_FILTERS);
 
 export type AuditLogFn = (
   stage: string,
@@ -84,7 +86,7 @@ export interface ExtractedQAPair {
 
 // 合并后的完整QA对
 export interface MergedQAPair {
-  label: number;
+  label: string;
   question_chapter_title: string;
   answer_chapter_title: string;
   question: string;
@@ -134,9 +136,8 @@ export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and 
 - **INTERLEAVED EXAMPLES**: When an example (e.g., "例①") is immediately followed by its solution (e.g., "解:" or "分析:"), extract them together:
   <qa_pair><label>1</label><question>EXAMPLE_IDS</question><answer></answer><solution>SOLUTION_IDS</solution></qa_pair>
 - **DEFINITION TEXT**: Pure definition or property statements (e.g., "如果一个数x的立方等于a...", "平方根与立方根的定义、性质对照表") without a problem number or question structure are NOT problems - do not extract them.
-- Preserve each problem's original label/number (e.g., "①", "②", "例1", "1", "11"). Do not include periods after numbers.
-- For circled numbers: use "1" for ①, "2" for ②, "3" for ③, etc.
-- Use Arabic numerals only. Convert "例一" to "例1", "IV" to "4".
+- **Preserve each problem’s original label/number**, such as "例1", "Example 3", "习题1", "11", "①".
+- Use Arabic numerals for numbered lists, but preserve original prefixes. For example, if the label is "例一", convert it to "例1". If the label is "IV", convert it to "4".
 - If the full label is "三、16", keep only "16". If "5.4", keep only "4".
 - If there are multiple sub-questions (like "(1)", "(a)") under one main question, put them together in the same <qa_pair> block.
 - But ①②③ are NOT sub-questions - they are separate questions!
@@ -435,7 +436,7 @@ export function extractImagesFromIds(
  * - 目录类: "本期导读", "本学期将学习"
  * - 题型标记: "一、选择题", "二、填空题", "三、解答题"
  */
-function cleanChapterTitle(title: string): string {
+export function cleanChapterTitle(title: string): string {
   if (!title) return '';
   
   const result = titleQualityGate.execute("section_marker_filter", { text: title });
@@ -452,7 +453,7 @@ function cleanChapterTitle(title: string): string {
  * 
  * 如果检测到多个题号,按题号边界拆分成多个独立的QA对
  */
-function splitMergedQuestion(
+export function splitMergedQuestion(
   qa: ExtractedQAPair,
   blocks: ConvertedBlock[],
   imagePrefix: string
@@ -773,13 +774,9 @@ function shouldReplaceQAPair(existing: ExtractedQAPair, newData: ExtractedQAPair
  * 对齐DataFlow官方: 过滤包含"Law:"等无效标记的solution
  */
 function isValidSolution(solution: string): boolean {
-  if (!solution || !solution.trim()) return false;
-  // DataFlow官方的过滤规则
-  if (solution.includes('Law:')) return false;
-  // 扩展: 过滤其他明显无效的标记
-  if (solution.includes('Error:')) return false;
-  if (solution.includes('Invalid:')) return false;
-  return true;
+  // Use Strategy Pattern
+  const result = solutionValidator.execute("keyword_block_filter", { text: solution });
+  return result.action === 'keep';
 }
 
 /**
@@ -801,42 +798,36 @@ export function mergeQAPairs(
 ): MergedQAPair[] {
   const merged: MergedQAPair[] = [];
   
-  // 单层索引：chapterId:chapter:label -> ExtractedQAPair
-  // 使用这个Map来存储所有的题目，并在后续进行字段合并
+  // 单层索引：normalizedChapter:labelKey -> ExtractedQAPair
   const qaMap = new Map<string, ExtractedQAPair>();
   
-  // 章节边界检测
+  // 章节上下文维护
   let currentQuestionChapter = '';
-  let lastQuestionLabel = Infinity;
-  let questionChapterId = 0;
   
   // 处理问题列表
   for (const q of questions) {
     const labelNum = normalizeLabel(q.label);
     if (labelNum === null || labelNum <= 0) continue;
     
-    // 章节边界检测
-    if (q.chapter_title && q.chapter_title !== '' && q.chapter_title !== currentQuestionChapter) {
-      if (labelNum < lastQuestionLabel) {
-        questionChapterId++;
-        currentQuestionChapter = q.chapter_title;
-      } else {
-        q.chapter_title = currentQuestionChapter;
-      }
+    // 章节上下文维护: 
+    // 1. 如果当前题目有章节标题，更新上下文
+    // 2. 如果当前题目没有章节标题，沿用上下文 (Context Inheritance)
+    if (q.chapter_title && q.chapter_title.trim() !== '') {
+      currentQuestionChapter = q.chapter_title;
     }
-    lastQuestionLabel = labelNum;
     
     // 规范化章节标题
-    const normalizedChapter = normalizeTitle(q.chapter_title || currentQuestionChapter, strictTitleMatch);
+    const normalizedChapter = normalizeTitle(currentQuestionChapter, strictTitleMatch);
     const labelKey = getLabelKey(q.label);
-    const key = `${questionChapterId}:${normalizedChapter}:${labelKey}`;
+    // P0修复: 移除questionChapterId, 使用 (章节+题号) 作为唯一键
+    const key = `${normalizedChapter}:${labelKey}`;
     
     // 已完整的题目直接输出 (Interleaved模式)
     if (q.question && (q.answer || q.solution)) {
       merged.push({
-        label: labelNum,
-        question_chapter_title: normalizedChapter,
-        answer_chapter_title: normalizedChapter,
+        label: q.label,
+        question_chapter_title: currentQuestionChapter, // Use context
+        answer_chapter_title: currentQuestionChapter, // Use context
         question: q.question,
         answer: q.answer,
         solution: q.solution,
@@ -844,17 +835,14 @@ export function mergeQAPairs(
       });
     } else {
       // 未完整的题目缓存
-      // 如果key已存在，说明有重复提取，保留先前的还是覆盖？
-      // DataFlow逻辑中，如果是同一个位置的提取，通常不会有冲突。
-      // 这里我们简单覆盖，因为我们假设输入是顺序的。
-      qaMap.set(key, { ...q, chapter_title: normalizedChapter });
+      // 如果key已存在(例如同一章节有两个"1"), 这是一个数据质量问题
+      // 策略: 覆盖旧的 (假设后面的提取更准确或是在修正)
+      qaMap.set(key, { ...q, chapter_title: currentQuestionChapter }); // Use context (original title)
     }
   }
   
   // 处理答案列表
   let currentAnswerChapter = '';
-  let lastAnswerLabel = Infinity;
-  let answerChapterId = 0;
   
   // 临时存储答案，以便后续合并
   const answerMap = new Map<string, ExtractedQAPair>();
@@ -863,23 +851,19 @@ export function mergeQAPairs(
     const labelNum = normalizeLabel(a.label);
     if (labelNum === null || labelNum <= 0) continue;
     
-    if (a.chapter_title && a.chapter_title !== '' && a.chapter_title !== currentAnswerChapter) {
-      if (labelNum < lastAnswerLabel) {
-        answerChapterId++;
-        currentAnswerChapter = a.chapter_title;
-      } else {
-        a.chapter_title = currentAnswerChapter;
-      }
+    // 章节上下文维护
+    if (a.chapter_title && a.chapter_title.trim() !== '') {
+      currentAnswerChapter = a.chapter_title;
     }
-    lastAnswerLabel = labelNum;
     
-    const normalizedChapter = normalizeTitle(a.chapter_title || currentAnswerChapter, strictTitleMatch);
+    const normalizedChapter = normalizeTitle(currentAnswerChapter, strictTitleMatch);
     const labelKey = getLabelKey(a.label);
-    const key = `${answerChapterId}:${normalizedChapter}:${labelKey}`;
+    // P0修复: 移除answerChapterId
+    const key = `${normalizedChapter}:${labelKey}`;
     
     // 字段级别的增量更新
     if (!answerMap.has(key)) {
-      answerMap.set(key, { ...a, chapter_title: normalizedChapter });
+      answerMap.set(key, { ...a, chapter_title: currentAnswerChapter }); // Use context (original title)
     } else {
       const existing = answerMap.get(key)!;
       if (!existing.solution && a.solution) {
@@ -890,6 +874,8 @@ export function mergeQAPairs(
       }
       // 合并图片
       existing.images = Array.from(new Set([...existing.images, ...a.images]));
+      // Update chapter title if needed? No, keep the first one or updated one?
+      // Actually if we are inheriting, the first one set in map should be correct for that key.
     }
   }
   
@@ -904,8 +890,6 @@ export function mergeQAPairs(
     if (answerMap.has(key)) {
       answerPair = answerMap.get(key);
     } 
-    // 这里可以添加模糊匹配逻辑，但为了严格对齐DataFlow，主要依赖精确匹配。
-    // DataFlow其实主要依赖 (chapter, label) 唯一键。
     
     const finalSolution = (answerPair && answerPair.solution && isValidSolution(answerPair.solution)) ? answerPair.solution : (q.solution && isValidSolution(q.solution) ? q.solution : '');
     const finalAnswer = (answerPair && answerPair.answer) ? answerPair.answer : q.answer;
@@ -913,7 +897,7 @@ export function mergeQAPairs(
     const combinedImages = Array.from(new Set([...q.images, ...(answerPair ? answerPair.images : [])]));
 
     merged.push({
-      label: labelNum,
+      label: q.label,
       question_chapter_title: q.chapter_title,
       answer_chapter_title: answerPair ? answerPair.chapter_title : q.chapter_title,
       question: q.question,
@@ -933,7 +917,7 @@ export function mergeQAPairs(
       const labelNum = normalizeLabel(a.label)!;
       if (a.answer || a.solution) {
           merged.push({
-              label: labelNum,
+              label: a.label,
               question_chapter_title: a.chapter_title,
               answer_chapter_title: a.chapter_title,
               question: '', // 问题为空
@@ -1217,21 +1201,24 @@ export async function callVLMForImageExtraction(
 /**
  * P0修复: 判断是否为噪声条目(出版信息、目录、定义等)
  */
-function isNoiseEntry(qa: MergedQAPair): boolean {
+export function isNoiseEntry(qa: MergedQAPair): boolean {
   const q = qa.question.trim();
   
-  // 出版信息特征
-  if (/ISBN\s*\d/.test(q)) return true;
-  if (/CIP数据/.test(q)) return true;
-  if (/出版说明/.test(q)) return true;
-  if (/责任编辑/.test(q)) return true;
+  // Use Strategy Pattern
+  // Check publication info
+  let result = noiseFilter.execute("publication_info_filter", { text: q });
+  if (result.action === 'drop') return true;
   
-  // 目录特征
-  if (q.startsWith('目录')) return true;
-  if (/^第\d+章/.test(q) && q.length < 50) return true; // 简短的章节标题
+  // Check TOC
+  result = noiseFilter.execute("toc_filter", { text: q });
+  if (result.action === 'drop') return true;
   
-  // chapter_title为空且题目很短(可能是碎片)
-  if (!qa.question_chapter_title && q.length < 20) return true;
+  // Check fragments
+  result = noiseFilter.execute("fragment_filter", { 
+    text: q, 
+    metadata: { chapter_title: qa.question_chapter_title } 
+  });
+  if (result.action === 'drop') return true;
   
   return false;
 }
