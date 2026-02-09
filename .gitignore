@@ -107,4 +107,5 @@ server/uploads/*
 !server/uploads/.gitkeep
 !server/uploads/tasks/
 *.db
+!sqlite.db
 debug_*.ts

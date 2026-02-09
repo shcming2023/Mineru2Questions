@@ -388,12 +388,12 @@ function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion
   const unique: ExtractedQuestion[] = [];
   
   for (const q of questions) {
-    // 修复：优先使用 (chapter_title, label) 作为唯一键，解决跨 Chunk 重复问题
+    // 修复：必须加入 page_idx 来区分不同页面上的同名题号，防止误删
     let key: string;
     
     if (q.chapter_title && q.label) {
       // 归一化：去除空白
-      key = `${q.chapter_title.trim()}_${q.label.trim()}`;
+      key = `${q.chapter_title.trim()}_${q.label.trim()}_${q.page_idx}`;
     } else {
       // 回退策略
       key = q.questionIds || `${q.label}_${q.question.substring(0, 50)}`;
