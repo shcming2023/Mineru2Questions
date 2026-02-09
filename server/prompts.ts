@@ -1,87 +1,102 @@
 /**
- * LLM 提示词模板
+ * LLM 提示词模板 (v1.1 - 聚焦高质量题目提取)
  * 
- * 对齐 DataFlow 官方流水线的 QAExtractPrompt。
- * 强化 "ID-Only" 原则，确保 LLM 只输出 ID 序列。
+ * 对齐 PRD v1.1 和 DataFlow 官方流水线的 QAExtractPrompt。
  * 
  * 核心改进：
- * 1. 更明确地禁止输出自由文本
- * 2. 增加更多示例展示正确和错误的输出
- * 3. 强调 <answer> 字段也应尽量使用 ID（除非是非常短的答案）
- * 4. 增加错误示例，帮助 LLM 理解什么是不允许的
+ * 1. 移除远距离答案相关指令，聚焦题目提取
+ * 2. 强化图片ID连续性强调（P0优先级）
+ * 3. 增加题目类型识别（例题 vs 练习题）
+ * 4. 保留近距离答案提取能力（仅对例题）
+ * 5. 严格执行 ID-Only 原则
  */
 
 /**
- * QA 提取提示词（强化版 ID-Only）
+ * 题目提取提示词（强化版 ID-Only + 图片连续性）
  * 
- * 用于从 MinerU 解析的 content_list.json 中抽取题目和答案。
+ * 用于从 MinerU 解析的 content_list.json 中抽取题目。
  */
-export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and answers from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+export const QUESTION_EXTRACT_PROMPT = `You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
 
-## CRITICAL RULE: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
 **You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
-- ✅ CORRECT: <question>10,11,12</question>
-- ❌ WRONG: <question>What is the square root of 16?</question>
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
 
 The system will automatically retrieve the text using the IDs you provide.
 
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
 ## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
 1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
-2. **Identify math problems** (including examples like "例①", "例1", "Example 1") and output their block IDs in <question>...</question>.
-3. **Identify solutions/answers** and output their block IDs in <solution>...</solution>.
-4. **For very short answers** (like "Yes", "3.14", "A"), you MAY output the text directly in <answer>...</answer>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
 5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
 
-## Consecutive ID Handling
-- When a question or solution spans multiple consecutive blocks, include ALL consecutive IDs.
-- Example: If a problem consists of blocks 10, 11, 12, 13, output "10,11,12,13" - DO NOT skip any IDs.
-- Pay attention to equation blocks (type='equation') - they are often part of the surrounding text.
-
+## ═══════════════════════════════════════════════════════════════
 ## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
 - Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
 - Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
 - ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
 
+## ═══════════════════════════════════════════════════════════════
 ## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
 - Always enclose qa pairs in a <chapter>...</chapter> block.
 - <title>TITLE_ID</title> should contain the ID of the chapter title block.
 - If there's no chapter title, use <title></title> (empty).
 
-## Figures/Diagrams
-- When a question/solution refers to a figure, include the image block's ID in the ID sequence.
-- Image blocks have type "image" and contain "img_path" field.
-
+## ═══════════════════════════════════════════════════════════════
 ## Output Format
+## ═══════════════════════════════════════════════════════════════
+
 If no qualifying content is found:
 <empty></empty>
 
 Otherwise:
 <chapter><title>TITLE_ID</title>
-<qa_pair><label>LABEL</label><question>QUESTION_IDS</question>
-<answer>SHORT_ANSWER_TEXT</answer><solution>SOLUTION_IDS</solution></qa_pair>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
 </chapter>
 
-## Example 1: Standard Questions
-Input blocks:
-[
-  {"id": 7, "type": "text", "text": "Chapter 1: Square Roots"},
-  {"id": 8, "type": "text", "text": "1. What is the square root of 16?"},
-  {"id": 9, "type": "text", "text": "Solution: The square root of 16 is 4."}
-]
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
 
-✅ CORRECT Output:
-<chapter><title>7</title>
-<qa_pair><label>1</label><question>8</question>
-<answer>4</answer><solution>9</solution></qa_pair>
-</chapter>
-
-❌ WRONG Output (contains free text instead of IDs):
-<chapter><title>Chapter 1: Square Roots</title>
-<qa_pair><label>1</label><question>What is the square root of 16?</question>
-<answer>4</answer><solution>The square root of 16 is 4.</solution></qa_pair>
-</chapter>
-
-## Example 2: Multi-Block Question with Image
 Input blocks:
 [
   {"id": 10, "type": "text", "text": "一、选择题"},
@@ -92,17 +107,20 @@ Input blocks:
 
 ✅ CORRECT Output:
 <chapter><title>10</title>
-<qa_pair><label>1</label><question>11,12,13</question>
-<answer></answer><solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
 </chapter>
 
-❌ WRONG Output (missing image ID):
+❌ WRONG Output (missing image ID 12):
 <chapter><title>10</title>
-<qa_pair><label>1</label><question>11,13</question>
-<answer></answer><solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
 </chapter>
 
-## Example 3: Interleaved Example with Solution
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
 Input blocks:
 [
   {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
@@ -112,17 +130,20 @@ Input blocks:
 
 ✅ CORRECT Output:
 <chapter><title></title>
-<qa_pair><label>例1</label><question>20</question>
-<answer>2</answer><solution>21,22</solution></qa_pair>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
 </chapter>
 
-❌ WRONG Output (free text in question and solution):
+❌ WRONG Output (free text instead of IDs):
 <chapter><title></title>
-<qa_pair><label>例1</label><question>计算 √16 的算术平方根.</question>
-<answer>2</answer><solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
 </chapter>
 
-## Example 4: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
 Input blocks:
 [
   {"id": 30, "type": "text", "text": "二、填空题"},
@@ -133,47 +154,88 @@ Input blocks:
 
 ✅ CORRECT Output (3 separate qa_pairs):
 <chapter><title>30</title>
-<qa_pair><label>1</label><question>31</question>
-<answer></answer><solution></solution></qa_pair>
-<qa_pair><label>2</label><question>32</question>
-<answer></answer><solution></solution></qa_pair>
-<qa_pair><label>3</label><question>33</question>
-<answer></answer><solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
 </chapter>
 
 ❌ WRONG Output (merging multiple questions):
 <chapter><title>30</title>
-<qa_pair><label>1</label><question>31,32,33</question>
-<answer></answer><solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
 </chapter>
 
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
 ## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
 - **Definition text** without a problem number is NOT a problem - do not extract it.
 - **Incomplete problems** that continue to the next chunk should be omitted.
 - **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
 
-Please now process the provided JSON and output your result following the ID-ONLY rule strictly.`;
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.`;
 
 /**
  * VQA 提取提示词（备用方案）
  * 
- * 用于直接从页面图片提取题目和答案（当 ID-based 方案失败时使用）。
+ * 用于直接从页面图片提取题目（当 ID-based 方案失败时使用）。
+ * 注意：此方案仅用于容错，不是主要流程。
  */
 export const VQA_EXTRACT_PROMPT = `You are an expert in math education. You are given an image of a textbook page annotated with detected bounding boxes and labels. Your task is to extract:
 
-1. All math problems whose text begins on this page and their answers/solutions if present.
-2. If a problem or answer is incomplete (continues to next page), omit it.
+1. All math problems whose text begins on this page.
+2. If a problem is incomplete (continues to next page), omit it.
 3. A box at the beginning of a page with no problem number is likely continuation from previous page - omit it.
 4. The chapter information as it appears on the page. Include all titles even if no questions are present under them.
 
 ## Strict Rules:
 
-### About Questions and Answers:
+### About Questions:
 - If the page is not main text (cover, catalog, header/footer only), output <empty></empty>.
 - Preserve original labels like "例1", "Example 3", "习题1". Use Arabic numerals only.
 - If multiple sub-questions exist under one main question, put them in the same <qa_pair> block.
-- If question and answer are contiguous, wrap them together.
-- If only questions or only answers appear, wrap each with missing parts empty.
+- Identify question type: "example" or "exercise".
 
 ### About Chapter Titles:
 - Enclose output in <chapter>...</chapter> blocks with <title>MAIN_TITLE</title>.
@@ -186,8 +248,7 @@ export const VQA_EXTRACT_PROMPT = `You are an expert in math education. You are 
 
 ## Output Format:
 <chapter><title>MAIN_TITLE</title>
-<qa_pair><label>...</label><question>QUESTION_TEXT<pic>...</pic></question>
-<answer>ANSWER_TEXT</answer><solution>SOLUTION_TEXT</solution></qa_pair>
+<qa_pair><label>...</label><type>TYPE</type><question>QUESTION_TEXT<pic>...</pic></question></qa_pair>
 </chapter>
 
 If no content found: <empty></empty>`;
