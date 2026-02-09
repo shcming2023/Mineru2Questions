@@ -16,7 +16,7 @@
  * 
  * 用于从 MinerU 解析的 content_list.json 中抽取题目和答案。
  */
-export const QA_EXTRACT_PROMPT_V2 = `You are an expert in extracting questions and answers from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and answers from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
 
 ## CRITICAL RULE: ID-ONLY OUTPUT
 **You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
@@ -191,18 +191,3 @@ export const VQA_EXTRACT_PROMPT = `You are an expert in math education. You are 
 </chapter>
 
 If no content found: <empty></empty>`;
-
-/**
- * 获取 QA 提取提示词（根据版本选择）
- * 
- * @param version - 提示词版本（'v1' 或 'v2'，默认 'v2'）
- * @returns 提示词字符串
- */
-export function getQAExtractPrompt(version: 'v1' | 'v2' = 'v2'): string {
-  if (version === 'v2') {
-    return QA_EXTRACT_PROMPT_V2;
-  }
-  // v1 是原始版本，保留用于兼容性测试
-  // 这里可以从 extraction.ts 导入原始提示词
-  throw new Error('v1 prompt is deprecated. Please use v2.');
-}

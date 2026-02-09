@@ -17,6 +17,7 @@ import {
   insertAuditLog
 } from "./db";
 import { storageGet, storagePut } from "./storage";
+import { QA_EXTRACT_PROMPT } from "./prompts";
 import {
   LLMConfig,
   ConvertedBlock,
@@ -27,7 +28,6 @@ import {
   mergeQAPairs,
   generateResults,
   callLLMForTextExtraction,
-  QA_EXTRACT_PROMPT,
   chunkContentBlocks,
   registerTask,
   unregisterTask,

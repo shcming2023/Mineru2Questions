@@ -16,6 +16,7 @@
 
 import axios from "axios";
 import { StrategyChain, DEFAULT_TITLE_FILTERS, DEFAULT_SOLUTION_VALIDATION, DEFAULT_NOISE_FILTERS } from "./strategies";
+import { QA_EXTRACT_PROMPT, VQA_EXTRACT_PROMPT } from "./prompts";
 
 // Initialize Quality Gate
 const titleQualityGate = new StrategyChain(DEFAULT_TITLE_FILTERS);
@@ -97,148 +98,9 @@ export interface MergedQAPair {
 
 // ============= 提示词模板 =============
 
-/**
- * QA提取提示词 - 参考DataFlow的QAExtractPrompt
- * 让LLM输出内容块ID而非原文
- * 
- * 优化: 增加了连续ID的强调说明
- */
-export const QA_EXTRACT_PROMPT = `You are an expert in extracting questions and answers from educational materials. You are given a JSON file containing content blocks from a textbook page. Your task is to segment the content, insert image IDs, and extract labels.
 
-## Your Tasks:
-1. Every JSON item has an "id" field. Your main task is to output these IDs.
-2. Extract ALL math problems (including examples marked as "例①", "例1", "Example 1", etc.) and their corresponding answers/solutions.
-3. **CRITICAL: ONE QUESTION PER <qa_pair> ONLY. NEVER merge multiple questions into a single <qa_pair> block.**
-4. **INTERLEAVED CONTENT HANDLING**: If a problem and its answer/solution appear contiguously (e.g., "例① ...题干..." followed by "解: ...解答..."), wrap them together as a single <qa_pair> block.
-5. **DISTINGUISH DEFINITIONS FROM PROBLEMS**: Pure definition text (e.g., "如果一个数x的立方等于a...") without a problem number or question structure is NOT a problem - do not extract it.
-6. If a problem or answer/solution is incomplete (e.g., continues to next chunk), omit it. An answer/solution is complete if either the answer or solution exists.
-7. Put image IDs into proper positions based on context or captions.
-8. Extract chapter titles and each problem's label/number from the text.
-9. Only output "id" fields for chapter titles, questions, and solutions. DO NOT OUTPUT ORIGINAL TEXT. Use ',' to separate different IDs.
-10. However, use original labels/numbers for labels, and extract original text for short answers.
 
-## CRITICAL: Consecutive ID Handling
-- When a question or solution spans multiple consecutive blocks, you MUST include ALL consecutive IDs.
-- For example, if a math problem consists of blocks 10, 11, 12, 13, output "10,11,12,13" - DO NOT skip any IDs.
-- Pay special attention to equation blocks (type='equation') - they are often part of the surrounding text.
-- If blocks 10, 11(equation), 12 form a complete sentence, output "10,11,12" not "10,12".
 
-## Strict Extraction Rules:
-
-### CRITICAL: Question Numbering Recognition
-- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions, NOT sub-questions. Each ① or ② starts a NEW <qa_pair>.
-- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
-- ONLY (1)(2)(3) or (a)(b)(c) or (i)(ii)(iii) WITHIN a question are sub-questions that belong together.
-- Example: "① 如图..." and "② 某校..." are TWO separate questions, not sub-questions of one question.
-
-### About Questions and Answers/Solutions:
-- **EXAMPLES ARE PROBLEMS**: Problems marked as "例①", "例1", "Example 1" are valid problems and MUST be extracted.
-- **INTERLEAVED EXAMPLES**: When an example (e.g., "例①") is immediately followed by its solution (e.g., "解:" or "分析:"), extract them together:
-  <qa_pair><label>1</label><question>EXAMPLE_IDS</question><answer></answer><solution>SOLUTION_IDS</solution></qa_pair>
-- **DEFINITION TEXT**: Pure definition or property statements (e.g., "如果一个数x的立方等于a...", "平方根与立方根的定义、性质对照表") without a problem number or question structure are NOT problems - do not extract them.
-- **Preserve each problem’s original label/number**, such as "例1", "Example 3", "习题1", "11", "①".
-- Use Arabic numerals for numbered lists, but preserve original prefixes. For example, if the label is "例一", convert it to "例1". If the label is "IV", convert it to "4".
-- If the full label is "三、16", keep only "16". If "5.4", keep only "4".
-- If there are multiple sub-questions (like "(1)", "(a)") under one main question, put them together in the same <qa_pair> block.
-- But ①②③ are NOT sub-questions - they are separate questions!
-- If a question and its answer/solution are contiguous, wrap them together as a single <qa_pair> block.
-- If only questions or only answers/solutions appear, wrap each in its own <qa_pair> block with the missing part left empty.
-- There are 7 possibilities: only question, only answer, only solution, question+answer, question+solution, answer+solution, full QA.
-- If you don't see the full solution, only extract the short answer and leave solution empty. YOU MUST KEEP SHORT ANSWERS!
-
-### About Chapter/Section Titles:
-- Always enclose qa pairs in a <chapter>...</chapter> block, where <title>MAIN_TITLE_ID</title> is the ID of the chapter title.
-- Normally, chapter/section titles appear before questions/answers in an independent JSON item.
-- There could be multiple <chapter>...</chapter> blocks if multiple chapters/sections exist.
-- Any title followed by a question/answer whose label is not 1, or title with a score like "一、选择题（每题1分，共10分）", should NOT be extracted.
-- Do not use nested titles.
-- Leave the title blank if there is no chapter title.
-
-### About Figures/Diagrams:
-- Whenever a question or answer/solution refers to a figure or diagram, record its "id" in question/answer/solution just like other text content.
-- You MUST include all images referenced in the question/answer/solution.
-- Image blocks have type "image" and contain "img_path" field.
-
-## Output Format:
-If no qualifying content is found, output:
-<empty></empty>
-
-Otherwise output (all tags run together, no extra whitespace):
-<chapter><title>MAIN_TITLE_ID</title>
-<qa_pair><label>LABEL</label><question>QUESTION_IDS</question>
-<answer>ANSWER_TEXT</answer><solution>SOLUTION_IDS</solution></qa_pair>
-</chapter>
-
-## Example 1 (Standard numbered questions):
-<chapter><title>7</title>
-<qa_pair><label>1</label><question>2,3,4,5</question>
-<answer>Yes</answer><solution>8,9,10,11,12</solution></qa_pair>
-<qa_pair><label>2</label><question>13,14,15,16</question>
-<answer>3.14</answer><solution></solution></qa_pair>
-</chapter>
-
-## Example 2 (Circled number questions - EACH ①②③ is a SEPARATE question):
-Input blocks:
-- id=10: "一、选择题"
-- id=11: "① 如图, 直线 l 与正五边形..."
-- id=12: image
-- id=13: "② 某校“智慧数学教室”..."
-- id=14: image
-- id=15: "③ 一个多边形切去一个角后..."
-
-Correct output (3 separate qa_pairs):
-<chapter><title>10</title>
-<qa_pair><label>1</label><question>11,12</question>
-<answer></answer><solution></solution></qa_pair>
-<qa_pair><label>2</label><question>13,14</question>
-<answer></answer><solution></solution></qa_pair>
-<qa_pair><label>3</label><question>15</question>
-<answer></answer><solution></solution></qa_pair>
-</chapter>
-
-WRONG output (treating ①②③ as sub-questions of one question):
-<chapter><title>10</title>
-<qa_pair><label>1</label><question>11,12,13,14,15</question>
-<answer></answer><solution></solution></qa_pair>
-</chapter>
-
-Please now process the provided JSON and output your result.`;
-
-/**
- * VQA提取提示词 - 用于直接从页面图片提取(备用方案)
- */
-export const VQA_EXTRACT_PROMPT = `You are an expert in math education. You are given an image of a textbook page annotated with detected bounding boxes and labels. Your task is to extract:
-
-1. All math problems whose text begins on this page and their answers/solutions if present.
-2. If a problem or answer is incomplete (continues to next page), omit it.
-3. A box at the beginning of a page with no problem number is likely continuation from previous page - omit it.
-4. The chapter information as it appears on the page. Include all titles even if no questions are present under them.
-
-## Strict Rules:
-
-### About Questions and Answers:
-- If the page is not main text (cover, catalog, header/footer only), output <empty></empty>.
-- Preserve original labels like "例1", "Example 3", "习题1". Use Arabic numerals only.
-- If multiple sub-questions exist under one main question, put them in the same <qa_pair> block.
-- If question and answer are contiguous, wrap them together.
-- If only questions or only answers appear, wrap each with missing parts empty.
-
-### About Chapter Titles:
-- Enclose output in <chapter>...</chapter> blocks with <title>MAIN_TITLE</title>.
-- Extract chapter titles only, no prefix numbers. Do not keep subtitles.
-- If a title has no problems on the page, still extract it with label 0.
-
-### About Figures:
-- For figures/diagrams, record with <pic>tagA:boxB</pic> using the RED labeled tags in the image.
-- Put <pic> tags at exact positions where figures are referenced.
-
-## Output Format:
-<chapter><title>MAIN_TITLE</title>
-<qa_pair><label>...</label><question>QUESTION_TEXT<pic>...</pic></question>
-<answer>ANSWER_TEXT</answer><solution>SOLUTION_TEXT</solution></qa_pair>
-</chapter>
-
-If no content found: <empty></empty>`;
 
 // ============= MinerU输出解析 =============
 
