@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { trpc } from "@/lib/trpc";
-import { Plus, Play, Pause, RotateCcw, Trash2, Eye, Loader2, Activity, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Plus, Play, Pause, RotateCcw, Trash2, Eye, Loader2 } from "lucide-react";
 import { useLocation } from "wouter";
 import { toast } from "sonner";
 import {
@@ -18,7 +18,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const statusConfig = {
   pending: { label: "等待中", variant: "secondary" as const, color: "bg-gray-500" },
@@ -33,17 +32,7 @@ export default function Tasks() {
   const utils = trpc.useUtils();
   
   const { data: tasks, isLoading } = trpc.task.list.useQuery();
-  const { data: health, refetch: refetchHealth } = trpc.task.checkHealth.useQuery();
   
-  const cleanupMutation = trpc.task.cleanup.useMutation({
-    onSuccess: (data) => {
-      toast.success(`环境清理完成，重置了 ${data.count} 个陈旧任务`);
-      utils.task.list.invalidate();
-      refetchHealth();
-    },
-    onError: (error) => toast.error(error.message),
-  });
-
   const startMutation = trpc.task.start.useMutation({
     onSuccess: () => {
       toast.success("任务已开始");
@@ -91,49 +80,11 @@ export default function Tasks() {
             <h1 className="text-2xl font-bold tracking-tight">任务管理</h1>
             <p className="text-muted-foreground">管理您的题目提取任务</p>
           </div>
-          <div className="flex gap-2">
-            {health && (
-              <Button 
-                variant={health.isHealthy ? "outline" : "destructive"}
-                size="sm"
-                onClick={() => cleanupMutation.mutate()}
-                disabled={cleanupMutation.isPending || (health.isHealthy && health.activeTasks === 0)}
-              >
-                {cleanupMutation.isPending ? (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                ) : health.isHealthy ? (
-                  <ShieldCheck className="mr-2 h-4 w-4" />
-                ) : (
-                  <AlertTriangle className="mr-2 h-4 w-4" />
-                )}
-                {health.staleTasks > 0 ? "清理陈旧任务" : "系统状态正常"}
-              </Button>
-            )}
-            <Button onClick={() => setLocation("/tasks/new")}>
-              <Plus className="mr-2 h-4 w-4" />
-              新建任务
-            </Button>
-          </div>
+          <Button onClick={() => setLocation("/tasks/new")}>
+            <Plus className="mr-2 h-4 w-4" />
+            新建任务
+          </Button>
         </div>
-
-        {health && !health.isHealthy && health.staleTasks > 0 && (
-          <Alert variant="destructive">
-            <AlertTriangle className="h-4 w-4" />
-            <AlertTitle>检测到环境异常</AlertTitle>
-            <AlertDescription className="flex items-center justify-between">
-              <span>检测到 {health.staleTasks} 个任务可能已卡死（陈旧进程）。建议立即清理环境以确保新任务正常执行。</span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="bg-white/10 hover:bg-white/20 border-white/20"
-                onClick={() => cleanupMutation.mutate()}
-                disabled={cleanupMutation.isPending}
-              >
-                立即清理
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
 
         {isLoading ? (
           <div className="flex items-center justify-center py-12">

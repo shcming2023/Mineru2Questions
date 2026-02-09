@@ -74,7 +74,7 @@ interface Chunk {
 
 // ============= 常量配置 =============
 
-const MAX_CHUNK_SIZE = 50;        // 每个 chunk 最多包含 50 个 block (降低以避免 token 过多)
+const MAX_CHUNK_SIZE = 100;        // 每个 chunk 最多包含 100 个 block
 const OVERLAP_SIZE = 10;           // 重叠窗口大小，避免题目被切断
 const NEAR_DISTANCE_THRESHOLD = 50; // 近距离答案阈值（block 数量）
 
@@ -94,47 +94,42 @@ export async function extractQuestions(
   imagesFolder: string,
   taskDir: string,
   llmConfig: LLMConfig,
-   onProgress?: (message: string) => void,
-   shouldContinue?: () => Promise<boolean>
- ): Promise<ExtractedQuestion[]> {
-   console.log('=== Starting Question Extraction Pipeline ===');
-   if (onProgress) onProgress('Pipeline started');
-   
-   // 1. 加载并格式化输入
-   if (shouldContinue && !(await shouldContinue())) throw new Error('Task cancelled by user');
-   console.log('Step 1: Loading and formatting content_list.json...');
-   if (onProgress) onProgress('Step 1: Loading content...');
-   const blocks = loadAndFormatBlocks(contentListPath);
-   console.log(`Loaded ${blocks.length} blocks`);
-   if (onProgress) onProgress(`Loaded ${blocks.length} blocks`);
-   
-   // 2. 分块处理
-   if (shouldContinue && !(await shouldContinue())) throw new Error('Task cancelled by user');
-   console.log('Step 2: Splitting into chunks with overlap...');
-   if (onProgress) onProgress('Step 2: Splitting chunks...');
-   const chunks = splitIntoChunks(blocks, MAX_CHUNK_SIZE, OVERLAP_SIZE);
-   console.log(`Created ${chunks.length} chunks`);
-   if (onProgress) onProgress(`Created ${chunks.length} chunks`);
-   
-   // 3. 调用 LLM 提取题目
-   console.log('Step 3: Extracting questions via LLM...');
-   if (onProgress) onProgress('Step 3: Extracting via LLM...');
-   const allQuestions: ExtractedQuestion[] = [];
-   
-   for (const chunk of chunks) {
-     // 检查是否应该继续
-     if (shouldContinue && !(await shouldContinue())) {
-       console.log('[Extraction] Task cancelled during chunk processing');
-       throw new Error('Task cancelled by user');
-     }
+  onProgress?: (progress: number, message: string) => Promise<void>
+): Promise<ExtractedQuestion[]> {
+  console.log('=== Starting Question Extraction Pipeline ===');
+  
+  // 1. 加载并格式化输入
+  console.log('Step 1: Loading and formatting content_list.json...');
+  if (onProgress) await onProgress(5, 'Loading and formatting content...');
+  const blocks = loadAndFormatBlocks(contentListPath);
+  console.log(`Loaded ${blocks.length} blocks`);
+  
+  // Debug: 保存格式化后的 blocks
+  const debugDir = path.join(taskDir, 'debug');
+  if (!fs.existsSync(debugDir)) {
+    fs.mkdirSync(debugDir, { recursive: true });
+  }
+  fs.writeFileSync(path.join(debugDir, 'formatted_blocks.json'), JSON.stringify(blocks, null, 2));
 
-     const msg = `Processing chunk ${chunk.index}/${chunks.length} (blocks ${chunk.startId}-${chunk.endId})...`;
-     console.log(msg);
-    if (onProgress) onProgress(msg);
-    
+  // 2. 分块处理
+  console.log('Step 2: Splitting into chunks with overlap...');
+  if (onProgress) await onProgress(10, 'Splitting content into chunks...');
+  const chunks = splitIntoChunks(blocks, MAX_CHUNK_SIZE, OVERLAP_SIZE);
+  console.log(`Created ${chunks.length} chunks`);
+  
+  // 3. 调用 LLM 提取题目
+  console.log('Step 3: Extracting questions via LLM...');
+  const allQuestions: ExtractedQuestion[] = [];
+  
+  for (const chunk of chunks) {
+    const progressPercent = 10 + Math.floor((chunk.index / chunks.length) * 80);
+    const progressMsg = `Processing chunk ${chunk.index + 1}/${chunks.length}...`;
+    console.log(progressMsg);
+    if (onProgress) await onProgress(progressPercent, progressMsg);
+
     try {
       // 调用 LLM
-      const llmOutput = await callLLM(chunk.blocks, llmConfig);
+      const llmOutput = await callLLM(chunk.blocks, llmConfig, { taskDir, chunkIndex: chunk.index });
       
       // 保存 LLM 原始输出
       const logDir = path.join(taskDir, 'logs');
@@ -161,6 +156,7 @@ export async function extractQuestions(
   }
   
   console.log(`Step 3 completed: Total ${allQuestions.length} questions extracted`);
+  if (onProgress) await onProgress(90, 'Deduplicating and filtering questions...');
   
   // 4. 去重（基于 questionIds）
   console.log('Step 4: Deduplicating questions...');
@@ -174,13 +170,18 @@ export async function extractQuestions(
       q.type = identifyQuestionType(q.label);
     }
   }
+
+  // 5.5. 清洗章节标题
+  console.log('Step 5.5: Cleaning chapter titles...');
+  const cleanedQuestions = cleanChapterTitles(uniqueQuestions);
   
   // 6. 质量过滤
   console.log('Step 6: Filtering low-quality questions...');
-  const filteredQuestions = filterLowQuality(uniqueQuestions);
+  const filteredQuestions = filterLowQuality(cleanedQuestions);
   console.log(`After quality filter: ${filteredQuestions.length} questions`);
   
   console.log('=== Question Extraction Pipeline Completed ===');
+  if (onProgress) await onProgress(100, 'Extraction completed');
   return filteredQuestions;
 }
 
@@ -188,69 +189,68 @@ export async function extractQuestions(
  * 加载并格式化 content_list.json
  */
 function loadAndFormatBlocks(contentListPath: string): ConvertedBlock[] {
-  console.log(`[Extraction] Reading file: ${contentListPath}`);
   const rawContent = fs.readFileSync(contentListPath, 'utf-8');
-  let contentList: ContentBlock[];
-  try {
-    contentList = JSON.parse(rawContent);
-  } catch (e: any) {
-    console.error(`[Extraction] Failed to parse JSON: ${e.message}`);
-    throw new Error(`Invalid JSON in content_list.json: ${e.message}`);
-  }
-  
-  console.log(`[Extraction] JSON parsed, found ${contentList.length} items`);
+  const contentList: ContentBlock[] = JSON.parse(rawContent);
   
   const convertedBlocks: ConvertedBlock[] = [];
   let currentId = 0;
   
   for (const block of contentList) {
-    // 特殊处理表格：如果表格包含HTML行，将其拆分为单独的行块
-    // 这样 LLM 可以提取表格中的具体题目行，而不是整个表格
-    const tableContent = block.text || block.table_body;
-    if (block.type === 'table' && typeof tableContent === 'string' && tableContent.includes('<tr')) {
-       // 使用正则匹配所有 tr 标签 (包括跨行)
-       const rows = tableContent.match(/<tr[\s\S]*?<\/tr>/gi);
-       
-       if (rows && rows.length > 0) {
-         console.log(`[Extraction] Splitting table block into ${rows.length} rows`);
-         rows.forEach((rowHtml: string) => {
-           convertedBlocks.push({
-             id: currentId++,
-             type: 'text', // 转换为 text 类型以便 Prompt 处理
-             text: `[Table Row] ${rowHtml}`, // 添加前缀提示
-             page_idx: block.page_idx
-           });
-         });
-         continue; // 跳过原始表格块
-       }
+    // 1. 过滤噪声块
+    if (['page_number', 'footer', 'header'].includes(block.type)) {
+      continue;
     }
 
-    // 分配 ID（如果没有）
-    const id = block.id !== undefined ? block.id : currentId++;
-    
-    // 转换为简化格式
-    const converted: ConvertedBlock = {
-      id,
+    // 2. 展平 list 块
+    if (block.type === 'list' && block.list_items) {
+      for (const itemText of block.list_items) {
+        convertedBlocks.push({
+          id: currentId++,
+          type: 'text', // 将 list_item 转换为 text 类型
+          text: itemText.trim(),
+          page_idx: block.page_idx,
+        });
+      }
+      continue; // 继续下一个原始 block
+    }
+
+    // 3. 拆分 table 块
+    const tableContent = block.text || (block as any).table_body;
+    if (block.type === 'table' && typeof tableContent === 'string' && tableContent.includes('<tr')) {
+      const rows = tableContent.match(/<tr[\s\S]*?<\/tr>/gi) || [];
+      for (const rowHtml of rows) {
+        convertedBlocks.push({
+          id: currentId++,
+          type: 'text',
+          text: `[Table Row] ${rowHtml}`,
+          page_idx: block.page_idx,
+        });
+      }
+      continue;
+    }
+
+    // 4. 处理其他类型 (text, equation, image)
+    // 分配 ID (如果 block.id 存在则使用，否则使用 currentId)
+    // 注意：为了保证 ID 连续性，建议统一使用 currentId 重排
+    const newBlock: ConvertedBlock = {
+      id: currentId, 
       type: block.type,
       page_idx: block.page_idx
     };
-    
-    // 处理文本内容
-    if (block.type === 'text' && block.text) {
-      converted.text = block.text.trim();
-    } else if (block.type === 'list' && block.list_items) {
-      converted.text = block.list_items.join(' ').trim();
+
+    if (block.text) {
+      newBlock.text = block.text.trim(); // 保留 text, 无论 type 是 text 还是 equation
     }
-    
-    // 处理图片
+
     if (block.type === 'image' && block.img_path) {
-      converted.img_path = block.img_path;
+      newBlock.img_path = block.img_path;
       if (block.image_caption && block.image_caption.length > 0) {
-        converted.image_caption = block.image_caption.join(' ');
+        newBlock.image_caption = block.image_caption.join(' ');
       }
     }
-    
-    convertedBlocks.push(converted);
+
+    convertedBlocks.push(newBlock);
+    currentId++;
   }
   
   return convertedBlocks;
@@ -279,15 +279,15 @@ function splitIntoChunks(
       endId: chunkBlocks[chunkBlocks.length - 1].id
     });
     
-    // 避免无限循环和负索引
-    // 下一轮的起始位置至少要比当前起始位置大 1
-    // 如果 end - overlapSize <= start，说明当前 chunk 很小（小于 overlap），此时应强制前进
-    const nextStart = end - overlapSize;
-    start = Math.max(start + 1, nextStart);
-    index++; // 增加索引
-
-    // 如果已经处理完所有数据，或者 start 超过了数组长度，则退出
-    if (start >= blocks.length) break;
+    index++;
+    
+    // 如果已经处理到末尾，结束循环
+    if (end === blocks.length) break;
+    
+    start = end - overlapSize; // 重叠窗口
+    
+    // 避免死循环（如果 overlapSize >= maxSize）
+    if (start >= end) break;
   }
   
   return chunks;
@@ -296,116 +296,65 @@ function splitIntoChunks(
 /**
  * 调用 LLM 提取题目
  */
-async function callLLM(blocks: ConvertedBlock[], config: LLMConfig): Promise<string> {
+async function callLLM(
+  blocks: ConvertedBlock[], 
+  config: LLMConfig, 
+  debugInfo?: { taskDir: string, chunkIndex: number }
+): Promise<string> {
   // 构建输入
   const inputJson = JSON.stringify(blocks, null, 2);
   const prompt = `${QUESTION_EXTRACT_PROMPT}\n\n## Input JSON:\n\`\`\`json\n${inputJson}\n\`\`\``;
   
-  // 修正 API URL
-  let apiUrl = config.apiUrl;
-  // 如果是 OpenAI 官方 API 或兼容接口，且 URL 没有以 chat/completions 结尾，自动追加
-  if (!apiUrl.endsWith('/chat/completions') && !apiUrl.endsWith('/chat/completions/')) {
-    // 移除尾部斜杠
-    if (apiUrl.endsWith('/')) {
-      apiUrl = apiUrl.slice(0, -1);
-    }
-    apiUrl = `${apiUrl}/chat/completions`;
-    // console.log(`[Extraction] Auto-corrected API URL to: ${apiUrl}`);
-  }
-
-  const maxRetries = config.maxRetries || 3;
-  let lastError: any;
-
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+  // Debug: 保存 Prompt
+  if (debugInfo) {
+    const debugDir = path.join(debugInfo.taskDir, 'debug');
     try {
-      // 自动修正 API URL
-      let effectiveUrl = config.apiUrl;
-      if (!effectiveUrl.endsWith('/chat/completions') && !effectiveUrl.endsWith('/chat/completions/')) {
-        if (effectiveUrl.endsWith('/')) {
-          effectiveUrl += 'chat/completions';
-        } else {
-          effectiveUrl += '/chat/completions';
-        }
-      }
-
-      if (attempt > 1) {
-        console.log(`[LLM] Retry attempt ${attempt}/${maxRetries}...`);
-      }
-      console.log(`[LLM] Calling API: ${effectiveUrl}`);
-
-      // 调用 LLM API
-      const response = await axios.post(
-        effectiveUrl,
-        {
-          model: config.modelName,
-          messages: [
-            { role: 'system', content: 'You are an expert in extracting questions from educational materials.' },
-            { role: 'user', content: prompt }
-          ],
-          temperature: 0.1,
-          max_tokens: 4000
-        },
-        {
-          headers: {
-            'Authorization': `Bearer ${config.apiKey}`,
-            'Content-Type': 'application/json'
-          },
-          timeout: config.timeout || 180000 // 默认 3 分钟超时
-        }
-      );
-      
-      console.log(`[LLM] Response status: ${response.status}`);
-      // console.log(`[LLM] Response data: ${JSON.stringify(response.data).substring(0, 200)}...`);
-
-      if (!response.data || !response.data.choices || !response.data.choices[0] || !response.data.choices[0].message) {
-         console.error('[LLM] Invalid response structure:', JSON.stringify(response.data));
-         throw new Error('Invalid LLM response structure');
-      }
-
-      return response.data.choices[0].message.content;
-    } catch (error: any) {
-      lastError = error;
-      console.warn(`[LLM] Attempt ${attempt} failed: ${error.message}`);
-      
-      // 如果是超时或 5xx 错误，进行重试
-      const isRetryable = error.code === 'ECONNABORTED' || (error.response && error.response.status >= 500);
-      
-      if (attempt < maxRetries && isRetryable) {
-        // 等待一段时间后重试 (指数退避)
-        const delay = Math.pow(2, attempt) * 1000;
-        await new Promise(resolve => setTimeout(resolve, delay));
-      } else if (!isRetryable) {
-         // 非重试错误（如 400, 401）直接抛出
-         throw error;
-      }
+      if (!fs.existsSync(debugDir)) fs.mkdirSync(debugDir, { recursive: true });
+      fs.writeFileSync(path.join(debugDir, `chunk_${debugInfo.chunkIndex}_prompt.txt`), prompt);
+    } catch (e) {
+      console.warn('Failed to save debug prompt:', e);
     }
   }
 
-  throw lastError;
+  // 调用 LLM API
+  const response = await axios.post(
+    config.apiUrl,
+    {
+      model: config.modelName,
+      messages: [
+        { role: 'system', content: 'You are an expert in extracting questions from educational materials.' },
+        { role: 'user', content: prompt }
+      ],
+      temperature: 0.1,
+      max_tokens: 4000
+    },
+    {
+      headers: {
+        'Authorization': `Bearer ${config.apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      timeout: config.timeout || 60000
+    }
+  );
+  
+  return response.data.choices[0].message.content;
 }
 
 /**
  * 去重：基于 questionIds 去重
  */
 function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion[] {
-  console.log(`[Deduplication] Starting with ${questions.length} questions`);
   const seen = new Set<string>();
   const unique: ExtractedQuestion[] = [];
   
   for (const q of questions) {
-    // 优先使用 questionIds，如果没有则使用 题号+题目前50字
     const key = q.questionIds || `${q.label}_${q.question.substring(0, 50)}`;
-    
     if (!seen.has(key)) {
       seen.add(key);
       unique.push(q);
-    } else {
-      // 记录重复项，方便调试
-      // console.log(`[Deduplication] Duplicate found: ${key}`);
     }
   }
   
-  console.log(`[Deduplication] Finished with ${unique.length} unique questions`);
   return unique;
 }
 
@@ -516,4 +465,40 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
   
   fs.writeFileSync(outputPath, markdown, 'utf-8');
   console.log(`Exported ${questions.length} questions to ${outputPath}`);
+}
+
+/**
+ * 清洗章节标题
+ */
+function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQuestion[] {
+  const titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式"];
+  let lastValidTitle = "";
+
+  return questions.map(q => {
+    const isNoiseTitle = titleBlacklist.some(keyword => q.chapter_title && q.chapter_title.includes(keyword));
+    if (isNoiseTitle) {
+      q.chapter_title = lastValidTitle; // 使用上一个有效的标题
+    } else {
+      if (q.chapter_title) lastValidTitle = q.chapter_title;
+    }
+    return q;
+  });
+}
+
+// ============= 任务控制存根 (兼容 routers.ts) =============
+
+export function pauseTask(taskId: number): void {
+  console.warn(`[Task ${taskId}] pauseTask called (deprecated in v1.1)`);
+}
+
+export function resumeTask(taskId: number): void {
+  console.warn(`[Task ${taskId}] resumeTask called (deprecated in v1.1)`);
+}
+
+export function cancelTask(taskId: number): void {
+  console.warn(`[Task ${taskId}] cancelTask called (deprecated in v1.1)`);
+}
+
+export function isTaskPaused(taskId: number): boolean {
+  return false;
 }

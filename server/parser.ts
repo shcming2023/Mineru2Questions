@@ -337,8 +337,10 @@ export class QuestionParser {
       if (!block) continue;
 
       if (block.type === 'image' && block.img_path) {
-        images.push(`${this.imagePrefix}/${block.img_path}`);
+        // 使用 path.join 确保路径正确
+        images.push(path.join(this.imagePrefix, block.img_path));
       } else if (block.text) {
+        // 只要有 text 字段就提取，支持 text, equation, table row 等
         textParts.push(block.text);
       }
     }
