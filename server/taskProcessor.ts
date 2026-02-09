@@ -78,8 +78,10 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       apiUrl: llmConfig.apiUrl,
       apiKey: llmConfig.apiKey,
       modelName: llmConfig.modelName,
-      timeout: llmConfig.timeout || 60000,
-      maxRetries: 3
+      // 核心修复：将数据库中的秒转换为 axios 需要的毫秒
+      timeout: (llmConfig.timeout || 60) * 1000,
+      maxRetries: 3,
+      maxWorkers: llmConfig.maxWorkers || 5
     };
     
     // 3. 获取 content_list.json 路径

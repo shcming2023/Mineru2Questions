@@ -1,0 +1,805 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1170,
+    "type": "text",
+    "page_idx": 64,
+    "text": "疑难分析"
+  },
+  {
+    "id": 1171,
+    "type": "text",
+    "page_idx": 64,
+    "text": "例① 计算："
+  },
+  {
+    "id": 1172,
+    "type": "text",
+    "page_idx": 64,
+    "text": "(1)  $\\sqrt{15} \\times \\sqrt{1\\frac{2}{3}} \\div \\sqrt{2.4}$ ;"
+  },
+  {
+    "id": 1173,
+    "type": "text",
+    "page_idx": 64,
+    "text": "(2)  $\\frac{1}{a}\\sqrt{\\frac{a}{a^2 - b^2}} \\div \\frac{b}{a}\\sqrt{\\frac{a + b}{a - b}} \\cdot \\frac{a + b}{a}\\sqrt{\\frac{1}{a}} (a + b > 0)$ ."
+  },
+  {
+    "id": 1174,
+    "type": "text",
+    "page_idx": 64,
+    "text": "分析 二次根式的乘除运算，只要系数与系数相乘除，被开方数与被开方数相乘除，约简后再化成最简二次根式."
+  },
+  {
+    "id": 1175,
+    "type": "text",
+    "page_idx": 64,
+    "text": "解 (1) 原式  $= \\sqrt{15} \\times \\sqrt{\\frac{5}{3}} \\div \\sqrt{\\frac{24}{10}} = \\sqrt{15 \\times \\frac{5}{3} \\times \\frac{10}{24}} = \\sqrt{\\frac{5^3}{12}} = \\sqrt{\\frac{5^2 \\times 5 \\times 3}{4 \\times 3 \\times 3}} = \\frac{5}{6} \\sqrt{15}$ ."
+  },
+  {
+    "id": 1176,
+    "type": "text",
+    "page_idx": 64,
+    "text": "(2) 原式  $= \\left(\\frac{1}{a} \\cdot \\frac{a}{b} \\cdot \\frac{a + b}{a}\\right) \\sqrt{\\frac{a}{(a + b)(a - b)} \\cdot \\frac{a - b}{a + b} \\cdot \\frac{1}{a}} = \\frac{a + b}{ab} \\sqrt{\\frac{1}{(a + b)^2}} = \\frac{1}{ab}$ ."
+  },
+  {
+    "id": 1177,
+    "type": "text",
+    "page_idx": 64,
+    "text": "说明 二次根式乘除运算时，如  $\\div \\frac{b}{a}\\sqrt{\\frac{a + b}{a - b}}$  时，应该把  $\\frac{b}{a}$  与  $\\sqrt{\\frac{a + b}{a - b}}$  的乘积作为除数."
+  },
+  {
+    "id": 1178,
+    "type": "text",
+    "page_idx": 64,
+    "text": "例② 已知等腰三角形的周长为  $2\\sqrt{10} + \\sqrt{2}$ ，面积为  $\\frac{\\sqrt{15}}{2}$ ，且其中一边的长为  $\\sqrt{10}$ ，求该等腰三角形底边上的高."
+  },
+  {
+    "id": 1179,
+    "type": "text",
+    "page_idx": 64,
+    "text": "分析 等腰三角形的周长及一边已知，求另一边时有两种可能，即  $\\sqrt{10}$  为腰或底边；又已知三角形面积，可求底边上的高."
+  },
+  {
+    "id": 1180,
+    "type": "text",
+    "page_idx": 64,
+    "text": "解 若  $\\sqrt{10}$  为腰，则底边为  $2\\sqrt{10} + \\sqrt{2} - 2\\sqrt{10} = \\sqrt{2}$ ，此三角形符合题意。"
+  },
+  {
+    "id": 1181,
+    "type": "text",
+    "page_idx": 64,
+    "text": "则底边上的高为  $\\frac{\\sqrt{15}}{2} \\times 2 \\div \\sqrt{2} = \\frac{\\sqrt{30}}{2}$ ."
+  },
+  {
+    "id": 1182,
+    "type": "text",
+    "page_idx": 64,
+    "text": "若  $\\sqrt{10}$  为底边，则腰为  $\\frac{2\\sqrt{10} + \\sqrt{2} - \\sqrt{10}}{2} = \\frac{\\sqrt{10} + \\sqrt{2}}{2}$ ，此三角形符合题意。"
+  },
+  {
+    "id": 1183,
+    "type": "text",
+    "page_idx": 64,
+    "text": "则底边上的高为  $\\frac{\\sqrt{15}}{2} \\times 2 \\div \\sqrt{10} = \\frac{\\sqrt{6}}{2}$ ."
+  },
+  {
+    "id": 1184,
+    "type": "text",
+    "page_idx": 64,
+    "text": "所以，底边上的高为  $\\frac{\\sqrt{30}}{2}$  或  $\\frac{\\sqrt{6}}{2}$ ."
+  },
+  {
+    "id": 1185,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/247f08931a2eb45b93904076c9b03f6ae9a8daeaab508f6cc4d68140f0dbec88.jpg"
+  },
+  {
+    "id": 1186,
+    "type": "text",
+    "page_idx": 65,
+    "text": "基础训练"
+  },
+  {
+    "id": 1187,
+    "type": "text",
+    "text": "1. 计算：(1)  $\\sqrt{3} \\times \\sqrt{6} = \\_$ ；(2)  $\\sqrt{1\\frac{1}{3}} \\div \\sqrt{\\frac{3}{4}} = \\_$ .",
+    "page_idx": 65
+  },
+  {
+    "id": 1188,
+    "type": "text",
+    "text": "2.  $(\\sqrt{3} - 2)^{2026} \\cdot (2 + \\sqrt{3})^{2027} = \\underline{\\quad}$",
+    "page_idx": 65
+  },
+  {
+    "id": 1189,
+    "type": "text",
+    "text": "3. 若三角形一边是  $\\sqrt{42} \\mathrm{~cm}$ , 这边上的高是  $\\sqrt{30} \\mathrm{~cm}$ , 则这个三角形的面积为",
+    "page_idx": 65
+  },
+  {
+    "id": 1190,
+    "type": "text",
+    "text": "4. 已知  $x > 0, y > 0$ ，化简： $x\\sqrt{xy} \\div y\\sqrt{\\frac{x}{y}} \\cdot \\sqrt{\\frac{y}{x}} =$  ________.",
+    "page_idx": 65
+  },
+  {
+    "id": 1191,
+    "type": "text",
+    "text": "5. 若  $a, b$  为有理数，且  $\\frac{2\\sqrt{3} - b}{3 - a\\sqrt{3}} = \\sqrt{3} + 1$ ，则  $a = \\_$ ， $b = \\_$",
+    "page_idx": 65
+  },
+  {
+    "id": 1192,
+    "type": "text",
+    "text": "6. 下列计算错误的个数是( ).",
+    "page_idx": 65
+  },
+  {
+    "id": 1193,
+    "type": "text",
+    "page_idx": 65,
+    "text": "①  $4\\sqrt{5} \\times 2\\sqrt{5} = 8\\sqrt{5}$"
+  },
+  {
+    "id": 1194,
+    "type": "text",
+    "page_idx": 65,
+    "text": "②  $4\\sqrt{3} \\times 4\\sqrt{2} = 4\\sqrt{6}$"
+  },
+  {
+    "id": 1195,
+    "type": "text",
+    "page_idx": 65,
+    "text": "③  $\\frac{\\sqrt{27} - \\sqrt{12}}{3} = \\sqrt{9} - \\sqrt{4} = 1$ ;"
+  },
+  {
+    "id": 1196,
+    "type": "text",
+    "page_idx": 65,
+    "text": "④  $\\frac{6 - \\sqrt{2}}{\\sqrt{2}} = 3\\sqrt{2} - 1.$"
+  },
+  {
+    "id": 1197,
+    "type": "text",
+    "page_idx": 65,
+    "text": "A. 1"
+  },
+  {
+    "id": 1198,
+    "type": "text",
+    "page_idx": 65,
+    "text": "C. 3"
+  },
+  {
+    "id": 1199,
+    "type": "text",
+    "page_idx": 65,
+    "text": "D. 4"
+  },
+  {
+    "id": 1200,
+    "type": "text",
+    "page_idx": 65,
+    "text": "7. 计算："
+  },
+  {
+    "id": 1201,
+    "type": "text",
+    "page_idx": 65,
+    "text": "(1)  $\\sqrt{17} \\div \\sqrt{3\\frac{2}{5}} \\times \\sqrt{\\frac{3}{5}}$ ;"
+  },
+  {
+    "id": 1202,
+    "type": "text",
+    "page_idx": 65,
+    "text": "(2)  $\\frac{1}{2}\\sqrt{6} \\times 4\\sqrt{\\frac{1}{12}} \\div \\frac{2}{3}\\sqrt{1\\frac{1}{2}}$ ;"
+  },
+  {
+    "id": 1203,
+    "type": "text",
+    "page_idx": 65,
+    "text": "(3)  $3\\sqrt{\\frac{b}{x}} \\div \\left(-2\\sqrt{\\frac{b}{a}}\\right) \\cdot \\sqrt{\\frac{x}{a}}$ ;"
+  },
+  {
+    "id": 1204,
+    "type": "text",
+    "page_idx": 65,
+    "text": "(4)  $3\\sqrt{\\frac{b}{x}} \\div \\left(-2\\sqrt{\\frac{b}{a}} \\cdot \\sqrt{\\frac{x}{a}}\\right)$ ;"
+  },
+  {
+    "id": 1205,
+    "type": "text",
+    "page_idx": 65,
+    "text": "(5)  $\\frac{2x^2}{3} \\cdot \\sqrt{\\frac{9}{x}} + 6\\sqrt{\\frac{x^3}{4}} - x^3\\sqrt{\\frac{1}{x^3}}$ ;"
+  },
+  {
+    "id": 1206,
+    "type": "text",
+    "text": "(6)  $-3\\sqrt{\\frac{3m^2 - 3n^2}{2a^2}} \\div \\frac{3}{2}\\sqrt{\\frac{m + n}{a^2}} \\cdot \\sqrt{\\frac{a^2}{m - n}} (a > 0)$ ;",
+    "page_idx": 66
+  },
+  {
+    "id": 1207,
+    "type": "text",
+    "text": "(7)  $(\\sqrt{18} + \\sqrt{48}) \\times (\\sqrt{2} - \\sqrt{12}) \\div (\\sqrt{3} - \\sqrt{2})^2$ .",
+    "page_idx": 66
+  },
+  {
+    "id": 1208,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/83bf4820e4922adf89afeafe8f9c7fa22f60c039bd413f03595f6f61a1ec7bc7.jpg"
+  },
+  {
+    "id": 1209,
+    "type": "text",
+    "page_idx": 66,
+    "text": "拓展训练"
+  },
+  {
+    "id": 1210,
+    "type": "text",
+    "page_idx": 66,
+    "text": "8. 求比  $(\\sqrt{6} + \\sqrt{5})^6$  大的最小整数"
+  },
+  {
+    "id": 1211,
+    "type": "text",
+    "page_idx": 67,
+    "text": "20.2(三） 分母有理化"
+  },
+  {
+    "id": 1212,
+    "type": "image",
+    "page_idx": 67,
+    "img_path": "images/2e366dfe032c76f133123908f1658be7766b4c2752ceb543d7814180e994260f.jpg"
+  },
+  {
+    "id": 1213,
+    "type": "text",
+    "page_idx": 67,
+    "text": "要点归纳"
+  },
+  {
+    "id": 1214,
+    "type": "text",
+    "text": "1. 明确分母有理化的含义: 把分母中的根号化去的过程称为分母有理化. 一般通过分子、分母同乘分母的有理化因式来实现.",
+    "page_idx": 67
+  },
+  {
+    "id": 1215,
+    "type": "text",
+    "text": "2. 利用分母有理化进行除式为一个根式的除法运算",
+    "page_idx": 67
+  },
+  {
+    "id": 1216,
+    "type": "image",
+    "page_idx": 67,
+    "img_path": "images/2f39e62cfb19d08c8d4abdba0ac37fb70f1ce519ab411a7877a5dd74c45c83b5.jpg"
+  },
+  {
+    "id": 1217,
+    "type": "text",
+    "page_idx": 67,
+    "text": "疑难分析"
+  },
+  {
+    "id": 1218,
+    "type": "text",
+    "page_idx": 67,
+    "text": "例① 将下列各题分母有理化："
+  },
+  {
+    "id": 1219,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(1)  $\\frac{3}{\\sqrt{12}}$"
+  },
+  {
+    "id": 1220,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(2)  $\\frac{2x + 3\\sqrt{y}}{2x - 3\\sqrt{y}}$"
+  },
+  {
+    "id": 1221,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(3)  $\\frac{4a^2 - b^2}{\\sqrt{2a + b}}$"
+  },
+  {
+    "id": 1222,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(4)  $\\frac{12}{\\sqrt{2} + \\sqrt{3} - \\sqrt{5}}$ ."
+  },
+  {
+    "id": 1223,
+    "type": "text",
+    "page_idx": 67,
+    "text": "分析 常用的有理化因式有 ①  $\\sqrt{a + b}$  与  $\\sqrt{a + b}$  ( $\\sqrt{a - b}$  与  $\\sqrt{a - b}$ ); ②  $\\sqrt{a} + \\sqrt{b}$  与  $\\sqrt{a} - \\sqrt{b}$ ; ③  $a\\sqrt{b} + c\\sqrt{d}$  与  $a\\sqrt{b} - c\\sqrt{d}$ ."
+  },
+  {
+    "id": 1224,
+    "type": "text",
+    "page_idx": 67,
+    "text": "解 (1)  $\\frac{3}{\\sqrt{12}} = \\frac{3 \\times \\sqrt{3}}{2\\sqrt{3} \\times \\sqrt{3}} = \\frac{\\sqrt{3}}{2}$ ."
+  },
+  {
+    "id": 1225,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(2)  $\\frac{2x + 3\\sqrt{y}}{2x - 3\\sqrt{y}} = \\frac{(2x + 3\\sqrt{y})^2}{(2x - 3\\sqrt{y}) \\cdot (2x + 3\\sqrt{y})} = \\frac{4x^2 + 12x\\sqrt{y} + 9y}{4x^2 - 9y}$ ."
+  },
+  {
+    "id": 1226,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(3)  $\\frac{4a^2 - b^2}{\\sqrt{2a + b}} = \\frac{(2a + b)(2a - b)\\cdot\\sqrt{2a + b}}{\\sqrt{2a + b}\\cdot\\sqrt{2a + b}} = (2a - b)\\sqrt{2a + b}.$"
+  },
+  {
+    "id": 1227,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(4)  $\\frac{12}{\\sqrt{2} + \\sqrt{3} - \\sqrt{5}} = \\frac{12(\\sqrt{2} + \\sqrt{3} + \\sqrt{5})}{(\\sqrt{2} + \\sqrt{3} - \\sqrt{5})(\\sqrt{2} + \\sqrt{3} + \\sqrt{5})} = \\frac{12(\\sqrt{2} + \\sqrt{3} + \\sqrt{5}) \\times \\sqrt{6}}{2\\sqrt{6} \\times \\sqrt{6}}$"
+  },
+  {
+    "id": 1228,
+    "type": "equation",
+    "page_idx": 67,
+    "text": "$$\n= 2 \\sqrt {3} + 3 \\sqrt {2} + \\sqrt {3 0}.\n$$"
+  },
+  {
+    "id": 1229,
+    "type": "text",
+    "page_idx": 67,
+    "text": "说明 找有理化因式主要利用了  $(\\sqrt{a})^2 = a$  与平方差公式."
+  },
+  {
+    "id": 1230,
+    "type": "text",
+    "page_idx": 67,
+    "text": "例② (1) 计算:  $\\sqrt{6} \\div (\\sqrt{3} + \\sqrt{2})$ ; (2) 解不等式:  $2(x + 1) - \\sqrt{2} < \\sqrt{6}(x - 1)$ ."
+  },
+  {
+    "id": 1231,
+    "type": "text",
+    "page_idx": 67,
+    "text": "解 (1)  $\\sqrt{6} \\div (\\sqrt{3} + \\sqrt{2}) = \\frac{\\sqrt{6}}{\\sqrt{3} + \\sqrt{2}} = \\frac{\\sqrt{6} (\\sqrt{3} - \\sqrt{2})}{3 - 2} = 3\\sqrt{2} - 2\\sqrt{3}$ ."
+  },
+  {
+    "id": 1232,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(2)  $2(x + 1) - \\sqrt{2} < \\sqrt{6} (x - 1)$ ."
+  },
+  {
+    "id": 1233,
+    "type": "equation",
+    "page_idx": 67,
+    "text": "$$\n2 x + 2 - \\sqrt {2} <   \\sqrt {6} x - \\sqrt {6}.\n$$"
+  },
+  {
+    "id": 1234,
+    "type": "equation",
+    "page_idx": 67,
+    "text": "$$\n\\begin{array}{l} (2 - \\sqrt {6}) x <   \\sqrt {2} - \\sqrt {6} - 2. \\\\ x > \\frac {\\sqrt {2} - \\sqrt {6} - 2}{2 - \\sqrt {6}}. \\\\ x > 2 \\sqrt {6} - \\sqrt {2} - \\sqrt {3} + 5. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 1235,
+    "type": "text",
+    "page_idx": 68,
+    "text": "$\\therefore$  原不等式的解集为  $x > 2\\sqrt{6} - \\sqrt{2} - \\sqrt{3} + 5.$"
+  },
+  {
+    "id": 1236,
+    "type": "text",
+    "page_idx": 68,
+    "text": "说明 除法没有分配律，当除式是一个根式时，常常用分母有理化进行除法运算。解不等式时，特别注意变号的情况。"
+  },
+  {
+    "id": 1237,
+    "type": "image",
+    "page_idx": 68,
+    "img_path": "images/6962c6d9ff240daefce41bcf9dcd8af7e96cfb0bcbea4e66d1a2fb801fedeab9.jpg"
+  },
+  {
+    "id": 1238,
+    "type": "text",
+    "page_idx": 68,
+    "text": "基础训练"
+  },
+  {
+    "id": 1239,
+    "type": "text",
+    "page_idx": 68,
+    "text": "1. 把下列各式的有理化因式填在括号内（每式只需写出一个有理化因式）"
+  },
+  {
+    "id": 1240,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(1)  $\\sqrt{a}$ : ("
+  },
+  {
+    "id": 1241,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）；"
+  },
+  {
+    "id": 1242,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(2)  $\\sqrt{27}$ : ("
+  },
+  {
+    "id": 1243,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）；"
+  },
+  {
+    "id": 1244,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(3)  $\\sqrt{3a - 4b}$ : ("
+  },
+  {
+    "id": 1245,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）；"
+  },
+  {
+    "id": 1246,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(4)  $\\sqrt{5} - 7$ :"
+  },
+  {
+    "id": 1247,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）；"
+  },
+  {
+    "id": 1248,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(5)  $m\\sqrt{a} - n\\sqrt{b}$ :"
+  },
+  {
+    "id": 1249,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）；"
+  },
+  {
+    "id": 1250,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(6)  $2a + \\sqrt{a + 1} - 1$ :"
+  },
+  {
+    "id": 1251,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）；"
+  },
+  {
+    "id": 1252,
+    "type": "text",
+    "page_idx": 68,
+    "text": "(7)  $1 + \\sqrt{2} + \\sqrt{3} + \\sqrt{6}$ :"
+  },
+  {
+    "id": 1253,
+    "type": "text",
+    "page_idx": 68,
+    "text": "）."
+  },
+  {
+    "id": 1254,
+    "type": "text",
+    "text": "2. 比较大小:  $2\\sqrt{3} - \\sqrt{10}$  _______  $3\\sqrt{2} - 4$ . (填“<”“>”或“=”)",
+    "page_idx": 68
+  },
+  {
+    "id": 1255,
+    "type": "text",
+    "text": "3. 已知  $x = \\sqrt{5} - \\sqrt{3}$ ,  $y = \\sqrt{5} + \\sqrt{3}$ , 则  $\\left(\\frac{1}{x} - 1\\right)\\left(\\frac{1}{y} - 1\\right)$  的值为",
+    "page_idx": 68
+  },
+  {
+    "id": 1256,
+    "type": "text",
+    "text": "4. 已知  $x = \\frac{\\sqrt{2} + \\sqrt{3}}{\\sqrt{2} - \\sqrt{3}}, y = \\frac{\\sqrt{3} - \\sqrt{2}}{\\sqrt{3} + \\sqrt{2}}$  则  $x^{2} + y^{2}$  的值为",
+    "page_idx": 68
+  },
+  {
+    "id": 1257,
+    "type": "text",
+    "text": "5. 不等式  $2(x - 1) < \\sqrt{5} x$  的解集为",
+    "page_idx": 68
+  },
+  {
+    "id": 1258,
+    "type": "text",
+    "text": "6. 设  $\\frac{3\\sqrt{3} + 5}{\\sqrt{3} + 1}$  的整数部分为  $a$ ，小数部分为  $b$ ，则  $a^2 + b^2$  的值为（ ）.",
+    "page_idx": 68
+  },
+  {
+    "id": 1259,
+    "type": "text",
+    "page_idx": 68,
+    "text": "A.  $13 + 2\\sqrt{3}$"
+  },
+  {
+    "id": 1260,
+    "type": "text",
+    "page_idx": 68,
+    "text": "B.  $11 + 2\\sqrt{3}$"
+  },
+  {
+    "id": 1261,
+    "type": "text",
+    "page_idx": 68,
+    "text": "C.  $11 - 2\\sqrt{3}$"
+  },
+  {
+    "id": 1262,
+    "type": "text",
+    "page_idx": 68,
+    "text": "D.  $13 - 2\\sqrt{3}$"
+  },
+  {
+    "id": 1263,
+    "type": "text",
+    "page_idx": 68,
+    "text": "7. 下列说法正确的是（ ）"
+  },
+  {
+    "id": 1264,
+    "type": "text",
+    "text": "A.  $\\sqrt{2} \\div (\\sqrt{2} + \\sqrt{6}) = 1 + \\frac{\\sqrt{2}}{\\sqrt{6}} = \\frac{3 + \\sqrt{3}}{3}$",
+    "page_idx": 68
+  },
+  {
+    "id": 1265,
+    "type": "text",
+    "text": "B.  $2\\sqrt{7} - 3\\sqrt{5}$  的有理化因式一定是  $2\\sqrt{7} + 3\\sqrt{5}$",
+    "page_idx": 68
+  },
+  {
+    "id": 1266,
+    "type": "text",
+    "text": "C.  $a\\sqrt{x} - b\\sqrt{y}$  与  $a\\sqrt{x} + b\\sqrt{y}$  互为有理化因式",
+    "page_idx": 68
+  },
+  {
+    "id": 1267,
+    "type": "text",
+    "text": "D.  $\\sqrt{a - b}$  的有理化因式可以是  $\\sqrt{a + b}$",
+    "page_idx": 68
+  },
+  {
+    "id": 1268,
+    "type": "text",
+    "page_idx": 68,
+    "text": "8.  $M = \\sqrt{a + 1} -\\sqrt{a}$  ，  $N = \\sqrt{a} -\\sqrt{a - 1}$  ,其中  $a > 1$  ，则( )."
+  },
+  {
+    "id": 1269,
+    "type": "text",
+    "page_idx": 68,
+    "text": "A.  $M = N$"
+  }
+]
+```

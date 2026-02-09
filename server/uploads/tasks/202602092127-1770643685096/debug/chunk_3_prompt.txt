@@ -1,0 +1,805 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 270,
+    "type": "text",
+    "text": "（4）如果  $\\sqrt[3]{200a}$  是一个整数，那么满足条件最大的负整数  $a$  是什么？",
+    "page_idx": 15
+  },
+  {
+    "id": 271,
+    "type": "text",
+    "page_idx": 15,
+    "text": "分析 对于第(1)题，在开立方根前宜先判断运算结果的正负；对于第(2)题，由于256的平方根有两个，即  $\\pm 16$  ，因此立方根会有两个；在求解立方根的过程中如果有必要须先对原数分解素因数."
+  },
+  {
+    "id": 272,
+    "type": "text",
+    "page_idx": 16,
+    "text": "(1)  $-\\sqrt[3]{-\\frac{343}{8}} = \\sqrt[3]{\\frac{343}{8}} = \\frac{7}{2}$ ."
+  },
+  {
+    "id": 273,
+    "type": "equation",
+    "page_idx": 16,
+    "text": "$$\n\\begin{array}{l} \\sqrt [ 3 ]{(- 1 0) ^ {6}} = \\sqrt [ 3 ]{1 0 ^ {6}} = 1 0 0. \\\\ \\sqrt [ 3 ]{- 6 0 \\times 1 8 \\times 2 5} = - \\sqrt [ 3 ]{5 \\times 3 \\times 2 ^ {2} \\times 2 \\times 3 ^ {2} \\times 5 ^ {2}} = - \\sqrt [ 3 ]{2 ^ {3} \\times 3 ^ {3} \\times 5 ^ {3}} = - 3 0. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 274,
+    "type": "text",
+    "page_idx": 16,
+    "text": "（2）：256的平方根是  $\\pm 16$  ，∴256的平方根的立方根是  $\\pm 2\\sqrt[3]{2}$"
+  },
+  {
+    "id": 275,
+    "type": "text",
+    "text": "(3)  $\\because x^3 + 729 = 0, \\therefore x^3 = -729$ .  $\\therefore x = -9$ .",
+    "page_idx": 16
+  },
+  {
+    "id": 276,
+    "type": "text",
+    "text": "（4） $\\because 200a = 2^3 \\times 5^2 \\times a$ ， $\\therefore$  满足  $\\sqrt[3]{200a}$  是一个整数的  $a = -5 \\times k^3 (k$  为整数).",
+    "page_idx": 16
+  },
+  {
+    "id": 277,
+    "type": "text",
+    "page_idx": 16,
+    "text": "所以最大的负整数  $a$  是-5."
+  },
+  {
+    "id": 278,
+    "type": "text",
+    "page_idx": 16,
+    "text": "例③ 已知  $\\sqrt[3]{0.23} \\approx 0.6127, \\sqrt[3]{2.3} \\approx 1.320, \\sqrt[3]{23} \\approx 2.844$ ."
+  },
+  {
+    "id": 279,
+    "type": "text",
+    "page_idx": 16,
+    "text": "求  $\\sqrt[3]{230},\\sqrt[3]{-23000},\\sqrt[3]{0.0023}$  的近似值"
+  },
+  {
+    "id": 280,
+    "type": "text",
+    "page_idx": 16,
+    "text": "分析 开立方时，被开方数的小数点向左(或向右)每移动三位，立方根的小数点相应地向左（或向右）移动一位即可。其一般规律是："
+  },
+  {
+    "id": 281,
+    "type": "text",
+    "page_idx": 16,
+    "text": "$\\sqrt[3]{10^{3n} \\cdot a} = 10^n \\sqrt[3]{a}, \\sqrt[3]{10^{-3n} \\cdot a} = \\frac{\\sqrt[3]{a}}{10^n}$  （ $n$  是自然数）."
+  },
+  {
+    "id": 282,
+    "type": "text",
+    "page_idx": 16,
+    "text": "$\\sqrt[3]{230} = \\sqrt[3]{0.23 \\times 10^3} \\approx 6.127.$ $\\sqrt[3]{-23000} = -\\sqrt[3]{23 \\times 10^3} \\approx -28.44.$"
+  },
+  {
+    "id": 283,
+    "type": "equation",
+    "page_idx": 16,
+    "text": "$$\n\\sqrt [ 3 ]{0 . 0 0 2 3} = \\sqrt [ 3 ]{2 . 3 \\times 1 0 ^ {- 3}} \\approx 0. 1 3 2 0.\n$$"
+  },
+  {
+    "id": 284,
+    "type": "text",
+    "page_idx": 16,
+    "text": "自基础训练"
+  },
+  {
+    "id": 285,
+    "type": "text",
+    "page_idx": 16,
+    "text": "1. 如果一个数的立方等于  $a$ ，那么这个数叫作  $a$  的 _______，用符号表示为 _______，而  $-\\sqrt[3]{a}$  表示 _______."
+  },
+  {
+    "id": 286,
+    "type": "text",
+    "text": "2.（1）一27的立方根是 ；（2）  $\\frac{1}{125}$  的立方根是",
+    "page_idx": 16
+  },
+  {
+    "id": 287,
+    "type": "text",
+    "text": "(3)  $\\left| - \\frac{1}{64} \\right|$  的立方根是",
+    "page_idx": 16
+  },
+  {
+    "id": 288,
+    "type": "text",
+    "text": "3. 平方根等于本身的数是 ，立方根等于本身的数是",
+    "page_idx": 16
+  },
+  {
+    "id": 289,
+    "type": "text",
+    "text": "4. 若  $\\sqrt[3]{-a} = -\\sqrt[3]{-a}$ , 则  $a =$",
+    "page_idx": 16
+  },
+  {
+    "id": 290,
+    "type": "text",
+    "text": "5. 是  $\\frac{1}{4}$  的负的平方根，又是 的立方根",
+    "page_idx": 16
+  },
+  {
+    "id": 291,
+    "type": "text",
+    "text": "6. 化简：(1)  $\\sqrt[3]{(5 - \\pi)^{3}} =$  ________；(2)  $\\sqrt[3]{(1 - x)^{3}} =$  ________.",
+    "page_idx": 16
+  },
+  {
+    "id": 292,
+    "type": "text",
+    "text": "7. 若  $\\sqrt[3]{0.0468} \\approx 0.3604$ ，则  $(-36.04)^{3} \\approx$  ________.",
+    "page_idx": 16
+  },
+  {
+    "id": 293,
+    "type": "text",
+    "text": "8. 下列说法正确的是（ ）",
+    "page_idx": 16
+  },
+  {
+    "id": 294,
+    "type": "text",
+    "page_idx": 16,
+    "text": "A.  $-\\frac{1}{16}$  没有立方根"
+  },
+  {
+    "id": 295,
+    "type": "text",
+    "page_idx": 16,
+    "text": "B.  $-\\frac{125}{512}$  的立方根是  $\\frac{5}{8}$  和  $-\\frac{5}{8}$"
+  },
+  {
+    "id": 296,
+    "type": "text",
+    "page_idx": 16,
+    "text": "C. 729 的平方根的立方根是 3"
+  },
+  {
+    "id": 297,
+    "type": "text",
+    "page_idx": 16,
+    "text": "D. 一4 是一64 的立方根"
+  },
+  {
+    "id": 298,
+    "type": "text",
+    "page_idx": 17,
+    "text": "9. 计算："
+  },
+  {
+    "id": 299,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(1)  $\\sqrt[3]{(-8)^2}$ ;"
+  },
+  {
+    "id": 300,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(2)  $-\\sqrt[3]{216}$ ;"
+  },
+  {
+    "id": 301,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(3)  $-\\sqrt[3]{-1\\frac{61}{64}}$"
+  },
+  {
+    "id": 302,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(4)  $\\sqrt[3]{-3 - \\frac{3}{8}}$ ;"
+  },
+  {
+    "id": 303,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(5)  $\\sqrt[3]{a^3}$ ;"
+  },
+  {
+    "id": 304,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(6)  $\\sqrt[3]{(-a)^6}$ ."
+  },
+  {
+    "id": 305,
+    "type": "text",
+    "page_idx": 17,
+    "text": "10. 求下列式子中  $x$  的值："
+  },
+  {
+    "id": 306,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(1)  $8x^{3} = 125$"
+  },
+  {
+    "id": 307,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(2)  $\\sqrt[3]{x} = -3$ ;"
+  },
+  {
+    "id": 308,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(3)  $8x^{3} - 2 = \\frac{10}{27}$ ;"
+  },
+  {
+    "id": 309,
+    "type": "text",
+    "page_idx": 17,
+    "text": "(4)  $2(x - 2)^{3} = 16.$"
+  },
+  {
+    "id": 310,
+    "type": "text",
+    "page_idx": 17,
+    "text": "11. 已知一个正方体的棱长是  $4\\mathrm{cm}$ , 现制作一个正方体, 使它的体积是原正方体体积的2倍, 求所作正方体的棱长."
+  },
+  {
+    "id": 311,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/14f22de5143a31f63cc4ccd5bccb34c788d042953e6b4f267e7d8798cb2b5b68.jpg"
+  },
+  {
+    "id": 312,
+    "type": "text",
+    "page_idx": 18,
+    "text": "拓展训练"
+  },
+  {
+    "id": 313,
+    "type": "text",
+    "text": "12. 已知  $a + 2$  的平方根是  $\\pm 2, 6a + b + 7$  的立方根是 3, 求  $a^2 + b$  的平方根.",
+    "page_idx": 18
+  },
+  {
+    "id": 314,
+    "type": "text",
+    "text": "13. 已知  $a$  是  $\\sqrt[3]{80}$  的整数部分, 求  $a$  的平方根",
+    "page_idx": 18
+  },
+  {
+    "id": 315,
+    "type": "text",
+    "text": "14. 已知  $\\sqrt[3]{3x + 8}$  和  $\\sqrt[3]{3y - 5}$  互为相反数, 求  $\\sqrt[3]{x + y}$  的值.",
+    "page_idx": 18
+  },
+  {
+    "id": 316,
+    "type": "text",
+    "text": "15. 若  $a$  没有平方根, 试化简:  $|a| - \\sqrt[3]{a^3} + \\sqrt{a^2}$ .",
+    "page_idx": 18
+  },
+  {
+    "id": 317,
+    "type": "text",
+    "text": "16. 已知甲、乙、丙三个数，甲  $= 5 + \\sqrt{15}$ ，乙  $= 3 + \\sqrt{17}$ ，丙  $= 1 + \\sqrt{19}$ ，则甲、乙、丙的大小关系是（ ）.",
+    "page_idx": 18
+  },
+  {
+    "id": 318,
+    "type": "text",
+    "page_idx": 18,
+    "text": "A. 丙  $<$  乙  $<$  甲"
+  },
+  {
+    "id": 319,
+    "type": "text",
+    "page_idx": 18,
+    "text": "B. 乙  $<$  甲  $<$  丙"
+  },
+  {
+    "id": 320,
+    "type": "text",
+    "page_idx": 18,
+    "text": "C. 甲  $<$  乙  $<$  丙"
+  },
+  {
+    "id": 321,
+    "type": "text",
+    "page_idx": 18,
+    "text": "D. 甲  $=$  乙  $=$  丙"
+  },
+  {
+    "id": 322,
+    "type": "text",
+    "page_idx": 19,
+    "text": "阶段训练 ①"
+  },
+  {
+    "id": 323,
+    "type": "text",
+    "text": "1. (1)  $\\sqrt{256}$  的平方根是 ________；(2) ________ 的立方根是一3.",
+    "page_idx": 19
+  },
+  {
+    "id": 324,
+    "type": "text",
+    "text": "2.（1）  $30\\frac{1}{4}$  的平方根为 ；(2)  $0.64\\times (-10)^{2}$  的算术平方根为",
+    "page_idx": 19
+  },
+  {
+    "id": 325,
+    "type": "text",
+    "text": "3. 若  $\\sqrt{3} \\approx 1.732, \\sqrt{30} \\approx 5.477$ ，则  $\\sqrt{30000} \\approx$  ________.",
+    "page_idx": 19
+  },
+  {
+    "id": 326,
+    "type": "text",
+    "text": "4. 若  $-1331$  的立方根是  $-11$ , 则立方根是 0.11 的数是",
+    "page_idx": 19
+  },
+  {
+    "id": 327,
+    "type": "text",
+    "text": "5. 求下列各式中  $x$  的取值范围：",
+    "page_idx": 19
+  },
+  {
+    "id": 328,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(1)  $\\sqrt{-(x - 2)^2}$"
+  },
+  {
+    "id": 329,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(2)  $\\frac{\\sqrt{x - 1}}{\\sqrt{9 - 3x}}$"
+  },
+  {
+    "id": 330,
+    "type": "text",
+    "text": "6. (1)  $7 - \\sqrt{7}$  的整数部分是 , 小数部分是",
+    "page_idx": 19
+  },
+  {
+    "id": 331,
+    "type": "text",
+    "text": "(2)  $9 - 2\\sqrt{5}$  的整数部分是 ,小数部分是",
+    "page_idx": 19
+  },
+  {
+    "id": 332,
+    "type": "text",
+    "text": "7. 一64的三次方根是",
+    "page_idx": 19
+  },
+  {
+    "id": 333,
+    "type": "text",
+    "text": "8. 使  $\\sqrt[3]{-a} = -\\sqrt[3]{a}$  成立的条件是",
+    "page_idx": 19
+  },
+  {
+    "id": 334,
+    "type": "text",
+    "text": "9. 如果  $a + b = 0, ab \\neq 0$ ，那么  $\\frac{\\sqrt{b^2}}{a} + \\frac{\\sqrt{a^2}}{b} = \\_$",
+    "page_idx": 19
+  },
+  {
+    "id": 335,
+    "type": "text",
+    "text": "10. 把  $\\sqrt{3}$  的小数部分记作  $a$ ，把  $\\sqrt{9}$  的正平方根记作  $b$ ，那么  $a^2 + 2b = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_.$",
+    "page_idx": 19
+  },
+  {
+    "id": 336,
+    "type": "text",
+    "text": "11. 下列说法正确的是（ ）.",
+    "page_idx": 19
+  },
+  {
+    "id": 337,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A. 一个数的平方根总有两个"
+  },
+  {
+    "id": 338,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B. 一个数的立方根有两个"
+  },
+  {
+    "id": 339,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C. 1 的立方根是  $\\pm 1$"
+  },
+  {
+    "id": 340,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D. 1 的平方根是  $\\pm 1$"
+  },
+  {
+    "id": 341,
+    "type": "text",
+    "page_idx": 19,
+    "text": "12. 下列式子表达不正确的是（ ）"
+  },
+  {
+    "id": 342,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A.  $-\\sqrt{18}$  是 18 的平方根"
+  },
+  {
+    "id": 343,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B.  $-\\sqrt{144} = -12$"
+  },
+  {
+    "id": 344,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C.  $\\sqrt{49} = \\pm 7$"
+  },
+  {
+    "id": 345,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D.  $-4$  是  $-64$  的立方根"
+  },
+  {
+    "id": 346,
+    "type": "text",
+    "page_idx": 19,
+    "text": "13. 计算："
+  },
+  {
+    "id": 347,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(1)  $-\\sqrt{3.61} \\times \\sqrt{0.04}$ ;"
+  },
+  {
+    "id": 348,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(2)  $\\pm \\sqrt{2 - \\frac{23}{36}}$ ;"
+  },
+  {
+    "id": 349,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(3)  $\\sqrt{0.0081} \\times \\sqrt[3]{-125}$ ;"
+  },
+  {
+    "id": 350,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(4)  $\\sqrt{2.89} - \\sqrt[3]{0.512}$ ."
+  },
+  {
+    "id": 351,
+    "type": "text",
+    "page_idx": 20,
+    "text": "14. 当  $x$  为何值时，下列各式有意义？"
+  },
+  {
+    "id": 352,
+    "type": "text",
+    "page_idx": 20,
+    "text": "(1)  $\\sqrt{2 - 4x}$ ;"
+  },
+  {
+    "id": 353,
+    "type": "text",
+    "page_idx": 20,
+    "text": "(2)  $\\sqrt[3]{5x - 3}$ ;"
+  },
+  {
+    "id": 354,
+    "type": "text",
+    "page_idx": 20,
+    "text": "(3)  $\\frac{(x - 1)^0}{\\sqrt[3]{x}}$"
+  },
+  {
+    "id": 355,
+    "type": "text",
+    "text": "15. 求值:  $\\sqrt{9 + a} - \\sqrt{16 - 3a} + \\sqrt{4a + 1} + \\sqrt{-a^2}$ .",
+    "page_idx": 20
+  },
+  {
+    "id": 356,
+    "type": "text",
+    "text": "16. 已知  $A = \\frac{\\sqrt{2x + 3y - 1} - \\sqrt{2 - 4x - 6y} + 2y}{\\sqrt{7x - 4y - 18} + \\sqrt{4y - 7x + 18} - x}$ , 求  $A$  的平方根.",
+    "page_idx": 20
+  },
+  {
+    "id": 357,
+    "type": "text",
+    "page_idx": 21,
+    "text": "19.2 实数"
+  },
+  {
+    "id": 358,
+    "type": "text",
+    "page_idx": 21,
+    "text": "19.2（一） 有理数的小数形式"
+  },
+  {
+    "id": 359,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/4896be22d52c1023b15bbe8beed64486cf3bff92dfe1565a8573ec598cf533bc.jpg"
+  },
+  {
+    "id": 360,
+    "type": "text",
+    "page_idx": 21,
+    "text": "要点归纳"
+  },
+  {
+    "id": 361,
+    "type": "text",
+    "page_idx": 21,
+    "text": "有理数的小数形式包括以下两种："
+  },
+  {
+    "id": 362,
+    "type": "text",
+    "page_idx": 21,
+    "text": "1. 有限小数："
+  },
+  {
+    "id": 363,
+    "type": "text",
+    "page_idx": 21,
+    "text": "当分子除以分母能够除尽时，得到的小数是有限的。例如， $\\frac{2}{5} = 0.4$ 。"
+  },
+  {
+    "id": 364,
+    "type": "text",
+    "page_idx": 21,
+    "text": "2. 无限循环小数："
+  },
+  {
+    "id": 365,
+    "type": "text",
+    "page_idx": 21,
+    "text": "当分子除以分母除不尽时，会得到一个无限循环小数。循环小数会有一段数字重复出现。例如， $\\frac{1}{3} = 0.3$ ，其中数字3会不断重复。"
+  },
+  {
+    "id": 366,
+    "type": "text",
+    "page_idx": 21,
+    "text": "这些形式展示了有理数如何以小数形式表示. 任何有限小数或无限循环小数都是有理数."
+  },
+  {
+    "id": 367,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/e6b063d020caf0dc143dd7cbf9ab202b66ddca988938adddd7010da828f5e84f.jpg"
+  },
+  {
+    "id": 368,
+    "type": "text",
+    "page_idx": 21,
+    "text": "疑难分析"
+  },
+  {
+    "id": 369,
+    "type": "text",
+    "page_idx": 21,
+    "text": "例① 将  $0.2\\dot{3}\\dot{4}$  化成分数"
+  }
+]
+```

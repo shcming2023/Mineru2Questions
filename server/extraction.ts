@@ -117,61 +117,82 @@ export async function extractQuestions(
   const chunks = splitIntoChunks(blocks, MAX_CHUNK_SIZE, OVERLAP_SIZE);
   console.log(`Created ${chunks.length} chunks`);
   
-  // 3. 调用 LLM 提取题目
-  console.log('Step 3: Extracting questions via LLM...');
-  const allQuestions: ExtractedQuestion[] = [];
-  
-  for (const chunk of chunks) {
-    const progressPercent = 10 + Math.floor((chunk.index / chunks.length) * 80);
-    const progressMsg = `Processing chunk ${chunk.index + 1}/${chunks.length}...`;
-    console.log(progressMsg);
-    if (onProgress) await onProgress(progressPercent, progressMsg);
+  // 3. 调用 LLM 提取题目 (并发处理)
+   console.log('Step 3: Extracting questions via LLM (Concurrent Mode)...');
+   const maxConcurrency = llmConfig.maxWorkers || 5;
+   console.log(`Concurrency level: ${maxConcurrency}`);
 
-    try {
-      // 调用 LLM
-      const llmOutput = await callLLM(chunk.blocks, llmConfig, { taskDir, chunkIndex: chunk.index });
+  // 初始化结果数组，保证顺序
+  const chunkResults = new Array<ExtractedQuestion[]>(chunks.length);
+  // 创建任务队列
+  const queue = chunks.map((chunk, i) => ({ chunk, index: i }));
+  
+  // 定义工作函数
+  const worker = async () => {
+    while (queue.length > 0) {
+      const item = queue.shift();
+      if (!item) break;
       
-      // 保存 LLM 原始输出
-      const logDir = path.join(taskDir, 'logs');
-      if (!fs.existsSync(logDir)) {
-        fs.mkdirSync(logDir, { recursive: true });
+      const { chunk, index } = item;
+      const progressPercent = 10 + Math.floor(((index + 1) / chunks.length) * 80);
+      const progressMsg = `Processing chunk ${index + 1}/${chunks.length}...`;
+      console.log(progressMsg);
+      if (onProgress) await onProgress(progressPercent, progressMsg);
+
+      try {
+        // 调用 LLM
+        const llmOutput = await callLLM(chunk.blocks, llmConfig, { taskDir, chunkIndex: chunk.index });
+        
+        // 保存 LLM 原始输出
+        const logDir = path.join(taskDir, 'logs');
+        if (!fs.existsSync(logDir)) {
+          fs.mkdirSync(logDir, { recursive: true });
+        }
+        fs.writeFileSync(
+          path.join(logDir, `chunk_${chunk.index}_llm_output.txt`),
+          llmOutput,
+          'utf-8'
+        );
+        
+        // 解析（带容错）
+        const parser = new QuestionParser(chunk.blocks, imagesFolder, logDir);
+        const questions = parser.parseWithFallback(llmOutput, chunk.index);
+        
+        console.log(`Chunk ${chunk.index}: Extracted ${questions.length} questions`);
+        chunkResults[index] = questions;
+        
+      } catch (error: any) {
+        console.error(`Chunk ${chunk.index}: Failed to process: ${error.message}`);
+        const logDir = path.join(taskDir, 'logs');
+        try {
+          if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+          }
+          const errorLogPath = path.join(logDir, `chunk_${chunk.index}_error.json`);
+          const errorPayload = {
+            chunkIndex: chunk.index,
+            message: error?.message ?? 'Unknown error',
+            stack: error?.stack ?? null,
+            apiUrl: llmConfig.apiUrl,
+            modelName: llmConfig.modelName,
+            timestamp: new Date().toISOString()
+          };
+          fs.writeFileSync(errorLogPath, JSON.stringify(errorPayload, null, 2));
+        } catch (logError) {
+          console.error(`Chunk ${chunk.index}: Failed to write error log:`, logError);
+        }
+        // 出错时返回空数组，不影响其他 chunk
+        chunkResults[index] = [];
       }
-      fs.writeFileSync(
-        path.join(logDir, `chunk_${chunk.index}_llm_output.txt`),
-        llmOutput,
-        'utf-8'
-      );
-      
-      // 解析（带容错）
-      const parser = new QuestionParser(chunk.blocks, imagesFolder, logDir);
-      const questions = parser.parseWithFallback(llmOutput, chunk.index);
-      
-      console.log(`Chunk ${chunk.index}: Extracted ${questions.length} questions`);
-      allQuestions.push(...questions);
-      
-            } catch (error: any) {
-              console.error(`Chunk ${chunk.index}: Failed to process: ${error.message}`);
-              const logDir = path.join(taskDir, 'logs');
-              try {
-                if (!fs.existsSync(logDir)) {
-                  fs.mkdirSync(logDir, { recursive: true });
-                }
-                const errorLogPath = path.join(logDir, `chunk_${chunk.index}_error.json`);
-                const errorPayload = {
-                  chunkIndex: chunk.index,
-                  message: error?.message ?? 'Unknown error',
-                  stack: error?.stack ?? null,
-                  apiUrl: llmConfig.apiUrl,
-                  modelName: llmConfig.modelName,
-                  timestamp: new Date().toISOString()
-                };
-                fs.writeFileSync(errorLogPath, JSON.stringify(errorPayload, null, 2));
-              } catch (logError) {
-                console.error(`Chunk ${chunk.index}: Failed to write error log:`, logError);
-              }
-              // 继续处理下一个 chunk
-            }
-  }
+    }
+  };
+
+  // 启动 Worker
+  const workers = Array(Math.min(maxConcurrency, chunks.length)).fill(null).map(() => worker());
+  await Promise.all(workers);
+
+  // 合并结果
+  const allQuestions = chunkResults.flat();
   
   console.log(`Step 3 completed: Total ${allQuestions.length} questions extracted`);
   if (onProgress) await onProgress(90, 'Deduplicating and filtering questions...');

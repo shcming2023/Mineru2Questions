@@ -1,0 +1,805 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2340,
+    "type": "text",
+    "page_idx": 134,
+    "text": "分析 分式方程的根为负数，要将使根为负数的增根的  $m$  的值除去."
+  },
+  {
+    "id": 2341,
+    "type": "text",
+    "page_idx": 134,
+    "text": "解 去分母，得  $(x + 1)(x - 1) - (x - 2)^{2} = 2x + m.$"
+  },
+  {
+    "id": 2342,
+    "type": "text",
+    "page_idx": 134,
+    "text": "解得  $x = \\frac{m + 5}{2}$"
+  },
+  {
+    "id": 2343,
+    "type": "text",
+    "page_idx": 134,
+    "text": "由题意，得  $x < 0$  且  $x \\neq -1$  ，即  $\\frac{m + 5}{2} < 0$  且  $\\frac{m + 5}{2} \\neq -1$ ."
+  },
+  {
+    "id": 2344,
+    "type": "text",
+    "page_idx": 135,
+    "text": "所以  $m$  的取值范围是  $m < -5$  且  $m \\neq -7$ ."
+  },
+  {
+    "id": 2345,
+    "type": "text",
+    "page_idx": 135,
+    "text": "说明 解分式方程通过“去分母”将分式方程转化成整式方程"
+  },
+  {
+    "id": 2346,
+    "type": "image",
+    "page_idx": 135,
+    "img_path": "images/cf3d7c3ec04f14e47c46bbb1248166fb0709ac37d189c3ed36b4721065876035.jpg"
+  },
+  {
+    "id": 2347,
+    "type": "text",
+    "page_idx": 135,
+    "text": "基础训练"
+  },
+  {
+    "id": 2348,
+    "type": "text",
+    "text": "1. 分式方程  $\\frac{2}{x - 2} - \\frac{8}{x^2 - 4} = 1$  去分母后，可化成整式方程 ________，在解这个方程的过程中，______ 增根（填“产生”或“不产生”）.",
+    "page_idx": 135
+  },
+  {
+    "id": 2349,
+    "type": "text",
+    "text": "2. 若关于  $x$  的分式方程  $\\frac{7 - m}{x(x + 1)} - \\frac{7}{x + 1} = \\frac{1}{x}$  有根, 则  $m$  的取值范围是",
+    "page_idx": 135
+  },
+  {
+    "id": 2350,
+    "type": "text",
+    "text": "3. 当  $m =$  时, 方程  $\\frac{x - 1}{x - 3} = \\frac{m}{x - 3}$  无实数根.",
+    "page_idx": 135
+  },
+  {
+    "id": 2351,
+    "type": "text",
+    "text": "4. 若关于  $x$  的方程  $\\frac{ax + 1}{x - 1} = 1$  有增根, 则  $a$  的值为",
+    "page_idx": 135
+  },
+  {
+    "id": 2352,
+    "type": "text",
+    "text": "5. 方程  $\\frac{6}{x + 1} = \\frac{5}{x - 4}$  的根为",
+    "page_idx": 135
+  },
+  {
+    "id": 2353,
+    "type": "text",
+    "text": "6. 当  $x =$  时，分式  $\\frac{x^2}{x - 1}$  与  $\\frac{x}{1 - x}$  的和等于2.",
+    "page_idx": 135
+  },
+  {
+    "id": 2354,
+    "type": "text",
+    "text": "7. 若关于  $x$  的方程  $\\frac{2}{x + 2} - \\frac{1}{x - 2} = \\frac{k}{4 - x^2}$  有增根, 则  $k$  的值是",
+    "page_idx": 135
+  },
+  {
+    "id": 2355,
+    "type": "text",
+    "text": "8. 若关于  $x$  的方程  $\\frac{x - 3}{x - 2} = \\frac{m}{2 - x}$  有增根，则  $m$  的值是",
+    "page_idx": 135
+  },
+  {
+    "id": 2356,
+    "type": "text",
+    "text": "9. 在公式  $\\frac{1}{u} + \\frac{1}{v} = \\frac{1}{f}$  中, 已知  $u, f$  且  $u \\neq f$ , 那么  $v =$",
+    "page_idx": 135
+  },
+  {
+    "id": 2357,
+    "type": "text",
+    "text": "10. 方程  $x - \\frac{5}{x - 2} = 2 - \\frac{5}{x - 2}$  的根的情况是（ ）.",
+    "page_idx": 135
+  },
+  {
+    "id": 2358,
+    "type": "text",
+    "text": "A. 只有一根  $x = 2$",
+    "page_idx": 135
+  },
+  {
+    "id": 2359,
+    "type": "text",
+    "text": "B. 任意实数都是方程的根",
+    "page_idx": 135
+  },
+  {
+    "id": 2360,
+    "type": "text",
+    "text": "C. 方程没有实数根",
+    "page_idx": 135
+  },
+  {
+    "id": 2361,
+    "type": "text",
+    "text": "D. 方程的根为  $x \\neq 2$  的任意实数",
+    "page_idx": 135
+  },
+  {
+    "id": 2362,
+    "type": "text",
+    "page_idx": 135,
+    "text": "11. 解下列关于  $x$  的方程："
+  },
+  {
+    "id": 2363,
+    "type": "text",
+    "page_idx": 135,
+    "text": "(1)  $\\frac{2}{x} -\\frac{3}{x + 1} = 2;$"
+  },
+  {
+    "id": 2364,
+    "type": "text",
+    "page_idx": 135,
+    "text": "(2)  $\\frac{6x}{x^2 - 9} + \\frac{3}{3 - x} = 1 - \\frac{1}{x + 3}$ ;"
+  },
+  {
+    "id": 2365,
+    "type": "text",
+    "text": "(3)  $\\frac{x}{2 - x} - 1 = \\frac{x - 26}{3(x^2 - 4)}$ ;",
+    "page_idx": 136
+  },
+  {
+    "id": 2366,
+    "type": "text",
+    "text": "(4)  $\\frac{1}{2 - x} - 1 = \\frac{1}{x - 2} - \\frac{6 - x}{3x^2 - 12}$ ;",
+    "page_idx": 136
+  },
+  {
+    "id": 2367,
+    "type": "text",
+    "text": "(5)  $\\frac{1}{x - 8} + \\frac{1}{x - 4} = \\frac{1}{x - 7} + \\frac{1}{x - 5}$ ;",
+    "page_idx": 136
+  },
+  {
+    "id": 2368,
+    "type": "text",
+    "text": "(6)  $\\frac{1}{x(x - 1)} + \\frac{1}{x(x + 1)} + \\dots + \\frac{1}{(x + 9)(x + 10)} = \\frac{11}{12}.$",
+    "page_idx": 136
+  },
+  {
+    "id": 2369,
+    "type": "text",
+    "text": "12. 已知关于  $x$  的方程  $\\frac{x + 1}{x + 2} - \\frac{x}{x - 1} = \\frac{a}{x^2 + x - 2}$  的根为正数, 求  $a$  的取值范围.",
+    "page_idx": 136
+  },
+  {
+    "id": 2370,
+    "type": "text",
+    "text": "13. 已知  $x = 3$  是方程  $\\frac{10}{x + 2} + \\frac{k}{x} = 1$  的一个根, 求  $k$  的值和这个方程其余的根.",
+    "page_idx": 136
+  },
+  {
+    "id": 2371,
+    "type": "image",
+    "page_idx": 137,
+    "img_path": "images/89054f6bc156c829c225a5e4730f97beb2a4448c68483c7563344b15af7a1fa8.jpg"
+  },
+  {
+    "id": 2372,
+    "type": "text",
+    "page_idx": 137,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2373,
+    "type": "text",
+    "page_idx": 137,
+    "text": "14. 若关于  $x$  的方程  $\\frac{2k}{x - 1} - \\frac{x}{x^2 - x} = \\frac{kx + 1}{x}$  只有一个根, 求  $k$  的值."
+  },
+  {
+    "id": 2374,
+    "type": "text",
+    "page_idx": 137,
+    "text": "15. 已知形如  $x + \\frac{1}{x} = a + \\frac{1}{a}$  的方程的根为  $x_{1} = a, x_{2} = \\frac{1}{a}$ ."
+  },
+  {
+    "id": 2375,
+    "type": "text",
+    "page_idx": 137,
+    "text": "解方程：  $\\frac{x^2 + x + 1}{x^2 + 1} +\\frac{2x^2 + x + 2}{x^2 + x + 1} = \\frac{19}{6}.$"
+  },
+  {
+    "id": 2376,
+    "type": "text",
+    "page_idx": 138,
+    "text": "21.5（四） 列分式方程解应用题"
+  },
+  {
+    "id": 2377,
+    "type": "image",
+    "page_idx": 138,
+    "img_path": "images/e11571a6195e7559bf41422ae3c771bfbb45419db1c9efa628308afff02747c4.jpg"
+  },
+  {
+    "id": 2378,
+    "type": "text",
+    "page_idx": 138,
+    "text": "要点归纳"
+  },
+  {
+    "id": 2379,
+    "type": "text",
+    "text": "1. 将实际问题转化为数学问题, 按照题意找出相等关系并正确地列出方程(组).",
+    "page_idx": 138
+  },
+  {
+    "id": 2380,
+    "type": "text",
+    "text": "2. 列分式方程(组)解应用题时需双重检验，即检验是否为原方程的根，检验是否符合实际意义.",
+    "page_idx": 138
+  },
+  {
+    "id": 2381,
+    "type": "image",
+    "page_idx": 138,
+    "img_path": "images/457a036031eacd7727f3cf73ed6aa27346b7fbd9e268dc2a45b1ee1623a137ec.jpg"
+  },
+  {
+    "id": 2382,
+    "type": "text",
+    "page_idx": 138,
+    "text": "疑难分析"
+  },
+  {
+    "id": 2383,
+    "type": "text",
+    "page_idx": 138,
+    "text": "例① 在抗洪救灾中，某厂家在规定的天数内要生产3600个帐篷支援救灾工作，但由于灾情严重，不但要在原计划基础上增加  $10\\%$  的总量，还要比原计划提前3天完成。经预测，要完成新计划，平均每天的生产总量要比原计划多20个。求原计划每天生产的帐篷个数。"
+  },
+  {
+    "id": 2384,
+    "type": "text",
+    "page_idx": 138,
+    "text": "分析 等量关系为实际比原计划提前3天完成"
+  },
+  {
+    "id": 2385,
+    "type": "text",
+    "page_idx": 138,
+    "text": "各量用表格表示如下："
+  },
+  {
+    "id": 2386,
+    "type": "text",
+    "text": "[Table Row] <tr><td>计划</td><td>工作量/个</td><td>工作效率/(个/天)</td><td>工作时间/天</td></tr>",
+    "page_idx": 138
+  },
+  {
+    "id": 2387,
+    "type": "text",
+    "text": "[Table Row] <tr><td>原计划</td><td>3600</td><td>x</td><td>3600/x</td></tr>",
+    "page_idx": 138
+  },
+  {
+    "id": 2388,
+    "type": "text",
+    "text": "[Table Row] <tr><td>新计划</td><td>3600×(1+10%)</td><td>x+20</td><td>3600(1+10%)/x+20</td></tr>",
+    "page_idx": 138
+  },
+  {
+    "id": 2389,
+    "type": "text",
+    "page_idx": 138,
+    "text": "解 设原计划每天生产帐篷  $x$  个."
+  },
+  {
+    "id": 2390,
+    "type": "text",
+    "page_idx": 138,
+    "text": "由题意，可列方程  $\\frac{3600}{x} -\\frac{3600(1 + 10\\%)}{x + 20} = 3.$"
+  },
+  {
+    "id": 2391,
+    "type": "text",
+    "page_idx": 138,
+    "text": "化为整式方程，得  $x^{2} + 140x - 24000 = 0$"
+  },
+  {
+    "id": 2392,
+    "type": "text",
+    "page_idx": 138,
+    "text": "解得  $x_{1} = 100$  ，  $x_{2} = -240$"
+  },
+  {
+    "id": 2393,
+    "type": "text",
+    "page_idx": 138,
+    "text": "经检验，  $x = 100$  是所列方程的根且符合题意"
+  },
+  {
+    "id": 2394,
+    "type": "text",
+    "page_idx": 138,
+    "text": "答：原计划每天生产帐篷100个."
+  },
+  {
+    "id": 2395,
+    "type": "text",
+    "page_idx": 138,
+    "text": "例②  $A, B$  两地相距  $50 \\mathrm{~km}$ , 甲骑自行车从  $A$  地前往  $B$  地,  $1 \\mathrm{~h} 30 \\mathrm{~min}$  后乙骑摩托车也从  $A$  地前往  $B$  地, 结果乙比甲先到  $1 \\mathrm{~h}$ . 已知乙的速度是甲的 2.5 倍, 求甲、乙两人的速度."
+  },
+  {
+    "id": 2396,
+    "type": "text",
+    "page_idx": 138,
+    "text": "分析 本题的相等关系：甲的行进时间  $= \\text{乙}$  的行进时间  $+1 + 1\\frac{1}{2}$ ."
+  },
+  {
+    "id": 2397,
+    "type": "text",
+    "page_idx": 138,
+    "text": "解 设甲的速度为  $x \\mathrm{~km} / \\mathrm{h}$ , 则乙的速度为  $2.5x \\mathrm{~km} / \\mathrm{h}$ ."
+  },
+  {
+    "id": 2398,
+    "type": "text",
+    "page_idx": 138,
+    "text": "根据题意，可列方程  $\\frac{50}{x} = \\frac{50}{2.5x} + 1 + 1\\frac{1}{2}$ ."
+  },
+  {
+    "id": 2399,
+    "type": "text",
+    "page_idx": 138,
+    "text": "解得  $x = 12$"
+  },
+  {
+    "id": 2400,
+    "type": "text",
+    "page_idx": 139,
+    "text": "经检验，  $x = 12$  是所列方程的根且符合题意"
+  },
+  {
+    "id": 2401,
+    "type": "text",
+    "page_idx": 139,
+    "text": "乙的速度  $= 2.5x = 30\\mathrm{km / h}$"
+  },
+  {
+    "id": 2402,
+    "type": "text",
+    "page_idx": 139,
+    "text": "答：甲的速度是  $12\\mathrm{km / h}$  ，乙的速度是  $30\\mathrm{km / h}$"
+  },
+  {
+    "id": 2403,
+    "type": "image",
+    "page_idx": 139,
+    "img_path": "images/e79578dc3672a98c785a17269615e10433f0805709ea9bb37f81e92f21a4b41c.jpg"
+  },
+  {
+    "id": 2404,
+    "type": "text",
+    "page_idx": 139,
+    "text": "基础训练"
+  },
+  {
+    "id": 2405,
+    "type": "text",
+    "text": "1. 甲地到乙地的铁路长  $1750 \\mathrm{~km}$ , 火车提速后速度增加了  $100 \\mathrm{~km} / \\mathrm{h}$ , 运行时间缩短了  $2 \\mathrm{~h}$ , 设原速度为  $x \\mathrm{~km} / \\mathrm{h}$ , 可列方程",
+    "page_idx": 139
+  },
+  {
+    "id": 2406,
+    "type": "text",
+    "text": "2. 一艘小艇顺流航行  $24\\mathrm{~n~}$  mile 到达目的地，然后逆流返回出发地，共用了  $3\\frac{1}{3}\\mathrm{h}$ ，已知水流速度为3节(3n mile/h)，设小艇在静水中的速度为  $x$  节，可列方程",
+    "page_idx": 139
+  },
+  {
+    "id": 2407,
+    "type": "text",
+    "text": "3. 要完成一件工作，甲单独做要比甲、乙、丙合作多用10天，乙单独做要比甲、乙、丙合作多用18天，丙在合作中完成全部任务的  $\\frac{3}{8}$ ，则甲、乙、丙三人合作 天才能完成任务。",
+    "page_idx": 139
+  },
+  {
+    "id": 2408,
+    "type": "text",
+    "text": "4. 某工程队承担了修建地铁两个站点间  $2400 \\mathrm{~m}$  的隧道工程任务，由于采用了新技术，现在每个月比原计划多挖进了  $60 \\mathrm{~m}$ ，因此比原计划提前 2 个月完成任务，则完成此项工程原计划每个月需挖进  $\\mathrm{m}$ ，如果每天的施工费用为 2.5 万元（每月按 30 天计算），那么该工程队现在完成此项工程共需  $\\mathrm{m}$  万元。",
+    "page_idx": 139
+  },
+  {
+    "id": 2409,
+    "type": "text",
+    "text": "5. 某水果店店主用 300 元以相同的单价购进一批苹果, 发现其中  $10 \\mathrm{~kg}$  已烂掉, 其余苹果每千克按进价加 2 元作零售价出售, 卖剩  $20 \\mathrm{~kg}$  后按零售价六折出售, 全部卖完后共赚 110 元. 店主进货时苹果的单价是多少?",
+    "page_idx": 139
+  },
+  {
+    "id": 2410,
+    "type": "text",
+    "page_idx": 139,
+    "text": "6. 某河的水流速度为  $2\\mathrm{km / h}$ .  $A$ ， $B$  两地相距  $36\\mathrm{km}$ ，一动力橡皮船从  $A$  地出发，逆流向上去  $B$  地，出航  $1\\mathrm{h}$ ，机器发生故障，橡皮船随水向下漂流， $30\\mathrm{min}$  后，机器修复，继续向  $B$  地开去，但船速比修复前慢了  $1\\mathrm{km / h}$ ，到达  $B$  地比预定时间迟了  $54\\mathrm{min}$ . 求橡皮船故障前在静水中的速度."
+  },
+  {
+    "id": 2411,
+    "type": "text",
+    "text": "7. 甲、乙两人绕湖而行，甲绕湖一周需  $3\\mathrm{h}$ 。现两人同时背向出发，乙自遇甲后再行  $4\\mathrm{h}$  才能到达出发点。求乙绕湖一周所需的时间。",
+    "page_idx": 140
+  },
+  {
+    "id": 2412,
+    "type": "text",
+    "text": "8. 小明和小莉两人分别从甲、乙两地同时出发同向而行，小明经过乙地，再经过  $3 \\mathrm{~h} 12 \\mathrm{~min}$  在丙地追上小莉，这时两人所走的路程和为  $36 \\mathrm{~km}$ ，而甲、丙两地的距离等于小莉走  $5 \\mathrm{~h}$  的路程。求甲、乙两地距离。",
+    "page_idx": 140
+  },
+  {
+    "id": 2413,
+    "type": "text",
+    "text": "9. (欧拉与农妇卖鸡蛋问题) 两个农妇一共带 100 个鸡蛋上市, 两人蛋数不同, 但卖得的钱数是一样的, 于是第一个农妇对第二个农妇说: “如果你的鸡蛋换给我, 我可以卖得 15 个钱.” 第二个农妇答道: “但是你的鸡蛋如果换给我, 我就只能卖得  $6 \\frac{2}{3}$  个钱.” 两个农妇每人各带了多少个鸡蛋?",
+    "page_idx": 140
+  },
+  {
+    "id": 2414,
+    "type": "image",
+    "page_idx": 140,
+    "img_path": "images/8747c02b872d8cd6c101f9d198342174eac16294a35ef6c1600344b229c709b7.jpg"
+  },
+  {
+    "id": 2415,
+    "type": "text",
+    "page_idx": 140,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2416,
+    "type": "text",
+    "page_idx": 140,
+    "text": "10. 甲桶中装有含盐  $20\\%$  的盐水  $40\\mathrm{kg}$ , 乙桶中装有含盐  $4\\%$  的盐水  $60\\mathrm{kg}$ . 现在从甲桶中取出一些盐水放入空的丙桶, 再从乙桶中取出一些盐水放入空的丁桶, 然后将丁桶盐水全部倒入甲桶, 把丙桶盐水全部倒入乙桶, 结果甲、乙两桶成为含盐浓度相同的盐水. 若已知从乙桶取出并倒入丁桶的盐水质量是从甲桶取出并倒入丙桶的盐水质量的 6 倍, 则从甲桶取出并倒入丙桶的盐水是多少千克?"
+  },
+  {
+    "id": 2417,
+    "type": "text",
+    "page_idx": 141,
+    "text": "阶段训练 ⑥"
+  },
+  {
+    "id": 2418,
+    "type": "text",
+    "page_idx": 141,
+    "text": "1. 一次同学聚会时，大家一见面就互相握手，一共握了45次，则参加聚会的同学共 _______人."
+  },
+  {
+    "id": 2419,
+    "type": "text",
+    "page_idx": 141,
+    "text": "2. 某款轿车原价  $a$  万元，现在平均每次降价  $x\\%$ ，经过连续两次降价后的车价是"
+  },
+  {
+    "id": 2420,
+    "type": "text",
+    "page_idx": 141,
+    "text": "3. 学校组织为家庭困难儿童捐资助学活动。其中八年级(1)班和八年级(2)班捐款总额分别为 1000 元和 900 元。已知八年级(1)班比八年级(2)班少 5 名学生，而八年级(1)班的人均捐款额比八年级(2)班的人均捐款额多 5 元。设八年级(1)班有学生  $x$  名，则可列方程"
+  },
+  {
+    "id": 2421,
+    "type": "text",
+    "page_idx": 141,
+    "text": "4. 某市为了进一步缓解交通拥堵现象，决定修建一条从市中心到机场的轻轨铁路。为使工程能提前3个月完成，需要将原定的工作效率提高  $12\\%$  ，则原计划完成这项工程用________个月。"
+  },
+  {
+    "id": 2422,
+    "type": "text",
+    "page_idx": 141,
+    "text": "5. 一个数和它的正的平方根的和是6，则这个数是"
+  },
+  {
+    "id": 2423,
+    "type": "text",
+    "page_idx": 141,
+    "text": "6. 甲、乙两人分别从  $A, B$  两地同时出发，匀速相向而行，在距离  $B$  地  $6 \\mathrm{~km}$  处相遇，相遇后两人又继续前进，当他们分别到达  $B$  地、 $A$  地后立刻返回，又在距  $A$  地  $4 \\mathrm{~km}$  处相遇，若甲回到原处比乙早  $20 \\mathrm{~min}$ ，则甲的速度为 _______，乙的速度为 _______。"
+  },
+  {
+    "id": 2424,
+    "type": "text",
+    "page_idx": 141,
+    "text": "7. 某学校用 420 元钱到商场购买某消毒液, 经过还价, 每瓶便宜 0.50 元, 结果比用原价多买了 20 瓶, 设原价每瓶  $x$  元, 则可列出方程 ( )."
+  },
+  {
+    "id": 2425,
+    "type": "text",
+    "page_idx": 141,
+    "text": "A.  $\\frac{420}{x} -\\frac{420}{x - 0.5} = 20$"
+  },
+  {
+    "id": 2426,
+    "type": "text",
+    "page_idx": 141,
+    "text": "B.  $\\frac{420}{x - 0.5} - \\frac{420}{x} = 20$"
+  },
+  {
+    "id": 2427,
+    "type": "text",
+    "page_idx": 141,
+    "text": "C.  $\\frac{420}{x} - \\frac{420}{x - 20} = 0.5$"
+  },
+  {
+    "id": 2428,
+    "type": "text",
+    "page_idx": 141,
+    "text": "D.  $\\frac{420}{x - 20} -\\frac{420}{x} = 0.5$"
+  },
+  {
+    "id": 2429,
+    "type": "text",
+    "page_idx": 141,
+    "text": "8. 有一位同学生病住院，需缴纳医药费1440元，班委发动了一部分同学捐款（每人捐款数相同），捐款活动后，又有8位同学也要加入捐款，这样使原来参加的每位同学的捐款比预计少20元之外，还正好可以买一包16元的奶粉，则原来参加捐款的人数为（ ）."
+  },
+  {
+    "id": 2430,
+    "type": "text",
+    "page_idx": 141,
+    "text": "A. 20"
+  },
+  {
+    "id": 2431,
+    "type": "text",
+    "page_idx": 141,
+    "text": "B. 28"
+  },
+  {
+    "id": 2432,
+    "type": "text",
+    "page_idx": 141,
+    "text": "C. 50"
+  },
+  {
+    "id": 2433,
+    "type": "text",
+    "page_idx": 141,
+    "text": "D. 72"
+  },
+  {
+    "id": 2434,
+    "type": "text",
+    "page_idx": 141,
+    "text": "9. 甲、乙两人骑自行车同时从相距  $60\\mathrm{km}$  的  $A, B$  两地相向而行，甲从  $A$  地出发至  $2\\mathrm{km}$  时，想起有东西忘在  $A$  地，即返回去取，又立即从  $A$  地向  $B$  地行进，甲、乙两人恰好在  $AB$  中点相遇，已知甲的速度比乙的速度快  $2.5\\mathrm{km/h}$ ，求甲、乙两人的速度。设乙的速度是  $x\\mathrm{km/h}$ ，所列方程正确的是（ ）."
+  },
+  {
+    "id": 2435,
+    "type": "text",
+    "page_idx": 141,
+    "text": "A.  $\\frac{32}{x + 2.5} = \\frac{30}{x}$"
+  },
+  {
+    "id": 2436,
+    "type": "text",
+    "page_idx": 141,
+    "text": "B.  $\\frac{32}{x - 2.5} = \\frac{30}{x}$"
+  },
+  {
+    "id": 2437,
+    "type": "text",
+    "page_idx": 141,
+    "text": "C.  $\\frac{34}{x - 2.5} = \\frac{30}{x}$"
+  },
+  {
+    "id": 2438,
+    "type": "text",
+    "page_idx": 141,
+    "text": "D.  $\\frac{34}{x + 2.5} = \\frac{30}{x}$"
+  },
+  {
+    "id": 2439,
+    "type": "text",
+    "page_idx": 141,
+    "text": "10. 某商场在“五一”期间实行让利销售，全部商品一律按九折销售，这样每天所获得的利润恰是销售收入的  $20\\%$ 。第一天的销售收入是4万元，并且每天的销售收入都有增长，第三"
+  }
+]
+```
