@@ -1,0 +1,805 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 360,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/d7aba1a0ec436b987bbce33953e33a3d534eb0a123dbebf30d0619f55c2f08e3.jpg"
+  },
+  {
+    "id": 361,
+    "type": "text",
+    "page_idx": 20,
+    "text": "3.如图所示，已知在△ABC中，  $\\angle A = 90^{\\circ}$  ，∠ABC的平分线交  $AC$  于点  $D,AH\\setminus DF$  都垂直"
+  },
+  {
+    "id": 362,
+    "type": "text",
+    "page_idx": 20,
+    "text": "于  $BC$  点  $H \\sim F$  为垂足, 求证: 四边形  $AEFD$  为菱形"
+  },
+  {
+    "id": 363,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/cadc772d54188b734f3f735712eac18404f13bf59e5631f8d39f51811447f120.jpg"
+  },
+  {
+    "id": 364,
+    "type": "text",
+    "page_idx": 20,
+    "text": "4.如图所示，ABCD是正方形，  $AE / / BD,BE = BD,BE$  交AD于点  $F$  ，求证：  $\\triangle DEF$  是等腰三角形"
+  },
+  {
+    "id": 365,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/76bf9c8d4e0ab43cb5297d8ad28bf8bc67133acf6b62960d81aa18ab09b9246e.jpg"
+  },
+  {
+    "id": 366,
+    "type": "text",
+    "page_idx": 20,
+    "text": "5.如图，正方形ABCD中，  $E$  是DB延长线上一点，且  $\\angle ECB = 15^{\\circ}$  求证  $EC = BD$"
+  },
+  {
+    "id": 367,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/601c7e6fa2297e7958720d5067bc499ef3c039a7385b65f503040c148dad384a.jpg"
+  },
+  {
+    "id": 368,
+    "type": "text",
+    "page_idx": 20,
+    "text": "B组"
+  },
+  {
+    "id": 369,
+    "type": "text",
+    "page_idx": 20,
+    "text": "1. 如图，在正方形ABCD中，E、F是AB、BC上两点，且  $\\angle EDF = 45^{\\circ}$ ， $DP \\perp EF$  于点P."
+  },
+  {
+    "id": 370,
+    "type": "text",
+    "page_idx": 20,
+    "text": "求证：  $DP = DA$"
+  },
+  {
+    "id": 371,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/ab1a51d079b64951ce90701f17d74df4b6b130742d6e84086d803cc3eb650ba1.jpg"
+  },
+  {
+    "id": 372,
+    "type": "text",
+    "page_idx": 21,
+    "text": "2.如图所示，已知四边形ABCD为正方形，点  $M$  为  $BC$  边中点，将正方形折起，使点  $M$  与  $A$  重合，设折痕为  $EF$  ，则  $\\frac{ME}{ME} = \\frac{2}{3} AB$  求△AEM的面积与正方形ABCD面积的比"
+  },
+  {
+    "id": 373,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/d055a9fb068f16f0b7c451c0003f56715c17862a00fd0eb1f06d75d2062b8d37.jpg"
+  },
+  {
+    "id": 374,
+    "type": "text",
+    "page_idx": 21,
+    "text": "22.4 梯形"
+  },
+  {
+    "id": 375,
+    "type": "text",
+    "page_idx": 21,
+    "text": "A组"
+  },
+  {
+    "id": 376,
+    "type": "text",
+    "page_idx": 21,
+    "text": "概念回顾"
+  },
+  {
+    "id": 377,
+    "type": "text",
+    "page_idx": 21,
+    "text": "梯形问题中，常添加的辅助线有："
+  },
+  {
+    "id": 378,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/10158ee98f39022eb7eec1fc081d05f4daccbe3f551b1d93d4b2fed27a1177ad.jpg"
+  },
+  {
+    "id": 379,
+    "type": "text",
+    "page_idx": 21,
+    "text": "一、填空题"
+  },
+  {
+    "id": 380,
+    "type": "text",
+    "text": "1. 若直角梯形的一条腰与一条对角线相等且互相垂直,则上、下底边之比等于_____.",
+    "page_idx": 21
+  },
+  {
+    "id": 381,
+    "type": "text",
+    "text": "2. 如图所示,已知在梯形  $ABCD$  中,  $AB // CD, AB = 12, CD = 8$ , 点",
+    "page_idx": 21
+  },
+  {
+    "id": 382,
+    "type": "text",
+    "page_idx": 21,
+    "text": "$E 、 F$  分别是  $A C 、 B D$  的中点, 则  $E F =$"
+  },
+  {
+    "id": 383,
+    "type": "text",
+    "page_idx": 21,
+    "text": "3. 若直角梯形的一组对角的度数之和是另一组对角的度数之和的一半,则这个梯形中最小的内角的度数是_____。"
+  },
+  {
+    "id": 384,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/5e6395d718f999a3987104d182dcec388293a576d2d7e339cec364656ded2e4d.jpg"
+  },
+  {
+    "id": 385,
+    "type": "text",
+    "text": "4. 若梯形面积为 144 ,且两底的比为  $4: 5$ , 高为 16 ,则梯形的上、下底分别为",
+    "page_idx": 22
+  },
+  {
+    "id": 386,
+    "type": "text",
+    "text": "5. 已知直角梯形两腰之比为  $1: 2$ , 那么该梯形的最小角是",
+    "page_idx": 22
+  },
+  {
+    "id": 387,
+    "type": "text",
+    "text": "6. 已知直角梯形的一腰长为 10 ,这条腰与底边的夹角是  $60^{\\circ}$ ,较短的底边长是 4 ,则另一条底的长是",
+    "page_idx": 22
+  },
+  {
+    "id": 388,
+    "type": "text",
+    "text": "7. 梯形的上底长为  $a c m$ , 下底为  $b c m$ , 它的一条对角线把它分成两部分的面积之比为",
+    "page_idx": 22
+  },
+  {
+    "id": 389,
+    "type": "text",
+    "text": "8. 已知梯形  $ABCD$  中,  $AD \\parallel BC$ , 对角线  $AC$ 、 $BD$  相交于点  $O$ ,  $\\triangle AOB$  与  $\\triangle BOC$  的面积分",
+    "page_idx": 22
+  },
+  {
+    "id": 390,
+    "type": "text",
+    "page_idx": 22,
+    "text": "别为  $2 \\text{平}$ , 则梯形  $ABCD$  的面积是"
+  },
+  {
+    "id": 391,
+    "type": "image",
+    "page_idx": 22,
+    "img_path": "images/47ccc194d4ef174334361899c4ecbd80832c7c8e574c0ca17444a9f59e02faec.jpg"
+  },
+  {
+    "id": 392,
+    "type": "text",
+    "page_idx": 22,
+    "text": "9. 如图,在梯形  $ABCD$  中,  $AB // CD, BC // DE$ , 若  $\\triangle AED$  的周"
+  },
+  {
+    "id": 393,
+    "type": "text",
+    "page_idx": 22,
+    "text": "长为  $20, D C = 3$ , 那么这个梯形的周长是"
+  },
+  {
+    "id": 394,
+    "type": "text",
+    "text": "10. 若直角梯形一腰与下底的长都是 \\(40 \\mathrm{~cm}\\), 且它们的夹角 \\(60^{\\circ}\\), 则梯形的上底是 \\(\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_",
+    "page_idx": 22
+  },
+  {
+    "id": 395,
+    "type": "text",
+    "text": "11. 直角梯形  $A B C D$  中,上底为 3 ,一个下底角为  $30^{\\circ}$ ,斜腰长等于 4 ,则梯形的面积为",
+    "page_idx": 22
+  },
+  {
+    "id": 396,
+    "type": "text",
+    "text": "12. 直角梯形的两底分别为  $3$  和  $7$ , 斜腰与底边的夹角为  $45^{\\circ}$ , 那么梯形的高为",
+    "page_idx": 22
+  },
+  {
+    "id": 397,
+    "type": "text",
+    "text": "13. 如图,在梯形  $A B C D$  中,",
+    "page_idx": 22
+  },
+  {
+    "id": 398,
+    "type": "equation",
+    "page_idx": 22,
+    "text": "$$\n\\angle D C B = 9 0 ^ {\\circ}, A B / / C D, A B = 2 5, B C = 2 4\n$$"
+  },
+  {
+    "id": 399,
+    "type": "text",
+    "page_idx": 22,
+    "text": "A,将该梯形折叠，点恰好"
+  },
+  {
+    "id": 400,
+    "type": "text",
+    "page_idx": 22,
+    "text": "与点  $D$  重合,  $B E$  为折痕, 那么  $A D$  的长度为"
+  },
+  {
+    "id": 401,
+    "type": "image",
+    "page_idx": 22,
+    "img_path": "images/aacb21dbec6ffcf3f0ca5b7940ce6fd4422d24be02b44e082b50440eb2f34d42.jpg"
+  },
+  {
+    "id": 402,
+    "type": "text",
+    "page_idx": 23,
+    "text": "14. 已知梯形上、下底分别为  $25$ ，一腰长为 4，则另一腰  $x$  的取值范围是"
+  },
+  {
+    "id": 403,
+    "type": "text",
+    "page_idx": 23,
+    "text": "二、选择题"
+  },
+  {
+    "id": 404,
+    "type": "text",
+    "page_idx": 23,
+    "text": "1. 有两个角相等的梯形是( )"
+  },
+  {
+    "id": 405,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.直角梯形或等腰梯形"
+  },
+  {
+    "id": 406,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.直角梯形"
+  },
+  {
+    "id": 407,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.一般梯形"
+  },
+  {
+    "id": 408,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.等腰梯形"
+  },
+  {
+    "id": 409,
+    "type": "text",
+    "page_idx": 23,
+    "text": "2. 在四边形  $ABCD$  中,  $AD // BC, AC = BD$ , 则四边形  $ABCD$  是( )"
+  },
+  {
+    "id": 410,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.平行四边形"
+  },
+  {
+    "id": 411,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.等腰梯形"
+  },
+  {
+    "id": 412,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.矩形"
+  },
+  {
+    "id": 413,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.等腰梯形或矩形"
+  },
+  {
+    "id": 414,
+    "type": "text",
+    "page_idx": 23,
+    "text": "3. 下列命题正确的是( )"
+  },
+  {
+    "id": 415,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.凡是梯形对角线都相等"
+  },
+  {
+    "id": 416,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.一组对边平行,另一组对边相等的四边形是梯形"
+  },
+  {
+    "id": 417,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.同一底上的两个角相等的梯形是等腰梯形"
+  },
+  {
+    "id": 418,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D. 只有两个角相等的梯形是等腰梯形"
+  },
+  {
+    "id": 419,
+    "type": "text",
+    "page_idx": 23,
+    "text": "4. 梯形  $ABCD$  的上底与高相等, 下底是上底的 3 倍, 则底角是( )"
+  },
+  {
+    "id": 420,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.  $30^{\\circ}$"
+  },
+  {
+    "id": 421,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.  $45^{\\circ}$"
+  },
+  {
+    "id": 422,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.  $60^{\\circ}$"
+  },
+  {
+    "id": 423,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.不能确定"
+  },
+  {
+    "id": 424,
+    "type": "text",
+    "page_idx": 23,
+    "text": "5. 已知,梯形  $A B C D$  的周长为  $40$  厘米,同一底上两个底角都为  $60^{\\circ}$  若腰长为  $8$  厘米,则梯形的两底之长为 ( )"
+  },
+  {
+    "id": 425,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A. 10 厘米, 14 厘米 B. 12 厘米, 16 厘米 C. 8 厘米, 12 厘米 D. 8 厘米, 16 厘米"
+  },
+  {
+    "id": 426,
+    "type": "text",
+    "page_idx": 23,
+    "text": "6. 已知: 梯形  $ABCD$  中,  $AB \\parallel DC$ ,  $AB = 5$ ,  $BC = 32$ ,  $\\angle BCD = 45^\\circ$ ,  $\\angle CDA = 60^\\circ$ , 那么  $CD$  的长等于 ( )"
+  },
+  {
+    "id": 427,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.  $7 + \\frac{2}{3}\\sqrt{3}$"
+  },
+  {
+    "id": 428,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B. 8"
+  },
+  {
+    "id": 429,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.  $8 + 3\\sqrt{3}$"
+  },
+  {
+    "id": 430,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.  $8 + \\sqrt{3}$"
+  },
+  {
+    "id": 431,
+    "type": "text",
+    "page_idx": 23,
+    "text": "三、解答题"
+  },
+  {
+    "id": 432,
+    "type": "text",
+    "page_idx": 23,
+    "text": "1. 如图所示,在梯形  $A B C D$  中,  $A D / / B C, D E / / A B, \\triangle C D E$  的周长为 36 厘米,  $A D = 6$  厘米"
+  },
+  {
+    "id": 433,
+    "type": "text",
+    "page_idx": 23,
+    "text": "求梯形  $ABCD$  的周长"
+  },
+  {
+    "id": 434,
+    "type": "image",
+    "page_idx": 23,
+    "img_path": "images/cada7e84485ad555962118e8563bd00a6fb0c320703f1ba2554a78360959d5af.jpg"
+  },
+  {
+    "id": 435,
+    "type": "text",
+    "page_idx": 24,
+    "text": "2. 如图所示，在梯形  $ABCD$  中， $AD \\parallel BC, AD = 5, CD = 3\\sqrt{2}, \\angle BCD = 45^\\circ,$"
+  },
+  {
+    "id": 436,
+    "type": "text",
+    "page_idx": 24,
+    "text": "$\\angle C B A = 60^{\\circ}$ , 求梯形的周长"
+  },
+  {
+    "id": 437,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/aaf9a1c6409a9a429939c98c18515948d1f505f92f7c7860526e41bcbedf34c5.jpg"
+  },
+  {
+    "id": 438,
+    "type": "text",
+    "page_idx": 24,
+    "text": "3. 如图所示,已知在梯形  $ABCD$  中,  $AD \\parallel BC$ ,  $\\angle ABC = 60^\\circ$ ,  $AB = AD$ ,  $AE$  是梯形的高, 且  $BE = 1$ , 求  $AD$  的长"
+  },
+  {
+    "id": 439,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/846620efc784884c27040eeed8805e4d83a52dc6df4fcf8bf4065add43bae94c.jpg"
+  },
+  {
+    "id": 440,
+    "type": "text",
+    "page_idx": 24,
+    "text": "B组"
+  },
+  {
+    "id": 441,
+    "type": "text",
+    "page_idx": 24,
+    "text": "1. 如图所示,在梯形  $A B C D$  中,  $A D / / B C$ , 对角线  $A C \\perp B D$ , 且  $A C = 5$  厘米,  $B D = 12$  厘米求该梯形的面积"
+  },
+  {
+    "id": 442,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/37626d867308607679fef874eda05e1ec9d34be1f21dc744331770892662b95d.jpg"
+  },
+  {
+    "id": 443,
+    "type": "text",
+    "page_idx": 25,
+    "text": "22.5(2) 等腰梯形"
+  },
+  {
+    "id": 444,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A组"
+  },
+  {
+    "id": 445,
+    "type": "text",
+    "page_idx": 25,
+    "text": "一、填空题"
+  },
+  {
+    "id": 446,
+    "type": "text",
+    "text": "1. 等腰梯形是轴对称图形,它的对称轴是",
+    "page_idx": 25
+  },
+  {
+    "id": 447,
+    "type": "text",
+    "text": "2. 若等腰梯形有一个角为  $120^{\\circ}$ , 上、下底长分别为 4 厘米、12 厘米则它的周长为",
+    "page_idx": 25
+  },
+  {
+    "id": 448,
+    "type": "text",
+    "text": "3. 已知梯形的上下底长分别为 1 厘米和 4 厘米,且两条对角线的长分别为 3 厘米和 4 厘米,则梯形的面积为",
+    "page_idx": 25
+  },
+  {
+    "id": 449,
+    "type": "text",
+    "text": "4. 等腰梯形上底与下底的差等于一腰的长,那么腰与下底的夹角是",
+    "page_idx": 25
+  },
+  {
+    "id": 450,
+    "type": "text",
+    "text": "5. 等腰梯形的一条对角线与一条腰垂直,如果两条腰长的和为 12 ,两条对角线长的和为 16 ,那么较长的一条底的长为",
+    "page_idx": 25
+  },
+  {
+    "id": 451,
+    "type": "text",
+    "text": "6. 等腰梯形的一个角是  $45^{\\circ}$ , 一条腰长为 8 , 如果较短的底长为  $3 \\sqrt{2}$ , 那么较长的底长等于",
+    "page_idx": 25
+  },
+  {
+    "id": 452,
+    "type": "text",
+    "page_idx": 25,
+    "text": "二、选择题"
+  },
+  {
+    "id": 453,
+    "type": "text",
+    "page_idx": 25,
+    "text": "1. 下列关于等腰梯形的判断,正确的是( )"
+  },
+  {
+    "id": 454,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A.两底相等 B.同底上的两底角互补 C.每两个角相等 D.对角线交点在对称轴上"
+  },
+  {
+    "id": 455,
+    "type": "text",
+    "page_idx": 25,
+    "text": "2. 在等腰梯形  $ABCD$  中,如图所示,  $AD \\parallel BC, AC 、 BD$  相交于点  $O$ , 则"
+  },
+  {
+    "id": 456,
+    "type": "text",
+    "page_idx": 25,
+    "text": "$O$  有下列四个结论①  $AC = BD$ ;② 梯形ABCD是轴对称图形;③"
+  },
+  {
+    "id": 457,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/7033205d4bdea4e749740b7b885c21d4d29ffade46428914ee6d495f1c05186f.jpg"
+  },
+  {
+    "id": 458,
+    "type": "text",
+    "page_idx": 26,
+    "text": "$\\angle ADB = \\angle DAC;$  ④  $\\triangle AOD \\cong \\triangle AOB$ . 其中正确的是( )"
+  },
+  {
+    "id": 459,
+    "type": "text",
+    "page_idx": 26,
+    "text": "A.①③④"
+  }
+]
+```

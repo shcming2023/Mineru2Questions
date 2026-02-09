@@ -103,6 +103,8 @@ tmp/
 temp/
 
 # Project specific
-server/uploads/
+server/uploads/*
+!server/uploads/.gitkeep
+!server/uploads/tasks/
 *.db
 debug_*.ts

@@ -1,0 +1,807 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 720,
+    "type": "text",
+    "page_idx": 39,
+    "text": "则  $OC - \\underline{\\underline{\\mathbf{\\alpha}}} = AC - \\underline{\\underline{\\mathbf{\\alpha}}} = BC - \\underline{\\underline{\\mathbf{\\alpha}}} = DC$"
+  },
+  {
+    "id": 721,
+    "type": "image",
+    "page_idx": 39,
+    "img_path": "images/aeb1849bdcaa15dd670589055a36c881a74e0e9d0cd4c7eb7ad6932685a9ff97.jpg"
+  },
+  {
+    "id": 722,
+    "type": "text",
+    "page_idx": 39,
+    "text": "5. 四边形  $ABCD$  的对角线  $AC, BD$  相交于点  $E$ ,"
+  },
+  {
+    "id": 723,
+    "type": "text",
+    "page_idx": 39,
+    "text": "则  $BC + CD = \\_ ,AB - AC = \\_ .$"
+  },
+  {
+    "id": 724,
+    "type": "image",
+    "page_idx": 39,
+    "img_path": "images/ea2f429173a7d735fd081f82ddebd620eae54d55b90cae7d4189a69ae7694df4.jpg"
+  },
+  {
+    "id": 725,
+    "type": "text",
+    "page_idx": 39,
+    "text": "6. 已知正方形  $ABCD$  的对角线相交于点  $O$ , 若  $AO = a, BO = b$ , 则  $a + b =$  ________."
+  },
+  {
+    "id": 726,
+    "type": "equation",
+    "page_idx": 39,
+    "text": "$$\na - b = \\underline {{}}\n$$"
+  },
+  {
+    "id": 727,
+    "type": "text",
+    "text": "7. 在四边形  $ABCD$  中,  $AC = AB + AD$ , 则  $ABCD$  是",
+    "page_idx": 39
+  },
+  {
+    "id": 728,
+    "type": "text",
+    "text": "8. 化简  $(AB - AD) + (BE - DE)$  的结果是",
+    "page_idx": 39
+  },
+  {
+    "id": 729,
+    "type": "text",
+    "text": "9. 化简:  $OM - ON + MN =$",
+    "page_idx": 39
+  },
+  {
+    "id": 730,
+    "type": "text",
+    "text": "10.计算：  $AB - AC + BC =$",
+    "page_idx": 39
+  },
+  {
+    "id": 731,
+    "type": "text",
+    "text": "11. 化简:  $AB - AC + BE =$",
+    "page_idx": 40
+  },
+  {
+    "id": 732,
+    "type": "text",
+    "text": "12. 已知在梯形  $ABCD$  中,  $AD // BC$ . 写出所有与  $BC$  平行的向量",
+    "page_idx": 40
+  },
+  {
+    "id": 733,
+    "type": "text",
+    "page_idx": 40,
+    "text": "二、选择题"
+  },
+  {
+    "id": 734,
+    "type": "text",
+    "page_idx": 40,
+    "text": "1. 下列说法中正确的是( )"
+  },
+  {
+    "id": 735,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.平行向量的方向必相同"
+  },
+  {
+    "id": 736,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.和向量为零向量的两个向量必是相反向量"
+  },
+  {
+    "id": 737,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.零向量与任何向量的和向量的方向不确定"
+  },
+  {
+    "id": 738,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.两个相反向量的和向量必是零向量"
+  },
+  {
+    "id": 739,
+    "type": "text",
+    "page_idx": 40,
+    "text": "2. 四边形  $ABCD$  是等腰梯形, 则下列判断正确的是( )"
+  },
+  {
+    "id": 740,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $AC = BD$"
+  },
+  {
+    "id": 741,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $A D = B C$"
+  },
+  {
+    "id": 742,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $AB - AC = CB$"
+  },
+  {
+    "id": 743,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $AD - AB = DB$"
+  },
+  {
+    "id": 744,
+    "type": "text",
+    "page_idx": 40,
+    "text": "3. 如图所示,在  $\\triangle ABC$  中,  $AB = AC$ , 点  $D 、 E$  分别是两腰的中点则"
+  },
+  {
+    "id": 745,
+    "type": "text",
+    "page_idx": 40,
+    "text": "下列判断正确的是( )"
+  },
+  {
+    "id": 746,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $AB = AC$"
+  },
+  {
+    "id": 747,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $AB - AE = AC - AD$"
+  },
+  {
+    "id": 748,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $BC - BD = CB - CE$"
+  },
+  {
+    "id": 749,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $\\left|AB - AE\\right| = \\left|AC - AD\\right|$"
+  },
+  {
+    "id": 750,
+    "type": "text",
+    "page_idx": 40,
+    "text": "4. 在四边形  $ABCD$  中, 如果  $AB = DC$ , 且  $\\left|AB - AD\\right| = \\left|BA - BC\\right|$"
+  },
+  {
+    "id": 751,
+    "type": "text",
+    "page_idx": 40,
+    "text": "四边形  $ABCD$  是( )"
+  },
+  {
+    "id": 752,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.平行四边形"
+  },
+  {
+    "id": 753,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.矩形"
+  },
+  {
+    "id": 754,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.菱形"
+  },
+  {
+    "id": 755,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.正方形"
+  },
+  {
+    "id": 756,
+    "type": "text",
+    "page_idx": 40,
+    "text": "5. 点  $D 、 E 、 F$  分别是  $\\triangle A B C$  三边  $A B 、 B C 、 C A$  的中点, 则下列等式不成立的是 ( )"
+  },
+  {
+    "id": 757,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $FD + DA = FA$"
+  },
+  {
+    "id": 758,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $FD + DE + EF = 0$"
+  },
+  {
+    "id": 759,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $D E + D A = E C$"
+  },
+  {
+    "id": 760,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $DA + DE = DF$"
+  },
+  {
+    "id": 761,
+    "type": "text",
+    "page_idx": 40,
+    "text": "6. 在梯形  $AB \\sim BC \\sim CA$  中,  $AD // BC$ ,  $AB = CD$ , 那么下列结论中正确的是( )"
+  },
+  {
+    "id": 762,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $AB$  与  $DC$  是相等向量"
+  },
+  {
+    "id": 763,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $AC$  与  $BD$  是相等向量"
+  },
+  {
+    "id": 764,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $A D$  与  $C B$  是相反向量"
+  },
+  {
+    "id": 765,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $AD$  与  $CB$  是平行向量"
+  },
+  {
+    "id": 766,
+    "type": "image",
+    "page_idx": 40,
+    "img_path": "images/74b04ecb769da45cd0ebb529883ca113463be29218bf5fe369ea75c043f9a316.jpg"
+  },
+  {
+    "id": 767,
+    "type": "text",
+    "page_idx": 41,
+    "text": "三、解答题"
+  },
+  {
+    "id": 768,
+    "type": "text",
+    "page_idx": 41,
+    "text": "1.如图所示，已知  $a\\text{b}\\mathfrak{c}$  ，用两种方法画出向量  $a - b - c$"
+  },
+  {
+    "id": 769,
+    "type": "image",
+    "page_idx": 41,
+    "img_path": "images/52b5d0ebedf978b9570cea4d8c4aa5a45328e41e8371913931670dabd9459507.jpg"
+  },
+  {
+    "id": 770,
+    "type": "text",
+    "page_idx": 41,
+    "text": "2. 如图所示,已知向量  $AB = a, AD = b$ ,  $\\angle DAB = 120^\\circ$ , 且  $\\left|a\\right| = \\left|b\\right| = 3$ , 求  $\\left|a + b\\right|$  和  $\\left|a - b\\right|$"
+  },
+  {
+    "id": 771,
+    "type": "image",
+    "page_idx": 41,
+    "img_path": "images/67d9ba9e83375347e399a6504c00893cf528b6b0cd3afa13ed1552894e5b2719.jpg"
+  },
+  {
+    "id": 772,
+    "type": "text",
+    "page_idx": 41,
+    "text": "3. 河流流速是向东 4 千米/小时,一个游泳者在水流影响下以  $4 \\sqrt{3}$  千米/小时的速度正好从南岸游向北岸,求游泳者在静水中的速度"
+  },
+  {
+    "id": 773,
+    "type": "text",
+    "page_idx": 41,
+    "text": "4. 如图所示,在梯形  $ABCD$  中,  $AB // CD$ , 点  $P$  为  $AB$  上一点,  $AD = a, AP = b, CD = c$ ."
+  },
+  {
+    "id": 774,
+    "type": "text",
+    "text": "(1) 用向量  $a \\not b c$  表示  $D P$  和  $P C$",
+    "page_idx": 41
+  },
+  {
+    "id": 775,
+    "type": "text",
+    "text": "(2) 在图中作出  $AD + DP + PC$",
+    "page_idx": 41
+  },
+  {
+    "id": 776,
+    "type": "image",
+    "page_idx": 41,
+    "img_path": "images/d8227de8bd8d42ba1a918665fcd8c613e28c8a6fa93ddb06b45cafaa66566f48.jpg"
+  },
+  {
+    "id": 777,
+    "type": "text",
+    "page_idx": 42,
+    "text": "5. 如图， $\\triangle ABC$  中  $M, N, P$  分别是  $AB, AC, BC$  边的中点，在图中画出："
+  },
+  {
+    "id": 778,
+    "type": "equation",
+    "page_idx": 42,
+    "text": "$$\nP M + B M - P N\n$$"
+  },
+  {
+    "id": 779,
+    "type": "image",
+    "page_idx": 42,
+    "img_path": "images/dfd5045fe723806fe614c9d5516fe67cd452eef3b088e19630a914f0f8d49722.jpg",
+    "image_caption": "B组"
+  },
+  {
+    "id": 780,
+    "type": "text",
+    "page_idx": 42,
+    "text": "1.如图，点  $E$  在平行四边形ABCD的对角线BD上"
+  },
+  {
+    "id": 781,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(1) 填空:  $BC + BA =$"
+  },
+  {
+    "id": 782,
+    "type": "equation",
+    "page_idx": 42,
+    "text": "$$\nB C - A E = \\underline {{}}\n$$"
+  },
+  {
+    "id": 783,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(2) 求作:  $BC + AE$"
+  },
+  {
+    "id": 784,
+    "type": "image",
+    "page_idx": 42,
+    "img_path": "images/c0fa7cadbf87306f7100137a997d02b6f3c84b3fe860778fb2303a42fe4e116b.jpg"
+  },
+  {
+    "id": 785,
+    "type": "text",
+    "page_idx": 42,
+    "text": "2. 如图,四边形  $ABCD$  的对角线  $AC$ 、 $BD$  交于点  $E$ ,"
+  },
+  {
+    "id": 786,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(1) 填空:  $AB + BC = \\_$ ;  $AB - AD = \\_$ ."
+  },
+  {
+    "id": 787,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(2) 求作:  $BC + BE$"
+  },
+  {
+    "id": 788,
+    "type": "image",
+    "page_idx": 42,
+    "img_path": "images/ec7497020b4342b44e68a628a6cd235cdbe676028b58a5be1e4cfe394024af3d.jpg"
+  },
+  {
+    "id": 789,
+    "type": "text",
+    "page_idx": 42,
+    "text": "3.(1)已知  $A,B,C$  是平面内的三点，  $\\left|AB\\right| = a,\\left|BC\\right| = b(a > b > 0)$  模的取值范围"
+  },
+  {
+    "id": 790,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(2) 如图所示, 在  $\\triangle ABC$  中,  $AD$  是  $BC$  边上的中线,  $AB - AD$  与  $AD - AC$  是不是相等的向量? 为什么?"
+  },
+  {
+    "id": 791,
+    "type": "image",
+    "page_idx": 43,
+    "img_path": "images/77c29b667889dedeb4038ff3dbf9cac1caf4cccefd4eb3b2d95bf6cd322ecd7e.jpg"
+  },
+  {
+    "id": 792,
+    "type": "text",
+    "page_idx": 44,
+    "text": "2特殊的平行四边形"
+  },
+  {
+    "id": 793,
+    "type": "text",
+    "page_idx": 44,
+    "text": "一．菱形的性质（共7小题）"
+  },
+  {
+    "id": 794,
+    "type": "text",
+    "text": "1. （2022 春·青浦区校级期中）如图，菱形ABCD的对角线相交于点O，延长BC至点E，使  $CE = BC$  ，联结DE，若  $\\angle E = 70^{\\circ}$  ，则  $\\angle OBC =$",
+    "page_idx": 44
+  },
+  {
+    "id": 795,
+    "type": "text",
+    "text": "2. （2022 春·杨浦区校级期中）菱形的边长为 10 厘米，一条对角线为 16 厘米，它的面积是 ______ 平方厘米。",
+    "page_idx": 44
+  },
+  {
+    "id": 796,
+    "type": "text",
+    "text": "3. (2022 春・徐汇区期末)如图, 菱形  $A B C D$  中, 如果  $A B = 3, B D = 2$ , 那么菱形  $A B C D$  的面积为",
+    "page_idx": 44
+  },
+  {
+    "id": 797,
+    "type": "image",
+    "page_idx": 44,
+    "img_path": "images/dd8f46edff3ce4dc48f062a63e706d53e962c6fe4907ee25d9717cd4641f7c2e.jpg"
+  },
+  {
+    "id": 798,
+    "type": "image",
+    "page_idx": 44,
+    "img_path": "images/b8a82379a27aa2bf7444a0edbb16f95cd29bef8dc6156ff2a2f7e576211a20a4.jpg"
+  },
+  {
+    "id": 799,
+    "type": "text",
+    "text": "4. （2022 春・上海期中）已知菱形ABCD中，对角线  $AC = 12$  ，  $BD = 16$  ，则菱形ABCD的面积是",
+    "page_idx": 44
+  },
+  {
+    "id": 800,
+    "type": "text",
+    "text": "5. （2022 春・虹口区期中）如果菱形的边长为 5 , 相邻两内角的度数之比为  $1: 2$ , 那么该菱形较长的对角线长为",
+    "page_idx": 44
+  },
+  {
+    "id": 801,
+    "type": "text",
+    "text": "6. （2022 春·青浦区校级期中）菱形ABCD中， $\\angle B = 60^{\\circ}$ ，点  $E$ 、 $F$  分别在边BC、CD上，且  $\\angle EAF = 60^{\\circ}$ 。求证： $AE = AF$ 。",
+    "page_idx": 44
+  },
+  {
+    "id": 802,
+    "type": "image",
+    "page_idx": 44,
+    "img_path": "images/8b5290d01603e7e1854999be67fff8fdce62a28b1b7b464aafb12e27fd16e65b.jpg"
+  },
+  {
+    "id": 803,
+    "type": "text",
+    "page_idx": 45,
+    "text": "7. （2022 春·杨浦区校级期中）已知：如图菱形ABCD，点E，F分别为边BC，CD上的动点（不与端点重合），且  $\\angle EAF = \\angle B = 60^{\\circ}$"
+  },
+  {
+    "id": 804,
+    "type": "text",
+    "text": "(1) 求证:  $AE = AF$ ;",
+    "page_idx": 45
+  },
+  {
+    "id": 805,
+    "type": "text",
+    "text": "(2) 如果  $AB = 8$ ，设  $BE = x, AE = y$ ，求  $y$  与  $x$  的函数关系式和定义域；",
+    "page_idx": 45
+  },
+  {
+    "id": 806,
+    "type": "text",
+    "text": "(3）在（2）的基础上，当  $x$  取何值时，  $S_{\\triangle AEF}$  与  $S_{\\triangle CEF}$  面积比值为7.",
+    "page_idx": 45
+  },
+  {
+    "id": 807,
+    "type": "image",
+    "page_idx": 45,
+    "img_path": "images/0b6fcefb519a45d211c8e767ad27df77f12595135cbf76cdaa6817bd960620b7.jpg",
+    "image_caption": "图1 备用图"
+  },
+  {
+    "id": 808,
+    "type": "text",
+    "page_idx": 45,
+    "text": "二．菱形的判定（共5小题）"
+  },
+  {
+    "id": 809,
+    "type": "text",
+    "page_idx": 45,
+    "text": "8. (2022 春・青浦区校级期中) 下列命题是真命题的是 ( )"
+  },
+  {
+    "id": 810,
+    "type": "text",
+    "text": "A. 有一组对边平行, 另一组对边相等的四边形是平行四边形",
+    "page_idx": 45
+  },
+  {
+    "id": 811,
+    "type": "text",
+    "text": "B. 两条对角线相等的四边形是矩形",
+    "page_idx": 45
+  },
+  {
+    "id": 812,
+    "type": "text",
+    "text": "C. 一条对角线平分一组对角的四边形是菱形",
+    "page_idx": 45
+  },
+  {
+    "id": 813,
+    "type": "text",
+    "text": "D. 对角线互相垂直平分的四边形是菱形",
+    "page_idx": 45
+  },
+  {
+    "id": 814,
+    "type": "text",
+    "page_idx": 45,
+    "text": "9. （2022 春・奉贤区校级期末）如图, 直线  $y = -x + 2$  与  $x$  轴,  $y$  轴分别交于点  $A 、 B$ , 点  $C$  在  $y$  轴上, 点  $D$  为平面内"
+  },
+  {
+    "id": 815,
+    "type": "text",
+    "page_idx": 45,
+    "text": "一点，若四边形ACDB恰好构成一个菱形，请写出点  $D$  的坐标"
+  },
+  {
+    "id": 816,
+    "type": "image",
+    "page_idx": 45,
+    "img_path": "images/fbb24cdd69ad36a949c1e31ec5d2ba769ff94ef489831064d0df75d0e3966959.jpg"
+  },
+  {
+    "id": 817,
+    "type": "text",
+    "page_idx": 46,
+    "text": "10. （2022 春·虹口区期中）如图， $\\triangle ABC$  中， $AD$  是  $\\angle BAC$  的平分线， $E$  是  $AC$  上一点， $AE = AB$ ， $EF \\parallel BC$  交  $AD$  于  $F$ ， $BE$  与  $AD$  交于  $G$ ."
+  },
+  {
+    "id": 818,
+    "type": "text",
+    "page_idx": 46,
+    "text": "求证：四边形BDEF是菱形."
+  },
+  {
+    "id": 819,
+    "type": "image",
+    "page_idx": 46,
+    "img_path": "images/4e5ca0faabec0abbfb797dcb08956613b29db415196a880004c78f4dcfe8563a.jpg"
+  }
+]
+```

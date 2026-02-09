@@ -1,0 +1,805 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 900,
+    "type": "text",
+    "page_idx": 51,
+    "text": "29. (2022 春・杨浦区校级期中)已知, 如图,  $B E, B D$  是  $\\triangle A B C$  中  $\\angle A B C$  的内、外角平分"
+  },
+  {
+    "id": 901,
+    "type": "text",
+    "page_idx": 51,
+    "text": "线，  $AD\\bot BD$  于  $D$  ，AE⊥BE于点  $E$  ，延长AE交BC的延长线于点  $N$"
+  },
+  {
+    "id": 902,
+    "type": "text",
+    "page_idx": 51,
+    "text": "求证：  $DE = BN$"
+  },
+  {
+    "id": 903,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/49b0baba6525df4f42f6537d08b2066504627bc346d0782e4a3dc2b89aea361c.jpg"
+  },
+  {
+    "id": 904,
+    "type": "text",
+    "page_idx": 51,
+    "text": "30．（2022春·青浦区校级期中）如图，在四边形ABCD的中，  $AB\\| CD$  ，对角线AC，BD相"
+  },
+  {
+    "id": 905,
+    "type": "text",
+    "page_idx": 51,
+    "text": "交于点  $O$  ，且  $AO = CO$  ，  $\\triangle OAB$  是等边三角形."
+  },
+  {
+    "id": 906,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ABCD$  是矩形;",
+    "page_idx": 51
+  },
+  {
+    "id": 907,
+    "type": "text",
+    "text": "(2) 若  $S_{\\text{四边形}ABCD} = 4\\sqrt{3}$ , 求  $BD$  的长.",
+    "page_idx": 51
+  },
+  {
+    "id": 908,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/667b7f4462d4176ff367d1e6d06d7953c9fabb4afc881c3340e2fba4e78762bb.jpg"
+  },
+  {
+    "id": 909,
+    "type": "text",
+    "page_idx": 51,
+    "text": "七．正方形的性质（共5小题）"
+  },
+  {
+    "id": 910,
+    "type": "text",
+    "text": "31.（2022春·静安区期中）如图，正方形ABCD中，延长BC到E，使  $CE = CA$  ，AE交CD于F，那么  $\\angle AFD = \\_$",
+    "page_idx": 51
+  },
+  {
+    "id": 911,
+    "type": "text",
+    "text": "32. （2022 春·浦东新区校级期中）如图，已知正方形ABCD的边长为5厘米，EG $\\| AD$ ，点  $H$  在边AD上， $\\triangle CEH$  的面积为8平方厘米，则  $FG =$  厘米.",
+    "page_idx": 51
+  },
+  {
+    "id": 912,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/ae66af3abb800ae1de6a5c8023c37521d3fbe1ccc16a8495f66fc6317b3768f5.jpg"
+  },
+  {
+    "id": 913,
+    "type": "text",
+    "page_idx": 51,
+    "text": "52"
+  },
+  {
+    "id": 914,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/a589a3ae52bd025d46b62d38997b6f0b82c7417ca5b41f157c6e53a49c05f84b.jpg"
+  },
+  {
+    "id": 915,
+    "type": "text",
+    "page_idx": 52,
+    "text": "33.（2022春·杨浦区校级期中）如图，E为正方形ABCD外一点，AE=AD，BE交AD于"
+  },
+  {
+    "id": 916,
+    "type": "text",
+    "page_idx": 52,
+    "text": "点  $F$  ，则  $\\angle BED = \\_$  。"
+  },
+  {
+    "id": 917,
+    "type": "image",
+    "page_idx": 52,
+    "img_path": "images/be9f58188230cd3a1a47d1df6be01631c2d74156f920b690443342998f12df0e.jpg"
+  },
+  {
+    "id": 918,
+    "type": "text",
+    "text": "34. （2022 春·浦东新区校级期中）已知正方形  $ABCD$ ，以  $CD$  为边作等边  $\\triangle CDE$ ，则  $\\angle ADE$  的度数是",
+    "page_idx": 52
+  },
+  {
+    "id": 919,
+    "type": "text",
+    "text": "35.（2022春·上海期中）在正方形ABCD中，边长为8，点  $P$  是对角线AC上一点， $CP = 2\\sqrt{2}$ ， $E$  是射线AB上一点，联结  $PE$ ，射线  $PF \\perp PE$  交直线AD于  $F$ ，当  $AC = CE$  时， $AF =$",
+    "page_idx": 52
+  },
+  {
+    "id": 920,
+    "type": "text",
+    "page_idx": 52,
+    "text": "八．正方形的判定（共4小题）"
+  },
+  {
+    "id": 921,
+    "type": "text",
+    "page_idx": 52,
+    "text": "36.（2022春·长宁区校级期末）在四边形ABCD中，  $\\angle A = \\angle B = \\angle C = 90^{\\circ}$  ，如果再添加一个条件可证明四边形是正方形，那么这个条件可以是（）"
+  },
+  {
+    "id": 922,
+    "type": "text",
+    "page_idx": 52,
+    "text": "A.  $AB = BC$"
+  },
+  {
+    "id": 923,
+    "type": "text",
+    "page_idx": 52,
+    "text": "B.  ${AB} = {CD}$"
+  },
+  {
+    "id": 924,
+    "type": "text",
+    "page_idx": 52,
+    "text": "C.  $AC = BD$"
+  },
+  {
+    "id": 925,
+    "type": "text",
+    "page_idx": 52,
+    "text": "D.  $\\angle D = 90^{\\circ}$"
+  },
+  {
+    "id": 926,
+    "type": "text",
+    "page_idx": 52,
+    "text": "37. (2022 春・杨浦区校级期中) 下列命题为假命题的是 ( )"
+  },
+  {
+    "id": 927,
+    "type": "text",
+    "text": "A. 四个内角相等的四边形是矩形",
+    "page_idx": 52
+  },
+  {
+    "id": 928,
+    "type": "text",
+    "text": "B. 对角线的交点到各边距离都相等的四边形是菱形",
+    "page_idx": 52
+  },
+  {
+    "id": 929,
+    "type": "text",
+    "text": "C. 有两组邻边相等的四边形是平行四边形",
+    "page_idx": 52
+  },
+  {
+    "id": 930,
+    "type": "text",
+    "text": "D. 一组邻边相等的矩形是正方形",
+    "page_idx": 52
+  },
+  {
+    "id": 931,
+    "type": "text",
+    "page_idx": 52,
+    "text": "38. (2022 春・宝山区校级月考)如图, 在  $\\square ABCD$  中, 对角线  ${AC}$  、  ${BD}$  交于点  $O$  ,  $E$  是  ${BD}$"
+  },
+  {
+    "id": 932,
+    "type": "text",
+    "page_idx": 52,
+    "text": "延长线上的点，且  $\\triangle ACE$  是等边三角形."
+  },
+  {
+    "id": 933,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ABCD$  是菱形.",
+    "page_idx": 52
+  },
+  {
+    "id": 934,
+    "type": "text",
+    "text": "(2) 若  $\\angle AED = 2\\angle EAD$  ，求证：四边形ABCD是正方形.",
+    "page_idx": 52
+  },
+  {
+    "id": 935,
+    "type": "image",
+    "page_idx": 52,
+    "img_path": "images/af9d811ddcfb98466bcfb91b80de98a0620503d48ed25c21c68c04ebeb31681e.jpg"
+  },
+  {
+    "id": 936,
+    "type": "text",
+    "page_idx": 53,
+    "text": "39. (2022 春・上海期中)如图, 在  $\\triangle ABC$  中,  $AB = AC$ ,  $AD \\perp BC$ , 垂足为点  $D$ ,  $AN$  是"
+  },
+  {
+    "id": 937,
+    "type": "text",
+    "page_idx": 53,
+    "text": "$\\triangle ABC$  外角  $\\angle CAM$  的平分线，  $CE\\bot AN$  ，垂足为点  $N$"
+  },
+  {
+    "id": 938,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ADCE$  为矩形;",
+    "page_idx": 53
+  },
+  {
+    "id": 939,
+    "type": "text",
+    "text": "(2) 当  $\\triangle ABC$  满足什么条件时, 四边形  $ADCE$  为正方形? 给出证明.",
+    "page_idx": 53
+  },
+  {
+    "id": 940,
+    "type": "image",
+    "page_idx": 53,
+    "img_path": "images/596d70533097dac989c2a64f48264336a598516b949c9c070ee03b69f58eac3b.jpg"
+  },
+  {
+    "id": 941,
+    "type": "text",
+    "page_idx": 53,
+    "text": "九．正方形的判定与性质（共1小题）"
+  },
+  {
+    "id": 942,
+    "type": "text",
+    "page_idx": 53,
+    "text": "40. (2019 $\\cdot$ 杨浦区二模)已知: 如图, 在  $\\triangle ABC$  中,  $AB = BC$ ,  $\\angle ABC = 90^{\\circ}$ , 点  $D 、 E$  分别是边  $A B 、 B C$  的中点, 点  $F 、 G$  是边  $A C$  的三等分点,  $D F 、 E G$  的延长线相交于点  $H$ , 连接  $H A 、 H C$ ."
+  },
+  {
+    "id": 943,
+    "type": "text",
+    "page_idx": 53,
+    "text": "求证：（1）四边形FBGH是菱形；"
+  },
+  {
+    "id": 944,
+    "type": "text",
+    "page_idx": 53,
+    "text": "(2) 四边形  $ABCH$  是正方形."
+  },
+  {
+    "id": 945,
+    "type": "image",
+    "page_idx": 53,
+    "img_path": "images/1756546da08353e1da9b43dd9dad50f340b79b76e1f323fcc16921eacbecc537.jpg"
+  },
+  {
+    "id": 946,
+    "type": "text",
+    "page_idx": 54,
+    "text": "4平面向量及加减运算"
+  },
+  {
+    "id": 947,
+    "type": "text",
+    "page_idx": 54,
+    "text": "考点一：平面向量"
+  },
+  {
+    "id": 948,
+    "type": "text",
+    "page_idx": 54,
+    "text": "一、单选题"
+  },
+  {
+    "id": 949,
+    "type": "text",
+    "page_idx": 54,
+    "text": "1. (2022 春・八年级课时练习) 下列关于空间向量的命题中, 正确命题的个数是 ( )"
+  },
+  {
+    "id": 950,
+    "type": "text",
+    "text": "(1) 任一向量与它的相反向量都不相等;",
+    "page_idx": 54
+  },
+  {
+    "id": 951,
+    "type": "text",
+    "text": "(2) 长度相等、方向相同的两个向量是相等向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 952,
+    "type": "text",
+    "text": "③ 平行且模相等的两个向量是相等向量；",
+    "page_idx": 54
+  },
+  {
+    "id": 953,
+    "type": "text",
+    "text": "④ 若  $a \\neq b$  ，则  $|a| \\neq |b|$",
+    "page_idx": 54
+  },
+  {
+    "id": 954,
+    "type": "text",
+    "text": "(5) 两个向量相等, 则它们的起点与终点相同.",
+    "page_idx": 54
+  },
+  {
+    "id": 955,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 0"
+  },
+  {
+    "id": 956,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 1"
+  },
+  {
+    "id": 957,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C. 2"
+  },
+  {
+    "id": 958,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 3"
+  },
+  {
+    "id": 959,
+    "type": "text",
+    "page_idx": 54,
+    "text": "2. (2022 春・八年级课时练习) 下列各量中是向量的是 ( )"
+  },
+  {
+    "id": 960,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 时间"
+  },
+  {
+    "id": 961,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 速度"
+  },
+  {
+    "id": 962,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C. 面积"
+  },
+  {
+    "id": 963,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 长度"
+  },
+  {
+    "id": 964,
+    "type": "text",
+    "page_idx": 54,
+    "text": "3. (2022 春・八年级课时练习) 在下列说法中正确的有 ( )"
+  },
+  {
+    "id": 965,
+    "type": "text",
+    "text": "(1) 在物理学中, 作用力与反作用力是一对共线向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 966,
+    "type": "text",
+    "text": "(2) 温度有零上温度和零下温度, 因此温度也是向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 967,
+    "type": "text",
+    "text": "(3) 方向为南偏西  $60^{\\circ}$  的向量与北偏东  $60^{\\circ}$  的向量是共线向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 968,
+    "type": "text",
+    "text": "④ 平面上的数轴都是向量",
+    "page_idx": 54
+  },
+  {
+    "id": 969,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 1个"
+  },
+  {
+    "id": 970,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 2 个"
+  },
+  {
+    "id": 971,
+    "type": "text",
+    "page_idx": 54,
+    "text": "c. 3个"
+  },
+  {
+    "id": 972,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 4个"
+  },
+  {
+    "id": 973,
+    "type": "text",
+    "page_idx": 54,
+    "text": "4. (2022 春・八年级课时练习) 下列说法正确的个数为 (   )"
+  },
+  {
+    "id": 974,
+    "type": "text",
+    "text": "(1) 面积、压强、速度、位移这些物理量都是向量",
+    "page_idx": 54
+  },
+  {
+    "id": 975,
+    "type": "text",
+    "text": "② 零向量没有方向",
+    "page_idx": 54
+  },
+  {
+    "id": 976,
+    "type": "text",
+    "text": "(3) 向量的模一定是正数",
+    "page_idx": 54
+  },
+  {
+    "id": 977,
+    "type": "text",
+    "text": "(4) 非零向量的单位向量是唯一的",
+    "page_idx": 54
+  },
+  {
+    "id": 978,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 0"
+  },
+  {
+    "id": 979,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 1"
+  },
+  {
+    "id": 980,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C. 2"
+  },
+  {
+    "id": 981,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 3"
+  },
+  {
+    "id": 982,
+    "type": "text",
+    "page_idx": 54,
+    "text": "5. (2022 春・八年级课时练习) 如果  $AB = CD$ , 那么下列结论正确的是 ( )"
+  },
+  {
+    "id": 983,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A.  $AC = DB$ ;"
+  },
+  {
+    "id": 984,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B.  $AC = DB$ ;"
+  },
+  {
+    "id": 985,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C.  $AD = BC$ ;"
+  },
+  {
+    "id": 986,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D.  $AD = CB$"
+  },
+  {
+    "id": 987,
+    "type": "text",
+    "page_idx": 55,
+    "text": "6. （2022 春·八年级课时练习）分别以正方形  $ABCD$  的四个顶点为起点与终点的所有有向线段能表示的不同向量有（）"
+  },
+  {
+    "id": 988,
+    "type": "text",
+    "page_idx": 55,
+    "text": "A. 4个"
+  },
+  {
+    "id": 989,
+    "type": "text",
+    "page_idx": 55,
+    "text": "B. 6个"
+  },
+  {
+    "id": 990,
+    "type": "text",
+    "page_idx": 55,
+    "text": "c. 8个"
+  },
+  {
+    "id": 991,
+    "type": "text",
+    "page_idx": 55,
+    "text": "D. 12个"
+  },
+  {
+    "id": 992,
+    "type": "text",
+    "page_idx": 55,
+    "text": "7. (2022 春・上海・八年级期末)如果  $EF = MN$  , 那么下列结论中正确的是 ( )"
+  },
+  {
+    "id": 993,
+    "type": "text",
+    "page_idx": 55,
+    "text": "EN  $\\models FM$  A."
+  },
+  {
+    "id": 994,
+    "type": "text",
+    "page_idx": 55,
+    "text": "B.  $\\overline{EM}$  与  $\\overline{FN}$  是相等向量"
+  },
+  {
+    "id": 995,
+    "type": "text",
+    "page_idx": 55,
+    "text": "C.  $\\overline{EN}$  与  $MF$  是相反向量"
+  },
+  {
+    "id": 996,
+    "type": "text",
+    "page_idx": 55,
+    "text": "D.  $\\overline{EN}$  与  $MF$  是平行向量"
+  },
+  {
+    "id": 997,
+    "type": "text",
+    "page_idx": 55,
+    "text": "二、解答题"
+  },
+  {
+    "id": 998,
+    "type": "text",
+    "page_idx": 55,
+    "text": "8. (2022 春・上海・八年级专题练习)如图,  $E 、 F 、 G$  分别为等边三角形的边  $A B 、 A C$  、"
+  },
+  {
+    "id": 999,
+    "type": "text",
+    "page_idx": 55,
+    "text": "BC 的中点，在以 A、B、C、E、F、G 为起点或终点的"
+  }
+]
+```

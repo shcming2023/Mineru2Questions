@@ -1,0 +1,8407 @@
+[
+  {
+    "id": 0,
+    "type": "text",
+    "page_idx": 0,
+    "text": "第二十二章 四边形"
+  },
+  {
+    "id": 1,
+    "type": "text",
+    "page_idx": 0,
+    "text": "22.1(1) 多边形的内角和"
+  },
+  {
+    "id": 2,
+    "type": "text",
+    "page_idx": 0,
+    "text": "A组"
+  },
+  {
+    "id": 3,
+    "type": "text",
+    "page_idx": 0,
+    "text": "一、填空题"
+  },
+  {
+    "id": 4,
+    "type": "text",
+    "text": "1. 一个7边形从一个顶点出发的对角线把7边形分成了____个三角形,因此7边形的内角和为____。",
+    "page_idx": 0
+  },
+  {
+    "id": 5,
+    "type": "text",
+    "text": "2.  $n$  边形的内角和为  $1620^{\\circ}$ , 则这个  $n$  边形的边数  $n =$",
+    "page_idx": 0
+  },
+  {
+    "id": 6,
+    "type": "text",
+    "text": "3. 已知  $n$  边形的外角和等于它的内角和, 则  $n =$",
+    "page_idx": 0
+  },
+  {
+    "id": 7,
+    "type": "text",
+    "text": "4. 从  $n$  边形的一个顶点出发, 最多可以引 条对角线, 这些对角线可以将这个多边形分成 个三角形",
+    "page_idx": 0
+  },
+  {
+    "id": 8,
+    "type": "text",
+    "text": "5. 一个多边形的每一个内角都是  $108^{\\circ}$ , 那么这个多边形的边数为",
+    "page_idx": 0
+  },
+  {
+    "id": 9,
+    "type": "text",
+    "text": "6. 一个多边形的边数增加 1 ,那么这个多边形的内角和增加_____。",
+    "page_idx": 0
+  },
+  {
+    "id": 10,
+    "type": "text",
+    "text": "7. 十边形的内角和是",
+    "page_idx": 0
+  },
+  {
+    "id": 11,
+    "type": "text",
+    "text": "8.  $n$  边形的内角和是  $180^{\\circ}$ , 则  $n =$",
+    "page_idx": 0
+  },
+  {
+    "id": 12,
+    "type": "text",
+    "text": "9. 从七边形的一个顶点出发可以作 条对角线,把七边形分成了 个三角形",
+    "page_idx": 0
+  },
+  {
+    "id": 13,
+    "type": "text",
+    "text": "10. 如果多边形的每一个内角都等于  $60^{\\circ}$ , 那么它的内角和是",
+    "page_idx": 0
+  },
+  {
+    "id": 14,
+    "type": "text",
+    "text": "11.  $n$  边形的内角和的度数随  $n$  的增加而_____. (填“增大” “不变”或“减小”)",
+    "page_idx": 0
+  },
+  {
+    "id": 15,
+    "type": "text",
+    "page_idx": 0,
+    "text": "二、选择题"
+  },
+  {
+    "id": 16,
+    "type": "text",
+    "page_idx": 0,
+    "text": "1. 多边形的内角和不可能是( )"
+  },
+  {
+    "id": 17,
+    "type": "text",
+    "page_idx": 0,
+    "text": "A.  $180^{\\circ}$"
+  },
+  {
+    "id": 18,
+    "type": "text",
+    "page_idx": 0,
+    "text": "B.1260°"
+  },
+  {
+    "id": 19,
+    "type": "text",
+    "page_idx": 0,
+    "text": "C.  $2160^{\\circ}$"
+  },
+  {
+    "id": 20,
+    "type": "text",
+    "page_idx": 0,
+    "text": "D.  $1500^{\\circ}$"
+  },
+  {
+    "id": 21,
+    "type": "text",
+    "page_idx": 0,
+    "text": "2. 一个多边形的外角中,钝角的个数不可能是( )"
+  },
+  {
+    "id": 22,
+    "type": "text",
+    "page_idx": 0,
+    "text": "A.1 个"
+  },
+  {
+    "id": 23,
+    "type": "text",
+    "page_idx": 0,
+    "text": "B.2 个"
+  },
+  {
+    "id": 24,
+    "type": "text",
+    "page_idx": 0,
+    "text": "C.3 个"
+  },
+  {
+    "id": 25,
+    "type": "text",
+    "page_idx": 0,
+    "text": "D.4 个"
+  },
+  {
+    "id": 26,
+    "type": "text",
+    "page_idx": 0,
+    "text": "3. 四边形中,如果有一组对角都是直角,那么另一组对角可能( )"
+  },
+  {
+    "id": 27,
+    "type": "text",
+    "page_idx": 0,
+    "text": "A.都是钝角"
+  },
+  {
+    "id": 28,
+    "type": "text",
+    "page_idx": 0,
+    "text": "B.都是锐角"
+  },
+  {
+    "id": 29,
+    "type": "text",
+    "page_idx": 0,
+    "text": "C.一个锐角、一个钝角"
+  },
+  {
+    "id": 30,
+    "type": "text",
+    "page_idx": 0,
+    "text": "D.一个锐角、一个直角"
+  },
+  {
+    "id": 31,
+    "type": "text",
+    "page_idx": 0,
+    "text": "4. 若从一个多边形的一个顶点出发, 最多可以引 10 条对角线, 则它是( )"
+  },
+  {
+    "id": 32,
+    "type": "text",
+    "page_idx": 0,
+    "text": "A. 十三边形"
+  },
+  {
+    "id": 33,
+    "type": "text",
+    "page_idx": 0,
+    "text": "B.十二边形"
+  },
+  {
+    "id": 34,
+    "type": "text",
+    "page_idx": 0,
+    "text": "C.十一边形"
+  },
+  {
+    "id": 35,
+    "type": "text",
+    "page_idx": 0,
+    "text": "D. 十边形"
+  },
+  {
+    "id": 36,
+    "type": "text",
+    "page_idx": 0,
+    "text": "三、解答题"
+  },
+  {
+    "id": 37,
+    "type": "text",
+    "page_idx": 0,
+    "text": "1. 一个多边形的每一个外角都等于  $24^{\\circ}$ , 求这个多边形的边数"
+  },
+  {
+    "id": 38,
+    "type": "text",
+    "page_idx": 1,
+    "text": "2. 已知一个多边形的内角和与外角和的差为  $1440^{\\circ}$ , 求这个多边形的边数"
+  },
+  {
+    "id": 39,
+    "type": "text",
+    "page_idx": 1,
+    "text": "3.已知在五边形  $ABCDE$  中，  $AE / / CD$ ，  $\\angle A = 107^\\circ$ ，  $\\angle B = 121^\\circ$ ，求  $\\angle C$  的度数"
+  },
+  {
+    "id": 40,
+    "type": "text",
+    "page_idx": 1,
+    "text": "4. 如图所示,六边形的每个内角都是  $120^{\\circ}$ ,  $AB = 1$ , 且  $BC = CD = 3, DE = 2$ , 求该六边形的周长"
+  },
+  {
+    "id": 41,
+    "type": "image",
+    "page_idx": 1,
+    "img_path": "images/d7d44b7877b44e0e46d6ca54e9e6138ccde001fbc67b584a3d1d77ea0fe1c621.jpg"
+  },
+  {
+    "id": 42,
+    "type": "text",
+    "text": "5. 在五边形 ABCDE 中, 若  $\\angle A: \\angle B: \\angle C: \\angle D: \\angle E = 1:2:3:4:5$ , 求  $\\angle C$  的度数",
+    "page_idx": 1
+  },
+  {
+    "id": 43,
+    "type": "text",
+    "text": "6.如图，求  $\\angle A + \\angle B + \\angle C + \\angle D + \\angle E + \\angle F$  的度数",
+    "page_idx": 1
+  },
+  {
+    "id": 44,
+    "type": "image",
+    "page_idx": 1,
+    "img_path": "images/6ac3250edc73f7f4d22334b831079678dc0ef8be0a2c78e8dc81ae2d19b45960.jpg"
+  },
+  {
+    "id": 45,
+    "type": "text",
+    "page_idx": 2,
+    "text": "B组"
+  },
+  {
+    "id": 46,
+    "type": "text",
+    "page_idx": 2,
+    "text": "1.课本上介绍了求多边形的内角和的方法是过  $n$  边形的一个顶点作对角线，把  $n$  边形分成 $(n - 2)$  个三角形，把求多边形的问题转化成三角形内角和的问题.从而得到  $n$  边形的内角和等于  $(n - 2)\\cdot 180^{\\circ}$  现在再提供两种添辅助线的方法，请你证明  $n$  边形的内角和定理"
+  },
+  {
+    "id": 47,
+    "type": "text",
+    "page_idx": 2,
+    "text": "(1)如图，  $P$  为  ${n}$  边形  $A_{1}A_{2}\\dots A_{n}$  内一点,联结  $PA_{1},PA_{2}\\dots .PA_{n}$  那么  ${n}$  边形被分成了  $_n$  个三角形，由此推理  ${n}$  边形的内角和定理"
+  },
+  {
+    "id": 48,
+    "type": "image",
+    "page_idx": 2,
+    "img_path": "images/d260f5daa781713fb51116fdaa6926a776ef86164b79ceec729241c4bbf721cf.jpg"
+  },
+  {
+    "id": 49,
+    "type": "text",
+    "page_idx": 2,
+    "text": "(2)如图，  $P$  为  $n$  边形  $A_{1}A_{2}\\dots \\dots A_{n}$  边  $A_{1}A_{2}$  的任意一点,联结  $PA_{3},PA_{4}\\dots \\dots PA_{n}$  那么  $n$  边形被分成了  $(n - 1)$  个三角形，由此推理  $n$  边形的内角和定理"
+  },
+  {
+    "id": 50,
+    "type": "image",
+    "page_idx": 2,
+    "img_path": "images/b9e1600055e345c099920f31eee49c0adc747d3464a525bb3a7581467ea43a99.jpg"
+  },
+  {
+    "id": 51,
+    "type": "text",
+    "page_idx": 2,
+    "text": "2. 一个广场地面的一部分如图所示, 地面的中央是一块正六边形的地砖, 周围用正角形和正方形的大理石地砖拼成, 从里往外共 12 层 (不包括中央的正六边形地砖), 每一层的外界都围成一个多边形. 若中央正六边形地砖的边长是 0.5 米, 则第 12 层的外边界所围成的多边形的周长是多少?"
+  },
+  {
+    "id": 52,
+    "type": "image",
+    "page_idx": 2,
+    "img_path": "images/d51f6d6c9be4899675ae3fac7f3717658056cf53a963aecac739211e2f2d8ce1.jpg"
+  },
+  {
+    "id": 53,
+    "type": "text",
+    "page_idx": 3,
+    "text": "22.2(1) 平行四边形"
+  },
+  {
+    "id": 54,
+    "type": "text",
+    "page_idx": 3,
+    "text": "A组"
+  },
+  {
+    "id": 55,
+    "type": "text",
+    "page_idx": 3,
+    "text": "一、填空题"
+  },
+  {
+    "id": 56,
+    "type": "text",
+    "text": "1. 在平行四边形  $ABCD$  中，如果  $\\angle A + \\angle C = 120^\\circ$  那么  $\\angle B =$",
+    "page_idx": 3
+  },
+  {
+    "id": 57,
+    "type": "text",
+    "text": "2. 已知平行四边形的周长为 56 厘米,两邻边之比为 3:1 ,则四边形较长的边长为_____",
+    "page_idx": 3
+  },
+  {
+    "id": 58,
+    "type": "text",
+    "text": "3.已知在平行四边形ABCD中，  $AB = 6,BC\\setminus AB$  边上的高分别为64，则  $BC$  边长为",
+    "page_idx": 3
+  },
+  {
+    "id": 59,
+    "type": "text",
+    "text": "4. 已知在平行四边形  $ABCD$  中,  $\\angle A = 60^\\circ$ ,  $AD = 6$  厘米,  $AB = 4$  厘米, 则平行四边形  $ABCD$  的面积为",
+    "page_idx": 3
+  },
+  {
+    "id": 60,
+    "type": "text",
+    "text": "5. 平行四边形  $ABCD$  的周长为 28 厘米,  $AB:BC = 3:4$ , 那么  $AB =$  厘米",
+    "page_idx": 3
+  },
+  {
+    "id": 61,
+    "type": "text",
+    "text": "6. 平行四边形两邻边分别是 4 和 6 ,其中一边上的高是 3 ,平行四边形的面积是",
+    "page_idx": 3
+  },
+  {
+    "id": 62,
+    "type": "text",
+    "text": "7. 如果  $\\square ABCD$  的周长为  $30cm, AB = 12cm$ , 那么  $BC =$  ________ cm",
+    "page_idx": 3
+  },
+  {
+    "id": 63,
+    "type": "text",
+    "text": "8. □ABCD中,  $\\angle A$  与  $\\angle D$  的度数的比为  $2:3$ , 则  $\\angle B$  的度数是",
+    "page_idx": 3
+  },
+  {
+    "id": 64,
+    "type": "text",
+    "text": "9.如图，在ABCD中，AE⊥BC垂足为E，  $BE = AB,EC = AE$",
+    "page_idx": 3
+  },
+  {
+    "id": 65,
+    "type": "text",
+    "page_idx": 3,
+    "text": "则  $\\angle DCA =$  度"
+  },
+  {
+    "id": 66,
+    "type": "text",
+    "text": "10. □ABCD中,如果  $\\angle A$  比  $\\angle B$  大  $20^{\\circ}$ ,那么  $\\angle C$  的度数是",
+    "page_idx": 3
+  },
+  {
+    "id": 67,
+    "type": "text",
+    "text": "11. 平行四边形一组邻边长为  $3cm$  和  $6cm$ , 这两边的夹角是  $60^\\circ$ , 则平行四边形的面积是  $\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ cm^2$",
+    "page_idx": 3
+  },
+  {
+    "id": 68,
+    "type": "text",
+    "text": "12.如图，在ABCD中，AE、AF分别是BC、CD上的高若  $\\angle B = 50^{\\circ}$  ，则  $\\angle 1 =$",
+    "page_idx": 3
+  },
+  {
+    "id": 69,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/c3e2a420b3508ba570e4c2c2a8499db2c6445d9df403de4b72adaca188348578.jpg"
+  },
+  {
+    "id": 70,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/45318a46744377d0e39e4b9587de7838b369743b8680973d055b3c9a7d264dd6.jpg"
+  },
+  {
+    "id": 71,
+    "type": "text",
+    "page_idx": 4,
+    "text": "度"
+  },
+  {
+    "id": 72,
+    "type": "text",
+    "page_idx": 4,
+    "text": "二、选择题"
+  },
+  {
+    "id": 73,
+    "type": "text",
+    "page_idx": 4,
+    "text": "1. 平行四边形是( )"
+  },
+  {
+    "id": 74,
+    "type": "text",
+    "page_idx": 4,
+    "text": "A.轴对称图形"
+  },
+  {
+    "id": 75,
+    "type": "text",
+    "page_idx": 4,
+    "text": "B. 既是轴对称图形,又是中心对称图形"
+  },
+  {
+    "id": 76,
+    "type": "text",
+    "page_idx": 4,
+    "text": "C.中心对称图形"
+  },
+  {
+    "id": 77,
+    "type": "text",
+    "page_idx": 4,
+    "text": "D.既不是轴对称图形,也不是中心对称图形"
+  },
+  {
+    "id": 78,
+    "type": "text",
+    "page_idx": 4,
+    "text": "2. 用两个全等的三角形(三边互不相等)拼成不同的四边形,其中不同的平行四边形的个数有( )"
+  },
+  {
+    "id": 79,
+    "type": "text",
+    "page_idx": 4,
+    "text": "A.1 个"
+  },
+  {
+    "id": 80,
+    "type": "text",
+    "page_idx": 4,
+    "text": "B.2 个"
+  },
+  {
+    "id": 81,
+    "type": "text",
+    "page_idx": 4,
+    "text": "C.3个"
+  },
+  {
+    "id": 82,
+    "type": "text",
+    "page_idx": 4,
+    "text": "D.4 个"
+  },
+  {
+    "id": 83,
+    "type": "text",
+    "page_idx": 4,
+    "text": "3. 下列条件中,能判断四边形是平行四边形的条件是( )"
+  },
+  {
+    "id": 84,
+    "type": "text",
+    "page_idx": 4,
+    "text": "A.一组对边平行"
+  },
+  {
+    "id": 85,
+    "type": "text",
+    "page_idx": 4,
+    "text": "B.四条边相等"
+  },
+  {
+    "id": 86,
+    "type": "text",
+    "page_idx": 4,
+    "text": "C.一组对边平行,另一组对边相等"
+  },
+  {
+    "id": 87,
+    "type": "text",
+    "page_idx": 4,
+    "text": "D.两条对角线相等"
+  },
+  {
+    "id": 88,
+    "type": "text",
+    "page_idx": 4,
+    "text": "4. 已知平行四边形  $ABCD$  的周长为 40 厘米,  $\\triangle ABC$  的周长为 25 厘米, 则对角线  $AC$  长为( )"
+  },
+  {
+    "id": 89,
+    "type": "text",
+    "page_idx": 4,
+    "text": "A.5厘米"
+  },
+  {
+    "id": 90,
+    "type": "text",
+    "page_idx": 4,
+    "text": "B.15 厘米"
+  },
+  {
+    "id": 91,
+    "type": "text",
+    "page_idx": 4,
+    "text": "C.6 厘米"
+  },
+  {
+    "id": 92,
+    "type": "text",
+    "page_idx": 4,
+    "text": "D.16 厘米"
+  },
+  {
+    "id": 93,
+    "type": "text",
+    "page_idx": 4,
+    "text": "5. 以不在同一直线上的三点为顶点可以作出的平行四边形的个数有( )"
+  },
+  {
+    "id": 94,
+    "type": "text",
+    "page_idx": 4,
+    "text": "A. 4 个"
+  },
+  {
+    "id": 95,
+    "type": "text",
+    "page_idx": 4,
+    "text": "B. 3 个"
+  },
+  {
+    "id": 96,
+    "type": "text",
+    "page_idx": 4,
+    "text": "C. 2 个"
+  },
+  {
+    "id": 97,
+    "type": "text",
+    "page_idx": 4,
+    "text": "D. 1 个"
+  },
+  {
+    "id": 98,
+    "type": "text",
+    "page_idx": 4,
+    "text": "6. 如图,在  $\\square ABCD$  中,对角线  $AC$  与  $BD$  交于点  $O$ , 则与  $\\triangle ABC$  面积相等的三角形的个数 ( )"
+  },
+  {
+    "id": 99,
+    "type": "text",
+    "page_idx": 4,
+    "text": "A. 4 个"
+  },
+  {
+    "id": 100,
+    "type": "text",
+    "page_idx": 4,
+    "text": "B. 3 个"
+  },
+  {
+    "id": 101,
+    "type": "text",
+    "page_idx": 4,
+    "text": "C. 2 个"
+  },
+  {
+    "id": 102,
+    "type": "text",
+    "page_idx": 4,
+    "text": "D. 1 个"
+  },
+  {
+    "id": 103,
+    "type": "image",
+    "page_idx": 4,
+    "img_path": "images/d3bc3d44ff3ee2f5777505b95b83fd74181b3962a347749724b08ca090a27c91.jpg"
+  },
+  {
+    "id": 104,
+    "type": "text",
+    "page_idx": 4,
+    "text": "三、解答题"
+  },
+  {
+    "id": 105,
+    "type": "text",
+    "page_idx": 4,
+    "text": "1. 如图所示，已知在平行四边形  $ABCD$  中， $AE \\perp BC$  于点  $E, AF \\perp CD$  于点  $F$ ， $BC:CD = 3:2, AB = EC$ ，求  $\\angle EAF$  的度数"
+  },
+  {
+    "id": 106,
+    "type": "image",
+    "page_idx": 4,
+    "img_path": "images/18097c2b42f866c106462cc4fd55f27b0ddf6f1a774bba3513a1a41fdebe66cd.jpg"
+  },
+  {
+    "id": 107,
+    "type": "text",
+    "page_idx": 4,
+    "text": "2. 在平行四边形  $ABCD$  中,  $\\angle B = 70^\\circ$ , 求平行四边形各角的度数"
+  },
+  {
+    "id": 108,
+    "type": "text",
+    "page_idx": 5,
+    "text": "3. 如图所示, 在平行四边形  $ABCD$  中, 点  $E \\setminus F$  分别是  $BC \\setminus AD$  上的点, 且  $BE = DF$ , 求证:  $\\triangle ABE \\cong \\triangle CDF$"
+  },
+  {
+    "id": 109,
+    "type": "image",
+    "page_idx": 5,
+    "img_path": "images/756744fde35c695dc0e854b2cbf217542374167e4d74f054259d6b2d45b5744c.jpg"
+  },
+  {
+    "id": 110,
+    "type": "text",
+    "page_idx": 5,
+    "text": "4. 如图所示,在平行四边形  ${ABCD}$  中,  ${BC} = {2AB}$  ,点  $E$  为  ${BC}$  的中点"
+  },
+  {
+    "id": 111,
+    "type": "text",
+    "text": "(1) 求证:  $AE$  平分  $\\angle BAD$",
+    "page_idx": 5
+  },
+  {
+    "id": 112,
+    "type": "text",
+    "text": "(2) 求  $\\angle AED$  的度数",
+    "page_idx": 5
+  },
+  {
+    "id": 113,
+    "type": "image",
+    "page_idx": 5,
+    "img_path": "images/63b75269610b12d0d91462ac9e48c19685e6a5c4485fa2458c14053fab7a42bc.jpg"
+  },
+  {
+    "id": 114,
+    "type": "text",
+    "page_idx": 5,
+    "text": "5. 在  $\\square ABCD$  中,  $AD$  长比  $AB$  长的 2 倍少 2 厘米,  $AB$  长的 5 倍比  $AD$  的 3 倍多 1 厘米, 求  $\\square ABCD$  的周长."
+  },
+  {
+    "id": 115,
+    "type": "text",
+    "page_idx": 6,
+    "text": "1.如图，已知ABCD中，  $DE\\bot AB$  于  $E$  ，  $DF\\bot BC$  于  $F$  ，且  $\\angle EDF = 60^{\\circ}$"
+  },
+  {
+    "id": 116,
+    "type": "text",
+    "text": "(1) 求  $\\square ABCD$  各角的大小;",
+    "page_idx": 6
+  },
+  {
+    "id": 117,
+    "type": "text",
+    "text": "(2) 若  $DE:DF = 2:3$ ， $\\square ABCD$  的周长是  $100cm$ ，求  $\\square ABCD$  各边的长",
+    "page_idx": 6
+  },
+  {
+    "id": 118,
+    "type": "image",
+    "page_idx": 6,
+    "img_path": "images/aafe9d17c980eab80c7894e9ced977d19c5181d6aba6c68bed8d98dde3b01b7d.jpg"
+  },
+  {
+    "id": 119,
+    "type": "text",
+    "page_idx": 6,
+    "text": "2. 如图所示,已知在平行四边形  $ABCD$  中,点  $E$  在  $AC$  上,且  $AE = 2EC$ ,点  $F$  在  $AB$  上,且  $BF = 2AF$ ,如果  $\\triangle BEF$  的面积为 2 ,求平行四边形  $ABCD$  的面积是多少?"
+  },
+  {
+    "id": 120,
+    "type": "image",
+    "page_idx": 6,
+    "img_path": "images/967f8dafe5f9c9832caaa8107d84207cba71b7e060a0c29522ed8e8e8795d716.jpg"
+  },
+  {
+    "id": 121,
+    "type": "text",
+    "page_idx": 6,
+    "text": "22.2(3) 平行四边形"
+  },
+  {
+    "id": 122,
+    "type": "text",
+    "page_idx": 6,
+    "text": "A组"
+  },
+  {
+    "id": 123,
+    "type": "text",
+    "page_idx": 6,
+    "text": "一、填空题"
+  },
+  {
+    "id": 124,
+    "type": "text",
+    "page_idx": 6,
+    "text": "1.如图所示，在平行四边形ABCD中，  $AB = 6,AD = 8$  ，AE平分∠BAD交BD于点E，则"
+  },
+  {
+    "id": 125,
+    "type": "equation",
+    "page_idx": 7,
+    "text": "$$\nE C = \\underline {{}}\n$$"
+  },
+  {
+    "id": 126,
+    "type": "text",
+    "text": "2. 在四边形  $ABCD$  中,  $AB = CD$ , 要使这个四边形成为平行四边形, 则可添加的一个条件可以是",
+    "page_idx": 7
+  },
+  {
+    "id": 127,
+    "type": "text",
+    "text": "3.平行四边形的周长是  $20$  ，相邻两边上的高分别为2和  $^3$  ，则它的面积为",
+    "page_idx": 7
+  },
+  {
+    "id": 128,
+    "type": "text",
+    "text": "4. 在平行四边形  $ABCD$  中， $AE \\perp BC, AF \\perp CD$ ，垂足分别为点  $E$ 、点  $F$ ，若  $\\angle B = 60^\\circ, BE = 2, DF = 3$  则平行四边形  $ABCD$  的周长为",
+    "page_idx": 7
+  },
+  {
+    "id": 129,
+    "type": "text",
+    "text": "5. 两组对边____或____的四边形是平行四边形",
+    "page_idx": 7
+  },
+  {
+    "id": 130,
+    "type": "text",
+    "text": "6. 用边长分别为 2 厘米、3 厘米、4 厘米的两个全等三角形拼成四边形,可拼成____个平行四边形",
+    "page_idx": 7
+  },
+  {
+    "id": 131,
+    "type": "text",
+    "text": "7.如图，ABCD中，  $G$  是  $CD$  上一点，BG交AD延长线于点  $E,AF = CG,\\angle DGE = 90^{\\circ}$",
+    "page_idx": 7
+  },
+  {
+    "id": 132,
+    "type": "text",
+    "page_idx": 7,
+    "text": "则  $\\angle AFD =$"
+  },
+  {
+    "id": 133,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/6b936e99124b4fdad0ea6fe5212d074161e1660683160a6544396ad50d9b2fd0.jpg"
+  },
+  {
+    "id": 134,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/401a1d9678aa4860b6959b4b22dc445f7be8a91c2f7ad32a4081b9f92f71d052.jpg"
+  },
+  {
+    "id": 135,
+    "type": "text",
+    "page_idx": 7,
+    "text": "二、选择题"
+  },
+  {
+    "id": 136,
+    "type": "text",
+    "page_idx": 7,
+    "text": "1. 在平行四边形  $ABCD$  中,  $\\angle A, \\angle B, \\angle C, \\angle D$  的度数之比可能是( )"
+  },
+  {
+    "id": 137,
+    "type": "text",
+    "page_idx": 7,
+    "text": "A.  $2: 1: 2: 1$"
+  },
+  {
+    "id": 138,
+    "type": "text",
+    "page_idx": 7,
+    "text": "B.  $1: 2: 2: 1$"
+  },
+  {
+    "id": 139,
+    "type": "text",
+    "page_idx": 7,
+    "text": "c.  $1: 2: 3: 4$"
+  },
+  {
+    "id": 140,
+    "type": "text",
+    "page_idx": 7,
+    "text": "D.  $2: 2: 2: 1$"
+  },
+  {
+    "id": 141,
+    "type": "text",
+    "page_idx": 7,
+    "text": "2. 如图所示,在平行四边形  $ABCD$  中,下列各式不一定正确的是( )"
+  },
+  {
+    "id": 142,
+    "type": "text",
+    "page_idx": 7,
+    "text": "A.  $\\angle 1 + \\angle 3 = 180^{\\circ}$"
+  },
+  {
+    "id": 143,
+    "type": "text",
+    "page_idx": 7,
+    "text": "B.  $\\angle 1 + \\angle 2 = 180^{\\circ}$"
+  },
+  {
+    "id": 144,
+    "type": "text",
+    "page_idx": 7,
+    "text": "C.  $\\angle 2 + \\angle 3 = 180^{\\circ}$"
+  },
+  {
+    "id": 145,
+    "type": "text",
+    "page_idx": 7,
+    "text": "D.  $\\angle 3 + \\angle 4 = 180^{\\circ}$"
+  },
+  {
+    "id": 146,
+    "type": "text",
+    "page_idx": 7,
+    "text": "3. 在平行四边形  $A B C D$  中, 如图所示, 对角线  $A C 、 B D$  交于点  $O$ , 将  $\\triangle A O D$  平移至  $\\triangle B E C$  的位置, 图中与  $B E$  相等的线段有( )"
+  },
+  {
+    "id": 147,
+    "type": "text",
+    "page_idx": 7,
+    "text": "A.1条"
+  },
+  {
+    "id": 148,
+    "type": "text",
+    "page_idx": 7,
+    "text": "B.2条"
+  },
+  {
+    "id": 149,
+    "type": "text",
+    "page_idx": 7,
+    "text": "C.3条"
+  },
+  {
+    "id": 150,
+    "type": "text",
+    "page_idx": 7,
+    "text": "D.4条"
+  },
+  {
+    "id": 151,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/42f196fa2871aa04e11d1d0a22faa5b457ae40599941661ec0dc7ccda97313c3.jpg"
+  },
+  {
+    "id": 152,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/4c591f719c74f1a88c89e3068b3c12e59c88a7b1b2d57651b52b42ea025def38.jpg"
+  },
+  {
+    "id": 153,
+    "type": "text",
+    "page_idx": 8,
+    "text": "三、解答题"
+  },
+  {
+    "id": 154,
+    "type": "text",
+    "page_idx": 8,
+    "text": "1. 如图所示,在平行四边形  $ABCD$  中,点  $E \\setminus F$  分别在边  $BC$  和  $AD$  上,且  $\\angle BAE = \\angle DCF$ ,求证: 四边形  $AECF$  是平行四边形"
+  },
+  {
+    "id": 155,
+    "type": "image",
+    "page_idx": 8,
+    "img_path": "images/d8128357dffa46c4f2e1dcd8296b82fd912cfba509074be5391cf4fb6bbae3f4.jpg"
+  },
+  {
+    "id": 156,
+    "type": "text",
+    "page_idx": 8,
+    "text": "2.如图所示，已知四边形ABCD是平行四边形，∠BCD的平分线CF交边AB于点F，∠ADC的平分线DG交边AB于点  $G$  ，CF与DG交于点E,求证：  $AF = GB$"
+  },
+  {
+    "id": 157,
+    "type": "image",
+    "page_idx": 8,
+    "img_path": "images/1c1773cc1fee87b238b209c8eeef1c9dc5041600fe64dcb923287369a29e3721.jpg"
+  },
+  {
+    "id": 158,
+    "type": "text",
+    "page_idx": 8,
+    "text": "3. 如图所示,已知在平行四边形  $ABCD$  中,平行于对角线  $AC$  的直线  $MN$  分别交  $DA 、 DC$  的延长线于点  $M 、 N$ , 交  $BA 、 BC$  于点  $P 、 Q$  求证:  $MQ = NP$"
+  },
+  {
+    "id": 159,
+    "type": "image",
+    "page_idx": 8,
+    "img_path": "images/b7f2502413c432d204a83b8dc5904f7f55f4e2a751312cee997655fd14d1f897.jpg"
+  },
+  {
+    "id": 160,
+    "type": "text",
+    "page_idx": 9,
+    "text": "4. 已知直线  $MN$  平行于  $\\triangle ABCD$  的对角线  $BD$ , 延长  $\\triangle ABCD$  的四边  $AB, DC, BC, AD$  交  $MN$  于点  $E, F, G, H$ , 求证:  $EF = GH$"
+  },
+  {
+    "id": 161,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/d0bd379be6cc14244b7f76fb378e3e0bde6d7ff65f523e8a540eadd85f023e05.jpg",
+    "image_caption": "B组"
+  },
+  {
+    "id": 162,
+    "type": "text",
+    "page_idx": 9,
+    "text": "1. 如图,在  $\\square ABCD$  中,对角线  $AC\\setminus BD$  相交于点  $O$  ，  $AF\\bot BD,CE\\bot BD$  垂足分别为 $F\\setminus E,$  试判断四边形  $AFCE$  是什么四边形，并证明你的结论"
+  },
+  {
+    "id": 163,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/1180cb67f938cf81d63a991341b6ae591d870f19e7b0c2abb734d5d567bff3ff.jpg"
+  },
+  {
+    "id": 164,
+    "type": "text",
+    "page_idx": 9,
+    "text": "2. 如图,在  $\\square ABCD$  中,  $E \\sim G$  分别为  $AD \\sim BC$  的中点,  $BF = DH$ , 求证: 四边形  $EFGH$  是平行四边形."
+  },
+  {
+    "id": 165,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/8fa50dae9709a0bd288af02411f3efe5e43f5973d4a01403ffd155ac6d4246cd.jpg"
+  },
+  {
+    "id": 166,
+    "type": "text",
+    "page_idx": 10,
+    "text": "3. 分别以  $\\triangle ABC$  的三条边长，在边  $BC$  的同侧作等边三角形  $\\triangle ABD \\cong \\triangle EBC \\cong \\triangle FAC$ ，求证：四边形  $ADEF$  是平行四边形"
+  },
+  {
+    "id": 167,
+    "type": "text",
+    "page_idx": 10,
+    "text": "22.2(5) 平行四边形"
+  },
+  {
+    "id": 168,
+    "type": "text",
+    "page_idx": 10,
+    "text": "A组"
+  },
+  {
+    "id": 169,
+    "type": "text",
+    "page_idx": 10,
+    "text": "一、填空题"
+  },
+  {
+    "id": 170,
+    "type": "text",
+    "text": "1. 在平行四边形  $ABCD$  中,过顶点  $A$  的高垂直平分  $BC$ , 若  $AB$  的长是 5 厘米,  $BC$  的长是 6 厘米,则平行四边形  $ABCD$  的面积是",
+    "page_idx": 10
+  },
+  {
+    "id": 171,
+    "type": "text",
+    "text": "2. 如图所示,在平行四边形  $A B C D$  中,  $E F / / A C$ , 与  $\\triangle A B E$  面积相等的三角形有______个, 它们是__________.",
+    "page_idx": 10
+  },
+  {
+    "id": 172,
+    "type": "text",
+    "text": "3. 如图在  $\\triangle MBN$  中,  $BM = 6$ , 点  $A, C, D$  分别在  $MB, BN, NM$  上, 四边形  $ABCD$  为平行四边形,",
+    "page_idx": 10
+  },
+  {
+    "id": 173,
+    "type": "equation",
+    "page_idx": 10,
+    "text": "$$\n\\angle N D C = \\angle M D A _ {\\text {, 则 平 行 四 边 形}} A B C D _ {\\text {的 周 长 是} \\_}\n$$"
+  },
+  {
+    "id": 174,
+    "type": "text",
+    "text": "4. 延长平行四边形  $ABCD$  的一边  $AB$  到  $E$ , 使  $BE = BD$ , 联结  $DE$  交  $BC$  于点  $F$ , 若  $AB = 1, \\angle DAB = 120^\\circ, \\angle CFE = 135^\\circ$ , 则  $AC$  的长是",
+    "page_idx": 10
+  },
+  {
+    "id": 175,
+    "type": "text",
+    "text": "5.在四边形ABCD中，若  $\\angle A = \\angle C,\\angle B = \\angle D$  ，则四边形ABCD是____根据是",
+    "page_idx": 10
+  },
+  {
+    "id": 176,
+    "type": "text",
+    "page_idx": 11,
+    "text": "6.  $BD$  是平行四边形  $ABCD$  的对角线, 点  $E \\setminus F$  在  $BD$  上, 要使四边形  $AECF$  是平行四边形, 还需要添加一个条件是"
+  },
+  {
+    "id": 177,
+    "type": "image",
+    "page_idx": 11,
+    "img_path": "images/59ee06cf17f93d4b321f8496fb68d7a4d2f83015fbf3d999380aca68ab03b2d6.jpg"
+  },
+  {
+    "id": 178,
+    "type": "image",
+    "page_idx": 11,
+    "img_path": "images/5e5ab3f6a68f4cdc5c2d31e688437bc1442186c532c77e57d5ab8962f18cb273.jpg"
+  },
+  {
+    "id": 179,
+    "type": "text",
+    "page_idx": 11,
+    "text": "二、选择题"
+  },
+  {
+    "id": 180,
+    "type": "text",
+    "page_idx": 11,
+    "text": "1. 平行四边形的两邻边分别为  $3$  和  $4$ , 那么对角线的长  $d$  必定( )"
+  },
+  {
+    "id": 181,
+    "type": "text",
+    "page_idx": 11,
+    "text": "A.  $d > 1$"
+  },
+  {
+    "id": 182,
+    "type": "text",
+    "page_idx": 11,
+    "text": "B.  $d < 7$"
+  },
+  {
+    "id": 183,
+    "type": "text",
+    "page_idx": 11,
+    "text": "C.  $1 < d < 7$"
+  },
+  {
+    "id": 184,
+    "type": "text",
+    "page_idx": 11,
+    "text": "D.  $d > 1$  或  $d < 7$"
+  },
+  {
+    "id": 185,
+    "type": "text",
+    "page_idx": 11,
+    "text": "2. 若平行四边形的两邻边分别为  $a = 3$  厘米,  $b = 5$  厘米, 则它们的对应高  $h_{a}: h_{b}$  ( )"
+  },
+  {
+    "id": 186,
+    "type": "text",
+    "page_idx": 11,
+    "text": "A.  $5: 3$"
+  },
+  {
+    "id": 187,
+    "type": "text",
+    "page_idx": 11,
+    "text": "B.  $3: 5$"
+  },
+  {
+    "id": 188,
+    "type": "text",
+    "page_idx": 11,
+    "text": "C.  $10: 3$"
+  },
+  {
+    "id": 189,
+    "type": "text",
+    "page_idx": 11,
+    "text": "D.  $3: 10$"
+  },
+  {
+    "id": 190,
+    "type": "text",
+    "page_idx": 11,
+    "text": "3. 平行四边形的一边长是 14 , 则它的两条对角线的长可以是 ( )"
+  },
+  {
+    "id": 191,
+    "type": "text",
+    "page_idx": 11,
+    "text": "A.16和12"
+  },
+  {
+    "id": 192,
+    "type": "text",
+    "page_idx": 11,
+    "text": "B.18和10"
+  },
+  {
+    "id": 193,
+    "type": "text",
+    "page_idx": 11,
+    "text": "C.36和6"
+  },
+  {
+    "id": 194,
+    "type": "text",
+    "page_idx": 11,
+    "text": "D.16和18"
+  },
+  {
+    "id": 195,
+    "type": "text",
+    "page_idx": 11,
+    "text": "4. 在平行四边形  $ABCD$  中, 对角线相交于点  $O$ , 点  $E, F$  在  $BD$  上, 且  $BE = DF$ , 图中关于  $O$  点成中心对称的三角形有( )"
+  },
+  {
+    "id": 196,
+    "type": "text",
+    "page_idx": 11,
+    "text": "A.3对"
+  },
+  {
+    "id": 197,
+    "type": "text",
+    "page_idx": 11,
+    "text": "B.4对"
+  },
+  {
+    "id": 198,
+    "type": "text",
+    "page_idx": 11,
+    "text": "C.5对"
+  },
+  {
+    "id": 199,
+    "type": "text",
+    "page_idx": 11,
+    "text": "D.6对"
+  },
+  {
+    "id": 200,
+    "type": "image",
+    "page_idx": 11,
+    "img_path": "images/6f9700fc9e1a9dc2f1a59bf4bd467a2b35738703c222c2831e10ceb5457a0cfb.jpg"
+  },
+  {
+    "id": 201,
+    "type": "text",
+    "page_idx": 11,
+    "text": "三、解答题"
+  },
+  {
+    "id": 202,
+    "type": "text",
+    "page_idx": 11,
+    "text": "1. 如图所示,已知  $\\triangle ABC$  与  $\\triangle ADE$  都是等边三角形,且  $CD = BF$ ,求证:四边形  $CDEF$  是平行四边形"
+  },
+  {
+    "id": 203,
+    "type": "image",
+    "page_idx": 11,
+    "img_path": "images/65d68b34ede81079edf9c55107e6b5b88d3a6b71046cd845219755085445f2e5.jpg"
+  },
+  {
+    "id": 204,
+    "type": "text",
+    "page_idx": 12,
+    "text": "2.如图所示，在四边形ABCD中，对角线AC、BD相交于点  $o$  点  $E,F$  分别是BO、OD的中点，且四边形AECF是平行四边形，试判断四边形ABCD是不是平行四边形，并说明理由"
+  },
+  {
+    "id": 205,
+    "type": "image",
+    "page_idx": 12,
+    "img_path": "images/428dfa128eadc1d2126bca69461a9f7532a8d348e51cdee7c09368e794ea0246.jpg"
+  },
+  {
+    "id": 206,
+    "type": "text",
+    "page_idx": 12,
+    "text": "3. 已知在平行四边形  $ABCD$  中,  $\\angle B = 60^\\circ$ , 点  $E, F$  分别是  $AB, CD$  的中点,  $AB = 2AD$ , 求证:  $AC = \\sqrt{3} EF$"
+  },
+  {
+    "id": 207,
+    "type": "image",
+    "page_idx": 12,
+    "img_path": "images/c65ed4a2270c682afdb0c008c67802fc8857183777791a8f5c1f472812ffa03e.jpg"
+  },
+  {
+    "id": 208,
+    "type": "text",
+    "page_idx": 12,
+    "text": "4. 已知：如图，在  $\\square ABCD$  中， $O$  是  $AC$  的中点， $EF$  过点  $O$ ，分别与  $AD$ 、 $BC$  交于点  $E$ 、 $F$ ，求证： $EC$  平行且等于  $AF$"
+  },
+  {
+    "id": 209,
+    "type": "image",
+    "page_idx": 12,
+    "img_path": "images/53b84d3ce7484bbd35a7366d06e732c461badefeb726930ad01410f07d24612f.jpg"
+  },
+  {
+    "id": 210,
+    "type": "text",
+    "page_idx": 12,
+    "text": "5. 在四边形  $ABCD$  中， $AD // BC$ ，且  $AD > BC, BC = 9cm, P \\sim Q$  分别从  $A \\sim C$  同时出发， $P$  以1厘米/秒的速度由  $A$  向  $D$  运动， $Q$  以2厘米/秒的速度由"
+  },
+  {
+    "id": 211,
+    "type": "text",
+    "page_idx": 12,
+    "text": "$C$  向  $B$  运动，问几秒时，四边形ABQP是平行四边形？"
+  },
+  {
+    "id": 212,
+    "type": "image",
+    "page_idx": 12,
+    "img_path": "images/2d1a9d60993b1dfcbc18cb947f8bbedb3a3b5861207524311fdc2d46a416c602.jpg"
+  },
+  {
+    "id": 213,
+    "type": "text",
+    "page_idx": 13,
+    "text": "B组"
+  },
+  {
+    "id": 214,
+    "type": "text",
+    "page_idx": 13,
+    "text": "1. 已知:  $\\square ABCD, AE \\perp BD$  于点  $E, CF \\perp BD$  于点  $F, G, H$  分别为  $AD, BC$  的中点求证:  $EF$  和  $GH$  互相平分."
+  },
+  {
+    "id": 215,
+    "type": "image",
+    "page_idx": 13,
+    "img_path": "images/7ff9874c239dbe9a6d6dec31f42e32ae6f5e70675d92ab71bae0a5e7936dd253.jpg"
+  },
+  {
+    "id": 216,
+    "type": "text",
+    "page_idx": 13,
+    "text": "2.如图所示，在平行四边形ABCD中，  $E\\setminus F$  分别在  $CD\\setminus AD$  上，联结  $AE$  和  $CF$  交于点  $P$  且  $AE = CF$  .求证：PB平分∠APC"
+  },
+  {
+    "id": 217,
+    "type": "image",
+    "page_idx": 13,
+    "img_path": "images/c3d8985cfc8325668f3633bc39a06202c383d5cc8058224a13a01765cecca0f5.jpg"
+  },
+  {
+    "id": 218,
+    "type": "text",
+    "page_idx": 14,
+    "text": "22.3(2) 特殊的平行四边形"
+  },
+  {
+    "id": 219,
+    "type": "text",
+    "page_idx": 14,
+    "text": "A组"
+  },
+  {
+    "id": 220,
+    "type": "text",
+    "page_idx": 14,
+    "text": "一、填空题"
+  },
+  {
+    "id": 221,
+    "type": "image",
+    "page_idx": 14,
+    "img_path": "images/ab26264897476fb20d71f2aec2a7a5b7a1c10e8983eb92acc59275e8c2cae407.jpg"
+  },
+  {
+    "id": 222,
+    "type": "text",
+    "text": "1. 在平行四边形  $ABCD$  中, 若添加一个条件 , 则四边形  $ABCD$  是矩形; 若添加一个条件 , 则四边形  $ABCD$  是菱形",
+    "page_idx": 14
+  },
+  {
+    "id": 223,
+    "type": "text",
+    "text": "2. 菱形的两条对角线分别是  $6$  厘米和  $8$  厘米, 则菱形的边长为________面积为________",
+    "page_idx": 14
+  },
+  {
+    "id": 224,
+    "type": "text",
+    "text": "3. 如图所示,在菱形  $ABCD$  中,  $\\angle BAD = 80^\\circ$ ,  $AB$  的垂直平分线交对角线  $AC$  于点  $F$ , 点  $E$  为垂足, 联结  $DF$ , 则  $\\angle CDF =$",
+    "page_idx": 14
+  },
+  {
+    "id": 225,
+    "type": "text",
+    "text": "4.矩形相邻两边的比为  $2:3$  ，面积为54，则矩形的周长为",
+    "page_idx": 14
+  },
+  {
+    "id": 226,
+    "type": "text",
+    "text": "5. 菱形的一边与两条对角线所构成的两角比为  $5: 4$ , 则它的较小的角度数为",
+    "page_idx": 14
+  },
+  {
+    "id": 227,
+    "type": "text",
+    "text": "6. 菱形的两个内角的度数比是  $1: 5$ , 如果高是 2 , 那么此菱形的周长是",
+    "page_idx": 14
+  },
+  {
+    "id": 228,
+    "type": "text",
+    "text": "7. 如果菱形的周长为 \\(20 \\mathrm{~cm}\\), 两条对角线的长之和为 \\(14 \\mathrm{~cm}\\), 那么它的面积是 \\(\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_",
+    "page_idx": 14
+  },
+  {
+    "id": 229,
+    "type": "text",
+    "text": "8. 已知菱形  $ABCD$  中的两条对角线  $AC = 8, BD = 6$ , 那么对角线  $AC \\sim BD$  的交点到任一边的距离等于",
+    "page_idx": 14
+  },
+  {
+    "id": 230,
+    "type": "text",
+    "text": "9. 如图,菱形  $A B C D$  的一条对角线  $A C$  上一点  $O$  到菱形一边  $A D$  的距离为 2 ,那么点  $O$  到边  $A B$  的距离",
+    "page_idx": 14
+  },
+  {
+    "id": 231,
+    "type": "image",
+    "page_idx": 14,
+    "img_path": "images/6d9fcfa15cd97d25e500880a55aee30c8c09a34b3b00a6bb2fb4b2490ba567b0.jpg",
+    "image_caption": "第9题"
+  },
+  {
+    "id": 232,
+    "type": "image",
+    "page_idx": 14,
+    "img_path": "images/f84cc95cbe8fd2c00e7fe8782673fb07d34d65c243e5eceb710cb441ce8b517c.jpg",
+    "image_caption": "第10题 第11题"
+  },
+  {
+    "id": 233,
+    "type": "image",
+    "page_idx": 14,
+    "img_path": "images/f0753124a84baadf5db539951ee4565a92ab7150afc20bc6c5084fa9de5e475a.jpg"
+  },
+  {
+    "id": 234,
+    "type": "text",
+    "text": "11. 如图,在矩形  $A B C D$  中,若将矩形折叠,使  $B$  点和  $D$  点重合,那么折痕  $E F$  分矩形面积之比为",
+    "page_idx": 14
+  },
+  {
+    "id": 235,
+    "type": "text",
+    "text": "12. 如图, 矩形  $ABCD$  中,  $AB = 3, BC = 4$ ,  $P$  是边  $AD$  上的动点,  $PE \\perp AC$  于点  $E$ ,",
+    "page_idx": 14
+  },
+  {
+    "id": 236,
+    "type": "text",
+    "page_idx": 15,
+    "text": "$PF\\bot BD$  于点  $F$  ，则  $PE + PF$  的值为"
+  },
+  {
+    "id": 237,
+    "type": "text",
+    "page_idx": 15,
+    "text": "二、选择题"
+  },
+  {
+    "id": 238,
+    "type": "text",
+    "page_idx": 15,
+    "text": "1. 能判断平行四边形是菱形的条件是( )"
+  },
+  {
+    "id": 239,
+    "type": "text",
+    "page_idx": 15,
+    "text": "A. 一个角是直角"
+  },
+  {
+    "id": 240,
+    "type": "text",
+    "page_idx": 15,
+    "text": "B.对角线相等"
+  },
+  {
+    "id": 241,
+    "type": "text",
+    "page_idx": 15,
+    "text": "C.一组邻角相等"
+  },
+  {
+    "id": 242,
+    "type": "text",
+    "page_idx": 15,
+    "text": "D.对角线互相垂直"
+  },
+  {
+    "id": 243,
+    "type": "text",
+    "page_idx": 15,
+    "text": "2. 已知直线  $l$  是四边形  $ABCD$  的对称轴，如图所示，如果"
+  },
+  {
+    "id": 244,
+    "type": "text",
+    "page_idx": 15,
+    "text": "$AD / / BC$  现有下列四个结论："
+  },
+  {
+    "id": 245,
+    "type": "equation",
+    "page_idx": 15,
+    "text": "$$\n① A B / / C D; ② A B = C D; ③ A B \\perp B C; ④ A D = D C\n$$"
+  },
+  {
+    "id": 246,
+    "type": "image",
+    "page_idx": 15,
+    "img_path": "images/afaca37bcf9f69791f013801b28ee4fc3ff456d1e058353ebc2c58b90d641a68.jpg"
+  },
+  {
+    "id": 247,
+    "type": "text",
+    "page_idx": 15,
+    "text": "其中正确结论的个数有( )"
+  },
+  {
+    "id": 248,
+    "type": "text",
+    "page_idx": 15,
+    "text": "A.1 个"
+  },
+  {
+    "id": 249,
+    "type": "text",
+    "page_idx": 15,
+    "text": "B.2 个"
+  },
+  {
+    "id": 250,
+    "type": "text",
+    "page_idx": 15,
+    "text": "C.3 个"
+  },
+  {
+    "id": 251,
+    "type": "text",
+    "page_idx": 15,
+    "text": "D.4 个"
+  },
+  {
+    "id": 252,
+    "type": "text",
+    "page_idx": 15,
+    "text": "3. 在菱形  $ABCD$  中,  $\\angle ADC = 120^\\circ$ , 则  $BD:AC$  等于( )"
+  },
+  {
+    "id": 253,
+    "type": "text",
+    "page_idx": 15,
+    "text": "A.  $\\sqrt{3}: 2$"
+  },
+  {
+    "id": 254,
+    "type": "text",
+    "page_idx": 15,
+    "text": "B.  $\\sqrt{3}: 3$"
+  },
+  {
+    "id": 255,
+    "type": "text",
+    "page_idx": 15,
+    "text": "C.  $1: 2$"
+  },
+  {
+    "id": 256,
+    "type": "text",
+    "page_idx": 15,
+    "text": "D.  $\\sqrt{3}: 1$"
+  },
+  {
+    "id": 257,
+    "type": "text",
+    "page_idx": 15,
+    "text": "4. 菱形的一边和等腰直角三角形的一直角边等长,且菱形的一个角是  $150^{\\circ}$ , 则菱形和三角形的面积之比是( )"
+  },
+  {
+    "id": 258,
+    "type": "text",
+    "page_idx": 15,
+    "text": "A.  $1: 2$"
+  },
+  {
+    "id": 259,
+    "type": "text",
+    "page_idx": 15,
+    "text": "B.  $2: 3$"
+  },
+  {
+    "id": 260,
+    "type": "text",
+    "page_idx": 15,
+    "text": "C.  $2: 1$"
+  },
+  {
+    "id": 261,
+    "type": "text",
+    "page_idx": 15,
+    "text": "D.  $1 : 1$"
+  },
+  {
+    "id": 262,
+    "type": "text",
+    "page_idx": 15,
+    "text": "5. 如果菱形  $ABCD$  的边长为 1,  $AE$  垂直平分  $BC$  于  $E$ , 那么  $BD$  等于 ( )"
+  },
+  {
+    "id": 263,
+    "type": "text",
+    "page_idx": 15,
+    "text": "A.  $\\frac{1}{2}$"
+  },
+  {
+    "id": 264,
+    "type": "text",
+    "page_idx": 15,
+    "text": "B.  $\\sqrt{3}$"
+  },
+  {
+    "id": 265,
+    "type": "text",
+    "page_idx": 15,
+    "text": "C.  $\\frac{\\sqrt{3}}{2}$"
+  },
+  {
+    "id": 266,
+    "type": "text",
+    "page_idx": 15,
+    "text": "D. 以上都不对"
+  },
+  {
+    "id": 267,
+    "type": "text",
+    "page_idx": 15,
+    "text": "6. 在矩形  $ABCD$  中， $DE \\perp AC$  于  $E$ ， $\\angle ADE = \\angle CDE$ ，那么  $\\angle EDB$  的度数是（）"
+  },
+  {
+    "id": 268,
+    "type": "image",
+    "page_idx": 15,
+    "img_path": "images/56767201c1ba21b8835909a1a6088b58d97ba009b23a79fa9fa3029a5e8c44d0.jpg"
+  },
+  {
+    "id": 269,
+    "type": "text",
+    "page_idx": 15,
+    "text": "A.  $22.5^{\\circ}$"
+  },
+  {
+    "id": 270,
+    "type": "text",
+    "page_idx": 15,
+    "text": "B.  $30^{\\circ}$"
+  },
+  {
+    "id": 271,
+    "type": "text",
+    "page_idx": 15,
+    "text": "C.  $45^{\\circ}$"
+  },
+  {
+    "id": 272,
+    "type": "text",
+    "page_idx": 15,
+    "text": "D.  $60^{\\circ}$"
+  },
+  {
+    "id": 273,
+    "type": "text",
+    "page_idx": 15,
+    "text": "三、解答题"
+  },
+  {
+    "id": 274,
+    "type": "text",
+    "page_idx": 15,
+    "text": "1. 如图所示,在菱形  $ABCD$  中,  $\\angle A$  与  $\\angle B$  的度数比为  $1: 2$ , 周长是  $48$  厘米. 求"
+  },
+  {
+    "id": 275,
+    "type": "text",
+    "text": "(1) 两条对角线的长度",
+    "page_idx": 15
+  },
+  {
+    "id": 276,
+    "type": "text",
+    "text": "(2)菱形的面积",
+    "page_idx": 15
+  },
+  {
+    "id": 277,
+    "type": "image",
+    "page_idx": 15,
+    "img_path": "images/26aee01333f4db88a8ea38b4d71920d0ba433cd51c9aee47e71064f72a1a8a87.jpg"
+  },
+  {
+    "id": 278,
+    "type": "text",
+    "page_idx": 16,
+    "text": "2. 如图所示, 在  $\\triangle ABC$  中,  $AD$  平分  $\\angle BAC$ ,  $DE // AC$ ,  $DF // AB$ . 试说明四边形  $AEDF$  是菱形"
+  },
+  {
+    "id": 279,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/dacef5b5066d24b398f6d5221a99d6e78c9bae0dae9a014c68cd74ecaefedd51.jpg"
+  },
+  {
+    "id": 280,
+    "type": "text",
+    "page_idx": 16,
+    "text": "3. 如图所示,四边形  $ABCD$  为矩形,两条对角线交于点  $O$ ,  $CE \\parallel DB$ , 交  $AB$  的延长线于点  $E$ ,求证:  $AC = CE$ ."
+  },
+  {
+    "id": 281,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/504c16f763395f479c7dea79747993835260536f39a7a7829e565b473e9bada7.jpg"
+  },
+  {
+    "id": 282,
+    "type": "text",
+    "text": "4. 在菱形  $ABCD$  中, 对角线  $AC \\cdot BD$  交于点  $O$ ,  $AC = 16$ ,  $BD = 12$ , 求菱形的高",
+    "page_idx": 16
+  },
+  {
+    "id": 283,
+    "type": "text",
+    "text": "5. 如图,把矩形  ${ABCD}$  的一边  ${AD}$  沿直线  ${AP}$  对折过来,使点  $D$  落在边  ${BC}$  上的点  $E$  处,已",
+    "page_idx": 16
+  },
+  {
+    "id": 284,
+    "type": "text",
+    "page_idx": 16,
+    "text": "知  $AD = 15cm, AB = 12cm$  求折痕线段  $AP$  的长"
+  },
+  {
+    "id": 285,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/ab67e8610ed9e8eb7eb2f6c4082ed2dc722ffecf050d21903c7363e942fc5376.jpg"
+  },
+  {
+    "id": 286,
+    "type": "text",
+    "page_idx": 17,
+    "text": "B组"
+  },
+  {
+    "id": 287,
+    "type": "text",
+    "page_idx": 17,
+    "text": "1.如图：四边形ABCD为菱形，对角线  $AC = 8,BD = 6$  ，对角线相交于点  $O,P$  是边AD上一点.(P点与  $D$  点可重合)"
+  },
+  {
+    "id": 288,
+    "type": "text",
+    "text": "(1) 如果  $P$  是  $AD$  的中点, 求  $\\Delta PAB$  的面积;",
+    "page_idx": 17
+  },
+  {
+    "id": 289,
+    "type": "text",
+    "text": "(2) 设  $AP = x, \\triangle PAB$  面积为  $y$ , 写出  $y$  关于  $x$  的函数解析式, 并写出定义域",
+    "page_idx": 17
+  },
+  {
+    "id": 290,
+    "type": "image",
+    "page_idx": 17,
+    "img_path": "images/4769efa772e4c989d1c9561ab577ab3c256efb5581d2f8dcc166de5c5e80ed6b.jpg"
+  },
+  {
+    "id": 291,
+    "type": "text",
+    "page_idx": 17,
+    "text": "2. 如图所示, 将矩形  $ABCD$  沿着直线  $BD$  对折, 使点  $C$  落在点  $C$  处,  $BC$  交  $AD$  于点"
+  },
+  {
+    "id": 292,
+    "type": "text",
+    "page_idx": 17,
+    "text": "$E,AD = 8,AB = 4$  求  $\\triangle BED$  的面积"
+  },
+  {
+    "id": 293,
+    "type": "image",
+    "page_idx": 17,
+    "img_path": "images/79749ca1aab7546ae004fc3de841d8705ec68ed6095dd36566a7f96a1369228b.jpg"
+  },
+  {
+    "id": 294,
+    "type": "text",
+    "page_idx": 17,
+    "text": "22.3(4)特殊的平行四边形"
+  },
+  {
+    "id": 295,
+    "type": "text",
+    "page_idx": 17,
+    "text": "A组"
+  },
+  {
+    "id": 296,
+    "type": "text",
+    "page_idx": 17,
+    "text": "一、填空题"
+  },
+  {
+    "id": 297,
+    "type": "text",
+    "text": "1. 已知正方形的面积为  $4$ , 则正方形的边长为 , 对角线长为",
+    "page_idx": 17
+  },
+  {
+    "id": 298,
+    "type": "text",
+    "text": "2. 如图所示,正方形  $ABCD$  的周长是 20 厘米,则矩形  $EFCG$  的周长为",
+    "page_idx": 17
+  },
+  {
+    "id": 299,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/b1b916b037f472a4df82e74dcc0a206bc656cccdbb8eaed460fac767d8e7d7ae.jpg"
+  },
+  {
+    "id": 300,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/281a7bacb7824bca952eb18fb73f4279349088ff3e09239b00bae0c3861e3807.jpg"
+  },
+  {
+    "id": 301,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/e86e4f348d977ea7c12174fea30f90308e455a065e165a105b1f34624fd5a0a7.jpg"
+  },
+  {
+    "id": 302,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/183af36b8853b4ad9ae922a7d76821588ca276baa4f7a512101052239da8f453.jpg"
+  },
+  {
+    "id": 303,
+    "type": "text",
+    "page_idx": 18,
+    "text": "第2题"
+  },
+  {
+    "id": 304,
+    "type": "text",
+    "page_idx": 18,
+    "text": "第3题"
+  },
+  {
+    "id": 305,
+    "type": "text",
+    "page_idx": 18,
+    "text": "第8题"
+  },
+  {
+    "id": 306,
+    "type": "text",
+    "page_idx": 18,
+    "text": "第10题"
+  },
+  {
+    "id": 307,
+    "type": "text",
+    "text": "3.如图所示，根据图中所给的尺寸和比例，可知这个“十”字标志的周长为",
+    "page_idx": 18
+  },
+  {
+    "id": 308,
+    "type": "text",
+    "text": "4. 如果用正三角形和正方形组合能够铺满地面,那么每个顶点周围有____个正三角形和____个正方形",
+    "page_idx": 18
+  },
+  {
+    "id": 309,
+    "type": "text",
+    "text": "5. 一个正方形的对角线长  $3$  厘米, 则它的面积为",
+    "page_idx": 18
+  },
+  {
+    "id": 310,
+    "type": "text",
+    "text": "6. 点  $P$  为正方形对角线  $AC$  上一点,且  $AP = AB$ ,则  $\\angle ABP =$",
+    "page_idx": 18
+  },
+  {
+    "id": 311,
+    "type": "text",
+    "text": "7. 正方形共有 条对称轴,它的对称中心是",
+    "page_idx": 18
+  },
+  {
+    "id": 312,
+    "type": "text",
+    "text": "8. 正方形  $ABCD$  的对角线  $AC$  和  $BD$  相交于  $O$ , 周长为  $12cm$ , 那么图中共有 ______ 个等腰直角三角形,  $O$  点到四个顶点的距离之和是 ______ cm",
+    "page_idx": 18
+  },
+  {
+    "id": 313,
+    "type": "text",
+    "text": "9. 正方形的对角线长为 22 ,则它的面积为",
+    "page_idx": 18
+  },
+  {
+    "id": 314,
+    "type": "text",
+    "text": "10. 如图所示,正方形  $A B C D$  的周长为  $16, E$  是对角线  $B D$  上任意一点,则矩形  $E F C G$  的周长为",
+    "page_idx": 18
+  },
+  {
+    "id": 315,
+    "type": "text",
+    "text": "11. 如图,在正方形  $A B C D$  中,  $E$  是  $B C$  边的中点, 如果  $D E = 10$ , 那么四边形  $A B E D$  的面积是",
+    "page_idx": 18
+  },
+  {
+    "id": 316,
+    "type": "text",
+    "text": "12. 如图,  $E$  是正方形  $ABCD$  的边  $BC$  的延长线上一点,  $CE = CA$ ,  $AE$  与  $CD$  相交于点  $F$ ,",
+    "page_idx": 18
+  },
+  {
+    "id": 317,
+    "type": "text",
+    "page_idx": 18,
+    "text": "那么  $\\angle AFC =$"
+  },
+  {
+    "id": 318,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/29d9c503879d94ade43020be31f4cc499e873260ec08c9894e65b4536b2116f6.jpg"
+  },
+  {
+    "id": 319,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/3ec1570e3cb303af1a524e51f232ea86f44dfe638429c5b48b9b96fede383e5f.jpg"
+  },
+  {
+    "id": 320,
+    "type": "text",
+    "page_idx": 18,
+    "text": "二、选择题"
+  },
+  {
+    "id": 321,
+    "type": "text",
+    "page_idx": 19,
+    "text": "1. 在线段、角、等边三角形、等腰三角形、平行四边形、矩形、菱形、正方形、圆、等腰梯形这十种图形中,既是轴对称图形又是中心对称图形的共有( )"
+  },
+  {
+    "id": 322,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A.4种"
+  },
+  {
+    "id": 323,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B.5种"
+  },
+  {
+    "id": 324,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C.7种"
+  },
+  {
+    "id": 325,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D.8种"
+  },
+  {
+    "id": 326,
+    "type": "text",
+    "page_idx": 19,
+    "text": "2. 如果一个四边形的两条对角线互相平分、互相垂直且相等,那么这个四边形是( )"
+  },
+  {
+    "id": 327,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A.矩形"
+  },
+  {
+    "id": 328,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B.菱形"
+  },
+  {
+    "id": 329,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C.正方形"
+  },
+  {
+    "id": 330,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D.菱形、矩形或正方形"
+  },
+  {
+    "id": 331,
+    "type": "text",
+    "page_idx": 19,
+    "text": "3.如图所示，四边形ABCD是正方形延长BC至点  $E$  ，使  $CE = CA$  ，联结AE交CD于点  $F$"
+  },
+  {
+    "id": 332,
+    "type": "text",
+    "page_idx": 19,
+    "text": "则  $\\angle AFC$  的度数是( )"
+  },
+  {
+    "id": 333,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/180aec7a811dd3d2e984e1ce2b67f3856063209adf43355a485548b15a6429f6.jpg"
+  },
+  {
+    "id": 334,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A.  $112.5^{\\circ}$"
+  },
+  {
+    "id": 335,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B.  $125^{\\circ}$"
+  },
+  {
+    "id": 336,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C.  $135^{\\circ}$"
+  },
+  {
+    "id": 337,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D.  $150^{\\circ}$"
+  },
+  {
+    "id": 338,
+    "type": "text",
+    "page_idx": 19,
+    "text": "4. 一条直线把正方形的周长分两等份,则这样的直线有( )"
+  },
+  {
+    "id": 339,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A.2条"
+  },
+  {
+    "id": 340,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B.4条"
+  },
+  {
+    "id": 341,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C.8条"
+  },
+  {
+    "id": 342,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D. 无数条"
+  },
+  {
+    "id": 343,
+    "type": "text",
+    "page_idx": 19,
+    "text": "5.如图，已知四边形ABCD,OEFG在同一平面内，都是边长为2的正方形，且  $o$  是正方形"
+  },
+  {
+    "id": 344,
+    "type": "text",
+    "page_idx": 19,
+    "text": "ABCD对角线的交点,则两正方形的公共部分的面积是（）"
+  },
+  {
+    "id": 345,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/97e78ef2639ffc4131d0c5ed5552e69ce77e51f5aac481fc1ec8a37910cbd037.jpg"
+  },
+  {
+    "id": 346,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A. 1"
+  },
+  {
+    "id": 347,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B. 2"
+  },
+  {
+    "id": 348,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C. 2"
+  },
+  {
+    "id": 349,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D. 一个变量,无法确定"
+  },
+  {
+    "id": 350,
+    "type": "text",
+    "page_idx": 19,
+    "text": "6. 正方形具有而矩形没有的性质是( )"
+  },
+  {
+    "id": 351,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A. 对角线互相平分"
+  },
+  {
+    "id": 352,
+    "type": "text",
+    "page_idx": 19,
+    "text": "B. 四个内角都是直角"
+  },
+  {
+    "id": 353,
+    "type": "text",
+    "page_idx": 19,
+    "text": "C. 对角线相等"
+  },
+  {
+    "id": 354,
+    "type": "text",
+    "page_idx": 19,
+    "text": "D. 每条对角线平分一组对角"
+  },
+  {
+    "id": 355,
+    "type": "text",
+    "page_idx": 19,
+    "text": "三、解答题"
+  },
+  {
+    "id": 356,
+    "type": "text",
+    "page_idx": 19,
+    "text": "1、如图，正方形ABCD的周长是24，对角线AC、BD相交于点O，E是BD上一点，且"
+  },
+  {
+    "id": 357,
+    "type": "text",
+    "page_idx": 19,
+    "text": "$BE = BC$  ，求：(1)  $\\angle ACE$  的度数；(2）△BCE的面积."
+  },
+  {
+    "id": 358,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/7b0c7c9ba7259cb47862f56260d5918abd744c7bc88476b729b3f2004f9b0f1f.jpg"
+  },
+  {
+    "id": 359,
+    "type": "text",
+    "page_idx": 19,
+    "text": "2.如图，四边形ABCD、DEFG都是正方形，求证：  $AE = CG$"
+  },
+  {
+    "id": 360,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/d7aba1a0ec436b987bbce33953e33a3d534eb0a123dbebf30d0619f55c2f08e3.jpg"
+  },
+  {
+    "id": 361,
+    "type": "text",
+    "page_idx": 20,
+    "text": "3.如图所示，已知在△ABC中，  $\\angle A = 90^{\\circ}$  ，∠ABC的平分线交  $AC$  于点  $D,AH\\setminus DF$  都垂直"
+  },
+  {
+    "id": 362,
+    "type": "text",
+    "page_idx": 20,
+    "text": "于  $BC$  点  $H \\sim F$  为垂足, 求证: 四边形  $AEFD$  为菱形"
+  },
+  {
+    "id": 363,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/cadc772d54188b734f3f735712eac18404f13bf59e5631f8d39f51811447f120.jpg"
+  },
+  {
+    "id": 364,
+    "type": "text",
+    "page_idx": 20,
+    "text": "4.如图所示，ABCD是正方形，  $AE / / BD,BE = BD,BE$  交AD于点  $F$  ，求证：  $\\triangle DEF$  是等腰三角形"
+  },
+  {
+    "id": 365,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/76bf9c8d4e0ab43cb5297d8ad28bf8bc67133acf6b62960d81aa18ab09b9246e.jpg"
+  },
+  {
+    "id": 366,
+    "type": "text",
+    "page_idx": 20,
+    "text": "5.如图，正方形ABCD中，  $E$  是DB延长线上一点，且  $\\angle ECB = 15^{\\circ}$  求证  $EC = BD$"
+  },
+  {
+    "id": 367,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/601c7e6fa2297e7958720d5067bc499ef3c039a7385b65f503040c148dad384a.jpg"
+  },
+  {
+    "id": 368,
+    "type": "text",
+    "page_idx": 20,
+    "text": "B组"
+  },
+  {
+    "id": 369,
+    "type": "text",
+    "page_idx": 20,
+    "text": "1. 如图，在正方形ABCD中，E、F是AB、BC上两点，且  $\\angle EDF = 45^{\\circ}$ ， $DP \\perp EF$  于点P."
+  },
+  {
+    "id": 370,
+    "type": "text",
+    "page_idx": 20,
+    "text": "求证：  $DP = DA$"
+  },
+  {
+    "id": 371,
+    "type": "image",
+    "page_idx": 20,
+    "img_path": "images/ab1a51d079b64951ce90701f17d74df4b6b130742d6e84086d803cc3eb650ba1.jpg"
+  },
+  {
+    "id": 372,
+    "type": "text",
+    "page_idx": 21,
+    "text": "2.如图所示，已知四边形ABCD为正方形，点  $M$  为  $BC$  边中点，将正方形折起，使点  $M$  与  $A$  重合，设折痕为  $EF$  ，则  $\\frac{ME}{ME} = \\frac{2}{3} AB$  求△AEM的面积与正方形ABCD面积的比"
+  },
+  {
+    "id": 373,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/d055a9fb068f16f0b7c451c0003f56715c17862a00fd0eb1f06d75d2062b8d37.jpg"
+  },
+  {
+    "id": 374,
+    "type": "text",
+    "page_idx": 21,
+    "text": "22.4 梯形"
+  },
+  {
+    "id": 375,
+    "type": "text",
+    "page_idx": 21,
+    "text": "A组"
+  },
+  {
+    "id": 376,
+    "type": "text",
+    "page_idx": 21,
+    "text": "概念回顾"
+  },
+  {
+    "id": 377,
+    "type": "text",
+    "page_idx": 21,
+    "text": "梯形问题中，常添加的辅助线有："
+  },
+  {
+    "id": 378,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/10158ee98f39022eb7eec1fc081d05f4daccbe3f551b1d93d4b2fed27a1177ad.jpg"
+  },
+  {
+    "id": 379,
+    "type": "text",
+    "page_idx": 21,
+    "text": "一、填空题"
+  },
+  {
+    "id": 380,
+    "type": "text",
+    "text": "1. 若直角梯形的一条腰与一条对角线相等且互相垂直,则上、下底边之比等于_____.",
+    "page_idx": 21
+  },
+  {
+    "id": 381,
+    "type": "text",
+    "text": "2. 如图所示,已知在梯形  $ABCD$  中,  $AB // CD, AB = 12, CD = 8$ , 点",
+    "page_idx": 21
+  },
+  {
+    "id": 382,
+    "type": "text",
+    "page_idx": 21,
+    "text": "$E 、 F$  分别是  $A C 、 B D$  的中点, 则  $E F =$"
+  },
+  {
+    "id": 383,
+    "type": "text",
+    "page_idx": 21,
+    "text": "3. 若直角梯形的一组对角的度数之和是另一组对角的度数之和的一半,则这个梯形中最小的内角的度数是_____。"
+  },
+  {
+    "id": 384,
+    "type": "image",
+    "page_idx": 21,
+    "img_path": "images/5e6395d718f999a3987104d182dcec388293a576d2d7e339cec364656ded2e4d.jpg"
+  },
+  {
+    "id": 385,
+    "type": "text",
+    "text": "4. 若梯形面积为 144 ,且两底的比为  $4: 5$ , 高为 16 ,则梯形的上、下底分别为",
+    "page_idx": 22
+  },
+  {
+    "id": 386,
+    "type": "text",
+    "text": "5. 已知直角梯形两腰之比为  $1: 2$ , 那么该梯形的最小角是",
+    "page_idx": 22
+  },
+  {
+    "id": 387,
+    "type": "text",
+    "text": "6. 已知直角梯形的一腰长为 10 ,这条腰与底边的夹角是  $60^{\\circ}$ ,较短的底边长是 4 ,则另一条底的长是",
+    "page_idx": 22
+  },
+  {
+    "id": 388,
+    "type": "text",
+    "text": "7. 梯形的上底长为  $a c m$ , 下底为  $b c m$ , 它的一条对角线把它分成两部分的面积之比为",
+    "page_idx": 22
+  },
+  {
+    "id": 389,
+    "type": "text",
+    "text": "8. 已知梯形  $ABCD$  中,  $AD \\parallel BC$ , 对角线  $AC$ 、 $BD$  相交于点  $O$ ,  $\\triangle AOB$  与  $\\triangle BOC$  的面积分",
+    "page_idx": 22
+  },
+  {
+    "id": 390,
+    "type": "text",
+    "page_idx": 22,
+    "text": "别为  $2 \\text{平}$ , 则梯形  $ABCD$  的面积是"
+  },
+  {
+    "id": 391,
+    "type": "image",
+    "page_idx": 22,
+    "img_path": "images/47ccc194d4ef174334361899c4ecbd80832c7c8e574c0ca17444a9f59e02faec.jpg"
+  },
+  {
+    "id": 392,
+    "type": "text",
+    "page_idx": 22,
+    "text": "9. 如图,在梯形  $ABCD$  中,  $AB // CD, BC // DE$ , 若  $\\triangle AED$  的周"
+  },
+  {
+    "id": 393,
+    "type": "text",
+    "page_idx": 22,
+    "text": "长为  $20, D C = 3$ , 那么这个梯形的周长是"
+  },
+  {
+    "id": 394,
+    "type": "text",
+    "text": "10. 若直角梯形一腰与下底的长都是 \\(40 \\mathrm{~cm}\\), 且它们的夹角 \\(60^{\\circ}\\), 则梯形的上底是 \\(\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_",
+    "page_idx": 22
+  },
+  {
+    "id": 395,
+    "type": "text",
+    "text": "11. 直角梯形  $A B C D$  中,上底为 3 ,一个下底角为  $30^{\\circ}$ ,斜腰长等于 4 ,则梯形的面积为",
+    "page_idx": 22
+  },
+  {
+    "id": 396,
+    "type": "text",
+    "text": "12. 直角梯形的两底分别为  $3$  和  $7$ , 斜腰与底边的夹角为  $45^{\\circ}$ , 那么梯形的高为",
+    "page_idx": 22
+  },
+  {
+    "id": 397,
+    "type": "text",
+    "text": "13. 如图,在梯形  $A B C D$  中,",
+    "page_idx": 22
+  },
+  {
+    "id": 398,
+    "type": "equation",
+    "page_idx": 22,
+    "text": "$$\n\\angle D C B = 9 0 ^ {\\circ}, A B / / C D, A B = 2 5, B C = 2 4\n$$"
+  },
+  {
+    "id": 399,
+    "type": "text",
+    "page_idx": 22,
+    "text": "A,将该梯形折叠，点恰好"
+  },
+  {
+    "id": 400,
+    "type": "text",
+    "page_idx": 22,
+    "text": "与点  $D$  重合,  $B E$  为折痕, 那么  $A D$  的长度为"
+  },
+  {
+    "id": 401,
+    "type": "image",
+    "page_idx": 22,
+    "img_path": "images/aacb21dbec6ffcf3f0ca5b7940ce6fd4422d24be02b44e082b50440eb2f34d42.jpg"
+  },
+  {
+    "id": 402,
+    "type": "text",
+    "page_idx": 23,
+    "text": "14. 已知梯形上、下底分别为  $25$ ，一腰长为 4，则另一腰  $x$  的取值范围是"
+  },
+  {
+    "id": 403,
+    "type": "text",
+    "page_idx": 23,
+    "text": "二、选择题"
+  },
+  {
+    "id": 404,
+    "type": "text",
+    "page_idx": 23,
+    "text": "1. 有两个角相等的梯形是( )"
+  },
+  {
+    "id": 405,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.直角梯形或等腰梯形"
+  },
+  {
+    "id": 406,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.直角梯形"
+  },
+  {
+    "id": 407,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.一般梯形"
+  },
+  {
+    "id": 408,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.等腰梯形"
+  },
+  {
+    "id": 409,
+    "type": "text",
+    "page_idx": 23,
+    "text": "2. 在四边形  $ABCD$  中,  $AD // BC, AC = BD$ , 则四边形  $ABCD$  是( )"
+  },
+  {
+    "id": 410,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.平行四边形"
+  },
+  {
+    "id": 411,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.等腰梯形"
+  },
+  {
+    "id": 412,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.矩形"
+  },
+  {
+    "id": 413,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.等腰梯形或矩形"
+  },
+  {
+    "id": 414,
+    "type": "text",
+    "page_idx": 23,
+    "text": "3. 下列命题正确的是( )"
+  },
+  {
+    "id": 415,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.凡是梯形对角线都相等"
+  },
+  {
+    "id": 416,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.一组对边平行,另一组对边相等的四边形是梯形"
+  },
+  {
+    "id": 417,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.同一底上的两个角相等的梯形是等腰梯形"
+  },
+  {
+    "id": 418,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D. 只有两个角相等的梯形是等腰梯形"
+  },
+  {
+    "id": 419,
+    "type": "text",
+    "page_idx": 23,
+    "text": "4. 梯形  $ABCD$  的上底与高相等, 下底是上底的 3 倍, 则底角是( )"
+  },
+  {
+    "id": 420,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.  $30^{\\circ}$"
+  },
+  {
+    "id": 421,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B.  $45^{\\circ}$"
+  },
+  {
+    "id": 422,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.  $60^{\\circ}$"
+  },
+  {
+    "id": 423,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.不能确定"
+  },
+  {
+    "id": 424,
+    "type": "text",
+    "page_idx": 23,
+    "text": "5. 已知,梯形  $A B C D$  的周长为  $40$  厘米,同一底上两个底角都为  $60^{\\circ}$  若腰长为  $8$  厘米,则梯形的两底之长为 ( )"
+  },
+  {
+    "id": 425,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A. 10 厘米, 14 厘米 B. 12 厘米, 16 厘米 C. 8 厘米, 12 厘米 D. 8 厘米, 16 厘米"
+  },
+  {
+    "id": 426,
+    "type": "text",
+    "page_idx": 23,
+    "text": "6. 已知: 梯形  $ABCD$  中,  $AB \\parallel DC$ ,  $AB = 5$ ,  $BC = 32$ ,  $\\angle BCD = 45^\\circ$ ,  $\\angle CDA = 60^\\circ$ , 那么  $CD$  的长等于 ( )"
+  },
+  {
+    "id": 427,
+    "type": "text",
+    "page_idx": 23,
+    "text": "A.  $7 + \\frac{2}{3}\\sqrt{3}$"
+  },
+  {
+    "id": 428,
+    "type": "text",
+    "page_idx": 23,
+    "text": "B. 8"
+  },
+  {
+    "id": 429,
+    "type": "text",
+    "page_idx": 23,
+    "text": "C.  $8 + 3\\sqrt{3}$"
+  },
+  {
+    "id": 430,
+    "type": "text",
+    "page_idx": 23,
+    "text": "D.  $8 + \\sqrt{3}$"
+  },
+  {
+    "id": 431,
+    "type": "text",
+    "page_idx": 23,
+    "text": "三、解答题"
+  },
+  {
+    "id": 432,
+    "type": "text",
+    "page_idx": 23,
+    "text": "1. 如图所示,在梯形  $A B C D$  中,  $A D / / B C, D E / / A B, \\triangle C D E$  的周长为 36 厘米,  $A D = 6$  厘米"
+  },
+  {
+    "id": 433,
+    "type": "text",
+    "page_idx": 23,
+    "text": "求梯形  $ABCD$  的周长"
+  },
+  {
+    "id": 434,
+    "type": "image",
+    "page_idx": 23,
+    "img_path": "images/cada7e84485ad555962118e8563bd00a6fb0c320703f1ba2554a78360959d5af.jpg"
+  },
+  {
+    "id": 435,
+    "type": "text",
+    "page_idx": 24,
+    "text": "2. 如图所示，在梯形  $ABCD$  中， $AD \\parallel BC, AD = 5, CD = 3\\sqrt{2}, \\angle BCD = 45^\\circ,$"
+  },
+  {
+    "id": 436,
+    "type": "text",
+    "page_idx": 24,
+    "text": "$\\angle C B A = 60^{\\circ}$ , 求梯形的周长"
+  },
+  {
+    "id": 437,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/aaf9a1c6409a9a429939c98c18515948d1f505f92f7c7860526e41bcbedf34c5.jpg"
+  },
+  {
+    "id": 438,
+    "type": "text",
+    "page_idx": 24,
+    "text": "3. 如图所示,已知在梯形  $ABCD$  中,  $AD \\parallel BC$ ,  $\\angle ABC = 60^\\circ$ ,  $AB = AD$ ,  $AE$  是梯形的高, 且  $BE = 1$ , 求  $AD$  的长"
+  },
+  {
+    "id": 439,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/846620efc784884c27040eeed8805e4d83a52dc6df4fcf8bf4065add43bae94c.jpg"
+  },
+  {
+    "id": 440,
+    "type": "text",
+    "page_idx": 24,
+    "text": "B组"
+  },
+  {
+    "id": 441,
+    "type": "text",
+    "page_idx": 24,
+    "text": "1. 如图所示,在梯形  $A B C D$  中,  $A D / / B C$ , 对角线  $A C \\perp B D$ , 且  $A C = 5$  厘米,  $B D = 12$  厘米求该梯形的面积"
+  },
+  {
+    "id": 442,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/37626d867308607679fef874eda05e1ec9d34be1f21dc744331770892662b95d.jpg"
+  },
+  {
+    "id": 443,
+    "type": "text",
+    "page_idx": 25,
+    "text": "22.5(2) 等腰梯形"
+  },
+  {
+    "id": 444,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A组"
+  },
+  {
+    "id": 445,
+    "type": "text",
+    "page_idx": 25,
+    "text": "一、填空题"
+  },
+  {
+    "id": 446,
+    "type": "text",
+    "text": "1. 等腰梯形是轴对称图形,它的对称轴是",
+    "page_idx": 25
+  },
+  {
+    "id": 447,
+    "type": "text",
+    "text": "2. 若等腰梯形有一个角为  $120^{\\circ}$ , 上、下底长分别为 4 厘米、12 厘米则它的周长为",
+    "page_idx": 25
+  },
+  {
+    "id": 448,
+    "type": "text",
+    "text": "3. 已知梯形的上下底长分别为 1 厘米和 4 厘米,且两条对角线的长分别为 3 厘米和 4 厘米,则梯形的面积为",
+    "page_idx": 25
+  },
+  {
+    "id": 449,
+    "type": "text",
+    "text": "4. 等腰梯形上底与下底的差等于一腰的长,那么腰与下底的夹角是",
+    "page_idx": 25
+  },
+  {
+    "id": 450,
+    "type": "text",
+    "text": "5. 等腰梯形的一条对角线与一条腰垂直,如果两条腰长的和为 12 ,两条对角线长的和为 16 ,那么较长的一条底的长为",
+    "page_idx": 25
+  },
+  {
+    "id": 451,
+    "type": "text",
+    "text": "6. 等腰梯形的一个角是  $45^{\\circ}$ , 一条腰长为 8 , 如果较短的底长为  $3 \\sqrt{2}$ , 那么较长的底长等于",
+    "page_idx": 25
+  },
+  {
+    "id": 452,
+    "type": "text",
+    "page_idx": 25,
+    "text": "二、选择题"
+  },
+  {
+    "id": 453,
+    "type": "text",
+    "page_idx": 25,
+    "text": "1. 下列关于等腰梯形的判断,正确的是( )"
+  },
+  {
+    "id": 454,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A.两底相等 B.同底上的两底角互补 C.每两个角相等 D.对角线交点在对称轴上"
+  },
+  {
+    "id": 455,
+    "type": "text",
+    "page_idx": 25,
+    "text": "2. 在等腰梯形  $ABCD$  中,如图所示,  $AD \\parallel BC, AC 、 BD$  相交于点  $O$ , 则"
+  },
+  {
+    "id": 456,
+    "type": "text",
+    "page_idx": 25,
+    "text": "$O$  有下列四个结论①  $AC = BD$ ;② 梯形ABCD是轴对称图形;③"
+  },
+  {
+    "id": 457,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/7033205d4bdea4e749740b7b885c21d4d29ffade46428914ee6d495f1c05186f.jpg"
+  },
+  {
+    "id": 458,
+    "type": "text",
+    "page_idx": 26,
+    "text": "$\\angle ADB = \\angle DAC;$  ④  $\\triangle AOD \\cong \\triangle AOB$ . 其中正确的是( )"
+  },
+  {
+    "id": 459,
+    "type": "text",
+    "page_idx": 26,
+    "text": "A.①③④"
+  },
+  {
+    "id": 460,
+    "type": "text",
+    "page_idx": 26,
+    "text": "B.①②④"
+  },
+  {
+    "id": 461,
+    "type": "text",
+    "page_idx": 26,
+    "text": "C.①②③"
+  },
+  {
+    "id": 462,
+    "type": "text",
+    "page_idx": 26,
+    "text": "D.②③④"
+  },
+  {
+    "id": 463,
+    "type": "text",
+    "page_idx": 26,
+    "text": "3. 以线段  $a = 16, b = 13, c = 10, d = 6$  为边作梯形,其中  $a \\sim c$  作为梯形的两底,这样的梯形能作( )"
+  },
+  {
+    "id": 464,
+    "type": "text",
+    "page_idx": 26,
+    "text": "A. 无数个"
+  },
+  {
+    "id": 465,
+    "type": "text",
+    "page_idx": 26,
+    "text": "B.2 个"
+  },
+  {
+    "id": 466,
+    "type": "text",
+    "page_idx": 26,
+    "text": "C.1 个"
+  },
+  {
+    "id": 467,
+    "type": "text",
+    "page_idx": 26,
+    "text": "D.0 个"
+  },
+  {
+    "id": 468,
+    "type": "text",
+    "page_idx": 26,
+    "text": "4. 已知梯形的两个对角分别是  $78^{\\circ}$  和  $120^{\\circ}$ , 则另两个角分别是( )"
+  },
+  {
+    "id": 469,
+    "type": "text",
+    "page_idx": 26,
+    "text": "A.  $78^{\\circ}$  或  $120^{\\circ}$"
+  },
+  {
+    "id": 470,
+    "type": "text",
+    "page_idx": 26,
+    "text": "B.  $102^{\\circ}$  或  $60^{\\circ}$"
+  },
+  {
+    "id": 471,
+    "type": "text",
+    "page_idx": 26,
+    "text": "C.  $120^{\\circ}$  或  $78^{\\circ}$"
+  },
+  {
+    "id": 472,
+    "type": "text",
+    "page_idx": 26,
+    "text": "D.  $60^{\\circ}$  或  $120^{\\circ}$"
+  },
+  {
+    "id": 473,
+    "type": "text",
+    "page_idx": 26,
+    "text": "5. 梯形的对角线互相垂直,其中一条对角线长是 5 厘米,另一条对角线等于 4 厘米,那么这个"
+  },
+  {
+    "id": 474,
+    "type": "text",
+    "page_idx": 26,
+    "text": "梯形的面积是（）A. 20"
+  },
+  {
+    "id": 475,
+    "type": "text",
+    "page_idx": 26,
+    "text": "B. 10"
+  },
+  {
+    "id": 476,
+    "type": "text",
+    "page_idx": 26,
+    "text": "C. 9"
+  },
+  {
+    "id": 477,
+    "type": "text",
+    "page_idx": 26,
+    "text": "D. 40"
+  },
+  {
+    "id": 478,
+    "type": "text",
+    "page_idx": 26,
+    "text": "6. 下列说法正确的个数有 ( )"
+  },
+  {
+    "id": 479,
+    "type": "text",
+    "text": "(1) 在同一底边上的两个内角相等的梯形是等腰梯形",
+    "page_idx": 26
+  },
+  {
+    "id": 480,
+    "type": "text",
+    "text": "(2)对角线相等的梯形是等腰梯形",
+    "page_idx": 26
+  },
+  {
+    "id": 481,
+    "type": "text",
+    "text": "(3) 等腰梯形既是轴对称图形, 又是中心对称图形",
+    "page_idx": 26
+  },
+  {
+    "id": 482,
+    "type": "text",
+    "text": "(4) 一组对边平行, 另一组对边相等的四边形一定是等腰梯形",
+    "page_idx": 26
+  },
+  {
+    "id": 483,
+    "type": "text",
+    "page_idx": 26,
+    "text": "A. 4 个"
+  },
+  {
+    "id": 484,
+    "type": "text",
+    "page_idx": 26,
+    "text": "B. 3 个"
+  },
+  {
+    "id": 485,
+    "type": "text",
+    "page_idx": 26,
+    "text": "C. 2 个"
+  },
+  {
+    "id": 486,
+    "type": "text",
+    "page_idx": 26,
+    "text": "D. 1 个"
+  },
+  {
+    "id": 487,
+    "type": "text",
+    "page_idx": 26,
+    "text": "三、解答题"
+  },
+  {
+    "id": 488,
+    "type": "text",
+    "page_idx": 26,
+    "text": "1. 如图所示,在等腰梯形  $A B C D$  中,  $A D / / B C, A B = C D = A D, A C = B C$ ."
+  },
+  {
+    "id": 489,
+    "type": "text",
+    "text": "(1) 图中有多少个等腰三角形?请你找出来",
+    "page_idx": 26
+  },
+  {
+    "id": 490,
+    "type": "text",
+    "text": "(2) 求梯形各个角的度数",
+    "page_idx": 26
+  },
+  {
+    "id": 491,
+    "type": "image",
+    "page_idx": 26,
+    "img_path": "images/d9a4dd310840c070b4397c4d9646641f707866449293d6aaddda954e88af836b.jpg"
+  },
+  {
+    "id": 492,
+    "type": "text",
+    "page_idx": 26,
+    "text": "2. 如图所示,在  $\\triangle ABC$  中,  $AB = AC, BD \\sim CE$ , 分别平分  $\\angle B \\sim \\angle C$ , 求证: 四边形  $EBCD$  是等腰梯形"
+  },
+  {
+    "id": 493,
+    "type": "image",
+    "page_idx": 26,
+    "img_path": "images/ce3dffb844f47f75d26a7c07e3b4b0b1c478bd89f3f26e0c081c2ddb515a02f6.jpg"
+  },
+  {
+    "id": 494,
+    "type": "text",
+    "page_idx": 27,
+    "text": "3. 如图所示,在等腰梯形  $ABCD$  中,  $AD \\parallel BC$ ,  $AB = CD$ , 点  $E$  是梯形外一点, 且  $EA = ED$ . 求证:  $EB = EC$"
+  },
+  {
+    "id": 495,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/e46034d24b899bad4616bbe89faaf4a59890e3701d1ffbac64241c035d965bda.jpg"
+  },
+  {
+    "id": 496,
+    "type": "text",
+    "page_idx": 27,
+    "text": "4. 已知: 线段  $a, b, c$ , 求作: 等腰梯形  $ABCD$ , 使其上底为  $a$ , 下底是  $b$ , 腰长为  $c$"
+  },
+  {
+    "id": 497,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/1c61a382cc3b5acbbeb88772f684d419903dfc2e189472c8de24acd1a2170276.jpg"
+  },
+  {
+    "id": 498,
+    "type": "text",
+    "page_idx": 27,
+    "text": "5. 已知:如图,在  $Rt\\triangle ABC$  中,  $D$  是斜边  $AB$  的中点,  $DF // BC, EF // DC$ , 交  $BC$  的延长线于"
+  },
+  {
+    "id": 499,
+    "type": "text",
+    "page_idx": 27,
+    "text": "点  $E$  ，求证：四边形BEFD是等腰梯形"
+  },
+  {
+    "id": 500,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/c5391661c09a2e677506a42c48b613cc182bd372a4be4fc6b47d0915531eff8e.jpg"
+  },
+  {
+    "id": 501,
+    "type": "text",
+    "page_idx": 27,
+    "text": "B组"
+  },
+  {
+    "id": 502,
+    "type": "text",
+    "page_idx": 27,
+    "text": "1. 已知: 如图, 点  $E$  在正方形  $ABCD$  的对角线上,  $CF \\perp BE$  交  $BD$  于点  $G$ ,  $F$  是垂足. 求证:"
+  },
+  {
+    "id": 503,
+    "type": "text",
+    "page_idx": 28,
+    "text": "四边形  $ABGE$  是等腰梯形"
+  },
+  {
+    "id": 504,
+    "type": "image",
+    "page_idx": 28,
+    "img_path": "images/f3c20e2f340f1c60881be1a3a23ede546e4abc1c8d9c7d14276c302b3d84bb63.jpg"
+  },
+  {
+    "id": 505,
+    "type": "text",
+    "page_idx": 28,
+    "text": "2. 如图所示,在梯形  $ABCD$  中,  $\\angle B = 90^\\circ$ ,  $AB = 14$  厘米,  $AD = 18$  厘米,  $BC = 21$  厘米, 点  $P$  从点  $A$  开始沿  $AD$  边向点  $D$  以 1 厘米/秒的速度移动, 点  $Q$  从点  $C$  开始沿  $CB$  向点  $B$  以 2 厘米/秒的速度移动, 如果点  $P \\sim Q$  分别从两点同时出发, 多少秒后, 梯形  $PBQD$  是等腰梯形"
+  },
+  {
+    "id": 506,
+    "type": "image",
+    "page_idx": 28,
+    "img_path": "images/e5ed30f2c257807126a452cf6c17061d84d20097f682871613b1b420110e8787.jpg"
+  },
+  {
+    "id": 507,
+    "type": "text",
+    "page_idx": 28,
+    "text": "22.6(2) 三角形、梯形的中位线"
+  },
+  {
+    "id": 508,
+    "type": "text",
+    "page_idx": 28,
+    "text": "A组"
+  },
+  {
+    "id": 509,
+    "type": "text",
+    "page_idx": 28,
+    "text": "一、填空题"
+  },
+  {
+    "id": 510,
+    "type": "text",
+    "text": "1. 梯形的两条对角线的中点的连线长为 7 ,上底长为 8 ,则下底长为",
+    "page_idx": 28
+  },
+  {
+    "id": 511,
+    "type": "text",
+    "text": "2. 若等腰梯形的腰长是 5 厘米,中位线是 6 厘米,则它的周长是_____厘米",
+    "page_idx": 28
+  },
+  {
+    "id": 512,
+    "type": "text",
+    "text": "3. 若梯形的一底长是 14 厘米中位线长是 16 厘米,则另一底长为_____厘米",
+    "page_idx": 28
+  },
+  {
+    "id": 513,
+    "type": "text",
+    "text": "4. 已知梯形中位线长是 5 厘米,高是 4 厘米,则梯形的面积是",
+    "page_idx": 28
+  },
+  {
+    "id": 514,
+    "type": "text",
+    "text": "5. 等腰梯形的中位线长 3.6 厘米,一腰垂直对角线,一底角为  $60^{\\circ}$ , 则梯形的周长为",
+    "page_idx": 28
+  },
+  {
+    "id": 515,
+    "type": "text",
+    "text": "6. 已知直角梯形的一条对角线把梯形分成一个直角三角形和一个边长为 4 厘米的等边三角",
+    "page_idx": 28
+  },
+  {
+    "id": 516,
+    "type": "text",
+    "page_idx": 29,
+    "text": "形,则此梯形的中位线长为 厘米"
+  },
+  {
+    "id": 517,
+    "type": "text",
+    "text": "7. 一个梯形的上底长  $4cm$ ，下底长  $6cm$ ，则其中位线长为 ______ cm",
+    "page_idx": 29
+  },
+  {
+    "id": 518,
+    "type": "text",
+    "text": "8. 一个梯形的上底长  $10 \\mathrm{~cm}$ , 中位线长  $16 \\mathrm{~cm}$ , 则其下底长为",
+    "page_idx": 29
+  },
+  {
+    "id": 519,
+    "type": "text",
+    "text": "9. 已知梯形的中位线长为  $6cm$ ，高为  $8cm$ ，则该梯形的面积为 ________ cm²",
+    "page_idx": 29
+  },
+  {
+    "id": 520,
+    "type": "text",
+    "text": "10. 已知等腰梯形的周长为  $80 \\mathrm{~cm}$ , 中位线与腰长相等, 则它的中位线长",
+    "page_idx": 29
+  },
+  {
+    "id": 521,
+    "type": "text",
+    "text": "11. 已知梯形的面积  $12cm^2$ ，底边上的高是  $4cm$ ，则该梯形中位线长是 ______ cm",
+    "page_idx": 29
+  },
+  {
+    "id": 522,
+    "type": "text",
+    "text": "12. 一个梯形中位线的长是高的 2 倍, 面积是  $18cm^2$ , 则这个梯形的高是",
+    "page_idx": 29
+  },
+  {
+    "id": 523,
+    "type": "text",
+    "text": "13. 梯形的中位线长为  $15 \\mathrm{~cm}$ , 一条对角线将中位线分成  $1: 2$  两部分, 则梯形两底的长分别为",
+    "page_idx": 29
+  },
+  {
+    "id": 524,
+    "type": "text",
+    "text": "14. 等腰梯形的一个内角为  $45^{\\circ}$ , 高为  $h$ , 中位线是  $m$ , 则其两底长分别为",
+    "page_idx": 29
+  },
+  {
+    "id": 525,
+    "type": "text",
+    "text": "15. 直角梯形一腰与下底都等于 4 ,且它们的夹角为  $60^{\\circ}$ , 则其中位线长为",
+    "page_idx": 29
+  },
+  {
+    "id": 526,
+    "type": "text",
+    "page_idx": 29,
+    "text": "二、选择题"
+  },
+  {
+    "id": 527,
+    "type": "text",
+    "page_idx": 29,
+    "text": "1. 若顺次联结四边形各边中点组成的四边形是菱形,那么原四边形的对角线( )"
+  },
+  {
+    "id": 528,
+    "type": "text",
+    "page_idx": 29,
+    "text": "A. 互相平分"
+  },
+  {
+    "id": 529,
+    "type": "text",
+    "page_idx": 29,
+    "text": "B.互相垂直"
+  },
+  {
+    "id": 530,
+    "type": "text",
+    "page_idx": 29,
+    "text": "C.相等"
+  },
+  {
+    "id": 531,
+    "type": "text",
+    "page_idx": 29,
+    "text": "D.相等且互相平分"
+  },
+  {
+    "id": 532,
+    "type": "text",
+    "page_idx": 29,
+    "text": "2. 顺次联结下列各四边形中点所得的四边形是矩形的是( )"
+  },
+  {
+    "id": 533,
+    "type": "text",
+    "page_idx": 29,
+    "text": "A.等腰梯形"
+  },
+  {
+    "id": 534,
+    "type": "text",
+    "page_idx": 29,
+    "text": "B.矩形"
+  },
+  {
+    "id": 535,
+    "type": "text",
+    "page_idx": 29,
+    "text": "C.平行四边形"
+  },
+  {
+    "id": 536,
+    "type": "text",
+    "page_idx": 29,
+    "text": "D.菱形或对角线互相垂直的四边形"
+  },
+  {
+    "id": 537,
+    "type": "text",
+    "page_idx": 29,
+    "text": "3. 已知在直角梯形中,上底和斜腰长均为  $a$ , 且斜腰和下底的夹角是  $60^{\\circ}$ , 则梯形中位线长为( )"
+  },
+  {
+    "id": 538,
+    "type": "text",
+    "page_idx": 29,
+    "text": "A.  $\\frac{3}{4} a$"
+  },
+  {
+    "id": 539,
+    "type": "text",
+    "page_idx": 29,
+    "text": "B. a"
+  },
+  {
+    "id": 540,
+    "type": "text",
+    "page_idx": 29,
+    "text": "C.  $\\frac{5}{4} a$"
+  },
+  {
+    "id": 541,
+    "type": "text",
+    "page_idx": 29,
+    "text": "D.以上都不对"
+  },
+  {
+    "id": 542,
+    "type": "text",
+    "page_idx": 29,
+    "text": "4. 如果梯形的中位线长为  $20$ , 它被一条对角线分成两段的差为 5 , 则两底长为( )"
+  },
+  {
+    "id": 543,
+    "type": "text",
+    "page_idx": 29,
+    "text": "A.15和25"
+  },
+  {
+    "id": 544,
+    "type": "text",
+    "page_idx": 29,
+    "text": "B.15 和 30"
+  },
+  {
+    "id": 545,
+    "type": "text",
+    "page_idx": 29,
+    "text": "C.20和30"
+  },
+  {
+    "id": 546,
+    "type": "text",
+    "page_idx": 29,
+    "text": "D.以上都不对"
+  },
+  {
+    "id": 547,
+    "type": "text",
+    "page_idx": 30,
+    "text": "5. 如果等腰梯形底角为  $45^{\\circ}$ , 高等于上底, 那么梯形的中位线和高的比为 ( )"
+  },
+  {
+    "id": 548,
+    "type": "text",
+    "page_idx": 30,
+    "text": "A.  $1: 2$"
+  },
+  {
+    "id": 549,
+    "type": "text",
+    "page_idx": 30,
+    "text": "B.  $2: 1$"
+  },
+  {
+    "id": 550,
+    "type": "text",
+    "page_idx": 30,
+    "text": "C.  $1: 3$"
+  },
+  {
+    "id": 551,
+    "type": "text",
+    "page_idx": 30,
+    "text": "D.  $2: 3$"
+  },
+  {
+    "id": 552,
+    "type": "text",
+    "page_idx": 30,
+    "text": "6. 若等腰梯形两底角为  $30^{\\circ}$ , 腰长为 8 厘米, 高和上底相等, 那么梯形中位线长为 ( )"
+  },
+  {
+    "id": 553,
+    "type": "text",
+    "page_idx": 30,
+    "text": "A.  $8 \\sqrt{3}$  厘米"
+  },
+  {
+    "id": 554,
+    "type": "text",
+    "page_idx": 30,
+    "text": "B. 10 厘米"
+  },
+  {
+    "id": 555,
+    "type": "text",
+    "page_idx": 30,
+    "text": "C.  $(4\\sqrt{3} + 4)$  厘米"
+  },
+  {
+    "id": 556,
+    "type": "text",
+    "page_idx": 30,
+    "text": "D.  $16 \\sqrt{3}$  厘米"
+  },
+  {
+    "id": 557,
+    "type": "text",
+    "page_idx": 30,
+    "text": "三、解答题"
+  },
+  {
+    "id": 558,
+    "type": "text",
+    "page_idx": 30,
+    "text": "1. 如图所示,已知  $CD$  是  $\\triangle ABC$  的高, 点  $E 、 F 、 G$  分别是  $BC 、 AB 、 AC$  上的中点, 求证:"
+  },
+  {
+    "id": 559,
+    "type": "equation",
+    "page_idx": 30,
+    "text": "$$\nF G = D E\n$$"
+  },
+  {
+    "id": 560,
+    "type": "image",
+    "page_idx": 30,
+    "img_path": "images/a51410b889a080cae2b2b3f4a34835daa804165346313a6413f239f100a3a11d.jpg"
+  },
+  {
+    "id": 561,
+    "type": "text",
+    "page_idx": 30,
+    "text": "2. 如图所示,在梯形  $ABCD$  中,  $\\angle ABC = 60^{\\circ}$ , 腰  $AB$  长为  $10$  厘米, 中位线  $EF$  长为  $18$  厘米, 求梯形  $ABCD$  的面积"
+  },
+  {
+    "id": 562,
+    "type": "image",
+    "page_idx": 30,
+    "img_path": "images/af328908fe958a810d019f0dbc20b10077fe468ae27e17dce8c27adb84293a83.jpg"
+  },
+  {
+    "id": 563,
+    "type": "text",
+    "page_idx": 30,
+    "text": "3. 如图所示,在梯形  $ABCD$  中,  $AB // DC, AB + CD = BC$ , 点  $E$  是腰  $AD$  的中点, 求证:"
+  },
+  {
+    "id": 564,
+    "type": "text",
+    "page_idx": 30,
+    "text": "$BE \\perp EC$ , 且  $BE$  平分  $\\angle ABC$"
+  },
+  {
+    "id": 565,
+    "type": "image",
+    "page_idx": 30,
+    "img_path": "images/5615da8a907edf767bd67747aca03bba93f95f85b299468fffe3bcab692bbce0.jpg"
+  },
+  {
+    "id": 566,
+    "type": "text",
+    "page_idx": 31,
+    "text": "4. 如图所示,在梯形  $ABCD$  中,  $AD // BC$ ,  $AB = CD$ ,  $EF$  是中位线,  $\\angle ABC = 60^\\circ$ ,  $BD$  平分"
+  },
+  {
+    "id": 567,
+    "type": "text",
+    "page_idx": 31,
+    "text": "$\\angle ABC, EF = 12$  厘米求梯形  $ABCD$  的面积"
+  },
+  {
+    "id": 568,
+    "type": "image",
+    "page_idx": 31,
+    "img_path": "images/71643ca3acec64a24edccfc4539ff136422d0622c9c6037c98caa5182c45a970.jpg"
+  },
+  {
+    "id": 569,
+    "type": "text",
+    "page_idx": 31,
+    "text": "5如图，等腰梯形ABCD，AD//BC,EF是中位线，且  $EF = 15cm,\\angle ABC = 60^{\\circ},BD$  平分 $\\angle ABC$  ，求梯形ABCD的周长."
+  },
+  {
+    "id": 570,
+    "type": "image",
+    "page_idx": 31,
+    "img_path": "images/45adc21747238f74dd9d88c74cd088392f4fe0c42da08c6223a1e3972d31a028.jpg"
+  },
+  {
+    "id": 571,
+    "type": "text",
+    "page_idx": 31,
+    "text": "B组"
+  },
+  {
+    "id": 572,
+    "type": "text",
+    "page_idx": 31,
+    "text": "1. 如图，在等腰梯形ABCD中，AB  $\\parallel$  DC，CG⊥AB于点G，对角线AC⊥BC于点O，EF是中位线．求证：  $CG = EF$  ："
+  },
+  {
+    "id": 573,
+    "type": "image",
+    "page_idx": 31,
+    "img_path": "images/1a8d87880737cd5cee19d0f524bc9f1d170f40dd1cd6706d69700fb54012d29e.jpg"
+  },
+  {
+    "id": 574,
+    "type": "text",
+    "page_idx": 32,
+    "text": "2. 如图所示,在梯形  $ABCD$  中,  $AB \\parallel DC$ , 点  $M 、 N$  分别是两对角线  $BD 、 AC$  的中点, 求证"
+  },
+  {
+    "id": 575,
+    "type": "equation",
+    "page_idx": 32,
+    "text": "$$\nM N / / D C _ {\\text {且}} M N = \\frac {1}{2} (D C - A B)\n$$"
+  },
+  {
+    "id": 576,
+    "type": "image",
+    "page_idx": 32,
+    "img_path": "images/a9205606642a87a30578c8ca88331230eb581b548933e5bdca040ebe8f168855.jpg"
+  },
+  {
+    "id": 577,
+    "type": "text",
+    "page_idx": 32,
+    "text": "22.7平面向量"
+  },
+  {
+    "id": 578,
+    "type": "text",
+    "page_idx": 32,
+    "text": "A组"
+  },
+  {
+    "id": 579,
+    "type": "text",
+    "page_idx": 32,
+    "text": "概念回顾"
+  },
+  {
+    "id": 580,
+    "type": "text",
+    "text": "(1) 有向线段: 具有方向的线段叫做有向线段. 三要素:  $\\_$  、  $\\_$  、  $\\_$",
+    "page_idx": 32
+  },
+  {
+    "id": 581,
+    "type": "text",
+    "text": "(2) 向量的概念: 既有____又有____的量叫做向量.",
+    "page_idx": 32
+  },
+  {
+    "id": 582,
+    "type": "text",
+    "text": "(3) 向量的表示方法: (1) 图形表示 (如图); (2) 符号表示: 用字母",
+    "page_idx": 32
+  },
+  {
+    "id": 583,
+    "type": "text",
+    "page_idx": 32,
+    "text": "等表示; 或用有向线段的起点与终点字母表示, 如  $A B$ ;"
+  },
+  {
+    "id": 584,
+    "type": "text",
+    "text": "(4) 向量的长度: 向量  $AB$  的大小 (长度) 称为向量的 , 记作  $\\left|AB\\right|$ .",
+    "page_idx": 32
+  },
+  {
+    "id": 585,
+    "type": "text",
+    "text": "(5) 平行向量: 方向相同或相反的向量叫做____向量; 0 与任意向量平行.",
+    "page_idx": 32
+  },
+  {
+    "id": 586,
+    "type": "text",
+    "text": "(6) 相等向量: 长度相等且方向相同的向量叫做____向量. 向量  $a$  与  $b$  相等, 记作  $a = b$ .",
+    "page_idx": 32
+  },
+  {
+    "id": 587,
+    "type": "text",
+    "text": "(7) 相反向量: 长度相等且方向相反的向量叫做____向量. 向量  $a$  的相反向量记为  $-a$ .",
+    "page_idx": 32
+  },
+  {
+    "id": 588,
+    "type": "text",
+    "page_idx": 32,
+    "text": "一、填空题"
+  },
+  {
+    "id": 589,
+    "type": "text",
+    "text": "1. 已知  $a \\nmid b$  为非零向量,且  $a$  与  $b$  不平行,若  $c / / a$ ,则  $c$  与  $b$  必定",
+    "page_idx": 32
+  },
+  {
+    "id": 590,
+    "type": "text",
+    "text": "2. 在平行四边形  $ABCD$  中, 写出所有与  $AB$  平行的向量",
+    "page_idx": 32
+  },
+  {
+    "id": 591,
+    "type": "text",
+    "text": "3. 在四边形  $ABCD$  中, 如果  $AB = DC$ , 那么与  $CB$  相等的向量是",
+    "page_idx": 32
+  },
+  {
+    "id": 592,
+    "type": "image",
+    "page_idx": 32,
+    "img_path": "images/86209ee053456df5936de03267264ab75bd9897a8329ffaadaeb286af5be9db2.jpg"
+  },
+  {
+    "id": 593,
+    "type": "text",
+    "text": "4.已知直角坐标平面内两点  $A(-2,1),B(2,3)$  则  $\\left|AB\\right| =$",
+    "page_idx": 33
+  },
+  {
+    "id": 594,
+    "type": "text",
+    "text": "5. 如图,在  $\\square A B C D$  中,与  $A B$  相等的向量 ,与  $B C$  平行的向量",
+    "page_idx": 33
+  },
+  {
+    "id": 595,
+    "type": "text",
+    "text": "6.如图，点  $B$  是线段  $AC$  上的点，则以点  $A\\setminus B\\setminus C$  为起点的向量有",
+    "page_idx": 33
+  },
+  {
+    "id": 596,
+    "type": "text",
+    "page_idx": 33,
+    "text": "二、选择题"
+  },
+  {
+    "id": 597,
+    "type": "text",
+    "page_idx": 33,
+    "text": "1. 若  $a, b$  是两个不平行的非零向量，并且  $a \\parallel c, b \\parallel c$ ，则向量  $c$  等于（ ）"
+  },
+  {
+    "id": 598,
+    "type": "text",
+    "page_idx": 33,
+    "text": "A. a"
+  },
+  {
+    "id": 599,
+    "type": "text",
+    "page_idx": 33,
+    "text": "B.  $b$"
+  },
+  {
+    "id": 600,
+    "type": "text",
+    "page_idx": 33,
+    "text": "C. 0"
+  },
+  {
+    "id": 601,
+    "type": "text",
+    "page_idx": 33,
+    "text": "D.  $c$  不存在"
+  },
+  {
+    "id": 602,
+    "type": "text",
+    "page_idx": 33,
+    "text": "2. 四边形  $ABCD$  中, 若向量  $AB$  与  $CD$  是平行向量, 则四边形  $ABCD$  是( )"
+  },
+  {
+    "id": 603,
+    "type": "text",
+    "page_idx": 33,
+    "text": "A.平行四边形"
+  },
+  {
+    "id": 604,
+    "type": "text",
+    "page_idx": 33,
+    "text": "B.梯形"
+  },
+  {
+    "id": 605,
+    "type": "text",
+    "page_idx": 33,
+    "text": "C.平行四边形或梯形"
+  },
+  {
+    "id": 606,
+    "type": "text",
+    "page_idx": 33,
+    "text": "D.不是平行四边形,也不是梯形"
+  },
+  {
+    "id": 607,
+    "type": "text",
+    "page_idx": 33,
+    "text": "3. 如图所示,在圆  $O$  中,向量  $O B \\cdot O C \\cdot A O$  是( )"
+  },
+  {
+    "id": 608,
+    "type": "text",
+    "page_idx": 33,
+    "text": "A.有相同方向的向量"
+  },
+  {
+    "id": 609,
+    "type": "text",
+    "page_idx": 33,
+    "text": "B.单位向量"
+  },
+  {
+    "id": 610,
+    "type": "text",
+    "page_idx": 33,
+    "text": "C.相等的向量"
+  },
+  {
+    "id": 611,
+    "type": "text",
+    "page_idx": 33,
+    "text": "D.模相等的向量"
+  },
+  {
+    "id": 612,
+    "type": "text",
+    "page_idx": 33,
+    "text": "4. 下列说法不正确的是( )"
+  },
+  {
+    "id": 613,
+    "type": "text",
+    "page_idx": 33,
+    "text": "A.相等的向量都平行"
+  },
+  {
+    "id": 614,
+    "type": "text",
+    "page_idx": 33,
+    "text": "B.平行的向量都相等或相反"
+  },
+  {
+    "id": 615,
+    "type": "text",
+    "page_idx": 33,
+    "text": "C.相反的向量都平行"
+  },
+  {
+    "id": 616,
+    "type": "text",
+    "page_idx": 33,
+    "text": "D.不相等的向量就不平行"
+  },
+  {
+    "id": 617,
+    "type": "text",
+    "page_idx": 33,
+    "text": "5. 下列命题中,正确命题的个数有 (   )"
+  },
+  {
+    "id": 618,
+    "type": "text",
+    "page_idx": 33,
+    "text": "若  $\\left|a\\right| = \\left|b\\right|$  则  $a = b$"
+  },
+  {
+    "id": 619,
+    "type": "text",
+    "page_idx": 33,
+    "text": "$② \\left| A B \\right| = \\left| B A \\right|$"
+  },
+  {
+    "id": 620,
+    "type": "text",
+    "page_idx": 33,
+    "text": "$③$  若  $a / / b,b\\parallel c,$  则  $a / / c$ $④$  若  $a / / b,$  则  $a$  、  $b$  的方向相同或相反"
+  },
+  {
+    "id": 621,
+    "type": "text",
+    "page_idx": 33,
+    "text": "A. 4 个"
+  },
+  {
+    "id": 622,
+    "type": "text",
+    "page_idx": 33,
+    "text": "B. 3 个"
+  },
+  {
+    "id": 623,
+    "type": "text",
+    "page_idx": 33,
+    "text": "C. 2 个"
+  },
+  {
+    "id": 624,
+    "type": "text",
+    "page_idx": 33,
+    "text": "D. 1 个"
+  },
+  {
+    "id": 625,
+    "type": "text",
+    "page_idx": 33,
+    "text": "三、解答题"
+  },
+  {
+    "id": 626,
+    "type": "text",
+    "page_idx": 33,
+    "text": "1. 设由一点  $O$  向东行走6米, 然后再向北行走6米, 终点为  $P$ , 求  $OP$  的长度和方向"
+  },
+  {
+    "id": 627,
+    "type": "text",
+    "page_idx": 33,
+    "text": "2. 判断下列命题是否正确，并说明理由"
+  },
+  {
+    "id": 628,
+    "type": "text",
+    "page_idx": 33,
+    "text": "(1) 向量就是有向线段"
+  },
+  {
+    "id": 629,
+    "type": "text",
+    "page_idx": 33,
+    "text": "(2) 若  $a \\parallel b, b \\parallel c$ , 则  $a \\parallel c$"
+  },
+  {
+    "id": 630,
+    "type": "image",
+    "page_idx": 33,
+    "img_path": "images/6698c93420cc6115c07d550bf72afad2dd935e7955744ad6af73e11e180cfaa1.jpg"
+  },
+  {
+    "id": 631,
+    "type": "text",
+    "page_idx": 34,
+    "text": "(3) 若  $a = b, b = c$ ，则  $a = c$"
+  },
+  {
+    "id": 632,
+    "type": "text",
+    "page_idx": 34,
+    "text": "(4) 非零向量  $AB$  与  $BA$  是平行向量"
+  },
+  {
+    "id": 633,
+    "type": "text",
+    "page_idx": 34,
+    "text": "3. 如图所示,  $D 、 E 、 F$  分别为  $\\triangle ABC$  三边中点"
+  },
+  {
+    "id": 634,
+    "type": "text",
+    "text": "(1)找出与  $EF$  平行的向量",
+    "page_idx": 34
+  },
+  {
+    "id": 635,
+    "type": "text",
+    "text": "(2) 找出与  $DE$  相等的向量",
+    "page_idx": 34
+  },
+  {
+    "id": 636,
+    "type": "text",
+    "text": "(3)找出与  $DF$  模相等的向量",
+    "page_idx": 34
+  },
+  {
+    "id": 637,
+    "type": "image",
+    "page_idx": 34,
+    "img_path": "images/a658e3e40efec17ddc9aacd00b6fb24dbccb1b2752b351f43aa76a82d763d4db.jpg"
+  },
+  {
+    "id": 638,
+    "type": "text",
+    "page_idx": 34,
+    "text": "B组"
+  },
+  {
+    "id": 639,
+    "type": "text",
+    "page_idx": 34,
+    "text": "1. 用有向线段(比例尺选用  $1:100000$  ) 表示两个点的相对位置"
+  },
+  {
+    "id": 640,
+    "type": "text",
+    "text": "(1) 点  $A$  在点  $B$  的南偏西  $30^{\\circ}$  的 2 千米处;",
+    "page_idx": 34
+  },
+  {
+    "id": 641,
+    "type": "text",
+    "text": "(2) 点  $P$  在点  $Q$  的东北方向 3 千米处",
+    "page_idx": 34
+  },
+  {
+    "id": 642,
+    "type": "text",
+    "page_idx": 34,
+    "text": "2. 如图所示,  $O$  为正六边形  $A B C D E F$  的对称中心, 完成下列各题:"
+  },
+  {
+    "id": 643,
+    "type": "text",
+    "text": "(1) 与  $AB \\subset CD EF$  相等的向量",
+    "page_idx": 34
+  },
+  {
+    "id": 644,
+    "type": "text",
+    "text": "(2) 与  $AO \\cdot AF \\cdot OB$  互为相反的向量",
+    "page_idx": 34
+  },
+  {
+    "id": 645,
+    "type": "text",
+    "text": "(3)与  ${EF}$  平行的向量",
+    "page_idx": 34
+  },
+  {
+    "id": 646,
+    "type": "image",
+    "page_idx": 34,
+    "img_path": "images/ddf04a0a71cdd64d075bf3b559a3969c2dcb01e7da31c0c446dc578415484da1.jpg"
+  },
+  {
+    "id": 647,
+    "type": "text",
+    "page_idx": 34,
+    "text": "3.如图，将一个向量  $AB$  放在平面直角坐标系内．若它的起点A在原点，终点B在直线"
+  },
+  {
+    "id": 648,
+    "type": "text",
+    "page_idx": 35,
+    "text": "$y = x$  ，  $y = -x + 2$  的交点上，则"
+  },
+  {
+    "id": 649,
+    "type": "text",
+    "text": "(1) 求出它的终点 B 的坐标;",
+    "page_idx": 35
+  },
+  {
+    "id": 650,
+    "type": "text",
+    "text": "(2) 求出  $|AB|$ ;",
+    "page_idx": 35
+  },
+  {
+    "id": 651,
+    "type": "text",
+    "text": "(3) 在平面直角坐标系中分别画出一个与  $AB$  相等、相反、模相等的向量，并标出它们的坐标起点、终点所在的坐标.",
+    "page_idx": 35
+  },
+  {
+    "id": 652,
+    "type": "image",
+    "page_idx": 35,
+    "img_path": "images/50711934415289fb604a956af59b5a1f835b0eb3299cbc47e644e995ebeae7fe.jpg"
+  },
+  {
+    "id": 653,
+    "type": "text",
+    "page_idx": 36,
+    "text": "22.8(2) 平面向量的加法"
+  },
+  {
+    "id": 654,
+    "type": "text",
+    "page_idx": 36,
+    "text": "A组"
+  },
+  {
+    "id": 655,
+    "type": "text",
+    "page_idx": 36,
+    "text": "一、填空题"
+  },
+  {
+    "id": 656,
+    "type": "text",
+    "page_idx": 36,
+    "text": "1. 多个向量的加法也可以用向量的________法则"
+  },
+  {
+    "id": 657,
+    "type": "text",
+    "page_idx": 36,
+    "text": "2.  $OA + OC + BO + CO =$"
+  },
+  {
+    "id": 658,
+    "type": "text",
+    "page_idx": 36,
+    "text": "3. 等边  $\\triangle ABC$  的中心为  $O$ , 则  $AO + BO + CO =$"
+  },
+  {
+    "id": 659,
+    "type": "text",
+    "page_idx": 36,
+    "text": "4. 一条渔船距对岸 4 千米现以 2 千米/时的速度向垂直于对岸的方向划去, 到达岸时, 船的实际航程为 8 千米, 则河水的流速为 _______ 千米/时"
+  },
+  {
+    "id": 660,
+    "type": "text",
+    "page_idx": 36,
+    "text": "5. 叫做零向量"
+  },
+  {
+    "id": 661,
+    "type": "text",
+    "page_idx": 36,
+    "text": "6. 向量加法的交换律用符号表示为 ,结合律用符号表示为"
+  },
+  {
+    "id": 662,
+    "type": "text",
+    "page_idx": 36,
+    "text": "7. 如图,已知五边形  $A B C D E$ , 适当选用它的几条边作向量, 把下列向量用所作的向量的关系式表示出来"
+  },
+  {
+    "id": 663,
+    "type": "text",
+    "page_idx": 36,
+    "text": "(1) \\(AC = \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_\n(2) \\(BE = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\)\n(3) \\(CE = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\)\n(4) \\(DE = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\)\n(5) \\(AE = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\)\n(6) \\(BD = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\)\n(7) \\(BC = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\)\n(8)"
+  },
+  {
+    "id": 664,
+    "type": "text",
+    "page_idx": 36,
+    "text": "8. 如图,梯形  $A B C D$  中,  $A D / / B C$ , 过  $D$  作  $D E / / A C$  交  $B C$  的延长线于  $E$ , 在图中指出下列几个向量的和向量"
+  },
+  {
+    "id": 665,
+    "type": "text",
+    "text": "(1) \\(BD + AC + DA = \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_\n(2) AB + BC + EB = \\_\n(3) AB + BC + CD = \\_\n(4) CD + AB + CD = \\_\n(5) CD + AB + CD = \\_\n(6) CD + AB + CD = \\_\n(7) CD + CD + AB = \\_\n(8) CD + CD + CD = \\_\n(9) CD + CD + CD + AB = \\_\n(10) CD + CD + CD + CD = \\_\n(11) CD + CD + CD + CD = \\_\n(12) CD + CD + CD + CD = \\_\n(13) CD + CD + CD + CD = \\_\n(14) CD + CD + CD + CD = \\_\n(15) CD + CD + CD + CD = \\_\n(16) CD + CD + CD + CD = \\_\n(17) CD + CD + CD + CD = \\_\n(18) CD + CD + CD + CD = \\_\n(19) CD + CD + CD + CD = \\_\n(20) CD + CD + CD + CD = \\_\n(21) CD + CD + CD + CD = \\_\n(22) CD + CD + CD + CD = \\_\n(23) CD + CD + CD + CD = \\_\n(24) CD + CD + CD + CD = \\_\n(25) CD + CD + CD + CD = \\_\n(26) CD + CD + CD + CD = \\_\n(27) CD + CD + CD + CD = \\_\n(28) CD + CD + CD + CD = \\_\n(29) CD + CD + CD + CD = \\_\n(30) CD + CD + CD + CD = \\_\n(31) CD + CD + CD + CD = \\_\n(32) CD + CD + CD + CD = \\_\n(33) CD + CD + CD + CD = \\_\n(34) CD + CD + CD + CD = \\_\n(35)",
+    "page_idx": 36
+  },
+  {
+    "id": 666,
+    "type": "text",
+    "text": "(3)  $AB + BC + CD = \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ (4)$",
+    "page_idx": 36
+  },
+  {
+    "id": 667,
+    "type": "image",
+    "page_idx": 36,
+    "img_path": "images/6ea2e519470faba11013aa199e2120d9e4859b7905a78f922671e12920adb034.jpg"
+  },
+  {
+    "id": 668,
+    "type": "image",
+    "page_idx": 36,
+    "img_path": "images/9c9dbc26ec4386122d72288b292c9d9b13fd3edf272f40a2b272bad8667afe91.jpg"
+  },
+  {
+    "id": 669,
+    "type": "text",
+    "page_idx": 36,
+    "text": "二、选择题"
+  },
+  {
+    "id": 670,
+    "type": "text",
+    "page_idx": 36,
+    "text": "1. 如图所示,在平行四边形  $ABCD$  中,下列关系式正确的是( )"
+  },
+  {
+    "id": 671,
+    "type": "text",
+    "page_idx": 36,
+    "text": "A.  $OA + OB = AB$"
+  },
+  {
+    "id": 672,
+    "type": "text",
+    "page_idx": 36,
+    "text": "B.  $AB + BC = BD$"
+  },
+  {
+    "id": 673,
+    "type": "text",
+    "page_idx": 36,
+    "text": "C.  $AO + OC = CA$"
+  },
+  {
+    "id": 674,
+    "type": "text",
+    "page_idx": 36,
+    "text": "D.  $BA + BC = BD$"
+  },
+  {
+    "id": 675,
+    "type": "text",
+    "page_idx": 36,
+    "text": "2.如图所示，在三角形ABC中，点  $D\\setminus E\\setminus F$  分别是 $BC\\setminus CA\\setminus AB$  的中点，则  $AD + BE + CF$  等于( ）"
+  },
+  {
+    "id": 676,
+    "type": "text",
+    "page_idx": 36,
+    "text": "A.  $AB + AC + BC$"
+  },
+  {
+    "id": 677,
+    "type": "text",
+    "page_idx": 36,
+    "text": "B. 0"
+  },
+  {
+    "id": 678,
+    "type": "image",
+    "page_idx": 36,
+    "img_path": "images/74e32c055d9adde712ccebf324c404b2b44a09ba8ce118f4d70cb5b3f8281c38.jpg"
+  },
+  {
+    "id": 679,
+    "type": "image",
+    "page_idx": 36,
+    "img_path": "images/7656292ccdf0a02140c0297e4c11246afe73125895f3886957fcabfb8b3872bc.jpg"
+  },
+  {
+    "id": 680,
+    "type": "text",
+    "page_idx": 37,
+    "text": "C.  $AB + AC + CB$  D. 0"
+  },
+  {
+    "id": 681,
+    "type": "text",
+    "page_idx": 37,
+    "text": "3. 下列说法正确的是( )"
+  },
+  {
+    "id": 682,
+    "type": "text",
+    "page_idx": 37,
+    "text": "A.方向相同的向量,都是相等的向量"
+  },
+  {
+    "id": 683,
+    "type": "text",
+    "page_idx": 37,
+    "text": "B 模相等的向量是相等的向量"
+  },
+  {
+    "id": 684,
+    "type": "text",
+    "page_idx": 37,
+    "text": "C.方向相反的两个向量之和是零向量"
+  },
+  {
+    "id": 685,
+    "type": "text",
+    "page_idx": 37,
+    "text": "D.向量加法满足交换律"
+  },
+  {
+    "id": 686,
+    "type": "text",
+    "page_idx": 37,
+    "text": "4. 在四边形  $ABCD$  中,  $AD = BC$ , 且  $\\left|AB\\right| = \\left|AD\\right|$ , 则四边形  $ABCD$  是( )"
+  },
+  {
+    "id": 687,
+    "type": "text",
+    "page_idx": 37,
+    "text": "A.平行四边形"
+  },
+  {
+    "id": 688,
+    "type": "text",
+    "page_idx": 37,
+    "text": "B.矩形"
+  },
+  {
+    "id": 689,
+    "type": "text",
+    "page_idx": 37,
+    "text": "C.菱形"
+  },
+  {
+    "id": 690,
+    "type": "text",
+    "page_idx": 37,
+    "text": "D.梯形"
+  },
+  {
+    "id": 691,
+    "type": "text",
+    "page_idx": 37,
+    "text": "三、解答题"
+  },
+  {
+    "id": 692,
+    "type": "text",
+    "page_idx": 37,
+    "text": "1. 如图所示,  $ABCD$  是任意四边形, 边  $AD \\sim BC$  的中点分别为  $E \\sim F, AF$  的延长线上点  $G$ ,而  $F$  恰为  $AG$  的中点, 联结  $EF, BG, AC$ . 试找出"
+  },
+  {
+    "id": 693,
+    "type": "text",
+    "page_idx": 37,
+    "text": "(1) 与  $AB$  相等的向量(2) 与  $AC$  相等的向量(3) 与  $EF$  平行的向量(4) 与  $AC$  相反的向量"
+  },
+  {
+    "id": 694,
+    "type": "image",
+    "page_idx": 37,
+    "img_path": "images/d4ed3af71c8b27b81f15d4452d28b734edb886d6df72c029c6192ed3dec6dfc9.jpg"
+  },
+  {
+    "id": 695,
+    "type": "text",
+    "page_idx": 37,
+    "text": "2.如图所示，已知向量  $a\\pmb{b}\\pmb{c}$  求作向量：  $a + b + c$  ："
+  },
+  {
+    "id": 696,
+    "type": "image",
+    "page_idx": 37,
+    "img_path": "images/19d55e8c95a6c111a1ff344326192a61ca8f6348185785fb87323b405f4948a2.jpg"
+  },
+  {
+    "id": 697,
+    "type": "text",
+    "page_idx": 37,
+    "text": "3. 如图所示,在四边形  $ABCD$  中,用  $AB \\cdot BC \\cdot CD$  表示(1)  $AC$  (2)  $AD$"
+  },
+  {
+    "id": 698,
+    "type": "image",
+    "page_idx": 37,
+    "img_path": "images/a07fa744308584acaee869d1be73ce0f4850a9094dae27f6b2daeeb302d657e4.jpg"
+  },
+  {
+    "id": 699,
+    "type": "text",
+    "page_idx": 38,
+    "text": "4. 根据下列各题的条件,判断四边形  ${ABCD}$  是什么四边形"
+  },
+  {
+    "id": 700,
+    "type": "text",
+    "text": "(1)  $AD = BC$",
+    "page_idx": 38
+  },
+  {
+    "id": 701,
+    "type": "text",
+    "text": "(2)  $A D \\parallel B C$ , 且  $A B$  与  $C D$  不平行.",
+    "page_idx": 38
+  },
+  {
+    "id": 702,
+    "type": "text",
+    "page_idx": 38,
+    "text": "5.如图，已知向量  $a\\text{b}\\mathfrak{c}$  ，求作  $a + b + c$"
+  },
+  {
+    "id": 703,
+    "type": "image",
+    "page_idx": 38,
+    "img_path": "images/5c910f060c7ad83ebd172806768977e9520960186142a3adb2153b4303a8cdcd.jpg"
+  },
+  {
+    "id": 704,
+    "type": "text",
+    "page_idx": 38,
+    "text": "6. 如图,在四边形  $ABCD$  中,设  $AB = a, AD = b, BC = c$ , 用  $a \\neq c$  表示向量  $DC$ ."
+  },
+  {
+    "id": 705,
+    "type": "image",
+    "page_idx": 38,
+    "img_path": "images/639a80ca4fd7900b0ac4cbce4eb20e2bd4d815690c0800d134886cf28b7651b3.jpg"
+  },
+  {
+    "id": 706,
+    "type": "text",
+    "page_idx": 38,
+    "text": "7. 画图验证:  $AB + BC + CD + DE + EF = AF$"
+  },
+  {
+    "id": 707,
+    "type": "text",
+    "page_idx": 38,
+    "text": "B组"
+  },
+  {
+    "id": 708,
+    "type": "text",
+    "page_idx": 38,
+    "text": "1. 判断下列等式是否正确，并说明理由"
+  },
+  {
+    "id": 709,
+    "type": "text",
+    "text": "(1)  $AB + BC = AD + BC + DB$",
+    "page_idx": 38
+  },
+  {
+    "id": 710,
+    "type": "text",
+    "text": "(2)  $AB + DC + EA + ED + BC = EC + EC$",
+    "page_idx": 38
+  },
+  {
+    "id": 711,
+    "type": "text",
+    "page_idx": 39,
+    "text": "2. 如图所示, 某观测站  $C$  在城的南偏西  $20^{\\circ}$  方向上, 且  $AC = 20$  千米, 从城  $A$  出发有一条公路, 走向是南偏东  $40^{\\circ}$ , 公路上的  $B$  处有一人正沿着公路向城  $A$  走去. 走 20 千米后到达  $D$  处. 测得  $CD = 20$  千米, 这时此人距城  $A$  多少千米"
+  },
+  {
+    "id": 712,
+    "type": "image",
+    "page_idx": 39,
+    "img_path": "images/e3f66ef4174731199c790bd030743b5d6fc307d6955dba5968bf58ff0a160f87.jpg"
+  },
+  {
+    "id": 713,
+    "type": "text",
+    "page_idx": 39,
+    "text": "22.9(2) 平面向量的减法"
+  },
+  {
+    "id": 714,
+    "type": "text",
+    "page_idx": 39,
+    "text": "A组"
+  },
+  {
+    "id": 715,
+    "type": "text",
+    "page_idx": 39,
+    "text": "一、填空题"
+  },
+  {
+    "id": 716,
+    "type": "text",
+    "text": "1. 在平行四边形中  $AB - AD =$",
+    "page_idx": 39
+  },
+  {
+    "id": 717,
+    "type": "text",
+    "text": "2.化简：  $AB - AC - DB - ED =$",
+    "page_idx": 39
+  },
+  {
+    "id": 718,
+    "type": "text",
+    "text": "3. 如图所示,在正六边形  ${ABCDEF}$  中,与  ${OA} - {OB}$  相等的向量是_____.",
+    "page_idx": 39
+  },
+  {
+    "id": 719,
+    "type": "text",
+    "text": "4. 如图所示,四边形  $ABCD$  是等腰梯形,",
+    "page_idx": 39
+  },
+  {
+    "id": 720,
+    "type": "text",
+    "page_idx": 39,
+    "text": "则  $OC - \\underline{\\underline{\\mathbf{\\alpha}}} = AC - \\underline{\\underline{\\mathbf{\\alpha}}} = BC - \\underline{\\underline{\\mathbf{\\alpha}}} = DC$"
+  },
+  {
+    "id": 721,
+    "type": "image",
+    "page_idx": 39,
+    "img_path": "images/aeb1849bdcaa15dd670589055a36c881a74e0e9d0cd4c7eb7ad6932685a9ff97.jpg"
+  },
+  {
+    "id": 722,
+    "type": "text",
+    "page_idx": 39,
+    "text": "5. 四边形  $ABCD$  的对角线  $AC, BD$  相交于点  $E$ ,"
+  },
+  {
+    "id": 723,
+    "type": "text",
+    "page_idx": 39,
+    "text": "则  $BC + CD = \\_ ,AB - AC = \\_ .$"
+  },
+  {
+    "id": 724,
+    "type": "image",
+    "page_idx": 39,
+    "img_path": "images/ea2f429173a7d735fd081f82ddebd620eae54d55b90cae7d4189a69ae7694df4.jpg"
+  },
+  {
+    "id": 725,
+    "type": "text",
+    "page_idx": 39,
+    "text": "6. 已知正方形  $ABCD$  的对角线相交于点  $O$ , 若  $AO = a, BO = b$ , 则  $a + b =$  ________."
+  },
+  {
+    "id": 726,
+    "type": "equation",
+    "page_idx": 39,
+    "text": "$$\na - b = \\underline {{}}\n$$"
+  },
+  {
+    "id": 727,
+    "type": "text",
+    "text": "7. 在四边形  $ABCD$  中,  $AC = AB + AD$ , 则  $ABCD$  是",
+    "page_idx": 39
+  },
+  {
+    "id": 728,
+    "type": "text",
+    "text": "8. 化简  $(AB - AD) + (BE - DE)$  的结果是",
+    "page_idx": 39
+  },
+  {
+    "id": 729,
+    "type": "text",
+    "text": "9. 化简:  $OM - ON + MN =$",
+    "page_idx": 39
+  },
+  {
+    "id": 730,
+    "type": "text",
+    "text": "10.计算：  $AB - AC + BC =$",
+    "page_idx": 39
+  },
+  {
+    "id": 731,
+    "type": "text",
+    "text": "11. 化简:  $AB - AC + BE =$",
+    "page_idx": 40
+  },
+  {
+    "id": 732,
+    "type": "text",
+    "text": "12. 已知在梯形  $ABCD$  中,  $AD // BC$ . 写出所有与  $BC$  平行的向量",
+    "page_idx": 40
+  },
+  {
+    "id": 733,
+    "type": "text",
+    "page_idx": 40,
+    "text": "二、选择题"
+  },
+  {
+    "id": 734,
+    "type": "text",
+    "page_idx": 40,
+    "text": "1. 下列说法中正确的是( )"
+  },
+  {
+    "id": 735,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.平行向量的方向必相同"
+  },
+  {
+    "id": 736,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.和向量为零向量的两个向量必是相反向量"
+  },
+  {
+    "id": 737,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.零向量与任何向量的和向量的方向不确定"
+  },
+  {
+    "id": 738,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.两个相反向量的和向量必是零向量"
+  },
+  {
+    "id": 739,
+    "type": "text",
+    "page_idx": 40,
+    "text": "2. 四边形  $ABCD$  是等腰梯形, 则下列判断正确的是( )"
+  },
+  {
+    "id": 740,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $AC = BD$"
+  },
+  {
+    "id": 741,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $A D = B C$"
+  },
+  {
+    "id": 742,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $AB - AC = CB$"
+  },
+  {
+    "id": 743,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $AD - AB = DB$"
+  },
+  {
+    "id": 744,
+    "type": "text",
+    "page_idx": 40,
+    "text": "3. 如图所示,在  $\\triangle ABC$  中,  $AB = AC$ , 点  $D 、 E$  分别是两腰的中点则"
+  },
+  {
+    "id": 745,
+    "type": "text",
+    "page_idx": 40,
+    "text": "下列判断正确的是( )"
+  },
+  {
+    "id": 746,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $AB = AC$"
+  },
+  {
+    "id": 747,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $AB - AE = AC - AD$"
+  },
+  {
+    "id": 748,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $BC - BD = CB - CE$"
+  },
+  {
+    "id": 749,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $\\left|AB - AE\\right| = \\left|AC - AD\\right|$"
+  },
+  {
+    "id": 750,
+    "type": "text",
+    "page_idx": 40,
+    "text": "4. 在四边形  $ABCD$  中, 如果  $AB = DC$ , 且  $\\left|AB - AD\\right| = \\left|BA - BC\\right|$"
+  },
+  {
+    "id": 751,
+    "type": "text",
+    "page_idx": 40,
+    "text": "四边形  $ABCD$  是( )"
+  },
+  {
+    "id": 752,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.平行四边形"
+  },
+  {
+    "id": 753,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.矩形"
+  },
+  {
+    "id": 754,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.菱形"
+  },
+  {
+    "id": 755,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.正方形"
+  },
+  {
+    "id": 756,
+    "type": "text",
+    "page_idx": 40,
+    "text": "5. 点  $D 、 E 、 F$  分别是  $\\triangle A B C$  三边  $A B 、 B C 、 C A$  的中点, 则下列等式不成立的是 ( )"
+  },
+  {
+    "id": 757,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $FD + DA = FA$"
+  },
+  {
+    "id": 758,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $FD + DE + EF = 0$"
+  },
+  {
+    "id": 759,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $D E + D A = E C$"
+  },
+  {
+    "id": 760,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $DA + DE = DF$"
+  },
+  {
+    "id": 761,
+    "type": "text",
+    "page_idx": 40,
+    "text": "6. 在梯形  $AB \\sim BC \\sim CA$  中,  $AD // BC$ ,  $AB = CD$ , 那么下列结论中正确的是( )"
+  },
+  {
+    "id": 762,
+    "type": "text",
+    "page_idx": 40,
+    "text": "A.  $AB$  与  $DC$  是相等向量"
+  },
+  {
+    "id": 763,
+    "type": "text",
+    "page_idx": 40,
+    "text": "B.  $AC$  与  $BD$  是相等向量"
+  },
+  {
+    "id": 764,
+    "type": "text",
+    "page_idx": 40,
+    "text": "C.  $A D$  与  $C B$  是相反向量"
+  },
+  {
+    "id": 765,
+    "type": "text",
+    "page_idx": 40,
+    "text": "D.  $AD$  与  $CB$  是平行向量"
+  },
+  {
+    "id": 766,
+    "type": "image",
+    "page_idx": 40,
+    "img_path": "images/74b04ecb769da45cd0ebb529883ca113463be29218bf5fe369ea75c043f9a316.jpg"
+  },
+  {
+    "id": 767,
+    "type": "text",
+    "page_idx": 41,
+    "text": "三、解答题"
+  },
+  {
+    "id": 768,
+    "type": "text",
+    "page_idx": 41,
+    "text": "1.如图所示，已知  $a\\text{b}\\mathfrak{c}$  ，用两种方法画出向量  $a - b - c$"
+  },
+  {
+    "id": 769,
+    "type": "image",
+    "page_idx": 41,
+    "img_path": "images/52b5d0ebedf978b9570cea4d8c4aa5a45328e41e8371913931670dabd9459507.jpg"
+  },
+  {
+    "id": 770,
+    "type": "text",
+    "page_idx": 41,
+    "text": "2. 如图所示,已知向量  $AB = a, AD = b$ ,  $\\angle DAB = 120^\\circ$ , 且  $\\left|a\\right| = \\left|b\\right| = 3$ , 求  $\\left|a + b\\right|$  和  $\\left|a - b\\right|$"
+  },
+  {
+    "id": 771,
+    "type": "image",
+    "page_idx": 41,
+    "img_path": "images/67d9ba9e83375347e399a6504c00893cf528b6b0cd3afa13ed1552894e5b2719.jpg"
+  },
+  {
+    "id": 772,
+    "type": "text",
+    "page_idx": 41,
+    "text": "3. 河流流速是向东 4 千米/小时,一个游泳者在水流影响下以  $4 \\sqrt{3}$  千米/小时的速度正好从南岸游向北岸,求游泳者在静水中的速度"
+  },
+  {
+    "id": 773,
+    "type": "text",
+    "page_idx": 41,
+    "text": "4. 如图所示,在梯形  $ABCD$  中,  $AB // CD$ , 点  $P$  为  $AB$  上一点,  $AD = a, AP = b, CD = c$ ."
+  },
+  {
+    "id": 774,
+    "type": "text",
+    "text": "(1) 用向量  $a \\not b c$  表示  $D P$  和  $P C$",
+    "page_idx": 41
+  },
+  {
+    "id": 775,
+    "type": "text",
+    "text": "(2) 在图中作出  $AD + DP + PC$",
+    "page_idx": 41
+  },
+  {
+    "id": 776,
+    "type": "image",
+    "page_idx": 41,
+    "img_path": "images/d8227de8bd8d42ba1a918665fcd8c613e28c8a6fa93ddb06b45cafaa66566f48.jpg"
+  },
+  {
+    "id": 777,
+    "type": "text",
+    "page_idx": 42,
+    "text": "5. 如图， $\\triangle ABC$  中  $M, N, P$  分别是  $AB, AC, BC$  边的中点，在图中画出："
+  },
+  {
+    "id": 778,
+    "type": "equation",
+    "page_idx": 42,
+    "text": "$$\nP M + B M - P N\n$$"
+  },
+  {
+    "id": 779,
+    "type": "image",
+    "page_idx": 42,
+    "img_path": "images/dfd5045fe723806fe614c9d5516fe67cd452eef3b088e19630a914f0f8d49722.jpg",
+    "image_caption": "B组"
+  },
+  {
+    "id": 780,
+    "type": "text",
+    "page_idx": 42,
+    "text": "1.如图，点  $E$  在平行四边形ABCD的对角线BD上"
+  },
+  {
+    "id": 781,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(1) 填空:  $BC + BA =$"
+  },
+  {
+    "id": 782,
+    "type": "equation",
+    "page_idx": 42,
+    "text": "$$\nB C - A E = \\underline {{}}\n$$"
+  },
+  {
+    "id": 783,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(2) 求作:  $BC + AE$"
+  },
+  {
+    "id": 784,
+    "type": "image",
+    "page_idx": 42,
+    "img_path": "images/c0fa7cadbf87306f7100137a997d02b6f3c84b3fe860778fb2303a42fe4e116b.jpg"
+  },
+  {
+    "id": 785,
+    "type": "text",
+    "page_idx": 42,
+    "text": "2. 如图,四边形  $ABCD$  的对角线  $AC$ 、 $BD$  交于点  $E$ ,"
+  },
+  {
+    "id": 786,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(1) 填空:  $AB + BC = \\_$ ;  $AB - AD = \\_$ ."
+  },
+  {
+    "id": 787,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(2) 求作:  $BC + BE$"
+  },
+  {
+    "id": 788,
+    "type": "image",
+    "page_idx": 42,
+    "img_path": "images/ec7497020b4342b44e68a628a6cd235cdbe676028b58a5be1e4cfe394024af3d.jpg"
+  },
+  {
+    "id": 789,
+    "type": "text",
+    "page_idx": 42,
+    "text": "3.(1)已知  $A,B,C$  是平面内的三点，  $\\left|AB\\right| = a,\\left|BC\\right| = b(a > b > 0)$  模的取值范围"
+  },
+  {
+    "id": 790,
+    "type": "text",
+    "page_idx": 42,
+    "text": "(2) 如图所示, 在  $\\triangle ABC$  中,  $AD$  是  $BC$  边上的中线,  $AB - AD$  与  $AD - AC$  是不是相等的向量? 为什么?"
+  },
+  {
+    "id": 791,
+    "type": "image",
+    "page_idx": 43,
+    "img_path": "images/77c29b667889dedeb4038ff3dbf9cac1caf4cccefd4eb3b2d95bf6cd322ecd7e.jpg"
+  },
+  {
+    "id": 792,
+    "type": "text",
+    "page_idx": 44,
+    "text": "2特殊的平行四边形"
+  },
+  {
+    "id": 793,
+    "type": "text",
+    "page_idx": 44,
+    "text": "一．菱形的性质（共7小题）"
+  },
+  {
+    "id": 794,
+    "type": "text",
+    "text": "1. （2022 春·青浦区校级期中）如图，菱形ABCD的对角线相交于点O，延长BC至点E，使  $CE = BC$  ，联结DE，若  $\\angle E = 70^{\\circ}$  ，则  $\\angle OBC =$",
+    "page_idx": 44
+  },
+  {
+    "id": 795,
+    "type": "text",
+    "text": "2. （2022 春·杨浦区校级期中）菱形的边长为 10 厘米，一条对角线为 16 厘米，它的面积是 ______ 平方厘米。",
+    "page_idx": 44
+  },
+  {
+    "id": 796,
+    "type": "text",
+    "text": "3. (2022 春・徐汇区期末)如图, 菱形  $A B C D$  中, 如果  $A B = 3, B D = 2$ , 那么菱形  $A B C D$  的面积为",
+    "page_idx": 44
+  },
+  {
+    "id": 797,
+    "type": "image",
+    "page_idx": 44,
+    "img_path": "images/dd8f46edff3ce4dc48f062a63e706d53e962c6fe4907ee25d9717cd4641f7c2e.jpg"
+  },
+  {
+    "id": 798,
+    "type": "image",
+    "page_idx": 44,
+    "img_path": "images/b8a82379a27aa2bf7444a0edbb16f95cd29bef8dc6156ff2a2f7e576211a20a4.jpg"
+  },
+  {
+    "id": 799,
+    "type": "text",
+    "text": "4. （2022 春・上海期中）已知菱形ABCD中，对角线  $AC = 12$  ，  $BD = 16$  ，则菱形ABCD的面积是",
+    "page_idx": 44
+  },
+  {
+    "id": 800,
+    "type": "text",
+    "text": "5. （2022 春・虹口区期中）如果菱形的边长为 5 , 相邻两内角的度数之比为  $1: 2$ , 那么该菱形较长的对角线长为",
+    "page_idx": 44
+  },
+  {
+    "id": 801,
+    "type": "text",
+    "text": "6. （2022 春·青浦区校级期中）菱形ABCD中， $\\angle B = 60^{\\circ}$ ，点  $E$ 、 $F$  分别在边BC、CD上，且  $\\angle EAF = 60^{\\circ}$ 。求证： $AE = AF$ 。",
+    "page_idx": 44
+  },
+  {
+    "id": 802,
+    "type": "image",
+    "page_idx": 44,
+    "img_path": "images/8b5290d01603e7e1854999be67fff8fdce62a28b1b7b464aafb12e27fd16e65b.jpg"
+  },
+  {
+    "id": 803,
+    "type": "text",
+    "page_idx": 45,
+    "text": "7. （2022 春·杨浦区校级期中）已知：如图菱形ABCD，点E，F分别为边BC，CD上的动点（不与端点重合），且  $\\angle EAF = \\angle B = 60^{\\circ}$"
+  },
+  {
+    "id": 804,
+    "type": "text",
+    "text": "(1) 求证:  $AE = AF$ ;",
+    "page_idx": 45
+  },
+  {
+    "id": 805,
+    "type": "text",
+    "text": "(2) 如果  $AB = 8$ ，设  $BE = x, AE = y$ ，求  $y$  与  $x$  的函数关系式和定义域；",
+    "page_idx": 45
+  },
+  {
+    "id": 806,
+    "type": "text",
+    "text": "(3）在（2）的基础上，当  $x$  取何值时，  $S_{\\triangle AEF}$  与  $S_{\\triangle CEF}$  面积比值为7.",
+    "page_idx": 45
+  },
+  {
+    "id": 807,
+    "type": "image",
+    "page_idx": 45,
+    "img_path": "images/0b6fcefb519a45d211c8e767ad27df77f12595135cbf76cdaa6817bd960620b7.jpg",
+    "image_caption": "图1 备用图"
+  },
+  {
+    "id": 808,
+    "type": "text",
+    "page_idx": 45,
+    "text": "二．菱形的判定（共5小题）"
+  },
+  {
+    "id": 809,
+    "type": "text",
+    "page_idx": 45,
+    "text": "8. (2022 春・青浦区校级期中) 下列命题是真命题的是 ( )"
+  },
+  {
+    "id": 810,
+    "type": "text",
+    "text": "A. 有一组对边平行, 另一组对边相等的四边形是平行四边形",
+    "page_idx": 45
+  },
+  {
+    "id": 811,
+    "type": "text",
+    "text": "B. 两条对角线相等的四边形是矩形",
+    "page_idx": 45
+  },
+  {
+    "id": 812,
+    "type": "text",
+    "text": "C. 一条对角线平分一组对角的四边形是菱形",
+    "page_idx": 45
+  },
+  {
+    "id": 813,
+    "type": "text",
+    "text": "D. 对角线互相垂直平分的四边形是菱形",
+    "page_idx": 45
+  },
+  {
+    "id": 814,
+    "type": "text",
+    "page_idx": 45,
+    "text": "9. （2022 春・奉贤区校级期末）如图, 直线  $y = -x + 2$  与  $x$  轴,  $y$  轴分别交于点  $A 、 B$ , 点  $C$  在  $y$  轴上, 点  $D$  为平面内"
+  },
+  {
+    "id": 815,
+    "type": "text",
+    "page_idx": 45,
+    "text": "一点，若四边形ACDB恰好构成一个菱形，请写出点  $D$  的坐标"
+  },
+  {
+    "id": 816,
+    "type": "image",
+    "page_idx": 45,
+    "img_path": "images/fbb24cdd69ad36a949c1e31ec5d2ba769ff94ef489831064d0df75d0e3966959.jpg"
+  },
+  {
+    "id": 817,
+    "type": "text",
+    "page_idx": 46,
+    "text": "10. （2022 春·虹口区期中）如图， $\\triangle ABC$  中， $AD$  是  $\\angle BAC$  的平分线， $E$  是  $AC$  上一点， $AE = AB$ ， $EF \\parallel BC$  交  $AD$  于  $F$ ， $BE$  与  $AD$  交于  $G$ ."
+  },
+  {
+    "id": 818,
+    "type": "text",
+    "page_idx": 46,
+    "text": "求证：四边形BDEF是菱形."
+  },
+  {
+    "id": 819,
+    "type": "image",
+    "page_idx": 46,
+    "img_path": "images/4e5ca0faabec0abbfb797dcb08956613b29db415196a880004c78f4dcfe8563a.jpg"
+  },
+  {
+    "id": 820,
+    "type": "text",
+    "page_idx": 46,
+    "text": "11．（2021春·杨浦区期末）如图，已知BD、BE分别是∠ABC与它的邻补角的平分线，AE⊥BE，AD⊥BD，垂足分别为E、D，联结CD、DE，DE与AB交于点O，CD∥AB．求证：四边形OBCD是菱形."
+  },
+  {
+    "id": 821,
+    "type": "image",
+    "page_idx": 46,
+    "img_path": "images/c2438bf636de06a7cdd9d1a01e7101f44b2f081528465604466f315a86067754.jpg"
+  },
+  {
+    "id": 822,
+    "type": "text",
+    "page_idx": 46,
+    "text": "12．（2021春·奉贤区期中）如图，已知在四边形ABCD中，AD  $\\| BC$  ，点  $E$  为BC中点，"
+  },
+  {
+    "id": 823,
+    "type": "text",
+    "page_idx": 46,
+    "text": "BD⊥DC，EA平分∠DEB."
+  },
+  {
+    "id": 824,
+    "type": "text",
+    "text": "(1) 求证:  $AE = DC$ ;",
+    "page_idx": 46
+  },
+  {
+    "id": 825,
+    "type": "text",
+    "text": "(2) 求证: 四边形  $ABED$  是菱形.",
+    "page_idx": 46
+  },
+  {
+    "id": 826,
+    "type": "image",
+    "page_idx": 46,
+    "img_path": "images/8a3a6b753e39d04d940402001aa1aa30458dafeaec19e7e213b8be78f89b6582.jpg"
+  },
+  {
+    "id": 827,
+    "type": "text",
+    "page_idx": 47,
+    "text": "三．菱形的判定与性质（共3小题）"
+  },
+  {
+    "id": 828,
+    "type": "text",
+    "page_idx": 47,
+    "text": "13. （2021 春・黄浦区期末）如图, 在四边形  $A B C D$  中,  $A D \\| B C$ ,  $B C = 2 A D$ ,  $\\angle B A C = 90^{\\circ}$ ,点  $E$  为  $B C$  的中点"
+  },
+  {
+    "id": 829,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $A E C D$  是菱形;",
+    "page_idx": 47
+  },
+  {
+    "id": 830,
+    "type": "text",
+    "text": "(2) 联结  $BD$ , 如果  $BD$  平分  $\\angle ABC, AD = 2$ , 求  $BD$  的长.",
+    "page_idx": 47
+  },
+  {
+    "id": 831,
+    "type": "image",
+    "page_idx": 47,
+    "img_path": "images/3b0c58bdd230b848b619e09a57f94e7f3a6d91169d55e3f30201cf517697d830.jpg"
+  },
+  {
+    "id": 832,
+    "type": "text",
+    "page_idx": 47,
+    "text": "14. （2021 春・徐汇区期中）如图, 四边形  $A B C D$  中,  $B D$  垂直平分  $A C$ , 垂足为点  $F, E$  为四边形  $A B C D$  外一点, 且  $\\angle A D E = \\angle B A D, A E \\perp A C$"
+  },
+  {
+    "id": 833,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $A B D E$  是平行四边形;",
+    "page_idx": 47
+  },
+  {
+    "id": 834,
+    "type": "text",
+    "text": "(2) 如果  $DA$  平分  $\\angle BDE, AB = 5, AD = 6$ , 求  $AC$  的长.",
+    "page_idx": 47
+  },
+  {
+    "id": 835,
+    "type": "image",
+    "page_idx": 47,
+    "img_path": "images/6cbea22f0d469287a93700622cb0f170e00974b8f1337fc032418698b2556b6b.jpg"
+  },
+  {
+    "id": 836,
+    "type": "text",
+    "page_idx": 47,
+    "text": "15. (2021 春・普陀区期中)已知, 如图, 在  $\\square ABCD$  中, 分别在边  $BC 、 {AD}$  上取两点, 使"
+  },
+  {
+    "id": 837,
+    "type": "text",
+    "page_idx": 47,
+    "text": "得  $CE = DF$  ，连接  $EF$  ，  $AE$  、  $BF$  相交于点  $O$  ，若  $AE \\perp BF$ ."
+  },
+  {
+    "id": 838,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ABEF$  是菱形;",
+    "page_idx": 47
+  },
+  {
+    "id": 839,
+    "type": "text",
+    "text": "(2) 若四边形  $A B E F$  的周长为 16,  $\\angle B E F = 120^{\\circ}$ , 求  $A E$  的长.",
+    "page_idx": 47
+  },
+  {
+    "id": 840,
+    "type": "image",
+    "page_idx": 47,
+    "img_path": "images/ca4fc2d77ab73ae2884c25b55cd510a85b8513734fd3cb67247d872d44752b03.jpg"
+  },
+  {
+    "id": 841,
+    "type": "text",
+    "page_idx": 48,
+    "text": "四．矩形的性质（共6小题）"
+  },
+  {
+    "id": 842,
+    "type": "text",
+    "page_idx": 48,
+    "text": "16. (2022 春・青浦区校级期中) 下面性质中菱形有而矩形没有的是 ( )"
+  },
+  {
+    "id": 843,
+    "type": "text",
+    "page_idx": 48,
+    "text": "A. 邻角互补"
+  },
+  {
+    "id": 844,
+    "type": "text",
+    "page_idx": 48,
+    "text": "B. 对角线互相垂直"
+  },
+  {
+    "id": 845,
+    "type": "text",
+    "page_idx": 48,
+    "text": "C. 对角线相等"
+  },
+  {
+    "id": 846,
+    "type": "text",
+    "page_idx": 48,
+    "text": "D. 对角线互相平分"
+  },
+  {
+    "id": 847,
+    "type": "text",
+    "page_idx": 48,
+    "text": "17. （2022 春・杨浦区校级期中）矩形的一条边长是  $a$ , 两条对角线的夹角为  $60^{\\circ}$ , 则矩形的另外一条边长等于 ( )"
+  },
+  {
+    "id": 848,
+    "type": "text",
+    "page_idx": 48,
+    "text": "A.  $\\frac{1}{2} a$"
+  },
+  {
+    "id": 849,
+    "type": "text",
+    "page_idx": 48,
+    "text": "B.  $\\frac{\\sqrt{3}}{2} a$"
+  },
+  {
+    "id": 850,
+    "type": "text",
+    "page_idx": 48,
+    "text": "C.  $\\sqrt{3} a$  或  $\\frac{\\sqrt{3}}{3} a$"
+  },
+  {
+    "id": 851,
+    "type": "text",
+    "page_idx": 48,
+    "text": "D.  $2 a$"
+  },
+  {
+    "id": 852,
+    "type": "text",
+    "page_idx": 48,
+    "text": "18. （2022 春・长宁区校级期末）如图, 矩形  $ABCD$  的对角线相交于点  $O$ , 点  $E 、 F$  分别在  $OA 、 OD$  上,  $EF \\parallel BC$ , 求证: 四边形  $BCFE$  是等腰梯形."
+  },
+  {
+    "id": 853,
+    "type": "image",
+    "page_idx": 48,
+    "img_path": "images/38d1eb4e8e5bec408fed86f1dd00298591c173d9a87b96e13d79216586f38210.jpg"
+  },
+  {
+    "id": 854,
+    "type": "text",
+    "page_idx": 48,
+    "text": "19. (2022 春・徐汇区期末)如图, 将矩形  $A B C D$  的边  $B C$  延长至点  $E$ , 使  $C E = B D$ , 联结  $A E$  交对角线  $B D$  于点  $F$ , 交边  $C D$  于点  $G$ , 如果  $\\angle A D B = 38^{\\circ}$ , 那么  $\\angle E$  的大小为"
+  },
+  {
+    "id": 855,
+    "type": "text",
+    "page_idx": 48,
+    "text": "20. （2022 春·宝山区校级月考）如图：在直角坐标系里点  $B(0,4)$ ，已知  $ABDO$  为矩形， $\\angle DBO = 30^\\circ$ ，则点  $A$  坐标为 _______."
+  },
+  {
+    "id": 856,
+    "type": "text",
+    "page_idx": 48,
+    "text": "21. （2021 春・杨浦区校级期中）如图, 矩形  $ABCD$  的对角线  $AC$  与  $BD$  相交于点  $O$ , 以  $AO, AB$  为邻边作平行四边形  $ABC_{1}O, AC_{1}$  交  $OB$  于点  $O_{1}$ ; 以  $AO_{1}, AB$  为邻边作平行四边"
+  },
+  {
+    "id": 857,
+    "type": "text",
+    "page_idx": 48,
+    "text": "形  $ABC_{2}O_{1}\\dots$  ，若  $S_{\\text{矩形}ABCD} = a$  ，则  $\\mathrm{S}_{\\text{平行四边形}ABC_{2021}} = 0_{2020} = \\_ .$"
+  },
+  {
+    "id": 858,
+    "type": "image",
+    "page_idx": 48,
+    "img_path": "images/cb48e63bc606cec67902ff2fa468e83dbde2cfc1ab053e672b7622877831b5a8.jpg"
+  },
+  {
+    "id": 859,
+    "type": "image",
+    "page_idx": 48,
+    "img_path": "images/d9ea50139415bb2b84abee308c19e8bd14c0c7632c6604cf734fc21eb67fb980.jpg"
+  },
+  {
+    "id": 860,
+    "type": "image",
+    "page_idx": 48,
+    "img_path": "images/717c0b8a94e4ea0813ee22142209281cd6c9f02b460d20406b73134e88faf267.jpg"
+  },
+  {
+    "id": 861,
+    "type": "text",
+    "page_idx": 49,
+    "text": "五．矩形的判定（共6小题）"
+  },
+  {
+    "id": 862,
+    "type": "text",
+    "page_idx": 49,
+    "text": "22. (2022 春・杨浦区校级期中) 下列条件不能判定一个四边形是矩形的是 (   )"
+  },
+  {
+    "id": 863,
+    "type": "text",
+    "text": "A. 四个内角都相等",
+    "page_idx": 49
+  },
+  {
+    "id": 864,
+    "type": "text",
+    "text": "B. 四条边都相等",
+    "page_idx": 49
+  },
+  {
+    "id": 865,
+    "type": "text",
+    "text": "C. 对角线相等且互相平分",
+    "page_idx": 49
+  },
+  {
+    "id": 866,
+    "type": "text",
+    "text": "D. 对角线相等的平行四边形",
+    "page_idx": 49
+  },
+  {
+    "id": 867,
+    "type": "text",
+    "page_idx": 49,
+    "text": "23. （2022 春・青浦区校级期中）四边形  $ABCD$  的对角线  $AC$ 、 $BD$  互相平分，要使它成为矩形，可添加条件（）"
+  },
+  {
+    "id": 868,
+    "type": "text",
+    "page_idx": 49,
+    "text": "A.  $AB = CD$"
+  },
+  {
+    "id": 869,
+    "type": "text",
+    "page_idx": 49,
+    "text": "B.  $AC = BD$"
+  },
+  {
+    "id": 870,
+    "type": "text",
+    "page_idx": 49,
+    "text": "C. AB  $\\parallel$  CD"
+  },
+  {
+    "id": 871,
+    "type": "text",
+    "page_idx": 49,
+    "text": "D. AC⊥BD"
+  },
+  {
+    "id": 872,
+    "type": "text",
+    "page_idx": 49,
+    "text": "24. (2021 春・奉贤区期中) 下列说法不正确的是 ( )"
+  },
+  {
+    "id": 873,
+    "type": "text",
+    "text": "A. 两组对边分别相等的四边形是平行四边形",
+    "page_idx": 49
+  },
+  {
+    "id": 874,
+    "type": "text",
+    "text": "B. 对角线相等的平行四边形是矩形",
+    "page_idx": 49
+  },
+  {
+    "id": 875,
+    "type": "text",
+    "text": "C. 一个角是直角的四边形是矩形",
+    "page_idx": 49
+  },
+  {
+    "id": 876,
+    "type": "text",
+    "text": "D. 对角线互相平分且垂直的四边形是菱形",
+    "page_idx": 49
+  },
+  {
+    "id": 877,
+    "type": "text",
+    "page_idx": 49,
+    "text": "25. (2022 春・虹口区期中) 如图, 在四边形  $A B C D$  中, 点  $G$  在边  $B C$  的延长线上,  $C E$  平分  $\\angle B C D$ ,  $C F$  平分  $\\angle G C D$ ,  $E F \\| B C$  交  $C D$  于点  $O$ , 点  $O$  为  $C D$  的中点."
+  },
+  {
+    "id": 878,
+    "type": "text",
+    "page_idx": 49,
+    "text": "求证：四边形DECF是矩形."
+  },
+  {
+    "id": 879,
+    "type": "text",
+    "page_idx": 49,
+    "text": "证明：CE平分∠BCD,"
+  },
+  {
+    "id": 880,
+    "type": "equation",
+    "page_idx": 49,
+    "text": "$$\n\\therefore \\quad = \\quad .\n$$"
+  },
+  {
+    "id": 881,
+    "type": "text",
+    "page_idx": 49,
+    "text": ":EFBC,"
+  },
+  {
+    "id": 882,
+    "type": "equation",
+    "page_idx": 49,
+    "text": "$$\n\\therefore = \\quad .\n$$"
+  },
+  {
+    "id": 883,
+    "type": "text",
+    "page_idx": 49,
+    "text": "于是，"
+  },
+  {
+    "id": 884,
+    "type": "text",
+    "page_idx": 49,
+    "text": "同理，  $= \\_ .$"
+  },
+  {
+    "id": 885,
+    "type": "text",
+    "page_idx": 49,
+    "text": "（请继续完成证明过程）"
+  },
+  {
+    "id": 886,
+    "type": "image",
+    "page_idx": 49,
+    "img_path": "images/7cc3bc43e9713a4db42eca16e1602680d24933d2219b3d2d75f1abd68929e544.jpg"
+  },
+  {
+    "id": 887,
+    "type": "text",
+    "page_idx": 50,
+    "text": "26. (2022 春・奉贤区校级月考)如图,已知: 在四边形  ${ABCD}$  中,  $E$  为边  ${CD}$  的中点,  ${AE}$"
+  },
+  {
+    "id": 888,
+    "type": "text",
+    "page_idx": 50,
+    "text": "与边BC的延长线相交于点  $F$  ，且  $AE = EF$  ，  $BC = CF$"
+  },
+  {
+    "id": 889,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ABCD$  是平行四边形;",
+    "page_idx": 50
+  },
+  {
+    "id": 890,
+    "type": "text",
+    "text": "(2) 当  $AF = 2BE$  时，求证：四边形ABCD是矩形.",
+    "page_idx": 50
+  },
+  {
+    "id": 891,
+    "type": "image",
+    "page_idx": 50,
+    "img_path": "images/16eb52b98956f7d9865ecc766ff790454deead629687a7630eb0878d6b7136ef.jpg"
+  },
+  {
+    "id": 892,
+    "type": "text",
+    "page_idx": 50,
+    "text": "27. (2022 春・静安区期中)已知：如图，在平行四边形ABCD中，点E、F分别是"
+  },
+  {
+    "id": 893,
+    "type": "text",
+    "page_idx": 50,
+    "text": "AD、BC的中点，点G、H分别在边AB、CD上，且  $AG = CH$"
+  },
+  {
+    "id": 894,
+    "type": "text",
+    "text": "(1) 求证:  $\\triangle AGE \\cong \\triangle CHF$ ;",
+    "page_idx": 50
+  },
+  {
+    "id": 895,
+    "type": "text",
+    "text": "(2) 若  $\\angle AEG + \\angle BFG = 90^{\\circ}$ , 求证: 四边形  $EGFH$  是矩形.",
+    "page_idx": 50
+  },
+  {
+    "id": 896,
+    "type": "image",
+    "page_idx": 50,
+    "img_path": "images/6d4cc6bed2805efb137042e602349ec44ab3e06828e5b61770815cbddba26ce0.jpg"
+  },
+  {
+    "id": 897,
+    "type": "text",
+    "page_idx": 50,
+    "text": "六．矩形的判定与性质（共3小题）"
+  },
+  {
+    "id": 898,
+    "type": "text",
+    "page_idx": 50,
+    "text": "28. (2022 春・青浦区校级期中) 如图, 在 Rt  $\\triangle ABC$  中,  $\\angle C = 90^{\\circ}, BC = 6, AC = 8, M$  为斜边  $AB$  上一动点, 过点  $M$  分别作  $MD \\perp AC$  于点  $D$ , 作  $ME \\perp CB$  于点  $E$ , 则线段  $DE$  的最小值为"
+  },
+  {
+    "id": 899,
+    "type": "image",
+    "page_idx": 50,
+    "img_path": "images/72d99e4a6ebf5f8d9c5e394ea23da00b56c6d37a45309caa9ff605bcb0e62155.jpg"
+  },
+  {
+    "id": 900,
+    "type": "text",
+    "page_idx": 51,
+    "text": "29. (2022 春・杨浦区校级期中)已知, 如图,  $B E, B D$  是  $\\triangle A B C$  中  $\\angle A B C$  的内、外角平分"
+  },
+  {
+    "id": 901,
+    "type": "text",
+    "page_idx": 51,
+    "text": "线，  $AD\\bot BD$  于  $D$  ，AE⊥BE于点  $E$  ，延长AE交BC的延长线于点  $N$"
+  },
+  {
+    "id": 902,
+    "type": "text",
+    "page_idx": 51,
+    "text": "求证：  $DE = BN$"
+  },
+  {
+    "id": 903,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/49b0baba6525df4f42f6537d08b2066504627bc346d0782e4a3dc2b89aea361c.jpg"
+  },
+  {
+    "id": 904,
+    "type": "text",
+    "page_idx": 51,
+    "text": "30．（2022春·青浦区校级期中）如图，在四边形ABCD的中，  $AB\\| CD$  ，对角线AC，BD相"
+  },
+  {
+    "id": 905,
+    "type": "text",
+    "page_idx": 51,
+    "text": "交于点  $O$  ，且  $AO = CO$  ，  $\\triangle OAB$  是等边三角形."
+  },
+  {
+    "id": 906,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ABCD$  是矩形;",
+    "page_idx": 51
+  },
+  {
+    "id": 907,
+    "type": "text",
+    "text": "(2) 若  $S_{\\text{四边形}ABCD} = 4\\sqrt{3}$ , 求  $BD$  的长.",
+    "page_idx": 51
+  },
+  {
+    "id": 908,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/667b7f4462d4176ff367d1e6d06d7953c9fabb4afc881c3340e2fba4e78762bb.jpg"
+  },
+  {
+    "id": 909,
+    "type": "text",
+    "page_idx": 51,
+    "text": "七．正方形的性质（共5小题）"
+  },
+  {
+    "id": 910,
+    "type": "text",
+    "text": "31.（2022春·静安区期中）如图，正方形ABCD中，延长BC到E，使  $CE = CA$  ，AE交CD于F，那么  $\\angle AFD = \\_$",
+    "page_idx": 51
+  },
+  {
+    "id": 911,
+    "type": "text",
+    "text": "32. （2022 春·浦东新区校级期中）如图，已知正方形ABCD的边长为5厘米，EG $\\| AD$ ，点  $H$  在边AD上， $\\triangle CEH$  的面积为8平方厘米，则  $FG =$  厘米.",
+    "page_idx": 51
+  },
+  {
+    "id": 912,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/ae66af3abb800ae1de6a5c8023c37521d3fbe1ccc16a8495f66fc6317b3768f5.jpg"
+  },
+  {
+    "id": 913,
+    "type": "text",
+    "page_idx": 51,
+    "text": "52"
+  },
+  {
+    "id": 914,
+    "type": "image",
+    "page_idx": 51,
+    "img_path": "images/a589a3ae52bd025d46b62d38997b6f0b82c7417ca5b41f157c6e53a49c05f84b.jpg"
+  },
+  {
+    "id": 915,
+    "type": "text",
+    "page_idx": 52,
+    "text": "33.（2022春·杨浦区校级期中）如图，E为正方形ABCD外一点，AE=AD，BE交AD于"
+  },
+  {
+    "id": 916,
+    "type": "text",
+    "page_idx": 52,
+    "text": "点  $F$  ，则  $\\angle BED = \\_$  。"
+  },
+  {
+    "id": 917,
+    "type": "image",
+    "page_idx": 52,
+    "img_path": "images/be9f58188230cd3a1a47d1df6be01631c2d74156f920b690443342998f12df0e.jpg"
+  },
+  {
+    "id": 918,
+    "type": "text",
+    "text": "34. （2022 春·浦东新区校级期中）已知正方形  $ABCD$ ，以  $CD$  为边作等边  $\\triangle CDE$ ，则  $\\angle ADE$  的度数是",
+    "page_idx": 52
+  },
+  {
+    "id": 919,
+    "type": "text",
+    "text": "35.（2022春·上海期中）在正方形ABCD中，边长为8，点  $P$  是对角线AC上一点， $CP = 2\\sqrt{2}$ ， $E$  是射线AB上一点，联结  $PE$ ，射线  $PF \\perp PE$  交直线AD于  $F$ ，当  $AC = CE$  时， $AF =$",
+    "page_idx": 52
+  },
+  {
+    "id": 920,
+    "type": "text",
+    "page_idx": 52,
+    "text": "八．正方形的判定（共4小题）"
+  },
+  {
+    "id": 921,
+    "type": "text",
+    "page_idx": 52,
+    "text": "36.（2022春·长宁区校级期末）在四边形ABCD中，  $\\angle A = \\angle B = \\angle C = 90^{\\circ}$  ，如果再添加一个条件可证明四边形是正方形，那么这个条件可以是（）"
+  },
+  {
+    "id": 922,
+    "type": "text",
+    "page_idx": 52,
+    "text": "A.  $AB = BC$"
+  },
+  {
+    "id": 923,
+    "type": "text",
+    "page_idx": 52,
+    "text": "B.  ${AB} = {CD}$"
+  },
+  {
+    "id": 924,
+    "type": "text",
+    "page_idx": 52,
+    "text": "C.  $AC = BD$"
+  },
+  {
+    "id": 925,
+    "type": "text",
+    "page_idx": 52,
+    "text": "D.  $\\angle D = 90^{\\circ}$"
+  },
+  {
+    "id": 926,
+    "type": "text",
+    "page_idx": 52,
+    "text": "37. (2022 春・杨浦区校级期中) 下列命题为假命题的是 ( )"
+  },
+  {
+    "id": 927,
+    "type": "text",
+    "text": "A. 四个内角相等的四边形是矩形",
+    "page_idx": 52
+  },
+  {
+    "id": 928,
+    "type": "text",
+    "text": "B. 对角线的交点到各边距离都相等的四边形是菱形",
+    "page_idx": 52
+  },
+  {
+    "id": 929,
+    "type": "text",
+    "text": "C. 有两组邻边相等的四边形是平行四边形",
+    "page_idx": 52
+  },
+  {
+    "id": 930,
+    "type": "text",
+    "text": "D. 一组邻边相等的矩形是正方形",
+    "page_idx": 52
+  },
+  {
+    "id": 931,
+    "type": "text",
+    "page_idx": 52,
+    "text": "38. (2022 春・宝山区校级月考)如图, 在  $\\square ABCD$  中, 对角线  ${AC}$  、  ${BD}$  交于点  $O$  ,  $E$  是  ${BD}$"
+  },
+  {
+    "id": 932,
+    "type": "text",
+    "page_idx": 52,
+    "text": "延长线上的点，且  $\\triangle ACE$  是等边三角形."
+  },
+  {
+    "id": 933,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ABCD$  是菱形.",
+    "page_idx": 52
+  },
+  {
+    "id": 934,
+    "type": "text",
+    "text": "(2) 若  $\\angle AED = 2\\angle EAD$  ，求证：四边形ABCD是正方形.",
+    "page_idx": 52
+  },
+  {
+    "id": 935,
+    "type": "image",
+    "page_idx": 52,
+    "img_path": "images/af9d811ddcfb98466bcfb91b80de98a0620503d48ed25c21c68c04ebeb31681e.jpg"
+  },
+  {
+    "id": 936,
+    "type": "text",
+    "page_idx": 53,
+    "text": "39. (2022 春・上海期中)如图, 在  $\\triangle ABC$  中,  $AB = AC$ ,  $AD \\perp BC$ , 垂足为点  $D$ ,  $AN$  是"
+  },
+  {
+    "id": 937,
+    "type": "text",
+    "page_idx": 53,
+    "text": "$\\triangle ABC$  外角  $\\angle CAM$  的平分线，  $CE\\bot AN$  ，垂足为点  $N$"
+  },
+  {
+    "id": 938,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $ADCE$  为矩形;",
+    "page_idx": 53
+  },
+  {
+    "id": 939,
+    "type": "text",
+    "text": "(2) 当  $\\triangle ABC$  满足什么条件时, 四边形  $ADCE$  为正方形? 给出证明.",
+    "page_idx": 53
+  },
+  {
+    "id": 940,
+    "type": "image",
+    "page_idx": 53,
+    "img_path": "images/596d70533097dac989c2a64f48264336a598516b949c9c070ee03b69f58eac3b.jpg"
+  },
+  {
+    "id": 941,
+    "type": "text",
+    "page_idx": 53,
+    "text": "九．正方形的判定与性质（共1小题）"
+  },
+  {
+    "id": 942,
+    "type": "text",
+    "page_idx": 53,
+    "text": "40. (2019 $\\cdot$ 杨浦区二模)已知: 如图, 在  $\\triangle ABC$  中,  $AB = BC$ ,  $\\angle ABC = 90^{\\circ}$ , 点  $D 、 E$  分别是边  $A B 、 B C$  的中点, 点  $F 、 G$  是边  $A C$  的三等分点,  $D F 、 E G$  的延长线相交于点  $H$ , 连接  $H A 、 H C$ ."
+  },
+  {
+    "id": 943,
+    "type": "text",
+    "page_idx": 53,
+    "text": "求证：（1）四边形FBGH是菱形；"
+  },
+  {
+    "id": 944,
+    "type": "text",
+    "page_idx": 53,
+    "text": "(2) 四边形  $ABCH$  是正方形."
+  },
+  {
+    "id": 945,
+    "type": "image",
+    "page_idx": 53,
+    "img_path": "images/1756546da08353e1da9b43dd9dad50f340b79b76e1f323fcc16921eacbecc537.jpg"
+  },
+  {
+    "id": 946,
+    "type": "text",
+    "page_idx": 54,
+    "text": "4平面向量及加减运算"
+  },
+  {
+    "id": 947,
+    "type": "text",
+    "page_idx": 54,
+    "text": "考点一：平面向量"
+  },
+  {
+    "id": 948,
+    "type": "text",
+    "page_idx": 54,
+    "text": "一、单选题"
+  },
+  {
+    "id": 949,
+    "type": "text",
+    "page_idx": 54,
+    "text": "1. (2022 春・八年级课时练习) 下列关于空间向量的命题中, 正确命题的个数是 ( )"
+  },
+  {
+    "id": 950,
+    "type": "text",
+    "text": "(1) 任一向量与它的相反向量都不相等;",
+    "page_idx": 54
+  },
+  {
+    "id": 951,
+    "type": "text",
+    "text": "(2) 长度相等、方向相同的两个向量是相等向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 952,
+    "type": "text",
+    "text": "③ 平行且模相等的两个向量是相等向量；",
+    "page_idx": 54
+  },
+  {
+    "id": 953,
+    "type": "text",
+    "text": "④ 若  $a \\neq b$  ，则  $|a| \\neq |b|$",
+    "page_idx": 54
+  },
+  {
+    "id": 954,
+    "type": "text",
+    "text": "(5) 两个向量相等, 则它们的起点与终点相同.",
+    "page_idx": 54
+  },
+  {
+    "id": 955,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 0"
+  },
+  {
+    "id": 956,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 1"
+  },
+  {
+    "id": 957,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C. 2"
+  },
+  {
+    "id": 958,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 3"
+  },
+  {
+    "id": 959,
+    "type": "text",
+    "page_idx": 54,
+    "text": "2. (2022 春・八年级课时练习) 下列各量中是向量的是 ( )"
+  },
+  {
+    "id": 960,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 时间"
+  },
+  {
+    "id": 961,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 速度"
+  },
+  {
+    "id": 962,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C. 面积"
+  },
+  {
+    "id": 963,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 长度"
+  },
+  {
+    "id": 964,
+    "type": "text",
+    "page_idx": 54,
+    "text": "3. (2022 春・八年级课时练习) 在下列说法中正确的有 ( )"
+  },
+  {
+    "id": 965,
+    "type": "text",
+    "text": "(1) 在物理学中, 作用力与反作用力是一对共线向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 966,
+    "type": "text",
+    "text": "(2) 温度有零上温度和零下温度, 因此温度也是向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 967,
+    "type": "text",
+    "text": "(3) 方向为南偏西  $60^{\\circ}$  的向量与北偏东  $60^{\\circ}$  的向量是共线向量;",
+    "page_idx": 54
+  },
+  {
+    "id": 968,
+    "type": "text",
+    "text": "④ 平面上的数轴都是向量",
+    "page_idx": 54
+  },
+  {
+    "id": 969,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 1个"
+  },
+  {
+    "id": 970,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 2 个"
+  },
+  {
+    "id": 971,
+    "type": "text",
+    "page_idx": 54,
+    "text": "c. 3个"
+  },
+  {
+    "id": 972,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 4个"
+  },
+  {
+    "id": 973,
+    "type": "text",
+    "page_idx": 54,
+    "text": "4. (2022 春・八年级课时练习) 下列说法正确的个数为 (   )"
+  },
+  {
+    "id": 974,
+    "type": "text",
+    "text": "(1) 面积、压强、速度、位移这些物理量都是向量",
+    "page_idx": 54
+  },
+  {
+    "id": 975,
+    "type": "text",
+    "text": "② 零向量没有方向",
+    "page_idx": 54
+  },
+  {
+    "id": 976,
+    "type": "text",
+    "text": "(3) 向量的模一定是正数",
+    "page_idx": 54
+  },
+  {
+    "id": 977,
+    "type": "text",
+    "text": "(4) 非零向量的单位向量是唯一的",
+    "page_idx": 54
+  },
+  {
+    "id": 978,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A. 0"
+  },
+  {
+    "id": 979,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B. 1"
+  },
+  {
+    "id": 980,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C. 2"
+  },
+  {
+    "id": 981,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D. 3"
+  },
+  {
+    "id": 982,
+    "type": "text",
+    "page_idx": 54,
+    "text": "5. (2022 春・八年级课时练习) 如果  $AB = CD$ , 那么下列结论正确的是 ( )"
+  },
+  {
+    "id": 983,
+    "type": "text",
+    "page_idx": 54,
+    "text": "A.  $AC = DB$ ;"
+  },
+  {
+    "id": 984,
+    "type": "text",
+    "page_idx": 54,
+    "text": "B.  $AC = DB$ ;"
+  },
+  {
+    "id": 985,
+    "type": "text",
+    "page_idx": 54,
+    "text": "C.  $AD = BC$ ;"
+  },
+  {
+    "id": 986,
+    "type": "text",
+    "page_idx": 54,
+    "text": "D.  $AD = CB$"
+  },
+  {
+    "id": 987,
+    "type": "text",
+    "page_idx": 55,
+    "text": "6. （2022 春·八年级课时练习）分别以正方形  $ABCD$  的四个顶点为起点与终点的所有有向线段能表示的不同向量有（）"
+  },
+  {
+    "id": 988,
+    "type": "text",
+    "page_idx": 55,
+    "text": "A. 4个"
+  },
+  {
+    "id": 989,
+    "type": "text",
+    "page_idx": 55,
+    "text": "B. 6个"
+  },
+  {
+    "id": 990,
+    "type": "text",
+    "page_idx": 55,
+    "text": "c. 8个"
+  },
+  {
+    "id": 991,
+    "type": "text",
+    "page_idx": 55,
+    "text": "D. 12个"
+  },
+  {
+    "id": 992,
+    "type": "text",
+    "page_idx": 55,
+    "text": "7. (2022 春・上海・八年级期末)如果  $EF = MN$  , 那么下列结论中正确的是 ( )"
+  },
+  {
+    "id": 993,
+    "type": "text",
+    "page_idx": 55,
+    "text": "EN  $\\models FM$  A."
+  },
+  {
+    "id": 994,
+    "type": "text",
+    "page_idx": 55,
+    "text": "B.  $\\overline{EM}$  与  $\\overline{FN}$  是相等向量"
+  },
+  {
+    "id": 995,
+    "type": "text",
+    "page_idx": 55,
+    "text": "C.  $\\overline{EN}$  与  $MF$  是相反向量"
+  },
+  {
+    "id": 996,
+    "type": "text",
+    "page_idx": 55,
+    "text": "D.  $\\overline{EN}$  与  $MF$  是平行向量"
+  },
+  {
+    "id": 997,
+    "type": "text",
+    "page_idx": 55,
+    "text": "二、解答题"
+  },
+  {
+    "id": 998,
+    "type": "text",
+    "page_idx": 55,
+    "text": "8. (2022 春・上海・八年级专题练习)如图,  $E 、 F 、 G$  分别为等边三角形的边  $A B 、 A C$  、"
+  },
+  {
+    "id": 999,
+    "type": "text",
+    "page_idx": 55,
+    "text": "BC 的中点，在以 A、B、C、E、F、G 为起点或终点的"
+  },
+  {
+    "id": 1000,
+    "type": "image",
+    "page_idx": 55,
+    "img_path": "images/8699a7308f9ac4b1f902e34aa6a9fae7972ce822892aacc784b79fc877c5a6cd.jpg"
+  },
+  {
+    "id": 1001,
+    "type": "text",
+    "page_idx": 55,
+    "text": "的向量."
+  },
+  {
+    "id": 1002,
+    "type": "text",
+    "page_idx": 55,
+    "text": "考点二：平面向量的加法"
+  },
+  {
+    "id": 1003,
+    "type": "text",
+    "page_idx": 55,
+    "text": "一、单选题"
+  },
+  {
+    "id": 1004,
+    "type": "text",
+    "page_idx": 55,
+    "text": "1. (2022·上海·八年级专题练习) 化简  $AB + BC + CD + DE =$  （ ）"
+  },
+  {
+    "id": 1005,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A. 0"
+  },
+  {
+    "id": 1006,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B. 0"
+  },
+  {
+    "id": 1007,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C.  $A E$"
+  },
+  {
+    "id": 1008,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D. EA"
+  },
+  {
+    "id": 1009,
+    "type": "text",
+    "page_idx": 56,
+    "text": "2. (2022·上海·八年级专题练习) 式子  $\\left( {{AB} + {MB}}\\right)  + \\left( {{BO} + {BC}}\\right)  + {OM}$  化简结果是(   )"
+  },
+  {
+    "id": 1010,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A.  $AO$"
+  },
+  {
+    "id": 1011,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B.  $AC$"
+  },
+  {
+    "id": 1012,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C.  $B C$"
+  },
+  {
+    "id": 1013,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D. AM"
+  },
+  {
+    "id": 1014,
+    "type": "text",
+    "page_idx": 56,
+    "text": "3. (2022·上海·八年级专题练习) 点  $O$  是平行四边形  $ABCD$  的两条对角线的交点,"
+  },
+  {
+    "id": 1015,
+    "type": "text",
+    "page_idx": 56,
+    "text": "$AO + OC + CB$  等于（ ）"
+  },
+  {
+    "id": 1016,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A.  $AB$"
+  },
+  {
+    "id": 1017,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B.  $BC$"
+  },
+  {
+    "id": 1018,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C. CD"
+  },
+  {
+    "id": 1019,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D. 0"
+  },
+  {
+    "id": 1020,
+    "type": "text",
+    "page_idx": 56,
+    "text": "4. (2022·上海·八年级专题练习)如图ABCD是平行四边形, 则在向量  $CB + AB =$  ( )"
+  },
+  {
+    "id": 1021,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A. AC"
+  },
+  {
+    "id": 1022,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B. CA"
+  },
+  {
+    "id": 1023,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C.  $B D$"
+  },
+  {
+    "id": 1024,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D.  $DB$"
+  },
+  {
+    "id": 1025,
+    "type": "text",
+    "page_idx": 56,
+    "text": "5. (2022·上海·八年级专题练习) 如图, 已知向量  $a, b, c$ , 那么下列结论正确的是 ( )"
+  },
+  {
+    "id": 1026,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A.  $a + b = c$"
+  },
+  {
+    "id": 1027,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B.  $a + b = -c$"
+  },
+  {
+    "id": 1028,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C.  $a - b = -c$"
+  },
+  {
+    "id": 1029,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D.  $b + c = a$"
+  },
+  {
+    "id": 1030,
+    "type": "text",
+    "page_idx": 56,
+    "text": "6. (2022·上海·八年级专题练习) 如图, 在正六边形  $A B C D E F$  中,  $B A + C D + F B$  等于 ( )"
+  },
+  {
+    "id": 1031,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A. 0"
+  },
+  {
+    "id": 1032,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B.  $BE$"
+  },
+  {
+    "id": 1033,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C. AD"
+  },
+  {
+    "id": 1034,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D.  $CF$"
+  },
+  {
+    "id": 1035,
+    "type": "image",
+    "page_idx": 56,
+    "img_path": "images/dc1c3253500b87218fe707c8e474bc399a7a273b9233b85c330d15b28c8cf6da.jpg"
+  },
+  {
+    "id": 1036,
+    "type": "image",
+    "page_idx": 56,
+    "img_path": "images/ef6eacdbf9120a3698dfb37c7634fed5648650fa980e2080352eccca43f496bb.jpg"
+  },
+  {
+    "id": 1037,
+    "type": "image",
+    "page_idx": 56,
+    "img_path": "images/37ccfb2f324028bf84b08dbc5bbc8ba03258f34d2b13e3ca4edccc78ec78c600.jpg"
+  },
+  {
+    "id": 1038,
+    "type": "text",
+    "page_idx": 56,
+    "text": "7. (2022 春・上海・八年级期末)已知正方形  $ABCD$  的边长为 1 , 设  $n = AB + BC$ , 那么  $n$  的模为 ( )"
+  },
+  {
+    "id": 1039,
+    "type": "text",
+    "page_idx": 56,
+    "text": "A.  $\\sqrt{3}$"
+  },
+  {
+    "id": 1040,
+    "type": "text",
+    "page_idx": 56,
+    "text": "B. 1"
+  },
+  {
+    "id": 1041,
+    "type": "text",
+    "page_idx": 56,
+    "text": "C.  $\\sqrt{2}$"
+  },
+  {
+    "id": 1042,
+    "type": "text",
+    "page_idx": 56,
+    "text": "D. 2"
+  },
+  {
+    "id": 1043,
+    "type": "text",
+    "page_idx": 57,
+    "text": "8. (2022 春・上海・八年级专题练习) 在平行四边形  $ABCD$  中, 设  $AB = a$ ,  $AD = b$ , 点  $O$"
+  },
+  {
+    "id": 1044,
+    "type": "text",
+    "page_idx": 57,
+    "text": "是对角线  $AC$  与  $BD$  的交点，那么向量  $OC$  可以表示为（）"
+  },
+  {
+    "id": 1045,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/ae642190b6c3f52a0d460853fd3c2c6cb6063a6f8330f82f366c8aad6043f01d.jpg"
+  },
+  {
+    "id": 1046,
+    "type": "text",
+    "page_idx": 57,
+    "text": "A.  $\\frac{1}{2} \\vec{a} + \\frac{1}{2} \\vec{b}$ ;"
+  },
+  {
+    "id": 1047,
+    "type": "text",
+    "page_idx": 57,
+    "text": "B.  $\\frac{1}{2} \\vec{a} - \\frac{1}{2} \\vec{b}$ ;"
+  },
+  {
+    "id": 1048,
+    "type": "text",
+    "page_idx": 57,
+    "text": "C.  $-\\frac{1}{2} \\vec{a} + \\frac{1}{2} \\vec{b}$ ;"
+  },
+  {
+    "id": 1049,
+    "type": "text",
+    "page_idx": 57,
+    "text": "D.  $-\\frac{1}{2} \\vec{a} - \\frac{1}{2} \\vec{b}$ ."
+  },
+  {
+    "id": 1050,
+    "type": "text",
+    "page_idx": 57,
+    "text": "二、解答题"
+  },
+  {
+    "id": 1051,
+    "type": "text",
+    "page_idx": 57,
+    "text": "9. (2022 春・上海闵行・八年级上海市民办文绮中学校考阶段练习) 已知: 如图, 在等腰梯形  $ABCD$  中,  $AD \\parallel BC$ ,  $BC = 2AD$ ,  $E$  为  $BC$  的中点, 设  $AB = a$ ,  $AD = b$ ."
+  },
+  {
+    "id": 1052,
+    "type": "text",
+    "text": "(1) 填空:  $BD = \\_$ ;  $DC = \\_$ ;  $AC = \\_$ ; (用  $a$ ,  $b$  的式子表示)",
+    "page_idx": 57
+  },
+  {
+    "id": 1053,
+    "type": "text",
+    "text": "(2) 在图中求作  $B E + D C$ . (不要求写出作法, 只需写出结论即可)",
+    "page_idx": 57
+  },
+  {
+    "id": 1054,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/455b089bee259ad53f47a13a0f13f0d2bba698c7ae8466930b0c81a24a08b601.jpg"
+  },
+  {
+    "id": 1055,
+    "type": "text",
+    "page_idx": 57,
+    "text": "10. (2022 春・上海・八年级专题练习)已知向量  $\\vec{a} 、 \\vec{b}$"
+  },
+  {
+    "id": 1056,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/61e793399f9f0f29bab9e665729c8873e3495c2c1fe1dbf47c219052b2e9220a.jpg"
+  },
+  {
+    "id": 1057,
+    "type": "text",
+    "page_idx": 57,
+    "text": "求作：  $a - 2b$  ："
+  },
+  {
+    "id": 1058,
+    "type": "text",
+    "page_idx": 57,
+    "text": "考点三：平面向量的减法"
+  },
+  {
+    "id": 1059,
+    "type": "text",
+    "page_idx": 57,
+    "text": "一、单选题"
+  },
+  {
+    "id": 1060,
+    "type": "text",
+    "page_idx": 57,
+    "text": "1. (2022 春・八年级课时练习)如图,在梯形  ${ABCD}$  中,  ${AD}\\parallel {BC}$  ,向量  ${AC} - {AB} =$  (   )"
+  },
+  {
+    "id": 1061,
+    "type": "text",
+    "page_idx": 58,
+    "text": "A. AB B. BC C. CB D. AD"
+  },
+  {
+    "id": 1062,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/54977a61f03b2fab2e34841b43564424b7430a3e99d3ea754b9beffb70ce4e2a.jpg"
+  },
+  {
+    "id": 1063,
+    "type": "text",
+    "page_idx": 58,
+    "text": "二、填空题"
+  },
+  {
+    "id": 1064,
+    "type": "text",
+    "text": "2. (2022 春・上海・八年级上海市进才中学校考期中)计算：  $AB - AC + BC =$",
+    "page_idx": 58
+  },
+  {
+    "id": 1065,
+    "type": "text",
+    "text": "3. (2022 春・上海・八年级专题练习) 已知在平行四边形  $ABCD$  中, 设  $AB = a$ ,  $AD = b$ , 那么用向量  $a$  、 $b$  表示向量  $CA =$  ________.",
+    "page_idx": 58
+  },
+  {
+    "id": 1066,
+    "type": "text",
+    "page_idx": 58,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1067,
+    "type": "text",
+    "page_idx": 58,
+    "text": "4.（2022春·上海·八年级专题练习）如图，在△ABC中，点D、E分别在边AB、AC上，DE  $\\parallel$  BC，且  $DE = \\frac{2}{3} BC$"
+  },
+  {
+    "id": 1068,
+    "type": "text",
+    "text": "(1) 如果  $AC = 6$ , 求 AE 的长;",
+    "page_idx": 58
+  },
+  {
+    "id": 1069,
+    "type": "text",
+    "text": "(2) 设  $AB = a$  ，  $AC = b$  ，求向量DE（用向量  $a$  、  $b$  表示）.",
+    "page_idx": 58
+  },
+  {
+    "id": 1070,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/7fd6562f31505669b8130961b5efcd8dc0dbe09cb883f5284d7237f6d2006418.jpg"
+  },
+  {
+    "id": 1071,
+    "type": "text",
+    "page_idx": 58,
+    "text": "5. （2022 春・上海・八年级专题练习）已知向量  $a, b$  ，（如图），请用向量的加法的平行四边形法则作向量  $a + b$  （不写作法，画出图形）"
+  },
+  {
+    "id": 1072,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/c2f6ef1d0be0136880f0644db8477590aecf67342078712680e449ac12b10f66.jpg"
+  },
+  {
+    "id": 1073,
+    "type": "text",
+    "page_idx": 59,
+    "text": "6. (2022 春・上海・八年级专题练习) 一条渔船距对岸  $4 \\mathrm{~km}$ , 以  $2 \\mathrm{~km} / \\mathrm{h}$  速度向垂直于对岸的方向划去, 到达对岸时, 船的实际航程为  $8 \\mathrm{~km}$ , 求河水的流速."
+  },
+  {
+    "id": 1074,
+    "type": "text",
+    "page_idx": 59,
+    "text": "7. (2022 春・上海・八年级专题练习) 如图, 在  $A B C D$  中,  $A B \\parallel C D$ ,  $A D = B C$ ,  $\\angle B = 60^{\\circ}$ ,  $A C$  平分  $\\angle D A B$ ."
+  },
+  {
+    "id": 1075,
+    "type": "text",
+    "text": "(1)求  $\\angle ACB$  的度数；",
+    "page_idx": 59
+  },
+  {
+    "id": 1076,
+    "type": "text",
+    "text": "(2)如果  $AD = 1$  ，请直接写出向量  $DC$  和向量  $BC + CD + DA$  的模.",
+    "page_idx": 59
+  },
+  {
+    "id": 1077,
+    "type": "image",
+    "page_idx": 59,
+    "img_path": "images/c5c2cb02c8473b0c792cc30d48d05b93b493201a0df19b309cd895ed2c34bd85.jpg"
+  },
+  {
+    "id": 1078,
+    "type": "text",
+    "page_idx": 60,
+    "text": "2四边形复习"
+  },
+  {
+    "id": 1079,
+    "type": "text",
+    "page_idx": 60,
+    "text": "一、选择题"
+  },
+  {
+    "id": 1080,
+    "type": "text",
+    "page_idx": 60,
+    "text": "1. 在下列命题中, 真命题是 ( )"
+  },
+  {
+    "id": 1081,
+    "type": "text",
+    "page_idx": 60,
+    "text": "A. 同位角相等"
+  },
+  {
+    "id": 1082,
+    "type": "text",
+    "page_idx": 60,
+    "text": "B. 到角的两边距离相等的点在这个角的平分线上"
+  },
+  {
+    "id": 1083,
+    "type": "text",
+    "page_idx": 60,
+    "text": "C. 两锐角互余"
+  },
+  {
+    "id": 1084,
+    "type": "text",
+    "page_idx": 60,
+    "text": "D. 直角三角形斜边上的中线等于斜边的一半"
+  },
+  {
+    "id": 1085,
+    "type": "text",
+    "page_idx": 60,
+    "text": "2. 如图, 把矩形  $ABCD$  沿  $EF$  对折后使两部分重合, 若  $\\angle 1 = 50^{\\circ}$ , 则  $\\angle AEF =$  ( )"
+  },
+  {
+    "id": 1086,
+    "type": "text",
+    "page_idx": 60,
+    "text": "A.  ${110}^{ \\circ  }$"
+  },
+  {
+    "id": 1087,
+    "type": "text",
+    "page_idx": 60,
+    "text": "B.  $115^{\\circ}$"
+  },
+  {
+    "id": 1088,
+    "type": "text",
+    "page_idx": 60,
+    "text": "C.  ${120}^{ \\circ  }$"
+  },
+  {
+    "id": 1089,
+    "type": "text",
+    "page_idx": 60,
+    "text": "D.  ${130}^{ \\circ  }$"
+  },
+  {
+    "id": 1090,
+    "type": "text",
+    "page_idx": 60,
+    "text": "3. 如果平行四边形一边长为  $12 \\mathrm{~cm}$ , 那么两条对角线的长度可以是 ( )"
+  },
+  {
+    "id": 1091,
+    "type": "text",
+    "page_idx": 60,
+    "text": "A.  $8 \\mathrm{~cm}$  和  $16 \\mathrm{~cm}$"
+  },
+  {
+    "id": 1092,
+    "type": "text",
+    "page_idx": 60,
+    "text": "B.  $10 \\mathrm{~cm}$  和  $16 \\mathrm{~cm}$"
+  },
+  {
+    "id": 1093,
+    "type": "text",
+    "page_idx": 60,
+    "text": "C.  $8 \\mathrm{~cm}$  和  $14 \\mathrm{~cm}$"
+  },
+  {
+    "id": 1094,
+    "type": "text",
+    "page_idx": 60,
+    "text": "D.  $10 \\mathrm{~cm}$  和  $12 \\mathrm{~cm}$"
+  },
+  {
+    "id": 1095,
+    "type": "text",
+    "page_idx": 60,
+    "text": "4. 在菱形ABCD中，对角线AC、BD相交于O，如果菱形ABCD的周长为20，  $\\mathrm{BD} = 6$"
+  },
+  {
+    "id": 1096,
+    "type": "text",
+    "page_idx": 60,
+    "text": "则下列结论中，正确的是（）"
+  },
+  {
+    "id": 1097,
+    "type": "image",
+    "page_idx": 60,
+    "img_path": "images/07f6b9bc398f1f0726d1c56f00d0897b82883226dfbdd207105b106ad8996f44.jpg"
+  },
+  {
+    "id": 1098,
+    "type": "text",
+    "page_idx": 60,
+    "text": "A. AC=8"
+  },
+  {
+    "id": 1099,
+    "type": "text",
+    "page_idx": 60,
+    "text": "B. AC=4"
+  },
+  {
+    "id": 1100,
+    "type": "text",
+    "page_idx": 60,
+    "text": "C. 菱形 ABCD 的面积为 48"
+  },
+  {
+    "id": 1101,
+    "type": "text",
+    "page_idx": 60,
+    "text": "D. 菱形 ABCD 的高为 9.6"
+  },
+  {
+    "id": 1102,
+    "type": "text",
+    "page_idx": 60,
+    "text": "5. 矩形、菱形、正方形都具有的性质是 ( )"
+  },
+  {
+    "id": 1103,
+    "type": "text",
+    "page_idx": 60,
+    "text": "A. 对角线相等"
+  },
+  {
+    "id": 1104,
+    "type": "text",
+    "page_idx": 60,
+    "text": "B. 对角线互相平分"
+  },
+  {
+    "id": 1105,
+    "type": "text",
+    "page_idx": 60,
+    "text": "C. 对角线互相垂直"
+  },
+  {
+    "id": 1106,
+    "type": "text",
+    "page_idx": 60,
+    "text": "D. 对角线互相平分且相等"
+  },
+  {
+    "id": 1107,
+    "type": "text",
+    "page_idx": 60,
+    "text": "6. 在四边形  $A B C D$  中, 对角线  $A C$  和  $B D$  交于点  $O$ , 下列条件能判定这个四边形是菱形的是 ( )"
+  },
+  {
+    "id": 1108,
+    "type": "text",
+    "page_idx": 61,
+    "text": "A.  $AD \\parallel BC, \\angle A = \\angle C$"
+  },
+  {
+    "id": 1109,
+    "type": "text",
+    "page_idx": 61,
+    "text": "B.  $AC = BD, AB \\parallel CD, AB = CD$"
+  },
+  {
+    "id": 1110,
+    "type": "text",
+    "page_idx": 61,
+    "text": "C.  $AB \\parallel CD, AC = BD, AC \\perp BD$"
+  },
+  {
+    "id": 1111,
+    "type": "text",
+    "page_idx": 61,
+    "text": "D.  $AO = CO, BO = DO, AB = BC$"
+  },
+  {
+    "id": 1112,
+    "type": "text",
+    "page_idx": 61,
+    "text": "二、填空题"
+  },
+  {
+    "id": 1113,
+    "type": "text",
+    "text": "7.  $E \\setminus F \\setminus G \\setminus H$  依次为四边形ABCD各边的中点，若四边形ABCD满足________，",
+    "page_idx": 61
+  },
+  {
+    "id": 1114,
+    "type": "text",
+    "text": "那么四边形EFGH是矩形；若四边形ABCD满足____，那么四边形EFGH是菱形.",
+    "page_idx": 61
+  },
+  {
+    "id": 1115,
+    "type": "text",
+    "text": "8. 菱形的一条对角线长和它的边长相等, 那么这个菱形最大的内角是______度.",
+    "page_idx": 61
+  },
+  {
+    "id": 1116,
+    "type": "text",
+    "text": "9. 八边形内角和等于________，外角和等于________。",
+    "page_idx": 61
+  },
+  {
+    "id": 1117,
+    "type": "text",
+    "text": "10. 如果一个多边形的边数增加  $1$ , 它的内角和就增加十分之一, 那么这个多边形的边数是",
+    "page_idx": 61
+  },
+  {
+    "id": 1118,
+    "type": "text",
+    "text": "11. 菱形的周长是 52, 一对角线的长是 10, 这菱形的面积是",
+    "page_idx": 61
+  },
+  {
+    "id": 1119,
+    "type": "text",
+    "text": "12. 矩形ABCD中,DE⊥AC,∠ADE=36°,那么∠ACD=______度.",
+    "page_idx": 61
+  },
+  {
+    "id": 1120,
+    "type": "text",
+    "text": "13. 菱形的周长 24, 一个内角是  $120^{\\circ}$ , 那么菱形的两条对角线的长分别是____和____.",
+    "page_idx": 61
+  },
+  {
+    "id": 1121,
+    "type": "text",
+    "text": "14. 菱形的两条对角线分别为 10 和 12, 则此菱形的边长为",
+    "page_idx": 61
+  },
+  {
+    "id": 1122,
+    "type": "text",
+    "text": "15. 已知 AD 是  $\\triangle ABC$  的角平分线, E, F 分别是边 AB, AC 的中点, 连结 DE, DF. 再不连结其",
+    "page_idx": 61
+  },
+  {
+    "id": 1123,
+    "type": "text",
+    "page_idx": 61,
+    "text": "他线段的前提下,要是四边形 AEDF 成为菱形, 还需添加一个条件, 这个条件可以是______。"
+  },
+  {
+    "id": 1124,
+    "type": "text",
+    "text": "16. 已知菱形ABCD的周长为  $20^{cm}$ , 且相邻两内角之比是  $1: 2$ , 则菱形的两条对角线的长和面积分别是",
+    "page_idx": 62
+  },
+  {
+    "id": 1125,
+    "type": "text",
+    "text": "17. 在五边形  $ABCDE$  中，若  $\\angle A + \\angle B + \\angle C + \\angle D = 440^\\circ$ ，则  $\\angle E =$",
+    "page_idx": 62
+  },
+  {
+    "id": 1126,
+    "type": "text",
+    "text": "18. 计算：  $AB + BC + CD =$",
+    "page_idx": 62
+  },
+  {
+    "id": 1127,
+    "type": "text",
+    "page_idx": 62,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1128,
+    "type": "text",
+    "page_idx": 62,
+    "text": "19. 已知:如图,在等腰梯形  $ABCD$  中,  $AD \\parallel BC, AB = DC$ , 点  $E$  为边  $BC$  上一点, 且  $AE = DC$"
+  },
+  {
+    "id": 1129,
+    "type": "text",
+    "text": "(1) 求证: 四边形  $A E C D$  是平行四边形;",
+    "page_idx": 62
+  },
+  {
+    "id": 1130,
+    "type": "text",
+    "text": "(2) 当  $\\angle B = 2\\angle DCA$  时, 求证四边形  $A E C D$  是菱形.",
+    "page_idx": 62
+  },
+  {
+    "id": 1131,
+    "type": "image",
+    "page_idx": 62,
+    "img_path": "images/82f3f4697987340040d420739fccf242676699752221e2b294c8dbd421159a15.jpg"
+  },
+  {
+    "id": 1132,
+    "type": "text",
+    "page_idx": 62,
+    "text": "20. 如图，在  $\\triangle ABCD$  中，点  $E$  是  $BC$  边的中点，设  $AB = a, BE = b$"
+  },
+  {
+    "id": 1133,
+    "type": "text",
+    "text": "(1) 试用向量  $a \\sqrt{b}$  表示向量  $DE$ , 则  $DE =$",
+    "page_idx": 62
+  },
+  {
+    "id": 1134,
+    "type": "text",
+    "text": "(2) 在图中求作:  $\\frac{BA - BE}{BE}, \\frac{EC + ED}{ED}$ .",
+    "page_idx": 62
+  },
+  {
+    "id": 1135,
+    "type": "text",
+    "page_idx": 62,
+    "text": "(保留作图痕迹，不要求写作法，但要写出结果)"
+  },
+  {
+    "id": 1136,
+    "type": "image",
+    "page_idx": 62,
+    "img_path": "images/ff1e4bd42dddcb905132820e3c021ac4ce36e0d9d262870e0378f999192d471f.jpg"
+  },
+  {
+    "id": 1137,
+    "type": "text",
+    "page_idx": 63,
+    "text": "21. 如图，矩形ABCD的对角线相交于点O，DE//AC，CE//BD,"
+  },
+  {
+    "id": 1138,
+    "type": "text",
+    "page_idx": 63,
+    "text": "求证：四边形OCED是菱形."
+  },
+  {
+    "id": 1139,
+    "type": "image",
+    "page_idx": 63,
+    "img_path": "images/947fc953397aade4f2a6c2bc2975e70f26fe42b217d9838ace214914a5e3fa88.jpg"
+  },
+  {
+    "id": 1140,
+    "type": "image",
+    "page_idx": 63,
+    "img_path": "images/64c5ce3a88a80945ac8c16f740ce973aa69ec46e2cd8514ad9a9056a72733bfb.jpg"
+  },
+  {
+    "id": 1141,
+    "type": "text",
+    "page_idx": 63,
+    "text": "22. 如图，在  $\\square ABCD$  中，  $AB = AE$"
+  },
+  {
+    "id": 1142,
+    "type": "text",
+    "text": "(1) 求证:  $AC = ED$ ;",
+    "page_idx": 63
+  },
+  {
+    "id": 1143,
+    "type": "text",
+    "text": "(2) 若 AE 平分  $\\angle DAB$ ,  $\\angle EAC = 25^\\circ$ . 求  $\\angle ACD$  的度数.",
+    "page_idx": 63
+  },
+  {
+    "id": 1144,
+    "type": "text",
+    "page_idx": 64,
+    "text": "23. 已知平行四边形  $ABCD$ ，对角线  $AC$ 、 $BD$  相交于点  $O$ ，且  $CA = CB$ ，延长  $BC$"
+  },
+  {
+    "id": 1145,
+    "type": "text",
+    "page_idx": 64,
+    "text": "至点  $E$  ，使  $CE = BC$  ，联结  $DE$  ："
+  },
+  {
+    "id": 1146,
+    "type": "text",
+    "page_idx": 64,
+    "text": "(1) 当  $AC \\perp BD$  时，求证： $BE = 2CD$ ；"
+  },
+  {
+    "id": 1147,
+    "type": "image",
+    "page_idx": 64,
+    "img_path": "images/6e727370aba74df6a722f7d1913478e4228f8c55a5d2bf15a86d13917c3e65ce.jpg"
+  },
+  {
+    "id": 1148,
+    "type": "text",
+    "page_idx": 64,
+    "text": "(2）当  $\\angle ACB = 90^{\\circ}$  时，求证：四边形  $ACED$  是正方形."
+  },
+  {
+    "id": 1149,
+    "type": "text",
+    "page_idx": 64,
+    "text": "24. 如图: 在正方形  $A B C D$  中, 对角线  $A C 、 B D$  相交于点  $O$ ,  $\\angle B A C$  的平分线  $A F$"
+  },
+  {
+    "id": 1150,
+    "type": "text",
+    "page_idx": 64,
+    "text": "交  $BD$  于点  $E$  ，交  $BC$  于点  $F$  ："
+  },
+  {
+    "id": 1151,
+    "type": "text",
+    "page_idx": 64,
+    "text": "求证：(1)  $BE = BF$ ；"
+  },
+  {
+    "id": 1152,
+    "type": "image",
+    "page_idx": 64,
+    "img_path": "images/14ec9d4dba8556bbe0d082fa2bc9cc0ac3e4976b4a08f4d458f5ae729b16a7e8.jpg"
+  },
+  {
+    "id": 1153,
+    "type": "text",
+    "page_idx": 64,
+    "text": "(2)  $OE = \\frac{1}{2} CF$"
+  },
+  {
+    "id": 1154,
+    "type": "text",
+    "page_idx": 65,
+    "text": "25. 如图，已知在正方形  $ABCD$  中， $AB = 2$ ，点  $E$  为线段  $AC$  上一点（点  $E$  不与  $A$ 、 $C$  重合），"
+  },
+  {
+    "id": 1155,
+    "type": "text",
+    "page_idx": 65,
+    "text": "$DE$  ，过点  $E$  作  $EF \\perp DE$  。交射线  $BC$  于点  $F$  ，以  $DE$  、  $EF$  为邻边作矩形  $DEFG$  。"
+  },
+  {
+    "id": 1156,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/a727ebe2ca0228d66c8d77beb44d72593fe6342e31e11bcb48f21c57ed044ec5.jpg"
+  },
+  {
+    "id": 1157,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/04183719c17a56441a93f56e68b180eb3e2ce799d90de90f25f9fabcc436de16.jpg"
+  },
+  {
+    "id": 1158,
+    "type": "text",
+    "text": "(1) 求证:  $DE = EF$ ;",
+    "page_idx": 65
+  },
+  {
+    "id": 1159,
+    "type": "text",
+    "text": "(2) 连接  $CG$  、  $EG$  ，设  $AE = x$  ，  $\\triangle ECG$  的面积为  $y$  。求  $y$  关于  $x$  的函数关系式并写出定义域；",
+    "page_idx": 65
+  },
+  {
+    "id": 1160,
+    "type": "text",
+    "text": "(3) 设  $EG$  、  $CD$  相交于点  $H$  如果  $\\Delta EDH$  是等腰三角形, 求线段  $AE$  的长.",
+    "page_idx": 65
+  },
+  {
+    "id": 1161,
+    "type": "text",
+    "page_idx": 66,
+    "text": "23.2 事件发生的可能性"
+  },
+  {
+    "id": 1162,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A组"
+  },
+  {
+    "id": 1163,
+    "type": "text",
+    "page_idx": 66,
+    "text": "一、选择题"
+  },
+  {
+    "id": 1164,
+    "type": "text",
+    "page_idx": 66,
+    "text": "1. 下列事件中,确定事件的是( )"
+  },
+  {
+    "id": 1165,
+    "type": "text",
+    "text": "A.掷一枚6个面分别标有  $1 \\sim 6$  数字的骰子,骰子停止运动后偶数点朝上",
+    "page_idx": 66
+  },
+  {
+    "id": 1166,
+    "type": "text",
+    "text": "B.从一副扑克牌中任意抽出一张牌,花色是红桃",
+    "page_idx": 66
+  },
+  {
+    "id": 1167,
+    "type": "text",
+    "text": "C. 任意选中电视的某一个频道, 正在播放动画片",
+    "page_idx": 66
+  },
+  {
+    "id": 1168,
+    "type": "text",
+    "text": "D.在一年出生的 367 名学生中,至少有两个人的生日在同一天",
+    "page_idx": 66
+  },
+  {
+    "id": 1169,
+    "type": "text",
+    "page_idx": 66,
+    "text": "2. 下列事件中:① 日落西山;② 今天下雨;③ 两个数,绝对值大的数大;④ 常温下,水必沸腾.是必然事件的个数有( )"
+  },
+  {
+    "id": 1170,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A. 0 个"
+  },
+  {
+    "id": 1171,
+    "type": "text",
+    "page_idx": 66,
+    "text": "B.1 个"
+  },
+  {
+    "id": 1172,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C.2 个"
+  },
+  {
+    "id": 1173,
+    "type": "text",
+    "page_idx": 66,
+    "text": "D.3 个"
+  },
+  {
+    "id": 1174,
+    "type": "text",
+    "page_idx": 66,
+    "text": "3. 甲乙两人掷两枚 6 个面分别标有  $1 \\sim 6$  数字的骰子, 规定掷出 “和不小于 7” 甲胜, “和不大于 6” 则乙胜, 那么, 这个游戏 ( )"
+  },
+  {
+    "id": 1175,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A.对甲乙都公平"
+  },
+  {
+    "id": 1176,
+    "type": "text",
+    "page_idx": 66,
+    "text": "B.对甲有利"
+  },
+  {
+    "id": 1177,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C.对乙有利"
+  },
+  {
+    "id": 1178,
+    "type": "text",
+    "page_idx": 66,
+    "text": "D.无法判断"
+  },
+  {
+    "id": 1179,
+    "type": "text",
+    "page_idx": 66,
+    "text": "4. 在一次向“希望工程”捐款的活动中，已知小刚的捐款数比他所在学习小组中13人捐款的平均数多2元，捐款数从多到少排序，则下列判断中，正确的是（）"
+  },
+  {
+    "id": 1180,
+    "type": "text",
+    "text": "A.小刚在小组中捐款数不可能是最多的",
+    "page_idx": 66
+  },
+  {
+    "id": 1181,
+    "type": "text",
+    "text": "B.小刚在小组中捐款数可能排在第12位",
+    "page_idx": 66
+  },
+  {
+    "id": 1182,
+    "type": "text",
+    "text": "C.小刚在小组中捐款数不可能比捐款数排在第7位的同学的少",
+    "page_idx": 66
+  },
+  {
+    "id": 1183,
+    "type": "text",
+    "text": "D.小刚在小组中捐款数可能是最少的",
+    "page_idx": 66
+  },
+  {
+    "id": 1184,
+    "type": "text",
+    "page_idx": 66,
+    "text": "5. 一副去掉大小王的扑克牌有 52 张, 任意抽牌最少要抽多少张牌, 才能保证有 4 张是同一花色的? ( )"
+  },
+  {
+    "id": 1185,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A. 4 张"
+  },
+  {
+    "id": 1186,
+    "type": "text",
+    "page_idx": 66,
+    "text": "B. 12 张"
+  },
+  {
+    "id": 1187,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C. 13 张"
+  },
+  {
+    "id": 1188,
+    "type": "text",
+    "page_idx": 66,
+    "text": "D. 52 张"
+  },
+  {
+    "id": 1189,
+    "type": "text",
+    "page_idx": 66,
+    "text": "6. 下列说法中,正确的个数是 (   )"
+  },
+  {
+    "id": 1190,
+    "type": "text",
+    "text": "(1) 可能性很小的事件也是有可能发生的",
+    "page_idx": 66
+  },
+  {
+    "id": 1191,
+    "type": "text",
+    "text": "(2) 如果一件事件发生的可能性很大,那么它就必然发生",
+    "page_idx": 66
+  },
+  {
+    "id": 1192,
+    "type": "text",
+    "text": "(3) 可能性很大的事也是有可能不发生的",
+    "page_idx": 66
+  },
+  {
+    "id": 1193,
+    "type": "text",
+    "text": "(4) 如果一件事情发生的可能性很小, 那么它就不可能发生",
+    "page_idx": 66
+  },
+  {
+    "id": 1194,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A. 0 个"
+  },
+  {
+    "id": 1195,
+    "type": "text",
+    "page_idx": 66,
+    "text": "B. 1 个"
+  },
+  {
+    "id": 1196,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C. 2 个"
+  },
+  {
+    "id": 1197,
+    "type": "text",
+    "page_idx": 66,
+    "text": "D. 3 个"
+  },
+  {
+    "id": 1198,
+    "type": "text",
+    "page_idx": 66,
+    "text": "二、填空题"
+  },
+  {
+    "id": 1199,
+    "type": "text",
+    "text": "7. 不可能发生是指事件发生的机会为",
+    "page_idx": 66
+  },
+  {
+    "id": 1200,
+    "type": "text",
+    "text": "8. 闭上眼睛,从装了100只标有  $1 \\sim 100$  的小球的口袋中一次任意摸一个球,摸到号码是4的倍数和5的倍数中, ______的可能性更大",
+    "page_idx": 66
+  },
+  {
+    "id": 1201,
+    "type": "text",
+    "text": "9. 抛掷两枚四个面分别标有 1,2,3,4 的四面体骰子, 写出这个实验中的一个随机事件 , 写出这个实验中的一个必然发生的事件是",
+    "page_idx": 66
+  },
+  {
+    "id": 1202,
+    "type": "text",
+    "page_idx": 67,
+    "text": "10.有两个盒子，第一个盒子有3个红球和1个白球，第二个盒子有3个红球和2个白球，从第 个盒子中摸到红球的可能性大"
+  },
+  {
+    "id": 1203,
+    "type": "text",
+    "page_idx": 67,
+    "text": "11. 一副国际象棋中,黑棋有 16 个,其中兵有 8 个,车、马、象各 2 个,王和后各 1 个,从中任取一个棋子,选到____的可能性最大"
+  },
+  {
+    "id": 1204,
+    "type": "text",
+    "page_idx": 67,
+    "text": "12. 随机事件发生的可能性大小,要经过 来确定的"
+  },
+  {
+    "id": 1205,
+    "type": "text",
+    "page_idx": 67,
+    "text": "13. 从一副扑克牌中任意取出一张牌是大王,该事件________发生。(填“不太可能”或“很有可能”)"
+  },
+  {
+    "id": 1206,
+    "type": "text",
+    "page_idx": 67,
+    "text": "14. 掷两枚 1 元硬币, 用  $P_{1}, P_{2}$  分别表示两枚硬币正面朝上, 一正一反朝上的可能性大小, 则  $P_{1} - P_{2}$  (填 “>” “<” 或 “=”)"
+  },
+  {
+    "id": 1207,
+    "type": "text",
+    "page_idx": 67,
+    "text": "15. 根据生活经验判断下列事件发生的可能性的大小.(在横线上填入编号)"
+  },
+  {
+    "id": 1208,
+    "type": "text",
+    "text": "(1) 一盒子中有 9 个红球, 1 个绿球, 它们形状大小一样, 只是颜色不同, 任意取出一个球是红球;",
+    "page_idx": 67
+  },
+  {
+    "id": 1209,
+    "type": "text",
+    "text": "(2) 从一副52张扑克牌(没有大、小王)中,抽出一张牌是黑色的(黑桃或梅花);",
+    "page_idx": 67
+  },
+  {
+    "id": 1210,
+    "type": "text",
+    "text": "(3) 小明一口气喝下三瓶  $550 \\mathrm{ml}$  的矿泉水;",
+    "page_idx": 67
+  },
+  {
+    "id": 1211,
+    "type": "text",
+    "text": "(4)掷一枚质地均匀的正方体骰子,掷得的点数为奇数",
+    "page_idx": 67
+  },
+  {
+    "id": 1212,
+    "type": "text",
+    "page_idx": 67,
+    "text": "其中很有可能的事件： 不太可能的事件： 有可能的事件："
+  },
+  {
+    "id": 1213,
+    "type": "text",
+    "page_idx": 67,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1214,
+    "type": "text",
+    "page_idx": 67,
+    "text": "16. 指出下列事件中,哪些是必然事件,哪些是不可能事件哪些是随机事件"
+  },
+  {
+    "id": 1215,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(1)两直线平行,内错角相等;(2)刘翔再次打破110米栏的世界纪录;(3)打靶命中靶心;(4)掷一次骰子,向上一面是3点;(5)13个人中,至少有两个人出生的月份相同;(6)经过有信号灯的十字路口,遇见红灯;(7)在装有3个球的布袋里摸出4个球;(8)物体在重力的作用下自由下落"
+  },
+  {
+    "id": 1216,
+    "type": "text",
+    "page_idx": 67,
+    "text": "17. 有一个质地均匀的正方体,一面涂上红色,两面涂上黄色,三面涂上绿色,用  $P_{1} \\sim P_{3}$  依次表示抛掷出“红”、“黄”、“绿”、“红或黄或绿”、“蓝”的可能性大小,请你将它们的可能大小按照从小到大的顺序排列"
+  },
+  {
+    "id": 1217,
+    "type": "text",
+    "text": "18. 有5张卡片上各写2、4、6、8、10中的一个数,指出下列事件是必然事件,还是随机事件,还是不可能事件?",
+    "page_idx": 68
+  },
+  {
+    "id": 1218,
+    "type": "text",
+    "text": "(1) 从中任取一张是偶数(2) 从中任取一张是奇数(3) 从中任取一张是3的倍数",
+    "page_idx": 68
+  },
+  {
+    "id": 1219,
+    "type": "text",
+    "page_idx": 68,
+    "text": "19. 试比较下列事件发生的可能性大小，并按可能性从大到小排列"
+  },
+  {
+    "id": 1220,
+    "type": "text",
+    "text": "(1)掷一枚质地均匀的正方体骰子，出现的点数为7；",
+    "page_idx": 68
+  },
+  {
+    "id": 1221,
+    "type": "text",
+    "text": "(2) 从一个装有 2 个白球, 1 个红球的袋子中任取一球, 取到白球",
+    "page_idx": 68
+  },
+  {
+    "id": 1222,
+    "type": "text",
+    "text": "(3) 在分别标有  $1 \\sim 9$  连续正整数的九张卡片中,随机抽取两张,和等于 17",
+    "page_idx": 68
+  },
+  {
+    "id": 1223,
+    "type": "text",
+    "page_idx": 68,
+    "text": "B组"
+  },
+  {
+    "id": 1224,
+    "type": "text",
+    "page_idx": 68,
+    "text": "1.抛一枚硬币，正面朝上的概率  $P(A)$  是  $\\frac{1}{2}$ $P(A)\\times 2 = \\frac{1}{2}\\times 2 = 1$  ，可知在相同的条件下重复2次，肯定可以扔得正面朝上，你认为这种说法对吗？为什么？"
+  },
+  {
+    "id": 1225,
+    "type": "text",
+    "page_idx": 69,
+    "text": "23.3(2) 事件的概率"
+  },
+  {
+    "id": 1226,
+    "type": "text",
+    "page_idx": 69,
+    "text": "A组"
+  },
+  {
+    "id": 1227,
+    "type": "text",
+    "page_idx": 69,
+    "text": "一、选择题"
+  },
+  {
+    "id": 1228,
+    "type": "text",
+    "page_idx": 69,
+    "text": "1. 某市民政部门:“五一”期间举行“即开式福利彩票”的销售活动,发行彩票 10 万张(每张彩票 2 元),在这些彩票中,设置如下奖项:如果花 2 元钱购买 1 张彩票,那么所得奖金不少于 50 元的概率是( )"
+  },
+  {
+    "id": 1229,
+    "type": "text",
+    "text": "[Table Row] <tr><td>奖金(元)</td><td>1000</td><td>500</td><td>100</td><td>50</td><td>10</td><td>2</td></tr>",
+    "page_idx": 69
+  },
+  {
+    "id": 1230,
+    "type": "text",
+    "text": "[Table Row] <tr><td>数量(个)</td><td>10</td><td>40</td><td>150</td><td>400</td><td>1000</td><td>10000</td></tr>",
+    "page_idx": 69
+  },
+  {
+    "id": 1231,
+    "type": "text",
+    "page_idx": 69,
+    "text": "A.0.0005"
+  },
+  {
+    "id": 1232,
+    "type": "text",
+    "page_idx": 69,
+    "text": "B.0.006"
+  },
+  {
+    "id": 1233,
+    "type": "text",
+    "page_idx": 69,
+    "text": "C.0.005"
+  },
+  {
+    "id": 1234,
+    "type": "text",
+    "page_idx": 69,
+    "text": "D.0.002"
+  },
+  {
+    "id": 1235,
+    "type": "text",
+    "page_idx": 69,
+    "text": "2. 在一个暗箱里放入除颜色外其他都相同的 3 个红球和 11 个黄球, 搅拌均匀后随机取一个球, 取到红球的概率是 ( )"
+  },
+  {
+    "id": 1236,
+    "type": "text",
+    "page_idx": 69,
+    "text": "A.  $\\frac{3}{11}$"
+  },
+  {
+    "id": 1237,
+    "type": "text",
+    "page_idx": 69,
+    "text": "B.  $\\frac{8}{11}$"
+  },
+  {
+    "id": 1238,
+    "type": "text",
+    "page_idx": 69,
+    "text": "C.  $\\frac{11}{14}$"
+  },
+  {
+    "id": 1239,
+    "type": "text",
+    "page_idx": 69,
+    "text": "D.  $\\frac{3}{14}$"
+  },
+  {
+    "id": 1240,
+    "type": "text",
+    "page_idx": 69,
+    "text": "3. 从甲地到乙地可坐飞机、火车、汽车,从乙地到丙地可坐飞机、火车、汽车、轮船,某人乘坐以上交通工具,从甲地经乙地到丙地的方法有( )"
+  },
+  {
+    "id": 1241,
+    "type": "text",
+    "page_idx": 69,
+    "text": "A.4种"
+  },
+  {
+    "id": 1242,
+    "type": "text",
+    "page_idx": 69,
+    "text": "B.7种"
+  },
+  {
+    "id": 1243,
+    "type": "text",
+    "page_idx": 69,
+    "text": "C.12种"
+  },
+  {
+    "id": 1244,
+    "type": "text",
+    "page_idx": 69,
+    "text": "D.81种"
+  },
+  {
+    "id": 1245,
+    "type": "text",
+    "page_idx": 69,
+    "text": "4. 同时掷两个质地均匀的骰子,两个骰子的点子数不相同的概率是( )"
+  },
+  {
+    "id": 1246,
+    "type": "text",
+    "page_idx": 69,
+    "text": "A.  $\\frac{5}{6}$"
+  },
+  {
+    "id": 1247,
+    "type": "text",
+    "page_idx": 69,
+    "text": "B.  $\\frac{1}{3}$"
+  },
+  {
+    "id": 1248,
+    "type": "text",
+    "page_idx": 69,
+    "text": "C.  $\\frac{1}{6}$"
+  },
+  {
+    "id": 1249,
+    "type": "text",
+    "page_idx": 69,
+    "text": "D.  $\\frac{1}{36}$"
+  },
+  {
+    "id": 1250,
+    "type": "text",
+    "page_idx": 69,
+    "text": "二、填空题"
+  },
+  {
+    "id": 1251,
+    "type": "image",
+    "page_idx": 69,
+    "img_path": "images/548bec04b7c5c344dc20e7d85263b0faed701652985653dac773f27b5f7dcf97.jpg"
+  },
+  {
+    "id": 1252,
+    "type": "text",
+    "text": "5. 小明有两件上衣,三条长裤,则他有______种不同的穿法",
+    "page_idx": 69
+  },
+  {
+    "id": 1253,
+    "type": "text",
+    "text": "6. 如图所示,是一个转盘转盘分成 7 个相同的扇形,颜色分为红黄绿三种,指针固定,转动转盘后任其自由停止,则指向红色的概率是_____;不指向黄色的概率是_____。",
+    "page_idx": 69
+  },
+  {
+    "id": 1254,
+    "type": "text",
+    "text": "7. 掷 2 枚一元钱的硬币和 3 枚一角钱的硬币, 1 枚一元钱的硬币和至少 1 枚一角钱的硬币的正面朝上的概率是",
+    "page_idx": 69
+  },
+  {
+    "id": 1255,
+    "type": "text",
+    "text": "8. 两双袜子,一双黄色,一双黑色,小明早上急匆匆穿上袜子就上学,那么小明所穿袜子正好穿对的概率是",
+    "page_idx": 69
+  },
+  {
+    "id": 1256,
+    "type": "text",
+    "text": "9. 在“石头、剪刀、布”的游戏中,两人做同样手势的概率是",
+    "page_idx": 69
+  },
+  {
+    "id": 1257,
+    "type": "text",
+    "text": "10. 等可能实验具有的特点有试验的结果是 , 各种结果可能出现的机会是 , 任何两个结果同时出现",
+    "page_idx": 69
+  },
+  {
+    "id": 1258,
+    "type": "text",
+    "text": "11. 一个不透明的袋中装有除颜色外其余均相同的 7 个黄球和 2 个绿球, 从中摸出一个, 则摸到黄球的概率是",
+    "page_idx": 70
+  },
+  {
+    "id": 1259,
+    "type": "text",
+    "text": "12.掷一枚质地均匀的正方体骰子，掷得面朝上的点数为合数的概率为",
+    "page_idx": 70
+  },
+  {
+    "id": 1260,
+    "type": "text",
+    "text": "13.随意掷出两个骰子,其所得点数之和恰好为7的概率是",
+    "page_idx": 70
+  },
+  {
+    "id": 1261,
+    "type": "text",
+    "text": "14. 在盒子中有 10 个相同的球, 它们的标号分别为  $1,2,\\ldots,10$ , 从中任取一球, 则此球的号码为偶数的概率为",
+    "page_idx": 70
+  },
+  {
+    "id": 1262,
+    "type": "text",
+    "text": "15. 有四条线段,长度分别为 1、3、5、7. 从这四条线段中任取三条,则所取三条线段能构成一个三角形的概率为",
+    "page_idx": 70
+  },
+  {
+    "id": 1263,
+    "type": "text",
+    "text": "16. 从  $1 \\sim 100$  这 100 个数字中任意选取一个数字, 取到的数是 3 的倍数的概率是",
+    "page_idx": 70
+  },
+  {
+    "id": 1264,
+    "type": "text",
+    "text": "17. 在一副扑克牌中拿出 3 张方块,2 张红桃的牌共 5 张,洗匀后,从中任取 2 张牌恰好是同花色的概率是",
+    "page_idx": 70
+  },
+  {
+    "id": 1265,
+    "type": "text",
+    "page_idx": 70,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1266,
+    "type": "text",
+    "page_idx": 70,
+    "text": "1. 口袋里有 3 张卡片,一张两面都是  $\\star$ ,一张两面都是  $\\bigcirc$ ,还有一张一面是  $\\star$ 、另一面是  $\\bigcirc$ . 现在摸出一张卡片摆在桌面上,大家看见是  $\\star$ ,那么这张卡片的另一面也是  $\\star$  的概率是多少"
+  },
+  {
+    "id": 1267,
+    "type": "text",
+    "page_idx": 70,
+    "text": "3.抛一枚硬币，正面朝上的概率为  $P_{1}$  ；掷一枚普通的正方体骰子，掷得的点数小于7的概率为 $P_{2}$  口袋中有红、黄、白球各一个，从中一次摸出两个红球的概率为  $P_{3}$  将  $P_{1},P_{2},P_{3}$  从小到大排列"
+  },
+  {
+    "id": 1268,
+    "type": "text",
+    "page_idx": 70,
+    "text": "4. 如图所示,在边长为 25 厘米的正方形中挖去边长为 23 厘米的两个等腰直角三角形,现有均匀的粒子散落在正方形中,问粒子落在中间带形区域的概率是多少?"
+  },
+  {
+    "id": 1269,
+    "type": "image",
+    "page_idx": 70,
+    "img_path": "images/952ad004f601459758fd31cb4c05ea9193c91c2c9d58437872def49015199479.jpg"
+  },
+  {
+    "id": 1270,
+    "type": "text",
+    "page_idx": 71,
+    "text": "B组"
+  },
+  {
+    "id": 1271,
+    "type": "text",
+    "page_idx": 71,
+    "text": "1. 甲、乙两人用一副52张的扑克牌(去掉大小王)进行摸牌游戏。结果甲有三次摸到红牌(红桃和方块),而乙没有一次摸到红牌。如果两人继续摸牌,那么下一次谁摸到红牌的机会比较大?"
+  },
+  {
+    "id": 1272,
+    "type": "text",
+    "page_idx": 71,
+    "text": "2. 抛掷两枚均匀的硬币,计算"
+  },
+  {
+    "id": 1273,
+    "type": "text",
+    "text": "(1) 两枚都出现正面的概率;",
+    "page_idx": 71
+  },
+  {
+    "id": 1274,
+    "type": "text",
+    "text": "(2) 一枚出现正面、一枚出现反面的概率",
+    "page_idx": 71
+  },
+  {
+    "id": 1275,
+    "type": "text",
+    "page_idx": 71,
+    "text": "3. 有10个型号相同的杯子，其中一等品6个，二等品3个，三等品1个从中任取一个，取到一等品的概率为多少？"
+  },
+  {
+    "id": 1276,
+    "type": "text",
+    "page_idx": 71,
+    "text": "4. 某号码锁有 6 个拨盘, 每个拨盘有从 0 到 9 共十个数字, 当 6 个拨盘上的数字组成某一个六位数字号码(开锁号码)时, 锁才能打开, 如果不知道开锁号码, 试开一次就把锁打开的概率是多少?"
+  },
+  {
+    "id": 1277,
+    "type": "text",
+    "page_idx": 72,
+    "text": "5. 有五条线段的长分别为2、4、6、8、10,从中任取三条能构成三角形的概率是多少?"
+  },
+  {
+    "id": 1278,
+    "type": "text",
+    "page_idx": 72,
+    "text": "23.4(1) 概率计算举例"
+  },
+  {
+    "id": 1279,
+    "type": "text",
+    "page_idx": 72,
+    "text": "A组"
+  },
+  {
+    "id": 1280,
+    "type": "text",
+    "page_idx": 72,
+    "text": "一、选择题"
+  },
+  {
+    "id": 1281,
+    "type": "text",
+    "page_idx": 72,
+    "text": "1. 抛掷一枚一元硬币三次,出现两次币值面向上的概率是( )"
+  },
+  {
+    "id": 1282,
+    "type": "text",
+    "page_idx": 72,
+    "text": "A.  $\\frac{1}{3}$"
+  },
+  {
+    "id": 1283,
+    "type": "text",
+    "page_idx": 72,
+    "text": "B.  $\\frac{2}{3}$"
+  },
+  {
+    "id": 1284,
+    "type": "text",
+    "page_idx": 72,
+    "text": "C.  $\\frac{3}{8}$"
+  },
+  {
+    "id": 1285,
+    "type": "text",
+    "page_idx": 72,
+    "text": "D.  $\\frac{3}{4}$"
+  },
+  {
+    "id": 1286,
+    "type": "text",
+    "page_idx": 72,
+    "text": "2. 某种产品 100 件, 其中一等品 40 件, 二等品 45 件, 三等品 15 件, 从中抽取一件不是三等品的概率是 ( )"
+  },
+  {
+    "id": 1287,
+    "type": "text",
+    "page_idx": 72,
+    "text": "A.  $\\frac{3}{20}$"
+  },
+  {
+    "id": 1288,
+    "type": "text",
+    "page_idx": 72,
+    "text": "B.  $\\frac{2}{5}$"
+  },
+  {
+    "id": 1289,
+    "type": "text",
+    "page_idx": 72,
+    "text": "C.  $\\frac{9}{20}$"
+  },
+  {
+    "id": 1290,
+    "type": "text",
+    "page_idx": 72,
+    "text": "D.  $\\frac{17}{20}$"
+  },
+  {
+    "id": 1291,
+    "type": "text",
+    "page_idx": 72,
+    "text": "3. 同时掷三个质地均匀的骰子出现至少两个相同点数的概率是( )"
+  },
+  {
+    "id": 1292,
+    "type": "text",
+    "page_idx": 72,
+    "text": "A.  $\\frac{1}{216}$"
+  },
+  {
+    "id": 1293,
+    "type": "text",
+    "page_idx": 72,
+    "text": "5 B. 36"
+  },
+  {
+    "id": 1294,
+    "type": "text",
+    "page_idx": 72,
+    "text": "C.  $\\frac{1}{6}$"
+  },
+  {
+    "id": 1295,
+    "type": "text",
+    "page_idx": 72,
+    "text": "4 D."
+  },
+  {
+    "id": 1296,
+    "type": "text",
+    "page_idx": 72,
+    "text": "4. 九年级 250 名学生中参加数学竞赛的有 40 名, 参加英语竞赛的有 60 名, 两科都参加竞赛的有 10 名, 现在从九年级学生名单中随机抽取名学生, 下列说法错误的是 ( )"
+  },
+  {
+    "id": 1297,
+    "type": "text",
+    "page_idx": 72,
+    "text": "A.  $P$  （该生两科都参加竞赛）  $= 0.04$"
+  },
+  {
+    "id": 1298,
+    "type": "text",
+    "page_idx": 72,
+    "text": "B."
+  },
+  {
+    "id": 1299,
+    "type": "text",
+    "page_idx": 72,
+    "text": "$P$  （该生参加数学竞赛）  $= 0.16$"
+  },
+  {
+    "id": 1300,
+    "type": "text",
+    "page_idx": 72,
+    "text": "C.  $P$  (该生只参加英语竞赛) = 0.2"
+  },
+  {
+    "id": 1301,
+    "type": "text",
+    "page_idx": 72,
+    "text": "D.  $P$  (该生不参加竞赛)  $= 0.64$"
+  },
+  {
+    "id": 1302,
+    "type": "text",
+    "page_idx": 72,
+    "text": "5. 如图,图中的两个转盘分别被均匀地分成 5 个和 4 个扇形,每个扇形上都标有数字,同时自由转动两个转盘,转盘停止后,指针都落在奇数上的概率是 ( )"
+  },
+  {
+    "id": 1303,
+    "type": "text",
+    "page_idx": 72,
+    "text": "A.  $\\frac{2}{5}$"
+  },
+  {
+    "id": 1304,
+    "type": "text",
+    "page_idx": 72,
+    "text": "B.  $\\frac{3}{10}$"
+  },
+  {
+    "id": 1305,
+    "type": "text",
+    "page_idx": 72,
+    "text": "3 C. 20"
+  },
+  {
+    "id": 1306,
+    "type": "text",
+    "page_idx": 72,
+    "text": "D.  $\\frac{1}{5}$"
+  },
+  {
+    "id": 1307,
+    "type": "image",
+    "page_idx": 72,
+    "img_path": "images/a293bff2a159c0c1033cb2fab8a24cdf8ec1ee563cead59fb88775e469636d89.jpg"
+  },
+  {
+    "id": 1308,
+    "type": "image",
+    "page_idx": 72,
+    "img_path": "images/3c140cc056852ef989f8c52c9455a0bcd45db2e6a4a71d8bf0cb8d0fce4f4a5d.jpg"
+  },
+  {
+    "id": 1309,
+    "type": "text",
+    "page_idx": 72,
+    "text": "二、填空题"
+  },
+  {
+    "id": 1310,
+    "type": "text",
+    "text": "6. 小射手为练习射击,共射击 60 次,其中 36 次击中靶子,试估计小射手依次击中靶子的概率为",
+    "page_idx": 72
+  },
+  {
+    "id": 1311,
+    "type": "text",
+    "text": "7. 小红、小张,在一起做游戏,需要确定的游戏的先后顺序,他们约定用“剪子,包袄,锤子”的方式确定,小红取胜的概率是",
+    "page_idx": 72
+  },
+  {
+    "id": 1312,
+    "type": "text",
+    "page_idx": 73,
+    "text": "8. 从两副拿掉大小王的扑克牌中,各抽取一张,两张牌都是方块的概率是"
+  },
+  {
+    "id": 1313,
+    "type": "text",
+    "page_idx": 73,
+    "text": "2"
+  },
+  {
+    "id": 1314,
+    "type": "text",
+    "page_idx": 73,
+    "text": "9. 袋子中共有 15 个大小相同的红球、白球, 任意摸出一球为红球的概率是 5 , 袋中红球有______个, 白球有______个"
+  },
+  {
+    "id": 1315,
+    "type": "text",
+    "page_idx": 73,
+    "text": "10. 在等可能试验过程中,遇到分步或交叉试验时,往往借助于 “_____图” 的方法来分析所有等可能结果,也可用_____的方法来分析所有的等可能结果"
+  },
+  {
+    "id": 1316,
+    "type": "text",
+    "page_idx": 73,
+    "text": "11. 如中奖率是  $5 \\%$ , 那不中奖率为"
+  },
+  {
+    "id": 1317,
+    "type": "image",
+    "page_idx": 73,
+    "img_path": "images/dadd65ca7862bfa5901ce47bb70024afd5118cdb6ea4936d8662ad2d6f53f945.jpg"
+  },
+  {
+    "id": 1318,
+    "type": "text",
+    "page_idx": 73,
+    "text": "12. 小成在书店买了一套故事书,有上中下三册,要整齐地摆放在书架上,有____种顺序不同的摆放。其中恰好摆成“下,中,上”顺序的概率为____。"
+  },
+  {
+    "id": 1319,
+    "type": "text",
+    "text": "13. 如图一只小狗在的方砖上行走,最终停在阴影方砖上的概率是",
+    "page_idx": 73
+  },
+  {
+    "id": 1320,
+    "type": "text",
+    "text": "14. 一个盒子里有 4 个除颜色外,其余都相同的玻璃球,一个红色,一个绿色,2 个白色,现随机地从盒子里一次取出两个球,则这两个球都是白球的概率__________.",
+    "page_idx": 73
+  },
+  {
+    "id": 1321,
+    "type": "text",
+    "text": "15. 从0到10这十一个数字中任取一个数, 取一个数恰好为素数概率为",
+    "page_idx": 73
+  },
+  {
+    "id": 1322,
+    "type": "text",
+    "page_idx": 73,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1323,
+    "type": "text",
+    "page_idx": 73,
+    "text": "16. 在一个布口袋里装着红色、黑色、蓝色、白色的小球各 5 个, 将它们在布袋内搅匀, 随机地从布袋中取球假如小张第一次和第二次取球都恰好取出了白球, 他把这两次取出的两个白球放在一边的桌子上, 从搅匀了剩下的小球中随机地摸第 3 个球, 那么这次他还是恰好取出一个白球的概率是多少?"
+  },
+  {
+    "id": 1324,
+    "type": "text",
+    "page_idx": 73,
+    "text": "17. 某产品出现次品的概率为 0.05 ,任意抽取这种产品 600 件,求这批产品大约有多少件次品"
+  },
+  {
+    "id": 1325,
+    "type": "text",
+    "page_idx": 73,
+    "text": "18. 小华有 3 张卡片,上面分别标有 2、2、3,小明有 2 张卡片,上面分别标有 4、5,小华和小明分别从自己的卡片中随机抽取一张,求抽取的两张卡片的数字和为 6 的概率"
+  },
+  {
+    "id": 1326,
+    "type": "text",
+    "page_idx": 73,
+    "text": "19.在一个布袋里有黄、绿颜色的球各1个,拿出一个记下颜色,再放回去,这样一共拿了三次"
+  },
+  {
+    "id": 1327,
+    "type": "text",
+    "page_idx": 74,
+    "text": "则拿三个黄色球的机会有多大?拿到两个黄色球、一个绿色球的机会有多大?"
+  },
+  {
+    "id": 1328,
+    "type": "text",
+    "page_idx": 74,
+    "text": "B组"
+  },
+  {
+    "id": 1329,
+    "type": "text",
+    "page_idx": 74,
+    "text": "1. 小王有 5 件衬衫, 其中 3 件是白衬衫, 4 条长裤, 其中 2 条是黑色的, 一天晚上, 灯坏了, 他顺手拿了衬衫和长裤穿上出门, 他走到路灯下发现自己穿白衬衫和黑长裤概率是多少?"
+  },
+  {
+    "id": 1330,
+    "type": "text",
+    "page_idx": 74,
+    "text": "2. 将正面分别标有数字 2,3,4 背面花色相同的三张卡片洗匀后，背面朝上放在桌面上"
+  },
+  {
+    "id": 1331,
+    "type": "text",
+    "text": "(1) 随机地取出一张, 求抽的偶数的概率是多少?",
+    "page_idx": 74
+  },
+  {
+    "id": 1332,
+    "type": "text",
+    "text": "(2) 随机的抽取一张作为个位上的数字 (不放回) 再抽取一张作为十位上的数字, 请你画出树形图, 并根据树形图求恰好取到 24 的概率是多少?",
+    "page_idx": 74
+  },
+  {
+    "id": 1333,
+    "type": "text",
+    "page_idx": 74,
+    "text": "3. 在围棋盒中有  $x$  颗黑子和  $y$  颗白子, 从盒中随机取出一个棋子, 如果它是黑色棋子的概率是"
+  },
+  {
+    "id": 1334,
+    "type": "text",
+    "page_idx": 74,
+    "text": "3 8"
+  },
+  {
+    "id": 1335,
+    "type": "text",
+    "page_idx": 74,
+    "text": "(1) 写出  $y$  与  $x$  的函数关系式"
+  },
+  {
+    "id": 1336,
+    "type": "text",
+    "page_idx": 75,
+    "text": "(2) 若往盒子中再放进 10 颗黑子, 则取得黑子的概率变为  $\\frac{1}{2}$ , 求  $x$  和  $y$  的值"
+  },
+  {
+    "id": 1337,
+    "type": "text",
+    "page_idx": 75,
+    "text": "第23章概率初步1"
+  },
+  {
+    "id": 1338,
+    "type": "text",
+    "page_idx": 75,
+    "text": "一、选择题"
+  },
+  {
+    "id": 1339,
+    "type": "text",
+    "page_idx": 75,
+    "text": "1. 下列事件中，属于确定事件的是（）"
+  },
+  {
+    "id": 1340,
+    "type": "text",
+    "text": "A. 抛掷一枚质地均匀的骰子, 正面向上的点数是 6",
+    "page_idx": 75
+  },
+  {
+    "id": 1341,
+    "type": "text",
+    "text": "B. 抛掷一枚质地均匀的骰子, 正面向上的点数大于 6",
+    "page_idx": 75
+  },
+  {
+    "id": 1342,
+    "type": "text",
+    "text": "C. 抛掷一枚质地均匀的骰子, 正面向上的点数小于 6",
+    "page_idx": 75
+  },
+  {
+    "id": 1343,
+    "type": "text",
+    "text": "D. 抛掷一枚质地均匀的骰子 6 次, “正面向上的点数是 6” 至少出现一次",
+    "page_idx": 75
+  },
+  {
+    "id": 1344,
+    "type": "text",
+    "page_idx": 75,
+    "text": "2.在下列事件中，确定事件共有（）"
+  },
+  {
+    "id": 1345,
+    "type": "text",
+    "text": "(1) 买一张体育彩票中大奖;",
+    "page_idx": 75
+  },
+  {
+    "id": 1346,
+    "type": "text",
+    "text": "(2) 抛掷一枚硬币, 落地后正面朝上;",
+    "page_idx": 75
+  },
+  {
+    "id": 1347,
+    "type": "text",
+    "text": "(3) 在只装有 2 只红球、3 只黄球的袋子中, 摸出 1 只白球;",
+    "page_idx": 75
+  },
+  {
+    "id": 1348,
+    "type": "text",
+    "text": "④ 初二（1）班共有37名学生，至少有3名学生的生日在同一个月。",
+    "page_idx": 75
+  },
+  {
+    "id": 1349,
+    "type": "text",
+    "page_idx": 75,
+    "text": "A. 1 个"
+  },
+  {
+    "id": 1350,
+    "type": "text",
+    "page_idx": 75,
+    "text": "B. 2 个"
+  },
+  {
+    "id": 1351,
+    "type": "text",
+    "page_idx": 75,
+    "text": "C. 3 个"
+  },
+  {
+    "id": 1352,
+    "type": "text",
+    "page_idx": 75,
+    "text": "D. 4 个"
+  },
+  {
+    "id": 1353,
+    "type": "text",
+    "page_idx": 75,
+    "text": "3. 下列事件中，是必然事件的是（）"
+  },
+  {
+    "id": 1354,
+    "type": "text",
+    "page_idx": 75,
+    "text": "A. 购买一张彩票，中奖"
+  },
+  {
+    "id": 1355,
+    "type": "text",
+    "page_idx": 75,
+    "text": "B. 射击运动员射击一次，命中靶心"
+  },
+  {
+    "id": 1356,
+    "type": "text",
+    "page_idx": 75,
+    "text": "C. 经过有交通信号灯的路口，遇到红灯"
+  },
+  {
+    "id": 1357,
+    "type": "text",
+    "page_idx": 75,
+    "text": "D. 任意画一个三角形, 其内角和是  $180^{\\circ}$"
+  },
+  {
+    "id": 1358,
+    "type": "text",
+    "page_idx": 75,
+    "text": "4. 不透明的袋子中只有 4 个黑球和 2 个白球, 这些球除颜色外无其他差别, 随机从袋子中一次摸出 3 个球, 下列事件是不可能事件的是 ( )"
+  },
+  {
+    "id": 1359,
+    "type": "text",
+    "page_idx": 75,
+    "text": "A. 3 个球都是黑球 B. 三个球中有黑球 C. 3 个球都是白球 D. 3 个球中有白球"
+  },
+  {
+    "id": 1360,
+    "type": "text",
+    "page_idx": 76,
+    "text": "5.事件“关于  $y$  的方程  $a^2 y + y = 1$  有实数解”是（）"
+  },
+  {
+    "id": 1361,
+    "type": "text",
+    "page_idx": 76,
+    "text": "A. 必然事件"
+  },
+  {
+    "id": 1362,
+    "type": "text",
+    "page_idx": 76,
+    "text": "B. 随机事件"
+  },
+  {
+    "id": 1363,
+    "type": "text",
+    "page_idx": 76,
+    "text": "C. 不可能事件"
+  },
+  {
+    "id": 1364,
+    "type": "text",
+    "page_idx": 76,
+    "text": "D. 以上都不对"
+  },
+  {
+    "id": 1365,
+    "type": "text",
+    "page_idx": 76,
+    "text": "6. 从 -1、2、3、-6 这四个数中任取两数，分别记为  $m$ 、 $n$ ，那么点  $(m, n)$  在函数  $y$"
+  },
+  {
+    "id": 1366,
+    "type": "text",
+    "page_idx": 76,
+    "text": "6  $\\equiv$  x图象的概率是（ ）"
+  },
+  {
+    "id": 1367,
+    "type": "text",
+    "page_idx": 76,
+    "text": "A.  $\\frac{1}{2}$"
+  },
+  {
+    "id": 1368,
+    "type": "text",
+    "page_idx": 76,
+    "text": "B.  $\\frac{1}{3}$"
+  },
+  {
+    "id": 1369,
+    "type": "text",
+    "page_idx": 76,
+    "text": "C.  $\\frac{1}{4}$"
+  },
+  {
+    "id": 1370,
+    "type": "text",
+    "page_idx": 76,
+    "text": "D.  $\\frac{1}{8}$"
+  },
+  {
+    "id": 1371,
+    "type": "text",
+    "page_idx": 76,
+    "text": "二、填空题"
+  },
+  {
+    "id": 1372,
+    "type": "text",
+    "text": "7.掷一枚材质均匀的骰子，掷得的点数是合数的概率是",
+    "page_idx": 76
+  },
+  {
+    "id": 1373,
+    "type": "text",
+    "text": "8.从0，1，2，3四个数字中任取三个数字组成没有重复数字的三位数，那么组成的三位数是奇数的概率是",
+    "page_idx": 76
+  },
+  {
+    "id": 1374,
+    "type": "text",
+    "text": "9. 从0，1，2，3这四个数字中任取3个数，三个数中不含0的概率是____.",
+    "page_idx": 76
+  },
+  {
+    "id": 1375,
+    "type": "text",
+    "text": "10. 如果从初三（1）、（2）、（3）班中随机抽取一个班与初三（4）班进行一场拔河比赛，那么恰好抽到初三（1）班的概率是______。",
+    "page_idx": 76
+  },
+  {
+    "id": 1376,
+    "type": "text",
+    "text": "11. 袋中装有除颜色外其余均相同的 5 个红球和 3 个白球。从袋中任意摸出一个球, 则摸出的球是红球的概率为",
+    "page_idx": 76
+  },
+  {
+    "id": 1377,
+    "type": "text",
+    "text": "12. 四张完全相同的卡片上，分别画有菱形、矩形、等腰梯形和直角梯形。如果从中任意抽取 1 张卡片，抽得的卡片上所画图形恰好是中心对称图形的概率是 ______.",
+    "page_idx": 76
+  },
+  {
+    "id": 1378,
+    "type": "text",
+    "text": "13.抛一枚质地均匀的硬币，正面朝上的概率为 ，因此，抛20次硬币，必有10次正面朝上. （填“对”或“错”）",
+    "page_idx": 76
+  },
+  {
+    "id": 1379,
+    "type": "text",
+    "text": "14. 一个不透明的袋中装有 4 个白球和若干个红球, 这些球除颜色外其他都相同, 摇匀后随机摸出一个球, 如果摸到白球的概率为 0.4 , 那么红球有_____个.",
+    "page_idx": 76
+  },
+  {
+    "id": 1380,
+    "type": "text",
+    "text": "15. 一个不透明的袋子中装有 4 张一模一样的卡片，上面分别写着数字 3、4、5、6，从袋中随机摸出两张卡片，那么摸到两张卡片上写的数字之和为偶数的概率是____.",
+    "page_idx": 76
+  },
+  {
+    "id": 1381,
+    "type": "text",
+    "text": "16.在一个不透明布袋里装有3个白球、2个红球和  $a$  个黄球，这些球除颜色不同其它没有",
+    "page_idx": 76
+  },
+  {
+    "id": 1382,
+    "type": "text",
+    "page_idx": 76,
+    "text": "任何区别．若从该布袋里任意摸出1个球，该球是黄球的概率为  $\\frac{1}{2}$  ，则  $a$  等于"
+  },
+  {
+    "id": 1383,
+    "type": "text",
+    "page_idx": 76,
+    "text": "17. 在阳光中学举行的春季运动会上, 小亮和大刚报名参加 100 米比赛, 预赛分  $A, B, C$ ,"
+  },
+  {
+    "id": 1384,
+    "type": "text",
+    "page_idx": 77,
+    "text": "D四组进行，运动员通过抽签来确定要参加的预赛小组，小亮和大刚恰好抽到同一个组的概率是____."
+  },
+  {
+    "id": 1385,
+    "type": "text",
+    "page_idx": 77,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1386,
+    "type": "text",
+    "page_idx": 77,
+    "text": "18.布袋中放有  $x$  只白球、  $y$  只黄球、2只红球，它们除颜色外其他都相同，如果从布袋中"
+  },
+  {
+    "id": 1387,
+    "type": "text",
+    "page_idx": 77,
+    "text": "1 8"
+  },
+  {
+    "id": 1388,
+    "type": "text",
+    "page_idx": 77,
+    "text": "随机摸出一个球，恰好是红球的概率是。"
+  },
+  {
+    "id": 1389,
+    "type": "text",
+    "text": "(1) 试写出  $y$  与  $x$  的函数关系式；",
+    "page_idx": 77
+  },
+  {
+    "id": 1390,
+    "type": "text",
+    "text": "(2) 当  $x = 6$  时, 求随机地取出一只黄球的概率  $P$ .",
+    "page_idx": 77
+  },
+  {
+    "id": 1391,
+    "type": "text",
+    "text": "19. (1) 从 2、3、8 三个数中任选一个数, 选出的数是偶数的概率是____;",
+    "page_idx": 77
+  },
+  {
+    "id": 1392,
+    "type": "text",
+    "text": "(2) 从 2、3、8 三个数中任选两个组成两位数，在组成的所有两位数中任意抽取一个数，这个数恰好能被 4 整除的概率是多少？（请用列表法或树状图法说明）",
+    "page_idx": 77
+  },
+  {
+    "id": 1393,
+    "type": "text",
+    "page_idx": 77,
+    "text": "20. 只有 1 和它本身两个因数且大于 1 的正整数叫做素数。我国数学家陈景润哥德巴赫猜想的研究中取得了世界领先的成果。哥德巴赫猜想是“每个大于 2 的偶数都表示为两个素数的和”。如  $20 = 3 + 17$ 。"
+  },
+  {
+    "id": 1394,
+    "type": "text",
+    "text": "(1) 从 7、11、19、23 这 4 个素数中随机抽取一个, 则抽到的数是 7 的概率是____;",
+    "page_idx": 77
+  },
+  {
+    "id": 1395,
+    "type": "text",
+    "text": "(2) 从 7、11、19、23 这 4 个素数中随机抽取 1 个数, 再从余下的 3 个数中随机抽取 1 个数, 用画树状图或列表的方法, 求抽到的两个素数之和等于 30 的概率.",
+    "page_idx": 77
+  },
+  {
+    "id": 1396,
+    "type": "text",
+    "page_idx": 78,
+    "text": "21. 一个不透明的袋子中装有四个小球，上面分别标有数字 -2，-1，0，1，它们除了数字不一样外，其它完全相同。"
+  },
+  {
+    "id": 1397,
+    "type": "text",
+    "text": "(1) 随机从袋子中摸出一个小球, 摸出的球上面标的数字为正数的概率是____.",
+    "page_idx": 78
+  },
+  {
+    "id": 1398,
+    "type": "text",
+    "text": "(2) 小聪先从袋子中随机摸出一个小球, 记下数字作为点 M 的纵坐标, 如图, 已知四边形 ABCD 的四个顶点的坐标分别为 A (-2, 0), B (0, -2), C (1, 0), D (0, 1), 请用画树状图或列表法, 求点 M 落在四边形 ABCD 所围成的部分内（含边界）的概率.",
+    "page_idx": 78
+  },
+  {
+    "id": 1399,
+    "type": "image",
+    "page_idx": 78,
+    "img_path": "images/e1c755ace60e6389e6e902c06c14aaf8996a78ec2787eeb795f8df1d0e4f88c6.jpg"
+  }
+]
