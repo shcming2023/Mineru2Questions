@@ -24,8 +24,14 @@ import {
   getTaskLogs
 } from "./db";
 import { storagePut, storageGet } from "./storage";
-import { pauseTask, resumeTask, cancelTask, isTaskPaused } from "./extraction";
-import { startTaskProcessing, pauseTaskProcessing, cancelTaskProcessing } from "./taskProcessor";
+import { 
+  startTaskProcessing, 
+  pauseTaskProcessing, 
+  cancelTaskProcessing,
+  checkSystemHealth,
+  cleanupStaleTasks,
+  forceResetTask
+} from "./taskProcessor";
 
 // LLM配置路由
 const llmConfigRouter = router({
@@ -140,6 +146,25 @@ const llmConfigRouter = router({
 
 // 提取任务路由
 const taskRouter = router({
+  // 检查系统健康状态
+  checkHealth: protectedProcedure.query(async ({ ctx }) => {
+    return await checkSystemHealth(ctx.user.id);
+  }),
+
+  // 清理陈旧任务
+  cleanup: protectedProcedure.mutation(async ({ ctx }) => {
+    const count = await cleanupStaleTasks(ctx.user.id);
+    return { success: true, count };
+  }),
+
+  // 强制重置任务
+  reset: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      await forceResetTask(input.id, ctx.user.id);
+      return { success: true };
+    }),
+
   // 获取用户所有任务
   list: protectedProcedure.query(async ({ ctx }) => {
     return await getExtractionTasksByUser(ctx.user.id);
@@ -200,6 +225,11 @@ const taskRouter = router({
         const defaultConfig = await getDefaultLLMConfig(ctx.user.id);
         if (defaultConfig) {
           configId = defaultConfig.id;
+        } else {
+          throw new TRPCError({ 
+            code: "BAD_REQUEST", 
+            message: "请选择 LLM 配置或设置默认配置" 
+          });
         }
       }
       
@@ -247,9 +277,9 @@ const taskRouter = router({
         startedAt: task.startedAt || new Date()
       });
       
-      resumeTask(input.id);
-      
       // 启动任务处理
+      // 检查系统健康，如果有其他任务正在运行，startTaskProcessing 内部会发出警告，但仍尝试执行
+      // 前端应在调用 start 前调用 checkHealth
       startTaskProcessing(input.id, ctx.user.id);
       
       return { success: true };
@@ -268,8 +298,8 @@ const taskRouter = router({
         throw new TRPCError({ code: "BAD_REQUEST", message: "只能暂停处理中的任务" });
       }
       
-      pauseTaskProcessing(input.id);
-      await updateExtractionTask(input.id, { status: "paused" });
+      await pauseTaskProcessing(input.id);
+      // taskProcessor.pauseTaskProcessing 已经更新了数据库状态
       
       return { success: true };
     }),
@@ -315,7 +345,7 @@ const taskRouter = router({
       }
       
       if (task.status === "processing") {
-        cancelTaskProcessing(input.id);
+        await cancelTaskProcessing(input.id);
       }
       
       await deleteExtractionTask(input.id, ctx.user.id);
@@ -409,7 +439,8 @@ const resultRouter = router({
         // 优先尝试从本地文件读取(用于测试任务)
         const fs = await import('node:fs');
         const path = await import('node:path');
-        const localPath = path.resolve(process.cwd(), 'server', 'uploads', 'tasks', task.sourceFolder, 'results', input.format === 'json' ? 'questions.json' : 'questions.md');
+        // task.sourceFolder 通常格式为 "tasks/TIMESTAMP-ID"，所以直接 resolve 到 server 目录即可
+        const localPath = path.resolve(process.cwd(), 'server', task.sourceFolder, 'results', input.format === 'json' ? 'questions.json' : 'questions.md');
         
         if (fs.existsSync(localPath)) {
           const content = fs.readFileSync(localPath, 'utf-8');

@@ -74,7 +74,7 @@ interface Chunk {
 
 // ============= 常量配置 =============
 
-const MAX_CHUNK_SIZE = 100;        // 每个 chunk 最多包含 100 个 block
+const MAX_CHUNK_SIZE = 50;        // 每个 chunk 最多包含 50 个 block (降低以避免 token 过多)
 const OVERLAP_SIZE = 10;           // 重叠窗口大小，避免题目被切断
 const NEAR_DISTANCE_THRESHOLD = 50; // 近距离答案阈值（block 数量）
 
@@ -93,26 +93,44 @@ export async function extractQuestions(
   contentListPath: string,
   imagesFolder: string,
   taskDir: string,
-  llmConfig: LLMConfig
-): Promise<ExtractedQuestion[]> {
-  console.log('=== Starting Question Extraction Pipeline ===');
-  
-  // 1. 加载并格式化输入
-  console.log('Step 1: Loading and formatting content_list.json...');
-  const blocks = loadAndFormatBlocks(contentListPath);
-  console.log(`Loaded ${blocks.length} blocks`);
-  
-  // 2. 分块处理
-  console.log('Step 2: Splitting into chunks with overlap...');
-  const chunks = splitIntoChunks(blocks, MAX_CHUNK_SIZE, OVERLAP_SIZE);
-  console.log(`Created ${chunks.length} chunks`);
-  
-  // 3. 调用 LLM 提取题目
-  console.log('Step 3: Extracting questions via LLM...');
-  const allQuestions: ExtractedQuestion[] = [];
-  
-  for (const chunk of chunks) {
-    console.log(`Processing chunk ${chunk.index}/${chunks.length} (blocks ${chunk.startId}-${chunk.endId})...`);
+  llmConfig: LLMConfig,
+   onProgress?: (message: string) => void,
+   shouldContinue?: () => Promise<boolean>
+ ): Promise<ExtractedQuestion[]> {
+   console.log('=== Starting Question Extraction Pipeline ===');
+   if (onProgress) onProgress('Pipeline started');
+   
+   // 1. 加载并格式化输入
+   if (shouldContinue && !(await shouldContinue())) throw new Error('Task cancelled by user');
+   console.log('Step 1: Loading and formatting content_list.json...');
+   if (onProgress) onProgress('Step 1: Loading content...');
+   const blocks = loadAndFormatBlocks(contentListPath);
+   console.log(`Loaded ${blocks.length} blocks`);
+   if (onProgress) onProgress(`Loaded ${blocks.length} blocks`);
+   
+   // 2. 分块处理
+   if (shouldContinue && !(await shouldContinue())) throw new Error('Task cancelled by user');
+   console.log('Step 2: Splitting into chunks with overlap...');
+   if (onProgress) onProgress('Step 2: Splitting chunks...');
+   const chunks = splitIntoChunks(blocks, MAX_CHUNK_SIZE, OVERLAP_SIZE);
+   console.log(`Created ${chunks.length} chunks`);
+   if (onProgress) onProgress(`Created ${chunks.length} chunks`);
+   
+   // 3. 调用 LLM 提取题目
+   console.log('Step 3: Extracting questions via LLM...');
+   if (onProgress) onProgress('Step 3: Extracting via LLM...');
+   const allQuestions: ExtractedQuestion[] = [];
+   
+   for (const chunk of chunks) {
+     // 检查是否应该继续
+     if (shouldContinue && !(await shouldContinue())) {
+       console.log('[Extraction] Task cancelled during chunk processing');
+       throw new Error('Task cancelled by user');
+     }
+
+     const msg = `Processing chunk ${chunk.index}/${chunks.length} (blocks ${chunk.startId}-${chunk.endId})...`;
+     console.log(msg);
+    if (onProgress) onProgress(msg);
     
     try {
       // 调用 LLM
@@ -170,13 +188,43 @@ export async function extractQuestions(
  * 加载并格式化 content_list.json
  */
 function loadAndFormatBlocks(contentListPath: string): ConvertedBlock[] {
+  console.log(`[Extraction] Reading file: ${contentListPath}`);
   const rawContent = fs.readFileSync(contentListPath, 'utf-8');
-  const contentList: ContentBlock[] = JSON.parse(rawContent);
+  let contentList: ContentBlock[];
+  try {
+    contentList = JSON.parse(rawContent);
+  } catch (e: any) {
+    console.error(`[Extraction] Failed to parse JSON: ${e.message}`);
+    throw new Error(`Invalid JSON in content_list.json: ${e.message}`);
+  }
+  
+  console.log(`[Extraction] JSON parsed, found ${contentList.length} items`);
   
   const convertedBlocks: ConvertedBlock[] = [];
   let currentId = 0;
   
   for (const block of contentList) {
+    // 特殊处理表格：如果表格包含HTML行，将其拆分为单独的行块
+    // 这样 LLM 可以提取表格中的具体题目行，而不是整个表格
+    const tableContent = block.text || block.table_body;
+    if (block.type === 'table' && typeof tableContent === 'string' && tableContent.includes('<tr')) {
+       // 使用正则匹配所有 tr 标签 (包括跨行)
+       const rows = tableContent.match(/<tr[\s\S]*?<\/tr>/gi);
+       
+       if (rows && rows.length > 0) {
+         console.log(`[Extraction] Splitting table block into ${rows.length} rows`);
+         rows.forEach((rowHtml: string) => {
+           convertedBlocks.push({
+             id: currentId++,
+             type: 'text', // 转换为 text 类型以便 Prompt 处理
+             text: `[Table Row] ${rowHtml}`, // 添加前缀提示
+             page_idx: block.page_idx
+           });
+         });
+         continue; // 跳过原始表格块
+       }
+    }
+
     // 分配 ID（如果没有）
     const id = block.id !== undefined ? block.id : currentId++;
     
@@ -231,11 +279,15 @@ function splitIntoChunks(
       endId: chunkBlocks[chunkBlocks.length - 1].id
     });
     
-    index++;
-    start = end - overlapSize; // 重叠窗口
-    
-    // 避免无限循环
-    if (start >= end) break;
+    // 避免无限循环和负索引
+    // 下一轮的起始位置至少要比当前起始位置大 1
+    // 如果 end - overlapSize <= start，说明当前 chunk 很小（小于 overlap），此时应强制前进
+    const nextStart = end - overlapSize;
+    start = Math.max(start + 1, nextStart);
+    index++; // 增加索引
+
+    // 如果已经处理完所有数据，或者 start 超过了数组长度，则退出
+    if (start >= blocks.length) break;
   }
   
   return chunks;
@@ -249,45 +301,111 @@ async function callLLM(blocks: ConvertedBlock[], config: LLMConfig): Promise<str
   const inputJson = JSON.stringify(blocks, null, 2);
   const prompt = `${QUESTION_EXTRACT_PROMPT}\n\n## Input JSON:\n\`\`\`json\n${inputJson}\n\`\`\``;
   
-  // 调用 LLM API
-  const response = await axios.post(
-    config.apiUrl,
-    {
-      model: config.modelName,
-      messages: [
-        { role: 'system', content: 'You are an expert in extracting questions from educational materials.' },
-        { role: 'user', content: prompt }
-      ],
-      temperature: 0.1,
-      max_tokens: 4000
-    },
-    {
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      timeout: config.timeout || 60000
+  // 修正 API URL
+  let apiUrl = config.apiUrl;
+  // 如果是 OpenAI 官方 API 或兼容接口，且 URL 没有以 chat/completions 结尾，自动追加
+  if (!apiUrl.endsWith('/chat/completions') && !apiUrl.endsWith('/chat/completions/')) {
+    // 移除尾部斜杠
+    if (apiUrl.endsWith('/')) {
+      apiUrl = apiUrl.slice(0, -1);
     }
-  );
-  
-  return response.data.choices[0].message.content;
+    apiUrl = `${apiUrl}/chat/completions`;
+    // console.log(`[Extraction] Auto-corrected API URL to: ${apiUrl}`);
+  }
+
+  const maxRetries = config.maxRetries || 3;
+  let lastError: any;
+
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      // 自动修正 API URL
+      let effectiveUrl = config.apiUrl;
+      if (!effectiveUrl.endsWith('/chat/completions') && !effectiveUrl.endsWith('/chat/completions/')) {
+        if (effectiveUrl.endsWith('/')) {
+          effectiveUrl += 'chat/completions';
+        } else {
+          effectiveUrl += '/chat/completions';
+        }
+      }
+
+      if (attempt > 1) {
+        console.log(`[LLM] Retry attempt ${attempt}/${maxRetries}...`);
+      }
+      console.log(`[LLM] Calling API: ${effectiveUrl}`);
+
+      // 调用 LLM API
+      const response = await axios.post(
+        effectiveUrl,
+        {
+          model: config.modelName,
+          messages: [
+            { role: 'system', content: 'You are an expert in extracting questions from educational materials.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.1,
+          max_tokens: 4000
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${config.apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          timeout: config.timeout || 180000 // 默认 3 分钟超时
+        }
+      );
+      
+      console.log(`[LLM] Response status: ${response.status}`);
+      // console.log(`[LLM] Response data: ${JSON.stringify(response.data).substring(0, 200)}...`);
+
+      if (!response.data || !response.data.choices || !response.data.choices[0] || !response.data.choices[0].message) {
+         console.error('[LLM] Invalid response structure:', JSON.stringify(response.data));
+         throw new Error('Invalid LLM response structure');
+      }
+
+      return response.data.choices[0].message.content;
+    } catch (error: any) {
+      lastError = error;
+      console.warn(`[LLM] Attempt ${attempt} failed: ${error.message}`);
+      
+      // 如果是超时或 5xx 错误，进行重试
+      const isRetryable = error.code === 'ECONNABORTED' || (error.response && error.response.status >= 500);
+      
+      if (attempt < maxRetries && isRetryable) {
+        // 等待一段时间后重试 (指数退避)
+        const delay = Math.pow(2, attempt) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      } else if (!isRetryable) {
+         // 非重试错误（如 400, 401）直接抛出
+         throw error;
+      }
+    }
+  }
+
+  throw lastError;
 }
 
 /**
  * 去重：基于 questionIds 去重
  */
 function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion[] {
+  console.log(`[Deduplication] Starting with ${questions.length} questions`);
   const seen = new Set<string>();
   const unique: ExtractedQuestion[] = [];
   
   for (const q of questions) {
+    // 优先使用 questionIds，如果没有则使用 题号+题目前50字
     const key = q.questionIds || `${q.label}_${q.question.substring(0, 50)}`;
+    
     if (!seen.has(key)) {
       seen.add(key);
       unique.push(q);
+    } else {
+      // 记录重复项，方便调试
+      // console.log(`[Deduplication] Duplicate found: ${key}`);
     }
   }
   
+  console.log(`[Deduplication] Finished with ${unique.length} unique questions`);
   return unique;
 }
 

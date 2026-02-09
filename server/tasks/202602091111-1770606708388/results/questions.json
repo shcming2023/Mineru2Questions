@@ -1,0 +1,15 @@
+{
+  "total": 1,
+  "questions": [
+    {
+      "label": "1",
+      "type": "exercise",
+      "chapter_title": "这是一段测试文本，用于验证任务能否正常执行。请提取其中的数学题。",
+      "question": "1. 计算 1 + 1 = ?",
+      "solution": "",
+      "images": [],
+      "page_idx": 0,
+      "has_answer": false
+    }
+  ]
+}
