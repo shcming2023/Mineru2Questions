@@ -25,12 +25,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>11</label><type>exercise</type><question>874</question>
 <solution></solution></qa_pair>
-<qa_pair><label>12</label><type>exercise</type><question>877</question>
-<solution></solution></qa_pair>
-<qa_pair><label>13</label><type>exercise</type><question>878</question>
-<solution></solution></qa_pair>
-<qa_pair><label>14</label><type>exercise</type><question>879</question>
-<solution></solution></qa_pair>
 <qa_pair><label>例1</label><type>example</type><question>888,889,890,891</question>
 <solution>892,893,894,895,896</solution></qa_pair>
 <qa_pair><label>例2</label><type>example</type><question>897</question>

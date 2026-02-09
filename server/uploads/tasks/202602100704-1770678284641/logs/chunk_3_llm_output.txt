@@ -1,6 +1,10 @@
 <chapter><title>357</title>
 <qa_pair><label>例1</label><type>example</type><question>369</question>
 <solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>270</question>
+<solution>276,277</solution></qa_pair>
+<qa_pair><label>例3</label><type>example</type><question>278,279</question>
+<solution>280,281,282,283</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>285</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>286,287</question>

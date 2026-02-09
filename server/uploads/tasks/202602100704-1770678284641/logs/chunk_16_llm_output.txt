@@ -33,6 +33,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>15</label><type>exercise</type><question>1493</question>
 <solution></solution></qa_pair>
+<qa_pair><label>16</label><type>exercise</type><question>1496</question>
+<solution></solution></qa_pair>
 <qa_pair><label>例1</label><type>example</type><question>1505,1506,1507,1508,1509</question>
 <solution>1510,1511,1512,1513,1514,1515,1516,1517,1518,1519,1520,1521,1522,1523,1524,1525,1526</solution></qa_pair>
 <qa_pair><label>例2</label><type>example</type><question>1527</question>

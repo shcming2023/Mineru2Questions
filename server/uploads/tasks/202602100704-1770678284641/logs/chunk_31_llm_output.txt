@@ -1,7 +1,7 @@
 <chapter><title>2820</title>
-<qa_pair><label>例1</label><type>example</type><question>2830,2844</question>
+<qa_pair><label>例1</label><type>example</type><question>2830</question>
 <solution>2831,2832,2833,2834,2835,2836,2837</solution></qa_pair>
-<qa_pair><label>例2</label><type>example</type><question>2839,2845</question>
+<qa_pair><label>例2</label><type>example</type><question>2839</question>
 <solution>2840,2841,2842,2843,2846,2847,2848,2849,2850,2851,2852</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>2856</question>
 <solution></solution></qa_pair>
@@ -19,7 +19,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>2866</question>
 <solution></solution></qa_pair>
-<qa_pair><label>9</label><type>exercise</type><question>2867,2868,2869</question>
+<qa_pair><label>9</label><type>exercise</type><question>2867,2868</question>
 <solution></solution></qa_pair>
 <qa_pair><label>10</label><type>exercise</type><question>2871,2872,2873</question>
 <solution></solution></qa_pair>

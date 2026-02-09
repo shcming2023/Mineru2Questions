@@ -15,9 +15,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>20</label><type>exercise</type><question>2997,2998,2999,3000,3001,3002,3003</question>
 <solution></solution></qa_pair>
-<qa_pair><label>例1</label><type>example</type><question>3011,3012,3013</question>
+<qa_pair><label>例①</label><type>example</type><question>3011,3012,3013</question>
 <solution>3014,3015,3016,3017,3018,3019,3020,3021</solution></qa_pair>
-<qa_pair><label>例2</label><type>example</type><question>3022,3023,3024</question>
+<qa_pair><label>例②</label><type>example</type><question>3022,3023,3024</question>
 <solution>3025,3026,3027,3028,3029,3030,3031,3032,3033,3034,3035,3036,3037,3038</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>3040</question>
 <solution></solution></qa_pair>

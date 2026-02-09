@@ -1,4 +1,8 @@
 <chapter><title>1164</title>
+<qa_pair><label>例1</label><type>example</type><question>1171,1172,1173</question>
+<solution>1175,1176</solution></qa_pair>
+<qa_pair><label>例2</label><type>example</type><question>1178</question>
+<solution>1179</solution></qa_pair>
 <qa_pair><label>17</label><type>exercise</type><question>1080,1081,1082,1083,1084</question>
 <solution></solution></qa_pair>
 <qa_pair><label>18</label><type>exercise</type><question>1085,1086,1087,1088,1089</question>
@@ -67,8 +71,4 @@
 <solution></solution></qa_pair>
 <qa_pair><label>28</label><type>exercise</type><question>1163</question>
 <solution></solution></qa_pair>
-<qa_pair><label>例1</label><type>example</type><question>1171,1172,1173</question>
-<solution>1175,1176</solution></qa_pair>
-<qa_pair><label>例2</label><type>example</type><question>1178</question>
-<solution>1179</solution></qa_pair>
 </chapter>

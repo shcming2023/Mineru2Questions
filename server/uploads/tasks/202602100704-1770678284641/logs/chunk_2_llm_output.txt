@@ -5,6 +5,12 @@
 <solution>194,195,196</solution></qa_pair>
 <qa_pair><label>例4</label><type>example</type><question>197,198</question>
 <solution>199,200,201,202,203,204,205,206</solution></qa_pair>
+<qa_pair><label>例1</label><type>example</type><question>263</question>
+<solution>264,265</solution></qa_pair>
+<qa_pair><label>例2</label><type>example</type><question>266,267,268,269,270,271</question>
+<solution>272,273,274,275,276,277</solution></qa_pair>
+<qa_pair><label>例3</label><type>example</type><question>278,279</question>
+<solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>210</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>211</question>
@@ -38,11 +44,5 @@
 <qa_pair><label>16</label><type>exercise</type><question>249</question>
 <solution></solution></qa_pair>
 <qa_pair><label>17</label><type>exercise</type><question>250</question>
-<solution></solution></qa_pair>
-<qa_pair><label>例1</label><type>example</type><question>263</question>
-<solution>264,265</solution></qa_pair>
-<qa_pair><label>例2</label><type>example</type><question>266,267,268,269,270,271</question>
-<solution>272,273,274,275,276,277</solution></qa_pair>
-<qa_pair><label>例3</label><type>example</type><question>278,279</question>
 <solution></solution></qa_pair>
 </chapter>
