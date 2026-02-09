@@ -1,0 +1,1448 @@
+[
+  {
+    "id": 0,
+    "type": "text",
+    "page_idx": 0,
+    "text": "Cambridge IGCSE"
+  },
+  {
+    "id": 1,
+    "type": "image",
+    "page_idx": 0,
+    "img_path": "images/e3a81316c635ea1e86c1cf612b9b73dba70635a6e63a4838e844d9b6ec572401.jpg"
+  },
+  {
+    "id": 2,
+    "type": "text",
+    "page_idx": 0,
+    "text": "CANDIDATE"
+  },
+  {
+    "id": 3,
+    "type": "text",
+    "page_idx": 0,
+    "text": "NAME"
+  },
+  {
+    "id": 4,
+    "type": "text",
+    "page_idx": 0,
+    "text": "CENTRE"
+  },
+  {
+    "id": 5,
+    "type": "text",
+    "page_idx": 0,
+    "text": "NUMBER"
+  },
+  {
+    "id": 6,
+    "type": "image",
+    "page_idx": 0,
+    "img_path": "images/b2d3617b6988999cbbb69255151522faba3a4e342366bdfb29895a775b487112.jpg"
+  },
+  {
+    "id": 7,
+    "type": "text",
+    "page_idx": 0,
+    "text": "MATHEMATICS"
+  },
+  {
+    "id": 8,
+    "type": "text",
+    "page_idx": 0,
+    "text": "0580/32"
+  },
+  {
+    "id": 9,
+    "type": "text",
+    "page_idx": 0,
+    "text": "Paper 3 Calculator (Core)"
+  },
+  {
+    "id": 10,
+    "type": "text",
+    "page_idx": 0,
+    "text": "February/March 2025"
+  },
+  {
+    "id": 11,
+    "type": "text",
+    "page_idx": 0,
+    "text": "1 hour 30 minutes"
+  },
+  {
+    "id": 12,
+    "type": "text",
+    "page_idx": 0,
+    "text": "You must answer on the question paper."
+  },
+  {
+    "id": 13,
+    "type": "text",
+    "page_idx": 0,
+    "text": "You will need: Geometrical instruments"
+  },
+  {
+    "id": 14,
+    "type": "text",
+    "page_idx": 0,
+    "text": "INSTRUCTIONS"
+  },
+  {
+    "id": 15,
+    "type": "text",
+    "text": "Answer all questions.",
+    "page_idx": 0
+  },
+  {
+    "id": 16,
+    "type": "text",
+    "text": "- Use a black or dark blue pen. You may use an HB pencil for any diagrams or graphs.",
+    "page_idx": 0
+  },
+  {
+    "id": 17,
+    "type": "text",
+    "text": "- Write your name, centre number and candidate number in the boxes at the top of the page.",
+    "page_idx": 0
+  },
+  {
+    "id": 18,
+    "type": "text",
+    "text": "Write your answer to each question in the space provided.",
+    "page_idx": 0
+  },
+  {
+    "id": 19,
+    "type": "text",
+    "text": "- Do not use an erasable pen or correction fluid.",
+    "page_idx": 0
+  },
+  {
+    "id": 20,
+    "type": "text",
+    "text": "- Do not write on any bar codes.",
+    "page_idx": 0
+  },
+  {
+    "id": 21,
+    "type": "text",
+    "text": "- You should use a scientific calculator where appropriate.",
+    "page_idx": 0
+  },
+  {
+    "id": 22,
+    "type": "text",
+    "text": "You may use tracing paper.",
+    "page_idx": 0
+  },
+  {
+    "id": 23,
+    "type": "text",
+    "text": "- You must show all necessary working clearly.",
+    "page_idx": 0
+  },
+  {
+    "id": 24,
+    "type": "text",
+    "text": "- Give non-exact numerical answers correct to 3 significant figures, or 1 decimal place for angles in degrees, unless a different level of accuracy is specified in the question.",
+    "page_idx": 0
+  },
+  {
+    "id": 25,
+    "type": "text",
+    "text": "For $\\pi$ , use either your calculator value or 3.142.",
+    "page_idx": 0
+  },
+  {
+    "id": 26,
+    "type": "text",
+    "page_idx": 0,
+    "text": "INFORMATION"
+  },
+  {
+    "id": 27,
+    "type": "text",
+    "text": "The total mark for this paper is 80.",
+    "page_idx": 0
+  },
+  {
+    "id": 28,
+    "type": "text",
+    "text": "The number of marks for each question or part question is shown in brackets [ ].",
+    "page_idx": 0
+  },
+  {
+    "id": 29,
+    "type": "text",
+    "page_idx": 1,
+    "text": "List of formulas"
+  },
+  {
+    "id": 30,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Area, $A$ , of triangle, base $b$ , height $h$ ."
+  },
+  {
+    "id": 31,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nA = \\frac {1}{2} b h\n$$"
+  },
+  {
+    "id": 32,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Area, $A$ , of circle of radius $r$ ."
+  },
+  {
+    "id": 33,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nA = \\pi r ^ {2}\n$$"
+  },
+  {
+    "id": 34,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Circumference, $C$ , of circle of radius $r$ ."
+  },
+  {
+    "id": 35,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nC = 2 \\pi r\n$$"
+  },
+  {
+    "id": 36,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Curved surface area, $A$ , of cylinder of radius $r$ , height $h$ ."
+  },
+  {
+    "id": 37,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nA = 2 \\pi r h\n$$"
+  },
+  {
+    "id": 38,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Curved surface area, $A$ , of cone of radius $r$ , sloping edge $l$ ."
+  },
+  {
+    "id": 39,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nA = \\pi r l\n$$"
+  },
+  {
+    "id": 40,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Surface area, $A$ , of sphere of radius $r$ ."
+  },
+  {
+    "id": 41,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nA = 4 \\pi r ^ {2}\n$$"
+  },
+  {
+    "id": 42,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Volume, $V$ , of prism, cross-sectional area $A$ , length $l$ ."
+  },
+  {
+    "id": 43,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nV = A l\n$$"
+  },
+  {
+    "id": 44,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Volume, $V$ , of pyramid, base area $A$ , height $h$ ."
+  },
+  {
+    "id": 45,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nV = \\frac {1}{3} A h\n$$"
+  },
+  {
+    "id": 46,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Volume, $V$ , of cylinder of radius $r$ , height $h$ ."
+  },
+  {
+    "id": 47,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nV = \\pi r ^ {2} h\n$$"
+  },
+  {
+    "id": 48,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Volume, $V$ , of cone of radius $r$ , height $h$ ."
+  },
+  {
+    "id": 49,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nV = \\frac {1}{3} \\pi r ^ {2} h\n$$"
+  },
+  {
+    "id": 50,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Volume, $V$ , of sphere of radius $r$ ."
+  },
+  {
+    "id": 51,
+    "type": "equation",
+    "page_idx": 1,
+    "text": "$$\nV = \\frac {4}{3} \\pi r ^ {3}\n$$"
+  },
+  {
+    "id": 52,
+    "type": "aside_text",
+    "page_idx": 1,
+    "text": "NIIGRWAISIHNLNIELRIWLONOD"
+  },
+  {
+    "id": 53,
+    "type": "aside_text",
+    "page_idx": 1,
+    "text": "NIISINI"
+  },
+  {
+    "id": 54,
+    "type": "aside_text",
+    "page_idx": 1,
+    "text": "NIHNISIHNI EINMON"
+  },
+  {
+    "id": 55,
+    "type": "aside_text",
+    "page_idx": 1,
+    "text": "NINRWAISIHLNEXRIWMONOD"
+  },
+  {
+    "id": 56,
+    "type": "text",
+    "page_idx": 2,
+    "text": "1 Taj is $3\\frac{1}{4}$ years old."
+  },
+  {
+    "id": 57,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Work out her age in months."
+  },
+  {
+    "id": 58,
+    "type": "text",
+    "page_idx": 2,
+    "text": "months [1]"
+  },
+  {
+    "id": 59,
+    "type": "text",
+    "page_idx": 2,
+    "text": "2 Div has $25 to buy some cups which cost $4.25 each."
+  },
+  {
+    "id": 60,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Calculate the maximum number of cups he can buy and the change he receives."
+  },
+  {
+    "id": 61,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Number of cups"
+  },
+  {
+    "id": 62,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Change \\$ [3]"
+  },
+  {
+    "id": 63,
+    "type": "text",
+    "page_idx": 2,
+    "text": "3"
+  },
+  {
+    "id": 64,
+    "type": "image",
+    "page_idx": 2,
+    "img_path": "images/f29469e725a70533a208d0d8cbb33eca604150decaf5f2ce939cf55112cb3e00.jpg"
+  },
+  {
+    "id": 65,
+    "type": "text",
+    "page_idx": 2,
+    "text": "(a) Measure angle $A$"
+  },
+  {
+    "id": 66,
+    "type": "text",
+    "page_idx": 2,
+    "text": "[1]"
+  },
+  {
+    "id": 67,
+    "type": "text",
+    "page_idx": 2,
+    "text": "(b) Write down the mathematical name of this type of angle."
+  },
+  {
+    "id": 68,
+    "type": "text",
+    "page_idx": 2,
+    "text": "[1]"
+  },
+  {
+    "id": 69,
+    "type": "aside_text",
+    "page_idx": 2,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 70,
+    "type": "aside_text",
+    "page_idx": 2,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 71,
+    "type": "aside_text",
+    "page_idx": 2,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 72,
+    "type": "aside_text",
+    "page_idx": 2,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 73,
+    "type": "aside_text",
+    "page_idx": 2,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 74,
+    "type": "text",
+    "page_idx": 3,
+    "text": "4"
+  },
+  {
+    "id": 75,
+    "type": "text",
+    "text": "[Table Row] <tr><td>30</td><td>31</td><td>32</td><td>33</td><td>34</td><td>35</td><td>36</td><td>37</td><td>38</td><td>39</td></tr>",
+    "page_idx": 3
+  },
+  {
+    "id": 76,
+    "type": "text",
+    "page_idx": 3,
+    "text": "From this list, write down the number that is"
+  },
+  {
+    "id": 77,
+    "type": "text",
+    "page_idx": 3,
+    "text": "(a) a multiple of 13"
+  },
+  {
+    "id": 78,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 79,
+    "type": "text",
+    "page_idx": 3,
+    "text": "(b) a factor of 140"
+  },
+  {
+    "id": 80,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 81,
+    "type": "text",
+    "page_idx": 3,
+    "text": "(c) the largest prime number"
+  },
+  {
+    "id": 82,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 83,
+    "type": "text",
+    "page_idx": 3,
+    "text": "(d) divisible by an even cube number"
+  },
+  {
+    "id": 84,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 85,
+    "type": "text",
+    "page_idx": 3,
+    "text": "(e) $20\\%$ of 190."
+  },
+  {
+    "id": 86,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 87,
+    "type": "text",
+    "page_idx": 3,
+    "text": "5 (a) A farmer plants $t$ trees each day."
+  },
+  {
+    "id": 88,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Write an expression for the number of trees he plants in $d$ days."
+  },
+  {
+    "id": 89,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 90,
+    "type": "text",
+    "page_idx": 3,
+    "text": "(b) A train has $p$ passengers."
+  },
+  {
+    "id": 91,
+    "type": "text",
+    "page_idx": 3,
+    "text": "$x$ passengers get off the train and $y$ passengers get on the train."
+  },
+  {
+    "id": 92,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Write an expression for the number of passengers on the train now."
+  },
+  {
+    "id": 93,
+    "type": "text",
+    "page_idx": 3,
+    "text": "[1]"
+  },
+  {
+    "id": 94,
+    "type": "aside_text",
+    "page_idx": 3,
+    "text": "NINW SIH L NI ELLM ON O N D NINW SIH L NI ELLM ON O N D NINW SIH L NI ELLM ON O N D"
+  },
+  {
+    "id": 95,
+    "type": "text",
+    "page_idx": 4,
+    "text": "6 Raj thinks of a negative number, $n$"
+  },
+  {
+    "id": 96,
+    "type": "text",
+    "page_idx": 4,
+    "text": "He adds 10 to $n$ and then multiplies by 5."
+  },
+  {
+    "id": 97,
+    "type": "text",
+    "page_idx": 4,
+    "text": "The answer is 30."
+  },
+  {
+    "id": 98,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Work out the value of $n$ ."
+  },
+  {
+    "id": 99,
+    "type": "equation",
+    "page_idx": 4,
+    "text": "$$\nn = \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\tag {2}\n$$"
+  },
+  {
+    "id": 100,
+    "type": "text",
+    "page_idx": 4,
+    "text": "7 The diagram shows a straight line crossing a pair of parallel lines."
+  },
+  {
+    "id": 101,
+    "type": "image",
+    "page_idx": 4,
+    "img_path": "images/86ffdcbe6f49dc83ec2ebf06809bce6de31c0443147fe5283a07b31515cd950a.jpg"
+  },
+  {
+    "id": 102,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Complete these statements."
+  },
+  {
+    "id": 103,
+    "type": "text",
+    "text": "(a) Angle $A$ and angle .. are corresponding angles. [1]",
+    "page_idx": 4
+  },
+  {
+    "id": 104,
+    "type": "text",
+    "text": "(b) Angle $A$ and angle $e$ are angles. [1]",
+    "page_idx": 4
+  },
+  {
+    "id": 105,
+    "type": "aside_text",
+    "page_idx": 4,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 106,
+    "type": "aside_text",
+    "page_idx": 4,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 107,
+    "type": "aside_text",
+    "page_idx": 4,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 108,
+    "type": "aside_text",
+    "page_idx": 4,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 109,
+    "type": "aside_text",
+    "page_idx": 4,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 110,
+    "type": "text",
+    "page_idx": 5,
+    "text": "8 These are the first four terms of a sequence."
+  },
+  {
+    "id": 111,
+    "type": "text",
+    "page_idx": 5,
+    "text": "31 24 17 10"
+  },
+  {
+    "id": 112,
+    "type": "text",
+    "page_idx": 5,
+    "text": "(a) Write down the term-to-term rule for continuing this sequence."
+  },
+  {
+    "id": 113,
+    "type": "text",
+    "page_idx": 5,
+    "text": "[1]"
+  },
+  {
+    "id": 114,
+    "type": "text",
+    "page_idx": 5,
+    "text": "(b) Find the next two terms in this sequence."
+  },
+  {
+    "id": 115,
+    "type": "text",
+    "page_idx": 5,
+    "text": "[2]"
+  },
+  {
+    "id": 116,
+    "type": "text",
+    "page_idx": 5,
+    "text": "(c) Find the $n$ th term."
+  },
+  {
+    "id": 117,
+    "type": "text",
+    "page_idx": 5,
+    "text": "[2]"
+  },
+  {
+    "id": 118,
+    "type": "text",
+    "page_idx": 5,
+    "text": "9 A cuboid measures $3\\mathrm{cm}$ by $7\\mathrm{cm}$ by $11\\mathrm{cm}$ ."
+  },
+  {
+    "id": 119,
+    "type": "text",
+    "page_idx": 5,
+    "text": "Calculate the surface area of the cuboid."
+  },
+  {
+    "id": 120,
+    "type": "text",
+    "page_idx": 5,
+    "text": "$\\mathrm{cm}^2$ [3]"
+  },
+  {
+    "id": 121,
+    "type": "aside_text",
+    "page_idx": 5,
+    "text": "NINW SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D"
+  },
+  {
+    "id": 122,
+    "type": "text",
+    "page_idx": 6,
+    "text": "10 The table shows an ordered stem-and-leaf diagram."
+  },
+  {
+    "id": 123,
+    "type": "text",
+    "page_idx": 6,
+    "text": "$A, B$ and $C$ are missing numbers."
+  },
+  {
+    "id": 124,
+    "type": "text",
+    "text": "[Table Row] <tr><td>0</td><td>2</td><td>A</td><td></td><td></td><td></td></tr>",
+    "page_idx": 6
+  },
+  {
+    "id": 125,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td>1</td><td>3</td><td>B</td><td>7</td><td></td></tr>",
+    "page_idx": 6
+  },
+  {
+    "id": 126,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2</td><td>0</td><td>4</td><td>6</td><td>C</td><td></td></tr>",
+    "page_idx": 6
+  },
+  {
+    "id": 127,
+    "type": "text",
+    "page_idx": 6,
+    "text": "Key:1|3 represents 13"
+  },
+  {
+    "id": 128,
+    "type": "text",
+    "page_idx": 6,
+    "text": "For the ten numbers"
+  },
+  {
+    "id": 129,
+    "type": "text",
+    "text": "the range is 27",
+    "page_idx": 6
+  },
+  {
+    "id": 130,
+    "type": "text",
+    "text": "the median is 16",
+    "page_idx": 6
+  },
+  {
+    "id": 131,
+    "type": "text",
+    "text": "the mean is 16.5 .",
+    "page_idx": 6
+  },
+  {
+    "id": 132,
+    "type": "text",
+    "page_idx": 6,
+    "text": "(a) Work out the values of $A, B$ and $C$ ."
+  },
+  {
+    "id": 133,
+    "type": "text",
+    "page_idx": 6,
+    "text": "$A =$"
+  },
+  {
+    "id": 134,
+    "type": "text",
+    "page_idx": 6,
+    "text": "$B =$"
+  },
+  {
+    "id": 135,
+    "type": "text",
+    "page_idx": 6,
+    "text": "$C =$"
+  },
+  {
+    "id": 136,
+    "type": "text",
+    "page_idx": 6,
+    "text": "[5]"
+  },
+  {
+    "id": 137,
+    "type": "text",
+    "page_idx": 6,
+    "text": "(b) Complete this statement."
+  },
+  {
+    "id": 138,
+    "type": "text",
+    "page_idx": 6,
+    "text": "There is no mode because"
+  },
+  {
+    "id": 139,
+    "type": "text",
+    "page_idx": 6,
+    "text": "[1]"
+  },
+  {
+    "id": 140,
+    "type": "aside_text",
+    "page_idx": 6,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 141,
+    "type": "aside_text",
+    "page_idx": 6,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 142,
+    "type": "aside_text",
+    "page_idx": 6,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 143,
+    "type": "aside_text",
+    "page_idx": 6,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 144,
+    "type": "aside_text",
+    "page_idx": 6,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 145,
+    "type": "text",
+    "page_idx": 7,
+    "text": "11 The scale drawing shows the positions of two lighthouses, $P$ and $Q$ . The scale is 1 centimetre represents 0.8 kilometres."
+  },
+  {
+    "id": 146,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/842f252a63c3c88a3d7d3fcb981a8ea89d27c0e0f20c155545c7e1dbcdf97bac.jpg"
+  },
+  {
+    "id": 147,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/67f4a85538af1328eebc5643c9d72e3b62c982c660e22561f105d22b704e57b0.jpg"
+  },
+  {
+    "id": 148,
+    "type": "text",
+    "page_idx": 7,
+    "text": "Scale: $1\\mathrm{cm}$ to $0.8\\mathrm{km}$"
+  },
+  {
+    "id": 149,
+    "type": "text",
+    "text": "(a) (i) Find the actual distance between $P$ and $Q$ .",
+    "page_idx": 7
+  },
+  {
+    "id": 150,
+    "type": "text",
+    "text": "(ii) Measure the bearing of $Q$ from $P$ .",
+    "page_idx": 7
+  },
+  {
+    "id": 151,
+    "type": "text",
+    "page_idx": 7,
+    "text": "km [2]"
+  },
+  {
+    "id": 152,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(b) A boat, $B$ , is on a bearing of $127^{\\circ}$ from $P$ Calculate the bearing of $P$ from $B$"
+  },
+  {
+    "id": 153,
+    "type": "text",
+    "page_idx": 7,
+    "text": "[1]"
+  },
+  {
+    "id": 154,
+    "type": "text",
+    "page_idx": 7,
+    "text": "[2]"
+  },
+  {
+    "id": 155,
+    "type": "aside_text",
+    "page_idx": 7,
+    "text": "NINW SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D"
+  },
+  {
+    "id": 156,
+    "type": "text",
+    "page_idx": 8,
+    "text": "12 Mo asks some people if they prefer sun, rain or wind."
+  },
+  {
+    "id": 157,
+    "type": "text",
+    "page_idx": 8,
+    "text": "The pie chart shows the results."
+  },
+  {
+    "id": 158,
+    "type": "image",
+    "page_idx": 8,
+    "img_path": "images/4d4a7cf0818e463d0e1fa736f422c12ad484f88e1f35eaafef091855b4ca5fb2.jpg"
+  },
+  {
+    "id": 159,
+    "type": "text",
+    "page_idx": 8,
+    "text": "45 more people prefer wind than rain."
+  },
+  {
+    "id": 160,
+    "type": "text",
+    "page_idx": 8,
+    "text": "Work out how many people prefer sun."
+  },
+  {
+    "id": 161,
+    "type": "text",
+    "page_idx": 8,
+    "text": "[4]"
+  },
+  {
+    "id": 162,
+    "type": "text",
+    "page_idx": 8,
+    "text": "13 Xie changes 2000 dollars into krona."
+  },
+  {
+    "id": 163,
+    "type": "text",
+    "page_idx": 8,
+    "text": "1 dollar $= 0.615$ euros"
+  },
+  {
+    "id": 164,
+    "type": "text",
+    "page_idx": 8,
+    "text": "1 krona $= 0.087$ euros"
+  },
+  {
+    "id": 165,
+    "type": "text",
+    "page_idx": 8,
+    "text": "Use the exchange rates to calculate how many krona she receives."
+  },
+  {
+    "id": 166,
+    "type": "text",
+    "page_idx": 8,
+    "text": "Give your answer correct to the nearest krona."
+  },
+  {
+    "id": 167,
+    "type": "text",
+    "page_idx": 8,
+    "text": "krona [3]"
+  },
+  {
+    "id": 168,
+    "type": "aside_text",
+    "page_idx": 8,
+    "text": "DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 169,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/1d0d4cce852c87dd48019d831339624ff354fa8ba66c2d77c3e25d9f136dd7ff.jpg"
+  },
+  {
+    "id": 170,
+    "type": "text",
+    "page_idx": 9,
+    "text": "10"
+  },
+  {
+    "id": 171,
+    "type": "text",
+    "page_idx": 9,
+    "text": "14 (a) Factorise."
+  },
+  {
+    "id": 172,
+    "type": "equation",
+    "page_idx": 9,
+    "text": "$$\n8 x ^ {2} - 2 x\n$$"
+  },
+  {
+    "id": 173,
+    "type": "text",
+    "page_idx": 9,
+    "text": "[2]"
+  },
+  {
+    "id": 174,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(b) Expand the brackets and simplify."
+  },
+  {
+    "id": 175,
+    "type": "equation",
+    "page_idx": 9,
+    "text": "$$\n5 (2 m - 1) + 3 (m + 7)\n$$"
+  },
+  {
+    "id": 176,
+    "type": "text",
+    "page_idx": 9,
+    "text": "[2]"
+  },
+  {
+    "id": 177,
+    "type": "text",
+    "page_idx": 9,
+    "text": "15 (a) A car travels $95\\mathrm{km}$ in 2 hours and 15 minutes."
+  },
+  {
+    "id": 178,
+    "type": "text",
+    "page_idx": 9,
+    "text": "Calculate the average speed of the car in $\\mathrm{km / h}$"
+  },
+  {
+    "id": 179,
+    "type": "text",
+    "page_idx": 9,
+    "text": "km/h [1]"
+  },
+  {
+    "id": 180,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(b) Convert $8\\mathrm{m / s}$ into $\\mathrm{km / h}$"
+  },
+  {
+    "id": 181,
+    "type": "text",
+    "page_idx": 9,
+    "text": "km/h [2]"
+  },
+  {
+    "id": 182,
+    "type": "aside_text",
+    "page_idx": 9,
+    "text": "NINW SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D"
+  },
+  {
+    "id": 183,
+    "type": "text",
+    "page_idx": 10,
+    "text": "16 (a) Chi shares $480 in the ratio 2 : 3 : 7."
+  },
+  {
+    "id": 184,
+    "type": "text",
+    "page_idx": 10,
+    "text": "Calculate the value of the largest share."
+  },
+  {
+    "id": 185,
+    "type": "text",
+    "page_idx": 10,
+    "text": "$ [2]"
+  },
+  {
+    "id": 186,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(b) Simplify these ratios."
+  },
+  {
+    "id": 187,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(i) $98:147$"
+  },
+  {
+    "id": 188,
+    "type": "text",
+    "page_idx": 10,
+    "text": "[1]"
+  },
+  {
+    "id": 189,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(ii) $2^{450}: 2^{452}$"
+  },
+  {
+    "id": 190,
+    "type": "text",
+    "page_idx": 10,
+    "text": "[1]"
+  },
+  {
+    "id": 191,
+    "type": "text",
+    "page_idx": 10,
+    "text": "17 (a) Solve."
+  },
+  {
+    "id": 192,
+    "type": "equation",
+    "page_idx": 10,
+    "text": "$$\n\\frac {x}{3} = 1 8\n$$"
+  },
+  {
+    "id": 193,
+    "type": "text",
+    "page_idx": 10,
+    "text": "$x =$ [1]"
+  },
+  {
+    "id": 194,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(b) $\\frac{6^9}{6^y} = 6^{11}$"
+  },
+  {
+    "id": 195,
+    "type": "text",
+    "page_idx": 10,
+    "text": "Find the value of $y$ ."
+  },
+  {
+    "id": 196,
+    "type": "text",
+    "page_idx": 10,
+    "text": "$y =$ [1]"
+  },
+  {
+    "id": 197,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(c) Simplify."
+  },
+  {
+    "id": 198,
+    "type": "equation",
+    "page_idx": 10,
+    "text": "$$\n\\frac {a ^ {6} b ^ {- 2}}{a ^ {4} b ^ {3}}\n$$"
+  },
+  {
+    "id": 199,
+    "type": "text",
+    "page_idx": 10,
+    "text": "[2]"
+  },
+  {
+    "id": 200,
+    "type": "aside_text",
+    "page_idx": 10,
+    "text": "DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 201,
+    "type": "text",
+    "page_idx": 11,
+    "text": "18 (a) Clare invests $12000 for 3 years at a rate of $8\\%$ per year compound interest."
+  },
+  {
+    "id": 202,
+    "type": "text",
+    "page_idx": 11,
+    "text": "Calculate the value of her investment at the end of the 3 years. Give your answer correct to the nearest $10."
+  },
+  {
+    "id": 203,
+    "type": "text",
+    "page_idx": 11,
+    "text": "$ [3]"
+  },
+  {
+    "id": 204,
+    "type": "text",
+    "page_idx": 11,
+    "text": "(b) Zak invests $560 for one year. After one year his investment is worth $630."
+  },
+  {
+    "id": 205,
+    "type": "text",
+    "page_idx": 11,
+    "text": "Calculate the percentage increase."
+  },
+  {
+    "id": 206,
+    "type": "text",
+    "page_idx": 11,
+    "text": "$\\%$ [2]"
+  },
+  {
+    "id": 207,
+    "type": "text",
+    "page_idx": 11,
+    "text": "19 (a) Write 2025 as the product of its prime factors."
+  },
+  {
+    "id": 208,
+    "type": "text",
+    "page_idx": 11,
+    "text": "[2]"
+  },
+  {
+    "id": 209,
+    "type": "text",
+    "page_idx": 11,
+    "text": "(b) Write 2025 as a product of two square numbers that are both greater than one."
+  },
+  {
+    "id": 210,
+    "type": "text",
+    "page_idx": 11,
+    "text": "[1]"
+  },
+  {
+    "id": 211,
+    "type": "aside_text",
+    "page_idx": 11,
+    "text": "NINW SIH L NI ELLM ON O D NINW SIH L NI ELLM ON O D NINW SIH L NI ELLM ON O D NINW SIH L NI ELLM ON O D"
+  },
+  {
+    "id": 212,
+    "type": "text",
+    "page_idx": 12,
+    "text": "20 The diagram shows three shapes, $A, B$ and $C$ , on a $1 \\, \\text{cm}^2$ grid."
+  },
+  {
+    "id": 213,
+    "type": "image",
+    "page_idx": 12,
+    "img_path": "images/ebbb155ce46598f0bb472130d08a47894e0378e281c82a8b1f8cfbfba673a014.jpg"
+  },
+  {
+    "id": 214,
+    "type": "text",
+    "text": "(a) On the grid, draw the image of shape $A$ after a rotation, $90^{\\circ}$ clockwise, centre $(0,3)$ . [2]",
+    "page_idx": 12
+  },
+  {
+    "id": 215,
+    "type": "text",
+    "text": "(b) Describe fully the single transformation that maps",
+    "page_idx": 12
+  },
+  {
+    "id": 216,
+    "type": "text",
+    "text": "(i) shape $A$ onto shape $B$ [2]",
+    "page_idx": 12
+  },
+  {
+    "id": 217,
+    "type": "text",
+    "text": "(ii) shape $A$ onto shape $C$ [3]",
+    "page_idx": 12
+  },
+  {
+    "id": 218,
+    "type": "text",
+    "page_idx": 12,
+    "text": "(c) Calculate the size of the smallest angle in triangle $C$"
+  },
+  {
+    "id": 219,
+    "type": "text",
+    "page_idx": 12,
+    "text": "[2]"
+  },
+  {
+    "id": 220,
+    "type": "aside_text",
+    "page_idx": 12,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 221,
+    "type": "aside_text",
+    "page_idx": 12,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 222,
+    "type": "aside_text",
+    "page_idx": 12,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 223,
+    "type": "aside_text",
+    "page_idx": 12,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 224,
+    "type": "aside_text",
+    "page_idx": 12,
+    "text": "DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 225,
+    "type": "text",
+    "page_idx": 13,
+    "text": "21 (a) Show that the sum of the interior angles of a pentagon is $540^{\\circ}$ ."
+  },
+  {
+    "id": 226,
+    "type": "text",
+    "page_idx": 13,
+    "text": "[1]"
+  },
+  {
+    "id": 227,
+    "type": "text",
+    "page_idx": 13,
+    "text": "(b) In this part, all angles are in degrees."
+  },
+  {
+    "id": 228,
+    "type": "image",
+    "page_idx": 13,
+    "img_path": "images/dc2838c48b70315ca4b450201b5b5358877d24395d5c524f61a165b04bd7aaef.jpg"
+  },
+  {
+    "id": 229,
+    "type": "text",
+    "page_idx": 13,
+    "text": "The diagram shows the five interior angles of a pentagon, written in terms of $x$ ."
+  },
+  {
+    "id": 230,
+    "type": "text",
+    "page_idx": 13,
+    "text": "(i) Write down an expression, in terms of $x$ , for the sum of the interior angles of the pentagon. Give your answer in its simplest form."
+  },
+  {
+    "id": 231,
+    "type": "text",
+    "page_idx": 13,
+    "text": "[2]"
+  },
+  {
+    "id": 232,
+    "type": "text",
+    "page_idx": 13,
+    "text": "(ii) Work out the value of $x$"
+  },
+  {
+    "id": 233,
+    "type": "text",
+    "page_idx": 13,
+    "text": "$x =$ [2]"
+  },
+  {
+    "id": 234,
+    "type": "aside_text",
+    "page_idx": 13,
+    "text": "NINW SIH L NI ELLI W O N O D N IEN W SIH L NI ELLI W O N O D N IEN W SIH L NI ELLI W O N O D N IEN W SIH L NI ELLI W O N O"
+  },
+  {
+    "id": 235,
+    "type": "aside_text",
+    "page_idx": 14,
+    "text": "DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN"
+  },
+  {
+    "id": 236,
+    "type": "text",
+    "page_idx": 15,
+    "text": "BLANK PAGE"
+  },
+  {
+    "id": 237,
+    "type": "text",
+    "page_idx": 15,
+    "text": "Permission to reproduce items where third-party owned material protected by copyright is included has been sought and cleared where possible. Every reasonable effort has been made by the publisher (UCLES) to trace copyright holders, but if any items requiring clearance have unwittingly been included, the publisher will be pleased to make amends at the earliest possible opportunity."
+  },
+  {
+    "id": 238,
+    "type": "text",
+    "page_idx": 15,
+    "text": "To avoid the issue of disclosure of answer-related information to candidates, all copyright acknowledgements are reproduced online in the Cambridge Assessment International Education Copyright Acknowledgements Booklet. This is produced for each series of examinations and is freely available to download at www.cambridgeinternational.org after the live examination series."
+  },
+  {
+    "id": 239,
+    "type": "text",
+    "page_idx": 15,
+    "text": "Cambridge Assessment International Education is part of Cambridge Assessment. Cambridge Assessment is the brand name of the University of Cambridge Local Examinations Syndicate (UCLES), which is a department of the University of Cambridge."
+  },
+  {
+    "id": 240,
+    "type": "aside_text",
+    "page_idx": 15,
+    "text": "NINW SIH⊥ NI ERIWM⊥ON ODN NINERW SIH⊥ NI ERIWM⊥ON ODN NINERW SIH⊥ NI ERIWM⊥ON ODN NINERW SIH⊥ NI ERIWM⊥ON ODN"
+  }
+]

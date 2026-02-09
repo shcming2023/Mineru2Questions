@@ -66,6 +66,9 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     await logTaskProgress(taskId, 'info', 'starting', 'Task processing started');
     
     // 2. 获取 LLM 配置
+    if (!task.configId) {
+      throw new Error(`Task ${taskId} is missing LLM config`);
+    }
     const llmConfig = await getLLMConfigById(task.configId, userId);
     if (!llmConfig) {
       throw new Error(`LLM config ${task.configId} not found`);
@@ -80,12 +83,15 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     };
     
     // 3. 获取 content_list.json 路径
+    if (!task.contentListPath) {
+      throw new Error(`Task ${taskId} is missing content_list.json path`);
+    }
     const contentListPath = await resolveFilePath(task.contentListPath);
     await logTaskProgress(taskId, 'info', 'loading', `Loading content_list.json from: ${contentListPath}`);
     
     // 4. 确定图片文件夹路径
     const imagesFolder = path.dirname(contentListPath);
-    const taskDir = path.dirname(path.dirname(contentListPath)); // 上两级目录
+    const taskDir = imagesFolder;
     
     // 5. 调用核心提取函数
     await logTaskProgress(taskId, 'info', 'extracting', 'Starting question extraction...');

@@ -1,0 +1,3641 @@
+[
+    {
+        "type": "text",
+        "text": "Cambridge IGCSE ",
+        "text_level": 1,
+        "bbox": [
+            92,
+            118,
+            376,
+            147
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/e3a81316c635ea1e86c1cf612b9b73dba70635a6e63a4838e844d9b6ec572401.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            31,
+            200,
+            80,
+            229
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "CANDIDATE ",
+        "bbox": [
+            90,
+            171,
+            191,
+            184
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "NAME ",
+        "bbox": [
+            90,
+            186,
+            144,
+            199
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "CENTRE ",
+        "bbox": [
+            90,
+            222,
+            166,
+            235
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "NUMBER ",
+        "bbox": [
+            90,
+            236,
+            169,
+            249
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/b2d3617b6988999cbbb69255151522faba3a4e342366bdfb29895a775b487112.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            211,
+            164,
+            905,
+            260
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "MATHEMATICS ",
+        "text_level": 1,
+        "bbox": [
+            92,
+            277,
+            228,
+            292
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "0580/32 ",
+        "bbox": [
+            835,
+            278,
+            905,
+            291
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Paper 3 Calculator (Core) ",
+        "bbox": [
+            92,
+            302,
+            285,
+            317
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "February/March 2025 ",
+        "bbox": [
+            732,
+            302,
+            905,
+            316
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1 hour 30 minutes ",
+        "bbox": [
+            757,
+            326,
+            905,
+            338
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "You must answer on the question paper. ",
+        "bbox": [
+            90,
+            355,
+            394,
+            370
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "You will need: Geometrical instruments ",
+        "bbox": [
+            90,
+            385,
+            400,
+            399
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "INSTRUCTIONS ",
+        "text_level": 1,
+        "bbox": [
+            92,
+            419,
+            221,
+            432
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "Answer all questions. ",
+            "- Use a black or dark blue pen. You may use an HB pencil for any diagrams or graphs. ",
+            "- Write your name, centre number and candidate number in the boxes at the top of the page. ",
+            "Write your answer to each question in the space provided. ",
+            "- Do not use an erasable pen or correction fluid. ",
+            "- Do not write on any bar codes. ",
+            "- You should use a scientific calculator where appropriate. ",
+            "You may use tracing paper. ",
+            "- You must show all necessary working clearly. ",
+            "- Give non-exact numerical answers correct to 3 significant figures, or 1 decimal place for angles in degrees, unless a different level of accuracy is specified in the question. ",
+            "For $\\pi$ , use either your calculator value or 3.142. "
+        ],
+        "bbox": [
+            90,
+            435,
+            853,
+            619
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "INFORMATION ",
+        "text_level": 1,
+        "bbox": [
+            90,
+            651,
+            213,
+            664
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "The total mark for this paper is 80. ",
+            "The number of marks for each question or part question is shown in brackets [ ]. "
+        ],
+        "bbox": [
+            90,
+            665,
+            727,
+            696
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "* 00008000000001 * ",
+        "bbox": [
+            134,
+            19,
+            253,
+            30
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            70
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "华",
+        "bbox": [
+            436,
+            29,
+            484,
+            65
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "Cambridge Assessment ",
+        "bbox": [
+            487,
+            29,
+            749,
+            49
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "header",
+        "text": "International Education ",
+        "bbox": [
+            487,
+            49,
+            739,
+            66
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "footer",
+        "text": "This document has 16 pages. Any blank pages are indicated. ",
+        "bbox": [
+            268,
+            868,
+            727,
+            883
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "footer",
+        "text": "DC (CJ/CT) 355741/4 ",
+        "bbox": [
+            90,
+            910,
+            225,
+            922
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "footer",
+        "text": "© UCLES 2025 ",
+        "bbox": [
+            90,
+            922,
+            186,
+            933
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            818,
+            920,
+            905,
+            935
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "List of formulas ",
+        "text_level": 1,
+        "bbox": [
+            430,
+            72,
+            568,
+            87
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Area, $A$ , of triangle, base $b$ , height $h$ . ",
+        "bbox": [
+            80,
+            117,
+            368,
+            137
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA = \\frac {1}{2} b h\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            114,
+            678,
+            142
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Area, $A$ , of circle of radius $r$ . ",
+        "bbox": [
+            80,
+            168,
+            305,
+            184
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA = \\pi r ^ {2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            167,
+            670,
+            183
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Circumference, $C$ , of circle of radius $r$ . ",
+        "bbox": [
+            80,
+            217,
+            384,
+            233
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nC = 2 \\pi r\n$$",
+        "text_format": "latex",
+        "bbox": [
+            605,
+            217,
+            673,
+            231
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Curved surface area, $A$ , of cylinder of radius $r$ , height $h$ . ",
+        "bbox": [
+            80,
+            265,
+            515,
+            281
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA = 2 \\pi r h\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            265,
+            682,
+            279
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Curved surface area, $A$ , of cone of radius $r$ , sloping edge $l$ . ",
+        "bbox": [
+            80,
+            313,
+            534,
+            330
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA = \\pi r l\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            313,
+            670,
+            326
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Surface area, $A$ , of sphere of radius $r$ . ",
+        "bbox": [
+            80,
+            360,
+            371,
+            376
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA = 4 \\pi r ^ {2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            360,
+            680,
+            375
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Volume, $V$ , of prism, cross-sectional area $A$ , length $l$ . ",
+        "bbox": [
+            80,
+            409,
+            490,
+            426
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV = A l\n$$",
+        "text_format": "latex",
+        "bbox": [
+            605,
+            410,
+            660,
+            423
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Volume, $V$ , of pyramid, base area $A$ , height $h$ . ",
+        "bbox": [
+            80,
+            456,
+            433,
+            473
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV = \\frac {1}{3} A h\n$$",
+        "text_format": "latex",
+        "bbox": [
+            605,
+            451,
+            675,
+            476
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Volume, $V$ , of cylinder of radius $r$ , height $h$ . ",
+        "bbox": [
+            80,
+            505,
+            420,
+            521
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV = \\pi r ^ {2} h\n$$",
+        "text_format": "latex",
+        "bbox": [
+            605,
+            504,
+            677,
+            520
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Volume, $V$ , of cone of radius $r$ , height $h$ . ",
+        "bbox": [
+            80,
+            552,
+            393,
+            569
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV = \\frac {1}{3} \\pi r ^ {2} h\n$$",
+        "text_format": "latex",
+        "bbox": [
+            605,
+            546,
+            690,
+            573
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Volume, $V$ , of sphere of radius $r$ . ",
+        "bbox": [
+            80,
+            602,
+            334,
+            618
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV = \\frac {4}{3} \\pi r ^ {3}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            605,
+            595,
+            680,
+            621
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000002 * ",
+        "bbox": [
+            137,
+            19,
+            255,
+            30
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            70
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "2 ",
+        "bbox": [
+            492,
+            43,
+            505,
+            55
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            453,
+            946,
+            544,
+            956
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "aside_text",
+        "text": "NIIGRWAISIHNLNIELRIWLONOD ",
+        "bbox": [
+            971,
+            35,
+            991,
+            185
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "aside_text",
+        "text": "NIISINI ",
+        "bbox": [
+            971,
+            231,
+            991,
+            380
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "aside_text",
+        "text": "NIHNISIHNI EINMON ",
+        "bbox": [
+            971,
+            425,
+            991,
+            574
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "aside_text",
+        "text": "NINRWAISIHLNEXRIWMONOD ",
+        "bbox": [
+            971,
+            620,
+            991,
+            770
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "1 Taj is $3\\frac{1}{4}$ years old. ",
+        "bbox": [
+            80,
+            74,
+            273,
+            101
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Work out her age in months. ",
+        "bbox": [
+            119,
+            112,
+            339,
+            128
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "months [1] ",
+        "bbox": [
+            640,
+            159,
+            917,
+            175
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "2 Div has $25 to buy some cups which cost $4.25 each. ",
+        "bbox": [
+            80,
+            205,
+            534,
+            219
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Calculate the maximum number of cups he can buy and the change he receives. ",
+        "bbox": [
+            117,
+            235,
+            734,
+            250
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Number of cups ",
+        "bbox": [
+            512,
+            375,
+            880,
+            390
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "Change \\$ [3] ",
+        "bbox": [
+            564,
+            405,
+            915,
+            420
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3 ",
+        "bbox": [
+            80,
+            438,
+            92,
+            449
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/f29469e725a70533a208d0d8cbb33eca604150decaf5f2ce939cf55112cb3e00.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            275,
+            447,
+            759,
+            579
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(a) Measure angle $A$ ",
+        "bbox": [
+            117,
+            614,
+            292,
+            630
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            630,
+            915,
+            646
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(b) Write down the mathematical name of this type of angle. ",
+        "bbox": [
+            117,
+            659,
+            600,
+            676
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            692,
+            915,
+            707
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            35,
+            25,
+            184
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            231,
+            23,
+            380
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            426,
+            25,
+            575
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            621,
+            23,
+            769
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            815,
+            23,
+            964
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000003 * ",
+        "bbox": [
+            137,
+            20,
+            255,
+            30
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            68
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "3 ",
+        "bbox": [
+            492,
+            43,
+            504,
+            55
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            947,
+            169,
+            956
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "footer",
+        "text": "# ",
+        "bbox": [
+            284,
+            944,
+            312,
+            964
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            453,
+            946,
+            542,
+            956
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            826,
+            944,
+            917,
+            958
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "4 ",
+        "bbox": [
+            80,
+            73,
+            94,
+            86
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "table",
+        "img_path": "images/c301cca8c694ef104b4d8acda5dbefbf524c3e1bd22627ace8f84e01554fde22.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>30</td><td>31</td><td>32</td><td>33</td><td>34</td><td>35</td><td>36</td><td>37</td><td>38</td><td>39</td></tr></table>",
+        "bbox": [
+            255,
+            85,
+            742,
+            129
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "From this list, write down the number that is ",
+        "bbox": [
+            115,
+            146,
+            465,
+            162
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(a) a multiple of 13 ",
+        "bbox": [
+            115,
+            177,
+            282,
+            193
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            208,
+            917,
+            225
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(b) a factor of 140 ",
+        "bbox": [
+            115,
+            239,
+            273,
+            255
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            285,
+            917,
+            302
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(c) the largest prime number ",
+        "bbox": [
+            115,
+            316,
+            354,
+            332
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            347,
+            917,
+            363
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(d) divisible by an even cube number ",
+        "bbox": [
+            115,
+            378,
+            421,
+            395
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            425,
+            917,
+            441
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(e) $20\\%$ of 190. ",
+        "bbox": [
+            115,
+            455,
+            253,
+            472
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            487,
+            917,
+            502
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "5 (a) A farmer plants $t$ trees each day. ",
+        "bbox": [
+            78,
+            532,
+            406,
+            549
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Write an expression for the number of trees he plants in $d$ days. ",
+        "bbox": [
+            152,
+            563,
+            648,
+            580
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            640,
+            917,
+            657
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(b) A train has $p$ passengers. ",
+        "bbox": [
+            115,
+            671,
+            349,
+            687
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "$x$ passengers get off the train and $y$ passengers get on the train. ",
+        "bbox": [
+            152,
+            687,
+            640,
+            703
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Write an expression for the number of passengers on the train now. ",
+        "bbox": [
+            152,
+            718,
+            675,
+            734
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            795,
+            917,
+            812
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "000080000004\\* ",
+        "bbox": [
+            53,
+            19,
+            413,
+            68
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "4 ",
+        "bbox": [
+            492,
+            43,
+            505,
+            55
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            78,
+            945,
+            169,
+            956
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "footer",
+        "text": "美",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            945,
+            544,
+            956
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH L NI ELLM ON O N D NINW SIH L NI ELLM ON O N D NINW SIH L NI ELLM ON O N D ",
+        "bbox": [
+            969,
+            34,
+            991,
+            965
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "6 Raj thinks of a negative number, $n$ ",
+        "bbox": [
+            80,
+            73,
+            393,
+            89
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "He adds 10 to $n$ and then multiplies by 5. ",
+        "bbox": [
+            117,
+            90,
+            438,
+            104
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "The answer is 30. ",
+        "bbox": [
+            117,
+            105,
+            257,
+            118
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Work out the value of $n$ . ",
+        "bbox": [
+            117,
+            135,
+            307,
+            149
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\nn = \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\dots \\tag {2}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            606,
+            259,
+            915,
+            274
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "7 The diagram shows a straight line crossing a pair of parallel lines. ",
+        "bbox": [
+            80,
+            304,
+            630,
+            321
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "image",
+        "img_path": "images/86ffdcbe6f49dc83ec2ebf06809bce6de31c0443147fe5283a07b31515cd950a.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            260,
+            332,
+            734,
+            502
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Complete these statements. ",
+        "bbox": [
+            115,
+            535,
+            331,
+            550
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(a) Angle $A$ and angle .. are corresponding angles. [1] ",
+            "(b) Angle $A$ and angle $e$ are angles. [1] "
+        ],
+        "bbox": [
+            117,
+            565,
+            915,
+            614
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            35,
+            25,
+            184
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            231,
+            23,
+            380
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            426,
+            23,
+            575
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            621,
+            23,
+            769
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            815,
+            23,
+            964
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000005 * ",
+        "bbox": [
+            137,
+            20,
+            255,
+            30
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            411,
+            68
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "5 ",
+        "bbox": [
+            492,
+            43,
+            505,
+            55
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "footer",
+        "text": "# ",
+        "bbox": [
+            284,
+            944,
+            312,
+            964
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            453,
+            946,
+            542,
+            956
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            826,
+            944,
+            917,
+            958
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "8 These are the first four terms of a sequence. ",
+        "bbox": [
+            80,
+            73,
+            460,
+            90
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "31 24 17 10 ",
+        "bbox": [
+            174,
+            103,
+            431,
+            118
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(a) Write down the term-to-term rule for continuing this sequence. ",
+        "bbox": [
+            115,
+            134,
+            645,
+            151
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            181,
+            917,
+            197
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(b) Find the next two terms in this sequence. ",
+        "bbox": [
+            115,
+            211,
+            477,
+            229
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            636,
+            258,
+            917,
+            274
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(c) Find the $n$ th term. ",
+        "bbox": [
+            115,
+            304,
+            297,
+            319
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            366,
+            915,
+            382
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "9 A cuboid measures $3\\mathrm{cm}$ by $7\\mathrm{cm}$ by $11\\mathrm{cm}$ . ",
+        "bbox": [
+            78,
+            412,
+            450,
+            429
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Calculate the surface area of the cuboid. ",
+        "bbox": [
+            115,
+            443,
+            431,
+            458
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "$\\mathrm{cm}^2$ [3] ",
+        "bbox": [
+            640,
+            612,
+            917,
+            630
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "000080000006 ",
+        "bbox": [
+            53,
+            19,
+            413,
+            68
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "6 ",
+        "bbox": [
+            492,
+            43,
+            505,
+            55
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            946,
+            544,
+            956
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D ",
+        "bbox": [
+            971,
+            35,
+            991,
+            965
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "10 The table shows an ordered stem-and-leaf diagram. ",
+        "bbox": [
+            82,
+            73,
+            515,
+            89
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "$A, B$ and $C$ are missing numbers. ",
+        "bbox": [
+            117,
+            90,
+            374,
+            104
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/ed56742754a36ee64ba502b5b5c1d36c0ae8d002d704469c6478c44ba1890700.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>0</td><td>2</td><td>A</td><td></td><td></td><td></td></tr><tr><td>1</td><td>1</td><td>3</td><td>B</td><td>7</td><td></td></tr><tr><td>2</td><td>0</td><td>4</td><td>6</td><td>C</td><td></td></tr></table>",
+        "bbox": [
+            117,
+            118,
+            408,
+            212
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Key:1|3 represents 13 ",
+        "bbox": [
+            421,
+            225,
+            616,
+            242
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "For the ten numbers ",
+        "bbox": [
+            117,
+            258,
+            275,
+            271
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "the range is 27 ",
+            "the median is 16 ",
+            "the mean is 16.5 . "
+        ],
+        "bbox": [
+            119,
+            274,
+            294,
+            318
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(a) Work out the values of $A, B$ and $C$ . ",
+        "bbox": [
+            117,
+            335,
+            428,
+            350
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "$A =$ ",
+        "bbox": [
+            606,
+            629,
+            914,
+            643
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "$B =$ ",
+        "bbox": [
+            606,
+            659,
+            912,
+            673
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "$C =$ ",
+        "bbox": [
+            606,
+            690,
+            914,
+            703
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "[5] ",
+        "bbox": [
+            892,
+            706,
+            915,
+            721
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(b) Complete this statement. ",
+        "bbox": [
+            117,
+            736,
+            349,
+            751
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "There is no mode because ",
+        "bbox": [
+            157,
+            766,
+            914,
+            782
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            890,
+            799,
+            915,
+            813
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            35,
+            25,
+            185
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            231,
+            23,
+            380
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            426,
+            23,
+            575
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            621,
+            23,
+            769
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            815,
+            23,
+            964
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000007 * ",
+        "bbox": [
+            137,
+            20,
+            255,
+            30
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "7 ",
+        "bbox": [
+            492,
+            43,
+            504,
+            55
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            411,
+            68
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            897,
+            32,
+            941,
+            61
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            947,
+            169,
+            956
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            284,
+            944,
+            312,
+            964
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            453,
+            946,
+            542,
+            956
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            826,
+            944,
+            917,
+            958
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "11 The scale drawing shows the positions of two lighthouses, $P$ and $Q$ . The scale is 1 centimetre represents 0.8 kilometres. ",
+        "bbox": [
+            80,
+            72,
+            645,
+            105
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/842f252a63c3c88a3d7d3fcb981a8ea89d27c0e0f20c155545c7e1dbcdf97bac.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            181,
+            117,
+            231,
+            208
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/67f4a85538af1328eebc5643c9d72e3b62c982c660e22561f105d22b704e57b0.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            623,
+            183,
+            673,
+            277
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Scale: $1\\mathrm{cm}$ to $0.8\\mathrm{km}$ ",
+        "bbox": [
+            645,
+            374,
+            815,
+            388
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(a) (i) Find the actual distance between $P$ and $Q$ . ",
+            "(ii) Measure the bearing of $Q$ from $P$ . "
+        ],
+        "bbox": [
+            115,
+            424,
+            524,
+            518
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "km [2] ",
+        "bbox": [
+            640,
+            469,
+            917,
+            488
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(b) A boat, $B$ , is on a bearing of $127^{\\circ}$ from $P$ Calculate the bearing of $P$ from $B$ ",
+        "bbox": [
+            115,
+            563,
+            482,
+            609
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            532,
+            917,
+            549
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            702,
+            917,
+            720
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000008 * ",
+        "bbox": [
+            137,
+            19,
+            255,
+            30
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            68
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "8 ",
+        "bbox": [
+            492,
+            43,
+            505,
+            55
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            946,
+            544,
+            956
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D ",
+        "bbox": [
+            971,
+            35,
+            991,
+            965
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "12 Mo asks some people if they prefer sun, rain or wind. ",
+        "bbox": [
+            80,
+            73,
+            534,
+            89
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "The pie chart shows the results. ",
+        "bbox": [
+            117,
+            89,
+            364,
+            104
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "image",
+        "img_path": "images/4d4a7cf0818e463d0e1fa736f422c12ad484f88e1f35eaafef091855b4ca5fb2.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            352,
+            115,
+            647,
+            324
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "45 more people prefer wind than rain. ",
+        "bbox": [
+            115,
+            354,
+            413,
+            370
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Work out how many people prefer sun. ",
+        "bbox": [
+            115,
+            385,
+            423,
+            401
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "[4] ",
+        "bbox": [
+            640,
+            539,
+            917,
+            557
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "13 Xie changes 2000 dollars into krona. ",
+        "bbox": [
+            78,
+            571,
+            406,
+            587
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "1 dollar $= 0.615$ euros ",
+        "bbox": [
+            408,
+            602,
+            588,
+            617
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "1 krona $= 0.087$ euros ",
+        "bbox": [
+            411,
+            618,
+            586,
+            632
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Use the exchange rates to calculate how many krona she receives. ",
+        "bbox": [
+            115,
+            648,
+            630,
+            664
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Give your answer correct to the nearest krona. ",
+        "bbox": [
+            117,
+            664,
+            478,
+            678
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "krona [3] ",
+        "bbox": [
+            640,
+            816,
+            917,
+            835
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            3,
+            34,
+            25,
+            965
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000009 * ",
+        "bbox": [
+            137,
+            19,
+            255,
+            30
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            70
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "9 ",
+        "bbox": [
+            492,
+            43,
+            505,
+            55
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            946,
+            544,
+            957
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            826,
+            942,
+            917,
+            958
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "image",
+        "img_path": "images/1d0d4cce852c87dd48019d831339624ff354fa8ba66c2d77c3e25d9f136dd7ff.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            53,
+            19,
+            413,
+            68
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "10 ",
+        "bbox": [
+            489,
+            43,
+            510,
+            57
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "14 (a) Factorise. ",
+        "bbox": [
+            80,
+            73,
+            235,
+            89
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "equation",
+        "text": "$$\n8 x ^ {2} - 2 x\n$$",
+        "text_format": "latex",
+        "bbox": [
+            240,
+            101,
+            312,
+            118
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            149,
+            917,
+            166
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(b) Expand the brackets and simplify. ",
+        "bbox": [
+            115,
+            180,
+            423,
+            198
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "equation",
+        "text": "$$\n5 (2 m - 1) + 3 (m + 7)\n$$",
+        "text_format": "latex",
+        "bbox": [
+            447,
+            211,
+            615,
+            228
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            304,
+            917,
+            321
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "15 (a) A car travels $95\\mathrm{km}$ in 2 hours and 15 minutes. ",
+        "bbox": [
+            80,
+            350,
+            519,
+            368
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "Calculate the average speed of the car in $\\mathrm{km / h}$ ",
+        "bbox": [
+            154,
+            381,
+            521,
+            398
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "km/h [1] ",
+        "bbox": [
+            640,
+            474,
+            915,
+            491
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(b) Convert $8\\mathrm{m / s}$ into $\\mathrm{km / h}$ ",
+        "bbox": [
+            115,
+            505,
+            354,
+            521
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "km/h [2] ",
+        "bbox": [
+            640,
+            627,
+            917,
+            646
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            946,
+            544,
+            956
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D N IEN W SIH L NI ELLM ON O D ",
+        "bbox": [
+            971,
+            35,
+            991,
+            965
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "16 (a) Chi shares $480 in the ratio 2 : 3 : 7. ",
+        "bbox": [
+            80,
+            72,
+            450,
+            89
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "Calculate the value of the largest share. ",
+        "bbox": [
+            154,
+            103,
+            462,
+            120
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "$ [2] ",
+        "bbox": [
+            626,
+            225,
+            917,
+            244
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(b) Simplify these ratios. ",
+        "bbox": [
+            115,
+            256,
+            324,
+            274
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(i) $98:147$ ",
+        "bbox": [
+            154,
+            288,
+            262,
+            305
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            643,
+            382,
+            917,
+            399
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(ii) $2^{450}: 2^{452}$ ",
+        "bbox": [
+            151,
+            409,
+            273,
+            429
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            643,
+            489,
+            917,
+            507
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "17 (a) Solve. ",
+        "bbox": [
+            80,
+            520,
+            206,
+            536
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\frac {x}{3} = 1 8\n$$",
+        "text_format": "latex",
+        "bbox": [
+            213,
+            551,
+            273,
+            576
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "$x =$ [1] ",
+        "bbox": [
+            606,
+            602,
+            917,
+            619
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(b) $\\frac{6^9}{6^y} = 6^{11}$ ",
+        "bbox": [
+            117,
+            626,
+            275,
+            659
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "Find the value of $y$ . ",
+        "bbox": [
+            154,
+            668,
+            307,
+            684
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "$y =$ [1] ",
+        "bbox": [
+            606,
+            715,
+            917,
+            732
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(c) Simplify. ",
+        "bbox": [
+            115,
+            746,
+            230,
+            762
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\frac {a ^ {6} b ^ {- 2}}{a ^ {4} b ^ {3}}\n$$",
+        "text_format": "latex",
+        "bbox": [
+            240,
+            778,
+            292,
+            813
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            890,
+            915,
+            907
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            35,
+            25,
+            964
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "0000800000011 ",
+        "bbox": [
+            53,
+            17,
+            413,
+            68
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "11 ",
+        "bbox": [
+            489,
+            43,
+            507,
+            55
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            78,
+            945,
+            169,
+            956
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            946,
+            544,
+            957
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            826,
+            942,
+            917,
+            958
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "18 (a) Clare invests $12000 for 3 years at a rate of $8\\%$ per year compound interest. ",
+        "bbox": [
+            80,
+            72,
+            751,
+            90
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Calculate the value of her investment at the end of the 3 years. Give your answer correct to the nearest $10. ",
+        "bbox": [
+            152,
+            103,
+            643,
+            135
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "$ [3] ",
+        "bbox": [
+            626,
+            242,
+            917,
+            260
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(b) Zak invests $560 for one year. After one year his investment is worth $630. ",
+        "bbox": [
+            115,
+            273,
+            505,
+            305
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Calculate the percentage increase. ",
+        "bbox": [
+            152,
+            319,
+            423,
+            337
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "$\\%$ [2] ",
+        "bbox": [
+            640,
+            489,
+            917,
+            507
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "19 (a) Write 2025 as the product of its prime factors. ",
+        "bbox": [
+            78,
+            535,
+            515,
+            552
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            644,
+            917,
+            661
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(b) Write 2025 as a product of two square numbers that are both greater than one. ",
+        "bbox": [
+            115,
+            674,
+            761,
+            692
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            640,
+            768,
+            917,
+            785
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "* 00008000000012 * ",
+        "bbox": [
+            137,
+            19,
+            255,
+            30
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            68
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "page_number",
+        "text": "12 ",
+        "bbox": [
+            487,
+            43,
+            510,
+            55
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "footer",
+        "text": "© UCLES 2025 ",
+        "bbox": [
+            80,
+            945,
+            169,
+            958
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            964
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            945,
+            544,
+            957
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH L NI ELLM ON O D NINW SIH L NI ELLM ON O D NINW SIH L NI ELLM ON O D NINW SIH L NI ELLM ON O D ",
+        "bbox": [
+            971,
+            34,
+            991,
+            965
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "20 The diagram shows three shapes, $A, B$ and $C$ , on a $1 \\, \\text{cm}^2$ grid. ",
+        "bbox": [
+            80,
+            76,
+            600,
+            93
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "image",
+        "img_path": "images/ebbb155ce46598f0bb472130d08a47894e0378e281c82a8b1f8cfbfba673a014.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            188,
+            111,
+            811,
+            395
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(a) On the grid, draw the image of shape $A$ after a rotation, $90^{\\circ}$ clockwise, centre $(0,3)$ . [2] ",
+            "(b) Describe fully the single transformation that maps "
+        ],
+        "bbox": [
+            117,
+            413,
+            915,
+            460
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(i) shape $A$ onto shape $B$ [2] ",
+            "(ii) shape $A$ onto shape $C$ [3] "
+        ],
+        "bbox": [
+            152,
+            475,
+            915,
+            646
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(c) Calculate the size of the smallest angle in triangle $C$ ",
+        "bbox": [
+            117,
+            659,
+            571,
+            677
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            769,
+            915,
+            785
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            35,
+            25,
+            185
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            231,
+            23,
+            380
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            426,
+            25,
+            575
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            621,
+            23,
+            769
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            815,
+            23,
+            964
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000013 * ",
+        "bbox": [
+            137,
+            20,
+            255,
+            30
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            68
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "page_number",
+        "text": "13 ",
+        "bbox": [
+            489,
+            43,
+            509,
+            55
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            956
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "footer",
+        "text": "# ",
+        "bbox": [
+            284,
+            944,
+            312,
+            964
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            453,
+            946,
+            542,
+            956
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "footer",
+        "text": "[Turn over ",
+        "bbox": [
+            826,
+            944,
+            915,
+            958
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "21 (a) Show that the sum of the interior angles of a pentagon is $540^{\\circ}$ . ",
+        "bbox": [
+            78,
+            73,
+            645,
+            90
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "[1] ",
+        "bbox": [
+            890,
+            181,
+            917,
+            199
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(b) In this part, all angles are in degrees. ",
+        "bbox": [
+            115,
+            212,
+            445,
+            229
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/dc2838c48b70315ca4b450201b5b5358877d24395d5c524f61a165b04bd7aaef.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            169,
+            255,
+            831,
+            444
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "The diagram shows the five interior angles of a pentagon, written in terms of $x$ . ",
+        "bbox": [
+            154,
+            458,
+            771,
+            476
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(i) Write down an expression, in terms of $x$ , for the sum of the interior angles of the pentagon. Give your answer in its simplest form. ",
+        "bbox": [
+            154,
+            489,
+            899,
+            521
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "[2] ",
+        "bbox": [
+            640,
+            614,
+            917,
+            630
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(ii) Work out the value of $x$ ",
+        "bbox": [
+            149,
+            644,
+            384,
+            659
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "$x =$ [2] ",
+        "bbox": [
+            606,
+            799,
+            917,
+            815
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "header",
+        "text": "* 00008000000014 * ",
+        "bbox": [
+            137,
+            19,
+            255,
+            30
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "header",
+        "text": "# ",
+        "bbox": [
+            55,
+            30,
+            413,
+            70
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "page_number",
+        "text": "14 ",
+        "bbox": [
+            487,
+            43,
+            510,
+            57
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            78,
+            945,
+            171,
+            958
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            965
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            945,
+            544,
+            957
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH L NI ELLI W O N O D N IEN W SIH L NI ELLI W O N O D N IEN W SIH L NI ELLI W O N O D N IEN W SIH L NI ELLI W O N O ",
+        "bbox": [
+            969,
+            34,
+            991,
+            967
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "aside_text",
+        "text": "DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN DO NOT WRITE IN THIS MARGIN ",
+        "bbox": [
+            6,
+            35,
+            25,
+            963
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000015 * ",
+        "bbox": [
+            137,
+            20,
+            255,
+            30
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "F ",
+        "bbox": [
+            53,
+            30,
+            413,
+            70
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "15 ",
+        "bbox": [
+            489,
+            43,
+            510,
+            55
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "BLANK PAGE ",
+        "bbox": [
+            433,
+            72,
+            563,
+            87
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            957
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "footer",
+        "text": "图",
+        "bbox": [
+            282,
+            942,
+            312,
+            965
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            453,
+            946,
+            544,
+            957
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "BLANK PAGE ",
+        "text_level": 1,
+        "bbox": [
+            433,
+            73,
+            563,
+            87
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Permission to reproduce items where third-party owned material protected by copyright is included has been sought and cleared where possible. Every reasonable effort has been made by the publisher (UCLES) to trace copyright holders, but if any items requiring clearance have unwittingly been included, the publisher will be pleased to make amends at the earliest possible opportunity. ",
+        "bbox": [
+            78,
+            828,
+            919,
+            863
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "To avoid the issue of disclosure of answer-related information to candidates, all copyright acknowledgements are reproduced online in the Cambridge Assessment International Education Copyright Acknowledgements Booklet. This is produced for each series of examinations and is freely available to download at www.cambridgeinternational.org after the live examination series. ",
+        "bbox": [
+            78,
+            872,
+            917,
+            904
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Cambridge Assessment International Education is part of Cambridge Assessment. Cambridge Assessment is the brand name of the University of Cambridge Local Examinations Syndicate (UCLES), which is a department of the University of Cambridge. ",
+        "bbox": [
+            78,
+            914,
+            917,
+            936
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "header",
+        "text": "* 0000800000016 * ",
+        "bbox": [
+            137,
+            20,
+            255,
+            30
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "header",
+        "text": "F ",
+        "bbox": [
+            53,
+            30,
+            413,
+            70
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "page_number",
+        "text": "16 ",
+        "bbox": [
+            489,
+            43,
+            510,
+            55
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "footer",
+        "text": "$\\odot$ UCLES 2025 ",
+        "bbox": [
+            80,
+            946,
+            169,
+            957
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "footer",
+        "text": "# ",
+        "bbox": [
+            282,
+            944,
+            312,
+            965
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "footer",
+        "text": "0580/32/F/M/25 ",
+        "bbox": [
+            452,
+            946,
+            544,
+            957
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "aside_text",
+        "text": "NINW SIH⊥ NI ERIWM⊥ON ODN NINERW SIH⊥ NI ERIWM⊥ON ODN NINERW SIH⊥ NI ERIWM⊥ON ODN NINERW SIH⊥ NI ERIWM⊥ON ODN ",
+        "bbox": [
+            971,
+            34,
+            991,
+            967
+        ],
+        "page_idx": 15
+    }
+]

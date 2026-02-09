@@ -149,10 +149,28 @@ export async function extractQuestions(
       console.log(`Chunk ${chunk.index}: Extracted ${questions.length} questions`);
       allQuestions.push(...questions);
       
-    } catch (error: any) {
-      console.error(`Chunk ${chunk.index}: Failed to process: ${error.message}`);
-      // 继续处理下一个 chunk
-    }
+            } catch (error: any) {
+              console.error(`Chunk ${chunk.index}: Failed to process: ${error.message}`);
+              const logDir = path.join(taskDir, 'logs');
+              try {
+                if (!fs.existsSync(logDir)) {
+                  fs.mkdirSync(logDir, { recursive: true });
+                }
+                const errorLogPath = path.join(logDir, `chunk_${chunk.index}_error.json`);
+                const errorPayload = {
+                  chunkIndex: chunk.index,
+                  message: error?.message ?? 'Unknown error',
+                  stack: error?.stack ?? null,
+                  apiUrl: llmConfig.apiUrl,
+                  modelName: llmConfig.modelName,
+                  timestamp: new Date().toISOString()
+                };
+                fs.writeFileSync(errorLogPath, JSON.stringify(errorPayload, null, 2));
+              } catch (logError) {
+                console.error(`Chunk ${chunk.index}: Failed to write error log:`, logError);
+              }
+              // 继续处理下一个 chunk
+            }
   }
   
   console.log(`Step 3 completed: Total ${allQuestions.length} questions extracted`);
@@ -316,9 +334,10 @@ async function callLLM(
     }
   }
 
-  // 调用 LLM API
+  const base = config.apiUrl.replace(/\/+$/, "");
+  const endpoint = base.endsWith("/chat/completions") ? base : `${base}/chat/completions`;
   const response = await axios.post(
-    config.apiUrl,
+    endpoint,
     {
       model: config.modelName,
       messages: [
