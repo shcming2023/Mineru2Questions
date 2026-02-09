@@ -131,6 +131,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       status: 'completed',
       resultJsonPath: jsonPath,
       resultMarkdownPath: mdPath,
+      extractedCount: questions.length,
       completedAt: new Date()
     });
     

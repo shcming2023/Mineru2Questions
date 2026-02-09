@@ -381,14 +381,24 @@ async function callLLM(
 }
 
 /**
- * 去重：基于 questionIds 去重
+ * 去重：优先使用 (chapter_title, label) 组合键，兼容 questionIds
  */
 function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion[] {
   const seen = new Set<string>();
   const unique: ExtractedQuestion[] = [];
   
   for (const q of questions) {
-    const key = q.questionIds || `${q.label}_${q.question.substring(0, 50)}`;
+    // 修复：优先使用 (chapter_title, label) 作为唯一键，解决跨 Chunk 重复问题
+    let key: string;
+    
+    if (q.chapter_title && q.label) {
+      // 归一化：去除空白
+      key = `${q.chapter_title.trim()}_${q.label.trim()}`;
+    } else {
+      // 回退策略
+      key = q.questionIds || `${q.label}_${q.question.substring(0, 50)}`;
+    }
+
     if (!seen.has(key)) {
       seen.add(key);
       unique.push(q);
@@ -449,6 +459,8 @@ function filterLowQuality(questions: ExtractedQuestion[]): ExtractedQuestion[] {
  * 导出为 JSON 格式
  */
 export function exportToJSON(questions: ExtractedQuestion[], outputPath: string): void {
+  const outputDir = path.dirname(outputPath);
+
   const output = {
     total: questions.length,
     questions: questions.map(q => ({
@@ -457,7 +469,13 @@ export function exportToJSON(questions: ExtractedQuestion[], outputPath: string)
       chapter_title: q.chapter_title,
       question: q.question,
       solution: q.solution,
-      images: q.images,
+      // 修复：将绝对路径转换为相对路径，提升可移植性
+      images: q.images?.map(img => {
+        if (path.isAbsolute(img)) {
+          return path.relative(outputDir, img);
+        }
+        return img;
+      }),
       page_idx: q.page_idx,
       has_answer: q.has_answer
     }))
@@ -471,6 +489,8 @@ export function exportToJSON(questions: ExtractedQuestion[], outputPath: string)
  * 导出为 Markdown 格式
  */
 export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: string): void {
+  const outputDir = path.dirname(outputPath);
+
   let markdown = `# 提取的题目\n\n`;
   markdown += `**总数**: ${questions.length}\n\n`;
   markdown += `---\n\n`;
@@ -491,7 +511,9 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
     // 图片
     if (q.images && q.images.length > 0) {
       for (const img of q.images) {
-        markdown += `![图片](${img})\n\n`;
+        // 修复：转为相对路径
+        const relPath = path.isAbsolute(img) ? path.relative(outputDir, img) : img;
+        markdown += `![图片](${relPath})\n\n`;
       }
     }
     
@@ -511,13 +533,24 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
  * 清洗章节标题
  */
 function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQuestion[] {
-  const titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式"];
+  const titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式", "基础训练", "拓展训练"];
+  // 匹配数字章节号，如 "19.2", "1. ", "第1章"
+  const chapterNumberRegex = /^(\d+(\.\d+)*|第[一二三四五六七八九十\d]+[章节])/;
   let lastValidTitle = "";
 
   return questions.map(q => {
-    const isNoiseTitle = titleBlacklist.some(keyword => q.chapter_title && q.chapter_title.includes(keyword));
+    const title = q.chapter_title || "";
+    const isNoiseTitle = titleBlacklist.some(keyword => title.includes(keyword));
+    
     if (isNoiseTitle) {
-      q.chapter_title = lastValidTitle; // 使用上一个有效的标题
+      // 尝试提取数字编号作为补救
+      const match = title.match(chapterNumberRegex);
+      if (match) {
+        q.chapter_title = match[0];
+        lastValidTitle = q.chapter_title;
+      } else {
+        q.chapter_title = lastValidTitle; // 使用上一个有效的标题
+      }
     } else {
       if (q.chapter_title) lastValidTitle = q.chapter_title;
     }
