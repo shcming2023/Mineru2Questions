@@ -21,6 +21,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import { QuestionParser, ExtractedQuestion } from './parser';
 import { QUESTION_EXTRACT_PROMPT } from './prompts';
 
@@ -139,50 +140,82 @@ export async function extractQuestions(
       console.log(progressMsg);
       if (onProgress) await onProgress(progressPercent, progressMsg);
 
-      try {
-        // 调用 LLM
-        const llmOutput = await callLLM(chunk.blocks, llmConfig, { taskDir, chunkIndex: chunk.index });
-        
-        // 保存 LLM 原始输出
-        const logDir = path.join(taskDir, 'logs');
-        if (!fs.existsSync(logDir)) {
-          fs.mkdirSync(logDir, { recursive: true });
-        }
-        fs.writeFileSync(
-          path.join(logDir, `chunk_${chunk.index}_llm_output.txt`),
-          llmOutput,
-          'utf-8'
-        );
-        
-        // 解析（带容错）
-        const parser = new QuestionParser(chunk.blocks, imagesFolder, logDir);
-        const questions = parser.parseWithFallback(llmOutput, chunk.index);
-        
-        console.log(`Chunk ${chunk.index}: Extracted ${questions.length} questions`);
-        chunkResults[index] = questions;
-        
-      } catch (error: any) {
-        console.error(`Chunk ${chunk.index}: Failed to process: ${error.message}`);
-        const logDir = path.join(taskDir, 'logs');
+      let retries = 0;
+      const maxRetries = 3;
+      let success = false;
+
+      while (retries <= maxRetries && !success) {
         try {
+          // 调用 LLM
+          const llmOutput = await callLLM(chunk.blocks, llmConfig, { taskDir, chunkIndex: chunk.index });
+          
+          // 保存 LLM 原始输出
+          const logDir = path.join(taskDir, 'logs');
           if (!fs.existsSync(logDir)) {
             fs.mkdirSync(logDir, { recursive: true });
           }
-          const errorLogPath = path.join(logDir, `chunk_${chunk.index}_error.json`);
-          const errorPayload = {
-            chunkIndex: chunk.index,
-            message: error?.message ?? 'Unknown error',
-            stack: error?.stack ?? null,
-            apiUrl: llmConfig.apiUrl,
-            modelName: llmConfig.modelName,
-            timestamp: new Date().toISOString()
-          };
-          fs.writeFileSync(errorLogPath, JSON.stringify(errorPayload, null, 2));
-        } catch (logError) {
-          console.error(`Chunk ${chunk.index}: Failed to write error log:`, logError);
+          fs.writeFileSync(
+            path.join(logDir, `chunk_${chunk.index}_llm_output.txt`),
+            llmOutput,
+            'utf-8'
+          );
+          
+          // 解析（带容错）
+          const parser = new QuestionParser(chunk.blocks, imagesFolder, logDir);
+          const questions = parser.parseWithFallback(llmOutput, chunk.index);
+
+          // Sanity Check: 检测 LLM 注意力衰减
+          // 如果 chunk 包含大量 blocks (>40) 但 LLM 只输出了极少题目 (<=1)，
+          // 且这不是最后一次重试，则抛出错误以触发重试。
+          if (chunk.blocks.length > 40 && questions.length <= 1) {
+             // 进一步检查：是不是真的只有文本很少？
+             // 简单策略：只要 blocks 多但产出少，就怀疑有问题。
+             // 除非这是最后一次重试，否则我们应该重试。
+             if (retries < maxRetries) {
+                throw new Error(`Sanity Check Failed: Input has ${chunk.blocks.length} blocks but only ${questions.length} questions extracted. Suspected LLM attention decay.`);
+             } else {
+                console.warn(`Chunk ${chunk.index}: Sanity check failed but reached max retries. Accepting result.`);
+             }
+          }
+          
+          console.log(`Chunk ${chunk.index}: Extracted ${questions.length} questions`);
+          chunkResults[index] = questions;
+          success = true;
+          
+        } catch (error: any) {
+          retries++;
+          const isSanityCheck = error.message.includes('Sanity Check');
+          console.error(`Chunk ${chunk.index}: Failed to process (Attempt ${retries}/${maxRetries + 1}): ${error.message}`);
+          
+          if (retries > maxRetries) {
+            // 最终失败处理
+            const logDir = path.join(taskDir, 'logs');
+            try {
+              if (!fs.existsSync(logDir)) {
+                fs.mkdirSync(logDir, { recursive: true });
+              }
+              const errorLogPath = path.join(logDir, `chunk_${chunk.index}_error.json`);
+              const errorPayload = {
+                chunkIndex: chunk.index,
+                message: error?.message ?? 'Unknown error',
+                stack: error?.stack ?? null,
+                apiUrl: llmConfig.apiUrl,
+                modelName: llmConfig.modelName,
+                timestamp: new Date().toISOString()
+              };
+              fs.writeFileSync(errorLogPath, JSON.stringify(errorPayload, null, 2));
+            } catch (logError) {
+              console.error(`Chunk ${chunk.index}: Failed to write error log:`, logError);
+            }
+            // 出错时返回空数组，不影响其他 chunk
+            chunkResults[index] = [];
+          } else {
+             // 等待后重试 (指数退避)
+             const delay = 1000 * Math.pow(2, retries);
+             console.log(`Chunk ${chunk.index}: Waiting ${delay}ms before retry...`);
+             await new Promise(resolve => setTimeout(resolve, delay));
+          }
         }
-        // 出错时返回空数组，不影响其他 chunk
-        chunkResults[index] = [];
       }
     }
   };
@@ -357,7 +390,27 @@ async function callLLM(
 
   const base = config.apiUrl.replace(/\/+$/, "");
   const endpoint = base.endsWith("/chat/completions") ? base : `${base}/chat/completions`;
-  const response = await axios.post(
+
+  // 创建 axios 实例并配置重试
+  const client = axios.create({
+    timeout: config.timeout || 60000,
+    headers: {
+      'Authorization': `Bearer ${config.apiKey}`,
+      'Content-Type': 'application/json'
+    }
+  });
+
+  axiosRetry(client, {
+    retries: config.maxRetries || 3,
+    retryDelay: axiosRetry.exponentialDelay,
+    retryCondition: (error) => {
+      // 在网络错误或 5xx 状态码时重试
+      return axiosRetry.isNetworkOrIdempotentRequestError(error) || 
+             (error.response?.status ? error.response.status >= 500 : false);
+    }
+  });
+
+  const response = await client.post(
     endpoint,
     {
       model: config.modelName,
@@ -367,13 +420,6 @@ async function callLLM(
       ],
       temperature: 0.1,
       max_tokens: 4000
-    },
-    {
-      headers: {
-        'Authorization': `Bearer ${config.apiKey}`,
-        'Content-Type': 'application/json'
-      },
-      timeout: config.timeout || 60000
     }
   );
   
