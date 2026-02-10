@@ -57,6 +57,8 @@ The system will automatically retrieve the text using the IDs you provide.
 ## ═══════════════════════════════════════════════════════════════
 
 1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary".
 2. **Identify question types**:
    - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
    - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>

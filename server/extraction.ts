@@ -388,19 +388,17 @@ function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion
   const unique: ExtractedQuestion[] = [];
   
   for (const q of questions) {
-    // 修复：必须加入 page_idx 来区分不同页面上的同名题号，防止误删
-    let key: string;
-    
-    if (q.chapter_title && q.label) {
-      // 归一化：去除空白
-      key = `${q.chapter_title.trim()}_${q.label.trim()}_${q.page_idx}`;
-    } else {
-      // 回退策略
-      key = q.questionIds || `${q.label}_${q.question.substring(0, 50)}`;
-    }
+    // 修复：使用 questionIds 作为唯一键，对齐官方策略
+    const key = q.questionIds;
 
-    if (!seen.has(key)) {
-      seen.add(key);
+    // 必须有 questionIds 才能参与去重
+    if (key && key.trim().length > 0) {
+      if (!seen.has(key)) {
+        seen.add(key);
+        unique.push(q);
+      }
+    } else {
+      // 对于没有 questionIds 的（理论上不应发生），直接放入
       unique.push(q);
     }
   }
@@ -477,7 +475,11 @@ export function exportToJSON(questions: ExtractedQuestion[], outputPath: string)
         return img;
       }),
       page_idx: q.page_idx,
-      has_answer: q.has_answer
+      has_answer: q.has_answer,
+      // 新增以下字段
+      questionIds: q.questionIds,
+      solutionIds: q.solutionIds,
+      chapterTitleIds: q.chapterTitleIds
     }))
   };
   
