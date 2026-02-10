@@ -1,0 +1,818 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - Prioritize blocks with explicit heading numbering.
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary", "选择题", "填空题".
+   - If uncertain, prefer NOT to tag it as a title rather than tagging incorrectly.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1260,
+    "type": "text",
+    "text": "8.菱形的周长是  $24\\mathrm{cm}$  ，较短的对角线长是  $6\\mathrm{cm}$  ，则该菱形较大的内角的度数是",
+    "page_idx": 79
+  },
+  {
+    "id": 1261,
+    "type": "text",
+    "text": "9. 如图,  $E$  为正方形ABCD外一点,  $AE = AD$ ,  $BE$  交AD于点  $F$ ,  $\\angle ADE = 75^{\\circ}$ , 则  $\\angle AFB$  的度数是",
+    "page_idx": 79
+  },
+  {
+    "id": 1262,
+    "type": "text",
+    "text": "10. 如图, 在 Rt\\(\\triangle ABC\\) 中, \\(\\angle BAC = 90^\\circ\\), 点 \\(M\\) 为斜边 \\(BC\\) 的中点, \\(AM = 5\\mathrm{cm}\\), \\(\\angle AMC = 45^\\circ\\), 将 \\(\\triangle AMC\\) 沿 \\(AM\\) 翻折, 点 \\(C\\) 落在 \\(\\triangle ABC\\) 所在平面内的 \\(C'\\) 处, 那么四边形 \\(BC'AC\\) 的面积为 \\(\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_",
+    "page_idx": 79
+  },
+  {
+    "id": 1263,
+    "type": "text",
+    "page_idx": 80,
+    "text": "24.1(二) 简单图形的坐标表达"
+  },
+  {
+    "id": 1264,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/0df44fc922325c2ef0672da911be6b347a4a61ce4cf01bec8fb12c569ae07ef0.jpg"
+  },
+  {
+    "id": 1265,
+    "type": "text",
+    "page_idx": 80,
+    "text": "要点归纳"
+  },
+  {
+    "id": 1266,
+    "type": "text",
+    "text": "1.  $x$  轴上的点的纵坐标为0，纵坐标为0的点一定在  $x$  轴上； $y$  轴上的点的横坐标为0，横坐标为0的点一定在  $y$  轴上；原点  $O$  的坐标为(0,0).",
+    "page_idx": 80
+  },
+  {
+    "id": 1267,
+    "type": "text",
+    "text": "2. 经过点  $P(a, b)$  且垂直于  $x$  轴的直线用“直线  $x = a$ ”表示；经过点  $P(a, b)$  且垂直于  $y$  轴的直线用“直线  $y = b$ ”表示。",
+    "page_idx": 80
+  },
+  {
+    "id": 1268,
+    "type": "text",
+    "text": "3. 会用分解组合思想去求平面直角坐标系中简单几何图形的面积",
+    "page_idx": 80
+  },
+  {
+    "id": 1269,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/925e8e04f5c964bd11310f0533a8a344543bccabedd8c5e8e3da40a3a6099e89.jpg"
+  },
+  {
+    "id": 1270,
+    "type": "text",
+    "page_idx": 80,
+    "text": "疑难分析"
+  },
+  {
+    "id": 1271,
+    "type": "text",
+    "page_idx": 80,
+    "text": "例① 在平面直角坐标系中，已知点  $P(x, y)$  是下列各图的阴影部分内任意一点（不包括边界）."
+  },
+  {
+    "id": 1272,
+    "type": "text",
+    "text": "（1）如图24-4(1)，  $AB / / y$  轴，且  $AB$  和  $\\pmb{x}$  轴的交点  $M$  的坐标是(2，0)，求点  $P$  的横坐标  $\\pmb{x}$  的取值范围；",
+    "page_idx": 80
+  },
+  {
+    "id": 1273,
+    "type": "text",
+    "text": "(2) 如图 24-4(2),  $EF$  在  $x$  轴的下方, 且与  $y$  轴相交于点  $Q$ ,  $EF \\parallel x$  轴, 且  $EF$  和  $x$  轴的距离是 2 , 求点  $P$  的纵坐标  $y$  的取值范围;",
+    "page_idx": 80
+  },
+  {
+    "id": 1274,
+    "type": "text",
+    "text": "（3）如图24-4(3)，直线  $AB // CD // y$  轴，直线  $EF // MN // x$  轴，直线  $AB$  与直线  $EF$  相交于点  $(2, -2)$ ，直线  $CD$  与直线  $MN$  相交于点  $(-1, 3)$ ，求点  $P$  的横坐标  $x$  和纵坐标  $y$  的取值范围.",
+    "page_idx": 80
+  },
+  {
+    "id": 1275,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/42b23199ed4c3b43279464cd8ed78e4f20f8474e20e14edeff92cf6f8f2990db.jpg",
+    "image_caption": "(1)"
+  },
+  {
+    "id": 1276,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/9cca1816d48976e9cfeb89e58be21972c8d2da445d0bcc9dc6051e75b6023119.jpg",
+    "image_caption": "(2) 图24-4"
+  },
+  {
+    "id": 1277,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/c5542a10c7ba22f9896a0e1891987691661812dae32364fc3492e0dfc1b1d148.jpg",
+    "image_caption": "(3）"
+  },
+  {
+    "id": 1278,
+    "type": "text",
+    "page_idx": 80,
+    "text": "分析 根据点的坐标的意义，分别过点  $P$  作  $PH \\perp x$  轴于点  $H$ ， $PL \\perp y$  轴于点  $L$ ，求  $x, y$  的取值范围，就是分别求垂足点  $H$  在  $x$  轴，点  $L$  在  $y$  轴上的坐标的取值范围."
+  },
+  {
+    "id": 1279,
+    "type": "text",
+    "page_idx": 80,
+    "text": "解 (1)  $0 < x < 2$ ."
+  },
+  {
+    "id": 1280,
+    "type": "text",
+    "text": "(2)  $-2 < y < 0$ .",
+    "page_idx": 80
+  },
+  {
+    "id": 1281,
+    "type": "text",
+    "text": "(3)  $-1 < x < 2$  且  $-2 < y < 3$ .",
+    "page_idx": 80
+  },
+  {
+    "id": 1282,
+    "type": "text",
+    "page_idx": 81,
+    "text": "例② 如图24-5，在平面直角坐标系中，点  $A(4,0),B(3,4),C(0,2)$"
+  },
+  {
+    "id": 1283,
+    "type": "text",
+    "text": "(1) 求  $S_{\\text{四边形}ABCO}$ ;",
+    "page_idx": 81
+  },
+  {
+    "id": 1284,
+    "type": "text",
+    "text": "(2) 求  $S_{\\triangle ABC}$ ;",
+    "page_idx": 81
+  },
+  {
+    "id": 1285,
+    "type": "text",
+    "text": "(3) 在  $x$  轴上存在一点  $P$ , 使  $S_{\\triangle PAB} = 10$ , 求点  $P$  的坐标.",
+    "page_idx": 81
+  },
+  {
+    "id": 1286,
+    "type": "text",
+    "page_idx": 81,
+    "text": "分析 (1) 过点  $B$  作  $BD \\perp OA$  于点  $D$ , 把四边形分割为直角梯形  $OCBD$  和直角三角形  $ABD$ . (2)  $\\triangle ABC$  的面积  $= 4$  四边形  $ABCO$  的面积  $-\\triangle AOC$  的面积. (3) 设点  $P(x,0)$ , 则  $PA = |x - 4|$ , 根据  $S_{\\triangle PAB} = 10$ , 得  $\\frac{1}{2} \\times |x - 4| \\times 4 = 10$ ."
+  },
+  {
+    "id": 1287,
+    "type": "image",
+    "page_idx": 81,
+    "img_path": "images/55fe6899ae7a844a5086ddfe91276d9da91ae70883dcbbccf5aec0e1138d2ca9.jpg",
+    "image_caption": "图 24-5"
+  },
+  {
+    "id": 1288,
+    "type": "text",
+    "page_idx": 81,
+    "text": "解 (1) 过点  $B$  作  $BD \\perp OA$  于点  $D$ ."
+  },
+  {
+    "id": 1289,
+    "type": "text",
+    "page_idx": 81,
+    "text": "点  $A(4,0),B(3,4),C(0,2)$"
+  },
+  {
+    "id": 1290,
+    "type": "equation",
+    "page_idx": 81,
+    "text": "$$\n\\therefore O C = 2, O D = 3, B D = 4, A D = 4 - 3 = 1.\n$$"
+  },
+  {
+    "id": 1291,
+    "type": "equation",
+    "page_idx": 81,
+    "text": "$$\n\\therefore S _ {\\text {四 边 形} A B C O} = S _ {\\text {梯 形} O C B D} + S _ {\\triangle A B D} = \\frac {1}{2} \\times (2 + 4) \\times 3 + \\frac {1}{2} \\times 1 \\times 4 = 9 + 2 = 1 1.\n$$"
+  },
+  {
+    "id": 1292,
+    "type": "text",
+    "text": "(2)  $S_{\\triangle ABC} = S_{\\text{四边形}ABCO} - S_{\\triangle AOC} = 11 - \\frac{1}{2} \\times 4 \\times 2 = 11 - 4 = 7.$",
+    "page_idx": 81
+  },
+  {
+    "id": 1293,
+    "type": "text",
+    "text": "（3）设点  $P(x,0)$  .则  $PA = |x - 4|$",
+    "page_idx": 81
+  },
+  {
+    "id": 1294,
+    "type": "equation",
+    "page_idx": 81,
+    "text": "$$\n\\because S _ {\\triangle P A B} = 1 0,\n$$"
+  },
+  {
+    "id": 1295,
+    "type": "equation",
+    "page_idx": 81,
+    "text": "$$\n\\therefore \\frac {1}{2} \\times | x - 4 | \\times 4 = 1 0. \\therefore | x - 4 | = 5.\n$$"
+  },
+  {
+    "id": 1296,
+    "type": "text",
+    "page_idx": 81,
+    "text": "解得  $x = 9$  或  $x = -1$"
+  },
+  {
+    "id": 1297,
+    "type": "text",
+    "page_idx": 81,
+    "text": "点  $P$  的坐标为(9，0)或(-1，0)."
+  },
+  {
+    "id": 1298,
+    "type": "text",
+    "page_idx": 81,
+    "text": "例③ 在平面直角坐标系中描出下列各点  $A(3,5)$ ， $B(-4,2)$ ， $C(-2,-3)$ ， $D(3,-4)$ ，并顺次连接点  $A, B, C, D$ ，求所得封闭图形的面积."
+  },
+  {
+    "id": 1299,
+    "type": "text",
+    "page_idx": 81,
+    "text": "分析 可以运用割补思想，把不规则图形的面积割补成几个规则图形的面积的和或差."
+  },
+  {
+    "id": 1300,
+    "type": "text",
+    "page_idx": 81,
+    "text": "解 描点、连接如图24-6所示，得到四边形ABCD."
+  },
+  {
+    "id": 1301,
+    "type": "text",
+    "page_idx": 81,
+    "text": "分别作  $BE \\perp AD$  于点  $E, CF \\perp AD$  于点  $F$ , 则四边形  $BCFE$  是梯形, 且  $E(3,2), F(3,-3)$ , 则  $AE = 3, EF = 5, FD = 1$ ,  $BE = 7, CF = 5$ ."
+  },
+  {
+    "id": 1302,
+    "type": "equation",
+    "page_idx": 81,
+    "text": "$$\n\\begin{array}{l} \\therefore S _ {\\text {四 边 形} A B C D} = S _ {\\triangle A E B} + S _ {\\text {梯 形} B C F E} + S _ {\\triangle C F D} \\\\ = \\frac {1}{2} B E \\cdot A E + \\frac {1}{2} (B E + C F) \\cdot E F + \\frac {1}{2} C F \\cdot F D \\\\ = \\frac {1}{2} \\times 7 \\times 3 + \\frac {1}{2} \\times (7 + 5) \\times 5 + \\frac {1}{2} \\times 5 \\times 1 \\\\ = 4 3. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 1303,
+    "type": "image",
+    "page_idx": 81,
+    "img_path": "images/9f3fb717de0e08ce37ce12eb5055147cb457384d2cd21bfdda1c5c6ee94ca990.jpg",
+    "image_caption": "图 24-6"
+  },
+  {
+    "id": 1304,
+    "type": "text",
+    "page_idx": 82,
+    "text": "基础训练"
+  },
+  {
+    "id": 1305,
+    "type": "text",
+    "text": "1. 在数轴上，如果  $A, B$  两点所对应的实数分别是  $a, b$ ，那么  $AB$  的长为 _______.",
+    "page_idx": 82
+  },
+  {
+    "id": 1306,
+    "type": "text",
+    "text": "2. 在平面直角坐标系中, 平行于  $x$  轴的直线上的两点  $A(a_{1}, b)$ ,  $B(a_{2}, b)$  的距离  $AB$  为 ______; 平行于  $y$  轴的直线上的两点  $C(a, b_{1})$ ,  $D(a, b_{2})$  的距离  $CD$  为 ______.",
+    "page_idx": 82
+  },
+  {
+    "id": 1307,
+    "type": "text",
+    "text": "3. 在平面直角坐标系中, 若点  $A(-\\sqrt{2}, 3)$ ,  $B(-\\sqrt{2}, -3)$ , 则  $AB$  的长为 ________; 若点  $P(\\sqrt{5}, -\\sqrt{3})$ ,  $Q(-\\sqrt{5}, -\\sqrt{3})$ , 则  $PQ$  的长为 ________.",
+    "page_idx": 82
+  },
+  {
+    "id": 1308,
+    "type": "text",
+    "text": "4. 在平面直角坐标系中, 已知点  $A(-2,1)$ , 另有一点  $B$ , 且直线  $AB$  平行于  $x$  轴, 如果  $A$ ,  $B$  两点的距离是 4, 那么点  $B$  的坐标是",
+    "page_idx": 82
+  },
+  {
+    "id": 1309,
+    "type": "text",
+    "text": "5. 在平面直角坐标系中, 已知点  $P(-2, -4)$ , 另有一点  $Q$ , 且直线  $PQ$  平行于  $y$  轴. 如果  $P, Q$  两点的距离是 6, 那么点  $Q$  的坐标是",
+    "page_idx": 82
+  },
+  {
+    "id": 1310,
+    "type": "text",
+    "text": "6. 在平面直角坐标系中, 点  $O$  是原点, 如果点  $A(-8,0), B(0,6)$ , 那么  $\\triangle AOB$  的面积为",
+    "page_idx": 82
+  },
+  {
+    "id": 1311,
+    "type": "text",
+    "text": "7. 在平面直角坐标系中, 如果点  $M(0, 7)$ ,  $N(-5, 0)$ ,  $P(0, -2)$ , 那么  $\\triangle MNP$  的面积为",
+    "page_idx": 82
+  },
+  {
+    "id": 1312,
+    "type": "text",
+    "text": "8. 在平面直角坐标系中, 如果矩形  $ABCD$  各顶点的坐标是  $A(-2,0)$ ,  $B(-2,-4)$ ,  $C(3,-4)$ ,  $D(3,0)$ , 那么该矩形的面积为 , 该矩形的周长为",
+    "page_idx": 82
+  },
+  {
+    "id": 1313,
+    "type": "text",
+    "text": "9. 在平面直角坐标系中有  $\\triangle ABC$ ，其中点  $A(-2, 6)$ ， $B(-5, -3)$ ， $C(6, -3)$ ，那么该三角形在边  $BC$  上的高的长为 ______.",
+    "page_idx": 82
+  },
+  {
+    "id": 1314,
+    "type": "text",
+    "text": "10. 在平面直角坐标系中有一个圆, 圆心是  $A(2,0)$ , 该圆与  $x$  轴有一个交点是  $B(5,0)$ , 那么这个圆的周长为 , 圆的面积为",
+    "page_idx": 82
+  },
+  {
+    "id": 1315,
+    "type": "text",
+    "text": "11. 在平面直角坐标系中有点  $A(0,3), B(0,-2), C(6,-2)$ ，那么  $\\triangle ABC$  是（ ）.",
+    "page_idx": 82
+  },
+  {
+    "id": 1316,
+    "type": "text",
+    "page_idx": 82,
+    "text": "A. 等腰三角形"
+  },
+  {
+    "id": 1317,
+    "type": "text",
+    "page_idx": 82,
+    "text": "B. 等边三角形"
+  },
+  {
+    "id": 1318,
+    "type": "text",
+    "page_idx": 82,
+    "text": "C. 直角三角形"
+  },
+  {
+    "id": 1319,
+    "type": "text",
+    "page_idx": 82,
+    "text": "D. 等腰直角三角形"
+  },
+  {
+    "id": 1320,
+    "type": "text",
+    "page_idx": 82,
+    "text": "12. 在平面直角坐标系中有点  $P(0, 2)$ , 如果在  $y$  轴上有点  $Q$ , 它到点  $P$  的距离等于 3, 那么点  $Q$  的坐标是 ( )."
+  },
+  {
+    "id": 1321,
+    "type": "text",
+    "page_idx": 82,
+    "text": "A. (0, 3)"
+  },
+  {
+    "id": 1322,
+    "type": "text",
+    "page_idx": 82,
+    "text": "B. (0, 5)"
+  },
+  {
+    "id": 1323,
+    "type": "text",
+    "page_idx": 82,
+    "text": "C.  $(0, -1)$"
+  },
+  {
+    "id": 1324,
+    "type": "text",
+    "page_idx": 82,
+    "text": "D. (0, 5)或(0, -1)"
+  },
+  {
+    "id": 1325,
+    "type": "text",
+    "page_idx": 82,
+    "text": "13. 在平面直角坐标系中有点  $A(0, \\sqrt{2})$ ， $B(-\\sqrt{2}, 0)$ ， $C(0, -\\sqrt{2})$ ， $D(\\sqrt{2}, 0)$ ，那么四边形ABCD的面积等于（ ）."
+  },
+  {
+    "id": 1326,
+    "type": "text",
+    "page_idx": 82,
+    "text": "A. 1"
+  },
+  {
+    "id": 1327,
+    "type": "text",
+    "page_idx": 82,
+    "text": "B. 2"
+  },
+  {
+    "id": 1328,
+    "type": "text",
+    "page_idx": 82,
+    "text": "C. 4"
+  },
+  {
+    "id": 1329,
+    "type": "text",
+    "page_idx": 82,
+    "text": "D.  $2 \\sqrt{2}$"
+  },
+  {
+    "id": 1330,
+    "type": "text",
+    "page_idx": 82,
+    "text": "14. 在平面直角坐标系中有直线  $l / / x$  轴，直线  $l$  上有两点  $A, B$  ，已知点  $A$  的坐标是  $(\\sqrt{3}, \\sqrt{5})$  ，且  $A, B$  两点的距离等于3，那么点  $B$  的坐标是（ ）."
+  },
+  {
+    "id": 1331,
+    "type": "text",
+    "page_idx": 82,
+    "text": "A.  $(\\sqrt{3} + 3, \\sqrt{5})$"
+  },
+  {
+    "id": 1332,
+    "type": "text",
+    "page_idx": 82,
+    "text": "B.  $(\\sqrt{3} - 3, \\sqrt{5})$"
+  },
+  {
+    "id": 1333,
+    "type": "text",
+    "page_idx": 82,
+    "text": "C.  $(\\sqrt{3} + 3, \\sqrt{5})$  或  $(\\sqrt{3} - 3, \\sqrt{5})$"
+  },
+  {
+    "id": 1334,
+    "type": "text",
+    "page_idx": 82,
+    "text": "D.  $(\\sqrt{3}, \\sqrt{5} + 3)$  或  $(\\sqrt{3}, \\sqrt{5} - 3)$"
+  },
+  {
+    "id": 1335,
+    "type": "text",
+    "page_idx": 83,
+    "text": "15. 如图, 求图中  $\\triangle ABC$  的面积"
+  },
+  {
+    "id": 1336,
+    "type": "image",
+    "page_idx": 83,
+    "img_path": "images/c9bdac90a19b21e9891064c79b9f19b0c08318a27ba657252c4fdf4a9ec1355b.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 1337,
+    "type": "text",
+    "page_idx": 83,
+    "text": "16. 如图, 求图中四边形  $ABCD$  的面积"
+  },
+  {
+    "id": 1338,
+    "type": "image",
+    "page_idx": 83,
+    "img_path": "images/3e2424ddecf8261842bd56a4311d7e59b6401ba751bf65f6a0d82246f2f8345b.jpg",
+    "image_caption": "（第16题）"
+  },
+  {
+    "id": 1339,
+    "type": "text",
+    "page_idx": 83,
+    "text": "17. 如图, 写出四边形  $ABCD$  各顶点的坐标, 并求四边形  $ABCD$  的面积."
+  },
+  {
+    "id": 1340,
+    "type": "image",
+    "page_idx": 83,
+    "img_path": "images/727c5cd07c1461543aa9a7779b2d97e9f8ec8bab15b4ad00af0ad529f891b944.jpg",
+    "image_caption": "（第17题）"
+  },
+  {
+    "id": 1341,
+    "type": "text",
+    "page_idx": 84,
+    "text": "18. 请在平面直角坐标系中画四条直线  $x = 3, x = -4, y = 4, y = -2$ ."
+  },
+  {
+    "id": 1342,
+    "type": "text",
+    "text": "（1）这四条直线所围成的四边形是一个怎样的四边形？",
+    "page_idx": 84
+  },
+  {
+    "id": 1343,
+    "type": "text",
+    "text": "(2) 现有点  $A(\\sqrt{2}, 3)$ ,  $B(-\\sqrt{5}, -1)$ ,  $C(2, -\\sqrt{3})$ ,  $D(-3, 5)$ ,  $E(\\sqrt{6}, -\\sqrt{2})$ ,  $F(-\\sqrt{10}, 2)$ , 请问: 哪些点在这个四边形的内部? 且它们各在什么象限?",
+    "page_idx": 84
+  },
+  {
+    "id": 1344,
+    "type": "image",
+    "page_idx": 84,
+    "img_path": "images/fce2d44bcba70128b01c49955f3d2c68b9b9798c4b7528ef3d053b2837718403.jpg"
+  },
+  {
+    "id": 1345,
+    "type": "text",
+    "page_idx": 84,
+    "text": "拓展训练"
+  },
+  {
+    "id": 1346,
+    "type": "text",
+    "text": "19. 已知点  $M$  在平行于  $x$  轴且到  $x$  轴的距离为 5 的直线上, 它到  $y$  轴的距离是 3 , 请写出点  $M$  的坐标",
+    "page_idx": 84
+  },
+  {
+    "id": 1347,
+    "type": "text",
+    "text": "20. 若点  $A(m, n)$  在第二象限，则点  $B(-m + 1, 3n + 5)$  在第 ______ 象限.",
+    "page_idx": 84
+  },
+  {
+    "id": 1348,
+    "type": "text",
+    "text": "21. 已知点  $A(a, -3), B(-4, b)$ . 若  $A, B$  两点的连线平行于  $x$  轴, 则  $a, b$  应满足什么条件?",
+    "page_idx": 84
+  },
+  {
+    "id": 1349,
+    "type": "text",
+    "page_idx": 85,
+    "text": "22. 如图, 在平面直角坐标系中, 点  $A$  的坐标为  $(0, 4)$ , 点  $B$  的坐标为  $(3, 0)$ , 点  $C$  的坐标为  $(6, 0)$ . 动点  $P$  以每秒 1 个单位长度的速度从点  $A$  出发, 沿折线  $A \\rightarrow O \\rightarrow C$  运动到点  $C$  停止. 设点  $P$  运动时间为  $t$  s."
+  },
+  {
+    "id": 1350,
+    "type": "image",
+    "page_idx": 85,
+    "img_path": "images/a0ae14fe242d17cfa9222a159650ce807faebe84e172167d2a1dad58375cb90f.jpg",
+    "image_caption": "（第22题）"
+  },
+  {
+    "id": 1351,
+    "type": "text",
+    "text": "（1）  $OA$  的长为 ，OB的长为",
+    "page_idx": 85
+  },
+  {
+    "id": 1352,
+    "type": "text",
+    "text": "（2）用含  $t$  的式子表示：",
+    "page_idx": 85
+  },
+  {
+    "id": 1353,
+    "type": "text",
+    "text": "$①$  当点  $P$  在线段  $OA$  上时，  $AP$  的长为",
+    "page_idx": 85
+  },
+  {
+    "id": 1354,
+    "type": "text",
+    "text": "$②$  当点  $P$  在线段OB上时，  $BP$  的长为",
+    "page_idx": 85
+  },
+  {
+    "id": 1355,
+    "type": "text",
+    "text": "$③$  当点  $P$  在线段  $BC$  上时，  $BP$  的长为",
+    "page_idx": 85
+  },
+  {
+    "id": 1356,
+    "type": "text",
+    "text": "（3）当  $\\triangle ABP$  的面积等于3时，求  $t$  的值；",
+    "page_idx": 85
+  },
+  {
+    "id": 1357,
+    "type": "text",
+    "text": "（4）设点  $C$  到直线  $AB$  的距离为  $h_1$  ，点  $P$  到直线  $AB$  的距离为  $h_2$",
+    "page_idx": 85
+  },
+  {
+    "id": 1358,
+    "type": "text",
+    "text": "① 当  $h_1 = h_2$  时， $S_{\\triangle ABC}$  ________  $S_{\\triangle ABP}$  （填“>”“<”或“=”）；",
+    "page_idx": 85
+  },
+  {
+    "id": 1359,
+    "type": "text",
+    "text": "② 当  $h_1 < 2h_2$  时，直接写出  $t$  的取值范围",
+    "page_idx": 85
+  }
+]
+```

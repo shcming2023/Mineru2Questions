@@ -1,0 +1,819 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - Prioritize blocks with explicit heading numbering.
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary", "选择题", "填空题".
+   - If uncertain, prefer NOT to tag it as a title rather than tagging incorrectly.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2970,
+    "type": "text",
+    "text": "(2）乙慢跑的速度是每分钟 km;",
+    "page_idx": 187
+  },
+  {
+    "id": 2971,
+    "type": "text",
+    "text": "(3）甲修车后行驶的速度是每分钟 km;",
+    "page_idx": 187
+  },
+  {
+    "id": 2972,
+    "type": "text",
+    "text": "（4）甲、乙两人在出发后，中途 min时相遇",
+    "page_idx": 187
+  },
+  {
+    "id": 2973,
+    "type": "image",
+    "page_idx": 187,
+    "img_path": "images/af3596eb003db392db47edba603505eaad2efd47e6cbc4439301e9269537ff6a.jpg",
+    "image_caption": "（第8题）"
+  },
+  {
+    "id": 2974,
+    "type": "text",
+    "page_idx": 187,
+    "text": "9. 为了预防流感病毒, 某学校在教室采用药熏消毒法进行消毒, 已知药物燃烧时, 室内每立方米空气中的含药量  $y$  (单位:  $\\mathrm{mg}$ ) 与时间  $x$  (单位:  $\\mathrm{min}$ ) 成正比例, 药物燃烧后,  $y$  与  $x$  成反比例. 现测得药物  $8\\mathrm{min}$  燃烧完毕, 此时室内空气中每立方米的含药量为  $6\\mathrm{mg}$ , 请根据题中提供的信息, 解答下列问题:"
+  },
+  {
+    "id": 2975,
+    "type": "text",
+    "text": "（1）药物燃烧时，  $y$  关于  $\\pmb{x}$  的函数表达式为 ，自变量的取值范围是 ，药物燃烧后，  $y$  关于  $\\pmb{x}$  的函数表达式为",
+    "page_idx": 187
+  },
+  {
+    "id": 2976,
+    "type": "text",
+    "text": "(2) 研究表明, 当空气中每立方米的含药量低于  $1.6 \\mathrm{mg}$  时学生方可进教室, 那么从消毒开始, 至少需要经过  $\\mathrm{min}$ , 学生才能回到教室;",
+    "page_idx": 187
+  },
+  {
+    "id": 2977,
+    "type": "text",
+    "text": "(3) 研究表明, 当空气中每立方米的含药量不低于  $3 \\mathrm{mg}$  且持续时间不低于  $10 \\mathrm{~min}$ , 才能有效杀灭空气中的病毒, 那么此次消毒有效吗? 为什么?",
+    "page_idx": 187
+  },
+  {
+    "id": 2978,
+    "type": "image",
+    "page_idx": 187,
+    "img_path": "images/02f266b9b849175aa1cf6b3bb646396e9f73582ff5a65553c59c5be25a0dd1ef.jpg",
+    "image_caption": "（第9题）"
+  },
+  {
+    "id": 2979,
+    "type": "image",
+    "page_idx": 188,
+    "img_path": "images/23f996be116bafbdc48a9e2661a1c1edaac03b61f38de25a731bf90273d9f14d.jpg"
+  },
+  {
+    "id": 2980,
+    "type": "text",
+    "page_idx": 188,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2981,
+    "type": "text",
+    "page_idx": 188,
+    "text": "10. 如图, 在梯形  $ABCD$  中,  $\\angle ABC = 90^\\circ$ ,  $\\angle BCD$  为锐角,  $AD \\parallel BC$ ,  $AB = 8$ ,  $BC = k$ ,  $DC = 10$ , 点  $P$  从点  $B$  开始沿  $BC$  向终点  $C$  以每秒 3 个单位长度的速度移动, 点  $Q$  从点  $D$  开始沿  $DA$  边向终点  $A$  以每秒 2 个单位长度的速度移动. 设运动时间为  $t \\mathrm{~s}$ , 若存在某一时刻使四边形  $PCDQ$  为等腰梯形, 写出  $t$  关于  $k$  的函数表达式并写出  $k$  的取值范围."
+  },
+  {
+    "id": 2982,
+    "type": "image",
+    "page_idx": 188,
+    "img_path": "images/9711e07fe6cddcf6329053a6fc79794b21977332d1a465c1165ad6bc0ee84760.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 2983,
+    "type": "text",
+    "page_idx": 188,
+    "text": "11. 某一蓄水池中有水若干吨，若排水速度  $\\nu$  （单位： $\\mathrm{m}^3/\\mathrm{h}$ ）与排完水池中的水所用的时间  $t$ （单位： $\\mathrm{h}$ ）之间的对应值关系如下表："
+  },
+  {
+    "id": 2984,
+    "type": "text",
+    "text": "[Table Row] <tr><td>排水速度ν/m3·h-1</td><td>1</td><td>2</td><td>3</td><td>4</td><td>6</td><td>8</td><td>12</td></tr>",
+    "page_idx": 188
+  },
+  {
+    "id": 2985,
+    "type": "text",
+    "text": "[Table Row] <tr><td>所用的时间t/h</td><td>12</td><td>6</td><td>4</td><td>3</td><td>2</td><td>1.5</td><td>1</td></tr>",
+    "page_idx": 188
+  },
+  {
+    "id": 2986,
+    "type": "text",
+    "text": "（1）在直角坐标系中，用描点法画出相应函数的图像；",
+    "page_idx": 188
+  },
+  {
+    "id": 2987,
+    "type": "text",
+    "text": "(2) 写出  $t$  与  $\\nu$  之间的函数表达式；",
+    "page_idx": 188
+  },
+  {
+    "id": 2988,
+    "type": "text",
+    "text": "(3) 若  $5 \\mathrm{~h}$  内排完水池中的水, 那么每小时的排水量至少应该是多少?",
+    "page_idx": 188
+  },
+  {
+    "id": 2989,
+    "type": "image",
+    "page_idx": 188,
+    "img_path": "images/796df5af043067f6b7e003c9b33ed81e981ce895951efff0b0b1aed95ac175e5.jpg",
+    "image_caption": "（第11题）"
+  },
+  {
+    "id": 2990,
+    "type": "text",
+    "page_idx": 189,
+    "text": "12. 喝绿茶前需要烧水和泡茶两个工序，即需要将电热水壶中的水烧到  $100^{\\circ}\\mathrm{C}$ ，然后停止烧水，等水温降低到适合的温度时再泡茶，烧水时水温  $y$ （单位： ${}^{\\circ}\\mathrm{C}$ ）与时间  $x$ （单位： $\\mathrm{min}$ ）成一次函数关系；停止加热过了  $1\\mathrm{min}$  后，水壶中水的温度  $y$ （单位： ${}^{\\circ}\\mathrm{C}$ ）与时间  $x$ （单位： $\\mathrm{min}$ ）近似于反比例函数关系（如图）。已知水壶中水的初始温度是  $20^{\\circ}\\mathrm{C}$ ，降温过程中水温不低于  $20^{\\circ}\\mathrm{C}$ 。"
+  },
+  {
+    "id": 2991,
+    "type": "text",
+    "text": "（1）分别求出图中所对应的函数表达式，并且写出自变量  $x$  的取值范围；",
+    "page_idx": 189
+  },
+  {
+    "id": 2992,
+    "type": "text",
+    "text": "(2) 水壶中的水烧开后降到  $80^{\\circ} \\mathrm{C}$  就可以进行泡制绿茶, 问从水烧开到泡茶需要等待多长时间?",
+    "page_idx": 189
+  },
+  {
+    "id": 2993,
+    "type": "image",
+    "page_idx": 189,
+    "img_path": "images/06c5f16ec62853a4e10244cc7e8a9cf650c2ce953cc3d302f503b6052c0a22c7.jpg",
+    "image_caption": "（第12题）"
+  },
+  {
+    "id": 2994,
+    "type": "text",
+    "page_idx": 190,
+    "text": "阶段训练⑦"
+  },
+  {
+    "id": 2995,
+    "type": "text",
+    "text": "1. 已知反比例函数  $y = \\frac{2m - 1}{x}$  图像上的两点  $A(x_{1},y_{1}), B(x_{2},y_{2})$ ，其中  $x_{1} < x_{2}, y_{1} > y_{2}$ ，则  $m$  的取值范围 ______（填“能”或“不能”）确定。",
+    "page_idx": 190
+  },
+  {
+    "id": 2996,
+    "type": "text",
+    "text": "2. 已知  $x$  与  $y$  有关系  $x = \\frac{2y}{y - 1}$ , 若把它改写为  $y = f(x)$  的形式, 则  $y = \\_$ .",
+    "page_idx": 190
+  },
+  {
+    "id": 2997,
+    "type": "text",
+    "text": "3. 已知  $f(x) = 2x^{2} + x$ ， $g(x) = 3x - 1$ ，则  $f(2) \\cdot g(-1) =$  ________.",
+    "page_idx": 190
+  },
+  {
+    "id": 2998,
+    "type": "text",
+    "text": "4. 当  $k =$  ______ 时，函数  $y = (k + 4)x^{k^2 + 5k + 5}$  是正比例函数；当  $k =$  ______ 时，函数  $y = (k + 4)x^{k^2 + 5k + 5}$  是反比例函数，且在每个象限内， $y$  随  $x$  的减小而 ______。",
+    "page_idx": 190
+  },
+  {
+    "id": 2999,
+    "type": "text",
+    "text": "5. 函数  $y = \\frac{\\sqrt[3]{2x}}{1 - \\sqrt{1 - x}}$  自变量  $x$  的取值范围为",
+    "page_idx": 190
+  },
+  {
+    "id": 3000,
+    "type": "text",
+    "text": "6. 若  $y$  与  $\\frac{1}{x}$  成正比例,  $x$  与  $z$  成正比例, 则  $y$  与  $z$  成 _______ 比例.",
+    "page_idx": 190
+  },
+  {
+    "id": 3001,
+    "type": "text",
+    "text": "7. 在反比例函数  $y = \\frac{k}{x} (k < 0)$  的图像上有三点  $(x_{1}, y_{1}), (x_{2}, y_{2}), (x_{3}, y_{3})$ ，且  $x_{1} < x_{2} < 0 < x_{3}$ ，则  $y_{1}, y_{2}, y_{3}$  的大小关系是 ______（用“<”连接）.",
+    "page_idx": 190
+  },
+  {
+    "id": 3002,
+    "type": "text",
+    "text": "8. 已知  $y$  与  $x + 1$  成反比例, 并且当  $x = 1$  时,  $y = 2$ , 则当  $x = 0$  时,  $y =$",
+    "page_idx": 190
+  },
+  {
+    "id": 3003,
+    "type": "text",
+    "text": "9. 若点  $A(2a + 1, 3a + 5)$  在第二、四象限角平分线上，则点  $A$  的坐标为",
+    "page_idx": 190
+  },
+  {
+    "id": 3004,
+    "type": "text",
+    "text": "10. 已知  $f(x) = 1 - 2x$ ， $g(x) = 4x$ ，则  $f[g(3)]$  的值为 _______.",
+    "page_idx": 190
+  },
+  {
+    "id": 3005,
+    "type": "text",
+    "text": "11. 如果函数  $y = (m - 1)x^{m^2 - 2}$  为反比例函数, 则  $m$  的值是( ).",
+    "page_idx": 190
+  },
+  {
+    "id": 3006,
+    "type": "text",
+    "page_idx": 190,
+    "text": "A. -1"
+  },
+  {
+    "id": 3007,
+    "type": "text",
+    "page_idx": 190,
+    "text": "B. 0"
+  },
+  {
+    "id": 3008,
+    "type": "text",
+    "page_idx": 190,
+    "text": "C. 0.5"
+  },
+  {
+    "id": 3009,
+    "type": "text",
+    "page_idx": 190,
+    "text": "D. 1"
+  },
+  {
+    "id": 3010,
+    "type": "text",
+    "page_idx": 190,
+    "text": "12. 若  $y = (a - 3)x + (a^2 - 9)$  是正比例函数, 则  $y$  随  $x$  的增大而( )."
+  },
+  {
+    "id": 3011,
+    "type": "text",
+    "page_idx": 190,
+    "text": "A. 增大"
+  },
+  {
+    "id": 3012,
+    "type": "text",
+    "page_idx": 190,
+    "text": "B. 减小"
+  },
+  {
+    "id": 3013,
+    "type": "text",
+    "page_idx": 190,
+    "text": "C. 不变"
+  },
+  {
+    "id": 3014,
+    "type": "text",
+    "page_idx": 190,
+    "text": "D. 不能确定"
+  },
+  {
+    "id": 3015,
+    "type": "text",
+    "page_idx": 190,
+    "text": "13. 下列关于反比例函数  $y = \\frac{k}{x} (k \\neq 0)$  的说法中错误的是（ ）."
+  },
+  {
+    "id": 3016,
+    "type": "text",
+    "text": "A.  $y = \\frac{k}{x} (k\\neq 0)$  自变量  $x$  的取值范围是  $x\\neq 0$",
+    "page_idx": 190
+  },
+  {
+    "id": 3017,
+    "type": "text",
+    "text": "B. 当  $k = -2$  时,  $y$  随  $x$  的增大而增大",
+    "page_idx": 190
+  },
+  {
+    "id": 3018,
+    "type": "text",
+    "text": "C.  $y = \\frac{k}{x} (k \\neq 0)$  的图像关于原点成中心对称",
+    "page_idx": 190
+  },
+  {
+    "id": 3019,
+    "type": "text",
+    "text": "D.  $y = \\frac{k}{x}$  与  $y = -kx (k \\neq 0)$  的图像没有交点",
+    "page_idx": 190
+  },
+  {
+    "id": 3020,
+    "type": "text",
+    "page_idx": 190,
+    "text": "14. 若点  $A(1, y_1), B(2, y_2), C(-3, y_3)$  在反比例函数  $y = -\\frac{k^2 + 1}{x}$  的图像上，则（ ）."
+  },
+  {
+    "id": 3021,
+    "type": "text",
+    "page_idx": 190,
+    "text": "A.  $y_{1} = y_{2} = y_{3}$"
+  },
+  {
+    "id": 3022,
+    "type": "text",
+    "page_idx": 190,
+    "text": "B.  $y_{1} < y_{2} < y_{3}$"
+  },
+  {
+    "id": 3023,
+    "type": "text",
+    "page_idx": 190,
+    "text": "C.  $y_{1} > y_{2} > y_{3}$"
+  },
+  {
+    "id": 3024,
+    "type": "text",
+    "page_idx": 190,
+    "text": "D.  $y_{1} > y_{3} > y_{2}$"
+  },
+  {
+    "id": 3025,
+    "type": "text",
+    "page_idx": 191,
+    "text": "15. 已知  $y - 1$  与  $x + 1$  成正比例关系"
+  },
+  {
+    "id": 3026,
+    "type": "text",
+    "text": "（1）如果正比例系数为2，试用  $x$  表示  $\\gamma$",
+    "page_idx": 191
+  },
+  {
+    "id": 3027,
+    "type": "text",
+    "text": "（2）若比例系数为  $k$  ，且函数的图像与坐标轴围成的三角形面积为2，求  $k$  的值.",
+    "page_idx": 191
+  },
+  {
+    "id": 3028,
+    "type": "text",
+    "page_idx": 191,
+    "text": "16. 已知  $y$  与  $x$  成正比例, 若  $y$  随  $x$  的增大而减小, 且其图像经过点  $A(3, -a)$  和  $B(a, -1)$  两点, 求  $y$  与  $x$  之间的函数表达式."
+  },
+  {
+    "id": 3029,
+    "type": "text",
+    "page_idx": 191,
+    "text": "17. 已知正比例函数  $y = ax$  和反比例函数  $y = \\frac{4 - a}{x}$  的图像有两个交点，如果其中一个交点的横坐标为 1，求  $a$  及两个交点的坐标。"
+  },
+  {
+    "id": 3030,
+    "type": "text",
+    "page_idx": 191,
+    "text": "18. 设函数  $y = (m - 2)x^{m^2 - 5m + 5}$  是反比例函数."
+  },
+  {
+    "id": 3031,
+    "type": "text",
+    "text": "（1）求  $m$  的值，它的图像在第几象限；",
+    "page_idx": 191
+  },
+  {
+    "id": 3032,
+    "type": "text",
+    "text": "(2) 求当  $-3 \\leqslant x \\leqslant -\\frac{1}{2}$  时，函数的最大值和最小值分别是多少？",
+    "page_idx": 191
+  },
+  {
+    "id": 3033,
+    "type": "text",
+    "text": "（3）当  $1 \\leqslant y \\leqslant 3$  时，求  $x$  的取值范围",
+    "page_idx": 191
+  },
+  {
+    "id": 3034,
+    "type": "text",
+    "page_idx": 192,
+    "text": "19. 如图, 正比例函数  $y = ax$  的图像与反比例函数  $y = \\frac{k}{x}$  的图像交于点  $A(3,2)$ ."
+  },
+  {
+    "id": 3035,
+    "type": "text",
+    "text": "（1）试确定上述正比例函数和反比例函数的表达式；",
+    "page_idx": 192
+  },
+  {
+    "id": 3036,
+    "type": "text",
+    "text": "(2) 根据图像回答, 在第一象限内, 当  $x$  取何值时, 反比例函数的值大于正比例函数的值?",
+    "page_idx": 192
+  },
+  {
+    "id": 3037,
+    "type": "text",
+    "text": "(3)  $M(m, n)$  是反比例函数图像上的一动点，其中  $0 < m < 3$  ，过点  $M$  作直线  $MB \\parallel x$  轴，交  $y$  轴于点  $B$  ；过点  $A$  作直线  $AC \\parallel y$  轴，交  $x$  轴于点  $C$  ，交直线  $MB$  于点  $D$  。当四边形  $OADM$  的面积为6时，请判断线段  $BM$  与  $DM$  的大小关系，并说明理由。",
+    "page_idx": 192
+  },
+  {
+    "id": 3038,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/a196641df45a76b92b7b362118170810e5fea12eef4a7ba0730bc5ea67aa7a41.jpg",
+    "image_caption": "（第19题）"
+  },
+  {
+    "id": 3039,
+    "type": "text",
+    "page_idx": 192,
+    "text": "20. 一次函数  $y = kx + b$  的图像经过点  $A(-2,12)$ ， $B(8, -3)$ ."
+  },
+  {
+    "id": 3040,
+    "type": "text",
+    "text": "（1）求该一次函数的表达式；",
+    "page_idx": 192
+  },
+  {
+    "id": 3041,
+    "type": "text",
+    "text": "（2）如图，该一次函数的图像与反比例函数  $y = \\frac{m}{x} (m > 0)$  的图像相交于点  $C(x_{1},y_{1})$ ， $D(x_{2},y_{2})$ ，与  $y$  轴交于点  $E$ ，且  $CD = CE$ ，求  $m$  的值.",
+    "page_idx": 192
+  },
+  {
+    "id": 3042,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/5b2506bf7bc11807d131abbd1193716286e20004a9dc4fa90ac6e1f3df66a4fd.jpg",
+    "image_caption": "(第20题)"
+  },
+  {
+    "id": 3043,
+    "type": "text",
+    "page_idx": 193,
+    "text": "本章复习题"
+  },
+  {
+    "id": 3044,
+    "type": "text",
+    "page_idx": 193,
+    "text": "一、填空题"
+  },
+  {
+    "id": 3045,
+    "type": "text",
+    "page_idx": 193,
+    "text": "1. 若函数  $y = \\frac{2 - m}{3x} + (m^2 - 4)$  是  $y$  关于  $x$  的反比例函数, 则  $m =$"
+  },
+  {
+    "id": 3046,
+    "type": "text",
+    "page_idx": 193,
+    "text": "2. 当  $k =$  时，函数  $y = k(x - 1) + 2$  是正比例函数"
+  },
+  {
+    "id": 3047,
+    "type": "text",
+    "page_idx": 193,
+    "text": "3. 若  $y + 3$  与  $x$  成正比例, 且当  $x = 2$  时,  $y = 1$ , 则当  $x = 5$  时,  $y =$"
+  },
+  {
+    "id": 3048,
+    "type": "text",
+    "page_idx": 193,
+    "text": "4. 点  $P$  在  $x$  轴上方, 到  $x$  轴的距离是 3 , 到  $y$  轴的距离是 5 , 则点  $P$  的坐标为"
+  },
+  {
+    "id": 3049,
+    "type": "text",
+    "page_idx": 193,
+    "text": "5. 已知反比例函数  $y = \\frac{k}{x}$  的图像如图所示,  $A$  是图像上一点, 点  $B$  在  $y$  轴上, 点  $C$  在  $x$  轴上,  $\\square OABC$  的面积为 5 , 则  $k =$"
+  },
+  {
+    "id": 3050,
+    "type": "text",
+    "page_idx": 193,
+    "text": "6. 由反比例函数  $y = (2m - 1)x^{1 - m}$  的图像可知，当  $x < 0$  时， $y$  随  $x$  的增大而"
+  },
+  {
+    "id": 3051,
+    "type": "image",
+    "page_idx": 193,
+    "img_path": "images/e154ee680c54afe5902aa26c9463c2098c643b23f3611f376f0f13216a384bed.jpg",
+    "image_caption": "（第5题）"
+  },
+  {
+    "id": 3052,
+    "type": "text",
+    "page_idx": 193,
+    "text": "7. 函数  $y = (|x| - 1)^{0} - \\left(\\frac{1}{2x - 1}\\right)^{2}$  自变量  $x$  的取值范围是"
+  },
+  {
+    "id": 3053,
+    "type": "text",
+    "page_idx": 193,
+    "text": "8. 直线  $y = ax (a \\neq 0)$  与函数  $y = \\frac{k}{x} (k \\neq 0)$  的图像交于点  $A(1,2)$ ，若  $\\frac{k}{x} > ax$ ，则  $x$  的取值范围是"
+  },
+  {
+    "id": 3054,
+    "type": "text",
+    "page_idx": 193,
+    "text": "9. 若  $x$  与  $-3y$  成反比例,  $y$  与  $-4z$  成反比例, 则  $x$  与  $z$  成 ______ 比例."
+  },
+  {
+    "id": 3055,
+    "type": "text",
+    "page_idx": 193,
+    "text": "10. 如图, 在  $x$  轴的正半轴上依次截取  $OA_{1} = A_{1}A_{2} = A_{2}A_{3} = A_{3}A_{4} = A_{4}A_{5}$ , 过点  $A_{1}, A_{2}, A_{3}, A_{4}, A_{5}$  分别作  $x$  轴的垂线与反比例函数  $y = \\frac{2}{x} (x \\neq 0)$  的图像相交于点  $P_{1}, P_{2}, P_{3}, P_{4}, P_{5}$ , 得直角三角形  $OP_{1}A_{1}, A_{1}P_{2}A_{2}, A_{2}P_{3}A_{3}, A_{3}P_{4}A_{4}, A_{4}P_{5}A_{5}$ , 并设其面积分别为  $S_{1}, S_{2}, S_{3}, S_{4}, S_{5}$ , 则  $S_{5}$  的值为"
+  },
+  {
+    "id": 3056,
+    "type": "image",
+    "page_idx": 193,
+    "img_path": "images/901fe26721b03278a60af8e132c09e71d59389a3d7b4e3b51553c972286f9f19.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 3057,
+    "type": "text",
+    "page_idx": 193,
+    "text": "11. 若两个函数的图像关于  $y$  轴对称，我们定义这两个函数互为“镜面”函数。请写出函数  $y = \\frac{6}{x}$  的镜面函数 ________。"
+  },
+  {
+    "id": 3058,
+    "type": "text",
+    "page_idx": 193,
+    "text": "12. 点  $A(-2, 1)$  在反比例函数  $y = \\frac{k}{x}$  的图像上，当  $1 < x < 4$  时， $y$  的取值范围是"
+  },
+  {
+    "id": 3059,
+    "type": "image",
+    "page_idx": 193,
+    "img_path": "images/71f9bfea94fafd0e1ee974e7aa03c1d07fbc9861fab75a385b14218a10f7f810.jpg",
+    "image_caption": "（第13题）"
+  },
+  {
+    "id": 3060,
+    "type": "text",
+    "page_idx": 193,
+    "text": "13. 如图, 函数  $y_{1} = -x + b$  和函数  $y_{2} = \\frac{k}{x} (x > 0)$  的图像相交于点  $M(1,4), N(n,1)$ , 若  $y_{1} < y_{2}$ , 则  $x$  的取值范围是"
+  },
+  {
+    "id": 3061,
+    "type": "text",
+    "page_idx": 194,
+    "text": "二、选择题"
+  },
+  {
+    "id": 3062,
+    "type": "text",
+    "page_idx": 194,
+    "text": "14. 下列函数中， $y$  随  $x$  的增大而减小的是（ ）."
+  },
+  {
+    "id": 3063,
+    "type": "text",
+    "page_idx": 194,
+    "text": "A.  $y = \\frac{x}{2}$"
+  },
+  {
+    "id": 3064,
+    "type": "text",
+    "page_idx": 194,
+    "text": "B.  $y = \\frac{-2}{x}$"
+  },
+  {
+    "id": 3065,
+    "type": "text",
+    "page_idx": 194,
+    "text": "C.  $y = -\\frac{x}{2}$"
+  },
+  {
+    "id": 3066,
+    "type": "text",
+    "page_idx": 194,
+    "text": "D.  $y = \\frac{2}{x}$"
+  },
+  {
+    "id": 3067,
+    "type": "text",
+    "page_idx": 194,
+    "text": "15. 如果  $y$  与  $x$  成正比例,  $x$  与  $z$  成反比例, 则( )."
+  },
+  {
+    "id": 3068,
+    "type": "text",
+    "page_idx": 194,
+    "text": "A.  $y$  与  $z$  成正比例"
+  },
+  {
+    "id": 3069,
+    "type": "text",
+    "page_idx": 194,
+    "text": "B.  $y$  与  $z$  成反比例"
+  }
+]
+```

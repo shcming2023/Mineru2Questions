@@ -1,0 +1,818 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - Prioritize blocks with explicit heading numbering.
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary", "选择题", "填空题".
+   - If uncertain, prefer NOT to tag it as a title rather than tagging incorrectly.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1710,
+    "type": "text",
+    "page_idx": 107,
+    "text": "基础训练"
+  },
+  {
+    "id": 1711,
+    "type": "text",
+    "text": "1. 点  $P(-5, -3)$  向右平移 6 个单位长度后的对应点  $P_{1}$  的坐标是 _______，它落在第 _______ 象限.",
+    "page_idx": 107
+  },
+  {
+    "id": 1712,
+    "type": "text",
+    "text": "2. 点  $Q(\\sqrt{2}, -\\sqrt{3})$  向上平移 2 个单位长度后的对应点  $Q_{1}$  的坐标是 _______，它落在第 _______ 象限.",
+    "page_idx": 107
+  },
+  {
+    "id": 1713,
+    "type": "text",
+    "text": "3. 点  $A(-4, 3)$  向 ______ 平移 ______ 个单位长度后落在  $x$  轴上.",
+    "page_idx": 107
+  },
+  {
+    "id": 1714,
+    "type": "text",
+    "text": "4. 点  $B(5, 9)$  向 ______ 平移 ______ 个单位长度后落在  $y$  轴上.",
+    "page_idx": 107
+  },
+  {
+    "id": 1715,
+    "type": "text",
+    "text": "5. 一个点从  $(-4, -2)$  沿  $x$  轴正方向平移 5 个单位长度，然后沿着  $y$  轴正方向平移 5 个单位长度后到达点  $P$ ，那么点  $P$  的坐标是 _______，它落在第 _______ 象限。",
+    "page_idx": 107
+  },
+  {
+    "id": 1716,
+    "type": "text",
+    "text": "6. 在平面直角坐标系中, 将点  $A(m, n)$  先向左平移 2 个单位长度, 再向下平移 3 个单位长度, 得到点  $A'$ , 若点  $A'$  位于第四象限, 则  $m, n$  的取值范围分别是 ( ).",
+    "page_idx": 107
+  },
+  {
+    "id": 1717,
+    "type": "text",
+    "page_idx": 107,
+    "text": "A.  $m < 2, n > 3$"
+  },
+  {
+    "id": 1718,
+    "type": "text",
+    "page_idx": 107,
+    "text": "B.  $m > 2, n < 3$"
+  },
+  {
+    "id": 1719,
+    "type": "text",
+    "page_idx": 107,
+    "text": "C.  $m < -2, n < -3$"
+  },
+  {
+    "id": 1720,
+    "type": "text",
+    "page_idx": 107,
+    "text": "D.  $m < -2, n > -3$"
+  },
+  {
+    "id": 1721,
+    "type": "text",
+    "page_idx": 107,
+    "text": "7. 下列判断正确的是（ ）"
+  },
+  {
+    "id": 1722,
+    "type": "text",
+    "text": "A. 点  $P(-5, -6)$  向右平移 5 个单位长度后所对应的点在第四象限",
+    "page_idx": 107
+  },
+  {
+    "id": 1723,
+    "type": "text",
+    "text": "B. 点  $Q(3, -2)$  向左平移 3 个单位长度后所对应的点在  $y$  轴上",
+    "page_idx": 107
+  },
+  {
+    "id": 1724,
+    "type": "text",
+    "text": "C. 点  $M(\\sqrt{2}, \\sqrt{3})$  向上平移  $\\sqrt{5}$  个单位长度后所对应的点的坐标是  $(\\sqrt{2} + \\sqrt{5}, \\sqrt{3})$",
+    "page_idx": 107
+  },
+  {
+    "id": 1725,
+    "type": "text",
+    "text": "D. 点  $N(-\\sqrt{3}, - \\sqrt{7})$  向下平移  $\\sqrt{7}$  个单位长度后所对应的点的坐标是  $(- \\sqrt{3}, 0)$",
+    "page_idx": 107
+  },
+  {
+    "id": 1726,
+    "type": "text",
+    "page_idx": 107,
+    "text": "8. 将点  $A(3, -4)$  平移到点  $B(-3, 4)$  的平移方法有（ ）."
+  },
+  {
+    "id": 1727,
+    "type": "text",
+    "page_idx": 107,
+    "text": "A. 仅1种"
+  },
+  {
+    "id": 1728,
+    "type": "text",
+    "page_idx": 107,
+    "text": "B. 2 种"
+  },
+  {
+    "id": 1729,
+    "type": "text",
+    "page_idx": 107,
+    "text": "C. 3 种"
+  },
+  {
+    "id": 1730,
+    "type": "text",
+    "page_idx": 107,
+    "text": "D. 无数种"
+  },
+  {
+    "id": 1731,
+    "type": "text",
+    "page_idx": 107,
+    "text": "9. 在平面直角坐标系中, 有  $M(-3, a + 2)$ ,  $N(a + 1, 6 - a)$  两点, 若  $MN \\parallel x$  轴, 则  $M$ ,  $N$  两点间的距离为( )."
+  },
+  {
+    "id": 1732,
+    "type": "text",
+    "page_idx": 107,
+    "text": "A. 5"
+  },
+  {
+    "id": 1733,
+    "type": "text",
+    "page_idx": 107,
+    "text": "B. 6"
+  },
+  {
+    "id": 1734,
+    "type": "text",
+    "page_idx": 107,
+    "text": "C. 7"
+  },
+  {
+    "id": 1735,
+    "type": "text",
+    "page_idx": 107,
+    "text": "D. 12"
+  },
+  {
+    "id": 1736,
+    "type": "text",
+    "page_idx": 107,
+    "text": "10. 如图, 在平面直角坐标系中, 已知点  $A(-3, 5)$ ,  $B(-3, -2)$ ."
+  },
+  {
+    "id": 1737,
+    "type": "text",
+    "page_idx": 107,
+    "text": "（1）将点  $A$  向右平移7个单位长度到达点  $C$  ，请画出图形 $\\triangle ABC$"
+  },
+  {
+    "id": 1738,
+    "type": "text",
+    "text": "(2) 写出点  $C$  的坐标；",
+    "page_idx": 107
+  },
+  {
+    "id": 1739,
+    "type": "text",
+    "text": "(3) 判断  $\\triangle ABC$  的形状, 并求出它的面积.",
+    "page_idx": 107
+  },
+  {
+    "id": 1740,
+    "type": "image",
+    "page_idx": 107,
+    "img_path": "images/3a05c1aa7aaf4e523e34ae0ac2e7aee4841727539fb7d77678fe38a18ef61881.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 1741,
+    "type": "text",
+    "page_idx": 108,
+    "text": "11. 如图, 已知点  $A(4, 6)$ ,  $B(1, 1)$ ,  $C(4, 1)$ . 将  $\\triangle ABC$  向左平移 5 个单位长度后得  $\\triangle A_{1}B_{1}C_{1}$ , 再将  $\\triangle A_{1}B_{1}C_{1}$  向下平移 3 个单位长度后得  $\\triangle A_{2}B_{2}C_{2}$ , 再将  $\\triangle A_{2}B_{2}C_{2}$  向右平移 6 个单位长度后得  $\\triangle A_{3}B_{3}C_{3}$ , 画出历次平移后所得到的三角形, 并写出  $\\triangle A_{3}B_{3}C_{3}$  各顶点的坐标."
+  },
+  {
+    "id": 1742,
+    "type": "image",
+    "page_idx": 108,
+    "img_path": "images/c3f80389f895b4277f7eddf8d5ff33e03192c7e0519699e737b17538952fe01b.jpg",
+    "image_caption": "（第11题）"
+  },
+  {
+    "id": 1743,
+    "type": "text",
+    "page_idx": 108,
+    "text": "拓展训练"
+  },
+  {
+    "id": 1744,
+    "type": "text",
+    "page_idx": 108,
+    "text": "12. 如图, 在平面直角坐标系中,  $A(1,3), B(2,0)$ . 第一次将  $\\triangle AOB$  变换成  $\\triangle OA_{1}B_{1}$ , 其中  $A_{1}(2,3), B_{1}(4,0)$ ; 第二次将  $\\triangle OA_{1}B_{1}$  变换成  $\\triangle OA_{2}B_{2}$ , 其中  $A_{2}(4,3), B_{2}(8,0)$ ; 第三次将  $\\triangle OA_{2}B_{2}$  变换成  $\\triangle OA_{3}B_{3}$  则点  $B_{2030}$  的横坐标为"
+  },
+  {
+    "id": 1745,
+    "type": "image",
+    "page_idx": 108,
+    "img_path": "images/6c91708bb43b355b6ea3f47f2e9515f9d7fd069f28b2c6007dd317d1ffcf5bed.jpg",
+    "image_caption": "（第12题）"
+  },
+  {
+    "id": 1746,
+    "type": "text",
+    "page_idx": 108,
+    "text": "13. 如图, 已知点  $A(-5, 3)$ ,  $B(-5, 0)$ . 将  $\\mathrm{Rt} \\triangle ABO$  绕原点  $O$  旋转  $90^{\\circ}$  至  $\\mathrm{Rt} \\triangle A_{1} B_{1} O$ ."
+  },
+  {
+    "id": 1747,
+    "type": "text",
+    "text": "（1）画出  $\\mathrm{Rt}\\triangle A_1B_1O$",
+    "page_idx": 108
+  },
+  {
+    "id": 1748,
+    "type": "text",
+    "text": "(2) 写出点  $A_{1}, B_{1}$  的坐标；",
+    "page_idx": 108
+  },
+  {
+    "id": 1749,
+    "type": "text",
+    "text": "（3）说明  $\\triangle A O A_{1}$  的形状",
+    "page_idx": 108
+  },
+  {
+    "id": 1750,
+    "type": "image",
+    "page_idx": 108,
+    "img_path": "images/b086d4160942864dbef2b231e796656b52e67802eb3a3e08e28a3db03d75d891.jpg",
+    "image_caption": "(第13题）"
+  },
+  {
+    "id": 1751,
+    "type": "text",
+    "page_idx": 109,
+    "text": "14. 如图, 在平面直角坐标系中,  $A(0,6)$ ,  $B(-4,0)$ , 将线段  $AB$  沿  $x$  轴向右平移 12 个单位长度得到线段  $DC$ , 点  $P$  为射线  $AD$  上的动点."
+  },
+  {
+    "id": 1752,
+    "type": "text",
+    "text": "（1）点  $C$  的坐标为 ，点  $D$  的坐标为",
+    "page_idx": 109
+  },
+  {
+    "id": 1753,
+    "type": "text",
+    "text": "(2) 如图(1), 点  $M$  是线段  $CD$  上一点 (不与点  $C, D$  重合), 当点  $P$  在射线  $AD$  上运动时 (点  $P$  不与点  $D$  重合), 连接  $PM$ , 则  $\\angle DPM, \\angle PMC, \\angle ABC$  之间有怎样的数量关系? 请说明理由;",
+    "page_idx": 109
+  },
+  {
+    "id": 1754,
+    "type": "text",
+    "text": "(3) 如图(2), 点  $N$  是  $y$  轴上任意一点, 连接  $BN, CN, PN, PC$ , 若  $ON = OB$ ,  $\\triangle PNC$  的面积等于  $\\triangle AOB$  的面积, 求点  $P$  的坐标.",
+    "page_idx": 109
+  },
+  {
+    "id": 1755,
+    "type": "image",
+    "page_idx": 109,
+    "img_path": "images/59817a39c3e2e4433cdf9325657567faa5a46bb04c99b9520d9aaff97e0f5ee1.jpg",
+    "image_caption": "(1) （第14题）"
+  },
+  {
+    "id": 1756,
+    "type": "image",
+    "page_idx": 109,
+    "img_path": "images/63cc3402a63b10f17f66042f9240c38b8cb48d3973153d2bb6d30cd05b8eadaa.jpg",
+    "image_caption": "(2)"
+  },
+  {
+    "id": 1757,
+    "type": "text",
+    "page_idx": 110,
+    "text": "24.3(二） 轴对称"
+  },
+  {
+    "id": 1758,
+    "type": "image",
+    "page_idx": 110,
+    "img_path": "images/2339c7bf44dd46ef298b98274a8ca4810450aa16207eb6cb224bf98a09d8f2b8.jpg"
+  },
+  {
+    "id": 1759,
+    "type": "text",
+    "page_idx": 110,
+    "text": "要点归纳"
+  },
+  {
+    "id": 1760,
+    "type": "text",
+    "page_idx": 110,
+    "text": "1. 在平面直角坐标系中："
+  },
+  {
+    "id": 1761,
+    "type": "text",
+    "page_idx": 110,
+    "text": "点  $P(x, y)$  关于  $x$  轴的对称点  $P_{1}$  的坐标为  $(x, -y)$ ;"
+  },
+  {
+    "id": 1762,
+    "type": "text",
+    "page_idx": 110,
+    "text": "点  $P(x, y)$  关于  $y$  轴的对称点  $P_{2}$  的坐标为  $(-x, y)$ ;"
+  },
+  {
+    "id": 1763,
+    "type": "text",
+    "page_idx": 110,
+    "text": "点  $P(x, y)$  关于原点的对称点  $P_{3}$  的坐标为  $(-x, -y)$ ."
+  },
+  {
+    "id": 1764,
+    "type": "text",
+    "page_idx": 110,
+    "text": "2. 在给定的平面直角坐标系中, 如果两个图形关于  $x$  轴对称, 那么这两个图形上各组对应点的横坐标相同, 纵坐标互为相反数; 如果点  $(x, y)$  在一个关于  $x$  轴对称的图形上, 那么以  $(x, -y)$  为坐标的点也在这个图形上. 如果两个图形关于  $y$  轴对称, 那么这两个图形上各组对应点的纵坐标相同, 横坐标互为相反数; 如果点  $(x, y)$  在一个关于  $y$  轴对称的图形上, 那么以  $(-x, y)$  为坐标的点也在这个图形上."
+  },
+  {
+    "id": 1765,
+    "type": "image",
+    "page_idx": 110,
+    "img_path": "images/11baba2fbdccbc55ae86e30990bd10f3ccada1d8ddef802a6199f5d16c70f21d.jpg"
+  },
+  {
+    "id": 1766,
+    "type": "text",
+    "page_idx": 110,
+    "text": "疑难分析"
+  },
+  {
+    "id": 1767,
+    "type": "text",
+    "page_idx": 110,
+    "text": "例① 在平面直角坐标系中，已知点  $A(m - 2, -3)$  和  $B(-6,1 - n)$"
+  },
+  {
+    "id": 1768,
+    "type": "text",
+    "text": "（1）若点  $A, B$  关于  $x$  轴对称，求  $m, n$  的值；",
+    "page_idx": 110
+  },
+  {
+    "id": 1769,
+    "type": "text",
+    "text": "(2) 若点  $A, B$  关于  $y$  轴对称，求  $m, n$  的值；",
+    "page_idx": 110
+  },
+  {
+    "id": 1770,
+    "type": "text",
+    "text": "(3) 若点  $A, B$  关于原点对称，求  $m, n$  的值.",
+    "page_idx": 110
+  },
+  {
+    "id": 1771,
+    "type": "text",
+    "page_idx": 110,
+    "text": "解 (1)  $\\because A, B$  两点关于  $x$  轴对称，"
+  },
+  {
+    "id": 1772,
+    "type": "text",
+    "page_idx": 110,
+    "text": "$\\therefore A, B$  两点横坐标相等，纵坐标互为相反数，即  $\\left\\{ \\begin{array}{l} m - 2 = -6, \\\\ 1 - n = 3. \\end{array} \\right.$"
+  },
+  {
+    "id": 1773,
+    "type": "text",
+    "page_idx": 110,
+    "text": "解方程组，得  $m = -4$  中 $n = -2.$"
+  },
+  {
+    "id": 1774,
+    "type": "text",
+    "page_idx": 110,
+    "text": "(2)  $\\because A, B$  两点关于  $y$  轴对称，"
+  },
+  {
+    "id": 1775,
+    "type": "text",
+    "page_idx": 110,
+    "text": "$\\therefore A, B$  两点纵坐标相等，横坐标互为相反数，即  $\\left\\{ \\begin{array}{l} m - 2 = 6, \\\\ 1 - n = -3. \\end{array} \\right.$"
+  },
+  {
+    "id": 1776,
+    "type": "text",
+    "page_idx": 110,
+    "text": "解方程组，得  $m = 8$  n=4."
+  },
+  {
+    "id": 1777,
+    "type": "text",
+    "page_idx": 110,
+    "text": "（3）∵  $A, B$  两点关于原点对称，"
+  },
+  {
+    "id": 1778,
+    "type": "text",
+    "page_idx": 110,
+    "text": "$\\therefore A, B$  两点纵坐标、横坐标都互为相反数，即  $\\left\\{ \\begin{array}{l} m - 2 = 6, \\\\ 1 - n = 3. \\end{array} \\right.$"
+  },
+  {
+    "id": 1779,
+    "type": "text",
+    "page_idx": 110,
+    "text": "解方程组，得  $\\left\\{ \\begin{array}{l}m = 8,\\\\ n = -2. \\end{array} \\right.$"
+  },
+  {
+    "id": 1780,
+    "type": "text",
+    "page_idx": 111,
+    "text": "例② 如图24-13，在平面直角坐标系中， $\\triangle ABC$  的各个顶点的坐标分别为  $A(1,2)$ ， $B(-3,0)$ ， $C(2,-1)$ 。下面给出与  $\\triangle ABC$  在同一坐标平面内，且与  $\\triangle ABC$  全等的三角形的各个顶点的坐标，请说明这些三角形可以由  $\\triangle ABC$  经过怎样的运动得到。"
+  },
+  {
+    "id": 1781,
+    "type": "text",
+    "text": "(1)  $\\triangle A_{1}B_{1}C_{1}:A_{1}(1, - 2),B_{1}(-3,0),C_{1}(2,1)$",
+    "page_idx": 111
+  },
+  {
+    "id": 1782,
+    "type": "text",
+    "text": "(2)  $\\triangle A_{2}B_{2}C_{2}:A_{2}(-1, - 2),B_{2}(3,0),C_{2}(-2,1)$",
+    "page_idx": 111
+  },
+  {
+    "id": 1783,
+    "type": "text",
+    "text": "(3)  $\\triangle A_{3}B_{3}C_{3}:A_{3}(4,0),B_{3}(0, - 2),C_{3}(5, - 3)$",
+    "page_idx": 111
+  },
+  {
+    "id": 1784,
+    "type": "text",
+    "text": "(4)  $\\triangle A_{4}B_{4}C_{4}:A_{4}(-7,2),B_{4}(-3,0),C_{4}(-8,-1).$",
+    "page_idx": 111
+  },
+  {
+    "id": 1785,
+    "type": "text",
+    "page_idx": 111,
+    "text": "解 (1)  $\\because \\triangle ABC$  与  $\\triangle A_{1}B_{1}C_{1}$  各顶点的横坐标相等, 纵坐标互为相反数,"
+  },
+  {
+    "id": 1786,
+    "type": "text",
+    "page_idx": 111,
+    "text": "$\\therefore \\triangle A_{1}B_{1}C_{1}$  可由△ABC沿着  $x$  轴翻折得到"
+  },
+  {
+    "id": 1787,
+    "type": "text",
+    "page_idx": 111,
+    "text": "(2)  $\\because \\triangle ABC$  与  $\\triangle A_{2}B_{2}C_{2}$  各顶点的横坐标、纵坐标都互为相反数，"
+  },
+  {
+    "id": 1788,
+    "type": "text",
+    "page_idx": 111,
+    "text": "$\\therefore \\triangle A_{2}B_{2}C_{2}$  可由△ABC绕原点旋转  $180^{\\circ}$  得到"
+  },
+  {
+    "id": 1789,
+    "type": "text",
+    "text": "（3）如图24-13，在平面直角坐标系中画出  $\\triangle A_{3}B_{3}C_{3}$ ，从图中观察可得，把  $\\triangle ABC$  先向右平移3个单位长度，再向下平移2个单位长度，即可得  $\\triangle A_{3}B_{3}C_{3}$ 。",
+    "page_idx": 111
+  },
+  {
+    "id": 1790,
+    "type": "text",
+    "text": "（4）如图24-14，在平面直角坐标系中画出  $\\triangle A_4B_4C_4$  ，从图中观察可得，把  $\\triangle ABC$  沿着直线  $x = -3$  翻折，即可得  $\\triangle A_4B_4C_4$",
+    "page_idx": 111
+  },
+  {
+    "id": 1791,
+    "type": "image",
+    "page_idx": 111,
+    "img_path": "images/8aea1ef698d343a070942e108722e5fd2aa8e90c2462de2e4d5a430d5fff7c22.jpg",
+    "image_caption": "图 24-13"
+  },
+  {
+    "id": 1792,
+    "type": "image",
+    "page_idx": 111,
+    "img_path": "images/d8506cfc47a2ac7f83d88c63f343138d4d6327453cbd2f5373a4830e8f499549.jpg",
+    "image_caption": "图 24-14"
+  },
+  {
+    "id": 1793,
+    "type": "text",
+    "page_idx": 111,
+    "text": "说明 对于类似问题(3)，(4)中坐标关系不明显的情况，可以考虑先画出相应图像后，再通过观察得到最后结果."
+  },
+  {
+    "id": 1794,
+    "type": "text",
+    "page_idx": 111,
+    "text": "例③ 如图24-15，已知平面直角坐标系  $xOy$  中的点  $A(4,0)$ ，且点  $P(m,n)$  在第四象限，若点  $P$  关于直线  $x = 2$  对称的点为点  $E$ ，点  $E$  关于  $y$  轴对称的点为点  $F$ ，四边形  $OAPF$  的面积为20，求  $n$  的值."
+  },
+  {
+    "id": 1795,
+    "type": "text",
+    "page_idx": 111,
+    "text": "解 点  $P(m, n)$  关于直线  $x = 2$  对称的点  $E$  的坐标为  $(4 - m, n)$ ，则点  $E$  关于  $y$  轴对称的点  $F$  的坐标为  $(m - 4, n)$ ."
+  },
+  {
+    "id": 1796,
+    "type": "image",
+    "page_idx": 111,
+    "img_path": "images/6384e1cdc2450928fa2de85b8d5f747fad75253f30348dcb0a5a723bb85ca3f3.jpg",
+    "image_caption": "图 24-15"
+  },
+  {
+    "id": 1797,
+    "type": "equation",
+    "page_idx": 111,
+    "text": "$$\n\\therefore P F = m - (m - 4) = 4. \\therefore P F \\parallel O A.\n$$"
+  },
+  {
+    "id": 1798,
+    "type": "text",
+    "page_idx": 111,
+    "text": "四边形  $OAPF$  为平行四边形.  $S_{\\text{四边形} OAPF} = OA \\cdot |n| = 4|n| = 20.$"
+  },
+  {
+    "id": 1799,
+    "type": "equation",
+    "page_idx": 111,
+    "text": "$$\n\\therefore | n | = 5.\n$$"
+  },
+  {
+    "id": 1800,
+    "type": "text",
+    "page_idx": 111,
+    "text": "$\\because$  点  $P$  为第四象限的点，  $\\therefore n < 0.\\therefore n = -5.$"
+  },
+  {
+    "id": 1801,
+    "type": "text",
+    "page_idx": 112,
+    "text": "基础训练"
+  },
+  {
+    "id": 1802,
+    "type": "text",
+    "page_idx": 112,
+    "text": "1. 如果点  $A(m,2)$  和点  $B(3,n)$  关于  $y$  轴对称，那么  $m = \\_\\_\\_\\_\\_\\_\\_\\_$ ， $n = \\_\\_\\_\\_\\_\\_\\_\\_$ ."
+  },
+  {
+    "id": 1803,
+    "type": "text",
+    "page_idx": 112,
+    "text": "2. 在平面直角坐标系中，点  $(a, b)$  关于  $x$  轴对称的点的坐标是 _______，点  $(a, b)$  关于  $y$  轴对称的点的坐标是 _______，点  $(a, b)$  关于原点对称的点的坐标是 _______。"
+  },
+  {
+    "id": 1804,
+    "type": "text",
+    "page_idx": 112,
+    "text": "3. 如果点  $P(m, -5)$  与点  $Q(-2, n)$  关于原点对称，那么  $3m - n =$"
+  },
+  {
+    "id": 1805,
+    "type": "text",
+    "page_idx": 112,
+    "text": "4. 如果点  $A(2, -3)$  关于  $y$  轴对称的点是点  $B$ , 点  $B$  关于  $x$  轴对称的点是点  $C$ , 那么点  $C$  的坐标是"
+  },
+  {
+    "id": 1806,
+    "type": "text",
+    "page_idx": 112,
+    "text": "5. 如果点  $D(-\\sqrt{5}, \\sqrt{3})$  关于原点对称的点是点  $E$ ，点  $E$  关于  $x$  轴对称的点是点  $F$ ，那么点  $F$  的坐标是"
+  },
+  {
+    "id": 1807,
+    "type": "text",
+    "page_idx": 112,
+    "text": "6. 在平面直角坐标系中, 点  $P(5, -2)$  关于直线  $y = 5$  对称的点的坐标是"
+  },
+  {
+    "id": 1808,
+    "type": "text",
+    "page_idx": 112,
+    "text": "7. 如果点  $P(x, y)$  在第四象限，它到两坐标轴的距离之和等于 12，它到  $x$  轴的距离比到  $y$  轴的距离大 2，那么点  $P$  的坐标是"
+  },
+  {
+    "id": 1809,
+    "type": "text",
+    "page_idx": 112,
+    "text": "8. 在平面直角坐标系中, 已知点  $M(4, -3)$ . 如果点  $M$  关于原点对称的点是点  $N$ , 点  $N$  关于  $y$  轴对称的点是点  $P$ , 此时点  $P$  的坐标为"
+  }
+]
+```

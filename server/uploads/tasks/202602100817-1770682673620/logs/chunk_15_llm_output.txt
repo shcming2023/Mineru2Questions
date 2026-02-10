@@ -1,4 +1,0 @@
-<chapter><title>1434</title>
-<qa_pair><label>例1</label><type>example</type><question>1442,1443,1444,1445,1446,1447,1448</question>
-<solution>1449</solution></qa_pair>
-</chapter>

@@ -1,0 +1,827 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - Prioritize blocks with explicit heading numbering.
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary", "选择题", "填空题".
+   - If uncertain, prefer NOT to tag it as a title rather than tagging incorrectly.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1170,
+    "type": "image",
+    "page_idx": 75,
+    "img_path": "images/403abd35e2d636fc0123d191bb6797607dec4a824d1cebf295e14b873015f0de.jpg"
+  },
+  {
+    "id": 1171,
+    "type": "text",
+    "page_idx": 75,
+    "text": "要点归纳"
+  },
+  {
+    "id": 1172,
+    "type": "text",
+    "text": "1. 重心的定义: 三角形的三条中线交于一点, 此交点叫作三角形的重心.",
+    "page_idx": 75
+  },
+  {
+    "id": 1173,
+    "type": "text",
+    "text": "2. 三角形的重心定理：三角形的重心到一个顶点的距离等于它到该顶点对边中点的距离的两倍。",
+    "page_idx": 75
+  },
+  {
+    "id": 1174,
+    "type": "image",
+    "page_idx": 75,
+    "img_path": "images/ba345890bac48e188c5a618c129bac5015c68aac7ce9505d9f45581124d5e328.jpg"
+  },
+  {
+    "id": 1175,
+    "type": "text",
+    "page_idx": 75,
+    "text": "疑难分析"
+  },
+  {
+    "id": 1176,
+    "type": "text",
+    "page_idx": 75,
+    "text": "例① 如图23-23，在梯形ABCD中，  $AB / / CD$  ，AC⊥BC,且AC平分∠DAB，点E为AC的中点.求证：  $DE = \\frac{1}{2} BC.$"
+  },
+  {
+    "id": 1177,
+    "type": "text",
+    "page_idx": 75,
+    "text": "证明 延长  $DE$  交  $AB$  于点  $F$ ."
+  },
+  {
+    "id": 1178,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\because A B / / C D, \\therefore \\angle D C A = \\angle B A C.\n$$"
+  },
+  {
+    "id": 1179,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\because \\angle D A C = \\angle B A C, \\therefore \\angle D A C = \\angle D C A. \\therefore D A = D C.\n$$"
+  },
+  {
+    "id": 1180,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\because \\text {点} E \\text {是} A C \\text {的 中 点 ,} \\therefore A E = E C. \\therefore D E \\perp A C.\n$$"
+  },
+  {
+    "id": 1181,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\because A C \\perp B C, \\therefore \\angle A C B = 9 0 ^ {\\circ} = \\angle C E D. \\therefore D F / / B C.\n$$"
+  },
+  {
+    "id": 1182,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\therefore \\text {四 边 形} D F B C \\text {是 平 行 四 边 形 .} \\therefore F B = C D, D F = B C.\n$$"
+  },
+  {
+    "id": 1183,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\because \\angle D E C = \\angle F E A, \\angle D C A = \\angle B A C, A E = E C, \\therefore \\triangle D E C \\cong \\triangle F E A (\\mathrm {A S A}).\n$$"
+  },
+  {
+    "id": 1184,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\therefore A F = C D = F B. \\therefore E F = \\frac {1}{2} B C. \\therefore D E = \\frac {1}{2} B C.\n$$"
+  },
+  {
+    "id": 1185,
+    "type": "text",
+    "page_idx": 75,
+    "text": "说明 此题关键是构造  $\\triangle ABC$  的中位线  $EF$ ."
+  },
+  {
+    "id": 1186,
+    "type": "text",
+    "page_idx": 75,
+    "text": "例② 如图23-24， $\\triangle OAB$  是等腰直角三角形， $\\angle AOB = 90^{\\circ}$ ， $OA = OB = 3\\sqrt{2}$ ，点  $C, D$  分别在边  $OA, OB$  上，且  $CD \\parallel AB$ ，已知  $\\triangle CDE$  是等边三角形，且点  $E$  在  $\\triangle OAB$  内，点  $G$  是  $\\triangle CDE$  的重心。求线段  $OG$  的取值范围。"
+  },
+  {
+    "id": 1187,
+    "type": "text",
+    "page_idx": 75,
+    "text": "分析 连接  $EG$  并延长交  $CD$  于点  $F$ , 连接  $OF$ , 延长  $GE$  交  $AB$  于点  $H$ . 由点  $G$  是  $\\triangle CDE$  的重心, 可得  $F$  为  $CD$  的中点, 进而由  $\\triangle CDE$  是等边三"
+  },
+  {
+    "id": 1188,
+    "type": "image",
+    "page_idx": 75,
+    "img_path": "images/ef823e77ca5ddc72e5bbc01c042ca638be974f274ed4f471e1295937285ee4bd.jpg",
+    "image_caption": "图 23-23"
+  },
+  {
+    "id": 1189,
+    "type": "image",
+    "page_idx": 75,
+    "img_path": "images/32ea57c741860fb63c2d76bb4f54489f0dbe1523ed7d9e830753599f7c0826be.jpg",
+    "image_caption": "图 23-24"
+  },
+  {
+    "id": 1190,
+    "type": "text",
+    "page_idx": 75,
+    "text": "角形可得  $EF \\perp CD$ , 设  $CD = x$ , 则  $CF = \\frac{1}{2} x$ ,  $FG = \\frac{\\sqrt{3}}{6} x$ , 又可证明  $\\triangle OCD$  是等腰直角三角形, 得到  $OF \\perp CD$ . 点  $O, F, G, E, H$  五点共线, 即得  $OE$  平分  $\\angle COD$ . 则  $OH$  垂直平分  $AB$ . 由勾股定理可得  $AB = 6$ , 则  $OH = \\frac{1}{2} AB = 3$ ,  $OF = \\frac{1}{2} CD = \\frac{1}{2} x$ , 得到  $FH = OH - OF = 3 - \\frac{1}{2} x$ . 根据点  $E$  在  $\\triangle OAB$  内,  $EF < FH$ , 可得  $\\frac{\\sqrt{3}}{2} x < 3 - \\frac{1}{2} x$ , 得到  $x < 3\\sqrt{3} - 3$ . 又根据  $x > 0$  可得  $0 < x < 3\\sqrt{3} - 3$ . 由  $OG = OF + FG = \\frac{3 + \\sqrt{3}}{6} x$ , 即可求出线段  $OG$  的取值范围."
+  },
+  {
+    "id": 1191,
+    "type": "text",
+    "page_idx": 76,
+    "text": "解 如图, 连接  $EG$  并延长交  $CD$  于点  $F$ , 连接  $OF$ , 延长  $GE$  交  $AB$  于点  $H$ ."
+  },
+  {
+    "id": 1192,
+    "type": "text",
+    "page_idx": 76,
+    "text": "$\\because$  点  $G$  是  $\\triangle CDE$  的重心， $\\therefore F$  为  $CD$  的中点."
+  },
+  {
+    "id": 1193,
+    "type": "text",
+    "page_idx": 76,
+    "text": "$\\because \\triangle CDE$  是等边三角形，  $\\therefore EF \\perp CD.$"
+  },
+  {
+    "id": 1194,
+    "type": "text",
+    "page_idx": 76,
+    "text": "设  $CD = CE = DE = x$  ，则  $CF = \\frac{1}{2} x$  ，  $EF = \\sqrt{CE^2 - CF^2} = \\frac{\\sqrt{3}}{2} x.$"
+  },
+  {
+    "id": 1195,
+    "type": "text",
+    "page_idx": 76,
+    "text": "$\\therefore FG = \\frac{1}{3} EF = \\frac{\\sqrt{3}}{6} x$  （三角形的重心到一个顶点的距离等于它到该顶点对边中点的距离的两倍）."
+  },
+  {
+    "id": 1196,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\begin{array}{l} \\because C D / / A B, \\\\ \\therefore \\angle O C D = \\angle A = 4 5 ^ {\\circ}, \\angle O D C = \\angle B = 4 5 ^ {\\circ}. \\therefore \\angle O C D = \\angle O D C. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 1197,
+    "type": "text",
+    "page_idx": 76,
+    "text": "又  $\\angle AOB = 90^{\\circ}$"
+  },
+  {
+    "id": 1198,
+    "type": "text",
+    "page_idx": 76,
+    "text": "$\\therefore \\triangle OCD$  是等腰直角三角形."
+  },
+  {
+    "id": 1199,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\therefore O F \\perp C D.\n$$"
+  },
+  {
+    "id": 1200,
+    "type": "text",
+    "page_idx": 76,
+    "text": "点  $O, F, G, E, H$  共线"
+  },
+  {
+    "id": 1201,
+    "type": "text",
+    "page_idx": 76,
+    "text": "$\\therefore OE$  平分  $\\angle COD$ .  $\\therefore OH$  垂直平分  $AB$ ."
+  },
+  {
+    "id": 1202,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\begin{array}{l} \\because \\angle A O B = 9 0 ^ {\\circ}, O A = O B = 3 \\sqrt {2}, \\\\ \\therefore A B = \\sqrt {O A ^ {2} + O B ^ {2}} = \\sqrt {(3 \\sqrt {2}) ^ {2} + (3 \\sqrt {2}) ^ {2}} = 6. \\\\ \\therefore O H = \\frac {1}{2} A B = 3. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 1203,
+    "type": "text",
+    "page_idx": 76,
+    "text": "同理可得  $OF = \\frac{1}{2} CD = \\frac{1}{2} x$"
+  },
+  {
+    "id": 1204,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\therefore F H = O H - O F = 3 - \\frac {1}{2} x.\n$$"
+  },
+  {
+    "id": 1205,
+    "type": "text",
+    "page_idx": 76,
+    "text": "点  $E$  在  $\\triangle OAB$  内， $\\therefore EF < FH$"
+  },
+  {
+    "id": 1206,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\begin{array}{l} \\therefore \\frac {\\sqrt {3}}{2} x <   3 - \\frac {1}{2} x. \\\\ \\therefore x <   3 \\sqrt {3} - 3. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 1207,
+    "type": "text",
+    "page_idx": 76,
+    "text": "又  $\\because x > 0$"
+  },
+  {
+    "id": 1208,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\begin{array}{l} \\therefore 0 <   x <   3 \\sqrt {3} - 3. \\\\ \\because O G = O F + F G = \\frac {1}{2} x + \\frac {\\sqrt {3}}{6} x = \\frac {3 + \\sqrt {3}}{6} x, \\\\ \\therefore 0 <   O G <   \\frac {3 + \\sqrt {3}}{6} \\times (3 \\sqrt {3} - 3). \\\\ \\therefore 0 <   O G <   \\sqrt {3}. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 1209,
+    "type": "text",
+    "page_idx": 76,
+    "text": "说明 本题考查了等腰直角三角形的性质、等边三角形的性质、三角形重心的性质、勾股定理、直角三角形的性质等."
+  },
+  {
+    "id": 1210,
+    "type": "image",
+    "page_idx": 77,
+    "img_path": "images/e94c0bc5546f8d25311eeb7b53b9809e22b61d63fa736f83014216a5a49962e4.jpg"
+  },
+  {
+    "id": 1211,
+    "type": "text",
+    "page_idx": 77,
+    "text": "基础训练"
+  },
+  {
+    "id": 1212,
+    "type": "text",
+    "text": "1. 在  $\\triangle ABC$  中， $\\angle ACB = 90^\\circ, AC = 3.6, BC = 4.8, G$  为  $\\triangle ABC$  的重心，则点  $G$  到  $AB$  中点的距离为",
+    "page_idx": 77
+  },
+  {
+    "id": 1213,
+    "type": "text",
+    "text": "2. 如图, 在  $\\triangle ABC$  中,  $AB = AC = 13$ ,  $AD$  平分  $\\angle BAC$ , 且  $AD = 12$ ,  $BE$  是边  $AC$  上的中线,  $AD$ ,  $BE$  交于点  $O$ , 则  $OE$  的长为",
+    "page_idx": 77
+  },
+  {
+    "id": 1214,
+    "type": "text",
+    "text": "3. 如图,  $D, E, F$  分别为  $\\triangle ABC$  三边上的中点,  $G$  为  $AE$  的中点,  $BE$  与  $DF, DG$  分别交于  $P, Q$  两点, 则  $PQ:BE =$  ________.",
+    "page_idx": 77
+  },
+  {
+    "id": 1215,
+    "type": "image",
+    "page_idx": 77,
+    "img_path": "images/cf477ed7cf1e0cecc591009761ece7ce42ff82c2811c2de9a9f428a4aac5ef3b.jpg",
+    "image_caption": "（第2题）"
+  },
+  {
+    "id": 1216,
+    "type": "image",
+    "page_idx": 77,
+    "img_path": "images/c455b34483b880339fbe6778bde6faf32c91d27b4ba3c97334e020a0f31ca7ba.jpg",
+    "image_caption": "（第3题）"
+  },
+  {
+    "id": 1217,
+    "type": "image",
+    "page_idx": 77,
+    "img_path": "images/83fef0183eb1c224f5a2e83a5cefd6c053aef3567b4444cf8531f80aa41a1b97.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 1218,
+    "type": "text",
+    "text": "4. 在  $\\mathrm{Rt}\\triangle ABC$  中， $\\angle ACB = 90^{\\circ}, AB = 15, G$  是  $\\mathrm{Rt}\\triangle ABC$  的重心，则  $GC$  的长为",
+    "page_idx": 77
+  },
+  {
+    "id": 1219,
+    "type": "text",
+    "text": "5.  $\\triangle ABC$  的两条中线  $AD, BE$  相交于点  $G$ , 如果  $S_{\\triangle ABG} = 2$ , 那么  $S_{\\triangle ABC} =$",
+    "page_idx": 77
+  },
+  {
+    "id": 1220,
+    "type": "text",
+    "text": "6. 如图, 在梯形  $ABCD$  中,  $AD \\parallel BC$ ,  $E, F$  分别是两条对角线的中点, 若  $AD = 4\\mathrm{cm}$ ,  $BC = 10\\mathrm{cm}$ , 则  $EF$  的长为",
+    "page_idx": 77
+  },
+  {
+    "id": 1221,
+    "type": "text",
+    "text": "7.  $\\triangle ABC$  为等腰直角三角形， $\\angle A = 90^\\circ, AB = 6, G_1$  为  $\\triangle ABC$  的重心，以  $CA$  为斜边作等腰直角三角形  $CAD$ （点  $D$  在  $\\triangle ABC$  外）， $G_2$  为  $\\mathrm{Rt}\\triangle CAD$  的重心，则  $G_1, G_2$  两点间的距离是",
+    "page_idx": 77
+  },
+  {
+    "id": 1222,
+    "type": "text",
+    "text": "8. 如图, 在  $\\triangle ABC$  中,  $AD$  是  $BC$  上的中线,  $E$  是  $AD$  的中点,  $BE$  的延长线交  $AC$  于点  $F$ , 则  $AF:FC =$  ________.",
+    "page_idx": 77
+  },
+  {
+    "id": 1223,
+    "type": "image",
+    "page_idx": 77,
+    "img_path": "images/722b6457be50d3155c6e58fb34186be00f349927540ba078893f8f3d01e8c9f8.jpg",
+    "image_caption": "（第8题）"
+  },
+  {
+    "id": 1224,
+    "type": "image",
+    "page_idx": 77,
+    "img_path": "images/031ee1bfa8bfb92ed2b8f34ec38390a855b02860e3de26455144d5c16ca97038.jpg",
+    "image_caption": "（第9题）"
+  },
+  {
+    "id": 1225,
+    "type": "text",
+    "page_idx": 77,
+    "text": "9. 如图, 已知  $\\triangle ABC$  的周长为 1 , 连接  $\\triangle ABC$  三边的中点构成第二个三角形, 再连接第二个三角形三边的中点构成第三个三角形, 依此类推, 第  $n$  个三角形的周长为 ( )."
+  },
+  {
+    "id": 1226,
+    "type": "text",
+    "page_idx": 77,
+    "text": "A.  $\\frac{1}{n - 1}$"
+  },
+  {
+    "id": 1227,
+    "type": "text",
+    "page_idx": 77,
+    "text": "B.  $\\frac{1}{n}$"
+  },
+  {
+    "id": 1228,
+    "type": "text",
+    "page_idx": 77,
+    "text": "C.  $\\frac{1}{2^{n - 1}}$"
+  },
+  {
+    "id": 1229,
+    "type": "text",
+    "page_idx": 77,
+    "text": "D.  $\\frac{1}{2^{n}}$"
+  },
+  {
+    "id": 1230,
+    "type": "text",
+    "page_idx": 78,
+    "text": "10. 如图, 在四边形  $ABCD$  中,  $BD \\perp CD$ , 且  $BD$  平分  $\\angle ABC$ ,  $AC$ ,  $BD$  相交于点  $O$ , 且  $O$  为  $BD$  的中点. 在  $BC$  上取一点  $G$ , 使  $AG \\perp BD$ ,  $E$  为垂足, 取  $AC$  的中点  $F$ , 连接  $EF$ ,  $DF$ . 有下列判断: ①  $CO = \\frac{1}{2} BD$ ; ②  $EF \\parallel BC$ ; ③  $DF = \\frac{1}{2} CG$ ; ④ 连接  $BF$ , 则四边形  $ABFD$  是平行四边形; ⑤  $DF = 2AE$ . 其中判断正确的有( )."
+  },
+  {
+    "id": 1231,
+    "type": "image",
+    "page_idx": 78,
+    "img_path": "images/022903d2c651e45146b499b0a0f492984664610305b5adbe597cde5a82cee69a.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 1232,
+    "type": "text",
+    "page_idx": 78,
+    "text": "A. 2 个"
+  },
+  {
+    "id": 1233,
+    "type": "text",
+    "page_idx": 78,
+    "text": "B. 3 个"
+  },
+  {
+    "id": 1234,
+    "type": "text",
+    "page_idx": 78,
+    "text": "C. 4 个"
+  },
+  {
+    "id": 1235,
+    "type": "text",
+    "page_idx": 78,
+    "text": "D. 5 个"
+  },
+  {
+    "id": 1236,
+    "type": "text",
+    "page_idx": 78,
+    "text": "11. 如图, 在  $\\triangle ABC$  中,  $AC$ ,  $BC$  上的中线  $BE$ ,  $AD$  交于点  $F$ , 且  $AD \\perp BE$ ,  $AC = 20$ ,  $AD = 12$ . 求  $BE$  的长."
+  },
+  {
+    "id": 1237,
+    "type": "image",
+    "page_idx": 78,
+    "img_path": "images/7d4d2d07980bd303e19c33884ef118c0045a831d3d33d0e496a82e695b6d12a7.jpg",
+    "image_caption": "（第11题）"
+  },
+  {
+    "id": 1238,
+    "type": "text",
+    "page_idx": 78,
+    "text": "12. 如图, 在四边形  $ABCD$  中,  $AD = BC$ ,  $E$ ,  $F$  分别是  $CD$ ,  $AB$  的中点, 延长  $AD$ ,  $BC$ , 分别交  $FE$  的延长线于点  $H$ ,  $G$ . 求证:  $\\angle AHF = \\angle BGF$ ."
+  },
+  {
+    "id": 1239,
+    "type": "image",
+    "page_idx": 78,
+    "img_path": "images/d63d9faec65ed23d7fb8abdec6191e1482ad5a21e2723be309ca682470cc5e76.jpg",
+    "image_caption": "（第12题）"
+  },
+  {
+    "id": 1240,
+    "type": "text",
+    "page_idx": 78,
+    "text": "13. 已知：如图，在  $\\triangle ABC$  中，点  $D, E$  分别是  $AB, BC$  的中点，点  $F, G$  是  $AC$  的三等分点， $DF, EG$  的延长线相交于点  $H$ . 求证："
+  },
+  {
+    "id": 1241,
+    "type": "text",
+    "text": "（1）四边形FBGH是平行四边形；",
+    "page_idx": 78
+  },
+  {
+    "id": 1242,
+    "type": "text",
+    "text": "（2）四边形ABCH是平行四边形",
+    "page_idx": 78
+  },
+  {
+    "id": 1243,
+    "type": "image",
+    "page_idx": 78,
+    "img_path": "images/3de736031c41e99802389c60b19eecd1610a269ec5cfd16859ced15218610543.jpg",
+    "image_caption": "(第13题)"
+  },
+  {
+    "id": 1244,
+    "type": "text",
+    "page_idx": 79,
+    "text": "本章复习题"
+  },
+  {
+    "id": 1245,
+    "type": "text",
+    "page_idx": 79,
+    "text": "一、填空题"
+  },
+  {
+    "id": 1246,
+    "type": "text",
+    "text": "1. 如图,  $E, F$  是  $\\square ABCD$  的对角线  $BD$  上的两点, 请你添加一个适当的条件: 使四边形  $AECF$  是平行四边形.",
+    "page_idx": 79
+  },
+  {
+    "id": 1247,
+    "type": "text",
+    "text": "2.如图，矩形ABCD的边长  $AB = 2BC$  ，  $AE = AB$  ，则  $\\angle EBC =$",
+    "page_idx": 79
+  },
+  {
+    "id": 1248,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/08dd89912ab1033b12b42895fff3fb2a7990385ad5f2874740cf6a2268d0ffb8.jpg",
+    "image_caption": "（第1题）"
+  },
+  {
+    "id": 1249,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/c3c8aa643978704070fa66287e295329ea9ac4f3fca6577c4356ebf8d5101dfe.jpg",
+    "image_caption": "（第2题）"
+  },
+  {
+    "id": 1250,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/299131cd4dedd872ac2ed60ebc1b38d62b3b39957deeb8802b165a2b9a9da1da.jpg",
+    "image_caption": "（第4题）"
+  },
+  {
+    "id": 1251,
+    "type": "text",
+    "text": "3. 从平行四边形的一个锐角顶点作两条高, 如果这两条高的夹角为  $135^{\\circ}$ , 则这个平行四边形的锐角度数为",
+    "page_idx": 79
+  },
+  {
+    "id": 1252,
+    "type": "text",
+    "text": "4. 如图, 在正方形  $ABCD$  的边  $BC$  的延长线上取一点  $E$ , 使  $CE = AC$ ,  $AE$  与  $CD$  交于点  $F$ , 则  $\\angle AFC$  的度数为",
+    "page_idx": 79
+  },
+  {
+    "id": 1253,
+    "type": "text",
+    "text": "5. 在梯形  $ABCD$  中,  $AB \\parallel CD$ ,  $AD = BC$ ,  $AB \\neq CD$ ,  $BD = 10$ ,  $\\angle BDC = 45^\\circ$ , 则梯形  $ABCD$  的面积为",
+    "page_idx": 79
+  },
+  {
+    "id": 1254,
+    "type": "text",
+    "text": "6. 如图, 在梯形  $ABCD$  中,  $AD \\parallel CB$ ,  $AD = 3$ ,  $BC = 9$ , 那么  $S_{\\triangle ADC}: S_{\\triangle ABC} =$",
+    "page_idx": 79
+  },
+  {
+    "id": 1255,
+    "type": "text",
+    "text": "7. 如图, 在  $\\triangle ABC$  中, 中线  $AD$ ,  $BE$  相交于点  $O$ . 若  $S_{\\triangle BOD} = 5$ , 则  $S_{\\triangle ABC} =$  ________.",
+    "page_idx": 79
+  },
+  {
+    "id": 1256,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/3f0c50fc852764bdba9407f81e9377d2633480a3f14a1a92979941bf41823013.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 1257,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/f9123b98b027bbe7bbf42af35c51a90c8cce9f6b49f07627e4ed4b6584391e9b.jpg",
+    "image_caption": "（第7题）"
+  },
+  {
+    "id": 1258,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/0bc9684fced5d88aeb4ab8eb71236849dfbe3ec655811106327ab2965a7e5ccb.jpg",
+    "image_caption": "（第9题）"
+  },
+  {
+    "id": 1259,
+    "type": "image",
+    "page_idx": 79,
+    "img_path": "images/4f2a16adccd14dde4008e20e2cec123d186fff299941be278588fecee0865398.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 1260,
+    "type": "text",
+    "text": "8.菱形的周长是  $24\\mathrm{cm}$  ，较短的对角线长是  $6\\mathrm{cm}$  ，则该菱形较大的内角的度数是",
+    "page_idx": 79
+  },
+  {
+    "id": 1261,
+    "type": "text",
+    "text": "9. 如图,  $E$  为正方形ABCD外一点,  $AE = AD$ ,  $BE$  交AD于点  $F$ ,  $\\angle ADE = 75^{\\circ}$ , 则  $\\angle AFB$  的度数是",
+    "page_idx": 79
+  },
+  {
+    "id": 1262,
+    "type": "text",
+    "text": "10. 如图, 在 Rt\\(\\triangle ABC\\) 中, \\(\\angle BAC = 90^\\circ\\), 点 \\(M\\) 为斜边 \\(BC\\) 的中点, \\(AM = 5\\mathrm{cm}\\), \\(\\angle AMC = 45^\\circ\\), 将 \\(\\triangle AMC\\) 沿 \\(AM\\) 翻折, 点 \\(C\\) 落在 \\(\\triangle ABC\\) 所在平面内的 \\(C'\\) 处, 那么四边形 \\(BC'AC\\) 的面积为 \\(\\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_ \\_",
+    "page_idx": 79
+  },
+  {
+    "id": 1263,
+    "type": "text",
+    "page_idx": 80,
+    "text": "24.1(二) 简单图形的坐标表达"
+  },
+  {
+    "id": 1264,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/0df44fc922325c2ef0672da911be6b347a4a61ce4cf01bec8fb12c569ae07ef0.jpg"
+  },
+  {
+    "id": 1265,
+    "type": "text",
+    "page_idx": 80,
+    "text": "要点归纳"
+  },
+  {
+    "id": 1266,
+    "type": "text",
+    "text": "1.  $x$  轴上的点的纵坐标为0，纵坐标为0的点一定在  $x$  轴上； $y$  轴上的点的横坐标为0，横坐标为0的点一定在  $y$  轴上；原点  $O$  的坐标为(0,0).",
+    "page_idx": 80
+  },
+  {
+    "id": 1267,
+    "type": "text",
+    "text": "2. 经过点  $P(a, b)$  且垂直于  $x$  轴的直线用“直线  $x = a$ ”表示；经过点  $P(a, b)$  且垂直于  $y$  轴的直线用“直线  $y = b$ ”表示。",
+    "page_idx": 80
+  },
+  {
+    "id": 1268,
+    "type": "text",
+    "text": "3. 会用分解组合思想去求平面直角坐标系中简单几何图形的面积",
+    "page_idx": 80
+  },
+  {
+    "id": 1269,
+    "type": "image",
+    "page_idx": 80,
+    "img_path": "images/925e8e04f5c964bd11310f0533a8a344543bccabedd8c5e8e3da40a3a6099e89.jpg"
+  }
+]
+```
