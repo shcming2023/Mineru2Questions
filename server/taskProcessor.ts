@@ -53,8 +53,6 @@ export function cancelTaskProcessing(taskId: number): void {
  * 处理单个提取任务
  */
 export async function processExtractionTask(taskId: number, userId: number): Promise<void> {
-  console.log(`[Task ${taskId}] Starting task processing...`);
-  
   try {
     // 1. 获取任务信息
     const task = await getExtractionTaskById(taskId, userId);
@@ -134,8 +132,6 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       extractedCount: questions.length,
       completedAt: new Date()
     });
-    
-    console.log(`[Task ${taskId}] Task completed successfully`);
     
   } catch (error: any) {
     console.error(`[Task ${taskId}] Task failed:`, error);

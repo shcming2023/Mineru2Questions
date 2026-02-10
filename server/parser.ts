@@ -76,7 +76,6 @@ export class QuestionParser {
         this.saveLog(chunkIndex, 'parsed_questions', JSON.stringify(questions, null, 2));
       }
       
-      console.log(`[Chunk ${chunkIndex}] Strict parse succeeded: ${questions.length} questions`);
       return questions;
       
     } catch (strictError: any) {
@@ -92,7 +91,6 @@ export class QuestionParser {
           this.saveLog(chunkIndex, 'parsed_questions_lenient', JSON.stringify(questions, null, 2));
         }
         
-        console.log(`[Chunk ${chunkIndex}] Lenient parse succeeded: ${questions.length} questions`);
         return questions;
         
       } catch (lenientError: any) {

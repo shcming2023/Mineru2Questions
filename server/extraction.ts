@@ -97,13 +97,10 @@ export async function extractQuestions(
   llmConfig: LLMConfig,
   onProgress?: (progress: number, message: string) => Promise<void>
 ): Promise<ExtractedQuestion[]> {
-  console.log('=== Starting Question Extraction Pipeline ===');
   
   // 1. 加载并格式化输入
-  console.log('Step 1: Loading and formatting content_list.json...');
   if (onProgress) await onProgress(5, 'Loading and formatting content...');
   const blocks = loadAndFormatBlocks(contentListPath);
-  console.log(`Loaded ${blocks.length} blocks`);
   
   // Debug: 保存格式化后的 blocks
   const debugDir = path.join(taskDir, 'debug');
@@ -113,15 +110,11 @@ export async function extractQuestions(
   fs.writeFileSync(path.join(debugDir, 'formatted_blocks.json'), JSON.stringify(blocks, null, 2));
 
   // 2. 分块处理
-  console.log('Step 2: Splitting into chunks with overlap...');
   if (onProgress) await onProgress(10, 'Splitting content into chunks...');
   const chunks = splitIntoChunks(blocks, MAX_CHUNK_SIZE, OVERLAP_SIZE);
-  console.log(`Created ${chunks.length} chunks`);
   
   // 3. 调用 LLM 提取题目 (并发处理)
-   console.log('Step 3: Extracting questions via LLM (Concurrent Mode)...');
    const maxConcurrency = llmConfig.maxWorkers || 5;
-   console.log(`Concurrency level: ${maxConcurrency}`);
 
   // 初始化结果数组，保证顺序
   const chunkResults = new Array<ExtractedQuestion[]>(chunks.length);
@@ -137,7 +130,6 @@ export async function extractQuestions(
       const { chunk, index } = item;
       const progressPercent = 10 + Math.floor(((index + 1) / chunks.length) * 80);
       const progressMsg = `Processing chunk ${index + 1}/${chunks.length}...`;
-      console.log(progressMsg);
       if (onProgress) await onProgress(progressPercent, progressMsg);
 
       let retries = 0;
@@ -178,13 +170,11 @@ export async function extractQuestions(
              }
           }
           
-          console.log(`Chunk ${chunk.index}: Extracted ${questions.length} questions`);
           chunkResults[index] = questions;
           success = true;
           
         } catch (error: any) {
           retries++;
-          const isSanityCheck = error.message.includes('Sanity Check');
           console.error(`Chunk ${chunk.index}: Failed to process (Attempt ${retries}/${maxRetries + 1}): ${error.message}`);
           
           if (retries > maxRetries) {
@@ -212,7 +202,6 @@ export async function extractQuestions(
           } else {
              // 等待后重试 (指数退避)
              const delay = 1000 * Math.pow(2, retries);
-             console.log(`Chunk ${chunk.index}: Waiting ${delay}ms before retry...`);
              await new Promise(resolve => setTimeout(resolve, delay));
           }
         }
@@ -227,16 +216,12 @@ export async function extractQuestions(
   // 合并结果
   const allQuestions = chunkResults.flat();
   
-  console.log(`Step 3 completed: Total ${allQuestions.length} questions extracted`);
   if (onProgress) await onProgress(90, 'Deduplicating and filtering questions...');
   
   // 4. 去重（基于 questionIds）
-  console.log('Step 4: Deduplicating questions...');
   const uniqueQuestions = deduplicateQuestions(allQuestions);
-  console.log(`After deduplication: ${uniqueQuestions.length} questions`);
   
   // 5. 题目类型识别（如果 LLM 未提供）
-  console.log('Step 5: Identifying question types...');
   for (const q of uniqueQuestions) {
     if (!q.type || (q.type !== 'example' && q.type !== 'exercise')) {
       q.type = identifyQuestionType(q.label);
@@ -244,15 +229,11 @@ export async function extractQuestions(
   }
 
   // 5.5. 清洗章节标题
-  console.log('Step 5.5: Cleaning chapter titles...');
   const cleanedQuestions = cleanChapterTitles(uniqueQuestions);
   
   // 6. 质量过滤
-  console.log('Step 6: Filtering low-quality questions...');
   const filteredQuestions = filterLowQuality(cleanedQuestions);
-  console.log(`After quality filter: ${filteredQuestions.length} questions`);
   
-  console.log('=== Question Extraction Pipeline Completed ===');
   if (onProgress) await onProgress(100, 'Extraction completed');
   return filteredQuestions;
 }
@@ -530,7 +511,6 @@ export function exportToJSON(questions: ExtractedQuestion[], outputPath: string)
   };
   
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf-8');
-  console.log(`Exported ${questions.length} questions to ${outputPath}`);
 }
 
 /**
@@ -574,7 +554,6 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
   }
   
   fs.writeFileSync(outputPath, markdown, 'utf-8');
-  console.log(`Exported ${questions.length} questions to ${outputPath}`);
 }
 
 /**

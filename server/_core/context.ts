@@ -14,7 +14,6 @@ export async function createContext(
   let user: User | null = null;
 
   if (process.env.NODE_ENV === "development") {
-    console.log("[Context] Development mode detected, mocking user");
     // Mock user for development
     user = {
       id: 1,
