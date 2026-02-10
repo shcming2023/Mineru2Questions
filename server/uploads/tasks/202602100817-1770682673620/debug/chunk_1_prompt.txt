@@ -1,0 +1,807 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary".
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 90,
+    "type": "text",
+    "page_idx": 6,
+    "text": "21.4 一元二次方程的根与系数的关系 ………………………………………… 108"
+  },
+  {
+    "id": 91,
+    "type": "text",
+    "text": "21.4(一） 一元二次方程的根与系数的关系(1) 108",
+    "page_idx": 6
+  },
+  {
+    "id": 92,
+    "type": "text",
+    "text": "21.4（二）一元二次方程的根与系数的关系(2) 111",
+    "page_idx": 6
+  },
+  {
+    "id": 93,
+    "type": "text",
+    "text": "21.5 一元二次方程的应用 … 116",
+    "page_idx": 6
+  },
+  {
+    "id": 94,
+    "type": "text",
+    "text": "21.5(一）二次三项式的因式分解 116",
+    "page_idx": 6
+  },
+  {
+    "id": 95,
+    "type": "text",
+    "text": "阶段训练5 120",
+    "page_idx": 6
+  },
+  {
+    "id": 96,
+    "type": "text",
+    "text": "21.5（二）列方程解实际问题 123",
+    "page_idx": 6
+  },
+  {
+    "id": 97,
+    "type": "text",
+    "text": "21.5（三）解分式方程 126",
+    "page_idx": 6
+  },
+  {
+    "id": 98,
+    "type": "text",
+    "text": "21.5（四）列分式方程解应用题 130",
+    "page_idx": 6
+  },
+  {
+    "id": 99,
+    "type": "text",
+    "page_idx": 7,
+    "text": "阶段训练6 133"
+  },
+  {
+    "id": 100,
+    "type": "text",
+    "page_idx": 7,
+    "text": "本章复习题 136"
+  },
+  {
+    "id": 101,
+    "type": "text",
+    "page_idx": 7,
+    "text": "第22章 直角三角形 140"
+  },
+  {
+    "id": 102,
+    "type": "text",
+    "page_idx": 7,
+    "text": "22.1 直角三角形 140"
+  },
+  {
+    "id": 103,
+    "type": "text",
+    "text": "22.1（一）直角三角形的性质 140",
+    "page_idx": 7
+  },
+  {
+    "id": 104,
+    "type": "text",
+    "text": "22.1（二） 直角三角形全等的判定 144",
+    "page_idx": 7
+  },
+  {
+    "id": 105,
+    "type": "text",
+    "page_idx": 7,
+    "text": "22.2角平分线 148"
+  },
+  {
+    "id": 106,
+    "type": "text",
+    "text": "22.2(一）角平分线性质定理 148",
+    "page_idx": 7
+  },
+  {
+    "id": 107,
+    "type": "text",
+    "text": "22.2（二）角平分线的综合运用 153",
+    "page_idx": 7
+  },
+  {
+    "id": 108,
+    "type": "text",
+    "page_idx": 7,
+    "text": "阶段训练7 156"
+  },
+  {
+    "id": 109,
+    "type": "text",
+    "page_idx": 7,
+    "text": "22.3 勾股定理 160"
+  },
+  {
+    "id": 110,
+    "type": "text",
+    "text": "22.3（一） 勾股定理的证明 160",
+    "page_idx": 7
+  },
+  {
+    "id": 111,
+    "type": "text",
+    "text": "22.3（二） 勾股定理的应用 163",
+    "page_idx": 7
+  },
+  {
+    "id": 112,
+    "type": "text",
+    "page_idx": 7,
+    "text": "阶段训练8 168"
+  },
+  {
+    "id": 113,
+    "type": "text",
+    "text": "22.3（三） 勾股定理的逆定理及其证明 171",
+    "page_idx": 7
+  },
+  {
+    "id": 114,
+    "type": "text",
+    "text": "22.3（四）勾股定理及其逆定理的应用 175",
+    "page_idx": 7
+  },
+  {
+    "id": 115,
+    "type": "text",
+    "page_idx": 7,
+    "text": "阶段训练9 180"
+  },
+  {
+    "id": 116,
+    "type": "text",
+    "page_idx": 7,
+    "text": "本章复习题 184"
+  },
+  {
+    "id": 117,
+    "type": "text",
+    "page_idx": 7,
+    "text": "期末测试卷A卷 189"
+  },
+  {
+    "id": 118,
+    "type": "text",
+    "page_idx": 7,
+    "text": "期末测试卷B卷 195"
+  },
+  {
+    "id": 119,
+    "type": "text",
+    "page_idx": 7,
+    "text": "附："
+  },
+  {
+    "id": 120,
+    "type": "text",
+    "page_idx": 7,
+    "text": "参考答案"
+  },
+  {
+    "id": 121,
+    "type": "text",
+    "page_idx": 9,
+    "text": "19.1 平方根与立方根"
+  },
+  {
+    "id": 122,
+    "type": "text",
+    "page_idx": 9,
+    "text": "19.1(一) 算术平方根"
+  },
+  {
+    "id": 123,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/1aab21d979963eecc679feddb76b4a098de6f59754d6aef37cd21a96899401ee.jpg"
+  },
+  {
+    "id": 124,
+    "type": "text",
+    "page_idx": 9,
+    "text": "要点归纳"
+  },
+  {
+    "id": 125,
+    "type": "text",
+    "text": "1. 如果一个正数  $x$  的平方等于  $a$ , 即  $x^2 = a$ , 那么这个正数  $x$  叫作  $a$  的算术平方根.  $a$  的算术平方根记作“ $\\sqrt{a}$ ”, 读作“根号  $a$ ”.  $a$  叫作被开方数.",
+    "page_idx": 9
+  },
+  {
+    "id": 126,
+    "type": "text",
+    "text": "2. 规定：0 的算术平方根是 0.",
+    "page_idx": 9
+  },
+  {
+    "id": 127,
+    "type": "text",
+    "text": "3. 如果正数的小数点向右或者向左移动两位，它的算术平方根的小数点就相应地向右或向左移动一位。",
+    "page_idx": 9
+  },
+  {
+    "id": 128,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/c5aeeaa12d9e7e13170344f31be0beec274e7bbbdcb7c1cc9975bf2815057df9.jpg"
+  },
+  {
+    "id": 129,
+    "type": "text",
+    "page_idx": 9,
+    "text": "疑难分析"
+  },
+  {
+    "id": 130,
+    "type": "text",
+    "page_idx": 9,
+    "text": "例① 实数  $\\sqrt{16}$  的算术平方根是"
+  },
+  {
+    "id": 131,
+    "type": "text",
+    "page_idx": 9,
+    "text": "分析 一个正数的正的平方根叫作它的算术平方根，由此即可求出结果."
+  },
+  {
+    "id": 132,
+    "type": "text",
+    "page_idx": 9,
+    "text": "解  $\\sqrt{16} = 4, 4$  的算术平方根是2，所以实数  $\\sqrt{16}$  的算术平方根是2."
+  },
+  {
+    "id": 133,
+    "type": "text",
+    "page_idx": 9,
+    "text": "说明 此题主要考查了算术平方根的概念，但要注意此题容易错"
+  },
+  {
+    "id": 134,
+    "type": "text",
+    "page_idx": 9,
+    "text": "例② 若代数式  $\\sqrt{1 - 2x} +\\sqrt{2x + 3}$  有意义，则  $x$  的取值范围是"
+  },
+  {
+    "id": 135,
+    "type": "text",
+    "page_idx": 9,
+    "text": "分析 根据算术平方根有意义的条件可得不等式组，再解不等式组即可."
+  },
+  {
+    "id": 136,
+    "type": "text",
+    "page_idx": 9,
+    "text": "解 由题意，得  $\\left\\{ \\begin{array}{l}1 - 2x\\geqslant 0,\\\\ 2x + 3\\geqslant 0. \\end{array} \\right.$"
+  },
+  {
+    "id": 137,
+    "type": "text",
+    "page_idx": 9,
+    "text": "解得  $-\\frac{3}{2} \\leqslant x \\leqslant \\frac{1}{2}$ ."
+  },
+  {
+    "id": 138,
+    "type": "text",
+    "page_idx": 9,
+    "text": "例③ 已知  $x, y$  是实数，且  $\\sqrt{3x + 4} + y^2 - 6y + 9 = 0$ ，若  $axy - 3x = y$ ，求实数  $a$  的值."
+  },
+  {
+    "id": 139,
+    "type": "text",
+    "page_idx": 9,
+    "text": "解 由已知，得  $\\sqrt{3x + 4} + (y - 3)^2 = 0.$"
+  },
+  {
+    "id": 140,
+    "type": "equation",
+    "page_idx": 9,
+    "text": "$$\n\\therefore 3 x + 4 = 0, y - 3 = 0.\n$$"
+  },
+  {
+    "id": 141,
+    "type": "equation",
+    "page_idx": 9,
+    "text": "$$\n\\therefore x = - \\frac {4}{3}, y = 3.\n$$"
+  },
+  {
+    "id": 142,
+    "type": "equation",
+    "page_idx": 9,
+    "text": "$$\n\\because a x y - 3 x = y,\n$$"
+  },
+  {
+    "id": 143,
+    "type": "equation",
+    "page_idx": 10,
+    "text": "$$\n\\therefore - \\frac {4}{3} \\times 3 a - 3 \\times \\left(- \\frac {4}{3}\\right) = 3.\n$$"
+  },
+  {
+    "id": 144,
+    "type": "equation",
+    "page_idx": 10,
+    "text": "$$\n\\therefore a = \\frac {1}{4}.\n$$"
+  },
+  {
+    "id": 145,
+    "type": "image",
+    "page_idx": 10,
+    "img_path": "images/fe5b8d18884939d8b411423af4c9b98380ca132d32e66c6caa05554abb667ffb.jpg"
+  },
+  {
+    "id": 146,
+    "type": "text",
+    "page_idx": 10,
+    "text": "基础训练"
+  },
+  {
+    "id": 147,
+    "type": "text",
+    "page_idx": 10,
+    "text": "1.  $x$  取何值时，下列各式有意义？"
+  },
+  {
+    "id": 148,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(1)  $\\sqrt{3 - 6x}$ ;"
+  },
+  {
+    "id": 149,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(2)  $\\frac{\\sqrt{x + 2}}{x - 5}$ ."
+  },
+  {
+    "id": 150,
+    "type": "text",
+    "page_idx": 10,
+    "text": "2. 求下列各数的算术平方根："
+  },
+  {
+    "id": 151,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(1) 81;"
+  },
+  {
+    "id": 152,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(2) 169;"
+  },
+  {
+    "id": 153,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(3) 2.89;"
+  },
+  {
+    "id": 154,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(4) 0.0289;"
+  },
+  {
+    "id": 155,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(5)  $\\frac{361}{196}$ ."
+  },
+  {
+    "id": 156,
+    "type": "text",
+    "page_idx": 10,
+    "text": "3. 化简："
+  },
+  {
+    "id": 157,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(1)  $\\sqrt{121}$ ;"
+  },
+  {
+    "id": 158,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(2)  $\\sqrt{1.44}$ ;"
+  },
+  {
+    "id": 159,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(3)  $\\sqrt{4^2}$ ;"
+  },
+  {
+    "id": 160,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(4)  $(\\sqrt{15})^2$"
+  },
+  {
+    "id": 161,
+    "type": "text",
+    "page_idx": 10,
+    "text": "(5)  $\\sqrt{0.000361}$ ."
+  },
+  {
+    "id": 162,
+    "type": "text",
+    "page_idx": 10,
+    "text": "4. 已知  $\\sqrt{4.84} = 2.2$ ，化简：(1)  $\\sqrt{4840000}$ ；(2)  $\\sqrt{0.0484}$ ."
+  },
+  {
+    "id": 163,
+    "type": "image",
+    "page_idx": 10,
+    "img_path": "images/411df3ff066a36595cfdf9d6a9dd02317a04bf432caadf03e533e2f5272da29a.jpg"
+  },
+  {
+    "id": 164,
+    "type": "text",
+    "page_idx": 10,
+    "text": "拓展训练"
+  },
+  {
+    "id": 165,
+    "type": "text",
+    "page_idx": 10,
+    "text": "5. 已知  $a, b$  是有理数，且  $(4 + \\sqrt{3})a + (2 - \\sqrt{3})b = 6 + 3\\sqrt{3}$ ，求  $a, b$  的值"
+  },
+  {
+    "id": 166,
+    "type": "text",
+    "page_idx": 11,
+    "text": "19.1(二) 平方根"
+  },
+  {
+    "id": 167,
+    "type": "image",
+    "page_idx": 11,
+    "img_path": "images/2d356ee42bf2d778e307a81d497ca17e68b9ddb389cdb84c8cb3d01d45dd8d83.jpg"
+  },
+  {
+    "id": 168,
+    "type": "text",
+    "page_idx": 11,
+    "text": "要点归纳"
+  },
+  {
+    "id": 169,
+    "type": "text",
+    "text": "1. 如果一个数  $x$  的平方等于  $a$ ，即  $x^2 = a$ ，那么这个数  $x$  叫作  $a$  的平方根，也称为二次方根， $a$  叫作被开方数。求一个数  $a$  的平方根的运算叫作开平方。",
+    "page_idx": 11
+  },
+  {
+    "id": 170,
+    "type": "text",
+    "text": "2.  $a$  为非负数.  $\\sqrt{a}$  表示  $a$  的正的平方根, 即算术平方根;  $-\\sqrt{a}$  表示  $a$  的负的平方根;  $\\pm \\sqrt{a}$  表示  $a$  的平方根.",
+    "page_idx": 11
+  },
+  {
+    "id": 171,
+    "type": "text",
+    "text": "3. 正数的平方根有两个，它们互为相反数",
+    "page_idx": 11
+  },
+  {
+    "id": 172,
+    "type": "image",
+    "page_idx": 11,
+    "img_path": "images/7fc39ff54a6d6fdd0bb635bf2c96ede66ca0588030dfa079a5fc9806595a2907.jpg"
+  },
+  {
+    "id": 173,
+    "type": "text",
+    "page_idx": 11,
+    "text": "疑难分析"
+  },
+  {
+    "id": 174,
+    "type": "text",
+    "page_idx": 11,
+    "text": "例① 判断："
+  },
+  {
+    "id": 175,
+    "type": "text",
+    "text": "（1）  $a^2$  的正平方根是  $\\pmb{a}$",
+    "page_idx": 11
+  },
+  {
+    "id": 176,
+    "type": "text",
+    "text": "（2）196的平方根是一14.",
+    "page_idx": 11
+  },
+  {
+    "id": 177,
+    "type": "text",
+    "text": "(3)  $-a^{2}$  没有平方根.",
+    "page_idx": 11
+  },
+  {
+    "id": 178,
+    "type": "text",
+    "text": "（4）平方根与原数相同的有0，1两数",
+    "page_idx": 11
+  },
+  {
+    "id": 179,
+    "type": "text",
+    "text": "(5)  $\\sqrt{16}$  的平方根是  $\\pm 4$ .",
+    "page_idx": 11
+  },
+  {
+    "id": 180,
+    "type": "text",
+    "page_idx": 11,
+    "text": "解 (1) 错误.  $a$  可能是负数"
+  },
+  {
+    "id": 181,
+    "type": "text",
+    "text": "（2）错误.196的平方根是士14",
+    "page_idx": 11
+  },
+  {
+    "id": 182,
+    "type": "text",
+    "text": "（3）错误.若  $a$  等于0，则  $-a^2$  等于0，0有平方根",
+    "page_idx": 11
+  },
+  {
+    "id": 183,
+    "type": "text",
+    "text": "（4）错误.1的平方根是  $\\pm 1$",
+    "page_idx": 11
+  },
+  {
+    "id": 184,
+    "type": "text",
+    "text": "（5）错误.  $\\sqrt{16} = 4, 4$  的平方根是  $\\pm 2$ .",
+    "page_idx": 11
+  },
+  {
+    "id": 185,
+    "type": "text",
+    "page_idx": 11,
+    "text": "说明 对于第(5)题，注意求的不是16的平方根，而是  $\\sqrt{16}$  的平方根，要先求出16的正平方根等于4，再求4的平方根."
+  },
+  {
+    "id": 186,
+    "type": "text",
+    "page_idx": 11,
+    "text": "例② 已知某正数的平方根是  $1 - 2a$  和  $a + 3$ , 求  $a$  的平方根."
+  },
+  {
+    "id": 187,
+    "type": "text",
+    "page_idx": 11,
+    "text": "解：某正数的平方根是  $1 - 2a$  和  $a + 3$"
+  },
+  {
+    "id": 188,
+    "type": "equation",
+    "page_idx": 11,
+    "text": "$$\n\\therefore (1 - 2 a) + (a + 3) = 0.\n$$"
+  },
+  {
+    "id": 189,
+    "type": "text",
+    "page_idx": 11,
+    "text": "解得  $a = 4$"
+  }
+]
+```

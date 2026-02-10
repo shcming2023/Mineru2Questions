@@ -1,0 +1,4 @@
+<chapter><title>1876</title>
+<qa_pair><label>例1</label><type>example</type><question>1885,1886,1887,1888,1889</question>
+<solution>1890,1891,1892,1893,1894,1895,1896,1897,1898,1899</solution></qa_pair>
+</chapter>

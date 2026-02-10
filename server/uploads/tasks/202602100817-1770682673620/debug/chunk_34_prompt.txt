@@ -1,0 +1,813 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary".
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 3060,
+    "type": "text",
+    "page_idx": 181,
+    "text": "B. 锐角三角形"
+  },
+  {
+    "id": 3061,
+    "type": "text",
+    "page_idx": 181,
+    "text": "C. 钝角三角形"
+  },
+  {
+    "id": 3062,
+    "type": "text",
+    "page_idx": 181,
+    "text": "D. 等腰三角形"
+  },
+  {
+    "id": 3063,
+    "type": "text",
+    "page_idx": 181,
+    "text": "11. 观察下列几组数据: ① 3, 4, 5; ② 4, 5, 6; ③ 6, 8, 10; ④ 7, 24, 25. 其中能作为直角三角形三边长的有( )."
+  },
+  {
+    "id": 3064,
+    "type": "text",
+    "page_idx": 181,
+    "text": "A. 1 组"
+  },
+  {
+    "id": 3065,
+    "type": "text",
+    "page_idx": 181,
+    "text": "B. 2 组"
+  },
+  {
+    "id": 3066,
+    "type": "text",
+    "page_idx": 181,
+    "text": "C. 3 组"
+  },
+  {
+    "id": 3067,
+    "type": "text",
+    "page_idx": 181,
+    "text": "D. 4 组"
+  },
+  {
+    "id": 3068,
+    "type": "text",
+    "page_idx": 181,
+    "text": "12. 如果  $\\triangle ABC$  的三边长分别为  $a, b, c$ , 且满足  $a^2 + b^2 + c^2 + 50 = 6a + 8b + 10c$ , 判断  $\\triangle ABC$  的形状."
+  },
+  {
+    "id": 3069,
+    "type": "text",
+    "page_idx": 181,
+    "text": "13. 阅读下列解题过程："
+  },
+  {
+    "id": 3070,
+    "type": "text",
+    "page_idx": 181,
+    "text": "已知  $a, b, c$  为  $\\triangle ABC$  的三边长，且满足  $a^2c^2 - b^2c^2 = a^4 - b^4$ ，试判定  $\\triangle ABC$  的形状. 解  $\\because a^2c^2 - b^2c^2 = a^4 - b^4$ ，①"
+  },
+  {
+    "id": 3071,
+    "type": "equation",
+    "page_idx": 181,
+    "text": "$$\n\\begin{array}{l} \\therefore c ^ {2} \\left(a ^ {2} - b ^ {2}\\right) = \\left(a ^ {2} + b ^ {2}\\right) \\left(a ^ {2} - b ^ {2}\\right). \\tag {②} \\\\ \\therefore c ^ {2} = a ^ {2} + b ^ {2}. \\quad ③ \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3072,
+    "type": "text",
+    "page_idx": 181,
+    "text": "$\\therefore \\triangle ABC$  为直角三角形"
+  },
+  {
+    "id": 3073,
+    "type": "text",
+    "text": "（1）上述解题过程，从哪一步开始出现错误？请写出该步的序号",
+    "page_idx": 181
+  },
+  {
+    "id": 3074,
+    "type": "text",
+    "text": "（2）错误的原因是",
+    "page_idx": 181
+  },
+  {
+    "id": 3075,
+    "type": "text",
+    "text": "(3) 本题正确的结论是",
+    "page_idx": 181
+  },
+  {
+    "id": 3076,
+    "type": "text",
+    "page_idx": 181,
+    "text": "14. 图(1)是用硬纸板做成的两个全等的直角三角形, 两直角边的长分别为  $a$  和  $b$ , 斜边长为  $c$ . 图(2)是以  $c$  为直角边的等腰直角三角形. 请你开动脑筋, 将它们拼成一个能证明勾股定理的图形."
+  },
+  {
+    "id": 3077,
+    "type": "text",
+    "text": "（1）画出拼成的这个图形的示意图，写出它是什么图形；",
+    "page_idx": 181
+  },
+  {
+    "id": 3078,
+    "type": "text",
+    "text": "（2）用这个图形证明勾股定理；",
+    "page_idx": 181
+  },
+  {
+    "id": 3079,
+    "type": "text",
+    "text": "(3) 假设图(1)中的直角三角形有若干个, 你能运用图(1)中所给的直角三角形拼出另一种能证明勾股定理的图形吗? 请画出拼后的示意图(无需证明).",
+    "page_idx": 181
+  },
+  {
+    "id": 3080,
+    "type": "image",
+    "page_idx": 181,
+    "img_path": "images/4ac0692dcb0fbe2498ef11ff411723942486a670acdaa80c49a25ae29ec2becc.jpg",
+    "image_caption": "(1) （第14题）"
+  },
+  {
+    "id": 3081,
+    "type": "image",
+    "page_idx": 181,
+    "img_path": "images/4ec44d518bb9c86ba880c441294374a4fad35189794e96095f5db3f7b2fc1084.jpg",
+    "image_caption": "(2)"
+  },
+  {
+    "id": 3082,
+    "type": "text",
+    "page_idx": 182,
+    "text": "15. 如图, 已知: 在正方形  $ABCD$  中,  $E$  是  $BC$  的中点,  $F$  为  $CD$  上的一点, 且  $CF = \\frac{1}{4} CD$ . 求证:  $\\triangle AEF$  是直角三角形."
+  },
+  {
+    "id": 3083,
+    "type": "image",
+    "page_idx": 182,
+    "img_path": "images/f4116ab99ce9172c2eec5d6190b6da1f2ff5208f558807e27e65f8b9991b5dd2.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 3084,
+    "type": "image",
+    "page_idx": 182,
+    "img_path": "images/fb89a3e9d96e4fdf04af8d3040a07da04f4f41979ea2c43af9402f660e83544a.jpg"
+  },
+  {
+    "id": 3085,
+    "type": "text",
+    "page_idx": 182,
+    "text": "拓展训练"
+  },
+  {
+    "id": 3086,
+    "type": "text",
+    "page_idx": 182,
+    "text": "16. 如图, 已知: 在 Rt $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $CD \\perp AB$  于点  $D$ , 设  $AC = b$ ,  $BC = a$ ,  $AB = c$ ,  $CD = h$ ."
+  },
+  {
+    "id": 3087,
+    "type": "text",
+    "page_idx": 182,
+    "text": "求证：(1)  $c + h > a + b$"
+  },
+  {
+    "id": 3088,
+    "type": "text",
+    "page_idx": 182,
+    "text": "（2）以  $a + b, c + h, h$  为三边可构成一个直角三角形"
+  },
+  {
+    "id": 3089,
+    "type": "image",
+    "page_idx": 182,
+    "img_path": "images/358bab64656ec6c8a764e428e2523c38bb6a216c808624cb029f1d8f2cc3f72c.jpg",
+    "image_caption": "（第16题）"
+  },
+  {
+    "id": 3090,
+    "type": "text",
+    "page_idx": 183,
+    "text": "22.3（四） 勾股定理及其逆定理的应用"
+  },
+  {
+    "id": 3091,
+    "type": "image",
+    "page_idx": 183,
+    "img_path": "images/93b842a99e5f7980181646873f69dd5c253e6b1cc2ec4a46535c8126817b5028.jpg"
+  },
+  {
+    "id": 3092,
+    "type": "text",
+    "page_idx": 183,
+    "text": "要点归纳"
+  },
+  {
+    "id": 3093,
+    "type": "text",
+    "text": "1. 应用勾股定理时要注意：(1)在直角三角形的三边中，首先弄清哪条边是斜边；(2)三边中有两边已知或者三边可以用设未知数表示出来. 解决问题的关键是用方程思想",
+    "page_idx": 183
+  },
+  {
+    "id": 3094,
+    "type": "text",
+    "text": "2. 应用勾股定理的逆定理时要注意: 最大边的平方等于较小两边的平方和.",
+    "page_idx": 183
+  },
+  {
+    "id": 3095,
+    "type": "image",
+    "page_idx": 183,
+    "img_path": "images/bb57fe2ff533e0e953eba6535903c147580627368110be3f46d1235e8e6985cf.jpg"
+  },
+  {
+    "id": 3096,
+    "type": "text",
+    "page_idx": 183,
+    "text": "疑难分析"
+  },
+  {
+    "id": 3097,
+    "type": "text",
+    "page_idx": 183,
+    "text": "例① 将一副三角板如图22-15放置，其中  $\\angle C = \\angle EDB = 90^{\\circ}$ ， $\\angle A = 45^{\\circ}$ ， $\\angle E = 30^{\\circ}$ ， $AB = DE = 6$ 。求重叠部分四边形  $DBCF$  的面积。"
+  },
+  {
+    "id": 3098,
+    "type": "text",
+    "page_idx": 183,
+    "text": "分析 要求四边形  $D B C F$  的面积, 发现  $\\triangle A B C$  的面积减去  $\\triangle A D F$  的面积较方便, 而且这两个三角形都是等腰直角三角形, 由题意可知  $\\triangle A B C$  的面积易求, 而对于  $\\triangle A D F$  的面积只要求出  $A D$  长即可, 在 Rt $\\triangle B D E$  中, 由  $\\angle E = 30^{\\circ}$ ,  $D E = 6$ , 可求  $B D = 2 \\sqrt{3}$ , 因此  $A D = 6 - 2 \\sqrt{3}$ , 从而  $\\triangle A D F$  的面积可求."
+  },
+  {
+    "id": 3099,
+    "type": "image",
+    "page_idx": 183,
+    "img_path": "images/e63d1a259ef4cf56e890e08c03cbf4a464e1bc28d59f1631fe6c3ef434977cae.jpg",
+    "image_caption": "图22-15"
+  },
+  {
+    "id": 3100,
+    "type": "text",
+    "page_idx": 183,
+    "text": "解 取  $BE$  的中点  $M$ , 连接  $DM$ ."
+  },
+  {
+    "id": 3101,
+    "type": "text",
+    "page_idx": 183,
+    "text": "在Rt△BDE中，"
+  },
+  {
+    "id": 3102,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\begin{array}{l} \\because \\angle E D B = 9 0 ^ {\\circ}, \\angle E = 3 0 ^ {\\circ}, \\\\ \\therefore \\angle E B D = 6 0 ^ {\\circ}. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3103,
+    "type": "text",
+    "page_idx": 183,
+    "text": "$\\because M$  是  $BE$  的中点，"
+  },
+  {
+    "id": 3104,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\therefore D M = B M = E M.\n$$"
+  },
+  {
+    "id": 3105,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\therefore \\angle M D B = \\angle E B D = 6 0 ^ {\\circ}.\n$$"
+  },
+  {
+    "id": 3106,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\therefore \\angle B M D = 6 0 ^ {\\circ}.\n$$"
+  },
+  {
+    "id": 3107,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\therefore B D = B M = \\frac {1}{2} B E.\n$$"
+  },
+  {
+    "id": 3108,
+    "type": "text",
+    "page_idx": 183,
+    "text": "$\\because EB^{2} = BD^{2} + ED^{2}$  （勾股定理），"
+  },
+  {
+    "id": 3109,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\therefore B D = \\frac {\\sqrt {3}}{3} E D = 2 \\sqrt {3}.\n$$"
+  },
+  {
+    "id": 3110,
+    "type": "text",
+    "page_idx": 183,
+    "text": "在Rt△ABC中，"
+  },
+  {
+    "id": 3111,
+    "type": "equation",
+    "page_idx": 183,
+    "text": "$$\n\\begin{array}{l} \\because \\angle C = 9 0 ^ {\\circ}, \\angle A = 4 5 ^ {\\circ}, \\\\ \\therefore \\angle A B C = 4 5 ^ {\\circ}. \\\\ \\therefore A C = B C. \\\\ \\because A B ^ {2} = A C ^ {2} + B C ^ {2}. \\\\ \\therefore A C = B C = \\frac {\\sqrt {2}}{2} A B = 3 \\sqrt {2}. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3112,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore S _ {\\triangle A B C} = \\frac {1}{2} \\cdot A C \\cdot B C = 9.\n$$"
+  },
+  {
+    "id": 3113,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\because \\angle A = 4 5 ^ {\\circ}, \\angle E D B = 9 0 ^ {\\circ},\n$$"
+  },
+  {
+    "id": 3114,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore \\angle A F D = 9 0 ^ {\\circ} - 4 5 ^ {\\circ} = 4 5 ^ {\\circ}.\n$$"
+  },
+  {
+    "id": 3115,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore D F = A D = 6 - 2 \\sqrt {3}.\n$$"
+  },
+  {
+    "id": 3116,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore S _ {\\triangle A D F} = \\frac {1}{2} \\cdot A D \\cdot D F = \\frac {1}{2} (6 - 2 \\sqrt {3}) ^ {2} = 2 4 - 1 2 \\sqrt {3}.\n$$"
+  },
+  {
+    "id": 3117,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore S _ {\\text {四 边 形} D B C F} = S _ {\\triangle A B C} - S _ {\\triangle A D F} = 1 2 \\sqrt {3} - 1 5.\n$$"
+  },
+  {
+    "id": 3118,
+    "type": "text",
+    "page_idx": 184,
+    "text": "例② 如图22-16，  $P$  是凸四边形ABCD内一点，过点  $P$  作  $AB, BC, CD, DA$  的垂线，垂足分别为点  $E, F, G, H$  ，已知  $AH = 3, HD = 4, DG = 1, GC = 5, CF = 6, FB = 4$  ，且  $BE - AE = 1$  . 求四边形ABCD的周长."
+  },
+  {
+    "id": 3119,
+    "type": "text",
+    "page_idx": 184,
+    "text": "解 连接  $PA, PB, PC, PD$ ."
+  },
+  {
+    "id": 3120,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\because P E \\perp A B,\n$$"
+  },
+  {
+    "id": 3121,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore \\angle A E P = \\angle B E P = 9 0 ^ {\\circ}.\n$$"
+  },
+  {
+    "id": 3122,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore P A ^ {2} = A E ^ {2} + P E ^ {2}, P B ^ {2} = P E ^ {2} + B E ^ {2} (\\text {勾 股 定 理}).\n$$"
+  },
+  {
+    "id": 3123,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore P B ^ {2} - P A ^ {2} = B E ^ {2} - A E ^ {2}.\n$$"
+  },
+  {
+    "id": 3124,
+    "type": "text",
+    "page_idx": 184,
+    "text": "同理  $PA^2 -PD^2 = AH^2 -HD^2$"
+  },
+  {
+    "id": 3125,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\nP D ^ {2} - P C ^ {2} = D G ^ {2} - G C ^ {2},\n$$"
+  },
+  {
+    "id": 3126,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\nP C ^ {2} - P B ^ {2} = C F ^ {2} - F B ^ {2}.\n$$"
+  },
+  {
+    "id": 3127,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore B E ^ {2} - A E ^ {2} + A H ^ {2} - H D ^ {2} + D G ^ {2} - G C ^ {2} + C F ^ {2} - F B ^ {2} = 0.\n$$"
+  },
+  {
+    "id": 3128,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\because A H = 3, H D = 4, D G = 1, G C = 5, C F = 6, F B = 4, \\text {且} B E - A E = 1,\n$$"
+  },
+  {
+    "id": 3129,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore (B E + A E) (B E - A E) = 1 1.\n$$"
+  },
+  {
+    "id": 3130,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore B E + A E = 1 1.\n$$"
+  },
+  {
+    "id": 3131,
+    "type": "equation",
+    "page_idx": 184,
+    "text": "$$\n\\therefore \\text {四 边 形} A B C D \\text {的 周 长} = A B + B C + C D + D A = 3 4.\n$$"
+  },
+  {
+    "id": 3132,
+    "type": "image",
+    "page_idx": 184,
+    "img_path": "images/e76cb01e07004928f7f638f257cd40683f4589f89d64b9c6b19bf9b29ad7a25d.jpg"
+  },
+  {
+    "id": 3133,
+    "type": "text",
+    "page_idx": 184,
+    "text": "基础训练"
+  },
+  {
+    "id": 3134,
+    "type": "text",
+    "text": "1. 在直角三角形中，以直角边为边长的两个正方形的面积分别为36和64，则以斜边为边长的正方形的面积为",
+    "page_idx": 184
+  },
+  {
+    "id": 3135,
+    "type": "text",
+    "text": "2. 在  $\\triangle ABC$  中， $\\angle C = 90^\\circ$ ，若  $AB = 5$ ，则  $AB^2 + AC^2 + BC^2$  的值为 _______.",
+    "page_idx": 184
+  },
+  {
+    "id": 3136,
+    "type": "text",
+    "text": "3. 一根旗杆在离地面  $9\\mathrm{m}$  处断裂(但仍相连), 旗杆顶部落在离旗杆底部  $12\\mathrm{m}$  处, 则旗杆折断之前的长度为",
+    "page_idx": 184
+  },
+  {
+    "id": 3137,
+    "type": "text",
+    "text": "4. 如果梯子的底端离建筑物  $8\\mathrm{m}$ ，那么  $17\\mathrm{m}$  长的梯子可以到达建筑物的高度是",
+    "page_idx": 184
+  },
+  {
+    "id": 3138,
+    "type": "text",
+    "text": "5. 若直角三角形的两边长为 12 和 5, 则以第三边为边长的等边三角形的面积是",
+    "page_idx": 184
+  },
+  {
+    "id": 3139,
+    "type": "text",
+    "text": "6. 在  $\\triangle ABC$  中， $AB = 15, AC = 13$  ，边  $BC$  上的高  $AD = 12$  ，则  $\\triangle ABC$  的周长为",
+    "page_idx": 184
+  },
+  {
+    "id": 3140,
+    "type": "image",
+    "page_idx": 184,
+    "img_path": "images/c248b9bd97b62634022c9e9fcd0e9dbbdad4b2a9d12e1499e8545be2fe8797c5.jpg",
+    "image_caption": "图 22-16"
+  },
+  {
+    "id": 3141,
+    "type": "text",
+    "page_idx": 185,
+    "text": "7. 已知在  $\\mathrm{Rt}\\triangle ABC$  中， $\\angle C = 90^\\circ$ ，若  $BC + AC = 14$ ， $AB = 10$ ，则  $\\mathrm{Rt}\\triangle ABC$  的面积是（ ）."
+  },
+  {
+    "id": 3142,
+    "type": "text",
+    "page_idx": 185,
+    "text": "A. 24"
+  },
+  {
+    "id": 3143,
+    "type": "text",
+    "page_idx": 185,
+    "text": "B. 36"
+  },
+  {
+    "id": 3144,
+    "type": "text",
+    "page_idx": 185,
+    "text": "C. 48"
+  },
+  {
+    "id": 3145,
+    "type": "text",
+    "page_idx": 185,
+    "text": "D. 60"
+  },
+  {
+    "id": 3146,
+    "type": "text",
+    "page_idx": 185,
+    "text": "8. 等腰三角形底边上的高为 6, 周长为 36, 则三角形的面积为 ( )."
+  },
+  {
+    "id": 3147,
+    "type": "text",
+    "page_idx": 185,
+    "text": "A. 56"
+  },
+  {
+    "id": 3148,
+    "type": "text",
+    "page_idx": 185,
+    "text": "B. 48"
+  },
+  {
+    "id": 3149,
+    "type": "text",
+    "page_idx": 185,
+    "text": "C. 40"
+  },
+  {
+    "id": 3150,
+    "type": "text",
+    "page_idx": 185,
+    "text": "D. 32"
+  },
+  {
+    "id": 3151,
+    "type": "text",
+    "page_idx": 185,
+    "text": "9. 若直角三角形一直角边的长为 9, 另两边为连续自然数, 则此三角形的周长为 ( )."
+  },
+  {
+    "id": 3152,
+    "type": "text",
+    "page_idx": 185,
+    "text": "A. 121"
+  },
+  {
+    "id": 3153,
+    "type": "text",
+    "page_idx": 185,
+    "text": "B. 120"
+  },
+  {
+    "id": 3154,
+    "type": "text",
+    "page_idx": 185,
+    "text": "C. 90"
+  },
+  {
+    "id": 3155,
+    "type": "text",
+    "page_idx": 185,
+    "text": "D. 不能确定"
+  },
+  {
+    "id": 3156,
+    "type": "text",
+    "page_idx": 185,
+    "text": "10. 放学以后, 小红和小颖从学校分手, 分别沿东南方向和西南方向回家, 若小红和小颖行走的速度都是  $40 \\mathrm{~m} / \\mathrm{min}$ , 小红用  $15 \\mathrm{~min}$  到家, 小颖用  $20 \\mathrm{~min}$  到家, 则小红和小颖家的直线距离为 ( )."
+  },
+  {
+    "id": 3157,
+    "type": "text",
+    "page_idx": 185,
+    "text": "A.  $600 \\mathrm{~m}$"
+  },
+  {
+    "id": 3158,
+    "type": "text",
+    "page_idx": 185,
+    "text": "B.  $800 \\mathrm{~m}$"
+  },
+  {
+    "id": 3159,
+    "type": "text",
+    "page_idx": 185,
+    "text": "C.  $1000 \\mathrm{~m}$"
+  }
+]
+```

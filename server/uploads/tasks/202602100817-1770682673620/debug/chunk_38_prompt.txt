@@ -1,0 +1,519 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary".
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 3420,
+    "type": "text",
+    "text": "(3) 全等三角形的对应角相等;",
+    "page_idx": 204
+  },
+  {
+    "id": 3421,
+    "type": "text",
+    "text": "(4) 直角三角形斜边上的中线等于斜边的一半.",
+    "page_idx": 204
+  },
+  {
+    "id": 3422,
+    "type": "text",
+    "page_idx": 204,
+    "text": "A. 0 个"
+  },
+  {
+    "id": 3423,
+    "type": "text",
+    "page_idx": 204,
+    "text": "B. 1 个"
+  },
+  {
+    "id": 3424,
+    "type": "text",
+    "page_idx": 204,
+    "text": "C. 2 个"
+  },
+  {
+    "id": 3425,
+    "type": "text",
+    "page_idx": 204,
+    "text": "D. 3 个"
+  },
+  {
+    "id": 3426,
+    "type": "text",
+    "page_idx": 205,
+    "text": "20. 如图, 在 Rt $\\triangle ABC$  中,  $\\angle BAC = 90^\\circ$ ,  $AD \\perp BC$ , 垂足为点  $D$ , 点  $E$ ,  $F$  分别是  $AB$ ,  $AC$  的中点,  $\\angle C = 30^\\circ$ ,  $BC = 4cm$ , 则四边形  $AEDF$  的周长是( )."
+  },
+  {
+    "id": 3427,
+    "type": "image",
+    "page_idx": 205,
+    "img_path": "images/452c01a7fd08689519510f7885f21160e283d2f769daaeeb81eca043938475ea.jpg",
+    "image_caption": "（第20题）"
+  },
+  {
+    "id": 3428,
+    "type": "text",
+    "page_idx": 205,
+    "text": "A.  $4 \\mathrm{~cm}$"
+  },
+  {
+    "id": 3429,
+    "type": "text",
+    "page_idx": 205,
+    "text": "B.  $4 \\sqrt{3} \\mathrm{~cm}$"
+  },
+  {
+    "id": 3430,
+    "type": "text",
+    "page_idx": 205,
+    "text": "C.  $(2 + \\sqrt{3})\\mathrm{cm}$"
+  },
+  {
+    "id": 3431,
+    "type": "text",
+    "page_idx": 205,
+    "text": "D.  $(2 + 2\\sqrt{3})\\mathrm{cm}$"
+  },
+  {
+    "id": 3432,
+    "type": "text",
+    "page_idx": 205,
+    "text": "21. 下列条件不一定能够判定直角三角形的是( )."
+  },
+  {
+    "id": 3433,
+    "type": "text",
+    "text": "A.三条边长的比是  $1:\\sqrt{10}:3$",
+    "page_idx": 205
+  },
+  {
+    "id": 3434,
+    "type": "text",
+    "text": "B. 三条边长分别是24，7，25",
+    "page_idx": 205
+  },
+  {
+    "id": 3435,
+    "type": "text",
+    "text": "C. 三个角的度数比为  $2:3:5$",
+    "page_idx": 205
+  },
+  {
+    "id": 3436,
+    "type": "text",
+    "text": "D. 有一条边等于另一条边的一半",
+    "page_idx": 205
+  },
+  {
+    "id": 3437,
+    "type": "text",
+    "page_idx": 205,
+    "text": "三、解答题（共4小题，第22题6分，第23题6分，第24题8分，第25题8分，共28分）"
+  },
+  {
+    "id": 3438,
+    "type": "text",
+    "page_idx": 205,
+    "text": "22. 化简:  $\\sqrt{\\frac{b}{8}} - \\left[a\\sqrt{\\frac{b}{2a^2}} - \\left(\\frac{b}{2a}\\sqrt{\\frac{a^2}{2b}} + ab^2\\sqrt{\\frac{8}{a^2b^3}}\\right)\\right] (a > 0)$ ."
+  },
+  {
+    "id": 3439,
+    "type": "text",
+    "page_idx": 205,
+    "text": "23. 已知关于  $x$  的方程  $x^{2} + 2(a - 1)x + a^{2} - 7a - 4 = 0$  的两个实数根为  $x_{1}, x_{2}$ , 且满足  $x_{1}x_{2} - 3x_{1} - 3x_{2} - 2 = 0$ . 求  $\\left(1 + \\frac{4}{a^2 - 4}\\right) \\cdot \\frac{a + 2}{a}$  的值."
+  },
+  {
+    "id": 3440,
+    "type": "text",
+    "page_idx": 206,
+    "text": "24. 如图, 已知: 在  $\\triangle ABC$  中,  $\\angle ACB = 45^\\circ$ ,  $AD$  是边  $BC$  上的高,  $G$  是  $AD$  上一点, 点  $E, F$  分别是  $AB, CG$  的中点, 且  $DE = DF$ ."
+  },
+  {
+    "id": 3441,
+    "type": "text",
+    "page_idx": 206,
+    "text": "求证：  $BD = GD$"
+  },
+  {
+    "id": 3442,
+    "type": "image",
+    "page_idx": 206,
+    "img_path": "images/36a32d6be13cda6c2bec4bddb54763275e05cb131348156f2be753bef7cdac16.jpg",
+    "image_caption": "（第24题）"
+  },
+  {
+    "id": 3443,
+    "type": "text",
+    "page_idx": 206,
+    "text": "25. 如图, 在  $\\triangle ABC$  中,  $\\angle ABC = 90^\\circ$ , 点  $E$  为  $AC$  的中点. 操作: 过点  $C$  作  $BE$  的垂线, 过点  $A$  作  $BE$  的平行线, 两直线相交于点  $D$ , 在  $AD$  的延长线上截取  $DF = BE$ . 连接  $EF$ ,  $BD$ ."
+  },
+  {
+    "id": 3444,
+    "type": "text",
+    "text": "（1）试判断  $EF$  与  $BD$  之间的位置关系，并证明你的结论；",
+    "page_idx": 206
+  },
+  {
+    "id": 3445,
+    "type": "text",
+    "text": "(2) 如果  $AF = 13, CD = 6$ , 求  $AC$  的长.",
+    "page_idx": 206
+  },
+  {
+    "id": 3446,
+    "type": "image",
+    "page_idx": 206,
+    "img_path": "images/9b0c9597a094f53e563e9cdeeb3885b75a6c585d7602fe6a727122a46108255c.jpg",
+    "image_caption": "（第25题）"
+  },
+  {
+    "id": 3447,
+    "type": "text",
+    "page_idx": 207,
+    "text": "四、综合题（共3小题，第26题8分，第27题10分，第28题12分，共30分）"
+  },
+  {
+    "id": 3448,
+    "type": "text",
+    "page_idx": 207,
+    "text": "26. 如图, 点  $D$  在射线  $AB$  上, 且  $AD = 2$ , 点  $P$  是射线  $AC$  上的一个动点, 线段  $PD$  的垂直平分线与射线  $AC$  交于点  $E$ , 与  $\\angle BAC$  的平分线交于点  $F$ . 连接  $DF, PF$ ."
+  },
+  {
+    "id": 3449,
+    "type": "text",
+    "text": "（1）当  $DF \\parallel AC$  时，求证： $AD = PF$ ；",
+    "page_idx": 207
+  },
+  {
+    "id": 3450,
+    "type": "text",
+    "text": "(2) 当  $\\angle BAC = 60^{\\circ}$  时, 设  $AP = x$ ,  $AF = y$ , 用含  $x$  的代数式表示  $y$ .",
+    "page_idx": 207
+  },
+  {
+    "id": 3451,
+    "type": "image",
+    "page_idx": 207,
+    "img_path": "images/07383fbb8f6d1670e575bffda5ead218027c51ec53e277817c758c4523ab2d27.jpg",
+    "image_caption": "（第26题）"
+  },
+  {
+    "id": 3452,
+    "type": "text",
+    "page_idx": 207,
+    "text": "27. 如图, 在  $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $\\angle BAC = 30^\\circ$ ,  $BC = 6$ . 点  $D$  是  $AB$  的中点, 点  $E$  是射线  $BC$  上的一动点 (点  $E$  与点  $B$  不重合), 点  $F$  在  $ED$  的延长线上, 且  $DF = DE$ ,  $DG \\perp EF$ , 垂足为点  $D$ ,  $DG$  交边  $AC$  于点  $G$ ."
+  },
+  {
+    "id": 3453,
+    "type": "text",
+    "text": "(1) 求证:  $AF \\parallel BC$ ;",
+    "page_idx": 207
+  },
+  {
+    "id": 3454,
+    "type": "text",
+    "text": "(2) 当  $CE = 1$  时, 直接写出  $AG$  的长.",
+    "page_idx": 207
+  },
+  {
+    "id": 3455,
+    "type": "image",
+    "page_idx": 207,
+    "img_path": "images/310d9bc6540793c93184bab8205c2a018b398f592fa22a8d7a4bbd6a26380910.jpg",
+    "image_caption": "（第27题）"
+  },
+  {
+    "id": 3456,
+    "type": "text",
+    "page_idx": 208,
+    "text": "28. 如图, 在  $\\triangle ABC$  纸片中,  $\\angle C = 90^\\circ$ ,  $AC = 6$ ,  $AB = 10$ . 按图所示的方法将  $\\triangle ACD$  沿  $AD$  折叠, 使点  $C$  恰好落在边  $AB$  上的点  $C'$  处."
+  },
+  {
+    "id": 3457,
+    "type": "text",
+    "text": "（1）求折痕  $AD$  长；",
+    "page_idx": 208
+  },
+  {
+    "id": 3458,
+    "type": "text",
+    "text": "(2) 若点  $P$  是边  $AB$  上的动点（点  $P$  与点  $A, B$  不重合），设  $AP = x$ ， $\\triangle APD$  的面积为  $y$ 。请用含  $x$  的代数式表示  $y$ ；",
+    "page_idx": 208
+  },
+  {
+    "id": 3459,
+    "type": "text",
+    "text": "(3) 在(2)的条件下, 当  $\\triangle APD$  是等腰三角形时, 求  $AP$  的长.",
+    "page_idx": 208
+  },
+  {
+    "id": 3460,
+    "type": "image",
+    "page_idx": 208,
+    "img_path": "images/b5d49c8042139d026908f6ed3f14fe194d3cec8d7a41d803b6ec6d0d911aafdc.jpg",
+    "image_caption": "（第28题）"
+  },
+  {
+    "id": 3461,
+    "type": "text",
+    "page_idx": 209,
+    "text": "辅导得当，训练有素"
+  },
+  {
+    "id": 3462,
+    "type": "text",
+    "page_idx": 209,
+    "text": "曾被上海市高考文科前200名、理科前400名学生，选为卓有成效的学习类参考书出版二十余年来，累计印刷达680万册"
+  },
+  {
+    "id": 3463,
+    "type": "text",
+    "page_idx": 209,
+    "text": "新思路辅导与训练"
+  },
+  {
+    "id": 3464,
+    "type": "text",
+    "page_idx": 209,
+    "text": "物理 数学 化学"
+  },
+  {
+    "id": 3465,
+    "type": "image",
+    "page_idx": 209,
+    "img_path": "images/0ecdfec9d4e99c8ed318390468d41ce9773fbe680717492cb935fd440f79eceb.jpg"
+  },
+  {
+    "id": 3466,
+    "type": "text",
+    "page_idx": 209,
+    "text": "www.sstp.cn"
+  },
+  {
+    "id": 3467,
+    "type": "text",
+    "page_idx": 209,
+    "text": "上架建议：初中教辅"
+  },
+  {
+    "id": 3468,
+    "type": "image",
+    "page_idx": 209,
+    "img_path": "images/1bf08a33d881543cdc7d54bfe92692be7208f488df5a50991b14ff239a9c011f.jpg"
+  },
+  {
+    "id": 3469,
+    "type": "text",
+    "page_idx": 209,
+    "text": "定价：59.00元"
+  },
+  {
+    "id": 3470,
+    "type": "text",
+    "page_idx": 209,
+    "text": "易文网：www ewen.co"
+  }
+]
+```

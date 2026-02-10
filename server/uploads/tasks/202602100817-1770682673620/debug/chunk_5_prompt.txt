@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary".
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 450,
+    "type": "text",
+    "text": "5. 下列语句正确的是（ ）",
+    "page_idx": 25
+  },
+  {
+    "id": 451,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A. 无理数都是无限小数"
+  },
+  {
+    "id": 452,
+    "type": "text",
+    "page_idx": 25,
+    "text": "B. 无限小数都是无理数"
+  },
+  {
+    "id": 453,
+    "type": "text",
+    "page_idx": 25,
+    "text": "C. 带根号的数都是无理数"
+  },
+  {
+    "id": 454,
+    "type": "text",
+    "page_idx": 25,
+    "text": "D. 不带根号的数一定不是无理数"
+  },
+  {
+    "id": 455,
+    "type": "text",
+    "page_idx": 25,
+    "text": "6. 下列语句正确的是（ ）"
+  },
+  {
+    "id": 456,
+    "type": "text",
+    "text": "A. 无理数之间不可以比较大小",
+    "page_idx": 25
+  },
+  {
+    "id": 457,
+    "type": "text",
+    "text": "B. 有理数与无理数无法比较大小",
+    "page_idx": 25
+  },
+  {
+    "id": 458,
+    "type": "text",
+    "text": "C. 无理数一定是无限不循环小数",
+    "page_idx": 25
+  },
+  {
+    "id": 459,
+    "type": "text",
+    "text": "D. 一个正无理数的算术平方根可能是有理数",
+    "page_idx": 25
+  },
+  {
+    "id": 460,
+    "type": "text",
+    "page_idx": 25,
+    "text": "7. 下列说法错误的有（ ）."
+  },
+  {
+    "id": 461,
+    "type": "text",
+    "page_idx": 25,
+    "text": "①  $\\frac{\\pi}{3}$  是分数； ②  $\\pi$  是无限小数； ③  $\\frac{\\sqrt{2}}{2}$  是分数； ④  $a^0 = 1$  ； ⑤ 0 是有理数."
+  },
+  {
+    "id": 462,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A. 1 个"
+  },
+  {
+    "id": 463,
+    "type": "text",
+    "page_idx": 25,
+    "text": "B. 2 个"
+  },
+  {
+    "id": 464,
+    "type": "text",
+    "page_idx": 25,
+    "text": "C. 3 个"
+  },
+  {
+    "id": 465,
+    "type": "text",
+    "page_idx": 25,
+    "text": "D. 4 个"
+  },
+  {
+    "id": 466,
+    "type": "text",
+    "page_idx": 25,
+    "text": "8. 下列说法错误的有（ ）"
+  },
+  {
+    "id": 467,
+    "type": "text",
+    "page_idx": 25,
+    "text": "① 一个无理数不是正数就是负数； ② 0 是最小的有理数，没有最大的无理数；"
+  },
+  {
+    "id": 468,
+    "type": "text",
+    "page_idx": 25,
+    "text": "③ 无理数都是开方开不尽的数；"
+  },
+  {
+    "id": 469,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A. 1 个"
+  },
+  {
+    "id": 470,
+    "type": "text",
+    "page_idx": 25,
+    "text": "B. 2 个"
+  },
+  {
+    "id": 471,
+    "type": "text",
+    "page_idx": 25,
+    "text": "C. 3 个"
+  },
+  {
+    "id": 472,
+    "type": "text",
+    "page_idx": 25,
+    "text": "D. 4 个"
+  },
+  {
+    "id": 473,
+    "type": "text",
+    "page_idx": 25,
+    "text": "9. 请判断  $3\\sqrt{5}$  在哪两个整数之间，并说明理由。"
+  },
+  {
+    "id": 474,
+    "type": "text",
+    "page_idx": 26,
+    "text": "拓展训练"
+  },
+  {
+    "id": 475,
+    "type": "text",
+    "text": "10. 求证:  $\\sqrt{13}$  是无理数",
+    "page_idx": 26
+  },
+  {
+    "id": 476,
+    "type": "text",
+    "text": "11. 计算:  $(- \\sqrt{7})^2 - (\\sqrt{13})^4 + \\frac{10}{\\sqrt[3]{0.001}}.$",
+    "page_idx": 26
+  },
+  {
+    "id": 477,
+    "type": "text",
+    "page_idx": 27,
+    "text": "19.2(三) 实数与数轴"
+  },
+  {
+    "id": 478,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/6871ea2ba1e37567793dabf1e5a95a308ef95f9da9f4106f59dd9216e47c5e94.jpg"
+  },
+  {
+    "id": 479,
+    "type": "text",
+    "page_idx": 27,
+    "text": "要点归纳"
+  },
+  {
+    "id": 480,
+    "type": "text",
+    "page_idx": 27,
+    "text": "1. 有理数和无理数统称为实数. 实数可以这样分类:"
+  },
+  {
+    "id": 481,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/4055740c6e41113bd6c9e15e878ac982d43ed049882bde163d8514a14e1f8475.jpg"
+  },
+  {
+    "id": 482,
+    "type": "text",
+    "page_idx": 27,
+    "text": "2. 实数与数轴上的点一一对应. 右边的点对应的实数总比左边的点对应的实数大."
+  },
+  {
+    "id": 483,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/3e497c1d6db6d4577e8eeb60037ceadedeabbef2dcf1659b3029819748db80ba.jpg"
+  },
+  {
+    "id": 484,
+    "type": "text",
+    "page_idx": 27,
+    "text": "疑难分析"
+  },
+  {
+    "id": 485,
+    "type": "text",
+    "page_idx": 27,
+    "text": "例① 已知下列各数："
+  },
+  {
+    "id": 486,
+    "type": "equation",
+    "page_idx": 27,
+    "text": "$$\n\\sqrt {3 6}, - 3, 0. \\dot {7}, 3. 1 4 1 5, 0. \\dot {1} \\dot {4} \\dot {9}, - \\frac {5}{1 2},\n$$"
+  },
+  {
+    "id": 487,
+    "type": "text",
+    "page_idx": 27,
+    "text": "0.2020020002…（两个2之间依次多1个0）， $\\left|1 - \\sqrt{3}\\right|, - \\sqrt{28},\\frac{31}{11},\\frac{\\pi}{4},0.$"
+  },
+  {
+    "id": 488,
+    "type": "text",
+    "text": "（1）属于无理数的是：",
+    "page_idx": 27
+  },
+  {
+    "id": 489,
+    "type": "text",
+    "text": "（2）属于非负实数的是：",
+    "page_idx": 27
+  },
+  {
+    "id": 490,
+    "type": "text",
+    "page_idx": 27,
+    "text": "解（1）属于无理数的是：0.2020020002…， $\\left|1 - \\sqrt{3}\\right|$ ， $-\\sqrt{28}$ ， $\\frac{\\pi}{4}$ 。"
+  },
+  {
+    "id": 491,
+    "type": "text",
+    "page_idx": 27,
+    "text": "(2) 属于非负实数的是:  $\\sqrt{36}, 0.7, 3.1415, 0.149, 0.2020020002 \\cdots, |1 - \\sqrt{3}|$ ,  $\\frac{31}{11}$ ,  $\\frac{\\pi}{4}$ , 0."
+  },
+  {
+    "id": 492,
+    "type": "text",
+    "page_idx": 27,
+    "text": "说明 判断一个数是有理数还是无理数，一般从观察数的形式入手，而有些数常常形似而实非。如  $\\sqrt{36}$  形似无理数，而实是有理数； $\\frac{\\pi}{4}$  形似分数，而实是无理数。"
+  },
+  {
+    "id": 493,
+    "type": "text",
+    "page_idx": 27,
+    "text": "例② 若将三个数  $\\sqrt{3}, \\sqrt{7}, \\sqrt{11}$  表示在如图 19-1 所示的数轴上，其中能被墨迹覆盖的数是"
+  },
+  {
+    "id": 494,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/46aaf03bfb4540372cf31e0cf5cf372d78ca2204a4db442f4a5bc7a071a0bd18.jpg",
+    "image_caption": "图19-1"
+  },
+  {
+    "id": 495,
+    "type": "text",
+    "page_idx": 27,
+    "text": "解 因为  $-2 < -\\sqrt{3} < -1, 2 < \\sqrt{7} < 3, 3 < \\sqrt{11} < 4$ ，所以能被墨迹覆盖的数是"
+  },
+  {
+    "id": 496,
+    "type": "text",
+    "page_idx": 28,
+    "text": "$\\sqrt{7}$"
+  },
+  {
+    "id": 497,
+    "type": "text",
+    "page_idx": 28,
+    "text": "例③ 实数  $a, b$  在数轴上的对应点的位置如图19-2所示，下列结论正确的是（ ）."
+  },
+  {
+    "id": 498,
+    "type": "image",
+    "page_idx": 28,
+    "img_path": "images/bd705462240ccf61c78d7f62204a1b73d0ad7f66513ac4b6cd0897bb55668ab7.jpg",
+    "image_caption": "图19-2"
+  },
+  {
+    "id": 499,
+    "type": "text",
+    "text": "A.  $b > -1$",
+    "page_idx": 28
+  },
+  {
+    "id": 500,
+    "type": "text",
+    "text": "B.  $-b > 2$",
+    "page_idx": 28
+  },
+  {
+    "id": 501,
+    "type": "text",
+    "text": "C.  $a + b > 0$",
+    "page_idx": 28
+  },
+  {
+    "id": 502,
+    "type": "text",
+    "text": "D.  $ab > 0$",
+    "page_idx": 28
+  },
+  {
+    "id": 503,
+    "type": "text",
+    "page_idx": 28,
+    "text": "解 由数轴可知  $-2 < b < -1$ ，故选项A不符合题意."
+  },
+  {
+    "id": 504,
+    "type": "text",
+    "page_idx": 28,
+    "text": "由数轴可知  $-2 < b < -1$ ，所以  $1 < -b < 2$ ，故选项B不符合题意。"
+  },
+  {
+    "id": 505,
+    "type": "text",
+    "page_idx": 28,
+    "text": "由数轴可知  $2 < a < 3$  ，而  $-2 < b < -1$  ，所以  $a + b > 0$  ，故选项C符合题意."
+  },
+  {
+    "id": 506,
+    "type": "text",
+    "page_idx": 28,
+    "text": "由数轴可知  $2 < a < 3$  ，而  $-2 < b < -1$  ，所以  $ab < 0$  ，故选项D不符合题意."
+  },
+  {
+    "id": 507,
+    "type": "text",
+    "page_idx": 28,
+    "text": "故选 C."
+  },
+  {
+    "id": 508,
+    "type": "image",
+    "page_idx": 28,
+    "img_path": "images/15972fd6dcf9bfaf6f25ffcb9bcee7d013802f9bc75385e8e154edbcf73c71f7.jpg"
+  },
+  {
+    "id": 509,
+    "type": "text",
+    "page_idx": 28,
+    "text": "基础训练"
+  },
+  {
+    "id": 510,
+    "type": "text",
+    "text": "1.  $\\sqrt{9}$  的平方根是",
+    "page_idx": 28
+  },
+  {
+    "id": 511,
+    "type": "text",
+    "text": "2. 如果一个数的立方根是一3，那么这个数是",
+    "page_idx": 28
+  },
+  {
+    "id": 512,
+    "type": "text",
+    "text": "3. 计算：(1)  $\\sqrt[3]{(-8)^2} = \\_$ ；(2)  $-\\sqrt[3]{343} = \\_$",
+    "page_idx": 28
+  },
+  {
+    "id": 513,
+    "type": "text",
+    "page_idx": 28,
+    "text": "(3)  $\\sqrt{3.7^2 - 1.2^2} = \\_$"
+  },
+  {
+    "id": 514,
+    "type": "text",
+    "page_idx": 28,
+    "text": "4.  $n$  是正整数，计算：  $-\\left[-(-1)^{2n}\\right]^{2n + 1} = \\underline{\\quad}$"
+  },
+  {
+    "id": 515,
+    "type": "text",
+    "page_idx": 28,
+    "text": "5. 比较大小：(1)  $\\left| -\\sqrt{3} \\right|$  ________ 2；(2)  $3\\sqrt{13}$  ________ 11. (填“<”“>”或“=”）"
+  },
+  {
+    "id": 516,
+    "type": "text",
+    "page_idx": 28,
+    "text": "6. 如果  $x^{2} = 64$ ，那么  $\\sqrt[3]{x} =$  ________."
+  },
+  {
+    "id": 517,
+    "type": "text",
+    "page_idx": 28,
+    "text": "7.（1）等式  $\\sqrt{a^2} = a$  成立的条件是"
+  },
+  {
+    "id": 518,
+    "type": "text",
+    "page_idx": 28,
+    "text": "（2）等式  $\\sqrt{a^2} = -a$  成立的条件是"
+  },
+  {
+    "id": 519,
+    "type": "text",
+    "page_idx": 28,
+    "text": "8. 已知下列各数："
+  },
+  {
+    "id": 520,
+    "type": "text",
+    "page_idx": 28,
+    "text": "①  $(- \\sqrt{2})^0, ② \\sqrt[3]{8}, ③ 0, ④ \\sqrt{9}, ⑤ 0.010010001 \\cdots$  （两个1之间依次多1个0），⑥  $\\frac{\\pi}{2}$ ，⑦  $-0.3, ⑧ |1 - \\sqrt{3}|$ ，⑨ 3.1415，⑩ 2.01."
+  },
+  {
+    "id": 521,
+    "type": "text",
+    "page_idx": 28,
+    "text": "属于无理数的是： ；（填序号）"
+  },
+  {
+    "id": 522,
+    "type": "text",
+    "page_idx": 28,
+    "text": "属于非负有理数的是： .（填序号）"
+  },
+  {
+    "id": 523,
+    "type": "text",
+    "page_idx": 29,
+    "text": "9. 已知数轴上的四点  $A, B, C, D$  所对应的实数依次是  $\\sqrt{2}, -\\frac{2}{3}, 2\\frac{1}{2}, -\\sqrt{5}, O$  为原点."
+  },
+  {
+    "id": 524,
+    "type": "text",
+    "text": "（1）求线段  $OA$  ，  $OB$  ，  $OC$  ，  $OD$  的长度；",
+    "page_idx": 29
+  },
+  {
+    "id": 525,
+    "type": "text",
+    "text": "(2) 求线段  $BD, BC, AC$  的长度.",
+    "page_idx": 29
+  },
+  {
+    "id": 526,
+    "type": "text",
+    "page_idx": 29,
+    "text": "10. 已知  $2m - 5$  的相反数是  $-9, 3n + 1$  的立方根是  $-2$ ."
+  },
+  {
+    "id": 527,
+    "type": "text",
+    "text": "（1）求  $m, n$  的值；",
+    "page_idx": 29
+  },
+  {
+    "id": 528,
+    "type": "text",
+    "text": "（2）求  $m - 3n$  的平方根",
+    "page_idx": 29
+  },
+  {
+    "id": 529,
+    "type": "text",
+    "page_idx": 30,
+    "text": "19.2（四） 实数的绝对值和大小比较"
+  },
+  {
+    "id": 530,
+    "type": "image",
+    "page_idx": 30,
+    "img_path": "images/79177b5e8c13e42a4d32cb51ab42f7c80b8c9e194ff53e9382ae63ebab688e67.jpg"
+  },
+  {
+    "id": 531,
+    "type": "text",
+    "page_idx": 30,
+    "text": "要点归纳"
+  },
+  {
+    "id": 532,
+    "type": "text",
+    "text": "1. 一个实数在数轴上所对应的点到原点的距离叫作这个实数的绝对值。实数  $a$  的绝对值记作  $|a|$ ，则  $|a| = \\begin{cases} a & (a > 0), \\\\ 0 & (a = 0), \\\\ -a & (a < 0). \\end{cases}$",
+    "page_idx": 30
+  },
+  {
+    "id": 533,
+    "type": "text",
+    "text": "2. 绝对值相等、符号相反的两个实数互为相反数。0 的相反数是 0。非零实数  $a$  的相反数是一  $a$ 。",
+    "page_idx": 30
+  },
+  {
+    "id": 534,
+    "type": "text",
+    "text": "3. 在数轴上, 如果点  $A, B$  所对应的数分别为  $a, b$ , 那么  $A, B$  两点间的距离  $AB = |a - b|$ .",
+    "page_idx": 30
+  },
+  {
+    "id": 535,
+    "type": "text",
+    "text": "4. 两个实数也可以比较大小, 其大小顺序的规定同有理数一样.",
+    "page_idx": 30
+  },
+  {
+    "id": 536,
+    "type": "image",
+    "page_idx": 30,
+    "img_path": "images/200e09b30fb8eda02c736d388ea5f3deaef56e87bde308fc266db675ab5c1a4e.jpg"
+  },
+  {
+    "id": 537,
+    "type": "text",
+    "page_idx": 30,
+    "text": "疑难分析"
+  },
+  {
+    "id": 538,
+    "type": "text",
+    "page_idx": 30,
+    "text": "例① 比较下列各组数的大小："
+  },
+  {
+    "id": 539,
+    "type": "text",
+    "text": "（1）  $4\\sqrt{5}$  和  $5\\sqrt{3}$",
+    "page_idx": 30
+  },
+  {
+    "id": 540,
+    "type": "text",
+    "text": "(2)  $a$  和  $\\sqrt{a} (0 < a < 1)$ ;",
+    "page_idx": 30
+  },
+  {
+    "id": 541,
+    "type": "text",
+    "text": "(3) 若  $b > 0, a < 0, c < 0$ ，且  $|c| > |b| > |a|$ ，比较  $a, b, c, a + b, a + c$  的大小.",
+    "page_idx": 30
+  },
+  {
+    "id": 542,
+    "type": "text",
+    "page_idx": 30,
+    "text": "解 (1)  $\\because 4\\sqrt{5} = \\sqrt{16 \\times 5} = \\sqrt{80}, 5\\sqrt{3} = \\sqrt{25 \\times 3} = \\sqrt{75}$ ,"
+  },
+  {
+    "id": 543,
+    "type": "text",
+    "page_idx": 30,
+    "text": "又  $\\because \\sqrt{80} > \\sqrt{75}$"
+  },
+  {
+    "id": 544,
+    "type": "equation",
+    "page_idx": 30,
+    "text": "$$\n\\therefore 4 \\sqrt {5} > 5 \\sqrt {3}.\n$$"
+  },
+  {
+    "id": 545,
+    "type": "text",
+    "page_idx": 30,
+    "text": "(2)  $\\because a - \\sqrt{a} = \\sqrt{a} (\\sqrt{a} - 1)$ ,"
+  },
+  {
+    "id": 546,
+    "type": "text",
+    "page_idx": 30,
+    "text": "又  $\\because 0 < a < 1$"
+  },
+  {
+    "id": 547,
+    "type": "equation",
+    "page_idx": 30,
+    "text": "$$\n\\therefore 0 <   \\sqrt {a} <   1.\n$$"
+  },
+  {
+    "id": 548,
+    "type": "equation",
+    "page_idx": 30,
+    "text": "$$\n\\therefore \\sqrt {a} - 1 <   0.\n$$"
+  },
+  {
+    "id": 549,
+    "type": "text",
+    "page_idx": 30,
+    "text": "$\\therefore a - \\sqrt{a} = \\sqrt{a} (\\sqrt{a} -1) <   0$  ，即  $a <   \\sqrt{a}$"
+  }
+]
+```
