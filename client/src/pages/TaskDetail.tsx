@@ -125,6 +125,45 @@ export default function TaskDetail() {
     return new Date(date).toLocaleTimeString();
   };
 
+  const slicedContent = useMemo(() => {
+    if (!resultContent?.content) return { content: "", totalPages: 0 };
+    
+    if (previewFormat === "json") {
+       // For JSON, we don't pagination string content, but we could if it's an array.
+       // For now, return as is.
+       return { content: resultContent.content, totalPages: 1 };
+    }
+
+    // For Markdown, split by delimiter "---"
+    // The format is usually Header --- Question 1 --- Question 2 ...
+    const parts = resultContent.content.split(/\n-{3,}\n/);
+    
+    // If it's just a header or empty
+    if (parts.length <= 1) return { content: resultContent.content, totalPages: 1 };
+
+    // Filter out empty parts
+    const validParts = parts.filter(p => p.trim().length > 0);
+    
+    // Calculate pagination
+    const totalItems = validParts.length;
+    const totalPages = Math.ceil(totalItems / resultPageSize);
+    const currentPage = Math.min(Math.max(1, resultPage), totalPages);
+    
+    const start = (currentPage - 1) * resultPageSize;
+    const end = start + resultPageSize;
+    
+    const slicedParts = validParts.slice(start, end);
+    
+    // If it's the first page, we might want to keep the header (index 0) if it was stripped
+    // But the splitting logic makes it a list of items. 
+    // Let's just join them back.
+    return { 
+      content: slicedParts.join("\n\n---\n\n"), 
+      totalPages,
+      currentPage
+    };
+  }, [resultContent, previewFormat, resultPage, resultPageSize]);
+
   if (isLoading) {
     return (
       <DashboardLayout>
@@ -169,45 +208,6 @@ export default function TaskDetail() {
       fallbackUsed,
     };
   })() : { total: 0, completed: 0, failed: 0, llmCalls: 0, fallbackUsed: 0 };
-
-  const slicedContent = useMemo(() => {
-    if (!resultContent?.content) return { content: "", totalPages: 0 };
-    
-    if (previewFormat === "json") {
-       // For JSON, we don't pagination string content, but we could if it's an array.
-       // For now, return as is.
-       return { content: resultContent.content, totalPages: 1 };
-    }
-
-    // For Markdown, split by delimiter "---"
-    // The format is usually Header --- Question 1 --- Question 2 ...
-    const parts = resultContent.content.split(/\n-{3,}\n/);
-    
-    // If it's just a header or empty
-    if (parts.length <= 1) return { content: resultContent.content, totalPages: 1 };
-
-    // Filter out empty parts
-    const validParts = parts.filter(p => p.trim().length > 0);
-    
-    // Calculate pagination
-    const totalItems = validParts.length;
-    const totalPages = Math.ceil(totalItems / resultPageSize);
-    const currentPage = Math.min(Math.max(1, resultPage), totalPages);
-    
-    const start = (currentPage - 1) * resultPageSize;
-    const end = start + resultPageSize;
-    
-    const slicedParts = validParts.slice(start, end);
-    
-    // If it's the first page, we might want to keep the header (index 0) if it was stripped
-    // But the splitting logic makes it a list of items. 
-    // Let's just join them back.
-    return { 
-      content: slicedParts.join("\n\n---\n\n"), 
-      totalPages,
-      currentPage
-    };
-  }, [resultContent, previewFormat, resultPage, resultPageSize]);
 
   return (
     <DashboardLayout>
