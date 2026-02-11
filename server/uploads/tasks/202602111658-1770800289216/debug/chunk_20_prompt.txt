@@ -1,0 +1,831 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1400,
+    "type": "text",
+    "page_idx": 87,
+    "text": "D. 向北偏西  $30^{\\circ}$  行走  $400 \\mathrm{~m}$"
+  },
+  {
+    "id": 1401,
+    "type": "text",
+    "page_idx": 87,
+    "text": "2.如图，小明家与学校的相对位置描述正确的是（ ）"
+  },
+  {
+    "id": 1402,
+    "type": "text",
+    "text": "A. 学校在小明家南偏东  $45^{\\circ}$  的方向, 距离  $500 \\mathrm{~m}$",
+    "page_idx": 87
+  },
+  {
+    "id": 1403,
+    "type": "text",
+    "text": "B. 学校在小明家北偏东  $45^{\\circ}$  的方向, 距离  $500 \\mathrm{~m}$",
+    "page_idx": 87
+  },
+  {
+    "id": 1404,
+    "type": "text",
+    "text": "C. 小明家在学校南偏西  $45^{\\circ}$  的方向, 距离  $500 \\mathrm{~m}$",
+    "page_idx": 87
+  },
+  {
+    "id": 1405,
+    "type": "text",
+    "text": "D. 小明家在学校北偏东  $45^{\\circ}$  的方向, 距离  $500 \\mathrm{~m}$",
+    "page_idx": 87
+  },
+  {
+    "id": 1406,
+    "type": "image",
+    "page_idx": 87,
+    "img_path": "images/10ab64341058688fa2168b9b73f0ee7164301f97cd400a4a31ae53b0f8399943.jpg",
+    "image_caption": "（第1题）"
+  },
+  {
+    "id": 1407,
+    "type": "image",
+    "page_idx": 87,
+    "img_path": "images/b894c58a984410294efbca9c49497c71954658d57607661767168f11522a98f1.jpg",
+    "image_caption": "（第2题）"
+  },
+  {
+    "id": 1408,
+    "type": "image",
+    "page_idx": 87,
+    "img_path": "images/127fc45cb20c1860aef5dce80e07d344303718b06ccd335fc558015b9b233794.jpg",
+    "image_caption": "（第3题）"
+  },
+  {
+    "id": 1409,
+    "type": "text",
+    "page_idx": 87,
+    "text": "3. 佳琪参加市运会，小宇想去裕同体育中心观看佳琪比赛，佳琪家、小宇家、裕同体育中心的位置如图所示，则下列说法正确的是（ ）."
+  },
+  {
+    "id": 1410,
+    "type": "text",
+    "text": "A. 佳琪家在裕同体育中心北偏西  $45^{\\circ}$  方向, 距离  $300 \\mathrm{~m}$",
+    "page_idx": 87
+  },
+  {
+    "id": 1411,
+    "type": "text",
+    "text": "B. 裕同体育中心在小宇家北偏东  $20^{\\circ}$  方向, 距离  $400 \\mathrm{~m}$",
+    "page_idx": 87
+  },
+  {
+    "id": 1412,
+    "type": "text",
+    "text": "C. 小宇家在裕同体育中心南偏西  $20^{\\circ}$  方向, 距离  $400 \\mathrm{~m}$",
+    "page_idx": 88
+  },
+  {
+    "id": 1413,
+    "type": "text",
+    "text": "D. 裕同体育中心在佳琪家南偏东  $45^{\\circ}$  方向, 距离  $400 \\mathrm{~m}$",
+    "page_idx": 88
+  },
+  {
+    "id": 1414,
+    "type": "text",
+    "page_idx": 88,
+    "text": "4. 如图所示的象棋盘上, 若“帅”位于点  $(-1, -2)$ , “马”位于点  $(3, -2)$ , 则位于原点位置的是 ( )."
+  },
+  {
+    "id": 1415,
+    "type": "image",
+    "page_idx": 88,
+    "img_path": "images/47c20380fddc9576720fccae685f7539fa645c5f40af337006293b3c16f7e6f5.jpg",
+    "image_caption": "（第4题）"
+  },
+  {
+    "id": 1416,
+    "type": "text",
+    "page_idx": 88,
+    "text": "A. 兵"
+  },
+  {
+    "id": 1417,
+    "type": "text",
+    "page_idx": 88,
+    "text": "B. 炮"
+  },
+  {
+    "id": 1418,
+    "type": "text",
+    "page_idx": 88,
+    "text": "C. 相"
+  },
+  {
+    "id": 1419,
+    "type": "text",
+    "page_idx": 88,
+    "text": "D. 车"
+  },
+  {
+    "id": 1420,
+    "type": "text",
+    "page_idx": 88,
+    "text": "5. 下图是某地火车站及周围的简单平面图。图中每个小正方形的边长都是  $1 \\mathrm{~km}$ ，以火车站所在的位置为坐标原点，以图中小正方形的边长为单位长度，建立如图所示的平面直角坐标系。"
+  },
+  {
+    "id": 1421,
+    "type": "text",
+    "text": "（1）请写出体育场  $A$  、超市  $B$  、市场  $C$  、文化宫  $D$  的坐标；",
+    "page_idx": 88
+  },
+  {
+    "id": 1422,
+    "type": "text",
+    "text": "（2）体育场与市场之间的距离为",
+    "page_idx": 88
+  },
+  {
+    "id": 1423,
+    "type": "text",
+    "text": "（3）若学校  $E$  的位置是  $(-3, -3)$ ，请在图中标出学校  $E$  的位置",
+    "page_idx": 88
+  },
+  {
+    "id": 1424,
+    "type": "image",
+    "page_idx": 88,
+    "img_path": "images/605314a9b3696b289ef5da89a2bcf116cd006b16d32b212db020e052a4c45b78.jpg",
+    "image_caption": "（第5题）"
+  },
+  {
+    "id": 1425,
+    "type": "text",
+    "page_idx": 88,
+    "text": "6. 如图, 用(0,0)表示点  $A$  的位置, 用(2,1)表示点  $B$  的位置."
+  },
+  {
+    "id": 1426,
+    "type": "text",
+    "text": "（1）图中  $C, D, E$  三点位置分别如何表示？",
+    "page_idx": 88
+  },
+  {
+    "id": 1427,
+    "type": "text",
+    "text": "(2) 在图中标出(3, 2)，(1, 2)，(3, 4)的位置上的点，并分别标上字母  $F, G, H$ .",
+    "page_idx": 88
+  },
+  {
+    "id": 1428,
+    "type": "image",
+    "page_idx": 88,
+    "img_path": "images/cc897839d9b96daf5440aa3ea97713de0dd74d87920bfee4bb494d4505526bf4.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 1429,
+    "type": "text",
+    "page_idx": 89,
+    "text": "7. 在平面直角坐标系中,  $O$  为原点, 点  $A(0,2), B(-1,0), C(2,0)$ ."
+  },
+  {
+    "id": 1430,
+    "type": "image",
+    "page_idx": 89,
+    "img_path": "images/b10960a7ddd02019950f764981f8115262db315398a6ec0d1e366deadbcb9c58.jpg",
+    "image_caption": "(1) （第7题）"
+  },
+  {
+    "id": 1431,
+    "type": "image",
+    "page_idx": 89,
+    "img_path": "images/e320dc098174158bb3657c3521e2c1e8c33ae68a39e34a24607086fcf9efb3c7.jpg",
+    "image_caption": "(2)"
+  },
+  {
+    "id": 1432,
+    "type": "text",
+    "text": "（1）如图(1)，  $\\triangle ABC$  的面积为",
+    "page_idx": 89
+  },
+  {
+    "id": 1433,
+    "type": "text",
+    "text": "(2) 如图(2), 将点  $B$  向右平移 4 个单位长度, 再向上平移 3 个单位长度, 得到对应点  $D$ .",
+    "page_idx": 89
+  },
+  {
+    "id": 1434,
+    "type": "text",
+    "text": "① 点  $D$  的坐标为________；按照同样的平移方式，点  $A, C$  平移后的对应点  $E, F$  的坐标分别为________，________；",
+    "page_idx": 89
+  },
+  {
+    "id": 1435,
+    "type": "text",
+    "text": "② 点  $P(0, m)$  是一动点，若  $\\triangle PAD$  的面积等于  $\\triangle ABC$  的面积，直接写出点  $P$  坐标.",
+    "page_idx": 89
+  },
+  {
+    "id": 1436,
+    "type": "text",
+    "page_idx": 89,
+    "text": "拓展训练"
+  },
+  {
+    "id": 1437,
+    "type": "text",
+    "page_idx": 89,
+    "text": "8. 如图, 在平面直角坐标系  $xOy$  中,  $\\triangle ABC$  三个顶点的坐标分别是  $A(4,2)$ ,  $B(1,0)$ ,  $C(5,-3)$ ,  $\\triangle ABC$  中任意一点  $P(x_0,y_0)$ , 经平移后的对应点为  $P'(x_0-6,y_0+2)$ , 将  $\\triangle ABC$  作同样的平移得到  $\\triangle A'B'C'$ , 点  $A, B, C$  的对应点分别为  $A', B', C'$ ."
+  },
+  {
+    "id": 1438,
+    "type": "text",
+    "text": "（1）点  $A^{\\prime}$  的坐标为",
+    "page_idx": 89
+  },
+  {
+    "id": 1439,
+    "type": "text",
+    "text": "(2) ① 画出  $\\triangle A'B'C'$ ;",
+    "page_idx": 89
+  },
+  {
+    "id": 1440,
+    "type": "text",
+    "page_idx": 89,
+    "text": "$②$  △A'B'C'的面积为"
+  },
+  {
+    "id": 1441,
+    "type": "text",
+    "page_idx": 89,
+    "text": "(3) 若点  $D$  在  $x$  轴上且  $\\triangle ABD$  的面积为 3, 则点  $D$  的坐标为"
+  },
+  {
+    "id": 1442,
+    "type": "image",
+    "page_idx": 89,
+    "img_path": "images/8f44ff1f70d547fdeab8ae35657d4cb8a5a3ab2c491d59bbe3019cbc7c4ec9ea.jpg",
+    "image_caption": "（第8题）"
+  },
+  {
+    "id": 1443,
+    "type": "text",
+    "page_idx": 90,
+    "text": "11. 在  $\\triangle ABC$  中,  $AB = AC = 13$ ,  $BC = 10$ ,  $AD \\perp BC$ , 垂足为点  $D$ ,  $BE$  是  $AC$  上的中线,  $AD$  与  $BE$  相交于点  $G$ , 则  $GE$  的长为"
+  },
+  {
+    "id": 1444,
+    "type": "text",
+    "page_idx": 90,
+    "text": "二、选择题"
+  },
+  {
+    "id": 1445,
+    "type": "text",
+    "page_idx": 90,
+    "text": "12. 下列关于矩形的说法正确的是（ ）."
+  },
+  {
+    "id": 1446,
+    "type": "text",
+    "page_idx": 90,
+    "text": "A. 对角线相等的四边形是矩形"
+  },
+  {
+    "id": 1447,
+    "type": "text",
+    "page_idx": 90,
+    "text": "B. 对角线互相平分的四边形是矩形"
+  },
+  {
+    "id": 1448,
+    "type": "text",
+    "page_idx": 90,
+    "text": "C. 矩形的对角线互相垂直且平分"
+  },
+  {
+    "id": 1449,
+    "type": "text",
+    "page_idx": 90,
+    "text": "D. 矩形的对角线相等且互相平分"
+  },
+  {
+    "id": 1450,
+    "type": "text",
+    "page_idx": 90,
+    "text": "13. 下列命题中，假命题是（ ）"
+  },
+  {
+    "id": 1451,
+    "type": "text",
+    "page_idx": 90,
+    "text": "A. 菱形的对角线互相平分"
+  },
+  {
+    "id": 1452,
+    "type": "text",
+    "page_idx": 90,
+    "text": "B. 菱形的对角线互相垂直"
+  },
+  {
+    "id": 1453,
+    "type": "text",
+    "page_idx": 90,
+    "text": "C. 菱形的对角线相等"
+  },
+  {
+    "id": 1454,
+    "type": "text",
+    "page_idx": 90,
+    "text": "D. 菱形的对角线平分一组对角"
+  },
+  {
+    "id": 1455,
+    "type": "text",
+    "page_idx": 90,
+    "text": "14. 下列条件中，不能判定四边形  $ABCD$  是平行四边形的是（ ）."
+  },
+  {
+    "id": 1456,
+    "type": "text",
+    "page_idx": 90,
+    "text": "A.  $AD \\parallel BC, \\angle A = \\angle C$"
+  },
+  {
+    "id": 1457,
+    "type": "text",
+    "page_idx": 90,
+    "text": "B.  $\\angle A = \\angle C, \\angle B = \\angle D$"
+  },
+  {
+    "id": 1458,
+    "type": "text",
+    "page_idx": 90,
+    "text": "C.  $AB \\parallel CD, AB = DC$"
+  },
+  {
+    "id": 1459,
+    "type": "text",
+    "page_idx": 90,
+    "text": "D.  $AB \\parallel CD, \\angle A + \\angle C = 180^\\circ$"
+  },
+  {
+    "id": 1460,
+    "type": "text",
+    "page_idx": 90,
+    "text": "15. 如图, 著名画家达·芬奇用三个正方形和三个全等的直角三角形拼成图形证明了勾股定理, 其中  $\\angle ACB = \\angle EJD = 90^\\circ$ ,  $CB = EJ$ , 连接  $HF$ ,  $CJ$ , 得到 4 个全等的四边形 HFGI、四边形 HFBA、四边形 CJEA、四边形 JCBD,  $CJ$  分别交  $AB$ ,  $ED$  于点  $M$ ,  $N$ , 若  $MN: CJ = 5:7$ , 且  $AB = 6$ , 则  $CJ$  的长为( )."
+  },
+  {
+    "id": 1461,
+    "type": "text",
+    "page_idx": 90,
+    "text": "A.  $\\frac{6 \\sqrt{70}}{5}$"
+  },
+  {
+    "id": 1462,
+    "type": "text",
+    "page_idx": 90,
+    "text": "B.  $2 \\sqrt{30}$"
+  },
+  {
+    "id": 1463,
+    "type": "text",
+    "page_idx": 90,
+    "text": "C.  $8 \\sqrt{2}$"
+  },
+  {
+    "id": 1464,
+    "type": "text",
+    "page_idx": 90,
+    "text": "D.  $3 \\sqrt{10}$"
+  },
+  {
+    "id": 1465,
+    "type": "image",
+    "page_idx": 90,
+    "img_path": "images/c218760593aca45d24cc793817d8cd247c05890d2cda0e154b9ff0f6361aaa7a.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 1466,
+    "type": "text",
+    "page_idx": 90,
+    "text": "三、解答题"
+  },
+  {
+    "id": 1467,
+    "type": "text",
+    "page_idx": 90,
+    "text": "16. 如图, 在  $\\square ABCD$  中,  $E, F$  分别为边  $AD, BC$  上的点, 且  $AE = CF$ ,  $AF$  与  $BE$  交于点  $M$ ,  $EC$  与  $DF$  交于点  $N$ . 求证: 四边形  $MFNE$  是平行四边形."
+  },
+  {
+    "id": 1468,
+    "type": "image",
+    "page_idx": 90,
+    "img_path": "images/555594e29a6edc4ce50c23da100cdf8898ea670a0b9e38cca94710eb8122dd49.jpg",
+    "image_caption": "(第16题)"
+  },
+  {
+    "id": 1469,
+    "type": "text",
+    "page_idx": 91,
+    "text": "17. 如图, 四边形  $ABCD$  是矩形,  $\\angle EDC = \\angle CAB$ ,  $\\angle DEC = 90^\\circ$ ."
+  },
+  {
+    "id": 1470,
+    "type": "text",
+    "text": "（1）求证：  $AC / / DE$",
+    "page_idx": 91
+  },
+  {
+    "id": 1471,
+    "type": "text",
+    "text": "(2) 过点  $B$  作  $BF \\perp AC$  于点  $F$ , 连接  $EF$ , 试判断四边形  $BCEF$  的形状, 并说明理由.",
+    "page_idx": 91
+  },
+  {
+    "id": 1472,
+    "type": "image",
+    "page_idx": 91,
+    "img_path": "images/e5dc11ed2cbb1588f2fb6177c9245e354405c6c754dca2900190ca330cd7e6d0.jpg",
+    "image_caption": "（第17题）"
+  },
+  {
+    "id": 1473,
+    "type": "text",
+    "page_idx": 91,
+    "text": "18.  $O$  是  $\\triangle ABC$  所在平面内的动点, 连接  $OB, OC$ , 将  $AB, OB, OC, AC$  的中点  $D, E, F$ ,  $G$  依次连接而成的  $DEFG$  能构成四边形."
+  },
+  {
+    "id": 1474,
+    "type": "text",
+    "text": "（1）如图，当点  $O$  在  $\\triangle ABC$  内时，求证：四边形DEFG是平行四边形；",
+    "page_idx": 91
+  },
+  {
+    "id": 1475,
+    "type": "text",
+    "text": "（2）当点  $O$  移动到  $\\triangle ABC$  外时，(1)中的结论是否成立？画出图形，并说明理由；",
+    "page_idx": 91
+  },
+  {
+    "id": 1476,
+    "type": "text",
+    "text": "（3）若四边形  $DEFG$  为矩形，点  $O$  所在位置应满足什么条件？试说明理由.",
+    "page_idx": 91
+  },
+  {
+    "id": 1477,
+    "type": "image",
+    "page_idx": 91,
+    "img_path": "images/8921be80c6084a5e49b624be34e3bcaa8ac2f691c122d532f0f4d3fd910e7c64.jpg",
+    "image_caption": "（第18题）"
+  },
+  {
+    "id": 1478,
+    "type": "text",
+    "page_idx": 92,
+    "text": "19. 如图, 在矩形  $ABCD$  中,  $AB = 2$ ,  $AD = 3$ ,  $E$ ,  $F$  分别是  $AB$ ,  $CD$  的中点."
+  },
+  {
+    "id": 1479,
+    "type": "text",
+    "text": "(1) 在  $AD$  上取一点  $M$ , 使点  $A$  关于  $BM$  的对称点  $G$  恰好落在  $EF$  上,  $BM$  与  $EF$  相交于点  $N$ , 求证: 四边形  $ANGM$  是菱形;",
+    "page_idx": 92
+  },
+  {
+    "id": 1480,
+    "type": "text",
+    "text": "(2) 设  $P$  是  $AD$  上一点,  $\\angle PFB = 3\\angle FBC$ , 求线段  $AP$  的长.",
+    "page_idx": 92
+  },
+  {
+    "id": 1481,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/33f76f4cf08cfccfe4f2774f9d5eee9d6fe6a5712a4ec6c6d13e792c311da0cb.jpg",
+    "image_caption": "（第19题）"
+  },
+  {
+    "id": 1482,
+    "type": "text",
+    "page_idx": 92,
+    "text": "20. 如图, 在直角梯形  $ABCD$  中,  $AD \\parallel BC (BC > AD)$ ,  $\\angle B = 90^\\circ$ ,  $AB = BC = 12$ ,  $E$  是  $AB$  上一点, 且  $\\angle DCE = 45^\\circ$ ,  $BE = 4$ . 求  $DE$  的长."
+  },
+  {
+    "id": 1483,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/a67767c5acb3d1b8de2b977e4fe18d5ce049bbd51a9a733e27e6011bf1bdaa9d.jpg",
+    "image_caption": "（第20题）"
+  },
+  {
+    "id": 1484,
+    "type": "text",
+    "page_idx": 92,
+    "text": "21. 如图，在梯形  $ABCD$  中， $AD \\parallel BC$ ， $AB$  与  $CD$  不平行， $M$  是腰  $AB$  的中点，且  $AD + BC = DC$ . 求证： $MD \\perp MC$ ."
+  },
+  {
+    "id": 1485,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/610a1c3d46a32c0e53fa122c8fe48e1b648441a07e20dab345690fcffe7f5104.jpg",
+    "image_caption": "（第21题）"
+  },
+  {
+    "id": 1486,
+    "type": "text",
+    "page_idx": 93,
+    "text": "22. 以一个等腰直角三角形的腰为边分别向形外作等边三角形，我们把这两个等边三角形重心之间的距离称作这个等腰直角三角形的“肩心距”。已知一个等腰直角三角形的腰长为2，求它的“肩心距”的长。"
+  },
+  {
+    "id": 1487,
+    "type": "text",
+    "page_idx": 93,
+    "text": "23. 如图, 在矩形  $ABCD$  中,  $AB = 4\\mathrm{cm}$ ,  $BC = 8\\mathrm{cm}$ ,  $AC$  的垂直平分线  $EF$  分别交  $AD$ ,  $BC$  于点  $E$ ,  $F$ , 垂足为点  $O$ , 连接  $AF$ ,  $CE$ ."
+  },
+  {
+    "id": 1488,
+    "type": "text",
+    "text": "（1）求证：四边形  $AFCE$  为菱形，并求  $AF$  的长；",
+    "page_idx": 93
+  },
+  {
+    "id": 1489,
+    "type": "text",
+    "text": "(2) 动点  $P, Q$  分别从  $A, C$  两点同时出发, 沿  $\\triangle AFB$  和  $\\triangle CDE$  各边匀速运动一周. 即点  $P$  自  $A \\rightarrow F \\rightarrow B \\rightarrow A$  停止, 点  $Q$  自  $C \\rightarrow D \\rightarrow E \\rightarrow C$  停止.",
+    "page_idx": 93
+  },
+  {
+    "id": 1490,
+    "type": "text",
+    "text": "① 已知点  $P$  的速度为  $5 \\mathrm{~cm} / \\mathrm{s}$ , 点  $Q$  的速度为  $4 \\mathrm{~cm} / \\mathrm{s}$ , 运动时间为  $t \\mathrm{~s}$ , 当以  $A, C, P, Q$  四点为顶点的四边形是平行四边形时, 求  $t$  的值;",
+    "page_idx": 93
+  },
+  {
+    "id": 1491,
+    "type": "text",
+    "text": "② 若点  $P, Q$  的运动路程分别为  $a, b$  (单位:  $\\mathrm{cm}, ab \\neq 0$ ), 已知以  $A, C, P, Q$  四点为顶点的四边形是平行四边形, 求  $a$  与  $b$  满足的数量关系式.",
+    "page_idx": 93
+  },
+  {
+    "id": 1492,
+    "type": "image",
+    "page_idx": 93,
+    "img_path": "images/c1ca8618fe0dcf7c85a44064a3791428c5335fde8fdd2cc56dec8b3b88b4facb.jpg",
+    "image_caption": "（第23题）"
+  },
+  {
+    "id": 1493,
+    "type": "text",
+    "page_idx": 94,
+    "text": "24. 如图, 在正方形  $ABCD$  中, 点  $E$  在边  $AB$  上 (与点  $A, B$  不重合), 过点  $E$  作  $FG \\perp DE$ ,  $FG$  与边  $BC$  相交于点  $F$ , 与  $DA$  的延长线相交于点  $G$ ."
+  },
+  {
+    "id": 1494,
+    "type": "text",
+    "text": "(1) 由几个不同点  $E$  的位置, 分别测量  $BF, AG, AE$  的长, 从中你能发现  $BF, AG, AE$  之间具有怎样的数量关系? 并证明你所得到的结论;",
+    "page_idx": 94
+  },
+  {
+    "id": 1495,
+    "type": "text",
+    "text": "(2) 连接  $DF$ , 如果正方形的边长为 2, 设  $AE = x$ ,  $\\triangle DFG$  的面积为  $y$ , 试用含有  $x$  的代数式表示  $y$ , 并直接写出  $x$  的取值范围;",
+    "page_idx": 94
+  },
+  {
+    "id": 1496,
+    "type": "text",
+    "text": "（3）如果正方形ABCD的边长为2，  $FG$  的长为  $\\frac{5}{2}$  求点  $C$  到直线DE的距离",
+    "page_idx": 94
+  },
+  {
+    "id": 1497,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/da67ba55f419494396a19532a83da73984492e14fd6ed0385bbd122fb8158eb0.jpg",
+    "image_caption": "（供证明计算用）"
+  },
+  {
+    "id": 1498,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/76874bfa37132e8fddead0e338a85ed780c071cc022be4721332286dffb2b4c7.jpg",
+    "image_caption": "（供操作实验用）"
+  },
+  {
+    "id": 1499,
+    "type": "text",
+    "page_idx": 94,
+    "text": "（第24题）"
+  }
+]
+```

@@ -1,0 +1,816 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2240,
+    "type": "text",
+    "page_idx": 137,
+    "text": "解  $\\because y = (m - 3)x^{m^2 - 2m - 2}$  是正比例函数， $\\therefore m^2 - 2m - 2 = 1.$  解方程，得  $m_1 = 3$ ， $m_2 = -1$ .  $\\because m \\neq 3, \\therefore m = -1$ ，则  $m - 3 = -4 < 0$ .  $\\therefore$  该函数图像经过第二、四象限， $y$  随  $x$  的增大而减小."
+  },
+  {
+    "id": 2241,
+    "type": "text",
+    "page_idx": 137,
+    "text": "例② 已知函数  $y = -3x$  的函数值的取值范围是  $-9 < y < 18$ ，求  $x$  的取值范围."
+  },
+  {
+    "id": 2242,
+    "type": "text",
+    "page_idx": 137,
+    "text": "解 当  $y = -9$  时, 则  $-9 = -3x$ , 解得  $x = 3$ . 当  $y = 18$  时, 则  $18 = -3x$ , 解得  $x = -6$ .  $\\therefore x$  的取值范围是  $-6 < x < 3$ ."
+  },
+  {
+    "id": 2243,
+    "type": "text",
+    "page_idx": 137,
+    "text": "例③ 第二象限内一点  $A$  在正比例函数的图像上，且点  $A$  到  $x$  轴的距离为2，到  $y$  轴的距离为5，则这个正比例函数的表达式为"
+  },
+  {
+    "id": 2244,
+    "type": "text",
+    "page_idx": 137,
+    "text": "分析 本题的关键是点  $A$  位于第二象限，因此“ $A$  到  $x$  轴的距离为  $2$ ”说明其纵坐标为  $2$ ，“到  $y$  轴的距离为  $5$ ”说明其横坐标为  $-5$ . 则比例系数  $k = -\\frac{2}{5}$"
+  },
+  {
+    "id": 2245,
+    "type": "text",
+    "page_idx": 137,
+    "text": "解  $y = -\\frac{2}{5} x.$"
+  },
+  {
+    "id": 2246,
+    "type": "image",
+    "page_idx": 137,
+    "img_path": "images/9f9428c531d9e8c984135d00a48ed5fbc592f36a8801b55a91b2296179b23339.jpg"
+  },
+  {
+    "id": 2247,
+    "type": "text",
+    "page_idx": 137,
+    "text": "基础训练"
+  },
+  {
+    "id": 2248,
+    "type": "text",
+    "text": "1. 当  $a$  时，正比例函数  $y = (1 - 2a)x$  的图像经过第二、四象限",
+    "page_idx": 137
+  },
+  {
+    "id": 2249,
+    "type": "text",
+    "text": "2. 已知  $\\frac{b}{a} + 2 < 0$ ，则正比例函数  $y = abx$  的图像经过第 ______ 象限。",
+    "page_idx": 137
+  },
+  {
+    "id": 2250,
+    "type": "text",
+    "text": "3. 正比例函数  $y = -2x$  上一点的横坐标为 4, 那么这个点到  $x$  轴的距离是",
+    "page_idx": 137
+  },
+  {
+    "id": 2251,
+    "type": "text",
+    "text": "4. 正比例函数  $y = (m^{2} - m)x^{m^{2} - 3m + 1}$  经过第 象限， $y$  随  $x$  增大而",
+    "page_idx": 137
+  },
+  {
+    "id": 2252,
+    "type": "text",
+    "text": "5. 正比例函数  $y = 3x$  中，自变量  $x$  增大2，那么相应的  $y$  的值增大",
+    "page_idx": 137
+  },
+  {
+    "id": 2253,
+    "type": "text",
+    "text": "6. 如果正比例函数  $y = kx (k \\neq 0)$  的图像过第二、四象限，且过  $P(k + 2, 2k + 1)$ ，则  $k =$",
+    "page_idx": 138
+  },
+  {
+    "id": 2254,
+    "type": "text",
+    "text": "7. 已知正比例函数  $y = (\\sqrt{1949} - \\sqrt{2026})x$  的图像经过  $A(-\\sqrt{3}, a)$  和  $B(-2, b)$  两点，则  $a$  _______  $b$  （填“>”或“<”）.",
+    "page_idx": 138
+  },
+  {
+    "id": 2255,
+    "type": "text",
+    "text": "8. 若点  $(-1, 2)$  同时在函数  $y = mx + n$  与  $y = \\frac{x - m}{n}$  的图像上，则过点  $(m, n)$  的正比例函数的表达式为",
+    "page_idx": 138
+  },
+  {
+    "id": 2256,
+    "type": "text",
+    "text": "9. 已知函数  $y = (t - 2)x + t^2 - 4$ ，当  $t$  为何值时，该函数的图像经过原点。",
+    "page_idx": 138
+  },
+  {
+    "id": 2257,
+    "type": "text",
+    "text": "10. 已知正比例函数的图像上一点  $P$  的横坐标是 2, 作  $PD \\perp x$  轴 (点  $O$  是坐标原点, 点  $D$  是垂足),  $\\triangle OPD$  的面积是 6, 求这个正比例函数的表达式.",
+    "page_idx": 138
+  },
+  {
+    "id": 2258,
+    "type": "text",
+    "text": "11. 已知  $y$  与  $x$  成正比例, 若  $y$  随  $x$  的增大而减小, 且其图像经过  $A(3, -a)$  和  $B(a, -1)$  两点, 求  $y$  与  $x$  之间的函数表达式.",
+    "page_idx": 138
+  },
+  {
+    "id": 2259,
+    "type": "text",
+    "text": "12. 已知  $A(-3,0), B(0,6)$ ，经过原点的直线把  $\\triangle AOB$  的面积分为  $1:2$  的两部分，求直线的表达式.",
+    "page_idx": 138
+  },
+  {
+    "id": 2260,
+    "type": "image",
+    "page_idx": 139,
+    "img_path": "images/5d8b8bc8440c5190860fb929d8c164d9701805b498a8bec734395309d9f24f48.jpg"
+  },
+  {
+    "id": 2261,
+    "type": "text",
+    "page_idx": 139,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2262,
+    "type": "text",
+    "page_idx": 139,
+    "text": "13. 若  $y + 1$  与  $z$  成正比例, 当  $y = 3$  时,  $z = 2$ ;  $z$  与  $x - 1$  成正比例, 当  $x = 3$  时,  $z = -4$ , 试写出  $y$  与  $x$  之间的函数表达式."
+  },
+  {
+    "id": 2263,
+    "type": "text",
+    "page_idx": 139,
+    "text": "14. 直线  $y = \\frac{5}{2} x$  绕原点顺时针旋转  $90^{\\circ}$  后，求旋转后的直线的表达式。你发现互相垂直的两条直线的表达式有什么关系？你能写出直线  $y = kx (k \\neq 0)$  绕原点顺时针旋转  $90^{\\circ}$  后的表达式吗？"
+  },
+  {
+    "id": 2264,
+    "type": "text",
+    "page_idx": 139,
+    "text": "15. 已知正比例函数  $y = kx$  经过点  $A$ ，点  $A$  在第四象限，过点  $A$  作  $AH \\perp x$  轴，垂足为点  $H$ ，点  $A$  的横坐标为3，且  $\\triangle AOH$  的面积为3."
+  },
+  {
+    "id": 2265,
+    "type": "text",
+    "text": "（1）求正比例函数的表达式；",
+    "page_idx": 139
+  },
+  {
+    "id": 2266,
+    "type": "text",
+    "text": "(2) 在  $x$  轴上能否找到一点  $P$ , 使  $\\triangle AOP$  的面积为 5, 若存在, 求点  $P$  的坐标; 若不存在, 请说明理由;",
+    "page_idx": 139
+  },
+  {
+    "id": 2267,
+    "type": "text",
+    "text": "(3) 在(2)的条件下，在正比例函数  $y = kx$  上是否存在一点  $M$ ，使得  $S_{\\triangle APM} = \\frac{2}{3} S_{\\triangle OPM}$ . 若存在，求出点  $M$  的坐标；若不存在，请说明理由.",
+    "page_idx": 139
+  },
+  {
+    "id": 2268,
+    "type": "text",
+    "page_idx": 140,
+    "text": "阶段训练④"
+  },
+  {
+    "id": 2269,
+    "type": "text",
+    "page_idx": 140,
+    "text": "1. 某种签字笔每支  $x$  元，买 5 支签字笔共支出  $b$  元，下列选项判断正确的是（ ）."
+  },
+  {
+    "id": 2270,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A.  $x$  是常量时,  $b$  是变量"
+  },
+  {
+    "id": 2271,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B.  $x$  是变量时,  $b$  是常量"
+  },
+  {
+    "id": 2272,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C.  $x$  是变量时,  $b$  也是变量"
+  },
+  {
+    "id": 2273,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D. 无论  $x$  是常量还是变量,  $b$  都是变量"
+  },
+  {
+    "id": 2274,
+    "type": "text",
+    "page_idx": 140,
+    "text": "2. 下列关系不是函数关系的是( )."
+  },
+  {
+    "id": 2275,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A. 长方形的宽一定时, 它的长与面积"
+  },
+  {
+    "id": 2276,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B. 正方形的周长与面积"
+  },
+  {
+    "id": 2277,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C. 等腰三角形的底边长与面积"
+  },
+  {
+    "id": 2278,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D. 等腰三角形的顶角度数与底角度数"
+  },
+  {
+    "id": 2279,
+    "type": "text",
+    "page_idx": 140,
+    "text": "3. 下列函数中，属于正比例函数的有（ ）个"
+  },
+  {
+    "id": 2280,
+    "type": "equation",
+    "page_idx": 140,
+    "text": "$$\ny = x - 1, y = x, y = \\frac {1}{x}, s = \\frac {1}{3} t, S = \\pi r ^ {2}, x = - \\frac {y}{3}.\n$$"
+  },
+  {
+    "id": 2281,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A. 2"
+  },
+  {
+    "id": 2282,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B. 3"
+  },
+  {
+    "id": 2283,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C. 4"
+  },
+  {
+    "id": 2284,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D. 5"
+  },
+  {
+    "id": 2285,
+    "type": "text",
+    "page_idx": 140,
+    "text": "4. 若  $y = (m - 1)x + m^2 - 1$  是  $y$  关于  $x$  的正比例函数, 则该函数的图像经过的象限是（）."
+  },
+  {
+    "id": 2286,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A. 第一、三象限"
+  },
+  {
+    "id": 2287,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B. 第一、四象限"
+  },
+  {
+    "id": 2288,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C. 第二、三象限"
+  },
+  {
+    "id": 2289,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D. 第二、四象限"
+  },
+  {
+    "id": 2290,
+    "type": "text",
+    "page_idx": 140,
+    "text": "5. 已知正比例函数的图像经过点  $(3a, 2b) (a \\neq b)$ ，则它的图像一定经过（ ）."
+  },
+  {
+    "id": 2291,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A.  $(3a, -2b)$"
+  },
+  {
+    "id": 2292,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B.  $(2b, 3a)$"
+  },
+  {
+    "id": 2293,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C.  $(-3a, 2b)$"
+  },
+  {
+    "id": 2294,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D.  $\\left(-a, -\\frac{2}{3} b\\right)$"
+  },
+  {
+    "id": 2295,
+    "type": "text",
+    "page_idx": 140,
+    "text": "6. 已知  $x$  与  $\\frac{3}{y}$  成正比例, 而  $y$  与  $\\frac{1}{2z}$  成正比例, 则( )."
+  },
+  {
+    "id": 2296,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A.  $x = 6z$"
+  },
+  {
+    "id": 2297,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B.  $x = \\frac{3}{2} z$"
+  },
+  {
+    "id": 2298,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C.  $x = kz (k \\neq 0)$"
+  },
+  {
+    "id": 2299,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D.  $y = {kz}\\left( {k \\neq  0}\\right)$"
+  },
+  {
+    "id": 2300,
+    "type": "text",
+    "page_idx": 140,
+    "text": "7. 如果  $y = k(x + 1) + 3$  是正比例函数，则  $k$  的值为（ ）."
+  },
+  {
+    "id": 2301,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A. -1"
+  },
+  {
+    "id": 2302,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B. 0"
+  },
+  {
+    "id": 2303,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C. 1"
+  },
+  {
+    "id": 2304,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D. -3"
+  },
+  {
+    "id": 2305,
+    "type": "text",
+    "page_idx": 140,
+    "text": "8. 下列函数中， $y$  是  $x$  的正比例函数的有（ ）."
+  },
+  {
+    "id": 2306,
+    "type": "text",
+    "page_idx": 140,
+    "text": "A.  $y = 3\\sqrt{x}$"
+  },
+  {
+    "id": 2307,
+    "type": "text",
+    "page_idx": 140,
+    "text": "B.  $y = \\frac{1}{2x}$"
+  },
+  {
+    "id": 2308,
+    "type": "text",
+    "page_idx": 140,
+    "text": "C.  $y = 2\\left( {x + 1}\\right)$"
+  },
+  {
+    "id": 2309,
+    "type": "text",
+    "page_idx": 140,
+    "text": "D.  $y = \\sqrt{3} x$"
+  },
+  {
+    "id": 2310,
+    "type": "text",
+    "page_idx": 140,
+    "text": "9. 如图, 在同一直角坐标系中, 正比例函数  $y = k_{1}x$ ,  $y = k_{2}x$ ,  $y = k_{3}x$ ,  $y = k_{4}x$  的图像分别为  $l_{1}, l_{2}, l_{3}, l_{4}$ , 则下列关系中正确的是 ( )."
+  },
+  {
+    "id": 2311,
+    "type": "text",
+    "text": "A.  $k_{1} < k_{2} < k_{3} < k_{4}$",
+    "page_idx": 140
+  },
+  {
+    "id": 2312,
+    "type": "text",
+    "text": "B.  $k_{2}< k_{1}< k_{4}< k_{3}$",
+    "page_idx": 140
+  },
+  {
+    "id": 2313,
+    "type": "text",
+    "text": "C.  $k_{1} < k_{2} < k_{4} < k_{3}$",
+    "page_idx": 140
+  },
+  {
+    "id": 2314,
+    "type": "text",
+    "text": "D.  $k_{2}< k_{1}< k_{3}< k_{4}$",
+    "page_idx": 140
+  },
+  {
+    "id": 2315,
+    "type": "image",
+    "page_idx": 140,
+    "img_path": "images/347fcea44b2c853c7217cd27d4aa5c3833165708c2f5d1372e6c9d9dc42189d5.jpg",
+    "image_caption": "（第9题）"
+  },
+  {
+    "id": 2316,
+    "type": "text",
+    "page_idx": 141,
+    "text": "10. 如图, 在平面直角坐标系中, 边长不等的正方形依次排列, 每个正方形都有一个顶点落在函数  $y = x$  的图像上, 从左向右依次记为  $A_{1}, A_{2}, A_{3}, \\cdots, A_{n}$ , 已知第 1 个正方形中的一个顶点  $A_{1}$  的坐标为 (1, 1), 则点  $A_{2025}$  的纵坐标为 ( )."
+  },
+  {
+    "id": 2317,
+    "type": "image",
+    "page_idx": 141,
+    "img_path": "images/85f1cb0228d3bc038389cceca9fd85acc54b57ae7969bb39ccf70c6d3554f43b.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 2318,
+    "type": "text",
+    "page_idx": 141,
+    "text": "A. 2025"
+  },
+  {
+    "id": 2319,
+    "type": "text",
+    "page_idx": 141,
+    "text": "B. 2024"
+  },
+  {
+    "id": 2320,
+    "type": "text",
+    "page_idx": 141,
+    "text": "C.  $2^{2024}$"
+  },
+  {
+    "id": 2321,
+    "type": "text",
+    "page_idx": 141,
+    "text": "D.  $2^{2025}$"
+  },
+  {
+    "id": 2322,
+    "type": "text",
+    "page_idx": 141,
+    "text": "11. 函数  $y = \\frac{\\sqrt{x}}{|x| - 3}$  自变量  $x$  的取值范围为 _______."
+  },
+  {
+    "id": 2323,
+    "type": "text",
+    "page_idx": 141,
+    "text": "12.  $f(x) = \\frac{x + 3}{1 - x}$  则  $f(\\sqrt{3}) =$"
+  },
+  {
+    "id": 2324,
+    "type": "text",
+    "page_idx": 141,
+    "text": "13. 已知正比例函数  $y = kx$  经过点  $(x_{1},y_{1})$  ，  $(x_{2},y_{2})$  ，若  $x_{1} < x_{2}$ ，  $y_{1} > y_{2}$ ，那么这个函数的图像必过第 象限."
+  },
+  {
+    "id": 2325,
+    "type": "text",
+    "page_idx": 141,
+    "text": "14. 如果正比例函数  $y = -\\frac{2}{3} x$  与正比例函数  $y = kx$  的图像关于  $y$  轴对称，则  $k =$"
+  },
+  {
+    "id": 2326,
+    "type": "text",
+    "page_idx": 141,
+    "text": "15. 已知直线  $y = kx$  经过点(2, -4)，若  $y = kx$  与直线  $x = \\frac{1}{2}$  交于点  $P$ ，则点  $P$  的坐标为"
+  },
+  {
+    "id": 2327,
+    "type": "text",
+    "page_idx": 141,
+    "text": "16. 已知函数  $y = \\left(k + \\frac{1}{2}\\right)x^{k^2 + k - 1}$  ( $k$  为整数), 当  $k =$  ________时, 它的图像是经过第二、四象限的一条直线."
+  },
+  {
+    "id": 2328,
+    "type": "text",
+    "page_idx": 141,
+    "text": "17. 正比例函数  $y = -2x$  上一点到  $x$  轴的距离是 8, 则这个点的坐标为"
+  },
+  {
+    "id": 2329,
+    "type": "text",
+    "page_idx": 141,
+    "text": "18. 如果正比例函数  $y = kx (k \\neq 0)$  的自变量取值增加7，函数值相应减少4，那么当  $x = 7$  时， $y =$  ________."
+  },
+  {
+    "id": 2330,
+    "type": "text",
+    "page_idx": 141,
+    "text": "19. 正比例函数  $y = mx$  的图像经过第二、四象限，且经过点  $P(3 + m, 3m + 4)$ ，则该函数的表达式为"
+  },
+  {
+    "id": 2331,
+    "type": "text",
+    "page_idx": 141,
+    "text": "20. 如图, 正方形  $OABC$  中, 点  $B(4, 4)$ , 点  $E$ ,  $F$  分别在边  $BC$ ,  $BA$  上,  $OE = 2\\sqrt{5}$ , 若  $\\angle EOF = 45^\\circ$ , 则直线  $OF$  的表达式为"
+  },
+  {
+    "id": 2332,
+    "type": "image",
+    "page_idx": 141,
+    "img_path": "images/b89c04a7630a96e8b4b360987772bc71e752a082105378f34969c6b0a6a3805d.jpg",
+    "image_caption": "（第20题）"
+  },
+  {
+    "id": 2333,
+    "type": "image",
+    "page_idx": 141,
+    "img_path": "images/24b47b235f61c986aa737cd88a3f28225bc118a97d7111a2a83cd8b066c6bb40.jpg",
+    "image_caption": "（第21题）"
+  },
+  {
+    "id": 2334,
+    "type": "text",
+    "page_idx": 141,
+    "text": "21. 如图, 点  $C, B$  分别在两条直线  $y = -3x$  和  $y = kx$  上, 点  $A, D$  是  $x$  轴上两点, 若四边形ABCD是正方形, 则  $k$  的值为"
+  },
+  {
+    "id": 2335,
+    "type": "text",
+    "page_idx": 142,
+    "text": "22. 当  $m$  取何值时，函数  $\\frac{y}{m^2 - 5m} = \\frac{1}{x^{2m^2 - 33}}$  的图像是经过原点和第一、三象限的一条直线？"
+  },
+  {
+    "id": 2336,
+    "type": "text",
+    "page_idx": 142,
+    "text": "23. 正比例函数  $y = (m^{2} - 2m - 3)x^{m^{2} - 4} + n - 2$  的图像经过第一、三象限，求  $m, n$  的值"
+  },
+  {
+    "id": 2337,
+    "type": "text",
+    "page_idx": 142,
+    "text": "24. 已知正比例函数图像经过点  $(-\\sqrt{5}, 2\\sqrt{5})$"
+  },
+  {
+    "id": 2338,
+    "type": "text",
+    "text": "(1) 若点  $A(a, -\\sqrt{3})$  ， $B(\\sqrt{6}, -b)$  在图像上，求  $a, b$  的值；",
+    "page_idx": 142
+  },
+  {
+    "id": 2339,
+    "type": "text",
+    "text": "（2）过图像上一点  $P$  作  $y$  轴的垂线，垂足为点  $Q(0, \\sqrt{15})$  ，求  $\\triangle OPQ$  的面积",
+    "page_idx": 142
+  }
+]
+```

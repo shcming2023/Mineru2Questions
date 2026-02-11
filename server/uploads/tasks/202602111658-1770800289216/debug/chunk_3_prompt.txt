@@ -1,0 +1,823 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 210,
+    "type": "text",
+    "page_idx": 14,
+    "text": "C. 正六边形"
+  },
+  {
+    "id": 211,
+    "type": "text",
+    "page_idx": 14,
+    "text": "D. 正八边形"
+  },
+  {
+    "id": 212,
+    "type": "text",
+    "page_idx": 14,
+    "text": "9.一个多边形除了一个内角外，其余各内角的和为  $2000^{\\circ}$  ，则这个内角是（ ）."
+  },
+  {
+    "id": 213,
+    "type": "text",
+    "page_idx": 14,
+    "text": "A.  $20^{\\circ}$"
+  },
+  {
+    "id": 214,
+    "type": "text",
+    "page_idx": 14,
+    "text": "B.  $160^{\\circ}$"
+  },
+  {
+    "id": 215,
+    "type": "text",
+    "page_idx": 14,
+    "text": "C.  $200^{\\circ}$"
+  },
+  {
+    "id": 216,
+    "type": "text",
+    "page_idx": 14,
+    "text": "D.  $140^{\\circ}$"
+  },
+  {
+    "id": 217,
+    "type": "text",
+    "page_idx": 14,
+    "text": "10. 如图, 在四边形  $ABCD$  中,  $\\angle A = 50^\\circ$ ,  $\\angle ABC = 105^\\circ$ ,  $\\angle BCD = 90^\\circ$ .  $\\angle 1, \\angle 2, \\angle 3, \\angle 4$  中哪个角是四边形  $ABCD$  的外角? 求出它的度数."
+  },
+  {
+    "id": 218,
+    "type": "image",
+    "page_idx": 14,
+    "img_path": "images/7c9cc676b621f3dd6c9dfff3db5191dde289d3805c6460ed71439ce1e856ed41.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 219,
+    "type": "text",
+    "page_idx": 14,
+    "text": "11. 已知四边形的一个外角度数等于与它不相邻的三个内角度数之和的  $\\frac{1}{4}$ , 求这个外角的度数."
+  },
+  {
+    "id": 220,
+    "type": "text",
+    "page_idx": 15,
+    "text": "12. 一个多边形截去一个角后，形成的另一个多边形的内角和为  $1800^{\\circ}$ . 你知道原多边形有多少条边吗？说明理由."
+  },
+  {
+    "id": 221,
+    "type": "text",
+    "page_idx": 15,
+    "text": "13. 一个多边形除一个内角外，其余各内角的和是  $2500^{\\circ}$ . 这个多边形有多少条边？这个内角是多少度？"
+  },
+  {
+    "id": 222,
+    "type": "text",
+    "page_idx": 15,
+    "text": "14. 如图， $\\angle A = \\angle C = 90^\\circ$ ，点  $E, F$  分别在  $AD, BC$  上， $BE, DF$  分别平分  $\\angle ABC$  和  $\\angle ADC$ .  $BE$  和  $DF$  平行吗？说明理由."
+  },
+  {
+    "id": 223,
+    "type": "image",
+    "page_idx": 15,
+    "img_path": "images/b1b5b839aedf5c7fbc66332bce39bdd80ecfa2ddd4b0dab43d588fbcb465ca78.jpg",
+    "image_caption": "（第14题）"
+  },
+  {
+    "id": 224,
+    "type": "image",
+    "page_idx": 15,
+    "img_path": "images/49c33c9b0a69a7455021068f34b03f83e863dce354f44644aab730359241d7cf.jpg"
+  },
+  {
+    "id": 225,
+    "type": "text",
+    "page_idx": 15,
+    "text": "拓展训练"
+  },
+  {
+    "id": 226,
+    "type": "text",
+    "text": "15. (1)  $n$  边形有几条对角线？",
+    "page_idx": 15
+  },
+  {
+    "id": 227,
+    "type": "text",
+    "text": "(2) 一个  $n$  边形的边数增加1, 对角线增加多少条?",
+    "page_idx": 15
+  },
+  {
+    "id": 228,
+    "type": "text",
+    "page_idx": 15,
+    "text": "16. 若将  $n$  边形的边数增加 1 倍, 则它的内角和增加多少度? 这个多边形的外角和如何变化?"
+  },
+  {
+    "id": 229,
+    "type": "text",
+    "page_idx": 16,
+    "text": "23.2 平行四边形"
+  },
+  {
+    "id": 230,
+    "type": "text",
+    "page_idx": 16,
+    "text": "23.2(一) 平行四边形的性质(1)"
+  },
+  {
+    "id": 231,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/cf2a6b311c6bd19928b3accf7e8b45fe97c2edd0c3584f5e5bf1df88acace37b.jpg"
+  },
+  {
+    "id": 232,
+    "type": "text",
+    "page_idx": 16,
+    "text": "要点归纳"
+  },
+  {
+    "id": 233,
+    "type": "text",
+    "text": "1. 梯形：有一组对边平行的四边形叫作梯形。在梯形中，把一组平行的边称为梯形的底，另外的两边称为梯形的腰。",
+    "page_idx": 16
+  },
+  {
+    "id": 234,
+    "type": "text",
+    "text": "2. 平行四边形: 两组对边分别平行的四边形叫作平行四边形. 平行四边形是梯形的一种特殊情形.",
+    "page_idx": 16
+  },
+  {
+    "id": 235,
+    "type": "text",
+    "page_idx": 16,
+    "text": "3. 平行四边形的性质"
+  },
+  {
+    "id": 236,
+    "type": "text",
+    "page_idx": 16,
+    "text": "定理1：平行四边形的对边相等"
+  },
+  {
+    "id": 237,
+    "type": "text",
+    "page_idx": 16,
+    "text": "定理2：平行四边形的对角相等"
+  },
+  {
+    "id": 238,
+    "type": "text",
+    "page_idx": 16,
+    "text": "4. 两平行线的距离：两平行线中一条直线上的任意一点到另一条直线的距离。"
+  },
+  {
+    "id": 239,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/4aaa5014b8fc218bf56feb4eacebc2e2e7869cc479899b1821ec5efed7b913a6.jpg"
+  },
+  {
+    "id": 240,
+    "type": "text",
+    "page_idx": 16,
+    "text": "疑难分析"
+  },
+  {
+    "id": 241,
+    "type": "text",
+    "page_idx": 16,
+    "text": "例① 如图23-2，在  $\\square ABCD$  中， $\\angle BAD$  与  $\\angle ADC$  的平分线分别交直线  $BC$  于点  $E, F$ . 求证： $EC = BF$ ."
+  },
+  {
+    "id": 242,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/263e4d065d3e7cbe50a78d223d2de892df3eae0d5470fa81ba4c7cf36d9cafd1.jpg",
+    "image_caption": "图 23-2"
+  },
+  {
+    "id": 243,
+    "type": "text",
+    "page_idx": 16,
+    "text": "证明 四边形ABCD是平行四边形，"
+  },
+  {
+    "id": 244,
+    "type": "text",
+    "page_idx": 16,
+    "text": "$\\therefore AD / / BC, AB = CD$  （平行四边形的对边平行且相等）."
+  },
+  {
+    "id": 245,
+    "type": "equation",
+    "page_idx": 16,
+    "text": "$$\n\\begin{array}{l} \\therefore \\angle E A D = \\angle E. \\\\ \\because \\angle B A E = \\angle E A D, \\\\ \\therefore \\angle B A E = \\angle E. \\therefore B A = B E. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 246,
+    "type": "text",
+    "page_idx": 16,
+    "text": "同理可证  $CD = CF$  ：  $\\therefore BE = CF$"
+  },
+  {
+    "id": 247,
+    "type": "text",
+    "page_idx": 16,
+    "text": "$\\therefore BC + EC = BC + BF$  ，即  $EC = BF$"
+  },
+  {
+    "id": 248,
+    "type": "text",
+    "page_idx": 16,
+    "text": "说明 当直接证明两条线段相等不方便时，可以间接证明这两条线段与某一条线段的和或差相等."
+  },
+  {
+    "id": 249,
+    "type": "text",
+    "page_idx": 16,
+    "text": "例② 如图23-3，在□ABCD中，点  $F$  在  $DC$  的延长线上，连接  $AF$  交  $BC$  于点  $E$  ，连接  $BF, DE$ ."
+  },
+  {
+    "id": 250,
+    "type": "text",
+    "page_idx": 16,
+    "text": "求证： $\\triangle ADE$  的面积  $= \\triangle BAF$  的面积"
+  },
+  {
+    "id": 251,
+    "type": "text",
+    "page_idx": 16,
+    "text": "分析 从图中可以看出  $\\triangle ADE$  的面积等于  $\\square ABCD$  面积的一半, 同理  $\\triangle BAF$  的面积等于  $\\square ABCD$  面积的一半, 所以结论可证."
+  },
+  {
+    "id": 252,
+    "type": "image",
+    "page_idx": 16,
+    "img_path": "images/89ef6a1e3a0dd1cc4b83c172acb69ef5366beed9f260677af68f53ede0145153.jpg",
+    "image_caption": "图23-3"
+  },
+  {
+    "id": 253,
+    "type": "text",
+    "page_idx": 16,
+    "text": "证明 记  $\\triangle ADE$  的面积  $= S_{\\triangle ADE}$  ，  $\\triangle BAF$  的面积  $= S_{\\triangle BAF}$  ，  $\\square ABCD$  的面积  $= S_{\\square ABCD}$"
+  },
+  {
+    "id": 254,
+    "type": "text",
+    "page_idx": 16,
+    "text": "四边形ABCD是平行四边形，"
+  },
+  {
+    "id": 255,
+    "type": "text",
+    "page_idx": 16,
+    "text": "$\\therefore AD / / BC,AB / / DC$  （平行四边形的定义）."
+  },
+  {
+    "id": 256,
+    "type": "text",
+    "page_idx": 17,
+    "text": "设  $\\square ABCD$  的边  $AD$  上的高为  $h_1$ ， $AB$  上的高为  $h_2$ 。"
+  },
+  {
+    "id": 257,
+    "type": "text",
+    "page_idx": 17,
+    "text": "$\\therefore \\triangle ADE$  的边  $AD$  上的高为  $h_1$  ，  $\\triangle BAF$  的边  $AB$  上的高为  $h_2$"
+  },
+  {
+    "id": 258,
+    "type": "equation",
+    "page_idx": 17,
+    "text": "$$\n\\therefore S _ {\\triangle A D E} = \\frac {1}{2} A D \\cdot h _ {1}, S _ {\\triangle B A F} = \\frac {1}{2} A B \\cdot h _ {2}.\n$$"
+  },
+  {
+    "id": 259,
+    "type": "equation",
+    "page_idx": 17,
+    "text": "$$\n\\because S _ {\\square A B C D} = A D \\cdot h _ {1} = A B \\cdot h _ {2},\n$$"
+  },
+  {
+    "id": 260,
+    "type": "text",
+    "page_idx": 17,
+    "text": "$\\therefore S_{\\triangle ADE} = S_{\\triangle BAF}$  ，即  $\\triangle ADE$  的面积  $= \\triangle BAF$  的面积"
+  },
+  {
+    "id": 261,
+    "type": "text",
+    "page_idx": 17,
+    "text": "说明 在  $\\square ABCD$  中,  $S_{\\triangle ADE} = \\frac{1}{2} S_{\\square ABCD}$ ,  $S_{\\triangle BAF} = \\frac{1}{2} S_{\\square ABCD}$  是常用的结论, 在以后证明复杂的问题中经常用到."
+  },
+  {
+    "id": 262,
+    "type": "image",
+    "page_idx": 17,
+    "img_path": "images/5c4241a20f6029a5c522206fcf0ee12555fd976a8cdef59bae374100b247239d.jpg"
+  },
+  {
+    "id": 263,
+    "type": "text",
+    "page_idx": 17,
+    "text": "基础训练"
+  },
+  {
+    "id": 264,
+    "type": "text",
+    "text": "1. 在  $\\square ABCD$  中， $\\angle A: \\angle B: \\angle C = 3:1:3$ ，则  $\\angle A + \\angle C$  的度数为",
+    "page_idx": 17
+  },
+  {
+    "id": 265,
+    "type": "text",
+    "text": "2. 平行四边形的周长为 50 , 则它的一组邻边长之和是",
+    "page_idx": 17
+  },
+  {
+    "id": 266,
+    "type": "text",
+    "text": "3. 平行四边形的一组邻边长的比为  $2:1$ , 周长为 60, 则这个四边形较短的边长为",
+    "page_idx": 17
+  },
+  {
+    "id": 267,
+    "type": "text",
+    "text": "4. 如图, 在  $\\square ABCD$  中,  $AE \\perp BC$  于点  $E$ ,  $AF \\perp CD$  于点  $F$ ,  $\\angle BAD = 120^\\circ$ ,  $BE = 2$ ,  $FD = 3$ , 则  $\\angle EAF$  的度数为 ,  $\\square ABCD$  的周长为",
+    "page_idx": 17
+  },
+  {
+    "id": 268,
+    "type": "text",
+    "text": "5. 若平行四边形的一组邻边的长分别为 16 和 20, 两长边间的距离为 8, 则两短边间的距离为",
+    "page_idx": 17
+  },
+  {
+    "id": 269,
+    "type": "image",
+    "page_idx": 17,
+    "img_path": "images/9c15a874e596217c1133c1be9f3e5203c7ba194f546106d3cc00252f7a4f5a2a.jpg",
+    "image_caption": "（第4题）"
+  },
+  {
+    "id": 270,
+    "type": "image",
+    "page_idx": 17,
+    "img_path": "images/d506b081b8c688f55f16698f202125438ce751d1917681b914f2b080dd4da1d4.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 271,
+    "type": "text",
+    "text": "6. 如图, 已知  $EF$ ,  $ED$ ,  $FD$  分别过  $\\triangle ABC$  的顶点  $A$ ,  $B$ ,  $C$ , 且  $EF \\parallel BC$ ,  $ED \\parallel AC$ ,  $FD \\parallel AB$ . 若  $\\triangle ABC$  的周长是 10, 则  $\\triangle EDF$  的周长为",
+    "page_idx": 17
+  },
+  {
+    "id": 272,
+    "type": "text",
+    "text": "7. 在  $\\square ABCD$  中, 若  $AB = 8$ ,  $AD$ ,  $BC$  之间的距离为 4 , 则  $\\angle A$  的度数为",
+    "page_idx": 17
+  },
+  {
+    "id": 273,
+    "type": "text",
+    "text": "8. 在  $\\square ABCD$  中,  $\\angle A: \\angle B: \\angle C: \\angle D$  可以是( ).",
+    "page_idx": 17
+  },
+  {
+    "id": 274,
+    "type": "text",
+    "page_idx": 17,
+    "text": "A.  $1 : 2 : 3 : 4$"
+  },
+  {
+    "id": 275,
+    "type": "text",
+    "page_idx": 17,
+    "text": "B.  $3 : 4 : 4 : 3$"
+  },
+  {
+    "id": 276,
+    "type": "text",
+    "page_idx": 17,
+    "text": "C.  $3 : 3 : 4 : 4$"
+  },
+  {
+    "id": 277,
+    "type": "text",
+    "page_idx": 17,
+    "text": "D.  $3 : 4 : 3 : 4$"
+  },
+  {
+    "id": 278,
+    "type": "text",
+    "page_idx": 17,
+    "text": "9. 在凸四边形  $ABCD$  中,  $AB = 3$ ,  $BC = 4$ ,  $CD = 7$ , 则  $AD$  的取值范围为( )."
+  },
+  {
+    "id": 279,
+    "type": "text",
+    "page_idx": 17,
+    "text": "A.  $2 < {AD} < 7$"
+  },
+  {
+    "id": 280,
+    "type": "text",
+    "page_idx": 17,
+    "text": "B.  $2 < AD < 13$"
+  },
+  {
+    "id": 281,
+    "type": "text",
+    "page_idx": 17,
+    "text": "C.  $0 < {AD} < {14}$"
+  },
+  {
+    "id": 282,
+    "type": "text",
+    "page_idx": 17,
+    "text": "D.  $1 < {AD} < {13}$"
+  },
+  {
+    "id": 283,
+    "type": "text",
+    "page_idx": 17,
+    "text": "10. 以不共线的三点为三个顶点作平行四边形，一共可作平行四边形的个数是（ ）."
+  },
+  {
+    "id": 284,
+    "type": "text",
+    "page_idx": 17,
+    "text": "A. 2"
+  },
+  {
+    "id": 285,
+    "type": "text",
+    "page_idx": 17,
+    "text": "B. 3"
+  },
+  {
+    "id": 286,
+    "type": "text",
+    "page_idx": 17,
+    "text": "C. 4"
+  },
+  {
+    "id": 287,
+    "type": "text",
+    "page_idx": 17,
+    "text": "D. 5"
+  },
+  {
+    "id": 288,
+    "type": "text",
+    "page_idx": 18,
+    "text": "11. 在下面的性质中，平行四边形不一定具备的是（ ）."
+  },
+  {
+    "id": 289,
+    "type": "text",
+    "page_idx": 18,
+    "text": "A. 内角和为  $360^{\\circ}$"
+  },
+  {
+    "id": 290,
+    "type": "text",
+    "page_idx": 18,
+    "text": "B. 对角相等"
+  },
+  {
+    "id": 291,
+    "type": "text",
+    "page_idx": 18,
+    "text": "C. 邻角互补"
+  },
+  {
+    "id": 292,
+    "type": "text",
+    "page_idx": 18,
+    "text": "D. 对角互补"
+  },
+  {
+    "id": 293,
+    "type": "text",
+    "page_idx": 18,
+    "text": "12. 从  $\\square ABCD$  的一个锐角顶点向对边作两条高, 已知两条高的夹角为  $135^{\\circ}$ , 求  $\\square ABCD$  各个内角的度数."
+  },
+  {
+    "id": 294,
+    "type": "text",
+    "page_idx": 18,
+    "text": "13. 如图， $\\square ABCD$  的周长为 19， $DE \\perp AB$  于点  $E$ ， $AE = BE$ ， $\\triangle ABD$  的周长为 14，求  $\\square ABCD$  各边的长。"
+  },
+  {
+    "id": 295,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/1e91fe8cf65f04c2ebcca36d429f7bf43c9b869b69a600f805d0393487449b9c.jpg",
+    "image_caption": "（第13题）"
+  },
+  {
+    "id": 296,
+    "type": "text",
+    "page_idx": 18,
+    "text": "14. 如图, 在  $\\square ABCD$  中,  $AE \\perp BC$ ,  $AF \\perp CD$ , 垂足分别为点  $E, F, AE = 6, AF = 8$ ."
+  },
+  {
+    "id": 297,
+    "type": "text",
+    "text": "(1) 若  $\\angle EAF = 30^{\\circ}$ , 求  $\\square ABCD$  的周长和面积;",
+    "page_idx": 18
+  },
+  {
+    "id": 298,
+    "type": "text",
+    "text": "（2）若  $\\square ABCD$  的周长为56，求它的面积",
+    "page_idx": 18
+  },
+  {
+    "id": 299,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/91858e66e71f7d20f749b1d6261d9f00938f869e8200ba931c76d310169dbab8.jpg",
+    "image_caption": "（第14题）"
+  },
+  {
+    "id": 300,
+    "type": "text",
+    "page_idx": 19,
+    "text": "15. 在  $\\square ABCD$  中,  $E$  为  $AD$  的中点,  $AD = 2AB$ , 求  $\\angle BEC$  的度数."
+  },
+  {
+    "id": 301,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/c19e668a46c3c59f30dd0f34b46aa72056691efa3f772bc9bc57bbefc0c3b36a.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 302,
+    "type": "text",
+    "page_idx": 19,
+    "text": "拓展训练"
+  },
+  {
+    "id": 303,
+    "type": "text",
+    "page_idx": 19,
+    "text": "16. (1) 如图(1),  $E$  为  $\\square ABCD$  内一点"
+  },
+  {
+    "id": 304,
+    "type": "text",
+    "page_idx": 19,
+    "text": "求证：  $S_{\\triangle ADE} + S_{\\triangle BCE} = S_{\\triangle ABE} + S_{\\triangle DCE}$"
+  },
+  {
+    "id": 305,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(2) 如图(2), 点  $E$  在  $\\square ABCD$  的边  $CD$  所在直线的上方."
+  },
+  {
+    "id": 306,
+    "type": "text",
+    "page_idx": 19,
+    "text": "请探究  $S_{\\triangle ADE}, S_{\\triangle BCE}, S_{\\triangle ABE}, S_{\\triangle DCE}$  之间的数量关系."
+  },
+  {
+    "id": 307,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/72419c81cfb84204fbdf2b8f226061e87183ab420a57debed1fd030a1b65737d.jpg",
+    "image_caption": "(1) （第16题）"
+  },
+  {
+    "id": 308,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/9e2330af53272113ec913169ab159311e259006cac27657574bf36febfadbad8.jpg",
+    "image_caption": "(2)"
+  },
+  {
+    "id": 309,
+    "type": "text",
+    "page_idx": 20,
+    "text": "17. 如图, 在  $\\square ABCD$  中,  $AB < BC$ ,  $AE \\perp BC$  于点  $E$ , 点  $P$  是  $BC$  上的动点, 连接  $AP$ ."
+  }
+]
+```

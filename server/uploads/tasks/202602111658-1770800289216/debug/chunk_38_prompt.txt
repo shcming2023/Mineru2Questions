@@ -1,0 +1,829 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2660,
+    "type": "text",
+    "page_idx": 164,
+    "text": "基础训练"
+  },
+  {
+    "id": 2661,
+    "type": "text",
+    "page_idx": 164,
+    "text": "1. 一根蜡烛长  $20\\mathrm{cm}$ , 点燃后每小时燃烧  $5\\mathrm{cm}$ , 燃烧时每小时剩下的  $h$  (单位:  $\\mathrm{cm}$ ) 与燃烧时间  $t$  (单位:  $\\mathrm{h}$ ) 的函数关系用图像表示应为( )."
+  },
+  {
+    "id": 2662,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/66f457253d7564b8ad562d2210f04c82dc1c3c06bcf9f778c629026f7a07f1d5.jpg",
+    "image_caption": "A."
+  },
+  {
+    "id": 2663,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/da9720cea93b39976f0e029e22ea19f57a1b50fef0711af603d03fd6cbef91ae.jpg",
+    "image_caption": "B."
+  },
+  {
+    "id": 2664,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/ebd7367932bd458d991033a338e70222e3ae4e2aed2e0c923a7a14f3986f289d.jpg",
+    "image_caption": "C."
+  },
+  {
+    "id": 2665,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/b7dc178f6d18dc2ab57c9606917751cd5dc0208257509d34652869e76c13dd22.jpg",
+    "image_caption": "D."
+  },
+  {
+    "id": 2666,
+    "type": "text",
+    "page_idx": 164,
+    "text": "2. 父亲节，学校“文苑”专栏登出了某同学回忆父亲的小诗：“同辞家门赴车站，别时叮咛语千万，学子满载信心去，老父怀抱希望还。”如果用纵轴表示父亲和学子在行进中离家的距离，横轴  $t$  表示离家的时间，那么下面与上述诗意大致相吻合的图像是（ ）."
+  },
+  {
+    "id": 2667,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/986b4ab6403663c792ce186766f9a3a2059bc9411552ab994db705becc70c03d.jpg",
+    "image_caption": "A."
+  },
+  {
+    "id": 2668,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/67cbf5c737680f3be41cb213e29c04a3d205dd074bf7403ad9090242e868e553.jpg",
+    "image_caption": "B."
+  },
+  {
+    "id": 2669,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/d915398c6b2a0876bcafc550fb1323c22f7e81602c5945bae924afbf307b23cc.jpg",
+    "image_caption": "C."
+  },
+  {
+    "id": 2670,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/ddd7370e43609f8b3655c729a70234355282cdad051cb2f53d613a73c4734509.jpg",
+    "image_caption": "D."
+  },
+  {
+    "id": 2671,
+    "type": "text",
+    "page_idx": 165,
+    "text": "3. 邮递员小王从县城出发,骑自行车到A村投递,途中遇到县城中学的学生李明从A村步行返校.小王在A村完成投递工作后,返回县城途中又遇到李明,便用自行车载上李明,一起到达县城,结果小王比预计时间晚到  $1\\mathrm{min}$ .二人与县城间的距离  $s$  (单位:  $\\mathrm{km}$ ) 和小王从县城出发后所用的时间  $t$  (单位:  $\\mathrm{min}$ ) 之间的函数关系如图所示,假设二人之间交流的时间忽略不计.请解答下列问题:"
+  },
+  {
+    "id": 2672,
+    "type": "text",
+    "text": "（1）小王和李明第一次相遇时，距县城多少千米？",
+    "page_idx": 165
+  },
+  {
+    "id": 2673,
+    "type": "text",
+    "text": "（2）小王从县城出发到返回县城用了多少分钟？",
+    "page_idx": 165
+  },
+  {
+    "id": 2674,
+    "type": "text",
+    "text": "(3) 李明从 A 村到县城用了多少分钟？",
+    "page_idx": 165
+  },
+  {
+    "id": 2675,
+    "type": "image",
+    "page_idx": 165,
+    "img_path": "images/48c82178616096cbeb2a3866a2e260d5929bff89ca13eeb9e92ad7036dcaaf88.jpg",
+    "image_caption": "（第3题）"
+  },
+  {
+    "id": 2676,
+    "type": "text",
+    "page_idx": 165,
+    "text": "4. 已知蜡烛每分钟燃烧的长度相等, 一支蜡烛点燃  $6 \\mathrm{~min}$  则剩下烛长  $12 \\mathrm{~cm}$ ; 点燃  $16 \\mathrm{~min}$  则剩下烛长  $7 \\mathrm{~cm}$ . 设点燃时间为  $t \\mathrm{~min}$ , 剩下烛长为  $y \\mathrm{~cm}$ ."
+  },
+  {
+    "id": 2677,
+    "type": "text",
+    "text": "(1) 写出  $y$  与  $t$  之间的函数表达式；",
+    "page_idx": 165
+  },
+  {
+    "id": 2678,
+    "type": "text",
+    "text": "（2）画出(1)的函数图像；",
+    "page_idx": 165
+  },
+  {
+    "id": 2679,
+    "type": "text",
+    "text": "（3）这支蜡烛点完需要多少时间？",
+    "page_idx": 165
+  },
+  {
+    "id": 2680,
+    "type": "image",
+    "page_idx": 166,
+    "img_path": "images/9dfc0d19d21c9b6cb7d37be789d83ef8ea7786c9bbdcd935e6b49782269a113a.jpg"
+  },
+  {
+    "id": 2681,
+    "type": "text",
+    "page_idx": 166,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2682,
+    "type": "text",
+    "page_idx": 166,
+    "text": "5. A 市和 B 市分别有库存机器 12 台和 6 台, 现决定支援 C 市 10 台, 支援 D 市 8 台, 已知从 A 市调运一台机器到 C 市和 D 市的运费分别为 400 元和 800 元, 从 B 市调运一台机器到 C 市和 D 市的运费分别为 300 元和 500 元."
+  },
+  {
+    "id": 2683,
+    "type": "text",
+    "text": "(1) 设 B 市运往 C 市机器  $x$  台, 求总运费  $y$  (单位: 元) 与  $x$  (单位: 台) 之间的函数表达式;",
+    "page_idx": 166
+  },
+  {
+    "id": 2684,
+    "type": "text",
+    "text": "（2）若要求总运费不超过9000元，问共有几种调运方案；",
+    "page_idx": 166
+  },
+  {
+    "id": 2685,
+    "type": "text",
+    "text": "（3）求出总运费最低的调运方案，最低运费是多少？",
+    "page_idx": 166
+  },
+  {
+    "id": 2686,
+    "type": "text",
+    "page_idx": 166,
+    "text": "6. 某研究所开发了一种新药，在检验药效时发现，如果成人按规定剂量服用，那么服药  $2\\mathrm{h}$  后血液中含药量最高，达每毫升  $6\\mu \\mathrm{g}$ ，接着逐步衰减，服药  $10\\mathrm{h}$  后血液中含药量达每毫升  $3\\mu \\mathrm{g}$ ，每毫升血液中含药量  $y$ （单位： $\\mu \\mathrm{g}$ ）随着时间  $x$ （单位： $\\mathrm{h}$ ）的变化如图所示。"
+  },
+  {
+    "id": 2687,
+    "type": "text",
+    "text": "（1）当成人按规定剂量服用后，分别求出当  $x \\leqslant 2$  和  $x > 2$  时， $y$  与  $x$  之间的函数表达式；",
+    "page_idx": 166
+  },
+  {
+    "id": 2688,
+    "type": "text",
+    "text": "(2) 如果每毫升血液中含药量为  $4\\mu \\mathrm{g}$  或  $4\\mu \\mathrm{g}$  以上时, 治疗疾病是有效的, 那么有效时间有多长?",
+    "page_idx": 166
+  },
+  {
+    "id": 2689,
+    "type": "image",
+    "page_idx": 166,
+    "img_path": "images/e411a01645049fa8dd69642a59810790f95144a72494e4964d4af497d343c9b7.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 2690,
+    "type": "text",
+    "page_idx": 167,
+    "text": "阶段训练⑥"
+  },
+  {
+    "id": 2691,
+    "type": "text",
+    "page_idx": 167,
+    "text": "1. 函数  $y = kx - k (k \\neq 0)$  的图像经过点  $P$ ，且  $y$  的值随  $x$  的增大而增大，则点  $P$  的坐标可以为（ ）."
+  },
+  {
+    "id": 2692,
+    "type": "text",
+    "page_idx": 167,
+    "text": "A. (0, 3)"
+  },
+  {
+    "id": 2693,
+    "type": "text",
+    "page_idx": 167,
+    "text": "B.  $(-1, 2)$"
+  },
+  {
+    "id": 2694,
+    "type": "text",
+    "page_idx": 167,
+    "text": "C.  $(-1, -1)$"
+  },
+  {
+    "id": 2695,
+    "type": "text",
+    "page_idx": 167,
+    "text": "D.  $(3, -2)$"
+  },
+  {
+    "id": 2696,
+    "type": "text",
+    "page_idx": 167,
+    "text": "2. 下图中表示函数  $y = \\frac{x}{a} - a$  和  $y = \\frac{a}{x}$  在同一平面直角坐标系中的图像是（ ）."
+  },
+  {
+    "id": 2697,
+    "type": "image",
+    "page_idx": 167,
+    "img_path": "images/a78ff61802f0e944a58a459167294ac69d56f4b88d781f31da02bab54354ca67.jpg",
+    "image_caption": "A."
+  },
+  {
+    "id": 2698,
+    "type": "image",
+    "page_idx": 167,
+    "img_path": "images/12d91e3c05171419143da437c183aff6468622586ecbddfa7871d969875daa55.jpg",
+    "image_caption": "B."
+  },
+  {
+    "id": 2699,
+    "type": "image",
+    "page_idx": 167,
+    "img_path": "images/a4166a9f1b10fdc32592e3ac04d1cbc015ae62192251405be2eabdf7cee17843.jpg",
+    "image_caption": "C."
+  },
+  {
+    "id": 2700,
+    "type": "image",
+    "page_idx": 167,
+    "img_path": "images/e84e7fe2b2e5584f60a29d4f5ea56cc0faf0a92b70c14b0e0d72aa52f1c7b812.jpg",
+    "image_caption": "D."
+  },
+  {
+    "id": 2701,
+    "type": "text",
+    "page_idx": 167,
+    "text": "3. 在平面直角坐标系中, 把直线  $y = 2x$  向右平移一个单位长度后, 其直线表达式为( )."
+  },
+  {
+    "id": 2702,
+    "type": "text",
+    "page_idx": 167,
+    "text": "A.  $y = 2x + 1$"
+  },
+  {
+    "id": 2703,
+    "type": "text",
+    "page_idx": 167,
+    "text": "B.  $y = 2x - 1$"
+  },
+  {
+    "id": 2704,
+    "type": "text",
+    "page_idx": 167,
+    "text": "C.  $y = 2x + 2$"
+  },
+  {
+    "id": 2705,
+    "type": "text",
+    "page_idx": 167,
+    "text": "D.  $y = 2x - 2$"
+  },
+  {
+    "id": 2706,
+    "type": "text",
+    "page_idx": 167,
+    "text": "4. 在直线  $y = \\frac{1}{2} x + \\frac{1}{2}$  上，到  $x$  轴或  $y$  轴的距离为 1 的点有（）个."
+  },
+  {
+    "id": 2707,
+    "type": "text",
+    "page_idx": 167,
+    "text": "A. 1"
+  },
+  {
+    "id": 2708,
+    "type": "text",
+    "page_idx": 167,
+    "text": "B. 2"
+  },
+  {
+    "id": 2709,
+    "type": "text",
+    "page_idx": 167,
+    "text": "C. 3"
+  },
+  {
+    "id": 2710,
+    "type": "text",
+    "page_idx": 167,
+    "text": "D. 4"
+  },
+  {
+    "id": 2711,
+    "type": "text",
+    "page_idx": 167,
+    "text": "5. 一次函数  $y = kx - k$ ，若  $y$  随着  $x$  的增大而增大，则该图像经过 象限"
+  },
+  {
+    "id": 2712,
+    "type": "text",
+    "page_idx": 167,
+    "text": "6. 若  $abc < 0$ ，且  $y = \\frac{a}{b}x - \\frac{c}{a}$  的图像不经过第四象限，则  $(a + b, c)$  所在的象限为 ______ 象限."
+  },
+  {
+    "id": 2713,
+    "type": "text",
+    "page_idx": 167,
+    "text": "7. 一次函数  $y = kx + b$  的图像不经过第二象限，则  $k$  和  $b$  应满足"
+  },
+  {
+    "id": 2714,
+    "type": "text",
+    "page_idx": 167,
+    "text": "8. 若直线  $y = x - 3$  与  $y = -2x + a$  交于  $x$  轴，则  $y = 3x + a$  经过第 ______ 象限."
+  },
+  {
+    "id": 2715,
+    "type": "text",
+    "page_idx": 167,
+    "text": "9. 已知直线  $l: y = -3x + 2$ ，现有命题：①点  $P(-1, 1)$  在直线  $l$  上；②若直线  $l$  与  $x$  轴、 $y$  轴分别交于  $A, B$  两点，则  $AB = \\frac{2}{3}\\sqrt{10}$ ；③若点  $M\\left(\\frac{1}{3}, 1\\right)$ ， $N(a, b)$  都在直线  $l$  上，且  $a > \\frac{1}{3}$ ，则  $b > 1$ ；④若点  $Q$  到两坐标轴的距离相等，且点  $Q$  在  $l$  上，则点  $Q$  在第一或第四象限。其中正确的命题是 ______（填序号）。"
+  },
+  {
+    "id": 2716,
+    "type": "text",
+    "page_idx": 167,
+    "text": "10. 已知  $y + a$  与  $x + b$  成正比例, 且当  $x = 1, -2$  时,  $y$  的值分别为 7, 4. 则  $y$  与  $x$  之间的函数表达式为"
+  },
+  {
+    "id": 2717,
+    "type": "text",
+    "page_idx": 168,
+    "text": "11. 正方形  $A_{1}B_{1}C_{1}O, A_{2}B_{2}C_{2}C_{1}, A_{3}B_{3}C_{3}C_{2}, \\cdots$  按如图所示的方式放置，点  $A_{1}, A_{2}, A_{3}, \\cdots$  和点  $C_{1}, C_{2}, C_{3}, \\cdots$  分别在直线  $y = kx + b (k > 0)$  和  $x$  轴上，已知点  $B_{1}(1, 1)$ ，点  $B_{2}(3, 2)$ ，则点  $B_{n}$  的坐标是"
+  },
+  {
+    "id": 2718,
+    "type": "text",
+    "page_idx": 168,
+    "text": "12. 在一次蜡烛燃烧试验中, 甲、乙两根蜡烛燃烧时剩余部分的高度  $y$  (单位:  $\\mathrm{cm}$ ) 与燃烧时间  $x$  (单位:  $\\mathrm{h}$ ) 之间的关系如图所示, 请根据图像所提供的信息解答下列问题:"
+  },
+  {
+    "id": 2719,
+    "type": "text",
+    "text": "（1）甲、乙两根蜡烛燃烧前的高度分别是 ，从点燃到燃尽所用的时间分别是",
+    "page_idx": 168
+  },
+  {
+    "id": 2720,
+    "type": "text",
+    "text": "（2）分别求甲、乙两根蜡烛燃烧时  $y$  与  $x$  之间的函数表达式；",
+    "page_idx": 168
+  },
+  {
+    "id": 2721,
+    "type": "text",
+    "text": "(3) 燃烧多长时间, 甲、乙两根蜡烛等高 (不考虑都燃尽时的情况).",
+    "page_idx": 168
+  },
+  {
+    "id": 2722,
+    "type": "image",
+    "page_idx": 168,
+    "img_path": "images/317808477c4beab3f3f2f7e6d0d3b20b2ebdf359c501de5d56e59ab9ee7f89ef.jpg",
+    "image_caption": "（第11题）"
+  },
+  {
+    "id": 2723,
+    "type": "image",
+    "page_idx": 168,
+    "img_path": "images/997576ed773107fb5b927c01789061bc793b3a8823e256840a26883a2e809065.jpg",
+    "image_caption": "（第12题）"
+  },
+  {
+    "id": 2724,
+    "type": "text",
+    "page_idx": 168,
+    "text": "13. 直线  $y = \\frac{1}{3} x - 4$  交  $y$  轴于点  $A$ ，求将该直线绕点  $A$  顺时针旋转  $90^{\\circ}$  后所得直线的表达式."
+  },
+  {
+    "id": 2725,
+    "type": "text",
+    "page_idx": 169,
+    "text": "14. 已知某服装厂现有 A 种布料  $70 \\mathrm{~m}$ , B 种布料  $52 \\mathrm{~m}$ , 现计划用这两种布料生产甲、乙两种型号的时装共 80 套. 已知做一套甲种型号的时装或一套乙种型号的时装所需 A, B 两种布料如下表:"
+  },
+  {
+    "id": 2726,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>甲</td><td>乙</td></tr>",
+    "page_idx": 169
+  },
+  {
+    "id": 2727,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A种/m</td><td>0.6</td><td>1.1</td></tr>",
+    "page_idx": 169
+  },
+  {
+    "id": 2728,
+    "type": "text",
+    "text": "[Table Row] <tr><td>B种/m</td><td>0.9</td><td>0.4</td></tr>",
+    "page_idx": 169
+  },
+  {
+    "id": 2729,
+    "type": "text",
+    "page_idx": 169,
+    "text": "若销售一套甲种型号的时装可获利润45元，销售一套乙种型号的时装可获利润50元.设生产乙种型号的时装为  $x$  套，用这批布料生产这两种型号的时装获得的总利润为 $y$  元"
+  },
+  {
+    "id": 2730,
+    "type": "text",
+    "text": "(1) 写出  $y$  与  $x$  之间的函数表达式，并写出自变量的取值范围；",
+    "page_idx": 169
+  },
+  {
+    "id": 2731,
+    "type": "text",
+    "text": "(2) 生产两种型号的时装各多少套时, 该服装厂获得的总利润最大? 最大利润是多少元?",
+    "page_idx": 169
+  },
+  {
+    "id": 2732,
+    "type": "text",
+    "page_idx": 170,
+    "text": "本章复习题"
+  },
+  {
+    "id": 2733,
+    "type": "text",
+    "page_idx": 170,
+    "text": "一、选择题"
+  },
+  {
+    "id": 2734,
+    "type": "text",
+    "page_idx": 170,
+    "text": "1. 下列函数中， $y$  随着  $x$  的增大而减小的函数是（ ）."
+  },
+  {
+    "id": 2735,
+    "type": "text",
+    "page_idx": 170,
+    "text": "A.  $y = \\frac{1}{2} x$"
+  },
+  {
+    "id": 2736,
+    "type": "text",
+    "page_idx": 170,
+    "text": "B.  $y = -x + 3$"
+  },
+  {
+    "id": 2737,
+    "type": "text",
+    "page_idx": 170,
+    "text": "C.  $y = 3x + 1$"
+  },
+  {
+    "id": 2738,
+    "type": "text",
+    "page_idx": 170,
+    "text": "D.  $y = 2x - 1$"
+  },
+  {
+    "id": 2739,
+    "type": "text",
+    "page_idx": 170,
+    "text": "2. 把一个二元一次方程组中的两个方程化为一次函数并画图像，所得的两条直线平行，则此方程组（ ）."
+  },
+  {
+    "id": 2740,
+    "type": "text",
+    "page_idx": 170,
+    "text": "A. 无解"
+  },
+  {
+    "id": 2741,
+    "type": "text",
+    "page_idx": 170,
+    "text": "B. 有唯一解"
+  },
+  {
+    "id": 2742,
+    "type": "text",
+    "page_idx": 170,
+    "text": "C. 有无数个解"
+  },
+  {
+    "id": 2743,
+    "type": "text",
+    "page_idx": 170,
+    "text": "D. 以上都有可能"
+  },
+  {
+    "id": 2744,
+    "type": "text",
+    "page_idx": 170,
+    "text": "3. 已知点  $(-4, y_1)$ ， $(2, y_2)$  都在直线  $y = \\frac{1}{2} x + 2$  上，则  $y_1$  与  $y_2$  大小关系是（ ）."
+  },
+  {
+    "id": 2745,
+    "type": "text",
+    "page_idx": 170,
+    "text": "A.  $y_{1} > y_{2}$"
+  },
+  {
+    "id": 2746,
+    "type": "text",
+    "page_idx": 170,
+    "text": "B.  $y_{1} = y_{2}$"
+  },
+  {
+    "id": 2747,
+    "type": "text",
+    "page_idx": 170,
+    "text": "C.  $y_{1} < y_{2}$"
+  },
+  {
+    "id": 2748,
+    "type": "text",
+    "page_idx": 170,
+    "text": "D. 不能比较"
+  },
+  {
+    "id": 2749,
+    "type": "text",
+    "page_idx": 170,
+    "text": "4. 无论  $m, n$  为何实数，直线  $y = -3x + 1$  与  $y = mx + n$  的交点不可能在（ ）."
+  },
+  {
+    "id": 2750,
+    "type": "text",
+    "page_idx": 170,
+    "text": "A. 第一象限"
+  },
+  {
+    "id": 2751,
+    "type": "text",
+    "page_idx": 170,
+    "text": "B. 第二象限"
+  },
+  {
+    "id": 2752,
+    "type": "text",
+    "page_idx": 170,
+    "text": "C. 第三象限"
+  },
+  {
+    "id": 2753,
+    "type": "text",
+    "page_idx": 170,
+    "text": "D. 第四象限"
+  },
+  {
+    "id": 2754,
+    "type": "text",
+    "page_idx": 170,
+    "text": "5. 一次函数  $y = kx + b$  ( $k, b$  是常数， $k \\neq 0$ ) 的图像如图所示，则不等式  $kx + b > 0$  的解集是（ ）."
+  },
+  {
+    "id": 2755,
+    "type": "text",
+    "page_idx": 170,
+    "text": "A.  $x > - 2$"
+  },
+  {
+    "id": 2756,
+    "type": "text",
+    "page_idx": 170,
+    "text": "B.  $x > 0$"
+  },
+  {
+    "id": 2757,
+    "type": "text",
+    "page_idx": 170,
+    "text": "C.  $x < -2$"
+  },
+  {
+    "id": 2758,
+    "type": "text",
+    "page_idx": 170,
+    "text": "D.  $x < 0$"
+  },
+  {
+    "id": 2759,
+    "type": "image",
+    "page_idx": 170,
+    "img_path": "images/14f5fe5741c138ea62942e7202343af082a61a9098c5e41947af82c379a2b5be.jpg",
+    "image_caption": "（第5题）"
+  }
+]
+```

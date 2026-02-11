@@ -1,0 +1,827 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 980,
+    "type": "text",
+    "page_idx": 60,
+    "text": "11. 如图, 在正方形  $ABCD$  中,  $E$  为对角线  $AC$  上一点, 连接  $EB$ ,  $ED$ , 延长  $BE$  交  $AD$  于点  $F$ . 若  $\\angle DEB = 140^\\circ$ , 则  $\\angle AFE$  的度数为"
+  },
+  {
+    "id": 981,
+    "type": "text",
+    "page_idx": 60,
+    "text": "12. 如图, 将边长为 24 的正方形  $ABCD$  折叠, 使得点  $A$  落在边  $CD$  上的点  $E$  处. 若折痕  $FG$  的长为 25 , 则线段  $CE$  的长为"
+  },
+  {
+    "id": 982,
+    "type": "text",
+    "page_idx": 61,
+    "text": "13. 下列判断正确的是（ ）"
+  },
+  {
+    "id": 983,
+    "type": "text",
+    "text": "A. 一组对边平行且另一组对边相等的四边形是平行四边形",
+    "page_idx": 61
+  },
+  {
+    "id": 984,
+    "type": "text",
+    "text": "B. 对角线相等的四边形是矩形",
+    "page_idx": 61
+  },
+  {
+    "id": 985,
+    "type": "text",
+    "text": "C. 一组对边平行且有一组对角相等的四边形是平行四边形",
+    "page_idx": 61
+  },
+  {
+    "id": 986,
+    "type": "text",
+    "text": "D. 对角线互相垂直且相等的四边形是正方形",
+    "page_idx": 61
+  },
+  {
+    "id": 987,
+    "type": "text",
+    "page_idx": 61,
+    "text": "14. 在四边形  $ABCD$  中,  $AC$ ,  $BD$  相交于点  $O$ , 能判别这个四边形是正方形的条件是( )."
+  },
+  {
+    "id": 988,
+    "type": "text",
+    "text": "A.  $OA = OB = OC = OD, AC \\perp BD$",
+    "page_idx": 61
+  },
+  {
+    "id": 989,
+    "type": "text",
+    "text": "B.  $AB \\parallel CD, AC = BD$",
+    "page_idx": 61
+  },
+  {
+    "id": 990,
+    "type": "text",
+    "text": "C.  $AD \\parallel BC, \\angle A = \\angle C$",
+    "page_idx": 61
+  },
+  {
+    "id": 991,
+    "type": "text",
+    "text": "D.  $OA = OC$  ，  $OB = OD$  ，  $AB = BC$",
+    "page_idx": 61
+  },
+  {
+    "id": 992,
+    "type": "text",
+    "page_idx": 61,
+    "text": "15. 已知四边形  $ABCD$  是平行四边形，下列结论中不正确的是（ ）."
+  },
+  {
+    "id": 993,
+    "type": "text",
+    "text": "A. 当  $AB = BC$  时, 它是菱形",
+    "page_idx": 61
+  },
+  {
+    "id": 994,
+    "type": "text",
+    "text": "B. 当  $AC \\perp BD$  时, 它是菱形",
+    "page_idx": 61
+  },
+  {
+    "id": 995,
+    "type": "text",
+    "text": "C. 当  $\\angle ABC = 90^{\\circ}$  时, 它是矩形",
+    "page_idx": 61
+  },
+  {
+    "id": 996,
+    "type": "text",
+    "text": "D. 当  $AC = BD$  时, 它是正方形",
+    "page_idx": 61
+  },
+  {
+    "id": 997,
+    "type": "text",
+    "page_idx": 61,
+    "text": "16. 如图, 在正方形  $ABCD$  中,  $AB = 6$ , 点  $E$  在边  $CD$  上, 且  $CD = 3DE$ . 将  $\\triangle ADE$  沿  $AE$  对折至  $\\triangle AFE$ , 延长  $EF$  交边  $BC$  于点  $G$ , 连接  $AG, CF$ . 有下列 4 个结论: ①  $\\triangle ABG \\cong \\triangle AFG$ ; ②  $BG = GC$ ; ③  $AG \\parallel CF$ ; ④  $S_{\\triangle FGC} = 3$ . 其中正确结论的个数是 ( )."
+  },
+  {
+    "id": 998,
+    "type": "image",
+    "page_idx": 61,
+    "img_path": "images/52d8298dc917370cd5207870808e5e1f9e9e67a272096c879116febce48a0ca3.jpg",
+    "image_caption": "（第16题）"
+  },
+  {
+    "id": 999,
+    "type": "text",
+    "page_idx": 61,
+    "text": "A. 1"
+  },
+  {
+    "id": 1000,
+    "type": "text",
+    "page_idx": 61,
+    "text": "B. 2"
+  },
+  {
+    "id": 1001,
+    "type": "text",
+    "page_idx": 61,
+    "text": "C. 3"
+  },
+  {
+    "id": 1002,
+    "type": "text",
+    "page_idx": 61,
+    "text": "D. 4"
+  },
+  {
+    "id": 1003,
+    "type": "text",
+    "page_idx": 61,
+    "text": "17. 如图, 在四边形  $ABCD$  中,  $\\angle ABC = 90^\\circ$ ,  $CD \\perp AD$ ,  $AD^2 + CD^2 = 2AB^2$ ."
+  },
+  {
+    "id": 1004,
+    "type": "text",
+    "text": "（1）求证：  $AB = BC$",
+    "page_idx": 61
+  },
+  {
+    "id": 1005,
+    "type": "text",
+    "text": "(2)  $BE \\perp AD$  于点  $E$ , 试证明:  $BE = AE + CD$ .",
+    "page_idx": 61
+  },
+  {
+    "id": 1006,
+    "type": "image",
+    "page_idx": 61,
+    "img_path": "images/e867c0ab15b3dc028a33c37cc966845b8980bad1e9c3b42689c5d4a22dc78551.jpg",
+    "image_caption": "（第17题）"
+  },
+  {
+    "id": 1007,
+    "type": "text",
+    "page_idx": 62,
+    "text": "18. 如图, 在  $\\square ABCD$  中, 对角线  $AC$ ,  $BD$  交于点  $O$ ,  $E$  是  $BD$  延长线上的点, 且  $\\triangle ACE$  是等边三角形."
+  },
+  {
+    "id": 1008,
+    "type": "text",
+    "text": "（1）求证：四边形ABCD是菱形；",
+    "page_idx": 62
+  },
+  {
+    "id": 1009,
+    "type": "text",
+    "text": "（2）若  $\\angle AED = 2\\angle EAD$  ，求证：四边形ABCD是正方形",
+    "page_idx": 62
+  },
+  {
+    "id": 1010,
+    "type": "image",
+    "page_idx": 62,
+    "img_path": "images/97730a49624127ba127e9e58495b3613fb0f2d666394f8f7fff0f761c9154da5.jpg",
+    "image_caption": "（第18题）"
+  },
+  {
+    "id": 1011,
+    "type": "text",
+    "page_idx": 62,
+    "text": "19. 如图, 在正方形  $ABCD$  中,  $M$  是边  $AB$  上一点,  $E$  是  $AB$  延长线上一点,  $MN \\perp DM$  交  $\\angle CBE$  的平分线于点  $N$ . 求证:  $DM = MN$ ."
+  },
+  {
+    "id": 1012,
+    "type": "image",
+    "page_idx": 62,
+    "img_path": "images/ca40278b3213bb71ec3106f1accad2e9fe49318f426c513d0b29bb5d9170e1d6.jpg",
+    "image_caption": "（第19题）"
+  },
+  {
+    "id": 1013,
+    "type": "text",
+    "page_idx": 63,
+    "text": "20. 如图,  $E$  是正方形ABCD内一点,  $\\triangle CDE$  是等边三角形, 连接  $EB$ ,  $EA$ , 延长  $BE$  交  $AD$  于点  $F$ ."
+  },
+  {
+    "id": 1014,
+    "type": "text",
+    "text": "（1）求证： $\\triangle ADE \\cong \\triangle BCE$ ；",
+    "page_idx": 63
+  },
+  {
+    "id": 1015,
+    "type": "text",
+    "text": "（2）求  $\\angle AFB$  的度数",
+    "page_idx": 63
+  },
+  {
+    "id": 1016,
+    "type": "image",
+    "page_idx": 63,
+    "img_path": "images/d3469516a47dae5a6c0aa4e7f029fe3a90a83ef6ba6548da822a5d67d6aec62f.jpg",
+    "image_caption": "（第20题）"
+  },
+  {
+    "id": 1017,
+    "type": "image",
+    "page_idx": 63,
+    "img_path": "images/03dbe2f6e888182919cc0de04620f1b58e0a2e1fd8e87be11fc961077b656c98.jpg"
+  },
+  {
+    "id": 1018,
+    "type": "text",
+    "page_idx": 63,
+    "text": "拓展训练"
+  },
+  {
+    "id": 1019,
+    "type": "text",
+    "page_idx": 63,
+    "text": "21. 已知: 如图, 四边形  $ABCD$  是正方形,  $E$  是  $CD$  上的点,  $BF$  平分  $\\angle ABE$ , 且点  $F$  是  $AD$  的中点. 求证:  $BE = AD + DE$ ."
+  },
+  {
+    "id": 1020,
+    "type": "image",
+    "page_idx": 63,
+    "img_path": "images/dea95c101c8b0c0bf63e11e6b88b4ac295c3c7106a21c479aef2087ebc45c835.jpg",
+    "image_caption": "（第21题）"
+  },
+  {
+    "id": 1021,
+    "type": "text",
+    "page_idx": 64,
+    "text": "22. 如图(1)，点  $E$  是射线  $BC$  上的一点，以  $BC, CE$  为边作正方形ABCD和正方形CEFG，连接  $AF$  ，取  $AF$  的中点  $M$  ，连接DM，MG."
+  },
+  {
+    "id": 1022,
+    "type": "text",
+    "text": "(1) 线段  $DM$  和  $MG$  的数量关系是 , 位置关系是",
+    "page_idx": 64
+  },
+  {
+    "id": 1023,
+    "type": "text",
+    "text": "(2) 正方形  $CEFG$  绕点  $C$  逆时针旋转至图(2)的过程中, 其他条件不变, 则(1)中的结论是否仍成立? 说明理由;",
+    "page_idx": 64
+  },
+  {
+    "id": 1024,
+    "type": "text",
+    "text": "(3) 已知  $BC = 10, CE = 2$ , 在正方形  $CEFG$  绕点  $C$  旋转的过程中, 当点  $A, F, E$  共线时, 直接写出  $\\triangle DMG$  的面积.",
+    "page_idx": 64
+  },
+  {
+    "id": 1025,
+    "type": "image",
+    "page_idx": 64,
+    "img_path": "images/76704aa5590a94014a7708af6ba77c189b5dd1f78ae86bd2b5413150630f8f3c.jpg",
+    "image_caption": "(1)"
+  },
+  {
+    "id": 1026,
+    "type": "image",
+    "page_idx": 64,
+    "img_path": "images/62ff58a8dd1d5dffd3d645ef2c54099c7a8a76e0251a66a05fc48b673ec8b4a8.jpg",
+    "image_caption": "(2) （第22题）"
+  },
+  {
+    "id": 1027,
+    "type": "text",
+    "page_idx": 65,
+    "text": "阶段训练 ②"
+  },
+  {
+    "id": 1028,
+    "type": "text",
+    "text": "1.矩形的对称轴有 条.",
+    "page_idx": 65
+  },
+  {
+    "id": 1029,
+    "type": "text",
+    "text": "2. 已知一个菱形的周长是 20, 两条对角线长的比是  $4:3$ , 则这个菱形的面积是",
+    "page_idx": 65
+  },
+  {
+    "id": 1030,
+    "type": "text",
+    "text": "3. 对角线 的四边形是菱形",
+    "page_idx": 65
+  },
+  {
+    "id": 1031,
+    "type": "text",
+    "text": "4. 正方形的一条对角线长为  $2\\sqrt{2}$ , 这个正方形的边长为",
+    "page_idx": 65
+  },
+  {
+    "id": 1032,
+    "type": "text",
+    "text": "5. 在四边形  $ABCD$  中,  $AB \\parallel CD$ , 要使四边形  $ABCD$  是平行四边形, 只需添加一个条件, 这个条件可以是 ________ (只需填写一种情况).",
+    "page_idx": 65
+  },
+  {
+    "id": 1033,
+    "type": "text",
+    "text": "6. 已知  $E$  是正方形ABCD的对角线BD上一点，且  $BE = BA$  ，则  $\\angle DAE$  的度数为",
+    "page_idx": 65
+  },
+  {
+    "id": 1034,
+    "type": "text",
+    "text": "7. 如果一个菱形的一条对角线长为 10, 面积为 60, 那么这个菱形的另一条对角线长为",
+    "page_idx": 65
+  },
+  {
+    "id": 1035,
+    "type": "text",
+    "text": "8. 矩形ABCD的对角线AC，BD相交于点  $O$  ，  $AB = 4$  ，  $\\angle AOD = 120^{\\circ}$  ，则矩形ABCD的面积是",
+    "page_idx": 65
+  },
+  {
+    "id": 1036,
+    "type": "text",
+    "text": "9. 在四边形  $ABCD$  中,  $AC = BD$ ,  $AB = CD$ , 要使四边形  $ABCD$  是矩形, 只需添加一个条件, 这个条件可以是 ________ (只需填写一种情况).",
+    "page_idx": 65
+  },
+  {
+    "id": 1037,
+    "type": "text",
+    "text": "10. 如图, 在菱形  $ABCD$  中,  $AE$  垂直平分  $BC$ , 垂足为点  $E$ ,  $AB = 4 \\mathrm{~cm}$ . 那么, 菱形  $ABCD$  的面积是 , 对角线  $BD$  的长是",
+    "page_idx": 65
+  },
+  {
+    "id": 1038,
+    "type": "text",
+    "text": "11. 如图,  $E, F, G, H$  分别为正方形  $ABCD$  的边  $AB, BC, CD, DA$  上的点, 且  $AE = BF = CG = DH = \\frac{1}{3} AB$ , 则图中阴影部分的面积与正方形  $ABCD$  的面积之比为",
+    "page_idx": 65
+  },
+  {
+    "id": 1039,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/f4000cee223ec2c1228314ec14e5e22ea524da28b810b72a429299a172648e5a.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 1040,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/489368e3d5f7f56e8a71277cfe601e968ebf0089f9174e3a54f7d3d83b4f5692.jpg",
+    "image_caption": "（第11题）"
+  },
+  {
+    "id": 1041,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/710724d06011975e2852b8e92d41ab3dee1750f69918b4e8479ed48251e34e2e.jpg",
+    "image_caption": "（第12题）"
+  },
+  {
+    "id": 1042,
+    "type": "text",
+    "text": "12. 如图, 在  $\\triangle ABC$  中,  $AB = 6$ ,  $AC = 5$ , 以  $BC$  为对角线作正方形  $BDCE$ , 连接  $AD$ , 则  $AD$  的最大值是",
+    "page_idx": 65
+  },
+  {
+    "id": 1043,
+    "type": "text",
+    "text": "13. 下列图形中，是中心对称图形但不是轴对称图形的是（ ）.",
+    "page_idx": 65
+  },
+  {
+    "id": 1044,
+    "type": "text",
+    "text": "A. 平行四边形",
+    "page_idx": 65
+  },
+  {
+    "id": 1045,
+    "type": "text",
+    "text": "B. 矩形",
+    "page_idx": 65
+  },
+  {
+    "id": 1046,
+    "type": "text",
+    "text": "C. 等边三角形",
+    "page_idx": 65
+  },
+  {
+    "id": 1047,
+    "type": "text",
+    "text": "D. 菱形",
+    "page_idx": 65
+  },
+  {
+    "id": 1048,
+    "type": "text",
+    "page_idx": 65,
+    "text": "14. 下列命题中，是真命题的是（ ）."
+  },
+  {
+    "id": 1049,
+    "type": "text",
+    "page_idx": 65,
+    "text": "A. 对角线相等的四边形是矩形"
+  },
+  {
+    "id": 1050,
+    "type": "text",
+    "page_idx": 65,
+    "text": "B. 对角线互相垂直平分的四边形是正方形"
+  },
+  {
+    "id": 1051,
+    "type": "text",
+    "page_idx": 65,
+    "text": "C. 对角线互相垂直的四边形是菱形"
+  },
+  {
+    "id": 1052,
+    "type": "text",
+    "page_idx": 65,
+    "text": "D. 对角线互相平分的四边形是平行四边形"
+  },
+  {
+    "id": 1053,
+    "type": "text",
+    "page_idx": 66,
+    "text": "15. 正方形具有而菱形不一定具有的性质是（ ）."
+  },
+  {
+    "id": 1054,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A. 对角线相等"
+  },
+  {
+    "id": 1055,
+    "type": "text",
+    "page_idx": 66,
+    "text": "B. 对角线互相垂直平分"
+  },
+  {
+    "id": 1056,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C. 对角线平分一组对角"
+  },
+  {
+    "id": 1057,
+    "type": "text",
+    "page_idx": 66,
+    "text": "D. 四条边相等"
+  },
+  {
+    "id": 1058,
+    "type": "text",
+    "page_idx": 66,
+    "text": "16. 如图, 将一张四边形纸片沿两组对边的中点连线剪开, 得到四张小纸片. 用这四张小纸片一定可以拼成( )."
+  },
+  {
+    "id": 1059,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/23b37455bccb782e9183d74e37c996e3775e5915622d97cdb0d5f865e03d030f.jpg",
+    "image_caption": "（第16题）"
+  },
+  {
+    "id": 1060,
+    "type": "text",
+    "page_idx": 66,
+    "text": "A. 正方形"
+  },
+  {
+    "id": 1061,
+    "type": "text",
+    "page_idx": 66,
+    "text": "B. 矩形"
+  },
+  {
+    "id": 1062,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C. 菱形"
+  },
+  {
+    "id": 1063,
+    "type": "text",
+    "page_idx": 66,
+    "text": "D. 平行四边形"
+  },
+  {
+    "id": 1064,
+    "type": "text",
+    "page_idx": 66,
+    "text": "17. 如图, 矩形  $ABCD$  的对角线  $AC$  的垂直平分线与边  $AB, DC$  的交点为  $E, F$ . 求证: 四边形  $AFCE$  是菱形."
+  },
+  {
+    "id": 1065,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/0f27713adb5a067620f77655f6c7b59eae0a94de81dde68e2433fb835c29b20a.jpg",
+    "image_caption": "（第17题）"
+  },
+  {
+    "id": 1066,
+    "type": "text",
+    "page_idx": 66,
+    "text": "18. 如图, 将  $\\square ABCD$  的边  $DC$  延长到点  $E$ , 使  $CE = DC$ , 连接  $AE$ , 交  $BC$  于点  $F$ ."
+  },
+  {
+    "id": 1067,
+    "type": "text",
+    "text": "（1）求证： $\\triangle ABF \\cong \\triangle ECF$ ；",
+    "page_idx": 66
+  },
+  {
+    "id": 1068,
+    "type": "text",
+    "text": "(2) 若  $\\angle AFC = 2\\angle D$  ，连接  $AC, BE$  ，求证：四边形ABEC是矩形",
+    "page_idx": 66
+  },
+  {
+    "id": 1069,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/3480d02dd660910b6ba5dada5f6729667c86591c7db92fceb444e53bc26f606b.jpg",
+    "image_caption": "（第18题）"
+  },
+  {
+    "id": 1070,
+    "type": "text",
+    "page_idx": 67,
+    "text": "19. 如图, 正方形  $ABCD$  绕点  $A$  逆时针旋转  $n^{\\circ}$  后得到正方形  $AEFG$ ,  $FE$  与  $CD$  交于点  $O$ ."
+  },
+  {
+    "id": 1071,
+    "type": "text",
+    "page_idx": 67,
+    "text": "（1）以图中已标有字母的点为端点连接两条线段（正方形的对角线除外），要求所连接的两条线段相交且互相垂直，并说明这两条线段互相垂直的理由；"
+  },
+  {
+    "id": 1072,
+    "type": "text",
+    "page_idx": 67,
+    "text": "(2) 若正方形的边长为  $2\\mathrm{cm}$ ，重叠部分（四边形  $AEOD$ ）的面积为  $\\frac{4\\sqrt{3}}{3}\\mathrm{cm}^2$ ，求旋转的角度."
+  },
+  {
+    "id": 1073,
+    "type": "image",
+    "page_idx": 67,
+    "img_path": "images/44f77685cd7aa50ffff12d584a7087a71a63cdd61d18b88b098475c8499419ca.jpg",
+    "image_caption": "（第19题）"
+  },
+  {
+    "id": 1074,
+    "type": "text",
+    "page_idx": 67,
+    "text": "20. 以四边形  $ABCD$  的边  $AB, BC, CD, DA$  为斜边分别向外侧作等腰直角三角形，直角顶点分别为  $E, F, G, H$  ，顺次连接这四个点，得四边形  $EFGH$ ."
+  },
+  {
+    "id": 1075,
+    "type": "text",
+    "text": "（1）如图(1)，当四边形ABCD为正方形时，我们发现四边形EFGH是正方形；如图(2），当四边形ABCD为矩形时，请判断四边形EFGH的形状(不要求证明)；",
+    "page_idx": 67
+  },
+  {
+    "id": 1076,
+    "type": "text",
+    "text": "(2) 如图(3), 当四边形  $ABCD$  为平行四边形时, 设  $\\angle ADC = \\alpha (0^{\\circ} < \\alpha < 90^{\\circ})$ ,",
+    "page_idx": 67
+  },
+  {
+    "id": 1077,
+    "type": "text",
+    "text": "① 试用含  $\\alpha$  的代数式表示  $\\angle HAE$ ;",
+    "page_idx": 67
+  },
+  {
+    "id": 1078,
+    "type": "text",
+    "text": "$②$  求证：  $HE = HG$",
+    "page_idx": 67
+  },
+  {
+    "id": 1079,
+    "type": "text",
+    "text": "③ 四边形EFGH是什么四边形？并说明理由",
+    "page_idx": 67
+  }
+]
+```

@@ -1,0 +1,831 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 3150,
+    "type": "text",
+    "text": "15. 如图, 在平面直角坐标系中, 函数  $y = \\frac{4}{x} (x > 0)$  与  $y = x - 1$  的图像交于点  $P(a, b)$ , 则代数式  $\\frac{1}{a} - \\frac{1}{b}$  的值为",
+    "page_idx": 198
+  },
+  {
+    "id": 3151,
+    "type": "text",
+    "text": "16. 一次函数  $y = ax + b (a \\neq 0)$  的图像与反比例函数  $y = \\frac{k}{x} (k \\neq 0)$  的图像的两个交点分别是  $A(-1, -4), B(2, m)$ ，则  $a + 2b$  的值是",
+    "page_idx": 198
+  },
+  {
+    "id": 3152,
+    "type": "text",
+    "text": "17. 已知一次函数的图像经过点(1，一2)，且图像与  $x$  轴交点的横坐标、与  $y$  轴交点的纵坐标两者之和为一2，这个一次函数的表达式为",
+    "page_idx": 198
+  },
+  {
+    "id": 3153,
+    "type": "image",
+    "page_idx": 198,
+    "img_path": "images/8459702d43005b01ddb2655eca547b56999bbc37cd871ef122bece95d915d17b.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 3154,
+    "type": "image",
+    "page_idx": 198,
+    "img_path": "images/7efc895f6485cc10c9d055ccfd8def948c7777e5b4fb9b9741d1b3d0f3e5c8ab.jpg",
+    "image_caption": "（第18题）"
+  },
+  {
+    "id": 3155,
+    "type": "text",
+    "page_idx": 198,
+    "text": "18. 如图, 在平面直角坐标系中,  $A(2,0)$ ,  $B(0,2\\sqrt{3})$ , 点  $C$  在直线  $m: y = \\frac{\\sqrt{3}}{3} x - \\frac{2\\sqrt{3}}{3}$  上, 且  $AC = 3$ , 连接  $AB$ ,  $BC$ , 将  $\\triangle ABC$  绕点  $C$  顺时针旋转到  $\\triangle A_{1}B_{1}C_{1}$ , 点  $B$  的对应点  $B_{1}$  落在直线  $m$  上, 再将  $\\triangle A_{1}B_{1}C_{1}$  绕点  $B_{1}$  顺时针旋转到  $\\triangle A_{2}B_{2}C_{2}$ , 点  $A_{1}$  的对应点  $A_{2}$  也落在直线  $m$  上. 如此下去, 则  $A_{1001}$  的纵坐标是"
+  },
+  {
+    "id": 3156,
+    "type": "text",
+    "page_idx": 199,
+    "text": "三、简答题（本大题共3题，每题5分，共15分）"
+  },
+  {
+    "id": 3157,
+    "type": "text",
+    "page_idx": 199,
+    "text": "19. 在平面直角坐标系  $xOy$  中, 已知一次函数的图像平行于直线  $y = \\frac{1}{2} x$ , 且经过点  $A(2,3)$ , 与  $x$  轴交于点  $B$ ."
+  },
+  {
+    "id": 3158,
+    "type": "text",
+    "text": "（1）求这个一次函数的表达式；",
+    "page_idx": 199
+  },
+  {
+    "id": 3159,
+    "type": "text",
+    "text": "(2) 设点  $C$  在  $y$  轴上, 当  $AC = BC$  时, 求点  $C$  的坐标.",
+    "page_idx": 199
+  },
+  {
+    "id": 3160,
+    "type": "text",
+    "page_idx": 199,
+    "text": "20. 小明家买了一台充电式自动扫地机, 每次完成充电后, 在使用时扫地机会自动根据设定扫地时间, 来确定扫地的速度 (以使每次扫地结束时尽量把所储存的电量用完), 下图是 “设定扫地时间”与“扫地速度”之间的函数图像(线段  $AB$ ), 其中设定扫地时间为  $x \\min$ , 扫地速度为  $y \\mathrm{dm}^2/\\mathrm{min}$ ."
+  },
+  {
+    "id": 3161,
+    "type": "text",
+    "text": "（1）求  $y$  关于  $x$  的函数表达式；",
+    "page_idx": 199
+  },
+  {
+    "id": 3162,
+    "type": "text",
+    "text": "(2) 现在小明需要扫地机完成  $180 \\mathrm{~m}^{2}$  的扫地任务, 他应该设定的扫地时间为多少分钟?",
+    "page_idx": 199
+  },
+  {
+    "id": 3163,
+    "type": "image",
+    "page_idx": 199,
+    "img_path": "images/75513b7d0f6b187a22760bcf4fa3720e0c53d4c283b5224addc7d1b100b49047.jpg",
+    "image_caption": "（第20题）"
+  },
+  {
+    "id": 3164,
+    "type": "text",
+    "page_idx": 199,
+    "text": "21. 如图, 在菱形  $ABCD$  中, 点  $E, F$  分别在边  $AB, BC$  上,  $BE = BF, DE, DF$  分别与  $AC$  交于点  $M, N$ . 求证:"
+  },
+  {
+    "id": 3165,
+    "type": "text",
+    "text": "(1)  $\\triangle ADE \\cong \\triangle CDF$ ;",
+    "page_idx": 199
+  },
+  {
+    "id": 3166,
+    "type": "text",
+    "text": "(2)  $ME = NF$",
+    "page_idx": 199
+  },
+  {
+    "id": 3167,
+    "type": "image",
+    "page_idx": 199,
+    "img_path": "images/4e2e1e9af2f547d5ce78b135ae0baeade28e7cb9d9eb603802480354119c1d0c.jpg",
+    "image_caption": "（第21题）"
+  },
+  {
+    "id": 3168,
+    "type": "text",
+    "page_idx": 200,
+    "text": "四、解答题(22、23题各9分，24题10分，25题10分，26题11分，共49分)"
+  },
+  {
+    "id": 3169,
+    "type": "text",
+    "page_idx": 200,
+    "text": "22. 如图, 在平面直角坐标系  $xOy$  中, 点  $A, B$  在反比例函数  $y = \\frac{4}{x}$  位于第一象限的图像上, 点  $B$  的横坐标大于点  $A$  的横坐标,  $OA = OB$ . 如果  $\\triangle OAB$  的重心恰好也在这个反比例函数的图像上, 求点  $A$  的横坐标."
+  },
+  {
+    "id": 3170,
+    "type": "image",
+    "page_idx": 200,
+    "img_path": "images/07ada7911a425e54739eced41769c2ffb1c251a91c60e0e0f7ad2d60541e7082.jpg",
+    "image_caption": "（第22题）"
+  },
+  {
+    "id": 3171,
+    "type": "text",
+    "page_idx": 200,
+    "text": "23. 如图， $O$  为矩形  $ABCD$  的对角线  $AC$  的中点， $AB = 3$ ， $BC = 4$ 。 $E$ ， $F$  是  $AC$  上的点（ $E$ ， $F$  均不与  $A$ ， $C$  重合），且  $AE = CF$ ，连接  $BE$ ， $DF$ 。用  $x$  表示线段  $AE$  的长度，点  $E$  与点  $F$  的距离为  $y_1$ 。矩形  $ABCD$  的面积为  $S$ ， $\\triangle ABE$  的面积为  $S_1$ ， $\\triangle CDF$  的面积为  $S_2$ ， $y_2 = \\frac{S}{S_1 + S_2}$ 。"
+  },
+  {
+    "id": 3172,
+    "type": "text",
+    "text": "（1）请直接写出  $y_{1}, y_{2}$  分别关于  $x$  的函数表达式，并写出自变量  $x$  的取值范围；",
+    "page_idx": 200
+  },
+  {
+    "id": 3173,
+    "type": "text",
+    "text": "(2) 在给定的平面直角坐标系中画出函数  $y_{1}, y_{2}$  的图像, 并分别写出函数  $y_{1}, y_{2}$  的一条性质;",
+    "page_idx": 200
+  },
+  {
+    "id": 3174,
+    "type": "text",
+    "text": "(3) 结合函数图像, 请直接写出  $y_{1} < y_{2}$  时  $x$  的取值范围 (近似值保留小数点后一位, 误差不超过 0.2).",
+    "page_idx": 200
+  },
+  {
+    "id": 3175,
+    "type": "image",
+    "page_idx": 200,
+    "img_path": "images/a787e0711c64a1929f3e6c778c4eac6a7c1587ef44292db7625fc14312855e3c.jpg",
+    "image_caption": "（第23题）"
+  },
+  {
+    "id": 3176,
+    "type": "text",
+    "page_idx": 201,
+    "text": "24. 如图, 在四边形  $ABCD$  中, 对角线  $AC$  与  $BD$  交于点  $O$ , 已知  $OA = OC$ ,  $OB = OD$ , 过点  $O$  作  $EF \\perp BD$ , 分别交  $AB$ ,  $DC$  于点  $E$ ,  $F$ , 连接  $DE$ ,  $BF$ ."
+  },
+  {
+    "id": 3177,
+    "type": "text",
+    "text": "（1）求证：四边形DEBF是菱形；",
+    "page_idx": 201
+  },
+  {
+    "id": 3178,
+    "type": "text",
+    "text": "(2) 若  $AD \\parallel EF, AD + AB = 12, BD = 4\\sqrt{3}$ , 求  $AF$  的长.",
+    "page_idx": 201
+  },
+  {
+    "id": 3179,
+    "type": "image",
+    "page_idx": 201,
+    "img_path": "images/dc365008f6338f28e2ea330f1798fd2490f35b172c1b2e4ed76def32e0533732.jpg",
+    "image_caption": "（第24题）"
+  },
+  {
+    "id": 3180,
+    "type": "text",
+    "page_idx": 201,
+    "text": "25. 如图, 直线  $y = kx + 2$  与反比例函数  $y = \\frac{3}{2x}$  相交于点  $A$ ,  $B$ , 已知点  $A$  的横坐标为 1."
+  },
+  {
+    "id": 3181,
+    "type": "text",
+    "text": "（1）求直线  $y = kx + 2$  的表达式及点  $B$  的坐标；",
+    "page_idx": 201
+  },
+  {
+    "id": 3182,
+    "type": "text",
+    "text": "(2) 点  $P$  在  $x$  轴上、点  $Q$  在  $y$  轴的负半轴上，若四边形  $ABQP$  为平行四边形，求直线  $PQ$  的表达式；",
+    "page_idx": 201
+  },
+  {
+    "id": 3183,
+    "type": "text",
+    "text": "(3) 以线段  $AB$  为斜边在直线  $AB$  的上方作等腰直角三角形  $ABC$ . 求经过点  $C$  的反比例函数的表达式.",
+    "page_idx": 201
+  },
+  {
+    "id": 3184,
+    "type": "image",
+    "page_idx": 201,
+    "img_path": "images/08abcb65fd40d988e5374751a2a498c53e5fb576f938cc456bd91159b8fb9743.jpg",
+    "image_caption": "（第25题）"
+  },
+  {
+    "id": 3185,
+    "type": "text",
+    "page_idx": 202,
+    "text": "26. 已知矩形  $ABCD$  中,  $AB = 6$ ,  $BC = 8$ ,  $P$  是边  $AD$  上一点, 将  $\\triangle ABP$  沿直线  $BP$  翻折, 使点  $A$  落在点  $E$  处."
+  },
+  {
+    "id": 3186,
+    "type": "text",
+    "text": "（1）如图(1)，连接  $DE$  ，直线  $DE$  与边  $CB$  交于点  $F$  ，若  $PD = BF$  时，求  $AP$  的长；",
+    "page_idx": 202
+  },
+  {
+    "id": 3187,
+    "type": "text",
+    "text": "(2) 如图(2), 若  $PE$  的延长线交边  $CD$  于点  $Q$ , 设  $CQ = x, AP = y$ , 求  $y$  关于  $x$  的函数表达式, 并写出自变量  $x$  的取值范围;",
+    "page_idx": 202
+  },
+  {
+    "id": 3188,
+    "type": "text",
+    "text": "(3) 如图(3), 当直线  $DE$  与  $BP$  的延长线交于点  $H$ , 若  $\\triangle BPE$  和  $\\triangle DHP$  面积相等, 求  $DH$  的长.",
+    "page_idx": 202
+  },
+  {
+    "id": 3189,
+    "type": "image",
+    "page_idx": 202,
+    "img_path": "images/1785e903e1d8728207edb55589a1f66bb27ed279a4fdd4293de12392b9859384.jpg",
+    "image_caption": "(1)"
+  },
+  {
+    "id": 3190,
+    "type": "image",
+    "page_idx": 202,
+    "img_path": "images/5d180d3b67fc5ffc6254aec05caa59790237de9ec6292435c311634211e818d7.jpg",
+    "image_caption": "(2) （第26题）"
+  },
+  {
+    "id": 3191,
+    "type": "image",
+    "page_idx": 202,
+    "img_path": "images/92ac5ced806e039d060f89c32a50094d9e7cb4e1853c858ca2aaa18f36ca310b.jpg",
+    "image_caption": "(3)"
+  },
+  {
+    "id": 3192,
+    "type": "text",
+    "page_idx": 203,
+    "text": "期末测试卷"
+  },
+  {
+    "id": 3193,
+    "type": "text",
+    "page_idx": 203,
+    "text": "一、选择题（每题2分，共12分）"
+  },
+  {
+    "id": 3194,
+    "type": "text",
+    "page_idx": 203,
+    "text": "1. 若点  $P(1 - 2a, a)$  在第二象限，那么  $a$  的取值范围是（ ）."
+  },
+  {
+    "id": 3195,
+    "type": "text",
+    "page_idx": 203,
+    "text": "A.  $a > \\frac{1}{2}$"
+  },
+  {
+    "id": 3196,
+    "type": "text",
+    "page_idx": 203,
+    "text": "B.  $a < \\frac{1}{2}$"
+  },
+  {
+    "id": 3197,
+    "type": "text",
+    "page_idx": 203,
+    "text": "C.  $0 < a < \\frac{1}{2}$"
+  },
+  {
+    "id": 3198,
+    "type": "text",
+    "page_idx": 203,
+    "text": "D.  $0 \\leqslant a < \\frac{1}{2}$"
+  },
+  {
+    "id": 3199,
+    "type": "text",
+    "page_idx": 203,
+    "text": "2. 下列函数中，当  $x$  减小时， $y$  的值总是增大的函数有（ ）个."
+  },
+  {
+    "id": 3200,
+    "type": "text",
+    "page_idx": 203,
+    "text": "①  $y = 2x$"
+  },
+  {
+    "id": 3201,
+    "type": "text",
+    "page_idx": 203,
+    "text": "②  $y = 3x^{-1}$"
+  },
+  {
+    "id": 3202,
+    "type": "text",
+    "page_idx": 203,
+    "text": "③  $y = -5x + 3$"
+  },
+  {
+    "id": 3203,
+    "type": "text",
+    "page_idx": 203,
+    "text": "④  $y = -3x^{-1}$"
+  },
+  {
+    "id": 3204,
+    "type": "text",
+    "page_idx": 203,
+    "text": "⑤  $y = \\frac{1}{2} x^{-1}(x > 0)$"
+  },
+  {
+    "id": 3205,
+    "type": "text",
+    "page_idx": 203,
+    "text": "⑥  $y = -16x$"
+  },
+  {
+    "id": 3206,
+    "type": "text",
+    "page_idx": 203,
+    "text": "A. 1"
+  },
+  {
+    "id": 3207,
+    "type": "text",
+    "page_idx": 203,
+    "text": "B. 2"
+  },
+  {
+    "id": 3208,
+    "type": "text",
+    "page_idx": 203,
+    "text": "C. 3"
+  },
+  {
+    "id": 3209,
+    "type": "text",
+    "page_idx": 203,
+    "text": "D. 4"
+  },
+  {
+    "id": 3210,
+    "type": "text",
+    "page_idx": 203,
+    "text": "3. 已知平面内  $A, B, C, D$  四个点，从 ①  $AB = CD$  ，②  $AB \\parallel CD$  ，③  $BC = AD$  ，④  $BC \\parallel AD$  ，这四个条件中任选两个，能使四边形  $ABCD$  为平行四边形的组合有（ ）种."
+  },
+  {
+    "id": 3211,
+    "type": "text",
+    "page_idx": 203,
+    "text": "A. 3"
+  },
+  {
+    "id": 3212,
+    "type": "text",
+    "page_idx": 203,
+    "text": "B. 4"
+  },
+  {
+    "id": 3213,
+    "type": "text",
+    "page_idx": 203,
+    "text": "C. 5"
+  },
+  {
+    "id": 3214,
+    "type": "text",
+    "page_idx": 203,
+    "text": "D. 6"
+  },
+  {
+    "id": 3215,
+    "type": "text",
+    "page_idx": 203,
+    "text": "4. 小华和小明是同班同学，也是邻居，某日早晨，小明7:40先出发去学校，走了一段后，在途中停下吃了早餐，后来发现上学时间快到了，就跑步到学校；小华离家后直接乘公共汽车到了学校，右图是他们从家到学校已走的路程S（单位：m）和所用时间t（单位：min)的关系图，下列说法中错误的是( )."
+  },
+  {
+    "id": 3216,
+    "type": "text",
+    "text": "A. 小明家和学校距离  $1200 \\mathrm{~m}$",
+    "page_idx": 203
+  },
+  {
+    "id": 3217,
+    "type": "text",
+    "text": "B. 小华乘公共汽车的速度是  $240 \\mathrm{~m} / \\mathrm{min}$",
+    "page_idx": 203
+  },
+  {
+    "id": 3218,
+    "type": "text",
+    "text": "C. 小华乘坐公共汽车后在 7:50 与小明相遇",
+    "page_idx": 203
+  },
+  {
+    "id": 3219,
+    "type": "text",
+    "text": "D. 小明从家到学校的平均速度为  $80 \\mathrm{~m} / \\mathrm{min}$",
+    "page_idx": 203
+  },
+  {
+    "id": 3220,
+    "type": "image",
+    "page_idx": 203,
+    "img_path": "images/b34b3eff70db8b3f09f277c908b75d66a7b8bdd80b7625ddaf1063714a56ec5f.jpg",
+    "image_caption": "（第4题）"
+  },
+  {
+    "id": 3221,
+    "type": "image",
+    "page_idx": 203,
+    "img_path": "images/d422c12a0b355bda64a4806a8965cbb2071221ec844dc3024e6bf272315cf50d.jpg",
+    "image_caption": "（第5题）"
+  },
+  {
+    "id": 3222,
+    "type": "text",
+    "page_idx": 203,
+    "text": "5. 如图, 已知在  $\\square ABCD$  中,  $3AB = 2BC$ ,  $O$  是  $\\angle BAD$  和  $\\angle CBA$  的角平分线的交点, 过点  $O$  作  $EF \\parallel AB$ , 分别交  $AD$ ,  $BC$  于  $E$ ,  $F$  两点, 连接  $OD$ ,  $OC$ . 则下列结论: ①  $AO \\perp BO$ ; ② 点  $O$  是  $EF$  的中点; ③  $DE = 2AE$ ; ④  $S_{\\triangle OCD} = 4S_{\\triangle OAE}$ . 其中正确的个数有 ( ) 个."
+  },
+  {
+    "id": 3223,
+    "type": "text",
+    "page_idx": 203,
+    "text": "A. 4"
+  },
+  {
+    "id": 3224,
+    "type": "text",
+    "page_idx": 203,
+    "text": "B. 3"
+  },
+  {
+    "id": 3225,
+    "type": "text",
+    "page_idx": 203,
+    "text": "C. 2"
+  },
+  {
+    "id": 3226,
+    "type": "text",
+    "page_idx": 203,
+    "text": "D. 1"
+  },
+  {
+    "id": 3227,
+    "type": "text",
+    "page_idx": 204,
+    "text": "6. 如图, 已知四边形  $ABCD$  中,  $AD \\parallel BC$ ,  $\\angle BCD = 90^\\circ$ ,  $BC = CD = 2AD$ ,  $E$ ,  $F$  分别是  $BC$ ,  $CD$  边的中点,  $BF$ ,  $DE$  交于点  $P$ , 连接  $CP$  并延长, 交  $AB$  于点  $Q$ , 连接  $AF$ , 则下列结论不正确的是（ ）."
+  },
+  {
+    "id": 3228,
+    "type": "image",
+    "page_idx": 204,
+    "img_path": "images/2af2c75d49f8b204ecb278cab43636a7cea31be6c875176bceb1f06434f68450.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 3229,
+    "type": "text",
+    "text": "A.  $\\angle QCD = 45^{\\circ}$",
+    "page_idx": 204
+  },
+  {
+    "id": 3230,
+    "type": "text",
+    "text": "B. 四边形  $ABED$  为平行四边形",
+    "page_idx": 204
+  },
+  {
+    "id": 3231,
+    "type": "text",
+    "text": "C.  $\\triangle ABF$  为等腰三角形",
+    "page_idx": 204
+  },
+  {
+    "id": 3232,
+    "type": "text",
+    "text": "D.  $C Q$  将四边形ABCD分为面积相等的两部分",
+    "page_idx": 204
+  },
+  {
+    "id": 3233,
+    "type": "text",
+    "page_idx": 204,
+    "text": "二、填空题（每题2分，共24分）"
+  },
+  {
+    "id": 3234,
+    "type": "text",
+    "text": "7.一个多边形从一个顶点出发有4条对角线，则这个多边形的内角和为",
+    "page_idx": 204
+  },
+  {
+    "id": 3235,
+    "type": "text",
+    "text": "8. 在  $\\triangle ABC$  中, 若  $AB = AC = 10$ ,  $BC = 16$ , 则此三角形的重心到  $BC$  边的距离是",
+    "page_idx": 204
+  },
+  {
+    "id": 3236,
+    "type": "text",
+    "text": "9. 在平面直角坐标系  $xOy$  中, 点  $P(a^2 + 1, -2)$  所在的象限是第____象限.",
+    "page_idx": 204
+  },
+  {
+    "id": 3237,
+    "type": "text",
+    "text": "10. 在函数  $y = \\sqrt{x - 2}$  中，自变量  $x$  的取值范围是",
+    "page_idx": 204
+  },
+  {
+    "id": 3238,
+    "type": "text",
+    "text": "11. 若反比例函数图像经过点(2,4)，则当  $y > -2$  时， $x$  的取值范围是",
+    "page_idx": 204
+  },
+  {
+    "id": 3239,
+    "type": "text",
+    "text": "12. 若一次函数  $y = ax + b$  与反比例函数  $y = \\frac{k}{x}$  的图像分别交于点  $A(1,6), B(m, -2)$ ，则不等式  $ax + b > \\frac{k}{x}$  的解集是",
+    "page_idx": 204
+  },
+  {
+    "id": 3240,
+    "type": "text",
+    "text": "13. 如图, 正比例函数  $y_{1} = k_{1}x$  和反比例函数  $y_{2} = \\frac{k_{2}}{x}$  的图像交于  $A(-1, 2)$ ,  $B(1, -2)$  两点, 若  $y_{1} > y_{2}$ , 则  $x$  的取值范围是",
+    "page_idx": 204
+  },
+  {
+    "id": 3241,
+    "type": "text",
+    "text": "14. 如图, 过  $x$  轴正半轴上的任意一点  $P$ , 作  $y$  轴的平行线, 分别与反比例函数  $y = -\\frac{9}{x}$  和  $y = \\frac{10}{x}$  的图像交于  $A, B$  两点. 若点  $C$  是  $y$  轴上任意一点, 则  $\\triangle ABC$  的面积为",
+    "page_idx": 204
+  },
+  {
+    "id": 3242,
+    "type": "image",
+    "page_idx": 204,
+    "img_path": "images/9d7840a3321ab36afd266898868445b004123a2b94ef53850348f2753699d5f5.jpg",
+    "image_caption": "（第13题）"
+  },
+  {
+    "id": 3243,
+    "type": "image",
+    "page_idx": 204,
+    "img_path": "images/cd454b3db07d76362393719d0ecc355a9d974f8d1053e86843fd92de96fe22bc.jpg",
+    "image_caption": "(第14题）"
+  },
+  {
+    "id": 3244,
+    "type": "image",
+    "page_idx": 204,
+    "img_path": "images/995111f2b197d3925410103e3828626feab3b0c8023a7a5b68fb11e5ddaf54ee.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 3245,
+    "type": "text",
+    "page_idx": 204,
+    "text": "15. 定义: 有一组对边相等而另一组对边不相等的凸四边形叫作“对等四边形”. 如图, 在  $\\mathrm{Rt}\\triangle PBC$  中,  $\\angle PCB = 90^\\circ$ ,  $\\angle PBC = 60^\\circ$ ,  $BC = 8$ , 点  $A$  在边  $BP$  上, 且  $AB = 4$ , 点  $D$  在  $PC$  上, 使四边形  $ABCD$  为对等四边形, 则  $CD$  的长为"
+  },
+  {
+    "id": 3246,
+    "type": "text",
+    "page_idx": 205,
+    "text": "16. 如图, 在正方形  $ABCD$  中, 点  $E$  在边  $CD$  上,  $CF \\perp BE$ , 垂足为点  $F$ . 若  $AB = 1$ ,  $\\angle EBC = 30^\\circ$ , 则  $\\triangle ABF$  的面积为"
+  },
+  {
+    "id": 3247,
+    "type": "text",
+    "page_idx": 205,
+    "text": "17. 如图, 在矩形  $ABCD$  中,  $AD = \\sqrt{3} AB$ , 对角线相交于点  $O$ , 动点  $M$  从点  $B$  向点  $A$  运动 (到点  $A$  即停止), 点  $N$  是  $AD$  上一动点, 且满足  $\\angle MON = 90^\\circ$ , 连接  $MN$ . 在点  $M, N$  运动过程中, 则以下结论中: ① 点  $M, N$  的运动速度不相等; ② 存在某一时刻使  $S_{\\triangle AMN} = S_{\\triangle MON}$ ; ③  $S_{\\triangle AMN}$  逐渐增大; ④  $MN^2 = BM^2 + DN^2$ . 正确的是______（填序号）."
+  },
+  {
+    "id": 3248,
+    "type": "image",
+    "page_idx": 205,
+    "img_path": "images/46b6d92fc1b18d5e4e908b206d803bd0caa68886185e089426f0750b15e274f0.jpg",
+    "image_caption": "（第16题）"
+  },
+  {
+    "id": 3249,
+    "type": "image",
+    "page_idx": 205,
+    "img_path": "images/a060951d7feedd7d5506ab11bd5b0ea95c9ef4b165cd03b3fedc4bf48382f15c.jpg",
+    "image_caption": "（第17题）"
+  }
+]
+```

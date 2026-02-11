@@ -105,8 +105,9 @@ temp/
 # Project specific
 server/uploads/*
 !server/uploads/.gitkeep
-!server/uploads/tasks/
+!server/uploads/taskshistory
+!server/uploads/tasks
+
 *.db
 !sqlite.db
 debug_*.ts
-server/uploads/tasks/

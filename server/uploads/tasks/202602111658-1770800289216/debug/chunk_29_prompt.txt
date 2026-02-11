@@ -1,0 +1,832 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found:
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2030,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/f2c3fe595582503acee4aeee8a90dbbe197abc3946d9151b7abfa2e7325cfd2e.jpg"
+  },
+  {
+    "id": 2031,
+    "type": "text",
+    "page_idx": 124,
+    "text": "A. 1"
+  },
+  {
+    "id": 2032,
+    "type": "text",
+    "page_idx": 124,
+    "text": "B. 2"
+  },
+  {
+    "id": 2033,
+    "type": "text",
+    "page_idx": 124,
+    "text": "C. 3"
+  },
+  {
+    "id": 2034,
+    "type": "text",
+    "page_idx": 124,
+    "text": "D. 4"
+  },
+  {
+    "id": 2035,
+    "type": "text",
+    "page_idx": 124,
+    "text": "3. 均匀地向一个如图所示的容器中注水, 最后把容器注满, 在注水过程中水面高度  $h$  随时间  $t$  变化的函数图像大致是( )."
+  },
+  {
+    "id": 2036,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/69c465af262755092532bf62ee2b09c242a6df8e3ac542eeb61370618e8b3e41.jpg",
+    "image_caption": "（第3题）"
+  },
+  {
+    "id": 2037,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/01a0cfa03c0d55b5ee97f7d17705d4b9008a0a79c65218f3d5d44e650eb38c68.jpg",
+    "image_caption": "A."
+  },
+  {
+    "id": 2038,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/67f3d416e41f39edf062aca43ef3f5f7c2ee7334fb01420293c5f7071cb72305.jpg",
+    "image_caption": "B."
+  },
+  {
+    "id": 2039,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/7a77b2ce0cfd1e0f898a9ad27f6809437d9e63d481b5ebb130c2df962e79cb03.jpg",
+    "image_caption": "C."
+  },
+  {
+    "id": 2040,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/382d2a68a6f859622b454ae0a19f49ec0ebe6f98fae0103246c9956730fd5152.jpg",
+    "image_caption": "D."
+  },
+  {
+    "id": 2041,
+    "type": "text",
+    "page_idx": 124,
+    "text": "4. 如图, 在矩形  $ABCD$  中,  $AB = 3$ ,  $AD = 4$ , 动点  $P$  沿  $A \\rightarrow B \\rightarrow C \\rightarrow D$  的路线由点  $A$  运动到点  $D$ , 则  $\\triangle APD$  的面积  $S$  是动点  $P$  运动的路程  $x$  的函数, 这个函数的大致图像可能是 ( )."
+  },
+  {
+    "id": 2042,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/8abc62d2874cf9daf5306e57350fe461a2086714982905860865ab2db8a201e7.jpg",
+    "image_caption": "（第4题）"
+  },
+  {
+    "id": 2043,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/60c16c5195324cda060ddd7e29edd446f72b69dc5ae95522a19220dc0739f94d.jpg",
+    "image_caption": "A."
+  },
+  {
+    "id": 2044,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/48a8f34247b6f02c6df401687a3bbcf333a25a2989f8b4f0b423c9bd1efa314d.jpg",
+    "image_caption": "B."
+  },
+  {
+    "id": 2045,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/eea0c948c604643a128a8b8a4393b6b9e2fca9e21077b91abfdd535e11f74194.jpg",
+    "image_caption": "C."
+  },
+  {
+    "id": 2046,
+    "type": "image",
+    "page_idx": 124,
+    "img_path": "images/071c123f996ee4c30e702d220c67b615c8e8f12d201b940d7811a7c63542b96d.jpg",
+    "image_caption": "D."
+  },
+  {
+    "id": 2047,
+    "type": "text",
+    "page_idx": 124,
+    "text": "5. 在登山过程中, 海拔每升高  $1 \\mathrm{~km}$  气温下降  $6^{\\circ} \\mathrm{C}$ , 已知某登山大本营所在的位置的气温是  $9^{\\circ} \\mathrm{C}$ , 登山队员从大本营出发登山, 当海拔升高  $x \\mathrm{~km}$  时, 所在位置的气温是  $y^{\\circ} \\mathrm{C}$ , 那么  $y$  关于  $x$  的函数表达式是"
+  },
+  {
+    "id": 2048,
+    "type": "text",
+    "page_idx": 125,
+    "text": "6. 如图, 直线  $l$  // 直线  $m, A, B$  是  $m$  上两个定点,  $C$  是  $l$  上的动点. 记  $AB = c, BC = a, AC = b, \\angle CAB = \\theta$ , 点  $C$  到  $m$  的距离为  $h$ ,  $\\triangle ABC$  的面积为  $S$ . 当点  $C$  在直线  $l$  上移动时, 在  $S, \\theta, a, b, c, h$  中, 是常量的有 _______ ; 是变量的有 _______."
+  },
+  {
+    "id": 2049,
+    "type": "image",
+    "page_idx": 125,
+    "img_path": "images/63430827b0b654452611bdd17983d37aab8b9983ed04abdcc63dbf7a5a78718d.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 2050,
+    "type": "text",
+    "page_idx": 125,
+    "text": "7. 图中有大小不同的菱形, 第 1 幅图中有 1 个, 第 2 幅图中有 3 个, 第 3 幅图中有 5 个, 则第  $n$  幅图中共有 ______ 个."
+  },
+  {
+    "id": 2051,
+    "type": "image",
+    "page_idx": 125,
+    "img_path": "images/54f322d02e462343adc4e33eb7b0de83bc2bd4a60f6a31b708ab6803355b135b.jpg",
+    "image_caption": "（第7题）"
+  },
+  {
+    "id": 2052,
+    "type": "text",
+    "page_idx": 125,
+    "text": "8. 一辆汽车以每小时  $40 \\mathrm{~km}$  的速度行驶, 行驶路程为  $s$ , 行驶时间为  $t$ ."
+  },
+  {
+    "id": 2053,
+    "type": "text",
+    "text": "(1) 填空  $s =$",
+    "page_idx": 125
+  },
+  {
+    "id": 2054,
+    "type": "text",
+    "text": "(2）请填表：",
+    "page_idx": 125
+  },
+  {
+    "id": 2055,
+    "type": "text",
+    "text": "[Table Row] <tr><td>t/h</td><td>0.5</td><td>1</td><td>1.5</td><td>2</td><td>2.5</td></tr>",
+    "page_idx": 125
+  },
+  {
+    "id": 2056,
+    "type": "text",
+    "text": "[Table Row] <tr><td>s/km</td><td>.</td><td></td><td></td><td></td><td></td></tr>",
+    "page_idx": 125
+  },
+  {
+    "id": 2057,
+    "type": "text",
+    "page_idx": 125,
+    "text": "（3）在上表中，  $t$  与  $\\pmb{S}$  哪个是自变量？哪个是自变量的函数？"
+  },
+  {
+    "id": 2058,
+    "type": "text",
+    "page_idx": 125,
+    "text": "9. 已知下列式子  $y = x^2$"
+  },
+  {
+    "id": 2059,
+    "type": "text",
+    "page_idx": 125,
+    "text": "（1）请填写下面两张表格："
+  },
+  {
+    "id": 2060,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>",
+    "page_idx": 125
+  },
+  {
+    "id": 2061,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td></td><td></td><td></td><td></td><td></td></tr>",
+    "page_idx": 125
+  },
+  {
+    "id": 2062,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>",
+    "page_idx": 125
+  },
+  {
+    "id": 2063,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td></td><td></td><td></td><td></td><td></td></tr>",
+    "page_idx": 125
+  },
+  {
+    "id": 2064,
+    "type": "text",
+    "text": "(2) 在式子  $y = x^2$  中, 哪个是常量? 哪个是变量?",
+    "page_idx": 125
+  },
+  {
+    "id": 2065,
+    "type": "text",
+    "text": "（3）在第1张表格中， $y$  是不是  $x$  的函数？在第2张表格中， $x$  是不是  $y$  的函数？",
+    "page_idx": 125
+  },
+  {
+    "id": 2066,
+    "type": "text",
+    "page_idx": 126,
+    "text": "10. 设某种电报收费标准是每个字 0.1 元, 写出电报费  $y$  与字数  $x$  之间的函数表达式, 并求自变量  $x$  的取值范围."
+  },
+  {
+    "id": 2067,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/ed5c8b1be945dc481940467a1f707c2edc9f6090d54c34f493940845ccea5d90.jpg"
+  },
+  {
+    "id": 2068,
+    "type": "text",
+    "page_idx": 126,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2069,
+    "type": "text",
+    "page_idx": 126,
+    "text": "11. 下列各函数中，与函数  $y = x$  相同的是（ ）"
+  },
+  {
+    "id": 2070,
+    "type": "text",
+    "page_idx": 126,
+    "text": "A.  $y = |x|$"
+  },
+  {
+    "id": 2071,
+    "type": "text",
+    "page_idx": 126,
+    "text": "B.  $y = (\\sqrt{x})^{2}$"
+  },
+  {
+    "id": 2072,
+    "type": "text",
+    "page_idx": 126,
+    "text": "C.  $y = \\frac{x^{2}}{x}$"
+  },
+  {
+    "id": 2073,
+    "type": "text",
+    "page_idx": 126,
+    "text": "D.  $y = \\sqrt[3]{x^{\\frac{1}{3}}}$"
+  },
+  {
+    "id": 2074,
+    "type": "text",
+    "page_idx": 126,
+    "text": "12. 如图(1)，在矩形  $MNPQ$  中，动点  $R$  从点  $N$  出发，沿  $N \\to P \\to Q \\to M$  方向运动到点  $M$  处停止。设点  $R$  运动的路程为  $x$ ， $\\triangle MNR$  的面积为  $y$ ，如果  $y$  关于  $x$  的函数图像如图(2)所示，则当  $x = 9$  时，点  $R$  应运动到（ ）."
+  },
+  {
+    "id": 2075,
+    "type": "text",
+    "page_idx": 126,
+    "text": "A.  $N$  处"
+  },
+  {
+    "id": 2076,
+    "type": "text",
+    "page_idx": 126,
+    "text": "B.  $P$  处"
+  },
+  {
+    "id": 2077,
+    "type": "text",
+    "page_idx": 126,
+    "text": "C.  $Q$  处"
+  },
+  {
+    "id": 2078,
+    "type": "text",
+    "page_idx": 126,
+    "text": "D.  $M$  处"
+  },
+  {
+    "id": 2079,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/c59652af9c38fbca7a3852c2cc055730744ad836bc64b2bfc2e740c40cad983a.jpg",
+    "image_caption": "(1)"
+  },
+  {
+    "id": 2080,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/90b104337d42f1e9a875ed534e0cf7b419a63101a12c1ad718b9a607d383f504.jpg",
+    "image_caption": "(2) (第12题)"
+  },
+  {
+    "id": 2081,
+    "type": "text",
+    "page_idx": 126,
+    "text": "13. 图(1)是一个圆底烧瓶，李老师在做化学实验时向空瓶匀速加水至图(2)状态停止，记加水时长为  $t$  ，圆底烧瓶里水面的高度为  $y$  ，则  $y$  与  $t$  函数关系的图像大致是（ ）."
+  },
+  {
+    "id": 2082,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/d287376c00f10ed57f0c674e43e7e5638956b3efadbc212c4d434cca38fdaf1f.jpg",
+    "image_caption": "（第13题）"
+  },
+  {
+    "id": 2083,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/3736c5f764e254219fe8411c9dff4f1e4a52d47682561d78c082abc7d81f5d93.jpg",
+    "image_caption": "A."
+  },
+  {
+    "id": 2084,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/53c1699936fb030dc4337ffd86ab602a3f791a7668d5609f5e0e242b7f7efc75.jpg",
+    "image_caption": "B."
+  },
+  {
+    "id": 2085,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/38e6fb7d0f14da210850eece67dc57f4ca86d19221a0364c7e8f02c75d5d2304.jpg",
+    "image_caption": "C."
+  },
+  {
+    "id": 2086,
+    "type": "image",
+    "page_idx": 126,
+    "img_path": "images/6bcb2bfdaa31e18a393dbf5510831d750a695c61bab2ba98082cbc056eef849d.jpg",
+    "image_caption": "D."
+  },
+  {
+    "id": 2087,
+    "type": "text",
+    "page_idx": 126,
+    "text": "14. 已知函数  $y = \\begin{cases} x^2, & 0 \\leqslant x < 1, \\\\ 2x - 2, & x \\geqslant 1, \\end{cases}$  若  $y = 2$ ，则  $x =$  ________."
+  },
+  {
+    "id": 2088,
+    "type": "text",
+    "page_idx": 127,
+    "text": "15. 如图, 有一个安装有进出水管的  $30 \\mathrm{~L}$  容器, 水管每单位时间内进出的水量是一定的. 设从某时刻开始的  $4 \\mathrm{~min}$  内只进水不出水, 在随后的  $8 \\mathrm{~min}$  内既进水又出水, 得到水量  $y$  与时间  $x$  之间的函数关系如图所示. 根据图像信息给出下列说法:"
+  },
+  {
+    "id": 2089,
+    "type": "image",
+    "page_idx": 127,
+    "img_path": "images/a50684041efbba514813e077b82e4910f99236fe674ab8c785bb0f10155a26b3.jpg",
+    "image_caption": "（第15题）"
+  },
+  {
+    "id": 2090,
+    "type": "text",
+    "text": "① 每分钟进水  $5 \\mathrm{~L}$",
+    "page_idx": 127
+  },
+  {
+    "id": 2091,
+    "type": "text",
+    "text": "② 当  $4 \\leqslant x \\leqslant 12$  时，容器中的水量在减少；",
+    "page_idx": 127
+  },
+  {
+    "id": 2092,
+    "type": "text",
+    "text": "③ 若  $12\\mathrm{min}$  后只放水，不进水，还要  $8\\mathrm{min}$  可以把水放完；",
+    "page_idx": 127
+  },
+  {
+    "id": 2093,
+    "type": "text",
+    "text": "$④$  若从一开始进出水管同时打开，则需要  $24\\mathrm{min}$  可以将容器灌满.其中正确的有（填序号）.",
+    "page_idx": 127
+  },
+  {
+    "id": 2094,
+    "type": "text",
+    "page_idx": 128,
+    "text": "25.1（二） 函数的自变量与函数值"
+  },
+  {
+    "id": 2095,
+    "type": "image",
+    "page_idx": 128,
+    "img_path": "images/5cf7eb3675b3a62da429f36840a40968092f8120e97cae73782c5eed2ba44b7d.jpg"
+  },
+  {
+    "id": 2096,
+    "type": "text",
+    "page_idx": 128,
+    "text": "要点归纳"
+  },
+  {
+    "id": 2097,
+    "type": "text",
+    "page_idx": 128,
+    "text": "知道函数的自变量、函数值的意义，知道自变量的值与函数值之间的对应关系，会求函数的自变量取值范围、函数值，知道符号“ $y = f(x)$ ”的意义."
+  },
+  {
+    "id": 2098,
+    "type": "image",
+    "page_idx": 128,
+    "img_path": "images/f1889b133c0b84f04da2d20d80d7a34d77f682166ea7cdf362c6d3e644f02d99.jpg"
+  },
+  {
+    "id": 2099,
+    "type": "text",
+    "page_idx": 128,
+    "text": "疑难分析"
+  },
+  {
+    "id": 2100,
+    "type": "text",
+    "page_idx": 128,
+    "text": "例① 等腰三角形周长为10，底边长  $x$  ，腰长为  $y$  ，求  $y$  关于  $x$  的函数表达式及其自变量  $x$  的取值范围."
+  },
+  {
+    "id": 2101,
+    "type": "text",
+    "page_idx": 128,
+    "text": "分析 求表达式的关键是找到等量关系."
+  },
+  {
+    "id": 2102,
+    "type": "text",
+    "page_idx": 128,
+    "text": "由于  $2y + x = 10$  ，所以函数表达式为  $y = -\\frac{1}{2} x + 5.$  根据三角形的三边关系，可知 $2y > x$  ，即  $-x + 10 > x > 0$  ，即  $0 <   x <   5.$  所以自变量  $x$  的取值范围为  $0 <   x <   5.$"
+  },
+  {
+    "id": 2103,
+    "type": "text",
+    "page_idx": 128,
+    "text": "说明 等腰三角形的三边关系只需满足两腰之和大于底边."
+  },
+  {
+    "id": 2104,
+    "type": "text",
+    "page_idx": 128,
+    "text": "例②  $y = f(x) = mx + n$  ，若  $f(4) = 1$  ，  $f(2) = 0$  ，求  $y$  关于  $x$  的函数表达式"
+  },
+  {
+    "id": 2105,
+    "type": "text",
+    "page_idx": 128,
+    "text": "解 由题意可得方程组  $\\left\\{ \\begin{array}{l}1 = 4m + n,\\\\ 0 = 2m + n, \\end{array} \\right.$  解得  $\\begin{cases} m = \\frac{1}{2}, \\\\ n = -1. \\end{cases}$  所以函数表达式为  $y = \\frac{1}{2} x - 1$"
+  },
+  {
+    "id": 2106,
+    "type": "text",
+    "page_idx": 128,
+    "text": "例③ 求函数式  $y = \\frac{\\sqrt{2x - 5}}{x^2 - 5x + 6}$  中自变量  $x$  的取值范围."
+  },
+  {
+    "id": 2107,
+    "type": "text",
+    "page_idx": 128,
+    "text": "$x$  应满足条件  $\\left\\{ \\begin{array}{l} 2x - 5 \\geqslant 0, \\\\ x^2 - 5x + 6 \\neq 0, \\end{array} \\right.$  解得  $\\left\\{ \\begin{array}{l} x \\geqslant \\frac{5}{2}, \\\\ x \\neq 2 \\text{且} x \\neq 3. \\end{array} \\right.$  所以自变量  $x$  的取值范围是  $x \\geqslant \\frac{5}{2}$  且  $x \\neq 3$ ."
+  },
+  {
+    "id": 2108,
+    "type": "text",
+    "page_idx": 128,
+    "text": "注意 求函数自变量  $x$  的取值范围需要从这4个方面入手："
+  },
+  {
+    "id": 2109,
+    "type": "text",
+    "page_idx": 128,
+    "text": "(1) 如果这个表达式的分母中有自变量, 其自变量的取值范围是使分母的值不为零的所有实数;"
+  },
+  {
+    "id": 2110,
+    "type": "text",
+    "page_idx": 128,
+    "text": "（2）偶次根式的被开方数非负；"
+  },
+  {
+    "id": 2111,
+    "type": "text",
+    "page_idx": 128,
+    "text": "(3) 0 的 0 次幂无意义；"
+  },
+  {
+    "id": 2112,
+    "type": "text",
+    "page_idx": 128,
+    "text": "（4）在函数关系中，自变量的每一个取值，不但要使自变量本身有意义，同时还要使对应的函数也有意义，因此，在考虑自变量的取值范围时，还要考虑问题的实际情况."
+  },
+  {
+    "id": 2113,
+    "type": "text",
+    "page_idx": 128,
+    "text": "例④ 已知  $f(x) = x + 2$  ，求  $f[f(1)]$  的值"
+  },
+  {
+    "id": 2114,
+    "type": "text",
+    "page_idx": 128,
+    "text": "解  $\\because f(1) = 1 + 2 = 3, \\therefore f[f(1)] = f(3) = 3 + 2 = 5.$"
+  },
+  {
+    "id": 2115,
+    "type": "image",
+    "page_idx": 128,
+    "img_path": "images/f6f7e8ba180e0875d303537b18619f8b00960509b4621cfd82b3ac85eb669dc9.jpg"
+  },
+  {
+    "id": 2116,
+    "type": "text",
+    "page_idx": 128,
+    "text": "基础训练"
+  },
+  {
+    "id": 2117,
+    "type": "text",
+    "page_idx": 128,
+    "text": "1. 已知  $x = \\frac{2y - 1}{y + 2}$ , 则  $y$  用含  $x$  的代数式表示为"
+  },
+  {
+    "id": 2118,
+    "type": "text",
+    "page_idx": 129,
+    "text": "2.  $y = f(z)$  表示 是 的函数"
+  },
+  {
+    "id": 2119,
+    "type": "text",
+    "page_idx": 129,
+    "text": "3. 求下列函数自变量  $x$  的取值范围"
+  },
+  {
+    "id": 2120,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(1)  $y = 3x - 4$ ;"
+  },
+  {
+    "id": 2121,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(2)  $y = \\sqrt{6 - \\sqrt{x}}$ ;"
+  },
+  {
+    "id": 2122,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(3)  $y = \\frac{x + 1}{\\sqrt{2x + 1}}$ ;"
+  },
+  {
+    "id": 2123,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(4)  $y = \\sqrt[5]{2x + 4}$ ;"
+  },
+  {
+    "id": 2124,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(5)  $y = (2x + 1)^{0} + \\frac{1}{\\sqrt{x + 2}}$ ;"
+  },
+  {
+    "id": 2125,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(6)  $y = \\frac{x - 1}{\\sqrt{x + 4}} + \\frac{\\sqrt{3 - 2x}}{x^2 - 8}$ ;"
+  },
+  {
+    "id": 2126,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(7)  $y = \\frac{1}{x^2 - x - 2}$ ;"
+  },
+  {
+    "id": 2127,
+    "type": "text",
+    "page_idx": 129,
+    "text": "(8)  $y = \\sqrt{\\frac{1}{x^2 - x - 2}}$ ."
+  },
+  {
+    "id": 2128,
+    "type": "text",
+    "text": "4. 把一块边长为  $20 \\mathrm{~cm}$  的正方形铁皮, 四角截去边长为  $x \\mathrm{~cm}$  的小正方形, 折成一个无盖的盒子, 求盒子的容积  $V$  (单位:  $\\mathrm{cm}^{3}$ ) 关于  $x$  (单位:  $\\mathrm{cm}$ ) 的函数表达式及其自变量  $x$  的取值范围.",
+    "page_idx": 129
+  },
+  {
+    "id": 2129,
+    "type": "text",
+    "text": "5. 等腰三角形周长为 10, 底边长为  $y$ , 腰长为  $x$ , 求  $y$  关于  $x$  的函数表达式及其自变量  $x$  的取值范围.",
+    "page_idx": 129
+  }
+]
+```
