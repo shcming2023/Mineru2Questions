@@ -403,20 +403,50 @@ const resultRouter = router({
       }
       
       try {
-        // 优先尝试从本地文件读取(用于测试任务)
         const fs = await import('node:fs');
         const path = await import('node:path');
-        const localPath = path.resolve(process.cwd(), 'server', 'uploads', 'tasks', task.sourceFolder, 'results', input.format === 'json' ? 'questions.json' : 'questions.md');
         
-        if (fs.existsSync(localPath)) {
+        const filename = input.format === 'json' ? 'questions.json' : 'questions.md';
+        const possiblePaths = [
+          filePath,
+          path.resolve(process.cwd(), 'server', 'uploads', 'tasks', task.sourceFolder, 'results', filename),
+          path.resolve(process.cwd(), 'server', 'uploads', task.sourceFolder, 'results', filename),
+          path.resolve(process.cwd(), 'server', task.sourceFolder, 'results', filename),
+          path.resolve(task.sourceFolder, 'results', filename)
+        ];
+
+        let localPath = '';
+        for (const p of possiblePaths) {
+          if (p && fs.existsSync(p)) {
+            localPath = p;
+            break;
+          }
+        }
+        
+        if (localPath) {
           const content = fs.readFileSync(localPath, 'utf-8');
           return { content, format: input.format };
         }
         
-        // 如果本地文件不存在,尝试从 S3 获取
         const { url } = await storageGet(filePath);
+        
+        if (url.startsWith('/') && url.includes('/uploads/')) {
+             const relativePath = url.substring(url.indexOf('/uploads/') + 1);
+             const mappedLocalPath = path.resolve(process.cwd(), 'server', relativePath);
+             if (fs.existsSync(mappedLocalPath)) {
+                  const content = fs.readFileSync(mappedLocalPath, 'utf-8');
+                  return { content, format: input.format };
+             }
+        }
+
         const axios = (await import("axios")).default;
-        const response = await axios.get(url, { timeout: 30000 });
+        let fetchUrl = url;
+        if (url.startsWith('/')) {
+             const port = process.env.PORT || 3000;
+             fetchUrl = `http://localhost:${port}${url}`;
+        }
+
+        const response = await axios.get(fetchUrl, { timeout: 30000 });
         return { content: typeof response.data === 'string' ? response.data : JSON.stringify(response.data, null, 2), format: input.format };
       } catch (error) {
         console.error('[result.getContent] Failed to load result file:', error);

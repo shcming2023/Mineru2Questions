@@ -6,10 +6,10 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle, Clock, Cpu, Zap } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle, Clock, Cpu, Zap, ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocation, useParams } from "wouter";
 import { toast } from "sonner";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { Streamdown } from "streamdown";
 
 const statusConfig = {
@@ -37,6 +37,8 @@ export default function TaskDetail() {
   const [previewFormat, setPreviewFormat] = useState<"json" | "markdown">("json");
   const [activeTab, setActiveTab] = useState<"status" | "logs" | "results">("status");
   const [autoScroll, setAutoScroll] = useState(true);
+  const [resultPage, setResultPage] = useState(1);
+  const [resultPageSize, setResultPageSize] = useState(10);
   const logsEndRef = useRef<HTMLDivElement>(null);
   
   const { data: task, isLoading, refetch } = trpc.task.get.useQuery(
@@ -147,14 +149,65 @@ export default function TaskDetail() {
   const status = statusConfig[task.status];
   const progress = task.totalPages > 0 ? (task.processedPages / task.totalPages) * 100 : 0;
   
-  // 计算chunk统计
-  const chunkStats = taskLogs ? {
-    total: taskLogs.filter(l => l.message?.includes("开始处理Chunk")).length,
-    completed: taskLogs.filter(l => l.message?.includes("Chunk") && l.message?.includes("完成")).length,
-    failed: taskLogs.filter(l => l.level === "error" && l.message?.includes("Chunk")).length,
-    llmCalls: taskLogs.filter(l => l.message?.includes("LLM响应完成")).length,
-    fallbackUsed: taskLogs.filter(l => l.message?.includes("Fallback")).length,
-  } : { total: 0, completed: 0, failed: 0, llmCalls: 0, fallbackUsed: 0 };
+  const chunkStats = taskLogs ? (() => {
+    const totalFromLogs = taskLogs.reduce((max, log) => Math.max(max, log.totalChunks || 0), 0);
+    const started = taskLogs.filter(l => l.message?.includes("开始处理Chunk") || l.message?.includes("Processing chunk")).length;
+    // Fix: Exclude "LLM response" messages to avoid double counting
+    const completed = taskLogs.filter(l => 
+      l.message?.includes("Chunk") && 
+      (l.message?.includes("完成") || l.message?.includes("completed") || l.message?.includes("处理完毕")) &&
+      !l.message?.includes("LLM")
+    ).length;
+    const failed = taskLogs.filter(l => l.level === "error" && (l.message?.includes("Chunk") || l.stage === "processing")).length;
+    const llmCalls = taskLogs.filter(l => l.message?.includes("LLM响应") || l.message?.includes("LLM response")).length;
+    const fallbackUsed = taskLogs.filter(l => l.message?.includes("Fallback")).length;
+    return {
+      total: totalFromLogs || started,
+      completed,
+      failed,
+      llmCalls,
+      fallbackUsed,
+    };
+  })() : { total: 0, completed: 0, failed: 0, llmCalls: 0, fallbackUsed: 0 };
+
+  const slicedContent = useMemo(() => {
+    if (!resultContent?.content) return { content: "", totalPages: 0 };
+    
+    if (previewFormat === "json") {
+       // For JSON, we don't pagination string content, but we could if it's an array.
+       // For now, return as is.
+       return { content: resultContent.content, totalPages: 1 };
+    }
+
+    // For Markdown, split by delimiter "---"
+    // The format is usually Header --- Question 1 --- Question 2 ...
+    const parts = resultContent.content.split(/\n-{3,}\n/);
+    
+    // If it's just a header or empty
+    if (parts.length <= 1) return { content: resultContent.content, totalPages: 1 };
+
+    // Filter out empty parts
+    const validParts = parts.filter(p => p.trim().length > 0);
+    
+    // Calculate pagination
+    const totalItems = validParts.length;
+    const totalPages = Math.ceil(totalItems / resultPageSize);
+    const currentPage = Math.min(Math.max(1, resultPage), totalPages);
+    
+    const start = (currentPage - 1) * resultPageSize;
+    const end = start + resultPageSize;
+    
+    const slicedParts = validParts.slice(start, end);
+    
+    // If it's the first page, we might want to keep the header (index 0) if it was stripped
+    // But the splitting logic makes it a list of items. 
+    // Let's just join them back.
+    return { 
+      content: slicedParts.join("\n\n---\n\n"), 
+      totalPages,
+      currentPage
+    };
+  }, [resultContent, previewFormat, resultPage, resultPageSize]);
 
   return (
     <DashboardLayout>
@@ -463,7 +516,10 @@ export default function TaskDetail() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <Tabs value={previewFormat} onValueChange={(v) => setPreviewFormat(v as "json" | "markdown")}>
+                  <Tabs value={previewFormat} onValueChange={(v) => {
+                    setPreviewFormat(v as "json" | "markdown");
+                    setResultPage(1); // Reset page on format change
+                  }}>
                     <TabsList>
                       <TabsTrigger value="json">
                         <FileJson className="mr-1 h-4 w-4" />
@@ -474,6 +530,36 @@ export default function TaskDetail() {
                         Markdown格式
                       </TabsTrigger>
                     </TabsList>
+                    
+                    {/* Pagination Controls */}
+                    {previewFormat === "markdown" && slicedContent.totalPages > 1 && (
+                      <div className="flex items-center justify-between py-4">
+                        <div className="text-sm text-muted-foreground">
+                          第 {slicedContent.currentPage} / {slicedContent.totalPages} 页
+                        </div>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            disabled={resultPage <= 1}
+                            onClick={() => setResultPage(p => Math.max(1, p - 1))}
+                          >
+                            <ChevronLeft className="h-4 w-4 mr-1" />
+                            上一页
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            disabled={resultPage >= slicedContent.totalPages}
+                            onClick={() => setResultPage(p => Math.min(slicedContent.totalPages, p + 1))}
+                          >
+                            下一页
+                            <ChevronRight className="h-4 w-4 ml-1" />
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
                     <TabsContent value="json" className="mt-4">
                       <ScrollArea className="h-96 w-full rounded-md border p-4">
                         {isLoadingContent ? (
@@ -486,14 +572,14 @@ export default function TaskDetail() {
                       </ScrollArea>
                     </TabsContent>
                     <TabsContent value="markdown" className="mt-4">
-                      <ScrollArea className="h-96 w-full rounded-md border p-4">
+                      <ScrollArea className="h-[600px] w-full rounded-md border p-4">
                         {isLoadingContent ? (
                           <div className="flex items-center justify-center py-8">
                             <Loader2 className="h-6 w-6 animate-spin" />
                           </div>
                         ) : (
                           <div className="prose prose-sm max-w-none dark:prose-invert">
-                            <Streamdown>{resultContent?.content || "暂无内容"}</Streamdown>
+                            <Streamdown>{slicedContent.content || "暂无内容"}</Streamdown>
                           </div>
                         )}
                       </ScrollArea>

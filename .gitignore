@@ -109,3 +109,4 @@ server/uploads/*
 *.db
 !sqlite.db
 debug_*.ts
+server/uploads/tasks/

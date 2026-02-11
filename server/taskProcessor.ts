@@ -93,6 +93,8 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     const imagesFolder = path.dirname(contentListPath);
     const taskDir = imagesFolder;
     
+    const lastProgress = { currentChunk: 0, totalChunks: 0, completedChunks: 0 };
+
     // 5. 调用核心提取函数
     await logTaskProgress(taskId, 'info', 'extracting', 'Starting question extraction...');
     const questions = await extractQuestions(
@@ -100,9 +102,35 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       imagesFolder, 
       taskDir, 
       config,
-      async (progress, message) => {
-        // 映射进度到 logTaskProgress
-        await logTaskProgress(taskId, 'info', 'processing', message);
+      async (progress, message, stats) => {
+        if (stats?.currentChunk && stats?.totalChunks) {
+          lastProgress.currentChunk = stats.currentChunk;
+          lastProgress.totalChunks = stats.totalChunks;
+          if (stats.completedChunks !== undefined) {
+            lastProgress.completedChunks = stats.completedChunks;
+          }
+        }
+
+        await logTaskProgress(
+          taskId,
+          'info',
+          'processing',
+          message,
+          undefined,
+          stats?.currentChunk ? stats.currentChunk - 1 : undefined,
+          stats?.totalChunks
+        );
+
+        if (stats?.totalChunks) {
+          // 优先使用 completedChunks 以确保进度单调递增
+          const processed = stats.completedChunks !== undefined ? stats.completedChunks : (stats.currentChunk || 0);
+          
+          await updateExtractionTask(taskId, {
+            processedPages: processed,
+            totalPages: stats.totalChunks,
+            currentPage: stats.currentChunk // currentPage 保持为当前正在处理的 Chunk ID
+          });
+        }
       }
     );
     
@@ -125,12 +153,16 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     await logTaskProgress(taskId, 'info', 'exporting', `Results exported to ${resultsDir}`);
     
     // 7. 更新任务状态
+    const finalTotalPages = lastProgress.totalChunks || task.totalPages;
     await updateExtractionTask(taskId, {
       status: 'completed',
       resultJsonPath: jsonPath,
       resultMarkdownPath: mdPath,
       extractedCount: questions.length,
-      completedAt: new Date()
+      completedAt: new Date(),
+      processedPages: finalTotalPages, // Force 100% progress
+      totalPages: finalTotalPages,
+      currentPage: finalTotalPages
     });
     
   } catch (error: any) {

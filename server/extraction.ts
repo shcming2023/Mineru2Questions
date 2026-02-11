@@ -95,7 +95,7 @@ export async function extractQuestions(
   imagesFolder: string,
   taskDir: string,
   llmConfig: LLMConfig,
-  onProgress?: (progress: number, message: string) => Promise<void>
+  onProgress?: (progress: number, message: string, stats?: { currentChunk?: number, totalChunks?: number, completedChunks?: number }) => Promise<void>
 ): Promise<ExtractedQuestion[]> {
   
   // 1. 加载并格式化输入
@@ -118,6 +118,8 @@ export async function extractQuestions(
 
   // 初始化结果数组，保证顺序
   const chunkResults = new Array<ExtractedQuestion[]>(chunks.length);
+  let completedCount = 0; // 追踪已完成的 Chunk 数量
+  
   // 创建任务队列
   const queue = chunks.map((chunk, i) => ({ chunk, index: i }));
   
@@ -129,8 +131,8 @@ export async function extractQuestions(
       
       const { chunk, index } = item;
       const progressPercent = 10 + Math.floor(((index + 1) / chunks.length) * 80);
-      const progressMsg = `Processing chunk ${index + 1}/${chunks.length}...`;
-      if (onProgress) await onProgress(progressPercent, progressMsg);
+      const progressMsg = `开始处理Chunk ${index + 1}/${chunks.length}`;
+      if (onProgress) await onProgress(progressPercent, progressMsg, { currentChunk: index + 1, totalChunks: chunks.length });
 
       let retries = 0;
       const maxRetries = 3;
@@ -152,7 +154,10 @@ export async function extractQuestions(
             'utf-8'
           );
           
-          // 解析（带容错）
+          if (onProgress) {
+            await onProgress(progressPercent, `LLM响应接收 Chunk ${index + 1}/${chunks.length}`, { currentChunk: index + 1, totalChunks: chunks.length });
+          }
+
           const parser = new QuestionParser(chunk.blocks, imagesFolder, logDir);
           const questions = parser.parseWithFallback(llmOutput, chunk.index);
 
@@ -171,6 +176,14 @@ export async function extractQuestions(
           }
           
           chunkResults[index] = questions;
+          completedCount++;
+          if (onProgress) {
+            await onProgress(progressPercent, `Chunk ${index + 1}/${chunks.length} 处理完毕`, { 
+              currentChunk: index + 1, 
+              totalChunks: chunks.length,
+              completedChunks: completedCount
+            });
+          }
           success = true;
           
         } catch (error: any) {
