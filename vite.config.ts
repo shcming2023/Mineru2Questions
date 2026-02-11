@@ -98,6 +98,35 @@ function vitePluginManusDebugCollector(): Plugin {
     },
 
     configureServer(server: ViteDevServer) {
+      // Serve the debug collector script
+      server.middlewares.use((req, res, next) => {
+        if (req.url === "/__manus__/debug-collector.js") {
+          const script = `
+            (function() {
+              const send = (payload) => {
+                fetch('/__manus__/logs', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                }).catch(() => {});
+              };
+
+              ['log', 'warn', 'error'].forEach((level) => {
+                const original = console[level];
+                console[level] = (...args) => {
+                  original.apply(console, args);
+                  send({ consoleLogs: [{ level, args: args.map(String), time: Date.now() }] });
+                };
+              });
+            })();
+          `;
+          res.writeHead(200, { "Content-Type": "application/javascript" });
+          res.end(script);
+          return;
+        }
+        next();
+      });
+
       // POST /__manus__/logs: Browser sends logs (written directly to files)
       server.middlewares.use("/__manus__/logs", (req, res, next) => {
         if (req.method !== "POST") {

@@ -1,0 +1,810 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- **IMPORTANT**: If the current section is a generic title (like '基础训练', '本章复习题', '习题'), and a parent chapter title (like '19.1 平方根') is available in the context, you should use the ID of the **PARENT CHAPTER** as the <title>. This ensures questions are correctly attributed to the main chapter.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1530,
+    "type": "text",
+    "page_idx": 87,
+    "text": "因式分解，得  $(m^{2} + n^{2} + 3)(m^{2} + n^{2} - 2) = 0.$"
+  },
+  {
+    "id": 1531,
+    "type": "text",
+    "page_idx": 87,
+    "text": "解得  $m^2 + n^2 = 2$  或  $m^2 + n^2 = -3$  (不合题意, 舍)."
+  },
+  {
+    "id": 1532,
+    "type": "text",
+    "page_idx": 87,
+    "text": "所以  $m^2 + n^2$  的值为 2."
+  },
+  {
+    "id": 1533,
+    "type": "image",
+    "page_idx": 87,
+    "img_path": "images/0790cd47ac72a67b65686ed9f70f7abb9436e25732017531299d93b8060a7dcc.jpg"
+  },
+  {
+    "id": 1534,
+    "type": "text",
+    "page_idx": 87,
+    "text": "基础训练"
+  },
+  {
+    "id": 1535,
+    "type": "text",
+    "text": "1.（1）方程  $7x^{2} = x$  的根为 ；(2）方程  $(x - 1)^{2} = 1 - x$  的根为",
+    "page_idx": 87
+  },
+  {
+    "id": 1536,
+    "type": "text",
+    "text": "2. 如果代数式  $y^{2} + 7y + 2$  与  $y - 3$  的值相等，那么  $y =$",
+    "page_idx": 87
+  },
+  {
+    "id": 1537,
+    "type": "text",
+    "text": "3. 写出一个以1，-3为根的一元二次方程：",
+    "page_idx": 87
+  },
+  {
+    "id": 1538,
+    "type": "text",
+    "text": "4. 若代数式  $4x^{2} - 2x - 5$  与  $2x^{2} + 1$  的值互为相反数，则  $x$  的值为",
+    "page_idx": 87
+  },
+  {
+    "id": 1539,
+    "type": "text",
+    "text": "5. 关于  $x$  的一元二次方程  $(m + 2)x^{2} + x - m^{2} - 5m - 6 = 0$  有一个根为0，则  $m =$",
+    "page_idx": 87
+  },
+  {
+    "id": 1540,
+    "type": "text",
+    "text": "6. 方程  $(\\sqrt{3} x - 2)(\\sqrt{5} x + \\sqrt{3}) = 0$  的根为",
+    "page_idx": 87
+  },
+  {
+    "id": 1541,
+    "type": "text",
+    "text": "7.（1）方程  $x^{2} = 2\\mid x\\mid +3$  的根是 ；（2）方程  $x^{2} = |x|$  的根是",
+    "page_idx": 87
+  },
+  {
+    "id": 1542,
+    "type": "text",
+    "text": "8. 若  $x - 3$  是多项式  $2x^{2} - 5x + m$  的一个因式，则  $m =$",
+    "page_idx": 87
+  },
+  {
+    "id": 1543,
+    "type": "text",
+    "text": "9. 已知关于  $x$  的方程  $(x + a)(x - 4) = 0$  和  $\\frac{1}{2} x^2 - \\frac{3}{2} x + b = 0$  的根完全相同, 则  $a + b =$",
+    "page_idx": 87
+  },
+  {
+    "id": 1544,
+    "type": "text",
+    "text": "10. 两个连续整数之积为20，那么这两个整数是",
+    "page_idx": 87
+  },
+  {
+    "id": 1545,
+    "type": "text",
+    "text": "11. 方程  $(x + 1)(x - 3) = 5$  的根是（ ）.",
+    "page_idx": 87
+  },
+  {
+    "id": 1546,
+    "type": "text",
+    "page_idx": 87,
+    "text": "A.  $x_{1} = 1, x_{2} = -3$"
+  },
+  {
+    "id": 1547,
+    "type": "text",
+    "page_idx": 87,
+    "text": "B.  $x_{1} = -1, x_{2} = 3$"
+  },
+  {
+    "id": 1548,
+    "type": "text",
+    "page_idx": 87,
+    "text": "C.  $x_{1} = 4, x_{2} = -2$"
+  },
+  {
+    "id": 1549,
+    "type": "text",
+    "page_idx": 87,
+    "text": "D.  $x_{1} = -4, x_{2} = 2$"
+  },
+  {
+    "id": 1550,
+    "type": "text",
+    "page_idx": 87,
+    "text": "12. 方程  $x(x + 1) = 3(x + 1)$  的根是( )."
+  },
+  {
+    "id": 1551,
+    "type": "text",
+    "page_idx": 87,
+    "text": "A.  $x = -1$"
+  },
+  {
+    "id": 1552,
+    "type": "text",
+    "page_idx": 87,
+    "text": "B.  $x = 3$"
+  },
+  {
+    "id": 1553,
+    "type": "text",
+    "page_idx": 87,
+    "text": "C.  $x_{1} = 3, x_{2} = -1$"
+  },
+  {
+    "id": 1554,
+    "type": "text",
+    "page_idx": 87,
+    "text": "D. 以上答案都不对"
+  },
+  {
+    "id": 1555,
+    "type": "text",
+    "page_idx": 87,
+    "text": "13. 用因式分解法解下列一元二次方程："
+  },
+  {
+    "id": 1556,
+    "type": "text",
+    "page_idx": 87,
+    "text": "(1)  $3x^{2} + 8x - 3 = 0$"
+  },
+  {
+    "id": 1557,
+    "type": "text",
+    "page_idx": 87,
+    "text": "(2)  $3(x - 2)^{2} + x(2 - x) = 0;$"
+  },
+  {
+    "id": 1558,
+    "type": "text",
+    "text": "(3)  $9x^{2} = 16(x + 1)^{2}$ ;",
+    "page_idx": 88
+  },
+  {
+    "id": 1559,
+    "type": "text",
+    "text": "(4)  $6y^{2} + 4\\sqrt{6} y - 1 = -5;$",
+    "page_idx": 88
+  },
+  {
+    "id": 1560,
+    "type": "text",
+    "text": "(5)  $(1 - \\sqrt{2})x^{2} = (1 + \\sqrt{2})x$",
+    "page_idx": 88
+  },
+  {
+    "id": 1561,
+    "type": "text",
+    "text": "(6)  $2\\sqrt{3} x^{2} - 5x = -\\sqrt{3}$ ;",
+    "page_idx": 88
+  },
+  {
+    "id": 1562,
+    "type": "text",
+    "text": "(7)  $20m^{2}x^{2} + 11mnx - 3n^{2} = 0 (m, n$  为常数， $m \\neq 0)$",
+    "page_idx": 88
+  },
+  {
+    "id": 1563,
+    "type": "text",
+    "text": "(8)  $x^{2} + (1 + 2\\sqrt{3})x + 3 + \\sqrt{3} = 0;$",
+    "page_idx": 88
+  },
+  {
+    "id": 1564,
+    "type": "text",
+    "text": "(9)  $\\frac{(t + 3)^2}{5} + 1 - \\frac{(3t - 1)^2}{5} = \\frac{t(2t - 3)}{2}$ ;",
+    "page_idx": 88
+  },
+  {
+    "id": 1565,
+    "type": "text",
+    "text": "(10)  $\\frac{1}{2}\\left[1 - \\frac{3}{2} y\\left(y - \\frac{8}{3}\\right)\\right] = y + \\frac{5}{6}$ .",
+    "page_idx": 88
+  },
+  {
+    "id": 1566,
+    "type": "text",
+    "page_idx": 89,
+    "text": "14. 方程  $(2029x)^{2} - 2028 \\times 2030x - 1 = 0$  的较大根是  $m$ , 方程  $2029x^{2} + 2030x + 1 = 0$  的较小根为  $n$ , 求  $m - n$  的值."
+  },
+  {
+    "id": 1567,
+    "type": "text",
+    "page_idx": 89,
+    "text": "15. 设关于  $x$  的二次方程  $(a - 1)x^{2} - (a^{2} + 2)x + (a^{2} + 2a) = 0$  及  $(b - 1)x^{2} - (b^{2} + 2)x + (b^{2} + 2b) = 0$  （其中  $a, b$  均为正整数，且  $a \\neq b$ ）有公共根，求  $\\frac{a^b + b^a}{a^{-b} + b^{-a}}$  的值."
+  },
+  {
+    "id": 1568,
+    "type": "text",
+    "page_idx": 90,
+    "text": "21.2（二）用开平方的方法解特殊的一元二次方程"
+  },
+  {
+    "id": 1569,
+    "type": "image",
+    "page_idx": 90,
+    "img_path": "images/6850d72b6bad311717be9829906b5ef202c97d44cf3c1e93678dd1a78b7efa3d.jpg"
+  },
+  {
+    "id": 1570,
+    "type": "text",
+    "page_idx": 90,
+    "text": "要点归纳"
+  },
+  {
+    "id": 1571,
+    "type": "text",
+    "text": "1. 掌握用开平方法解一元二次方程: 直接通过求平方根来解某些特殊的一元二次方程.",
+    "page_idx": 90
+  },
+  {
+    "id": 1572,
+    "type": "text",
+    "text": "2. 用开平方的方法解形如  $ax^2 + c = 0 (a \\neq 0)$  的方程：当  $-\\frac{c}{a} > 0$  时，方程有两个不相等的实数根  $x_1 = \\sqrt{-\\frac{c}{a}}$ ， $x_2 = -\\sqrt{-\\frac{c}{a}}$ ；当  $-\\frac{c}{a} = 0$  时，方程有两个相等的实数根  $x_1 = x_2 = 0$ ；当  $-\\frac{c}{a} < 0$  时，方程没有实数根。",
+    "page_idx": 90
+  },
+  {
+    "id": 1573,
+    "type": "image",
+    "page_idx": 90,
+    "img_path": "images/33b33126d69d06ce7a6c815a4b2f48dcddfe0bb23bb95b87033c1ed09f7fd498.jpg"
+  },
+  {
+    "id": 1574,
+    "type": "text",
+    "page_idx": 90,
+    "text": "疑难分析"
+  },
+  {
+    "id": 1575,
+    "type": "text",
+    "page_idx": 90,
+    "text": "例① 用开平方法解下列关于  $x$  的方程："
+  },
+  {
+    "id": 1576,
+    "type": "text",
+    "page_idx": 90,
+    "text": "(1)  $3(2x - 5)^{2} - 12 = 2(2x - 5)^{2} + 4;$"
+  },
+  {
+    "id": 1577,
+    "type": "text",
+    "page_idx": 90,
+    "text": "(2)  $9(x - 1)^{2} - 25(x + 2)^{2} = 0$ ;"
+  },
+  {
+    "id": 1578,
+    "type": "text",
+    "page_idx": 90,
+    "text": "(3)  $m^2 x^2 + 2m^2 nx = n^2 - m^2 n^2 (m \\neq 0)$ ."
+  },
+  {
+    "id": 1579,
+    "type": "text",
+    "page_idx": 90,
+    "text": "分析 用直接开平方法解方程，要先将方程左边化为含未知数的完全平方式，右边化为非负数的形式，然后利用平方根的性质将方程转化成两个一元一次方程，进而求出方程的解。"
+  },
+  {
+    "id": 1580,
+    "type": "text",
+    "page_idx": 90,
+    "text": "解 (1) 原方程化为  $(2x - 5)^{2} = 16$ ."
+  },
+  {
+    "id": 1581,
+    "type": "text",
+    "page_idx": 90,
+    "text": "由此得  $2x - 5 = 4$  或  $2x - 5 = -4$ ."
+  },
+  {
+    "id": 1582,
+    "type": "text",
+    "page_idx": 90,
+    "text": "解得  $x = 4.5$  或  $x = 0.5$"
+  },
+  {
+    "id": 1583,
+    "type": "text",
+    "page_idx": 90,
+    "text": "所以原方程的根为  $x_{1} = 4.5, x_{2} = 0.5$ ."
+  },
+  {
+    "id": 1584,
+    "type": "text",
+    "page_idx": 90,
+    "text": "（2）原方程化为  $[3(x - 1)]^2 = [5(x + 2)]^2.$"
+  },
+  {
+    "id": 1585,
+    "type": "text",
+    "page_idx": 90,
+    "text": "由此得  $3x - 3 = 5x + 10$  或  $3x - 3 = -5x - 10$ ."
+  },
+  {
+    "id": 1586,
+    "type": "text",
+    "page_idx": 90,
+    "text": "解得  $x = -\\frac{13}{2}$  或  $x = -\\frac{7}{8}$ ."
+  },
+  {
+    "id": 1587,
+    "type": "text",
+    "page_idx": 90,
+    "text": "所以原方程的根为  $x_{1} = -\\frac{13}{2}, x_{2} = -\\frac{7}{8}$ ."
+  },
+  {
+    "id": 1588,
+    "type": "text",
+    "page_idx": 90,
+    "text": "（3）原方程化为  $(mx + mn)^2 = n^2$"
+  },
+  {
+    "id": 1589,
+    "type": "text",
+    "page_idx": 90,
+    "text": "由此得  $mx + mn = n$  或  $mx + mn = -n$ ."
+  },
+  {
+    "id": 1590,
+    "type": "text",
+    "page_idx": 90,
+    "text": "解得  $x = \\frac{n - mn}{m}$  或  $x = -\\frac{n + mn}{m}$ ."
+  },
+  {
+    "id": 1591,
+    "type": "text",
+    "page_idx": 90,
+    "text": "所以原方程的根为  $x_{1} = \\frac{n - mn}{m}, x_{2} = -\\frac{n + mn}{m}$ ."
+  },
+  {
+    "id": 1592,
+    "type": "text",
+    "page_idx": 90,
+    "text": "例② 解关于  $x$  的一元二次方程：  $x^{2} = m + 2$"
+  },
+  {
+    "id": 1593,
+    "type": "text",
+    "page_idx": 90,
+    "text": "分析  $m$  的符号与方程的根的情况的关系需要讨论，特别注意当  $m = -2$  时方程有重根"
+  },
+  {
+    "id": 1594,
+    "type": "text",
+    "page_idx": 91,
+    "text": "解 当  $m + 2 > 0$  ，即  $m > -2$  时， $x = \\pm \\sqrt{m + 2}$ ；当  $m + 2 = 0$  ，即  $m = -2$  时， $x_1 = x_2 = 0$ ；当  $m + 2 < 0$  ，即  $m < -2$  时，方程没有实数根。"
+  },
+  {
+    "id": 1595,
+    "type": "text",
+    "page_idx": 91,
+    "text": "所以当  $m > -2$  时，原方程的根为  $x_{1} = \\sqrt{m + 2}$ ， $x_{2} = -\\sqrt{m + 2}$ ；当  $m = -2$  时，原方程的根为  $x_{1} = x_{2} = 0$ ；当  $m < -2$  时，原方程没有实数根。"
+  },
+  {
+    "id": 1596,
+    "type": "image",
+    "page_idx": 91,
+    "img_path": "images/6c680645e80b1df62c180597a6fd179e1131fd7737ad6735d3a1b91967bd0251.jpg"
+  },
+  {
+    "id": 1597,
+    "type": "text",
+    "page_idx": 91,
+    "text": "基础训练"
+  },
+  {
+    "id": 1598,
+    "type": "text",
+    "text": "1. 关于  $x$  的一元二次方程  $ax^2 + c = 0$  有实数根的条件是",
+    "page_idx": 91
+  },
+  {
+    "id": 1599,
+    "type": "text",
+    "text": "2.（1）方程  $x^{2} - 0.81 = 0$  的根为 ；(2）方程  $2x^{2} + 9 = 0$  的根为",
+    "page_idx": 91
+  },
+  {
+    "id": 1600,
+    "type": "text",
+    "text": "3.（1）方程  $36x^{2} - 0.25 = 0$  的正的实根为",
+    "page_idx": 91
+  },
+  {
+    "id": 1601,
+    "type": "text",
+    "text": "(2) 方程  $3 - (2x - 1)^{2} = 0$  的负的实根为",
+    "page_idx": 91
+  },
+  {
+    "id": 1602,
+    "type": "text",
+    "text": "4. 若关于  $x$  的方程  $(x - a)^2 + b = 0$  有实数根, 则  $b$  的取值范围是",
+    "page_idx": 91
+  },
+  {
+    "id": 1603,
+    "type": "text",
+    "text": "5. 若关于 \\(x\\) 的方程 \\(3x^{2} = a^{2}\\) 与 \\(9x^{2} = 4\\) 的根相同，则 \\(a = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_\\_",
+    "page_idx": 91
+  },
+  {
+    "id": 1604,
+    "type": "text",
+    "text": "6. 若  $2x + 1$  与  $2x - 1$  互为倒数，则实数  $x$  的值为",
+    "page_idx": 91
+  },
+  {
+    "id": 1605,
+    "type": "text",
+    "text": "7. 当 ______ 时，一元二次方程  $ax^2 + bx + c = 0 (a \\neq 0)$  一般用开平方法求解；",
+    "page_idx": 91
+  },
+  {
+    "id": 1606,
+    "type": "text",
+    "page_idx": 91,
+    "text": "当 时，一元二次方程  $ax^2 + c = 0 (a \\neq 0)$  有两个相同的实数根；"
+  },
+  {
+    "id": 1607,
+    "type": "text",
+    "page_idx": 91,
+    "text": "当  $a, c$  同号时，一元二次方程  $ax^2 + c = 0 (a \\neq 0)$  实数根（填“有”或“没有”）；"
+  },
+  {
+    "id": 1608,
+    "type": "text",
+    "page_idx": 91,
+    "text": "当  $a, c$  异号时，一元二次方程  $ax^2 + c = 0 (a \\neq 0)$  有两个不同的实数根，它们分别是  $x_1 = \\_$ ， $x_2 = \\_$ 。"
+  },
+  {
+    "id": 1609,
+    "type": "text",
+    "page_idx": 91,
+    "text": "8. 下列方程能用开平方法解的是（ ）"
+  },
+  {
+    "id": 1610,
+    "type": "text",
+    "page_idx": 91,
+    "text": "A.  $x^{2} = \\sqrt{3} - 2$"
+  },
+  {
+    "id": 1611,
+    "type": "text",
+    "page_idx": 91,
+    "text": "B.  $(2 - \\sqrt{5})x^{2} + 1 = 0$"
+  },
+  {
+    "id": 1612,
+    "type": "text",
+    "page_idx": 91,
+    "text": "C.  ${\\left( x + 4\\right) }^{2} + \\sqrt{5} = \\sqrt{3}$"
+  },
+  {
+    "id": 1613,
+    "type": "text",
+    "page_idx": 91,
+    "text": "D.  $(x + \\sqrt{3})(\\sqrt{3} - x) = 4$"
+  },
+  {
+    "id": 1614,
+    "type": "text",
+    "page_idx": 91,
+    "text": "9. 用开平方法解下列关于  $x$  的方程："
+  },
+  {
+    "id": 1615,
+    "type": "text",
+    "page_idx": 91,
+    "text": "(1)  $3x^{2} - 75 = 0$"
+  },
+  {
+    "id": 1616,
+    "type": "text",
+    "page_idx": 91,
+    "text": "(2)  $(x + 4)^{2} - 8 = 0$"
+  },
+  {
+    "id": 1617,
+    "type": "text",
+    "page_idx": 91,
+    "text": "(3)  $(2x - \\sqrt{3})^2 = 0$"
+  },
+  {
+    "id": 1618,
+    "type": "text",
+    "page_idx": 91,
+    "text": "(4)  $(x + 3)^2 = (1 - 2x)^2$ ;"
+  },
+  {
+    "id": 1619,
+    "type": "text",
+    "page_idx": 91,
+    "text": "(5)  $(3x + \\sqrt{5})^2 - 18 = 0$ ;"
+  },
+  {
+    "id": 1620,
+    "type": "text",
+    "text": "(6)  $4(\\sqrt{3} x + \\sqrt{2})^2 = 9$ ;",
+    "page_idx": 92
+  },
+  {
+    "id": 1621,
+    "type": "text",
+    "text": "(7)  $4(3x - 1)^2 = 25(2x + 1)^2$",
+    "page_idx": 92
+  },
+  {
+    "id": 1622,
+    "type": "text",
+    "text": "(8)  $(x - a)^2 + 2ab = a^2 + b^2$ ;",
+    "page_idx": 92
+  },
+  {
+    "id": 1623,
+    "type": "text",
+    "text": "(9)  $mx^2 + n = 0 (m \\neq 0)$ .",
+    "page_idx": 92
+  },
+  {
+    "id": 1624,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/70b4c6e8f2c64d0f89197aab6aac69c94c41d5bc0eba072137df1ab40da2ff6e.jpg"
+  },
+  {
+    "id": 1625,
+    "type": "text",
+    "page_idx": 92,
+    "text": "拓展训练"
+  },
+  {
+    "id": 1626,
+    "type": "text",
+    "page_idx": 92,
+    "text": "10. 若关于  $x$  的方程  $(3x - 1)^2 = a$  有两个不相等的实数根,  $(2x + 1)^2 = b$  有两个相等的实数根,  $(4 - 7x)^2 = c$  无实数根, 试比较  $a, b, c$  的大小, 并用“<”连接."
+  },
+  {
+    "id": 1627,
+    "type": "text",
+    "page_idx": 92,
+    "text": "11. 某商场在国庆节假期实行让利销售，全部商品一律打九折，这样每天所获得的利润恰是销售收入的  $25\\%$ 。已知第一天的销售收入是6.25万元，并且每天的销售收入都有增长，第三天的利润是2.25万元。"
+  },
+  {
+    "id": 1628,
+    "type": "text",
+    "text": "(1) 求第三天的销售收入；",
+    "page_idx": 92
+  },
+  {
+    "id": 1629,
+    "type": "text",
+    "text": "(2) 求第二天和第三天销售收入平均每天的增长率.",
+    "page_idx": 92
+  }
+]
+```

@@ -1,0 +1,825 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- **IMPORTANT**: If the current section is a generic title (like '基础训练', '本章复习题', '习题'), and a parent chapter title (like '19.1 平方根') is available in the context, you should use the ID of the **PARENT CHAPTER** as the <title>. This ensures questions are correctly attributed to the main chapter.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2520,
+    "type": "text",
+    "page_idx": 148,
+    "text": "求证：  $BF = BD$"
+  },
+  {
+    "id": 2521,
+    "type": "text",
+    "page_idx": 148,
+    "text": "分析 要证  $BF = BD$  ，可考虑证明  $\\angle F = \\angle BDF$  ，利用外角定理只需证明  $\\angle ABC = 2\\angle BDF$  即可，由  $E$  为  $AC$  的中点，可得  $DE = CE$  ，即  $\\angle C = \\angle EDC = \\angle BDF$"
+  },
+  {
+    "id": 2522,
+    "type": "image",
+    "page_idx": 148,
+    "img_path": "images/2c6bbf1ef934a3de7a6beda05fa9bee4e4f3aee875553379de0bcfe1e453e41b.jpg",
+    "image_caption": "图 22-1"
+  },
+  {
+    "id": 2523,
+    "type": "text",
+    "page_idx": 148,
+    "text": "证明  $\\because AD \\perp BC$  于点  $D, E$  为  $AC$  的中点，"
+  },
+  {
+    "id": 2524,
+    "type": "text",
+    "page_idx": 148,
+    "text": "$\\therefore DE = \\frac{1}{2} AC = CE$  （直角三角形的斜边上的中线等于斜边的一半）."
+  },
+  {
+    "id": 2525,
+    "type": "equation",
+    "page_idx": 148,
+    "text": "$$\n\\begin{array}{l} \\therefore \\angle E D C = \\angle C. \\\\ \\because \\angle E D C = \\angle B D F, \\\\ \\therefore \\angle B D F = \\angle C. \\\\ \\because \\angle A B C = \\angle F + \\angle B D F, \\text {又} \\because \\angle A B C = 2 \\angle C, \\\\ \\therefore \\angle F + \\angle B D F = 2 \\angle C = 2 \\angle B D F. \\\\ \\therefore \\angle F = \\angle B D F. \\\\ \\therefore B F = B D. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2526,
+    "type": "text",
+    "page_idx": 149,
+    "text": "例② 如图22-2，在△ABC中，BE⊥AC于点E，CF⊥AB于点F，D是边BC的中点，连接DF，EF，DE."
+  },
+  {
+    "id": 2527,
+    "type": "text",
+    "text": "（1）求证：  $DE = DF$",
+    "page_idx": 149
+  },
+  {
+    "id": 2528,
+    "type": "text",
+    "text": "（2）若  $\\triangle DEF$  是等边三角形，则  $\\triangle ABC$  应满足什么条件？",
+    "page_idx": 149
+  },
+  {
+    "id": 2529,
+    "type": "text",
+    "page_idx": 149,
+    "text": "分析 可试着思考以下问题："
+  },
+  {
+    "id": 2530,
+    "type": "text",
+    "text": "① 在  $Rt\\triangle BFC$  中， $DF$  与  $BC$  的数量关系是什么？",
+    "page_idx": 149
+  },
+  {
+    "id": 2531,
+    "type": "text",
+    "text": "② 若  $\\triangle DEF$  是等边三角形, 则需要  $\\angle FDE$  是多少度?",
+    "page_idx": 149
+  },
+  {
+    "id": 2532,
+    "type": "text",
+    "text": "③ 在  $\\angle FDE = 60^{\\circ}$  的条件下，能求出  $\\triangle ABC$  中有关角的度数吗？若设  $\\angle ABC$  为  $x$  ， $\\angle ACB$  为  $y$  ，在等腰三角形  $DBF$  中，外角  $\\angle FDC = 2x$  ，同理  $\\angle EDB = 2y$  ，则  $2x + 2y = 180^{\\circ} + 60^{\\circ}$  ，得  $x + y = 120^{\\circ}$  ，因此  $\\angle A = 60^{\\circ}$  。",
+    "page_idx": 149
+  },
+  {
+    "id": 2533,
+    "type": "text",
+    "page_idx": 149,
+    "text": "证明 (1)  $\\because CF \\perp AB$  于点  $F, D$  为  $BC$  的中点，"
+  },
+  {
+    "id": 2534,
+    "type": "text",
+    "page_idx": 149,
+    "text": "$\\therefore FD = \\frac{1}{2} BC = BD$  （直角三角形的斜边上的中线等于斜边的一半）."
+  },
+  {
+    "id": 2535,
+    "type": "text",
+    "page_idx": 149,
+    "text": "在  $\\mathrm{Rt}\\triangle BEC$  中，同理可证  $DE = \\frac{1}{2} BC = CD.$"
+  },
+  {
+    "id": 2536,
+    "type": "equation",
+    "page_idx": 149,
+    "text": "$$\n\\therefore D E = D F.\n$$"
+  },
+  {
+    "id": 2537,
+    "type": "text",
+    "page_idx": 149,
+    "text": "（2）在  $\\triangle ABC$  中，  $\\angle A = 60^{\\circ}$  .理由如下："
+  },
+  {
+    "id": 2538,
+    "type": "equation",
+    "page_idx": 149,
+    "text": "$$\n\\begin{array}{l} \\because F D = B D, \\\\ \\therefore \\angle A B C = \\angle D F B. \\\\ \\therefore / F D C = / A B C + / D F B = 2 / A B C. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2539,
+    "type": "text",
+    "page_idx": 149,
+    "text": "同理可证  $\\angle EDB = 2\\angle ACB$"
+  },
+  {
+    "id": 2540,
+    "type": "text",
+    "page_idx": 149,
+    "text": "$\\because \\triangle DEF$  是等边三角形，"
+  },
+  {
+    "id": 2541,
+    "type": "equation",
+    "page_idx": 149,
+    "text": "$$\n\\therefore \\angle E D F = 6 0 ^ {\\circ}.\n$$"
+  },
+  {
+    "id": 2542,
+    "type": "equation",
+    "page_idx": 149,
+    "text": "$$\n\\because \\angle F D C + \\angle E D B = 1 8 0 ^ {\\circ} + \\angle E D F = 2 4 0 ^ {\\circ},\n$$"
+  },
+  {
+    "id": 2543,
+    "type": "text",
+    "page_idx": 149,
+    "text": "$\\therefore$  设  $\\angle ABC$  为  $x, \\angle ACB$  为  $y$ ，则  $2x + 2y = 240^\\circ$ ，得  $x + y = 120^\\circ$"
+  },
+  {
+    "id": 2544,
+    "type": "equation",
+    "page_idx": 149,
+    "text": "$$\n\\begin{array}{l} \\because \\angle A + \\angle A B C + \\angle A C B = 1 8 0 ^ {\\circ}, \\\\ \\therefore \\angle A = 6 0 ^ {\\circ}. \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2545,
+    "type": "image",
+    "page_idx": 149,
+    "img_path": "images/b4058f744261b3343fdaaf5d2a97511c31a89d2454c4b5c32db2d1a6c3eb6653.jpg"
+  },
+  {
+    "id": 2546,
+    "type": "text",
+    "page_idx": 149,
+    "text": "基础训练"
+  },
+  {
+    "id": 2547,
+    "type": "text",
+    "page_idx": 149,
+    "text": "1. 如图, 在  $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $CD \\perp AB$  于点  $D$ , 写出图中相等的锐角:"
+  },
+  {
+    "id": 2548,
+    "type": "image",
+    "page_idx": 149,
+    "img_path": "images/687b47d4c2c65b24314a665ddc944da093e3cb0ff22833aaf3a451d86d8ec24c.jpg",
+    "image_caption": "（第1题）"
+  },
+  {
+    "id": 2549,
+    "type": "image",
+    "page_idx": 149,
+    "img_path": "images/427fb99ac103db66aaf98658f27a9f8d3995c87e2ddcc58ecdbc0d1ed1cb8840.jpg",
+    "image_caption": "图 22-2"
+  },
+  {
+    "id": 2550,
+    "type": "text",
+    "page_idx": 150,
+    "text": "2. 如图，在  $\\triangle ABC$  中， $\\angle ACB = 90^{\\circ}$ ， $D$  为  $AB$  的中点，写出图中相等的线段："
+  },
+  {
+    "id": 2551,
+    "type": "image",
+    "page_idx": 150,
+    "img_path": "images/4c8099572c7640a4af1fb3f8216073d8c2eaa10af4283cb896130ae3c096606b.jpg",
+    "image_caption": "（第2题）"
+  },
+  {
+    "id": 2552,
+    "type": "image",
+    "page_idx": 150,
+    "img_path": "images/0eab916abb128d88658825069f210aef811ba1bec685b39bf56713ce86dd3aa8.jpg",
+    "image_caption": "（第3题）"
+  },
+  {
+    "id": 2553,
+    "type": "image",
+    "page_idx": 150,
+    "img_path": "images/59fa235b28f9f2f7faf0d1617b88263e4141338c6937b8c8d303a9b78a56cc4e.jpg",
+    "image_caption": "（第4题）"
+  },
+  {
+    "id": 2554,
+    "type": "text",
+    "text": "3. 如图，在  $\\triangle ABC$  中， $\\angle ACB = 90^\\circ$ ， $D$  为  $AB$  的中点，点  $E$  在  $CD$  上， $CE = BC$ ，若  $\\angle A = 20^\\circ$  则  $\\angle EBD$  的度数为",
+    "page_idx": 150
+  },
+  {
+    "id": 2555,
+    "type": "text",
+    "text": "4. 如图, 在  $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $\\angle A = 35^\\circ$ ,  $CD \\perp AB$  于点  $D$ ,  $E$  是  $AC$  的中点, 则  $\\angle EDB$  的度数为",
+    "page_idx": 150
+  },
+  {
+    "id": 2556,
+    "type": "text",
+    "text": "5. 如图, 已知: 在  $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $D$  是  $AB$  的中点, 延长  $BC$  到点  $E$ , 使  $CE = AD$ , 连接  $DE$ .",
+    "page_idx": 150
+  },
+  {
+    "id": 2557,
+    "type": "text",
+    "page_idx": 150,
+    "text": "求证：  $\\angle B = 2\\angle E$"
+  },
+  {
+    "id": 2558,
+    "type": "image",
+    "page_idx": 150,
+    "img_path": "images/cf692ebd8f948afe5254c76b4a8f37ddf9f11914eca8f25a09902f11da927879.jpg",
+    "image_caption": "（第5题）"
+  },
+  {
+    "id": 2559,
+    "type": "text",
+    "page_idx": 150,
+    "text": "6. 如图, 已知: 在  $\\triangle ABC$  中,  $\\angle C = 2\\angle B$ ,  $AD \\perp AB$  交  $BC$  于点  $D$ ."
+  },
+  {
+    "id": 2560,
+    "type": "text",
+    "page_idx": 150,
+    "text": "求证：  $BD = 2AC$"
+  },
+  {
+    "id": 2561,
+    "type": "image",
+    "page_idx": 150,
+    "img_path": "images/0864b74c299a23c5d66e63106d54181c93ec412e02064d1040165378070b9697.jpg",
+    "image_caption": "（第6题）"
+  },
+  {
+    "id": 2562,
+    "type": "text",
+    "page_idx": 150,
+    "text": "7. 如图, 在  $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $M$  是  $AB$  的中点,  $E, F$  分别是  $AC, BC$  延长线上的点, 且  $CE = CF = \\frac{1}{2} AB$ . 求  $\\angle EMF$  的度数."
+  },
+  {
+    "id": 2563,
+    "type": "image",
+    "page_idx": 150,
+    "img_path": "images/4a876ea0687b625f378ce71af30097073d8c124dcfaf83fa8416526cdcdd8725.jpg",
+    "image_caption": "（第7题）"
+  },
+  {
+    "id": 2564,
+    "type": "text",
+    "page_idx": 151,
+    "text": "8. 如图, 已知:  $AE$ ,  $BD$  相交于点  $C$ ,  $AB = AC$ ,  $DC = DE$ ,  $F$ ,  $G$ ,  $H$  分别是  $AD$ ,  $BC$ ,  $CE$  的中点."
+  },
+  {
+    "id": 2565,
+    "type": "text",
+    "page_idx": 151,
+    "text": "求证：  $FG = FH$"
+  },
+  {
+    "id": 2566,
+    "type": "image",
+    "page_idx": 151,
+    "img_path": "images/956a5ff5292d52ffaa8d524040960235a5df220b0b8359b1dfa690b7fba8d8f9.jpg",
+    "image_caption": "（第8题）"
+  },
+  {
+    "id": 2567,
+    "type": "text",
+    "page_idx": 151,
+    "text": "9. 如图, 已知: 在  $\\triangle ABC$  中,  $\\angle ACB = 90^\\circ$ ,  $AB$  的垂直平分线  $DE$  交  $\\angle ACB$  的平分线于点  $E$ , 交  $AB$  于点  $D$ ."
+  },
+  {
+    "id": 2568,
+    "type": "text",
+    "page_idx": 151,
+    "text": "求证：  $CD = ED$"
+  },
+  {
+    "id": 2569,
+    "type": "image",
+    "page_idx": 151,
+    "img_path": "images/36c6fceb7efa72e603fe6971f13ddc82a10579477d05b72384ac5ed122962107.jpg",
+    "image_caption": "（第9题）"
+  },
+  {
+    "id": 2570,
+    "type": "image",
+    "page_idx": 151,
+    "img_path": "images/7b0b9174327b7f29f228774b427ecc05ab5801d91975f3c183bf1bcc2ec7a595.jpg"
+  },
+  {
+    "id": 2571,
+    "type": "text",
+    "page_idx": 151,
+    "text": "拓展训练"
+  },
+  {
+    "id": 2572,
+    "type": "text",
+    "page_idx": 151,
+    "text": "10. 如图, 已知: 在  $\\triangle ABC$  中, 边  $AB$  上的高  $CF$  、边  $BC$  上的高  $AD$  与边  $CA$  上的高  $BE$  交于点  $H$ ,  $N$ ,  $M$  分别为  $AH$  和  $BC$  的中点."
+  },
+  {
+    "id": 2573,
+    "type": "text",
+    "page_idx": 151,
+    "text": "求证:  $MN$  是线段  $EF$  的中垂线"
+  },
+  {
+    "id": 2574,
+    "type": "image",
+    "page_idx": 151,
+    "img_path": "images/ebd665cb01f64e7af04de466843a4128a5fee032cd8b93bd4cfb6d4391e98070.jpg",
+    "image_caption": "（第10题）"
+  },
+  {
+    "id": 2575,
+    "type": "text",
+    "page_idx": 152,
+    "text": "22.1（二） 直角三角形全等的判定"
+  },
+  {
+    "id": 2576,
+    "type": "image",
+    "page_idx": 152,
+    "img_path": "images/bcce904fa57a191a81e4287231623301e487b3f80d65f841a5e6a1dac76b2b76.jpg"
+  },
+  {
+    "id": 2577,
+    "type": "text",
+    "page_idx": 152,
+    "text": "要点归纳"
+  },
+  {
+    "id": 2578,
+    "type": "text",
+    "text": "1. 直角三角形是特殊的三角形, 对于一般三角形全等的判定方法, 直角三角形都适用.",
+    "page_idx": 152
+  },
+  {
+    "id": 2579,
+    "type": "text",
+    "text": "2. 直角三角形还有一个特殊的判定方法. 定理: 如果两个直角三角形的斜边和一条直角边对应相等, 那么这两个直角三角形全等 (简记为 HL).",
+    "page_idx": 152
+  },
+  {
+    "id": 2580,
+    "type": "image",
+    "page_idx": 152,
+    "img_path": "images/fb9b9d78cb3fc27d280aab6282175a6778e22c0cffb6d55de7a275c5ad6179f7.jpg"
+  },
+  {
+    "id": 2581,
+    "type": "text",
+    "page_idx": 152,
+    "text": "疑难分析"
+  },
+  {
+    "id": 2582,
+    "type": "text",
+    "page_idx": 152,
+    "text": "例① 如图22-3，在△ABC中，∠ABC的平分线与AC的垂直平分线相交于点  $N$  ，过点  $N$  作ND⊥AB于点D，NE⊥BC于点E."
+  },
+  {
+    "id": 2583,
+    "type": "text",
+    "page_idx": 152,
+    "text": "求证：  $AD = CE$"
+  },
+  {
+    "id": 2584,
+    "type": "text",
+    "page_idx": 152,
+    "text": "分析 要证明  $AD = CE$  ，由已知可证  $\\triangle BND \\cong \\triangle BNE$  ，则  $DN = EN$  由点  $N$  在  $AC$  的垂直平分线上，连接  $AN$  ，  $CN$  后，可得  $AN = CN$  ，进而可得  $\\mathrm{Rt}\\triangle ADN \\cong \\mathrm{Rt}\\triangle CEN$  ，所以  $AD = CE$"
+  },
+  {
+    "id": 2585,
+    "type": "image",
+    "page_idx": 152,
+    "img_path": "images/06e0f9441647b7a3a5ec5090fd81b9ce62d375e0ebc029b5f4e0923e5d21d4f3.jpg",
+    "image_caption": "图 22-3"
+  },
+  {
+    "id": 2586,
+    "type": "text",
+    "page_idx": 152,
+    "text": "证明 连接  $AN, CN$ ."
+  },
+  {
+    "id": 2587,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\because BN$  是  $\\angle ABC$  的平分线，"
+  },
+  {
+    "id": 2588,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore \\angle DBN = \\angle EBN$  （角平分线的定义）."
+  },
+  {
+    "id": 2589,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\because ND \\perp AB, NE \\perp BC,$"
+  },
+  {
+    "id": 2590,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore \\angle BDN = 90^{\\circ} = \\angle BEN.$"
+  },
+  {
+    "id": 2591,
+    "type": "text",
+    "page_idx": 152,
+    "text": "在  $\\triangle BND$  和  $\\triangle BNE$  中，"
+  },
+  {
+    "id": 2592,
+    "type": "equation",
+    "page_idx": 152,
+    "text": "$$\n\\because \\left\\{ \\begin{array}{l} \\angle B D N = \\angle B E N, \\\\ \\angle D B N = \\angle E B N, \\\\ B N = B N, \\end{array} \\right.\n$$"
+  },
+  {
+    "id": 2593,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore \\triangle BND \\cong \\triangle BNE(AAS)$ ."
+  },
+  {
+    "id": 2594,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore DN = EN$"
+  },
+  {
+    "id": 2595,
+    "type": "text",
+    "page_idx": 152,
+    "text": "点  $N$  在  $AC$  的垂直平分线上，"
+  },
+  {
+    "id": 2596,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore AN = CN.$"
+  },
+  {
+    "id": 2597,
+    "type": "text",
+    "page_idx": 152,
+    "text": "在Rt△ADN和Rt△CEN中，"
+  },
+  {
+    "id": 2598,
+    "type": "equation",
+    "page_idx": 152,
+    "text": "$$\n\\begin{array}{l} \\because \\left\\{ \\begin{array}{l} D N = E N, \\\\ A N = C N, \\end{array} \\right. \\end{array}\n$$"
+  },
+  {
+    "id": 2599,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore \\mathrm{Rt}\\triangle ADN \\cong \\mathrm{Rt}\\triangle CEN(\\mathrm{HL}).$"
+  },
+  {
+    "id": 2600,
+    "type": "text",
+    "page_idx": 152,
+    "text": "$\\therefore AD = CE.$"
+  },
+  {
+    "id": 2601,
+    "type": "text",
+    "page_idx": 153,
+    "text": "例② 如图22-4,已知：在锐角三角形ABC和锐角三角形  $A_{1}B_{1}C_{1}$  中， $AD$  与  $A_{1}D_{1}$  分别是高，且  $AB = A_{1}B_{1}$ ， $AD = A_{1}D_{1}$ ， $BC = B_{1}C_{1}$ ."
+  },
+  {
+    "id": 2602,
+    "type": "text",
+    "page_idx": 153,
+    "text": "求证：  $\\triangle ABC\\cong \\triangle A_{1}B_{1}C_{1}$"
+  },
+  {
+    "id": 2603,
+    "type": "image",
+    "page_idx": 153,
+    "img_path": "images/453f2aaad2414026007f1f58d5ef2ea90bd028780982027ae70a0a01de93e359.jpg",
+    "image_caption": "图 22-4"
+  },
+  {
+    "id": 2604,
+    "type": "image",
+    "page_idx": 153,
+    "img_path": "images/2d7a3634eb6a5afd46df2c4de96f4b0ea414bd15651969b61916944db642bc19.jpg"
+  },
+  {
+    "id": 2605,
+    "type": "text",
+    "page_idx": 153,
+    "text": "证明  $\\because AD$  与  $A_{1}D_{1}$  分别是  $\\triangle ABC$  和  $\\triangle A_{1}B_{1}C_{1}$  的高，"
+  },
+  {
+    "id": 2606,
+    "type": "equation",
+    "page_idx": 153,
+    "text": "$$\n\\therefore \\angle A D B = 9 0 ^ {\\circ} = \\angle A _ {1} D _ {1} B _ {1}.\n$$"
+  },
+  {
+    "id": 2607,
+    "type": "text",
+    "page_idx": 153,
+    "text": "在  $\\mathrm{Rt}\\triangle ABD$  和  $\\mathrm{Rt}\\triangle A_1B_1D_1$  中，"
+  },
+  {
+    "id": 2608,
+    "type": "equation",
+    "page_idx": 153,
+    "text": "$$\n\\begin{array}{r l} & \\therefore \\left\\{ \\begin{array}{l} A B = A _ {1} B _ {1}, \\\\ A D = A _ {1} D _ {1}, \\end{array} \\right. \\end{array}\n$$"
+  },
+  {
+    "id": 2609,
+    "type": "equation",
+    "page_idx": 153,
+    "text": "$$\n\\therefore \\mathrm {R t} \\triangle A B D \\cong \\mathrm {R t} \\triangle A _ {1} B _ {1} D _ {1} (\\mathrm {H L}).\n$$"
+  },
+  {
+    "id": 2610,
+    "type": "equation",
+    "page_idx": 153,
+    "text": "$$\n\\therefore \\angle B = \\angle B _ {1}.\n$$"
+  },
+  {
+    "id": 2611,
+    "type": "text",
+    "page_idx": 153,
+    "text": "在  $\\triangle ABC$  和  $\\triangle A_{1}B_{1}C_{1}$  中，"
+  },
+  {
+    "id": 2612,
+    "type": "equation",
+    "page_idx": 153,
+    "text": "$$\n\\begin{array}{l} \\left\\{A B = A _ {1} B _ {1}, \\right. \\\\ \\therefore \\left\\{\\angle B = \\angle B _ {1}, \\right. \\\\ B C = B _ {1} C _ {1}, \\end{array}\n$$"
+  },
+  {
+    "id": 2613,
+    "type": "equation",
+    "page_idx": 153,
+    "text": "$$\n\\therefore \\triangle A B C \\cong \\triangle A _ {1} B _ {1} C _ {1} (\\text {S A S}).\n$$"
+  },
+  {
+    "id": 2614,
+    "type": "text",
+    "page_idx": 153,
+    "text": "说明 如果两个三角形没有限制在都是锐角三角形的条件下，这两个三角形不一定全等，请读者自己完成证明."
+  },
+  {
+    "id": 2615,
+    "type": "text",
+    "page_idx": 153,
+    "text": "基础训练"
+  },
+  {
+    "id": 2616,
+    "type": "text",
+    "page_idx": 153,
+    "text": "1. 如图, 已知: 在  $\\triangle ABC$  中,  $BD \\perp AC$  于点  $D$ ,  $CE \\perp AB$  于点  $E$ , 且  $BD = CE$ ."
+  },
+  {
+    "id": 2617,
+    "type": "text",
+    "page_idx": 153,
+    "text": "求证：(1)  $\\triangle EBC \\cong \\triangle DCB$ ；(2)  $DE \\parallel BC$ ."
+  },
+  {
+    "id": 2618,
+    "type": "image",
+    "page_idx": 153,
+    "img_path": "images/ec0e4b14c83b6fa904c191b7b5173214cbbdbfe003efca9bb970bfeb1123fa98.jpg",
+    "image_caption": "（第1题）"
+  },
+  {
+    "id": 2619,
+    "type": "text",
+    "page_idx": 154,
+    "text": "2. 如图, 已知:  $BE \\perp AC$  于点  $E$ ,  $CF \\perp AB$  于点  $F$ , 且  $BE = CF$ ,  $BE$ ,  $CF$  交于点  $D$ . 求证:  $AD$  平分  $\\angle BAC$ ."
+  }
+]
+```

@@ -76,7 +76,7 @@ interface Chunk {
 // ============= 常量配置 =============
 
 const MAX_CHUNK_SIZE = 100;        // 每个 chunk 最多包含 100 个 block
-const OVERLAP_SIZE = 10;           // 重叠窗口大小，避免题目被切断
+const OVERLAP_SIZE = 30;           // 重叠窗口大小，避免题目被切断 (Increased to 30 as per Test 3 report)
 const NEAR_DISTANCE_THRESHOLD = 50; // 近距离答案阈值（block 数量）
 
 // ============= 核心流水线函数 =============
@@ -252,6 +252,12 @@ function loadAndFormatBlocks(contentListPath: string): ConvertedBlock[] {
     // 1. 过滤噪声块
     if (['page_number', 'footer', 'header'].includes(block.type)) {
       continue;
+    }
+    
+    // 1.1 TOC Filtering (Added as per Test 3 report)
+    // Filter blocks that look like Table of Contents entries (e.g. "Chapter 1 ...... 10")
+    if (block.text && (block.text.trim() === '目录' || block.text.match(/\.{4,}\s*\d+$/))) {
+       continue;
     }
 
     // 2. 展平 list 块

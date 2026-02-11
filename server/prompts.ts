@@ -58,9 +58,8 @@ The system will automatically retrieve the text using the IDs you provide.
 
 1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
    - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
-   - Prioritize blocks with explicit heading numbering.
-   - DO NOT include generic headers like "疑难分析", "本章复习题", "Review", "Summary", "选择题", "填空题".
-   - If uncertain, prefer NOT to tag it as a title rather than tagging incorrectly.
+   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
+   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
 2. **Identify question types**:
    - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
    - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
@@ -96,6 +95,10 @@ Otherwise:
 <qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
 <solution>SOLUTION_IDS</solution></qa_pair>
 </chapter>
+
+If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
+<chapter><title>ID_1</title>...</chapter>
+<chapter><title>ID_2</title>...</chapter>
 
 ## ═══════════════════════════════════════════════════════════════
 ## Example 1: Exercise Question with Image
