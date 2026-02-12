@@ -162,14 +162,14 @@ export async function extractQuestions(
           const questions = parser.parseWithFallback(llmOutput, chunk.index);
 
           // Sanity Check: 检测 LLM 注意力衰减
-          // 如果 chunk 包含大量 blocks (>40) 但 LLM 只输出了极少题目 (<=1)，
-          // 且这不是最后一次重试，则抛出错误以触发重试。
-          if (chunk.blocks.length > 40 && questions.length <= 1) {
+          // 修复：使用比例检测而非固定阈值，避免误报
+          // 建议阈值：题目数量 / block 数量 < 0.02 (即每 50 个 block 至少应有一个题目)
+          if (chunk.blocks.length > 40 && (questions.length / chunk.blocks.length < 0.02)) {
              // 进一步检查：是不是真的只有文本很少？
              // 简单策略：只要 blocks 多但产出少，就怀疑有问题。
              // 除非这是最后一次重试，否则我们应该重试。
              if (retries < maxRetries) {
-                throw new Error(`Sanity Check Failed: Input has ${chunk.blocks.length} blocks but only ${questions.length} questions extracted. Suspected LLM attention decay.`);
+                throw new Error(`Sanity Check Failed: Input has ${chunk.blocks.length} blocks but only ${questions.length} questions extracted (Ratio: ${(questions.length / chunk.blocks.length).toFixed(3)}). Suspected LLM attention decay.`);
              } else {
                 console.warn(`Chunk ${chunk.index}: Sanity check failed but reached max retries. Accepting result.`);
              }
@@ -576,32 +576,116 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
 }
 
 /**
- * 清洗章节标题
+ * 清洗章节标题 (增强版 v1.2)
+ * 1. 题号连续性检测：防止误将子标题识别为新章节
+ * 2. 章节标题规范化：提取章节编号，去除冗余文本
+ * 3. 黑名单过滤：过滤无效标题
  */
-function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQuestion[] {
+export function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQuestion[] {
   const titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式", "基础训练", "拓展训练"];
-  // 匹配数字章节号，如 "19.2", "1. ", "第1章"
-  const chapterNumberRegex = /^(\d+(\.\d+)*|第[一二三四五六七八九十\d]+[章节])/;
+  
+  // 1. 第一遍：题号连续性检测 (P1 #3)
+  // 如果题号连续 (如 10->11) 但章节标题变化，且新标题可能是噪声（在黑名单中），则回退到上一个有效标题
   let lastValidTitle = "";
+  let lastLabelNum = -1;
 
+  for (let i = 0; i < questions.length; i++) {
+    const q = questions[i];
+    const currentLabelNum = parseLabelToNumber(q.label);
+    
+    // 检查题号是否连续
+    const isConsecutive = (lastLabelNum !== -1 && currentLabelNum === lastLabelNum + 1);
+    
+    // 检查新标题是否在黑名单中
+    const isNoiseTitle = q.chapter_title && titleBlacklist.some(keyword => q.chapter_title!.includes(keyword));
+
+    // 如果题号连续但章节标题变化，且新标题是噪声，则回退
+    if (isConsecutive && lastValidTitle && q.chapter_title && q.chapter_title !== lastValidTitle) {
+      if (isNoiseTitle) {
+        console.warn(`[Chapter Continuity] Reverting noise title for Q${q.label}: "${q.chapter_title}" -> "${lastValidTitle}"`);
+        q.chapter_title = lastValidTitle;
+      }
+    }
+
+    // 更新最后有效标题 (如果不是噪声)
+    // 注意：如果当前标题被回退了，q.chapter_title 已经是 lastValidTitle，所以这里 logic 没问题
+    // 但如果当前标题是新的有效标题 (如 20.1)，我们更新 lastValidTitle
+    if (q.chapter_title && !titleBlacklist.some(keyword => q.chapter_title!.includes(keyword))) {
+      lastValidTitle = q.chapter_title;
+    }
+    
+    // 更新最后有效题号 (只在解析成功时更新)
+    if (currentLabelNum !== -1) {
+      lastLabelNum = currentLabelNum;
+    } else {
+      // 如果解析失败，重置连续性检查，避免错误关联
+      lastLabelNum = -1; 
+    }
+  }
+
+  // 2. 第二遍：标题规范化与黑名单过滤 (P0 #2)
+  lastValidTitle = "";
+  
   return questions.map(q => {
-    const title = q.chapter_title || "";
+    let title = q.chapter_title || "";
+    
+    // 规范化：提取章节编号 (对齐官方 refine_title)
+    title = refineTitle(title);
+    
+    // 黑名单检查
     const isNoiseTitle = titleBlacklist.some(keyword => title.includes(keyword));
     
-    if (isNoiseTitle) {
-      // 尝试提取数字编号作为补救
-      const match = title.match(chapterNumberRegex);
-      if (match) {
-        q.chapter_title = match[0];
-        lastValidTitle = q.chapter_title;
-      } else {
-        q.chapter_title = lastValidTitle; // 使用上一个有效的标题
-      }
+    if (isNoiseTitle || !title) {
+       // 如果是噪声或空，尝试使用上一个有效标题
+       if (lastValidTitle) {
+         title = lastValidTitle;
+       }
     } else {
-      if (q.chapter_title) lastValidTitle = q.chapter_title;
+       // 如果是有效标题，更新
+       lastValidTitle = title;
     }
+    
+    q.chapter_title = title;
     return q;
   });
+}
+
+/**
+ * 解析题号为数字
+ * 支持 "1", "1.", "(1)", "Example 1" 等格式
+ */
+function parseLabelToNumber(label: string): number {
+  if (!label) return -1;
+  // 提取第一个连续数字序列
+  const match = label.match(/\d+/);
+  return match ? parseInt(match[0], 10) : -1;
+}
+
+/**
+ * 规范化章节标题
+ * 对齐官方 refine_title 实现
+ */
+function refineTitle(title: string): string {
+  if (!title) return "";
+  
+  // 1. 去除空白字符
+  let newTitle = title.replace(/\s+/g, '');
+  
+  // 2. 优先提取阿拉伯数字编号 (如 "19.2", "1")
+  const arabicMatch = newTitle.match(/(\d+(\.\d+)*)/);
+  if (arabicMatch) {
+    return arabicMatch[0];
+  }
+  
+  // 3. 其次提取中文数字编号 (如 "第一章", "二")
+  // 注意：官方正则 r'[一二...]+' 会提取 "第一章" 中的 "一"，这里保持一致但稍微放宽以包含常见单位
+  const chineseMatch = newTitle.match(/[一二三四五六七八九十百零]+/);
+  if (chineseMatch) {
+    return chineseMatch[0];
+  }
+  
+  // 4. 如果都无法提取，返回去空后的标题
+  return newTitle;
 }
 
 // ============= 任务控制存根 (兼容 routers.ts) =============

@@ -336,7 +336,14 @@ export class QuestionParser {
 
       if (block.type === 'image' && block.img_path) {
         // 使用 path.join 确保路径正确
-        images.push(path.join(this.imagePrefix, block.img_path));
+        const imagePath = path.join(this.imagePrefix, block.img_path);
+        images.push(imagePath);
+        
+        // 修复：将图片嵌入到文本中（Markdown格式），对齐官方实现
+        // 这样 question 字段就包含了完整信息，包括图片位置
+        const caption = block.image_caption || 'image';
+        textParts.push(`![${caption}](${imagePath})`);
+        
       } else if (block.text) {
         // 只要有 text 字段就提取，支持 text, equation, table row 等
         textParts.push(block.text);
@@ -344,7 +351,8 @@ export class QuestionParser {
     }
 
     return {
-      text: textParts.join(' ').trim(),
+      // 修复：使用换行符分隔，保留段落结构
+      text: textParts.join('\n').trim(),
       images
     };
   }

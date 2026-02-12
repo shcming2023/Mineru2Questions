@@ -37,7 +37,7 @@ The system will automatically retrieve the text using the IDs you provide.
 **DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
 
 ✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
-❌ WRONG: <question>45,47,48</question>       <!-- MISSING image block 46 -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
 
 ### Why This Matters:
 - Many questions contain embedded images or diagrams that are essential to understanding the problem.
@@ -50,6 +50,7 @@ The system will automatically retrieve the text using the IDs you provide.
    - type="text": regular text content
    - type="image": figure, diagram, or photo
    - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
 3. If a text block is followed by an image, then more text, they are likely part of the same question.
 
 ## ═══════════════════════════════════════════════════════════════
@@ -57,9 +58,6 @@ The system will automatically retrieve the text using the IDs you provide.
 ## ═══════════════════════════════════════════════════════════════
 
 1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
-   - A valid title MUST be a numbered chapter/section heading (e.g., "19.1 平方根", "第1章 全等三角形").
-   - **Parent Chapter Association**: If you encounter a section title (like "基础训练", "本章复习题") and a parent chapter title (like "19.1 平方根") is available in the context (blocks before it), you should combine them. Use the ID of the parent chapter title.
-   - Example: If block 10 is "19.1" and block 50 is "基础训练", the chapter block for "基础训练" questions should use <title>10</title>.
 2. **Identify question types**:
    - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
    - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
@@ -74,12 +72,14 @@ The system will automatically retrieve the text using the IDs you provide.
 - Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
 - Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
 - ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
 
 ## ═══════════════════════════════════════════════════════════════
 ## Chapter/Section Titles
 ## ═══════════════════════════════════════════════════════════════
 
 - Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
 - <title>TITLE_ID</title> should contain the ID of the chapter title block.
 - If there's no chapter title, use <title></title> (empty).
 
@@ -87,7 +87,7 @@ The system will automatically retrieve the text using the IDs you provide.
 ## Output Format
 ## ═══════════════════════════════════════════════════════════════
 
-If no qualifying content is found:
+If no qualifying content is found (and NO questions are visible in text):
 <empty></empty>
 
 Otherwise:
@@ -95,10 +95,6 @@ Otherwise:
 <qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
 <solution>SOLUTION_IDS</solution></qa_pair>
 </chapter>
-
-If the content spans multiple chapters (e.g., ends Chapter 1 and starts Chapter 2), output multiple <chapter> blocks:
-<chapter><title>ID_1</title>...</chapter>
-<chapter><title>ID_2</title>...</chapter>
 
 ## ═══════════════════════════════════════════════════════════════
 ## Example 1: Exercise Question with Image
@@ -109,7 +105,8 @@ Input blocks:
   {"id": 10, "type": "text", "text": "一、选择题"},
   {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
   {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
-  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"}
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
 ]
 
 ✅ CORRECT Output:
