@@ -1,10 +1,15 @@
 /**
- * 章节标题候选集构建模块
+ * 章节标题候选集构建模块 (v2)
  * 
  * 功能：从 Mineru 的 content_list.json 中，利用三路信号提取标题候选者：
  *   1. type 信号：type === 'header'
  *   2. text_level 信号：text_level === 1
  *   3. 正则模式信号：匹配常见的教育文本章节标题模式
+ * 
+ * v2 改进：
+ *   - 增加标题破碎合并（如 "期末测试卷" + "A卷" → "期末测试卷A卷"）
+ *   - 改进目录页条目过滤规则
+ *   - 保留更多上下文信息供 LLM 判断
  * 
  * 设计原则：
  *   - 宁可多选（高召回），不可遗漏（低精确率可由 LLM 后续修正）
@@ -31,37 +36,29 @@ export interface RawContentBlock {
   img_path?: string;
   list_items?: string[];
   sub_type?: string;
-  [key: string]: any;  // 保留其他未知字段
+  [key: string]: any;
 }
 
-/** 带有全局 ID 的 block（模拟官方 _convert_json 后的格式） */
+/** 带有全局 ID 的 block */
 export interface IndexedBlock extends RawContentBlock {
   id: number;
 }
 
 /** 标题候选者 */
 export interface TitleCandidate {
-  id: number;              // 全局 block ID
-  text: string;            // 文本内容
-  page_idx: number;        // 页码
-  type: string;            // 原始 type (header / text / ...)
-  text_level?: number;     // Mineru 的 text_level 字段
-  signals: string[];       // 命中的信号列表 ['type:header', 'text_level:1', 'pattern:chapter', ...]
-  context_before?: string; // 前一个 block 的文本（辅助 LLM 判断）
-  context_after?: string;  // 后一个 block 的文本（辅助 LLM 判断）
+  id: number;
+  text: string;
+  page_idx: number;
+  type: string;
+  text_level?: number;
+  signals: string[];
+  merged_from?: number[];  // 如果是合并的，记录原始 block ID 列表
+  context_before?: string;
+  context_after?: string;
 }
 
 // ============= 可配置的正则模式库 =============
 
-/**
- * 标题模式库：可扩展的正则规则集
- * 每个规则包含：name（信号名）、pattern（正则）、description（说明）
- * 
- * 设计原则：
- * - 基于通用的教育文本结构模式，而非硬编码特定教材
- * - 优先匹配结构化编号（章、节、小节）
- * - 兼顾常见的教育文本功能性标题（练习、复习、训练等）
- */
 export const TITLE_PATTERNS: Array<{ name: string; pattern: RegExp; description: string }> = [
   // === 一级标题模式 ===
   {
@@ -92,6 +89,11 @@ export const TITLE_PATTERNS: Array<{ name: string; pattern: RegExp; description:
     description: '数字节标题：X.Y 标题名'
   },
   {
+    name: 'subsection_dotnum',
+    pattern: /^\d+\.\d+[\(（][一二三四五六七八九十\d]+[\)）]/,
+    description: '数字子节标题：X.Y(一) 标题名'
+  },
+  {
     name: 'section_cn',
     pattern: /^第[一二三四五六七八九十百千\d]+节/,
     description: '中文节标题：第X节...'
@@ -105,38 +107,118 @@ export const TITLE_PATTERNS: Array<{ name: string; pattern: RegExp; description:
   },
   {
     name: 'review_section',
-    pattern: /^(本章复习|本章小结|章末复习|单元复习|复习题|要点归纳|知识梳理|知识归纳)/,
+    pattern: /^(本章复习|本章小结|章末复习|单元复习|复习题)/,
     description: '复习/归纳类标题'
   },
   {
-    name: 'practice_section',
-    pattern: /^(练习|习题|课后练习|课时练习|随堂练习|巩固练习|拓展训练|拓展提升)/,
-    description: '练习/习题类标题'
+    name: 'exam_paper',
+    pattern: /^(期末测试卷|期中测试卷|模拟试卷|综合测试卷)/,
+    description: '试卷类标题'
   },
-  // 注意：带圈数字模式已移除，因为 ①②③ 在教育文本中更多出现在题目选项/步骤中
-  // 「阶段训练①」这类标题会被 exercise_section 模式覆盖
-  // {
-  //   name: 'numbered_circled',
-  //   pattern: /^[①②③④⑤⑥⑦⑧⑨⑩]\s*\S/,
-  //   description: '带圈数字开头的标题（如阶段训练①）'
-  // },
-
-  // === 通用编号模式 ===
-  // 注意：罗马数字模式已移除，因为 C./I./V. 等在中文教育文本中误匹配率极高
-  // 如需支持英文教材，可按需启用并增加长度约束
-  // {
-  //   name: 'roman_section',
-  //   pattern: /^(?:II|III|IV|VI|VII|VIII|IX|XI|XII)[\.]\s+\S/,
-  //   description: '罗马数字编号标题（仅匹配 II 及以上，避免 I/V/C 误匹配）'
-  // },
 ];
+
+// ============= 目录页条目过滤规则 =============
+
+/**
+ * 判断是否为目录页条目（带尾部页码的条目）
+ * 
+ * 规则：文本末尾有 2-3 位数字，且前面有空格或省略号
+ * 例外：
+ *   - "阶段训练 5" 不应被过滤（⑤被OCR为5，只有1位数字）
+ *   - "19.2(四) 实数的绝对值和大小比较" 不应被过滤（没有尾部页码）
+ */
+function isTocPageEntry(text: string): boolean {
+  // 末尾有 2-3 位数字，前面有空格、省略号或点号
+  return /[\s…·.]+\d{2,3}\s*$/.test(text);
+}
+
+// ============= 标题破碎合并 =============
+
+/**
+ * 合并破碎的标题
+ * 
+ * 策略：同页关联合并
+ * 
+ * 检测模式：
+ *   - 在同一页中，如果有"期末测试卷"(text_level=1) 和 "A卷"/"B卷"(type=header)
+ *   - 则将它们合并为 "期末测试卷A卷"
+ *   - 注意：它们之间可能隔了很多 block（题目内容），不是相邻的
+ * 
+ * 实现方式：
+ *   - 先按页分组，在每页内寻找可合并的标题对
+ *   - 标记被合并的 block，在后续处理中跳过
+ */
+function mergeFragmentedTitles(blocks: IndexedBlock[]): IndexedBlock[] {
+  // Step 1: 按页分组，找到需要合并的 block 对
+  const mergeMap = new Map<number, { mainId: number; fragmentId: number; mergedText: string }>();
+  const fragmentIds = new Set<number>();
+
+  // 按页分组
+  const pageGroups = new Map<number, IndexedBlock[]>();
+  for (const block of blocks) {
+    const page = block.page_idx ?? -1;
+    if (!pageGroups.has(page)) pageGroups.set(page, []);
+    pageGroups.get(page)!.push(block);
+  }
+
+  // 在每页内寻找可合并的标题对
+  for (const [page, pageBlocks] of pageGroups) {
+    // 模式1：试卷类标题 + 卷号（如"期末测试卷" + "A卷"）
+    const examTitles = pageBlocks.filter(b => 
+      /^(期末测试卷|期中测试卷|模拟试卷|综合测试卷)$/.test((b.text || '').trim())
+    );
+    const volumeLabels = pageBlocks.filter(b => 
+      /^[A-Ba-b]卷$/.test((b.text || '').trim())
+    );
+
+    if (examTitles.length === 1 && volumeLabels.length === 1) {
+      const main = examTitles[0];
+      const fragment = volumeLabels[0];
+      const mergedText = (main.text || '').trim() + (fragment.text || '').trim();
+      mergeMap.set(main.id, { mainId: main.id, fragmentId: fragment.id, mergedText });
+      fragmentIds.add(fragment.id);
+    }
+
+    // 模式2：不完整的章标题 + 章名（如"第19章" + "实数"）
+    // 仅当相邻时合并
+    for (let i = 0; i < pageBlocks.length - 1; i++) {
+      const a = pageBlocks[i];
+      const b = pageBlocks[i + 1];
+      const textA = (a.text || '').trim();
+      const textB = (b.text || '').trim();
+      if (/^第[一二三四五六七八九十百千\d]+章\s*$/.test(textA) &&
+          textB.length < 20 && !/^\d/.test(textB)) {
+        mergeMap.set(a.id, { mainId: a.id, fragmentId: b.id, mergedText: textA + textB });
+        fragmentIds.add(b.id);
+      }
+    }
+  }
+
+  // Step 2: 构建结果，应用合并
+  const result: IndexedBlock[] = [];
+  for (const block of blocks) {
+    // 跳过被合并的 fragment
+    if (fragmentIds.has(block.id)) continue;
+
+    const merge = mergeMap.get(block.id);
+    if (merge) {
+      result.push({
+        ...block,
+        text: merge.mergedText,
+        _merged_from: [merge.mainId, merge.fragmentId],
+      } as any);
+    } else {
+      result.push(block);
+    }
+  }
+
+  return result;
+}
 
 // ============= 核心函数 =============
 
 /**
  * Step 1: 加载并索引 content_list.json
- * 模拟官方 DataFlow 的 MinerU2LLMInputOperator._convert_json
- * 关键区别：保留 type、text_level 等所有字段，不过滤任何 block
  */
 export function loadAndIndex(contentListPath: string): IndexedBlock[] {
   const raw: RawContentBlock[] = JSON.parse(fs.readFileSync(contentListPath, 'utf-8'));
@@ -144,7 +226,6 @@ export function loadAndIndex(contentListPath: string): IndexedBlock[] {
   let globalId = 0;
 
   for (const item of raw) {
-    // 展平 list 类型（对齐官方逻辑）
     if (item.type === 'list' && item.sub_type === 'text' && item.list_items) {
       for (const listItem of item.list_items) {
         indexed.push({
@@ -168,22 +249,26 @@ export function loadAndIndex(contentListPath: string): IndexedBlock[] {
 /**
  * Step 2: 构建标题候选集
  * 三路信号并行检测，任一命中即纳入候选
+ * 
+ * v2: 先做破碎合并，再做候选筛选
  */
 export function buildTitleCandidates(blocks: IndexedBlock[]): TitleCandidate[] {
+  // Step 2a: 合并破碎标题
+  const mergedBlocks = mergeFragmentedTitles(blocks);
+
   const candidates: TitleCandidate[] = [];
 
-  for (let i = 0; i < blocks.length; i++) {
-    const block = blocks[i];
+  for (let i = 0; i < mergedBlocks.length; i++) {
+    const block = mergedBlocks[i];
     const text = (block.text || '').trim();
 
-    // 跳过无文本的 block（图片、表格等）
+    // 跳过无文本的 block
     if (!text || text.length === 0) continue;
     // 跳过过长的文本（标题通常较短）
     if (text.length > 100) continue;
 
-    // === 过滤目录页条目：文本末尾带页码的条目（如 "阶段训练1 11"、"22.2角平分线 148"）===
-    // 使用 2-3 位数字避免误过滤“阶段训练 5”（⑤被OCR为5）
-    if (/\s+\d{2,3}$/.test(text)) continue;
+    // 过滤目录页条目
+    if (isTocPageEntry(text)) continue;
 
     const signals: string[] = [];
 
@@ -206,6 +291,11 @@ export function buildTitleCandidates(blocks: IndexedBlock[]): TitleCandidate[] {
 
     // 任一信号命中即纳入候选
     if (signals.length > 0) {
+      const mergedFrom = (block as any)._merged_from as number[] | undefined;
+      
+      // 在原始 blocks 数组中找上下文
+      const origIdx = blocks.findIndex(b => b.id === block.id);
+      
       candidates.push({
         id: block.id,
         text: text,
@@ -213,8 +303,9 @@ export function buildTitleCandidates(blocks: IndexedBlock[]): TitleCandidate[] {
         type: block.type,
         text_level: block.text_level,
         signals: signals,
-        context_before: i > 0 ? (blocks[i - 1].text || '').trim().substring(0, 80) : undefined,
-        context_after: i < blocks.length - 1 ? (blocks[i + 1].text || '').trim().substring(0, 80) : undefined,
+        merged_from: mergedFrom,
+        context_before: origIdx > 0 ? (blocks[origIdx - 1].text || '').trim().substring(0, 80) : undefined,
+        context_after: origIdx < blocks.length - 1 ? (blocks[origIdx + 1].text || '').trim().substring(0, 80) : undefined,
       });
     }
   }
@@ -223,7 +314,7 @@ export function buildTitleCandidates(blocks: IndexedBlock[]): TitleCandidate[] {
 }
 
 /**
- * Step 3: 统计分析（用于诊断和调试）
+ * Step 3: 统计分析
  */
 export function analyzeCandidates(candidates: TitleCandidate[]): {
   total: number;
@@ -231,15 +322,19 @@ export function analyzeCandidates(candidates: TitleCandidate[]): {
   multiSignal: number;
   singleSignal: number;
   byPage: Record<number, number>;
+  mergedCount: number;
 } {
   const bySignal: Record<string, number> = {};
   let multiSignal = 0;
   let singleSignal = 0;
+  let mergedCount = 0;
   const byPage: Record<number, number> = {};
 
   for (const c of candidates) {
     if (c.signals.length > 1) multiSignal++;
     else singleSignal++;
+
+    if (c.merged_from) mergedCount++;
 
     for (const s of c.signals) {
       bySignal[s] = (bySignal[s] || 0) + 1;
@@ -254,6 +349,7 @@ export function analyzeCandidates(candidates: TitleCandidate[]): {
     multiSignal,
     singleSignal,
     byPage,
+    mergedCount,
   };
 }
 
@@ -283,6 +379,7 @@ async function main() {
   const stats = analyzeCandidates(candidates);
   console.log(`  多信号命中: ${stats.multiSignal} (高置信度)`);
   console.log(`  单信号命中: ${stats.singleSignal} (需 LLM 确认)`);
+  console.log(`  合并标题数: ${stats.mergedCount}`);
   console.log(`  按信号分布:`);
   for (const [signal, count] of Object.entries(stats.bySignal).sort((a, b) => b[1] - a[1])) {
     console.log(`    ${signal}: ${count}`);
@@ -302,7 +399,8 @@ async function main() {
   console.log('-'.repeat(120));
   for (const c of candidates) {
     const signalStr = c.signals.join(', ').padEnd(40);
-    console.log(`${c.id}\t${c.page_idx}\t${c.type}\t${c.text_level ?? '-'}\t${signalStr}\t${c.text.substring(0, 50)}`);
+    const mergeTag = c.merged_from ? ' [MERGED]' : '';
+    console.log(`${c.id}\t${c.page_idx}\t${c.type}\t${c.text_level ?? '-'}\t${signalStr}\t${c.text.substring(0, 50)}${mergeTag}`);
   }
 }
 
