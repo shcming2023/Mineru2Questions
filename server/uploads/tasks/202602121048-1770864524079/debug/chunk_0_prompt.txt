@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 0,
+    "type": "text",
+    "page_idx": 0,
+    "text": "新思路"
+  },
+  {
+    "id": 1,
+    "type": "image",
+    "page_idx": 0,
+    "img_path": "images/ccc49fa00475cb76258d56c7fa1350e702c3128b8b92318dbc4dab94dfbb166e.jpg"
+  },
+  {
+    "id": 2,
+    "type": "text",
+    "page_idx": 0,
+    "text": "FUDAO YU XUNLIAN"
+  },
+  {
+    "id": 3,
+    "type": "text",
+    "page_idx": 0,
+    "text": "辅导与训练"
+  },
+  {
+    "id": 4,
+    "type": "text",
+    "page_idx": 0,
+    "text": "数学"
+  },
+  {
+    "id": 5,
+    "type": "text",
+    "page_idx": 0,
+    "text": "SHUXUE"
+  },
+  {
+    "id": 6,
+    "type": "text",
+    "page_idx": 0,
+    "text": "主编 王同启"
+  },
+  {
+    "id": 7,
+    "type": "text",
+    "page_idx": 0,
+    "text": "八年级第一学期"
+  },
+  {
+    "id": 8,
+    "type": "text",
+    "page_idx": 0,
+    "text": "(第三版)"
+  },
+  {
+    "id": 9,
+    "type": "text",
+    "page_idx": 1,
+    "text": "辅导与训练"
+  },
+  {
+    "id": 10,
+    "type": "text",
+    "page_idx": 1,
+    "text": "数学"
+  },
+  {
+    "id": 11,
+    "type": "text",
+    "page_idx": 1,
+    "text": "八年级第一学期"
+  },
+  {
+    "id": 12,
+    "type": "text",
+    "page_idx": 1,
+    "text": "（第三版）"
+  },
+  {
+    "id": 13,
+    "type": "text",
+    "page_idx": 1,
+    "text": "主编 王同启"
+  },
+  {
+    "id": 14,
+    "type": "text",
+    "page_idx": 2,
+    "text": "内容提要"
+  },
+  {
+    "id": 15,
+    "type": "text",
+    "page_idx": 2,
+    "text": "《新思路辅导与训练 数学 八年级第一学期(第三版)》一书依据《义务教育数学课程标准(2022年版)》编写而成.全书按课时编写，每课时由要点归纳、疑难分析、基础训练、拓展训练四部分组成，有的章节会根据教学进度设置阶段训练.本书力求通过典型例题的辅导和精选习题的训练，帮助学生牢固掌握数学基础知识，及时消化所学知识内容，克服学习上的困难，提高数学成绩."
+  },
+  {
+    "id": 16,
+    "type": "text",
+    "page_idx": 2,
+    "text": "图书在版编目（CIP）数据"
+  },
+  {
+    "id": 17,
+    "type": "text",
+    "page_idx": 2,
+    "text": "新思路辅导与训练．数学八年级第一学期／王同启主编．--3版．--上海：上海科学技术出版社，2025."
+  },
+  {
+    "id": 18,
+    "type": "text",
+    "page_idx": 2,
+    "text": "7. -- ISBN 978-7-5478-7229-1 I. G634"
+  },
+  {
+    "id": 19,
+    "type": "text",
+    "page_idx": 2,
+    "text": "中国国家版本馆CIP数据核字第20256Y8B01号"
+  },
+  {
+    "id": 20,
+    "type": "text",
+    "page_idx": 2,
+    "text": "责任编辑 杨铮园"
+  },
+  {
+    "id": 21,
+    "type": "text",
+    "page_idx": 2,
+    "text": "新思路辅导与训练 数学 八年级第一学期(第三版)"
+  },
+  {
+    "id": 22,
+    "type": "text",
+    "page_idx": 2,
+    "text": "主编 王同启"
+  },
+  {
+    "id": 23,
+    "type": "text",
+    "page_idx": 2,
+    "text": "上海世纪出版(集团)有限公司"
+  },
+  {
+    "id": 24,
+    "type": "text",
+    "page_idx": 2,
+    "text": "上海科学技术出版社"
+  },
+  {
+    "id": 25,
+    "type": "text",
+    "page_idx": 2,
+    "text": "出版、发行"
+  },
+  {
+    "id": 26,
+    "type": "text",
+    "page_idx": 2,
+    "text": "（上海市闵行区号景路159弄A座9F-10F）"
+  },
+  {
+    "id": 27,
+    "type": "text",
+    "page_idx": 2,
+    "text": "邮政编码201101 www.sstp.cn"
+  },
+  {
+    "id": 28,
+    "type": "text",
+    "page_idx": 2,
+    "text": "上海盛通时代印刷有限公司印刷"
+  },
+  {
+    "id": 29,
+    "type": "text",
+    "page_idx": 2,
+    "text": "开本  $890\\times 1240$  1/16 印张13"
+  },
+  {
+    "id": 30,
+    "type": "text",
+    "page_idx": 2,
+    "text": "插页16"
+  },
+  {
+    "id": 31,
+    "type": "text",
+    "page_idx": 2,
+    "text": "字数：316千字"
+  },
+  {
+    "id": 32,
+    "type": "text",
+    "page_idx": 2,
+    "text": "2011年6月第1版"
+  },
+  {
+    "id": 33,
+    "type": "text",
+    "page_idx": 2,
+    "text": "2017年6月第2版"
+  },
+  {
+    "id": 34,
+    "type": "text",
+    "page_idx": 2,
+    "text": "2025年7月第3版 2025年7月第1次印刷"
+  },
+  {
+    "id": 35,
+    "type": "text",
+    "page_idx": 2,
+    "text": "ISBN 978-7-5478-7229-1/G·1380"
+  },
+  {
+    "id": 36,
+    "type": "text",
+    "page_idx": 2,
+    "text": "定价：59.00元"
+  },
+  {
+    "id": 37,
+    "type": "text",
+    "page_idx": 3,
+    "text": "出版说明"
+  },
+  {
+    "id": 38,
+    "type": "text",
+    "page_idx": 3,
+    "text": "20世纪90年代初，上海科学技术出版社约请了上海教材主编和一些著名中学的资深教师推出“辅导与训练”丛书，涉及数学、物理、化学等出版社的优势学科。这套丛书在使用过程中，经多次修订改版，一直以“辅导得当、训练有素”而深受广大师生的青睐，已经成为上海市场的品牌教辅。"
+  },
+  {
+    "id": 39,
+    "type": "text",
+    "page_idx": 3,
+    "text": "21世纪初，为适应上海“二期课改”的需要，我社根据新课标教材，又推出了“新教材辅导与训练”丛书，同样受到读者肯定。随后推出的“新思路辅导与训练”丛书也受到了广泛好评。现在，我社在总结各版优点的基础上，根据《义务教育数学课程标准(2022年版)》的要求，对本套丛书进行再次修订，旨在帮助学生理解“新课标”涉及的知识内容（基本知识、基本技能和相关的重点、难点），克服学习上的困难，增强自学能力，提高学科素养。"
+  },
+  {
+    "id": 40,
+    "type": "text",
+    "page_idx": 3,
+    "text": "《新思路辅导与训练 数学 八年级第一学期(第三版)》以课时为单位编写，每课时由要点归纳、疑难分析、基础训练、拓展训练四部分组成，有的章节会根据教学进度设置阶段训练，每章后设置本章复习题，在全书章后设置期末测试卷，供学生对本学期知识进行系统性复习和自我检测。"
+  },
+  {
+    "id": 41,
+    "type": "text",
+    "page_idx": 3,
+    "text": "【要点归纳】用简练的几句话归纳本课时学习的要点知识，方便学生归纳、复习."
+  },
+  {
+    "id": 42,
+    "type": "text",
+    "page_idx": 3,
+    "text": "【疑难分析】根据教学需要精选典型例题，例题讲解细致，分析透彻，层次鲜明，旨在将疑难问题的解决置于“润物细无声”的境地，让读者通过研读例题做到举一反三，提高解题能力。"
+  },
+  {
+    "id": 43,
+    "type": "text",
+    "page_idx": 3,
+    "text": "【基础训练】针对本课时的教学内容，为每个知识点或思想方法编写基础性题目。在习题的内容、数量上都以精选为标准，力图使学生在最短的时间内掌握基础知识，使有关教学内容得以巩固和落实。"
+  },
+  {
+    "id": 44,
+    "type": "text",
+    "page_idx": 4,
+    "text": "【拓展训练】在落实基础的前提下，挑选一些贴近学生实际要求的综合性题目，提高学生的学习积极性，拓展学习视界，提高解题技巧，挑战思维能力."
+  },
+  {
+    "id": 45,
+    "type": "text",
+    "page_idx": 4,
+    "text": "【阶段训练】根据教学进度进行设置，可作为学生的周末作业，也可以作为教师的每周测试使用."
+  },
+  {
+    "id": 46,
+    "type": "text",
+    "page_idx": 4,
+    "text": "本书由王同启老师担任主编，上海市民办上宝中学部分老师参与编写。其中第19章、第21章的韦达定理部分、第22章及期末测试卷由王同启老师编写，第20章、第21章的主要部分由曹雁华老师编写；王同启老师进行了整本书的修订与校对。"
+  },
+  {
+    "id": 47,
+    "type": "text",
+    "page_idx": 4,
+    "text": "为初、高中师生提供适用而又有指导意义的辅导书, 是我们一贯的心愿, 也是当前教学的需要. 对于我们所做的努力和尝试, 诚挚地期望广大读者给予批评和指正."
+  },
+  {
+    "id": 48,
+    "type": "text",
+    "page_idx": 4,
+    "text": "上海科学技术出版社"
+  },
+  {
+    "id": 49,
+    "type": "text",
+    "page_idx": 4,
+    "text": "2025年6月"
+  },
+  {
+    "id": 50,
+    "type": "text",
+    "page_idx": 5,
+    "text": "第19章 实数"
+  },
+  {
+    "id": 51,
+    "type": "text",
+    "page_idx": 5,
+    "text": "19.1 平方根与立方根 1"
+  },
+  {
+    "id": 52,
+    "type": "text",
+    "text": "19.1（一）算术平方根 1",
+    "page_idx": 5
+  },
+  {
+    "id": 53,
+    "type": "text",
+    "text": "19.1（二） 平方根 3",
+    "page_idx": 5
+  },
+  {
+    "id": 54,
+    "type": "text",
+    "text": "19.1（三）立方根 7",
+    "page_idx": 5
+  },
+  {
+    "id": 55,
+    "type": "text",
+    "page_idx": 5,
+    "text": "阶段训练1 11"
+  },
+  {
+    "id": 56,
+    "type": "text",
+    "page_idx": 5,
+    "text": "19.2 实数 13"
+  },
+  {
+    "id": 57,
+    "type": "text",
+    "text": "19.2（一）有理数的小数形式 13",
+    "page_idx": 5
+  },
+  {
+    "id": 58,
+    "type": "text",
+    "text": "19.2（二） 无理数 16",
+    "page_idx": 5
+  },
+  {
+    "id": 59,
+    "type": "text",
+    "text": "19.2（三）实数与数轴 19",
+    "page_idx": 5
+  },
+  {
+    "id": 60,
+    "type": "text",
+    "text": "19.2（四）实数的绝对值和大小比较 22",
+    "page_idx": 5
+  },
+  {
+    "id": 61,
+    "type": "text",
+    "text": "19.2（五）实数的运算 26",
+    "page_idx": 5
+  },
+  {
+    "id": 62,
+    "type": "text",
+    "text": "19.2(六） 科学记数法 29",
+    "page_idx": 5
+  },
+  {
+    "id": 63,
+    "type": "text",
+    "page_idx": 5,
+    "text": "本章复习题(一) 32"
+  },
+  {
+    "id": 64,
+    "type": "text",
+    "page_idx": 5,
+    "text": "本章复习题(二) 35"
+  },
+  {
+    "id": 65,
+    "type": "text",
+    "page_idx": 5,
+    "text": "第20章 二次根式 … 38"
+  },
+  {
+    "id": 66,
+    "type": "text",
+    "page_idx": 5,
+    "text": "20.1 二次根式及其性质 38"
+  },
+  {
+    "id": 67,
+    "type": "text",
+    "text": "20.1(一）二次根式的概念 38",
+    "page_idx": 5
+  },
+  {
+    "id": 68,
+    "type": "text",
+    "text": "20.1（二）二次根式的性质及最简二次根式 41",
+    "page_idx": 5
+  },
+  {
+    "id": 69,
+    "type": "text",
+    "page_idx": 5,
+    "text": "20.2 二次根式的运算 47"
+  },
+  {
+    "id": 70,
+    "type": "text",
+    "page_idx": 5,
+    "text": "20.2（一）同类二次根式及二次根式的加减法 47"
+  },
+  {
+    "id": 71,
+    "type": "text",
+    "page_idx": 6,
+    "text": "阶段训练2 53"
+  },
+  {
+    "id": 72,
+    "type": "text",
+    "text": "20.2（二）二次根式的乘法和除法 56",
+    "page_idx": 6
+  },
+  {
+    "id": 73,
+    "type": "text",
+    "text": "20.2（三） 分母有理化 59",
+    "page_idx": 6
+  },
+  {
+    "id": 74,
+    "type": "text",
+    "text": "20.2（四）二次根式的混合运算 63",
+    "page_idx": 6
+  },
+  {
+    "id": 75,
+    "type": "text",
+    "page_idx": 6,
+    "text": "阶段训练3 68"
+  },
+  {
+    "id": 76,
+    "type": "text",
+    "page_idx": 6,
+    "text": "本章复习题 71"
+  },
+  {
+    "id": 77,
+    "type": "text",
+    "page_idx": 6,
+    "text": "第21章 一元二次方程 75"
+  },
+  {
+    "id": 78,
+    "type": "text",
+    "text": "21.1 一元二次方程的概念 75",
+    "page_idx": 6
+  },
+  {
+    "id": 79,
+    "type": "text",
+    "text": "21.2 一元二次方程的解法 78",
+    "page_idx": 6
+  },
+  {
+    "id": 80,
+    "type": "text",
+    "text": "21.2（一）特殊的一元二次方程的解法——因式分解法 78",
+    "page_idx": 6
+  },
+  {
+    "id": 81,
+    "type": "text",
+    "text": "21.2（二）用开平方的方法解特殊的一元二次方程 82",
+    "page_idx": 6
+  },
+  {
+    "id": 82,
+    "type": "text",
+    "text": "21.2（三） 一般的一元二次方程的解法——配方法 ………………………………………… 86",
+    "page_idx": 6
+  },
+  {
+    "id": 83,
+    "type": "text",
+    "text": "21.2（四） 一般的一元二次方程的解法——公式法 90",
+    "page_idx": 6
+  },
+  {
+    "id": 84,
+    "type": "text",
+    "text": "21.2（五）用合适的方法解一元二次方程 94",
+    "page_idx": 6
+  },
+  {
+    "id": 85,
+    "type": "text",
+    "page_idx": 6,
+    "text": "阶段训练4 98"
+  },
+  {
+    "id": 86,
+    "type": "text",
+    "page_idx": 6,
+    "text": "21.3 一元二次方程的判别式 … 101"
+  },
+  {
+    "id": 87,
+    "type": "text",
+    "text": "21.3（一） 一元二次方程的根的判别式 101",
+    "page_idx": 6
+  },
+  {
+    "id": 88,
+    "type": "text",
+    "text": "21.3（二）一元二次方程的根的判别式的应用 104",
+    "page_idx": 6
+  },
+  {
+    "id": 89,
+    "type": "text",
+    "page_idx": 6,
+    "text": "21.4 一元二次方程的根与系数的关系 ………………………………………… 108"
+  },
+  {
+    "id": 90,
+    "type": "text",
+    "text": "21.4(一） 一元二次方程的根与系数的关系(1) 108",
+    "page_idx": 6
+  },
+  {
+    "id": 91,
+    "type": "text",
+    "text": "21.4（二）一元二次方程的根与系数的关系(2) 111",
+    "page_idx": 6
+  },
+  {
+    "id": 92,
+    "type": "text",
+    "text": "21.5 一元二次方程的应用 … 116",
+    "page_idx": 6
+  },
+  {
+    "id": 93,
+    "type": "text",
+    "text": "21.5(一）二次三项式的因式分解 116",
+    "page_idx": 6
+  },
+  {
+    "id": 94,
+    "type": "text",
+    "text": "阶段训练5 120",
+    "page_idx": 6
+  },
+  {
+    "id": 95,
+    "type": "text",
+    "text": "21.5（二）列方程解实际问题 123",
+    "page_idx": 6
+  },
+  {
+    "id": 96,
+    "type": "text",
+    "text": "21.5（三）解分式方程 126",
+    "page_idx": 6
+  },
+  {
+    "id": 97,
+    "type": "text",
+    "text": "21.5（四）列分式方程解应用题 130",
+    "page_idx": 6
+  },
+  {
+    "id": 98,
+    "type": "text",
+    "page_idx": 7,
+    "text": "阶段训练6 133"
+  },
+  {
+    "id": 99,
+    "type": "text",
+    "page_idx": 7,
+    "text": "本章复习题 136"
+  }
+]
+```
