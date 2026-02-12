@@ -25,6 +25,7 @@ import axiosRetry from 'axios-retry';
 import { QuestionParser, ExtractedQuestion } from './parser';
 import { QUESTION_EXTRACT_PROMPT } from './prompts';
 import { ChapterFlatEntry, findChapterForBlock } from './chapterPreprocess';
+import { flattenContentList, toConvertedBlocks } from './blockFlattener';
 
 // ============= 类型定义 =============
 
@@ -275,79 +276,14 @@ export async function extractQuestions(
 
 /**
  * 加载并格式化 content_list.json
+ * 
+ * 使用共享的 flattenContentList() 确保与 chapterPreprocess 的 ID 空间一致。
  */
 function loadAndFormatBlocks(contentListPath: string): ConvertedBlock[] {
   const rawContent = fs.readFileSync(contentListPath, 'utf-8');
-  const contentList: ContentBlock[] = JSON.parse(rawContent);
-  
-  const convertedBlocks: ConvertedBlock[] = [];
-  let currentId = 0;
-  
-  for (const block of contentList) {
-    // 1. 过滤噪声块
-    if (['page_number', 'footer', 'header'].includes(block.type)) {
-      continue;
-    }
-    
-    // 1.1 TOC Filtering (Added as per Test 3 report)
-    // Filter blocks that look like Table of Contents entries (e.g. "Chapter 1 ...... 10")
-    if (block.text && (block.text.trim() === '目录' || block.text.match(/\.{4,}\s*\d+$/))) {
-       continue;
-    }
-
-    // 2. 展平 list 块
-    if (block.type === 'list' && block.list_items) {
-      for (const itemText of block.list_items) {
-        convertedBlocks.push({
-          id: currentId++,
-          type: 'text', // 将 list_item 转换为 text 类型
-          text: itemText.trim(),
-          page_idx: block.page_idx,
-        });
-      }
-      continue; // 继续下一个原始 block
-    }
-
-    // 3. 拆分 table 块
-    const tableContent = block.text || (block as any).table_body;
-    if (block.type === 'table' && typeof tableContent === 'string' && tableContent.includes('<tr')) {
-      const rows = tableContent.match(/<tr[\s\S]*?<\/tr>/gi) || [];
-      for (const rowHtml of rows) {
-        convertedBlocks.push({
-          id: currentId++,
-          type: 'text',
-          text: `[Table Row] ${rowHtml}`,
-          page_idx: block.page_idx,
-        });
-      }
-      continue;
-    }
-
-    // 4. 处理其他类型 (text, equation, image)
-    // 分配 ID (如果 block.id 存在则使用，否则使用 currentId)
-    // 注意：为了保证 ID 连续性，建议统一使用 currentId 重排
-    const newBlock: ConvertedBlock = {
-      id: currentId, 
-      type: block.type,
-      page_idx: block.page_idx
-    };
-
-    if (block.text) {
-      newBlock.text = block.text.trim(); // 保留 text, 无论 type 是 text 还是 equation
-    }
-
-    if (block.type === 'image' && block.img_path) {
-      newBlock.img_path = block.img_path;
-      if (block.image_caption && block.image_caption.length > 0) {
-        newBlock.image_caption = block.image_caption.join(' ');
-      }
-    }
-
-    convertedBlocks.push(newBlock);
-    currentId++;
-  }
-  
-  return convertedBlocks;
+  const contentList = JSON.parse(rawContent);
+  const flatBlocks = flattenContentList(contentList);
+  return toConvertedBlocks(flatBlocks);
 }
 
 /**
@@ -449,28 +385,62 @@ async function callLLM(
 }
 
 /**
- * 去重：优先使用 (chapter_title, label) 组合键，兼容 questionIds
+ * 去重：基于 questionIds 集合重叠检测
+ * 
+ * 跨 chunk 重叠窗口产生的同一题可能有不同的 ID 集合（如 "95,96" vs "95"）。
+ * 使用 Jaccard 系数检测重叠：如果交集/并集 > 0.5，认为是同一题，保留 ID 集合更大的。
  */
 function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion[] {
-  const seen = new Set<string>();
   const unique: ExtractedQuestion[] = [];
-  
-  for (const q of questions) {
-    // 修复：使用 questionIds 作为唯一键，对齐官方策略
-    const key = q.questionIds;
 
-    // 必须有 questionIds 才能参与去重
-    if (key && key.trim().length > 0) {
-      if (!seen.has(key)) {
-        seen.add(key);
-        unique.push(q);
+  /** 将 questionIds 字符串解析为 Set<number> */
+  function parseIdSet(ids: string | undefined): Set<number> {
+    if (!ids || ids.trim() === '') return new Set();
+    return new Set(ids.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n)));
+  }
+
+  /** 计算两个集合的 Jaccard 系数 */
+  function jaccard(a: Set<number>, b: Set<number>): number {
+    if (a.size === 0 && b.size === 0) return 0;
+    let intersection = 0;
+    for (const v of a) {
+      if (b.has(v)) intersection++;
+    }
+    const union = a.size + b.size - intersection;
+    return union > 0 ? intersection / union : 0;
+  }
+
+  for (const q of questions) {
+    const qIds = parseIdSet(q.questionIds);
+
+    // 如果没有 questionIds，直接放入
+    if (qIds.size === 0) {
+      unique.push(q);
+      continue;
+    }
+
+    // 检查是否与已有题目重叠
+    let isDuplicate = false;
+    for (let i = 0; i < unique.length; i++) {
+      const existingIds = parseIdSet(unique[i].questionIds);
+      if (existingIds.size === 0) continue;
+
+      const sim = jaccard(qIds, existingIds);
+      if (sim > 0.5) {
+        // 重叠！保留 ID 集合更大的（更完整的）
+        if (qIds.size > existingIds.size) {
+          unique[i] = q;
+        }
+        isDuplicate = true;
+        break;
       }
-    } else {
-      // 对于没有 questionIds 的（理论上不应发生），直接放入
+    }
+
+    if (!isDuplicate) {
       unique.push(q);
     }
   }
-  
+
   return unique;
 }
 

@@ -19,6 +19,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
+import { flattenContentList, FlatBlock } from './blockFlattener';
 
 // ============================================================
 // 类型定义
@@ -34,14 +35,8 @@ interface RawBlock {
   [key: string]: any;
 }
 
-/** 展平后的 block（带连续 ID） */
-export interface FlatBlock {
-  id: number;
-  text: string;
-  page: number;
-  type: string;
-  text_level: number | null;
-}
+// FlatBlock 类型从 blockFlattener.ts 导入
+export type { FlatBlock } from './blockFlattener';
 
 /** 章节目录树中的单个条目 */
 export interface ChapterFlatEntry {
@@ -80,40 +75,13 @@ export interface ChapterPreprocessResult {
 }
 
 // ============================================================
-// Step 0: 展平 block 列表
+// Step 0: 展平 block 列表（使用共享的 flattenContentList）
 // ============================================================
 
+// flattenBlocks 已迁移到 blockFlattener.ts 的 flattenContentList()
+// 保留此函数作为兼容性包装
 export function flattenBlocks(raw: RawBlock[]): FlatBlock[] {
-  const blocks: FlatBlock[] = [];
-  let id = 0;
-
-  for (const item of raw) {
-    if (!item || typeof item !== 'object') continue;
-    const page = item.page_idx ?? 0;
-
-    // 展平 table 内嵌的子块
-    if (item.type === 'table' && Array.isArray(item.inside)) {
-      for (const sub of item.inside) {
-        blocks.push({
-          id: id++,
-          text: (sub.text ?? '').trim(),
-          page,
-          type: sub.type ?? 'text',
-          text_level: sub.text_level ?? null,
-        });
-      }
-    } else {
-      blocks.push({
-        id: id++,
-        text: (item.text ?? '').trim(),
-        page,
-        type: item.type ?? 'text',
-        text_level: item.text_level ?? null,
-      });
-    }
-  }
-
-  return blocks;
+  return flattenContentList(raw);
 }
 
 // ============================================================
@@ -127,7 +95,7 @@ function formatFullText(blocks: FlatBlock[]): string {
     if (!b.text) continue;
     const truncated = b.text.length > 150 ? b.text.substring(0, 150) + '...' : b.text;
     const typeTag = b.type === 'header' ? 'H' : (b.text_level === 1 ? 'T1' : '');
-    const tag = typeTag ? `${b.id}|p${b.page}|${typeTag}` : `${b.id}|p${b.page}`;
+    const tag = typeTag ? `${b.id}|p${b.page_idx}|${typeTag}` : `${b.id}|p${b.page_idx}`;
     lines.push(`[${tag}] ${truncated}`);
   }
 
@@ -392,7 +360,7 @@ function buildFlatMap(entries: DirectoryEntry[], blocks: FlatBlock[]): ChapterFl
       return t.length > 80 ? t.substring(0, 80) : t;
     }).filter(t => t);
     const mergedText = texts.join(' ');
-    const page = blockMap.get(primaryId)?.page ?? 0;
+    const page = blockMap.get(primaryId)?.page_idx ?? 0;
 
     // block_range 计算
     const minId = Math.min(...allIds);
@@ -486,7 +454,7 @@ export async function preprocessChapters(
   if (onProgress) await onProgress('章节预处理：加载并展平 content_list.json...');
   const raw: RawBlock[] = JSON.parse(fs.readFileSync(contentListPath, 'utf-8'));
   const blocks = flattenBlocks(raw);
-  const totalPages = Math.max(...blocks.map(b => b.page)) + 1;
+  const totalPages = Math.max(...blocks.map(b => b.page_idx ?? 0)) + 1;
   console.log(`[ChapterPreprocess] 展平: ${raw.length} 原始 → ${blocks.length} blocks, ${totalPages} pages`);
 
   // ========== Step 1: 全文格式化 ==========

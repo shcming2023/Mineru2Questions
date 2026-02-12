@@ -335,14 +335,14 @@ export class QuestionParser {
       if (!block) continue;
 
       if (block.type === 'image' && block.img_path) {
-        // 使用 path.join 确保路径正确
+        // 使用 path.join 拼接绝对路径（用于 images 数组）
         const imagePath = path.join(this.imagePrefix, block.img_path);
         images.push(imagePath);
         
-        // 修复：将图片嵌入到文本中（Markdown格式），对齐官方实现
-        // 这样 question 字段就包含了完整信息，包括图片位置
+        // 在 question 文本中嵌入图片时使用原始相对路径，避免绝对路径泄露
+        // block.img_path 已经是相对路径（如 "images/xxx.jpg"）
         const caption = block.image_caption || 'image';
-        textParts.push(`![${caption}](${imagePath})`);
+        textParts.push(`![${caption}](${block.img_path})`);
         
       } else if (block.text) {
         // 只要有 text 字段就提取，支持 text, equation, table row 等
