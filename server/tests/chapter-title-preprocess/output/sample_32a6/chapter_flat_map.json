@@ -1,0 +1,93 @@
+[
+  {
+    "id": 615,
+    "text": "第一单元知识梳理",
+    "level": 1,
+    "page_idx": 33,
+    "full_path": "第一单元知识梳理"
+  },
+  {
+    "id": 619,
+    "text": "第一单元综合练习",
+    "level": 2,
+    "page_idx": 34,
+    "full_path": "第一单元知识梳理 > 第一单元综合练习",
+    "parent_id": 615
+  },
+  {
+    "id": 825,
+    "text": "第1课时 分数与小数",
+    "level": 2,
+    "page_idx": 44,
+    "full_path": "第一单元知识梳理 > 第1课时 分数与小数",
+    "parent_id": 615
+  },
+  {
+    "id": 1212,
+    "text": "第4课时 小数的读写",
+    "level": 2,
+    "page_idx": 64,
+    "full_path": "第一单元知识梳理 > 第4课时 小数的读写",
+    "parent_id": 615
+  },
+  {
+    "id": 2002,
+    "text": "第二单元知识梳理",
+    "level": 1,
+    "page_idx": 98,
+    "full_path": "第二单元知识梳理"
+  },
+  {
+    "id": 2007,
+    "text": "第二单元综合练习",
+    "level": 2,
+    "page_idx": 99,
+    "full_path": "第二单元知识梳理 > 第二单元综合练习",
+    "parent_id": 2002
+  },
+  {
+    "id": 2280,
+    "text": "第三单元知识梳理",
+    "level": 1,
+    "page_idx": 118,
+    "full_path": "第三单元知识梳理"
+  },
+  {
+    "id": 2283,
+    "text": "第三单元综合练习",
+    "level": 2,
+    "page_idx": 118,
+    "full_path": "第三单元知识梳理 > 第三单元综合练习",
+    "parent_id": 2280
+  },
+  {
+    "id": 2751,
+    "text": "第四单元知识梳理",
+    "level": 1,
+    "page_idx": 142,
+    "full_path": "第四单元知识梳理"
+  },
+  {
+    "id": 2753,
+    "text": "第四单元综合练习",
+    "level": 2,
+    "page_idx": 142,
+    "full_path": "第四单元知识梳理 > 第四单元综合练习",
+    "parent_id": 2751
+  },
+  {
+    "id": 3638,
+    "text": "第五单元知识梳理",
+    "level": 1,
+    "page_idx": 194,
+    "full_path": "第五单元知识梳理"
+  },
+  {
+    "id": 3643,
+    "text": "第五单元综合练习",
+    "level": 2,
+    "page_idx": 195,
+    "full_path": "第五单元知识梳理 > 第五单元综合练习",
+    "parent_id": 3638
+  }
+]

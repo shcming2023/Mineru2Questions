@@ -1,0 +1,99 @@
+{
+  "document_title": "新教材全解",
+  "document_language": "zh-CN",
+  "chapters": [
+    {
+      "id": 615,
+      "text": "第一单元知识梳理",
+      "level": 1,
+      "page": 33,
+      "children": [
+        {
+          "id": 619,
+          "text": "第一单元综合练习",
+          "level": 2,
+          "page": 34,
+          "children": []
+        },
+        {
+          "id": 825,
+          "text": "第1课时 分数与小数",
+          "level": 2,
+          "page": 44,
+          "children": [],
+          "_backfilled": true
+        },
+        {
+          "id": 1212,
+          "text": "第4课时 小数的读写",
+          "level": 2,
+          "page": 64,
+          "children": [],
+          "_backfilled": true
+        }
+      ]
+    },
+    {
+      "id": 2002,
+      "text": "第二单元知识梳理",
+      "level": 1,
+      "page": 98,
+      "children": [
+        {
+          "id": 2007,
+          "text": "第二单元综合练习",
+          "level": 2,
+          "page": 99,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 2280,
+      "text": "第三单元知识梳理",
+      "level": 1,
+      "page": 118,
+      "children": [
+        {
+          "id": 2283,
+          "text": "第三单元综合练习",
+          "level": 2,
+          "page": 118,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 2751,
+      "text": "第四单元知识梳理",
+      "level": 1,
+      "page": 142,
+      "children": [
+        {
+          "id": 2753,
+          "text": "第四单元综合练习",
+          "level": 2,
+          "page": 142,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": 3638,
+      "text": "第五单元知识梳理",
+      "level": 1,
+      "page": 194,
+      "children": [
+        {
+          "id": 3643,
+          "text": "第五单元综合练习",
+          "level": 2,
+          "page": 195,
+          "children": []
+        }
+      ]
+    }
+  ],
+  "excluded_count": 124,
+  "notes": "The document is organized mainly by units labeled as '第一单元知识梳理', '第二单元知识梳理', etc. Each unit has a corresponding '综合练习' section. Repeated pedagogical labels such as '重点难点', '学前准备', '例题讲解', '归纳总结', '温馨提示', and exercise instructions were excluded as they appear frequently and are not unique structural titles. No chapters or parts were explicitly labeled, so units are treated as level 1. No third-level divisions were identified from the candidates."
+}

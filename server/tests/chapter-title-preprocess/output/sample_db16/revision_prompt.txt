@@ -1,0 +1,167 @@
+You are an expert in analyzing educational textbook structures. Your task is to identify the real chapter/section titles from the "title candidate list" below and build an accurate, multi-level table of contents (TOC) tree.
+
+## Input Description
+
+Below is a list of "title candidates" extracted from an educational textbook (parsed from PDF via OCR). The document has 680 text blocks across 66 pages. Each candidate contains:
+- **id**: Global unique ID of the original text block (DO NOT modify)
+- **page**: Page number (0-indexed)
+- **type**: OCR tool's type annotation (header or text)
+- **text_level**: Font-size-based level inferred by OCR (1 = large font title; null = not annotated)
+- **signals**: Pre-screening signals from code
+- **text**: Text content
+
+## Your Task
+
+### Step 1: Understand the document's organizational structure
+
+First, scan all candidates to understand the document's hierarchy. Common patterns include:
+- "Chapter > Section > Subsection" (e.g., "第19章 > 19.1 > 19.1(一)")
+- "Unit > Lesson" (e.g., "Unit 1 > Lesson 1-1")
+- "Topic > Lesson" (e.g., "TOPIC 3 > Lesson 3-1")
+- "Part > Unit > Section" (e.g., "Part 1 > Unit 1 > 1.1")
+- Flat structure with only topic-level titles (e.g., "Personal Pronouns", "Future Tense")
+
+### Step 2: Identify real structural titles
+
+**KEEP** items that define the document's organizational structure:
+- Top-level divisions (chapters, parts, units, topics, modules)
+- Second-level divisions (sections, lessons, numbered subsections)
+- Third-level divisions (sub-sections)
+- Functional sections with unique identifiers (e.g., "阶段训练①", "本章复习题(一)", "SUMMARY OF UNIT 8", "TOPIC 3 Assessment Practice")
+
+**EXCLUDE** all of the following:
+- Table of contents page entries (typically in the first few pages, listing titles with page numbers)
+- Repeated pedagogical labels that appear in EVERY unit/chapter with the same text (e.g., "REVIEW", "Practice", "Part 1 Editing Advice", "Part 2 Editing Practice", "Part 3 Write", "Part 4 Learner's Log")
+- Question type headers (e.g., "Part A", "Part B", "一、填空题")
+- Exercise instructions or activity labels
+- Page headers/footers
+
+**Critical distinction**: If a label like "REVIEW" or "PART 1 Editing Advice" appears in EVERY unit with the exact same text, it is a repeated pedagogical label and should be EXCLUDED. But if "TOPIC 3 Assessment Practice" appears only once (unique to Topic 3), it should be KEPT.
+
+### Step 3: Assign levels
+
+- **level 1**: Top-level structural divisions
+- **level 2**: Second-level divisions within level 1
+- **level 3**: Third-level divisions within level 2
+
+### Step 4: Build tree
+
+- level 1 nodes are top-level
+- level 2 nodes are children of the nearest preceding level 1
+- level 3 nodes are children of the nearest preceding level 2
+- Order strictly by page number
+
+## Important Notes
+
+- OCR may misrecognize characters (e.g., circled numbers ⑤ → 5)
+- **DO NOT create titles that don't exist in the candidate list**
+- **DO NOT include any item that is clearly a repeated template label**
+- The document may be in any language
+
+## Output Format
+
+Output ONLY valid JSON, no markdown fences:
+
+{
+  "document_title": "Document title or N/A",
+  "document_language": "zh-CN or en-US or other",
+  "chapters": [
+    {
+      "id": 129,
+      "text": "Title text",
+      "level": 1,
+      "page": 9,
+      "children": [
+        {
+          "id": 110,
+          "text": "Section title",
+          "level": 2,
+          "page": 9,
+          "children": []
+        }
+      ]
+    }
+  ],
+  "excluded_count": 123,
+  "notes": "Brief notes about structure decisions"
+}
+
+## Title Candidate List
+
+[
+  {"id": 0, "page": 0, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Grammar skills book"},
+  {"id": 1, "page": 0, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Grade 4-5"},
+  {"id": 4, "page": 1, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Contents key"},
+  {"id": 6, "page": 1, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Contents"},
+  {"id": 21, "page": 4, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Personal and Possessive Pronouns"},
+  {"id": 24, "page": 4, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Personal pronouns"},
+  {"id": 27, "page": 4, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Possessive pronouns"},
+  {"id": 57, "page": 8, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Reflexive pronouns"},
+  {"id": 58, "page": 8, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Singular"},
+  {"id": 66, "page": 8, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Plural"},
+  {"id": 93, "page": 10, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Write sentences for these reflexive pronouns"},
+  {"id": 100, "page": 11, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Time Prepositions"},
+  {"id": 114, "page": 12, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Prepositions for time, place and cause"},
+  {"id": 117, "page": 12, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Place"},
+  {"id": 128, "page": 14, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Subject-verb agreement"},
+  {"id": 129, "page": 14, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The Verb 'to be' (Present Tense)"},
+  {"id": 130, "page": 14, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Affirmative"},
+  {"id": 132, "page": 14, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fill in the gaps using the correct form of the verb 'to be'."},
+  {"id": 136, "page": 15, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Affirmative Contractions"},
+  {"id": 138, "page": 15, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fill in the gaps using the correct form of the verb 'to be'."},
+  {"id": 142, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Negative Contractions"},
+  {"id": 144, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fill in the gaps using the correct form of the verb 'to be'."},
+  {"id": 147, "page": 17, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "'has' or 'have'?"},
+  {"id": 158, "page": 18, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "'There Is' and 'There Are'"},
+  {"id": 162, "page": 19, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "general subject-verb agreement exercises"},
+  {"id": 170, "page": 20, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Subject-verb agreement where the sentence is interrupted by a subordinate clause"},
+  {"id": 176, "page": 21, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Subject-verb agreement for collective and abstract nouns"},
+  {"id": 181, "page": 21, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "What was that again?"},
+  {"id": 195, "page": 22, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Future tense"},
+  {"id": 196, "page": 22, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Simple Future"},
+  {"id": 199, "page": 22, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Future Continuous"},
+  {"id": 220, "page": 23, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Write 2 of your own future tense sentences:"},
+  {"id": 224, "page": 24, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Irregular past tense verbs"},
+  {"id": 238, "page": 26, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Regular and Irregular Verbs in Sentences"},
+  {"id": 262, "page": 28, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Modal Verbs"},
+  {"id": 281, "page": 30, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "First Conditional tense"},
+  {"id": 282, "page": 30, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "ENGLISH GRAMMAR"},
+  {"id": 283, "page": 30, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "FIRST CONDITIONAL"},
+  {"id": 284, "page": 30, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "1"},
+  {"id": 314, "page": 32, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Second Conditional tense"},
+  {"id": 329, "page": 33, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Third Conditional tense"},
+  {"id": 331, "page": 33, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Meaning:"},
+  {"id": 333, "page": 33, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Form:"},
+  {"id": 340, "page": 34, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The Zero Conditional"},
+  {"id": 361, "page": 36, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Comparative and superlative adjectives"},
+  {"id": 381, "page": 39, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Present Progressive Tense"},
+  {"id": 385, "page": 39, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Complete the following sentences"},
+  {"id": 391, "page": 40, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Past progressive tense"},
+  {"id": 402, "page": 42, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Base Verbs and Past Participles"},
+  {"id": 415, "page": 42, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Tasks"},
+  {"id": 418, "page": 43, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Base"},
+  {"id": 446, "page": 43, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Simple Past"},
+  {"id": 474, "page": 43, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "随班听课"},
+  {"id": 507, "page": 45, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Present perfect tense"},
+  {"id": 512, "page": 45, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Present Perfect Form Gap Fill"},
+  {"id": 524, "page": 47, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Past perfect tense"},
+  {"id": 526, "page": 47, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Complete the sentences using Past perfect tense."},
+  {"id": 531, "page": 48, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Perfect tense practice"},
+  {"id": 541, "page": 49, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Clause awareness"},
+  {"id": 553, "page": 50, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Creating Sentences Using Subordinate Clauses"},
+  {"id": 556, "page": 50, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Existing sentence"},
+  {"id": 557, "page": 50, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Extended sentences"},
+  {"id": 567, "page": 52, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Subordinating conjunctions"},
+  {"id": 575, "page": 54, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fronted adverbials"},
+  {"id": 579, "page": 54, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Writing Your Own Fronted Adverbials: ISPACE"},
+  {"id": 593, "page": 54, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Sentence examples:"},
+  {"id": 622, "page": 58, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Relative Clauses"},
+  {"id": 633, "page": 60, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Two Become One"},
+  {"id": 641, "page": 61, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Cheeseburgers 1"},
+  {"id": 664, "page": 63, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Passive Voice"},
+  {"id": 673, "page": 64, "type": "header", "text_level": null, "signals": "type:header", "text": "Complete the following table, inserting a tick showing whether the verb is active or passive."},
+  {"id": 675, "page": 65, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Write 5 of your own sentences using passive voice"},
+  {"id": 677, "page": 65, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Workbook references"}
+]
+
+Analyze the candidates and output the JSON result.

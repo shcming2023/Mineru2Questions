@@ -1,0 +1,3228 @@
+[
+  {
+    "id": 1,
+    "text": "GRADE 1",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 0,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 162,
+    "text": "Videos",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 4,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 174,
+    "text": "Glossary",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 4,
+    "signals": [
+      "text_level:1",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 211,
+    "text": "TOPIC 2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 8,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 238,
+    "text": "TOPIC 3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 9,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 245,
+    "text": "TOPIC 4 Subtraction Facts to 20: Use Strategies",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 10,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 262,
+    "text": "TOPIC 5 Work with Addition and Subtraction Equations",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 11,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 285,
+    "text": "TOPIC 6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 12,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 302,
+    "text": "TOPIC 7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 13,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 327,
+    "text": "TOPIC 8",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 15,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 339,
+    "text": "TOPIC 9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 16,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 363,
+    "text": "10.4 Add Tens and Ones Using an Open Number Line 413",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 17,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 371,
+    "text": "10.8 Practice Adding Using Strategies 429",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 17,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 442,
+    "text": "14.3 Defining and Non-Defining Attributes of 2-D Shapes 561",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 21,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 454,
+    "text": "14.8 Compose with 3-D Shapes 585",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 21,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 474,
+    "text": "15.3 Understand Halves and Fourths 617",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 22,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 624,
+    "text": "Counting and Writing to 9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 32,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 895,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 43,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 948,
+    "text": "Solve & Share",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 46,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1010,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 47,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1128,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 51,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1239,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 55,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1270,
+    "text": "6. Reasoning",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 57,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1346,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 59,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1449,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 63,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1560,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 67,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1595,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 68,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 1677,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 71,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1756,
+    "text": "Lesson 1-9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 74,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 1803,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 75,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 1836,
+    "text": "5. Explain",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 77,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1938,
+    "text": "3.6 penguins in all",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 81,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 2223,
+    "text": "Making Numbers",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 91,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2265,
+    "text": "Lesson 2- I",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 94,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 2318,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 95,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 2399,
+    "text": "Lesson 2-2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 98,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 2466,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 99,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 2577,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 103,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 2583,
+    "text": "Independent Practice",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 104,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2684,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 107,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 2758,
+    "text": "Lesson 2-5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 110,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 2805,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 111,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 2882,
+    "text": "Lesson 2-6",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 114,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 2907,
+    "text": "Guided Practice",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 115,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2917,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 115,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 2987,
+    "text": "Lesson 2-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 118,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 3034,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 119,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 3101,
+    "text": "Lesson 2-8",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 122,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 3138,
+    "text": "#",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 123,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 3142,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 123,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 3211,
+    "text": "Lesson 2-9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 126,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 3252,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 127,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 3305,
+    "text": "TOPIC 2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 130,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 3306,
+    "text": "Fluency Practice Activity",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 130,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3361,
+    "text": "TOPIC 2 Vocabulary Review",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 131,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 3363,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 131,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 3476,
+    "text": "TOPIC 2 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 136,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 3542,
+    "text": "TOPIC 2 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 140,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 3661,
+    "text": "#",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 145,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 3713,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 147,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 3775,
+    "text": "Lesson 3-2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 150,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 3811,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 151,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 3872,
+    "text": "Lesson 3-3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 154,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 3923,
+    "text": "Visual",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 155,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 3926,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 155,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4009,
+    "text": "Lesson 3-4",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 158,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 4040,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 159,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4130,
+    "text": "Visual Learning Bridge",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 163,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 4152,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 163,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4170,
+    "text": "7.4 +8 ?",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 164,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 4254,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 167,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4298,
+    "text": "Lesson 3-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 170,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 4339,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 171,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4364,
+    "text": "Problem Solving Solve each problem below.",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 173,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 4397,
+    "text": "Lesson 3-8",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 174,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 4438,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 175,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4501,
+    "text": "Lesson 3-9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 178,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 4549,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 179,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 4604,
+    "text": "TOPIC 3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 182,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 4626,
+    "text": "Partner2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 182,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 4855,
+    "text": "TOPIC 3 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 192,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 5018,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 199,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5019,
+    "text": "Visual Learning Bridge",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 199,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 5120,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 203,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5197,
+    "text": "Lesson 4-3",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 206,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 5242,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 207,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5357,
+    "text": "Guided Practice",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 211,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 5377,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 211,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5437,
+    "text": "Lesson 4-5",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 214,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 5467,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 215,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5527,
+    "text": "Lesson 4-6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 218,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 5583,
+    "text": "Visual",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 219,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 5587,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 219,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5602,
+    "text": "11.17 -7",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 220,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 5647,
+    "text": "Lesson 4-7",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 222,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 5675,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 223,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5687,
+    "text": "9.7 -7",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 224,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 5722,
+    "text": "Lesson 4-8",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 226,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 5767,
+    "text": "Learning",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 227,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 5769,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 227,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 5831,
+    "text": "Lesson 4-9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 230,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 5868,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 231,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6020,
+    "text": "Set E",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 238,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 6097,
+    "text": "TOPIC 4 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 240,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 6129,
+    "text": "TOPIC 4 Assessment Practice Continued",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 242,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 6164,
+    "text": "TOPIC 4 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 244,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 6309,
+    "text": "Lesson 5- I",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 250,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 6341,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 251,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6364,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 252,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 6448,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 255,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6554,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 259,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6609,
+    "text": "Lesson 5-4",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 262,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 6645,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 263,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6646,
+    "text": "Visual Learning Bridge",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 263,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 6745,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 267,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6805,
+    "text": "Lesson 5-6",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 270,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 6847,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 271,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6908,
+    "text": "Lesson 5-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 274,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 6947,
+    "text": "#",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 275,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 6950,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 275,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 6995,
+    "text": "TOPIC 5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 278,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 7049,
+    "text": "TOPIC 5 Vocabulary Review",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 279,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 7118,
+    "text": "TOPIC 5 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 282,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 7153,
+    "text": "TOPIC 5 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 284,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 7277,
+    "text": "Lesson 6-1",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 290,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 7278,
+    "text": "Organize Data into Three Categories",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 290,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 7325,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 291,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 7397,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 295,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 7482,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 299,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 7527,
+    "text": "Name",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 302,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 7530,
+    "text": "Lesson 6-4",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 302,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 7579,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 303,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 7631,
+    "text": "Lesson 6-5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 306,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 7689,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 307,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 7713,
+    "text": "Performance Task",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 309,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 7735,
+    "text": "TOPIC 6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 310,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 7881,
+    "text": "TOPIC 6 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 316,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 7991,
+    "text": "Super Selfie",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 321,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 8065,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 323,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8129,
+    "text": "Lesson 7-2",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 326,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 8158,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 327,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8210,
+    "text": "Lesson 7-3",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 330,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 8238,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 331,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8284,
+    "text": "Solve & Share",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 334,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 8290,
+    "text": "Lesson 7-4",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 334,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 8330,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 335,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8415,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 339,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8467,
+    "text": "Lesson 7-6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 342,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 8505,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 343,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8559,
+    "text": "Lesson 7-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 346,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 8591,
+    "text": "Visual",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 347,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 8594,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 347,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 8750,
+    "text": "TOPIC 7 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 354,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 8797,
+    "text": "TOPIC 7 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 356,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 8901,
+    "text": "Solve & Share",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 362,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 8972,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 363,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9046,
+    "text": "Lesson 8-2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 366,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9083,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 367,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9137,
+    "text": "Lesson 8-3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 370,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9175,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 371,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9197,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 372,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 9234,
+    "text": "Lesson 8-4",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 374,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9272,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 375,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9321,
+    "text": "Lesson 8-5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 378,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9360,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 379,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9408,
+    "text": "Lesson 8-6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 382,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9410,
+    "text": "I can …",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 382,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 9443,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 383,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9500,
+    "text": "Lesson 8-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 386,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9550,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 387,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9591,
+    "text": "TOPIC 8",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 390,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 9638,
+    "text": "TOPIC 8 Vocabulary Review",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 391,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 9639,
+    "text": "A-Z Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 391,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 9697,
+    "text": "TOPIC 8 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 394,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 9727,
+    "text": "TOPIC 8 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 396,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 9746,
+    "text": "TOPIC 9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 398,
+    "signals": [
+      "text_level:1",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 9849,
+    "text": "Lesson 9-1",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 402,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 9883,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 403,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 9948,
+    "text": "Guided Practice",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 407,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 9958,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 407,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10025,
+    "text": "Lesson 9-3",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 410,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 10074,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 411,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10159,
+    "text": "Lesson 9-4",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 414,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 10217,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 415,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10229,
+    "text": "7.95 90",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 416,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 10230,
+    "text": "8.74 74",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 416,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 10269,
+    "text": "Lesson 9-5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 418,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 10271,
+    "text": "Numbers on a Number Line",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 418,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 10298,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 419,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10314,
+    "text": "14.47 35",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 420,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 10315,
+    "text": "15.29 72",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 420,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 10408,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 423,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10523,
+    "text": "TOPIC 9 Vocabulary Review",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 427,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 10561,
+    "text": "6.46 is 26.",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 429,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 10563,
+    "text": "7.25 is 52.",
+    "type": "text",
+    "text_level": null,
+    "page_idx": 429,
+    "signals": [
+      "pattern:section_dotnum"
+    ]
+  },
+  {
+    "id": 10565,
+    "text": "SetD",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 429,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 10596,
+    "text": "TOPIC 9 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 430,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 10642,
+    "text": "TOPIC 9 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 432,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 10815,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 439,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10897,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 443,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 10949,
+    "text": "Problem Solving Use mental math to solve the problems below.",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 445,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 10960,
+    "text": "Lesson 10-3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 446,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 10995,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 447,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11033,
+    "text": "Lesson 10-4",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 450,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 11070,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 451,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11117,
+    "text": "Lesson 10-5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 454,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 11157,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 455,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11186,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 456,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 11220,
+    "text": "Lesson 10-6",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 458,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 11256,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 459,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11317,
+    "text": "Lesson 10-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 462,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 11356,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 463,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11429,
+    "text": "Learning",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 467,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 11432,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 467,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11486,
+    "text": "Lesson 10-9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 470,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 11526,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 471,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11646,
+    "text": "Set E",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 478,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 11705,
+    "text": "TOPIC 10 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 480,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 11734,
+    "text": "TOPIC 10 Assessment Practice Continued",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 482,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 11769,
+    "text": "TOPIC 10 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 484,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 11941,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 491,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 11985,
+    "text": "Solve & Share",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 494,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 12033,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 495,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12112,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 499,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12186,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 503,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12267,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 507,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12274,
+    "text": "Independent Practice",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 508,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 12363,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 511,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12410,
+    "text": "Lesson 11-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 514,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 12445,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 515,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12524,
+    "text": "Word List",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 519,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 12765,
+    "text": "Lesson 12-1",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 530,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 12797,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 531,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12819,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 532,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 12856,
+    "text": "Lesson 12-2",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 534,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 12897,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 535,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 12968,
+    "text": "Lesson 12-3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 538,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 13007,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 539,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 13056,
+    "text": "Lesson 12-4",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 542,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 13099,
+    "text": "Visual",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 543,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 13102,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 543,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 13316,
+    "text": "TOPIC 12 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 552,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 13432,
+    "text": "#",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 557,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 13454,
+    "text": "Lesson 13-1",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 558,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 13507,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 559,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 13581,
+    "text": "Lesson 13-2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 562,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 13644,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 563,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 13750,
+    "text": "Guided Practice",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 567,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 13774,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 567,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 13876,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 571,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 13932,
+    "text": "Lesson 13-5",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 574,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 13970,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 575,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14026,
+    "text": "Lesson 13-6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 578,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14032,
+    "text": "Thinking Habits",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 578,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 14067,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 579,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14166,
+    "text": "TOPIC 13 Vocabulary Review",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 583,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 14248,
+    "text": "TOPIC 13 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 586,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 14288,
+    "text": "TOPIC 13 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 588,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 14373,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 591,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 14419,
+    "text": "Lesson 14-1",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 594,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14467,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 595,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14511,
+    "text": "Lesson 14-2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 598,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14554,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 599,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14604,
+    "text": "Lesson 14-3",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 602,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14639,
+    "text": "#",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 603,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 14643,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 603,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14685,
+    "text": "Lesson 14-4",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 606,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14714,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 607,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14765,
+    "text": "Lesson 14-5",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 610,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14804,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 611,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14847,
+    "text": "Lesson 14-6",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 614,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 14852,
+    "text": "cube",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 614,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 14905,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 615,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 14947,
+    "text": "Lesson 14-7",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 618,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 15002,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 619,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 15056,
+    "text": "Lesson 14-8",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 622,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 15083,
+    "text": "Visual",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 623,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 15086,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 623,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 15160,
+    "text": "Lesson 14-9",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 626,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 15220,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 627,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 15426,
+    "text": "Reteaching",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 634,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 15478,
+    "text": "TOPIC 14 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 636,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 15518,
+    "text": "TOPIC 14 Assessment Practice Continued",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 638,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 15544,
+    "text": "TOPIC 14 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 640,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 15692,
+    "text": "Lesson 15-1",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 646,
+    "signals": [
+      "type:header",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 15722,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 647,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 15762,
+    "text": "Name",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 648,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 15793,
+    "text": "Lesson 15-2",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 650,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 15840,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 651,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 15936,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 655,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 15987,
+    "text": "Lesson 15-4",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 658,
+    "signals": [
+      "text_level:1",
+      "pattern:lesson_en"
+    ]
+  },
+  {
+    "id": 16023,
+    "text": "A-Z",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 659,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 16024,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 659,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 16111,
+    "text": "TOPIC 15 Vocabulary Review",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 663,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 16113,
+    "text": "Glossary",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 663,
+    "signals": [
+      "type:header",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 16195,
+    "text": "TOPIC 15 Assessment Practice",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 666,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 16249,
+    "text": "TOPIC 15 Performance Task",
+    "type": "header",
+    "text_level": null,
+    "page_idx": 668,
+    "signals": [
+      "type:header",
+      "pattern:topic_en"
+    ]
+  },
+  {
+    "id": 16271,
+    "text": "Glossary",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 670,
+    "signals": [
+      "text_level:1",
+      "pattern:appendix_en"
+    ]
+  },
+  {
+    "id": 16349,
+    "text": "doubles fact",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 672,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 16529,
+    "text": "ones",
+    "type": "text",
+    "text_level": 1,
+    "page_idx": 677,
+    "signals": [
+      "text_level:1"
+    ]
+  }
+]

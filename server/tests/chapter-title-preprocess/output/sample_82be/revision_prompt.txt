@@ -1,0 +1,394 @@
+You are an expert in analyzing educational textbook structures. Your task is to identify the real chapter/section titles from the "title candidate list" below and build an accurate, multi-level table of contents (TOC) tree.
+
+## Input Description
+
+Below is a list of "title candidates" extracted from an educational textbook (parsed from PDF via OCR). The document has 2556 text blocks across 161 pages. Each candidate contains:
+- **id**: Global unique ID of the original text block (DO NOT modify)
+- **page**: Page number (0-indexed)
+- **type**: OCR tool's type annotation (header or text)
+- **text_level**: Font-size-based level inferred by OCR (1 = large font title; null = not annotated)
+- **signals**: Pre-screening signals from code
+- **text**: Text content
+
+## Your Task
+
+### Step 1: Understand the document's organizational structure
+
+First, scan all candidates to understand the document's hierarchy. Common patterns include:
+- "Chapter > Section > Subsection" (e.g., "第19章 > 19.1 > 19.1(一)")
+- "Unit > Lesson" (e.g., "Unit 1 > Lesson 1-1")
+- "Topic > Lesson" (e.g., "TOPIC 3 > Lesson 3-1")
+- "Part > Unit > Section" (e.g., "Part 1 > Unit 1 > 1.1")
+- Flat structure with only topic-level titles (e.g., "Personal Pronouns", "Future Tense")
+
+### Step 2: Identify real structural titles
+
+**KEEP** items that define the document's organizational structure:
+- Top-level divisions (chapters, parts, units, topics, modules)
+- Second-level divisions (sections, lessons, numbered subsections)
+- Third-level divisions (sub-sections)
+- Functional sections with unique identifiers (e.g., "阶段训练①", "本章复习题(一)", "SUMMARY OF UNIT 8", "TOPIC 3 Assessment Practice")
+
+**EXCLUDE** all of the following:
+- Table of contents page entries (typically in the first few pages, listing titles with page numbers)
+- Repeated pedagogical labels that appear in EVERY unit/chapter with the same text (e.g., "REVIEW", "Practice", "Part 1 Editing Advice", "Part 2 Editing Practice", "Part 3 Write", "Part 4 Learner's Log")
+- Question type headers (e.g., "Part A", "Part B", "一、填空题")
+- Exercise instructions or activity labels
+- Page headers/footers
+
+**Critical distinction**: If a label like "REVIEW" or "PART 1 Editing Advice" appears in EVERY unit with the exact same text, it is a repeated pedagogical label and should be EXCLUDED. But if "TOPIC 3 Assessment Practice" appears only once (unique to Topic 3), it should be KEPT.
+
+### Step 3: Assign levels
+
+- **level 1**: Top-level structural divisions
+- **level 2**: Second-level divisions within level 1
+- **level 3**: Third-level divisions within level 2
+
+### Step 4: Build tree
+
+- level 1 nodes are top-level
+- level 2 nodes are children of the nearest preceding level 1
+- level 3 nodes are children of the nearest preceding level 2
+- Order strictly by page number
+
+## Important Notes
+
+- OCR may misrecognize characters (e.g., circled numbers ⑤ → 5)
+- **DO NOT create titles that don't exist in the candidate list**
+- **DO NOT include any item that is clearly a repeated template label**
+- The document may be in any language
+
+## Output Format
+
+Output ONLY valid JSON, no markdown fences:
+
+{
+  "document_title": "Document title or N/A",
+  "document_language": "zh-CN or en-US or other",
+  "chapters": [
+    {
+      "id": 129,
+      "text": "Title text",
+      "level": 1,
+      "page": 9,
+      "children": [
+        {
+          "id": 110,
+          "text": "Section title",
+          "level": 2,
+          "page": 9,
+          "children": []
+        }
+      ]
+    }
+  ],
+  "excluded_count": 123,
+  "notes": "Brief notes about structure decisions"
+}
+
+## Title Candidate List
+
+[
+  {"id": 0, "page": 0, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Cambridge IGCSE®"},
+  {"id": 1, "page": 0, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "First"},
+  {"id": 2, "page": 0, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Language"},
+  {"id": 3, "page": 0, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "English"},
+  {"id": 8, "page": 0, "type": "header", "text_level": null, "signals": "type:header", "text": "#"},
+  {"id": 9, "page": 0, "type": "header", "text_level": null, "signals": "type:header", "text": "CAMBRIDGE"},
+  {"id": 10, "page": 0, "type": "header", "text_level": null, "signals": "type:header", "text": "UNIVERSITY PRESS"},
+  {"id": 11, "page": 0, "type": "header", "text_level": null, "signals": "type:header", "text": "ENDORSED BY"},
+  {"id": 12, "page": 0, "type": "header", "text_level": null, "signals": "type:header", "text": "#"},
+  {"id": 14, "page": 0, "type": "header", "text_level": null, "signals": "type:header", "text": "International Examinations"},
+  {"id": 16, "page": 1, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Cambridge IGCSE®"},
+  {"id": 17, "page": 1, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "First"},
+  {"id": 18, "page": 1, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Language"},
+  {"id": 19, "page": 1, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "English"},
+  {"id": 25, "page": 2, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "CAMBRIDGE UNIVERSITY PRESS"},
+  {"id": 40, "page": 2, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "NOTICE TO TEACHERS"},
+  {"id": 45, "page": 3, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Contents"},
+  {"id": 61, "page": 4, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 63, "page": 5, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Introduction"},
+  {"id": 69, "page": 5, "type": "header", "text_level": null, "signals": "type:header", "text": "Introduction"},
+  {"id": 76, "page": 6, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 79, "page": 7, "type": "header", "text_level": null, "signals": "type:header", "text": "Skills grid"},
+  {"id": 82, "page": 8, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 85, "page": 9, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Part 1: Travel and sport"},
+  {"id": 89, "page": 9, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 1: Reading Comprehension"},
+  {"id": 104, "page": 10, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "VOCABULARY"},
+  {"id": 110, "page": 10, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Tenerife"},
+  {"id": 116, "page": 10, "type": "header", "text_level": null, "signals": "type:header", "text": "IGCSE First Language English"},
+  {"id": 127, "page": 11, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 1: Reading Comprehension"},
+  {"id": 129, "page": 12, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "CaPE Town"},
+  {"id": 132, "page": 12, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "DISCOVER SOUTH AFRICA"},
+  {"id": 137, "page": 12, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 138, "page": 13, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Day56-Luxor"},
+  {"id": 150, "page": 13, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 1: Reading Comprehension"},
+  {"id": 162, "page": 14, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 193, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Robinson Crusoe"},
+  {"id": 194, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "September 30, 1659."},
+  {"id": 197, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "From the 1st of October to the 24th."},
+  {"id": 199, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "October 26."},
+  {"id": 201, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The 31st."},
+  {"id": 203, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "November 1."},
+  {"id": 205, "page": 16, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "November 17."},
+  {"id": 208, "page": 16, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 212, "page": 17, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "January 2."},
+  {"id": 214, "page": 17, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "January 3."},
+  {"id": 226, "page": 17, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 1: Reading Comprehension"},
+  {"id": 231, "page": 18, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 2: Response Writing"},
+  {"id": 236, "page": 18, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "THE BIG CHILL"},
+  {"id": 244, "page": 18, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 255, "page": 19, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 2: Response Writing"},
+  {"id": 265, "page": 20, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 278, "page": 21, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 2: Response Writing"},
+  {"id": 296, "page": 22, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 311, "page": 23, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 2: Response Writing"},
+  {"id": 322, "page": 24, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The International Award"},
+  {"id": 324, "page": 24, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "What is it?"},
+  {"id": 326, "page": 24, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "What does the programme consist of?"},
+  {"id": 328, "page": 24, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The Sections"},
+  {"id": 331, "page": 24, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "What are the benefits of involvement?"},
+  {"id": 336, "page": 24, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 342, "page": 25, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "WHITE WATER ACTION IN VICTORIA FALLS"},
+  {"id": 353, "page": 25, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "SPLASH AND DASH - approx. March and June"},
+  {"id": 358, "page": 25, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "MULTI-DAY RAFTING ADVENTURES - low Water Only"},
+  {"id": 362, "page": 25, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "OVERNIGHT TRIPS - low Water Only"},
+  {"id": 366, "page": 25, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 2: Response Writing"},
+  {"id": 380, "page": 26, "type": "text", "text_level": null, "signals": "pattern:section_en", "text": "Section 1: Reason for writing / topic of letter"},
+  {"id": 381, "page": 26, "type": "text", "text_level": null, "signals": "pattern:section_en", "text": "Section 2: Background to and details of request / complaint / issue"},
+  {"id": 382, "page": 26, "type": "text", "text_level": null, "signals": "pattern:section_en", "text": "Section 3: Conclusion, threat, thanks, prediction, advice, warning"},
+  {"id": 390, "page": 26, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 404, "page": 27, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 2: Response Writing"},
+  {"id": 409, "page": 28, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 3: Continuous Writing"},
+  {"id": 420, "page": 28, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 439, "page": 29, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 3: Continuous Writing"},
+  {"id": 469, "page": 31, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 3: Continuous Writing"},
+  {"id": 472, "page": 32, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The Strawberry Pink Villa"},
+  {"id": 479, "page": 32, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 504, "page": 33, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 3: Continuous Writing"},
+  {"id": 512, "page": 34, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 524, "page": 35, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 3: Continuous Writing"},
+  {"id": 535, "page": 36, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 549, "page": 37, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 1 Unit 3: Continuous Writing"},
+  {"id": 562, "page": 39, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Part 2:"},
+  {"id": 563, "page": 39, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Work and education"},
+  {"id": 564, "page": 39, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 4: Reading Comprehension"},
+  {"id": 570, "page": 40, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "INTERNET GLOBAL LEADER"},
+  {"id": 571, "page": 40, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "How an 18-year-old computer whiz-kid from the UK became an international ‘Global Leader of Tomorrow’."},
+  {"id": 572, "page": 40, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Soccernet.com"},
+  {"id": 579, "page": 40, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 581, "page": 41, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Schoolsnet.com"},
+  {"id": 586, "page": 41, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "AeroDesigns, Inc."},
+  {"id": 593, "page": 41, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 4: Reading Comprehension"},
+  {"id": 605, "page": 42, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 607, "page": 43, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "How much is it all going to cost?"},
+  {"id": 613, "page": 43, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "How will I know how good the degree is?"},
+  {"id": 617, "page": 43, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "What else is there to think about?"},
+  {"id": 621, "page": 43, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 4: Reading Comprehension"},
+  {"id": 629, "page": 44, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "THE QINLING PANDAS"},
+  {"id": 648, "page": 44, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 651, "page": 45, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Why the old woman limps"},
+  {"id": 669, "page": 46, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "VOCABULARY"},
+  {"id": 678, "page": 46, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 693, "page": 47, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 4: Reading Comprehension"},
+  {"id": 702, "page": 48, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 711, "page": 49, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 4: Unit 4: Reading Comprehension"},
+  {"id": 717, "page": 50, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 5: Response Writing"},
+  {"id": 739, "page": 50, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 741, "page": 51, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "3 With a partner:"},
+  {"id": 752, "page": 51, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 5: Response Writing"},
+  {"id": 774, "page": 52, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 785, "page": 53, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 792, "page": 54, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "SPIDERMAN CLIMBS SKY HIGH"},
+  {"id": 810, "page": 54, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 5: Response Writing"},
+  {"id": 812, "page": 55, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "BANK ROBBER ESCAPES"},
+  {"id": 813, "page": 55, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "JOHN STUART GLADWIN"},
+  {"id": 816, "page": 55, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "DESCRIPTION"},
+  {"id": 823, "page": 55, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "CAUTION"},
+  {"id": 825, "page": 55, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "REWARD"},
+  {"id": 841, "page": 56, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 5: Response Writing"},
+  {"id": 846, "page": 57, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Rules for School Uniform"},
+  {"id": 853, "page": 57, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "KNITTERS OF THE WORLD SAVE PEPUGINS FROM EXTINCTION"},
+  {"id": 863, "page": 57, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 865, "page": 58, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 6: Continuous Writing"},
+  {"id": 878, "page": 58, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 6: Continuous Writing"},
+  {"id": 895, "page": 59, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 901, "page": 60, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "What's an Amish wedding like?"},
+  {"id": 911, "page": 60, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 6: Continuous Writing"},
+  {"id": 930, "page": 61, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 936, "page": 62, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "A day in the life of"},
+  {"id": 941, "page": 62, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Juana Oliveira"},
+  {"id": 945, "page": 62, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 6: Continuous Writing"},
+  {"id": 960, "page": 63, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 982, "page": 64, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 2 Unit 6: Continuous Writing"},
+  {"id": 985, "page": 65, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Part 3:"},
+  {"id": 986, "page": 65, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "People and society"},
+  {"id": 991, "page": 65, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 7: Reading Comprehension"},
+  {"id": 1000, "page": 66, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 7: Reading Comprehension"},
+  {"id": 1003, "page": 67, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Boald Dahl"},
+  {"id": 1019, "page": 67, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1040, "page": 68, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 7: Reading Comprehension"},
+  {"id": 1051, "page": 69, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Feb. 13, 2000"},
+  {"id": 1090, "page": 69, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1091, "page": 69, "type": "header", "text_level": null, "signals": "type:header", "text": "13 Read the obituary below, as published on the Internet."},
+  {"id": 1107, "page": 70, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text A"},
+  {"id": 1108, "page": 70, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "THE LIFE OF RASPUTIN"},
+  {"id": 1116, "page": 71, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text B"},
+  {"id": 1117, "page": 71, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The Death of Rasputin"},
+  {"id": 1118, "page": 71, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "This is the first-person account of Dr Lazovert, a conspirator in the plot against Rasputin."},
+  {"id": 1138, "page": 71, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1153, "page": 72, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 7: Reading Comprehension"},
+  {"id": 1169, "page": 73, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1171, "page": 74, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 8: Response to Reading"},
+  {"id": 1174, "page": 74, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "HOTEL PALDMA"},
+  {"id": 1175, "page": 74, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Location:"},
+  {"id": 1179, "page": 74, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Facilities:"},
+  {"id": 1185, "page": 74, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1199, "page": 75, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1214, "page": 76, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1216, "page": 77, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Lunch"},
+  {"id": 1217, "page": 77, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Mezze"},
+  {"id": 1219, "page": 77, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Seafood selection"},
+  {"id": 1221, "page": 77, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Soup"},
+  {"id": 1225, "page": 77, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Murghandilaziz"},
+  {"id": 1227, "page": 77, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Prawn biryani"},
+  {"id": 1233, "page": 77, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1236, "page": 78, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "For Sale"},
+  {"id": 1238, "page": 78, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "FOR SALE"},
+  {"id": 1244, "page": 78, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "8 With your partner:"},
+  {"id": 1247, "page": 78, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1250, "page": 79, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The joys of jogging"},
+  {"id": 1264, "page": 79, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1290, "page": 81, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text A"},
+  {"id": 1298, "page": 81, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1300, "page": 82, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text B"},
+  {"id": 1301, "page": 82, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Minimum driving ages around the world"},
+  {"id": 1307, "page": 82, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1319, "page": 83, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1322, "page": 84, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "VOCABULARY"},
+  {"id": 1333, "page": 84, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1337, "page": 85, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Aid to Africa International Constitution Square Frankfurt"},
+  {"id": 1341, "page": 85, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Dear Supporter,"},
+  {"id": 1347, "page": 85, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1359, "page": 86, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Dino Karides"},
+  {"id": 1365, "page": 86, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1383, "page": 87, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1396, "page": 88, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 8: Response to Reading"},
+  {"id": 1398, "page": 89, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 9: Continuous Writing"},
+  {"id": 1419, "page": 89, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1454, "page": 91, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1472, "page": 92, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 9: Continuous Writing"},
+  {"id": 1486, "page": 93, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1490, "page": 94, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Stopping by Woods on a Snowy Evening"},
+  {"id": 1498, "page": 94, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 9: Continuous Writing"},
+  {"id": 1512, "page": 95, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1523, "page": 96, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 3 Unit 9: Continuous Writing"},
+  {"id": 1526, "page": 97, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The eyes have it"},
+  {"id": 1559, "page": 97, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1585, "page": 99, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "WANTED:"},
+  {"id": 1590, "page": 99, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "FREE"},
+  {"id": 1594, "page": 99, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1597, "page": 100, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Part 4:"},
+  {"id": 1598, "page": 100, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Ideas and technology"},
+  {"id": 1599, "page": 100, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 10: Reading Comprehension"},
+  {"id": 1604, "page": 101, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The art and science of photography"},
+  {"id": 1615, "page": 101, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1618, "page": 102, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "One man"},
+  {"id": 1627, "page": 102, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Mini-sub statistics"},
+  {"id": 1639, "page": 102, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 10: Reading Comprehension"},
+  {"id": 1646, "page": 103, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Mikhail's mad invention"},
+  {"id": 1647, "page": 103, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Do-it-yourself submarine"},
+  {"id": 1648, "page": 103, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Pedal power!"},
+  {"id": 1649, "page": 103, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1651, "page": 104, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "KGB ARREST SPY SUSPECT"},
+  {"id": 1652, "page": 104, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Seasick sailor's secret"},
+  {"id": 1667, "page": 105, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The solution is Crystal Clear"},
+  {"id": 1678, "page": 105, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1684, "page": 106, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 10: Reading Comprehension"},
+  {"id": 1695, "page": 107, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1698, "page": 108, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "THE AMAZING INCAS"},
+  {"id": 1705, "page": 108, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 10: Reading Comprehension"},
+  {"id": 1715, "page": 109, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "IN SEARCH OF THE LOST CITY"},
+  {"id": 1719, "page": 109, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1732, "page": 110, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 10: Reading Comprehension"},
+  {"id": 1747, "page": 112, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 10: Reading Comprehension"},
+  {"id": 1749, "page": 113, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 11: Response Writing"},
+  {"id": 1752, "page": 113, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text A"},
+  {"id": 1760, "page": 113, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1762, "page": 114, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text B"},
+  {"id": 1763, "page": 114, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "FOX ATTACKS TODDLER IN LAKEWOOD"},
+  {"id": 1770, "page": 114, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text C"},
+  {"id": 1771, "page": 114, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fox that attacked little girl in New Jersey tested positive for rabies"},
+  {"id": 1785, "page": 114, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 11: Response Writing"},
+  {"id": 1807, "page": 115, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1817, "page": 116, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 11: Response Writing"},
+  {"id": 1828, "page": 117, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1836, "page": 118, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 11: Response Writing"},
+  {"id": 1838, "page": 119, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "11 Read the newspaper articles below about teenagers' use of language."},
+  {"id": 1839, "page": 119, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text A"},
+  {"id": 1849, "page": 119, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text B"},
+  {"id": 1854, "page": 119, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1887, "page": 121, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1906, "page": 123, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Safe landings"},
+  {"id": 1907, "page": 123, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Nothing can replace old-fashioned pilot skills"},
+  {"id": 1916, "page": 123, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1929, "page": 124, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 11: Response Writing"},
+  {"id": 1931, "page": 125, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 12: Continuous Writing"},
+  {"id": 1948, "page": 125, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1968, "page": 126, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 12: Continuous Writing"},
+  {"id": 1979, "page": 127, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 1984, "page": 128, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Text A"},
+  {"id": 1988, "page": 128, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 12: Continuous Writing"},
+  {"id": 2005, "page": 129, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2031, "page": 130, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 12: Continuous Writing"},
+  {"id": 2046, "page": 131, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2055, "page": 132, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 4 Unit 12: Continuous Writing"},
+  {"id": 2074, "page": 133, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2077, "page": 134, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Part 5:"},
+  {"id": 2078, "page": 134, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Speaking and Listening"},
+  {"id": 2079, "page": 134, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 13: Giving a talk and conducting a dialogue"},
+  {"id": 2095, "page": 135, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2097, "page": 136, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Games Children Play"},
+  {"id": 2114, "page": 136, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 13: Giving a talk and conducting a dialogue"},
+  {"id": 2141, "page": 137, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2161, "page": 138, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 13: Giving a talk and conducting a dialogue"},
+  {"id": 2179, "page": 139, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2193, "page": 140, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 13: Giving a talk and conducting a dialogue"},
+  {"id": 2210, "page": 141, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2217, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "DYNAMIC SALES EXECUTIVES"},
+  {"id": 2230, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Junior Designer"},
+  {"id": 2231, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Responsibilities include:"},
+  {"id": 2233, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Requirements:"},
+  {"id": 2241, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Red Star Shipping Company Ltd"},
+  {"id": 2242, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Receptionist / Booking Clerk"},
+  {"id": 2247, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "ADMINISTRATIVE ASSISTANT"},
+  {"id": 2248, "page": 143, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "General office administration:"},
+  {"id": 2254, "page": 143, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2278, "page": 145, "type": "text", "text_level": 1, "signals": "text_level:1, pattern:unit_en", "text": "Unit 14: Group discussion and making a speech"},
+  {"id": 2291, "page": 145, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2302, "page": 146, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fact"},
+  {"id": 2304, "page": 146, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Opinion"},
+  {"id": 2308, "page": 146, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 14: Group discussion and making a speech"},
+  {"id": 2311, "page": 147, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "WHY ARE ROCK FANS SO STUPID?"},
+  {"id": 2325, "page": 147, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2342, "page": 148, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 14: Group discussion and making a speech"},
+  {"id": 2350, "page": 149, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2363, "page": 151, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "I am prepared to die"},
+  {"id": 2372, "page": 151, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2382, "page": 152, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 14: Group discussion and making a speech"},
+  {"id": 2392, "page": 153, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2399, "page": 154, "type": "header", "text_level": null, "signals": "type:header", "text": "Part 5 Unit 14: Group discussion and making a speech"},
+  {"id": 2406, "page": 155, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2408, "page": 156, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "List of terms"},
+  {"id": 2452, "page": 156, "type": "header", "text_level": null, "signals": "type:header", "text": "List of terms"},
+  {"id": 2498, "page": 158, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Acknowledgements"},
+  {"id": 2501, "page": 158, "type": "header", "text_level": null, "signals": "type:header", "text": "Acknowledgements"},
+  {"id": 2515, "page": 159, "type": "header", "text_level": null, "signals": "type:header", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2517, "page": 160, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Cambridge IGCSE First Language English"},
+  {"id": 2518, "page": 160, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Coursebook"},
+  {"id": 2519, "page": 160, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Fourth edition"},
+  {"id": 2520, "page": 160, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "Marian Cox"},
+  {"id": 2524, "page": 160, "type": "text", "text_level": 1, "signals": "text_level:1", "text": "The Coursebook includes the following features:"}
+]
+
+Analyze the candidates and output the JSON result.
