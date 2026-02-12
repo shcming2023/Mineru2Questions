@@ -24,6 +24,11 @@ import {
   exportToMarkdown,
   LLMConfig
 } from './extraction';
+import {
+  preprocessChapters,
+  ChapterLLMConfig,
+  ChapterPreprocessResult
+} from './chapterPreprocess';
 
 /**
  * 启动任务处理
@@ -93,6 +98,43 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     const imagesFolder = path.dirname(contentListPath);
     const taskDir = imagesFolder;
     
+    // 4.5. 章节预处理（如果配置了长文本 LLM）
+    let chapterResult: ChapterPreprocessResult | null = null;
+    if (task.chapterConfigId) {
+      const chapterLlmConfig = await getLLMConfigById(task.chapterConfigId, userId);
+      if (chapterLlmConfig) {
+        await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理（零筛选全文推理）...');
+        try {
+          const chapterConfig: ChapterLLMConfig = {
+            apiUrl: chapterLlmConfig.apiUrl,
+            apiKey: chapterLlmConfig.apiKey,
+            modelName: chapterLlmConfig.modelName,
+            timeout: (chapterLlmConfig.timeout || 120) * 1000,
+          };
+          chapterResult = await preprocessChapters(
+            contentListPath,
+            taskDir,
+            chapterConfig,
+            async (msg) => {
+              await logTaskProgress(taskId, 'info', 'chapter_preprocess', msg);
+            }
+          );
+          await logTaskProgress(taskId, 'info', 'chapter_preprocess',
+            `章节预处理完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
+        } catch (err: any) {
+          console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
+          await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
+            `章节预处理失败，回退到 LLM 自行判断章节: ${err.message}`);
+          // 不抛异常，回退到无章节预处理模式
+        }
+      } else {
+        await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
+          `章节预处理 LLM 配置 ${task.chapterConfigId} 未找到，跳过章节预处理`);
+      }
+    } else {
+      await logTaskProgress(taskId, 'info', 'chapter_preprocess', '未配置章节预处理 LLM，跳过章节预处理');
+    }
+    
     const lastProgress = { currentChunk: 0, totalChunks: 0, completedChunks: 0 };
 
     // 5. 调用核心提取函数
@@ -102,6 +144,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       imagesFolder, 
       taskDir, 
       config,
+      chapterResult?.flatMap ?? null,
       async (progress, message, stats) => {
         if (stats?.currentChunk && stats?.totalChunks) {
           lastProgress.currentChunk = stats.currentChunk;

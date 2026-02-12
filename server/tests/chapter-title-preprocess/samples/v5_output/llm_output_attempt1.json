@@ -1,0 +1,36 @@
+{
+  "chapters": [
+    {
+      "id": 202,
+      "level": 1,
+      "children": [
+        { "id": 203, "level": 2 },
+        { "id": 212, "level": 2 },
+        { "id": 239, "level": 2 },
+        { "id": 245, "level": 2 },
+        { "id": 262, "level": 2 },
+        { "id": 286, "level": 2 },
+        { "id": 303, "level": 2 },
+        { "id": 328, "level": 2 },
+        { "id": 340, "level": 2 },
+        { "id": 353, "level": 2 }
+      ]
+    },
+    {
+      "id": 386,
+      "level": 1,
+      "children": [
+        { "id": 387, "level": 2 },
+        { "id": 411, "level": 2 },
+        { "id": 422, "level": 2 },
+        { "id": 436, "level": 2 },
+        { "id": 468, "level": 2 }
+      ]
+    }
+  ],
+  "stats": {
+    "total_candidates": 473,
+    "selected_count": 17,
+    "excluded_count": 456
+  }
+}

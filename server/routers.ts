@@ -62,7 +62,8 @@ const llmConfigRouter = router({
       modelName: z.string().min(1).max(128),
       maxWorkers: z.number().min(1).max(50).default(5),
       timeout: z.number().min(30).max(1800).default(300),
-      isDefault: z.boolean().default(false)
+      isDefault: z.boolean().default(false),
+      purpose: z.enum(["vision_extract", "long_context", "general"]).default("vision_extract")
     }))
     .mutation(async ({ ctx, input }) => {
       const id = await createLLMConfig({
@@ -82,7 +83,8 @@ const llmConfigRouter = router({
       modelName: z.string().min(1).max(128).optional(),
       maxWorkers: z.number().min(1).max(50).optional(),
       timeout: z.number().min(30).max(1800).optional(),
-      isDefault: z.boolean().optional()
+      isDefault: z.boolean().optional(),
+      purpose: z.enum(["vision_extract", "long_context", "general"]).optional()
     }))
     .mutation(async ({ ctx, input }) => {
       const { id, ...updates } = input;
@@ -186,6 +188,7 @@ const taskRouter = router({
     .input(z.object({
       name: z.string().min(1).max(256),
       configId: z.number().optional(),
+      chapterConfigId: z.number().optional(),
       sourceFolder: z.string(), // S3文件夹路径
       markdownPath: z.string().optional(),
       contentListPath: z.string().optional(),
@@ -202,9 +205,13 @@ const taskRouter = router({
         }
       }
       
+      // 章节预处理配置：如果没有指定，尝试使用用户的默认长文本配置
+      let chapterConfigId = input.chapterConfigId;
+      
       const id = await createExtractionTask({
         ...input,
         configId,
+        chapterConfigId,
         userId: ctx.user.id,
         status: "pending"
       });

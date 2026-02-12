@@ -31,6 +31,7 @@ export const llmConfigs = sqliteTable("llm_configs", {
   maxWorkers: integer("maxWorkers").default(5).notNull(), // 并发数
   timeout: integer("timeout").default(300).notNull(), // 超时时间(秒)
   isDefault: integer("isDefault", { mode: "boolean" }).default(false).notNull(), // 是否为默认配置
+  purpose: text("purpose", { enum: ["vision_extract", "long_context", "general"] }).default("vision_extract").notNull(), // 用途：视觉抽取 / 长文本推理 / 通用
   createdAt: integer("createdAt", { mode: "timestamp" }).defaultNow().notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp" }).defaultNow().notNull(),
 });
@@ -44,7 +45,8 @@ export type InsertLLMConfig = typeof llmConfigs.$inferInsert;
 export const extractionTasks = sqliteTable("extraction_tasks", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   userId: integer("userId").notNull(),
-  configId: integer("configId"), // 关联的LLM配置
+  configId: integer("configId"), // 关联的LLM配置（题目抽取用）
+  chapterConfigId: integer("chapterConfigId"), // 关联的LLM配置（章节预处理用）
   name: text("name", { length: 256 }).notNull(), // 任务名称(教材名)
   status: text("status", { enum: ["pending", "processing", "completed", "failed", "paused"] }).default("pending").notNull(),
   

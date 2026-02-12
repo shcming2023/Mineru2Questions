@@ -1,0 +1,898 @@
+[
+  {
+    "id": 0,
+    "text": "新思路",
+    "page": 0,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 4,
+    "text": "数学",
+    "page": 0,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 9,
+    "text": "上海市教辅畅销品牌",
+    "page": 0,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 13,
+    "text": "数学",
+    "page": 1,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 17,
+    "text": "新思路",
+    "page": 1,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 19,
+    "text": "内容提要",
+    "page": 2,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 21,
+    "text": "图书在版编目（CIP）数据",
+    "page": 2,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 44,
+    "text": "出版说明",
+    "page": 3,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 60,
+    "text": "目录",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 61,
+    "text": "第19章 实数",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 62,
+    "text": "19.1 平方根与立方根 1",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 64,
+    "text": "阶段训练1 11",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 65,
+    "text": "19.2 实数 13",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 67,
+    "text": "本章复习题(一) 32",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 68,
+    "text": "本章复习题(二) 35",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 69,
+    "text": "第20章 二次根式 … 38",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 70,
+    "text": "20.1 二次根式及其性质 38",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 72,
+    "text": "20.2 二次根式的运算 47",
+    "page": 5,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 80,
+    "text": "第21章 一元二次方程 75",
+    "page": 6,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 92,
+    "text": "第22章 直角三角形 140",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 93,
+    "text": "22.1 直角三角形 140",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 95,
+    "text": "22.2角平分线 148",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 97,
+    "text": "阶段训练7 156",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 98,
+    "text": "22.3 勾股定理 160",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 100,
+    "text": "阶段训练8 168",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 102,
+    "text": "阶段训练9 180",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 103,
+    "text": "本章复习题 184",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 104,
+    "text": "期末测试卷A卷 189",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 105,
+    "text": "期末测试卷B卷 195",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 106,
+    "text": "附：",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 107,
+    "text": "参考答案",
+    "page": 7,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 109,
+    "text": "19.1 平方根与立方根",
+    "page": 9,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 110,
+    "text": "19.1(一) 算术平方根",
+    "page": 9,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 129,
+    "text": "第19章 实数",
+    "page": 9,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 155,
+    "text": "19.1(二) 平方根",
+    "page": 11,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 221,
+    "text": "19.1(三) 立方根",
+    "page": 15,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 245,
+    "text": "自基础训练",
+    "page": 16,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 276,
+    "text": "阶段训练 ①",
+    "page": 19,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 302,
+    "text": "19.2 实数",
+    "page": 21,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 303,
+    "text": "19.2（一） 有理数的小数形式",
+    "page": 21,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 355,
+    "text": "19.2（二） 无理数",
+    "page": 24,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 407,
+    "text": "19.2(三) 实数与数轴",
+    "page": 27,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 455,
+    "text": "19.2（四） 实数的绝对值和大小比较",
+    "page": 30,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 523,
+    "text": "19.2(五) 实数的运算",
+    "page": 34,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 573,
+    "text": "19.2(六） 科学记数法",
+    "page": 37,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 634,
+    "text": "本章复习题（一）",
+    "page": 40,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 663,
+    "text": "本章复习题（二）",
+    "page": 43,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 708,
+    "text": "20.1 二次根式及其性质",
+    "page": 46,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 709,
+    "text": "20.1(一) 二次根式的概念",
+    "page": 46,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 727,
+    "text": "第20章 二次根式",
+    "page": 46,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 768,
+    "text": "20.1(二） 二次根式的性质及最简二次根式",
+    "page": 49,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 886,
+    "text": "20.2 二次根式的运算",
+    "page": 55,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 887,
+    "text": "20.2（一）同类二次根式及二次根式的加减法",
+    "page": 55,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 972,
+    "text": "阶段训练②",
+    "page": 61,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1036,
+    "text": "20.2（二） 二次根式的乘法和除法",
+    "page": 64,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1080,
+    "text": "20.2(三） 分母有理化",
+    "page": 67,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1155,
+    "text": "20.2（四） 二次根式的混合运算",
+    "page": 71,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1211,
+    "text": "阶段训练③",
+    "page": 76,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1271,
+    "text": "第21章 一元二次方程",
+    "page": 83,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1272,
+    "text": "21.1 一元二次方程的概念",
+    "page": 83,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1330,
+    "text": "21.2 一元二次方程的解法",
+    "page": 86,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1331,
+    "text": "21.2(一）特殊的一元二次方程的解法——因式分解法",
+    "page": 86,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1388,
+    "text": "21.2（二）用开平方的方法解特殊的一元二次方程",
+    "page": 90,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1445,
+    "text": "21.2(三） 一般的一元二次方程的解法——配方法",
+    "page": 94,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1511,
+    "text": "21.2（四） 一般的一元二次方程的解法——公式法",
+    "page": 98,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1559,
+    "text": "21.2(五） 用合适的方法解一元二次方程",
+    "page": 102,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1614,
+    "text": "阶段训练④",
+    "page": 106,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1646,
+    "text": "21.3 一元二次方程的判别式",
+    "page": 109,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1647,
+    "text": "21.3(一） 一元二次方程的根的判别式",
+    "page": 109,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1701,
+    "text": "21.3(二） 一元二次方程的根的判别式的应用",
+    "page": 112,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1748,
+    "text": "21.4 一元二次方程的根与系数的关系",
+    "page": 116,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1749,
+    "text": "21.4(一） 一元二次方程的根与系数的关系(1)",
+    "page": 116,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1810,
+    "text": "21.4(二） 一元二次方程的根与系数的关系(2)",
+    "page": 119,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1867,
+    "text": "21.5 一元二次方程的应用",
+    "page": 124,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1868,
+    "text": "21.5(一) 二次三项式的因式分解",
+    "page": 124,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1939,
+    "text": "阶段训练 5",
+    "page": 128,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 1991,
+    "text": "21.5(二) 列方程解实际问题",
+    "page": 131,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2040,
+    "text": "21.5(三） 解分式方程",
+    "page": 134,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2087,
+    "text": "21.5（四） 列分式方程解应用题",
+    "page": 138,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2122,
+    "text": "阶段训练 ⑥",
+    "page": 141,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2207,
+    "text": "22.1 直角三角形",
+    "page": 148,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2208,
+    "text": "22.1(一) 直角三角形的性质",
+    "page": 148,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2221,
+    "text": "第22章 直角三角形",
+    "page": 148,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 2270,
+    "text": "22.1（二） 直角三角形全等的判定",
+    "page": 152,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2331,
+    "text": "22.2 角平分线",
+    "page": 156,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2332,
+    "text": "22.2（一） 角平分线性质定理",
+    "page": 156,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2418,
+    "text": "22.2（二） 角平分线的综合运用",
+    "page": 161,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2479,
+    "text": "阶段训练⑦",
+    "page": 164,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2519,
+    "text": "22.3 勾股定理",
+    "page": 168,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2520,
+    "text": "22.3(一) 勾股定理的证明",
+    "page": 168,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2569,
+    "text": "22.3(二) 勾股定理的应用",
+    "page": 171,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2638,
+    "text": "阶段训练⑧",
+    "page": 176,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2686,
+    "text": "22.3(三) 勾股定理的逆定理及其证明",
+    "page": 179,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2768,
+    "text": "22.3（四） 勾股定理及其逆定理的应用",
+    "page": 183,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2864,
+    "text": "阶段训练⑨",
+    "page": 188,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2952,
+    "text": "期末测试卷",
+    "page": 197,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2953,
+    "text": "一、填空题（共15小题，每题2分，共30分）",
+    "page": 197,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2970,
+    "text": "A卷",
+    "page": 197,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 2975,
+    "text": "二、选择题（共4小题，每题2分，共8分）",
+    "page": 198,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 2998,
+    "text": "三、计算题（共4小题，每题4分，共16分）",
+    "page": 198,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3008,
+    "text": "五、综合题（共2小题，第28题8分，第29题10分，共18分）",
+    "page": 200,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3010,
+    "text": "“平方和”等式宝塔的构建",
+    "page": 200,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3033,
+    "text": "期末测试卷",
+    "page": 203,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3034,
+    "text": "一、填空题（共16小题，每题2分，共32分）",
+    "page": 203,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3050,
+    "text": "B卷",
+    "page": 203,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 3056,
+    "text": "二、选择题（共5小题，每题2分，共10分）",
+    "page": 204,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3079,
+    "text": "三、解答题（共4小题，第22题6分，第23题6分，第24题8分，第25题8分，共28分）",
+    "page": 205,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3102,
+    "text": "辅导得当，训练有素",
+    "page": 209,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3104,
+    "text": "新思路辅导与训练",
+    "page": 209,
+    "signals": [
+      "text_level:1"
+    ]
+  },
+  {
+    "id": 3112,
+    "text": "世纪出版",
+    "page": 209,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 3113,
+    "text": "责任编辑 杨铮园",
+    "page": 209,
+    "signals": [
+      "type:header"
+    ]
+  },
+  {
+    "id": 3114,
+    "text": "美术编辑 诸梦婷",
+    "page": 209,
+    "signals": [
+      "type:header"
+    ]
+  }
+]

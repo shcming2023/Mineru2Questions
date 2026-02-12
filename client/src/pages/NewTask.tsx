@@ -7,8 +7,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { trpc } from "@/lib/trpc";
 import { ArrowLeft, Upload, FolderOpen, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { useLocation } from "wouter";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { toast } from "sonner";
+import { PURPOSE_LABELS, type LLMPurpose } from "../../../shared/llm-presets";
 
 interface FileInfo {
   name: string;
@@ -26,10 +27,17 @@ interface FolderStructure {
   totalPages: number;
 }
 
+const PURPOSE_BADGE_COLORS: Record<LLMPurpose, string> = {
+  vision_extract: "text-blue-600",
+  long_context: "text-purple-600",
+  general: "text-gray-600",
+};
+
 export default function NewTask() {
   const [, setLocation] = useLocation();
   const [taskName, setTaskName] = useState("");
   const [selectedConfigId, setSelectedConfigId] = useState<string>("");
+  const [selectedChapterConfigId, setSelectedChapterConfigId] = useState<string>("");
   const [folderStructure, setFolderStructure] = useState<FolderStructure | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -44,6 +52,17 @@ export default function NewTask() {
     },
     onError: (error) => toast.error(error.message),
   });
+
+  // 按用途分类配置
+  const visionConfigs = useMemo(() => 
+    configs?.filter((c: any) => !c.purpose || c.purpose === 'vision_extract' || c.purpose === 'general') || [],
+    [configs]
+  );
+  
+  const longContextConfigs = useMemo(() => 
+    configs?.filter((c: any) => c.purpose === 'long_context' || c.purpose === 'general') || [],
+    [configs]
+  );
 
   // 处理文件夹选择
   const handleFolderSelect = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -194,6 +213,7 @@ export default function NewTask() {
       await createTaskMutation.mutateAsync({
         name: taskName,
         configId: selectedConfigId ? parseInt(selectedConfigId) : undefined,
+        chapterConfigId: selectedChapterConfigId ? parseInt(selectedChapterConfigId) : undefined,
         sourceFolder: baseKey,
         contentListPath: contentListKey,
         markdownPath: markdownKey,
@@ -217,7 +237,7 @@ export default function NewTask() {
           </Button>
           <div>
             <h1 className="text-2xl font-bold tracking-tight">新建提取任务</h1>
-            <p className="text-muted-foreground">上传MinerU解析结果,开始提取数学题目</p>
+            <p className="text-muted-foreground">上传MinerU解析结果,开始提取题目</p>
           </div>
         </div>
 
@@ -303,24 +323,57 @@ export default function NewTask() {
               />
             </div>
 
-            {/* LLM配置选择 */}
+            {/* LLM配置选择 - 题目抽取 */}
             <div className="space-y-2">
-              <Label>LLM配置</Label>
+              <Label>题目抽取 LLM 配置 <span className="text-blue-600 text-xs">(视觉模型)</span></Label>
               <Select value={selectedConfigId} onValueChange={setSelectedConfigId}>
                 <SelectTrigger>
-                  <SelectValue placeholder="选择LLM配置(可选)" />
+                  <SelectValue placeholder="选择题目抽取 LLM 配置(可选)" />
                 </SelectTrigger>
                 <SelectContent>
                   {configs?.map((config) => (
                     <SelectItem key={config.id} value={config.id.toString()}>
-                      {config.name} ({config.modelName})
-                      {config.isDefault && " - 默认"}
+                      <span>{config.name}</span>
+                      <span className="text-muted-foreground ml-1">({config.modelName})</span>
+                      {config.isDefault && <span className="text-primary ml-1">- 默认</span>}
+                      <span className={`ml-1 text-xs ${PURPOSE_BADGE_COLORS[(config as any).purpose as LLMPurpose] || ''}`}>
+                        [{PURPOSE_LABELS[(config as any).purpose as LLMPurpose] || '通用'}]
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                如未选择,将使用默认配置。如无配置,请先在设置页面添加。
+                用于分块处理题目提取，推荐使用视觉语言模型（如 Qwen2.5-VL、GPT-4o）
+              </p>
+            </div>
+
+            {/* LLM配置选择 - 章节预处理 */}
+            <div className="space-y-2">
+              <Label>章节预处理 LLM 配置 <span className="text-purple-600 text-xs">(长文本模型)</span></Label>
+              <Select value={selectedChapterConfigId} onValueChange={setSelectedChapterConfigId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="选择章节预处理 LLM 配置(可选)" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">
+                    <span className="text-muted-foreground">不使用章节预处理</span>
+                  </SelectItem>
+                  {configs?.map((config) => (
+                    <SelectItem key={config.id} value={config.id.toString()}>
+                      <span>{config.name}</span>
+                      <span className="text-muted-foreground ml-1">({config.modelName})</span>
+                      {config.isDefault && <span className="text-primary ml-1">- 默认</span>}
+                      <span className={`ml-1 text-xs ${PURPOSE_BADGE_COLORS[(config as any).purpose as LLMPurpose] || ''}`}>
+                        [{PURPOSE_LABELS[(config as any).purpose as LLMPurpose] || '通用'}]
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                用于全文推理构建章节目录树，推荐使用长上下文模型（如 Gemini 2.5 Flash 1M、DeepSeek-V3 128K）。
+                如不选择，将由题目抽取 LLM 自行判断章节。
               </p>
             </div>
 

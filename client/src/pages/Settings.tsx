@@ -28,7 +28,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { LLM_PRESETS, getPresetById, type LLMPreset } from "../../../shared/llm-presets";
+import { LLM_PRESETS, getPresetById, type LLMPreset, PURPOSE_LABELS, type LLMPurpose } from "../../../shared/llm-presets";
 
 interface ConfigForm {
   presetId: string;
@@ -39,6 +39,7 @@ interface ConfigForm {
   maxWorkers: number;
   timeout: number;
   isDefault: boolean;
+  purpose: LLMPurpose;
 }
 
 const STORAGE_KEY = "llm_config_last_values";
@@ -52,6 +53,7 @@ const defaultForm: ConfigForm = {
   maxWorkers: 5,
   timeout: 300,
   isDefault: false,
+  purpose: "vision_extract",
 };
 
 // 从localStorage加载上次的配置值
@@ -76,6 +78,12 @@ function saveLastConfig(form: ConfigForm) {
   }
 }
 
+const PURPOSE_BADGE_COLORS: Record<LLMPurpose, string> = {
+  vision_extract: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
+  long_context: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+  general: "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200",
+};
+
 export default function Settings() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -89,7 +97,7 @@ export default function Settings() {
   const createMutation = trpc.llmConfig.create.useMutation({
     onSuccess: () => {
       toast.success("配置创建成功");
-      saveLastConfig(form); // 保存配置值
+      saveLastConfig(form);
       setIsDialogOpen(false);
       setForm(defaultForm);
       utils.llmConfig.list.invalidate();
@@ -100,7 +108,7 @@ export default function Settings() {
   const updateMutation = trpc.llmConfig.update.useMutation({
     onSuccess: () => {
       toast.success("配置更新成功");
-      saveLastConfig(form); // 保存配置值
+      saveLastConfig(form);
       setIsDialogOpen(false);
       setForm(defaultForm);
       setEditingId(null);
@@ -146,18 +154,16 @@ export default function Settings() {
       modelName: preset.defaultModel,
       maxWorkers: preset.defaultMaxWorkers,
       timeout: preset.defaultTimeout,
+      purpose: preset.primaryPurpose || "general",
     }));
   };
 
   const handleOpenCreate = () => {
     setEditingId(null);
     
-    // 尝试加载上次的配置值
     const lastConfig = loadLastConfig();
     const initialForm = { ...defaultForm, ...lastConfig };
     
-    // 如果有预设，确保apiUrl和modelName有值
-    // 特别是对于首次加载，defaultForm中的apiUrl为空，需要从预设填充
     const preset = getPresetById(initialForm.presetId);
     if (preset) {
       if (!initialForm.apiUrl) initialForm.apiUrl = preset.baseUrl;
@@ -175,7 +181,6 @@ export default function Settings() {
   const handleOpenEdit = (config: any) => {
     setEditingId(config.id);
     
-    // 尝试从预设中匹配
     let matchedPresetId = "custom";
     for (const preset of LLM_PRESETS) {
       if (preset.baseUrl && config.apiUrl.includes(preset.baseUrl.split('/v1')[0])) {
@@ -191,11 +196,12 @@ export default function Settings() {
       presetId: matchedPresetId,
       name: config.name,
       apiUrl: config.apiUrl,
-      apiKey: "", // 不显示原密钥
+      apiKey: "",
       modelName: config.modelName,
       maxWorkers: config.maxWorkers,
       timeout: config.timeout,
       isDefault: config.isDefault,
+      purpose: config.purpose || "vision_extract",
     });
     setTestResult(null);
     setIsDialogOpen(true);
@@ -216,6 +222,7 @@ export default function Settings() {
       updates.maxWorkers = form.maxWorkers;
       updates.timeout = form.timeout;
       updates.isDefault = form.isDefault;
+      updates.purpose = form.purpose;
       updateMutation.mutate(updates);
     } else {
       if (!form.apiKey) {
@@ -245,7 +252,7 @@ export default function Settings() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">设置</h1>
-            <p className="text-muted-foreground">管理LLM API配置</p>
+            <p className="text-muted-foreground">管理LLM API配置，不同流水线阶段可使用不同的模型</p>
           </div>
           <Button onClick={handleOpenCreate}>
             <Plus className="mr-2 h-4 w-4" />
@@ -257,7 +264,9 @@ export default function Settings() {
           <CardHeader>
             <CardTitle>LLM API配置</CardTitle>
             <CardDescription>
-              配置用于题目提取的视觉语言模型API。支持OpenAI兼容的API接口。
+              配置用于不同流水线阶段的LLM API。
+              <strong>视觉抽取</strong>用于题目提取（需要理解图片），
+              <strong>长文本推理</strong>用于章节预处理（需要大上下文窗口）。
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -288,6 +297,9 @@ export default function Settings() {
                             默认
                           </span>
                         )}
+                        <span className={`text-xs px-2 py-0.5 rounded ${PURPOSE_BADGE_COLORS[(config as any).purpose as LLMPurpose] || PURPOSE_BADGE_COLORS.general}`}>
+                          {PURPOSE_LABELS[(config as any).purpose as LLMPurpose] || PURPOSE_LABELS.general}
+                        </span>
                       </div>
                       <div className="text-sm text-muted-foreground">
                         <span>模型: {config.modelName}</span>
@@ -351,6 +363,36 @@ export default function Settings() {
             </DialogHeader>
             
             <div className="space-y-4 py-4">
+              {/* 用途选择 */}
+              <div className="space-y-2">
+                <Label htmlFor="purpose">用途 *</Label>
+                <Select value={form.purpose} onValueChange={(value) => setForm({ ...form, purpose: value as LLMPurpose })}>
+                  <SelectTrigger id="purpose">
+                    <SelectValue placeholder="选择用途" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="vision_extract">
+                      <div className="flex flex-col">
+                        <span>视觉抽取</span>
+                        <span className="text-xs text-muted-foreground">用于题目提取，需要理解图片/公式</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="long_context">
+                      <div className="flex flex-col">
+                        <span>长文本推理</span>
+                        <span className="text-xs text-muted-foreground">用于章节预处理，需要 100K+ 上下文窗口</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="general">
+                      <div className="flex flex-col">
+                        <span>通用</span>
+                        <span className="text-xs text-muted-foreground">可用于多种任务</span>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {/* 预设提供商选择器 */}
               <div className="space-y-2">
                 <Label htmlFor="preset">模型提供商 *</Label>
@@ -362,6 +404,11 @@ export default function Settings() {
                     {LLM_PRESETS.map((preset) => (
                       <SelectItem key={preset.id} value={preset.id}>
                         {preset.name}
+                        {preset.primaryPurpose && (
+                          <span className="ml-2 text-xs text-muted-foreground">
+                            ({PURPOSE_LABELS[preset.primaryPurpose]})
+                          </span>
+                        )}
                       </SelectItem>
                     ))}
                   </SelectContent>

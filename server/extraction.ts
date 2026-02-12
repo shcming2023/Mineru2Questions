@@ -24,6 +24,7 @@ import axios from 'axios';
 import axiosRetry from 'axios-retry';
 import { QuestionParser, ExtractedQuestion } from './parser';
 import { QUESTION_EXTRACT_PROMPT } from './prompts';
+import { ChapterFlatEntry, findChapterForBlock } from './chapterPreprocess';
 
 // ============= 类型定义 =============
 
@@ -95,6 +96,7 @@ export async function extractQuestions(
   imagesFolder: string,
   taskDir: string,
   llmConfig: LLMConfig,
+  chapterFlatMap: ChapterFlatEntry[] | null,
   onProgress?: (progress: number, message: string, stats?: { currentChunk?: number, totalChunks?: number, completedChunks?: number }) => Promise<void>
 ): Promise<ExtractedQuestion[]> {
   
@@ -241,8 +243,28 @@ export async function extractQuestions(
     }
   }
 
-  // 5.5. 清洗章节标题
-  const cleanedQuestions = cleanChapterTitles(uniqueQuestions);
+  // 5.5. 章节标题处理
+  let cleanedQuestions: ExtractedQuestion[];
+  if (chapterFlatMap && chapterFlatMap.length > 0) {
+    // 使用预处理的章节目录树覆盖 LLM 自行判断的章节标题
+    console.log(`[Extraction] 使用章节预处理结果覆盖章节标题 (${chapterFlatMap.length} 个章节条目)`);
+    for (const q of uniqueQuestions) {
+      // 通过 questionIds 的第一个 ID 查找所属章节
+      if (q.questionIds) {
+        const firstId = parseInt(q.questionIds.split(',')[0].trim(), 10);
+        if (!isNaN(firstId)) {
+          const chapterPath = findChapterForBlock(firstId, chapterFlatMap);
+          if (chapterPath) {
+            q.chapter_title = chapterPath;
+          }
+        }
+      }
+    }
+    cleanedQuestions = uniqueQuestions;
+  } else {
+    // 回退：使用原有的章节标题清洗逻辑
+    cleanedQuestions = cleanChapterTitles(uniqueQuestions);
+  }
   
   // 6. 质量过滤
   const filteredQuestions = filterLowQuality(cleanedQuestions);

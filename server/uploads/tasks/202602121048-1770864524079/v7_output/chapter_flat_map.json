@@ -1,0 +1,275 @@
+[
+  {
+    "id": 61,
+    "text": "第19章 实数",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 61,
+      "end": 62
+    },
+    "parent_id": null
+  },
+  {
+    "id": 62,
+    "text": "19.1 平方根与立方根 1",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 62,
+      "end": 64
+    },
+    "parent_id": 61
+  },
+  {
+    "id": 64,
+    "merged_ids": [
+      64,
+      276
+    ],
+    "text": "阶段训练1 11 阶段训练 ①",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 64,
+      "end": 65
+    },
+    "parent_id": 61
+  },
+  {
+    "id": 65,
+    "text": "19.2 实数 13",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 65,
+      "end": 69
+    },
+    "parent_id": 61
+  },
+  {
+    "id": 69,
+    "text": "第20章 二次根式 … 38",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 69,
+      "end": 70
+    },
+    "parent_id": null
+  },
+  {
+    "id": 70,
+    "text": "20.1 二次根式及其性质 38",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 70,
+      "end": 72
+    },
+    "parent_id": 69
+  },
+  {
+    "id": 72,
+    "text": "20.2 二次根式的运算 47",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 72,
+      "end": 80
+    },
+    "parent_id": 69
+  },
+  {
+    "id": 80,
+    "text": "第21章 一元二次方程 75",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 80,
+      "end": 92
+    },
+    "parent_id": null
+  },
+  {
+    "id": 92,
+    "text": "第22章 直角三角形 140",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 92,
+      "end": 93
+    },
+    "parent_id": null
+  },
+  {
+    "id": 93,
+    "text": "22.1 直角三角形 140",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 93,
+      "end": 95
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 95,
+    "text": "22.2角平分线 148",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 95,
+      "end": 97
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 97,
+    "merged_ids": [
+      97,
+      100,
+      102
+    ],
+    "text": "阶段训练7 156 阶段训练8 168 阶段训练9 180",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 97,
+      "end": 98
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 98,
+    "text": "22.3 勾股定理 160",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 98,
+      "end": 221
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 221,
+    "text": "19.1(三) 立方根",
+    "level": 1,
+    "page": 15,
+    "block_range": {
+      "start": 221,
+      "end": 245
+    },
+    "parent_id": null
+  },
+  {
+    "id": 245,
+    "text": "自基础训练",
+    "level": 1,
+    "page": 16,
+    "block_range": {
+      "start": 245,
+      "end": 302
+    },
+    "parent_id": null
+  },
+  {
+    "id": 302,
+    "text": "19.2 实数",
+    "level": 1,
+    "page": 21,
+    "block_range": {
+      "start": 302,
+      "end": 634
+    },
+    "parent_id": null
+  },
+  {
+    "id": 634,
+    "text": "本章复习题（一）",
+    "level": 1,
+    "page": 40,
+    "block_range": {
+      "start": 634,
+      "end": 663
+    },
+    "parent_id": null
+  },
+  {
+    "id": 663,
+    "text": "本章复习题（二）",
+    "level": 1,
+    "page": 43,
+    "block_range": {
+      "start": 663,
+      "end": 1271
+    },
+    "parent_id": null
+  },
+  {
+    "id": 1271,
+    "text": "第21章 一元二次方程",
+    "level": 1,
+    "page": 83,
+    "block_range": {
+      "start": 1271,
+      "end": 1272
+    },
+    "parent_id": null
+  },
+  {
+    "id": 1272,
+    "text": "21.1 一元二次方程的概念",
+    "level": 2,
+    "page": 83,
+    "block_range": {
+      "start": 1272,
+      "end": 1330
+    },
+    "parent_id": 1271
+  },
+  {
+    "id": 1330,
+    "text": "21.2 一元二次方程的解法",
+    "level": 2,
+    "page": 86,
+    "block_range": {
+      "start": 1330,
+      "end": 1646
+    },
+    "parent_id": 1271
+  },
+  {
+    "id": 1646,
+    "text": "21.3 一元二次方程的判别式",
+    "level": 2,
+    "page": 109,
+    "block_range": {
+      "start": 1646,
+      "end": 1748
+    },
+    "parent_id": 1271
+  },
+  {
+    "id": 1748,
+    "text": "21.4 一元二次方程的根与系数的关系",
+    "level": 2,
+    "page": 116,
+    "block_range": {
+      "start": 1748,
+      "end": 1867
+    },
+    "parent_id": 1271
+  },
+  {
+    "id": 1867,
+    "text": "21.5 一元二次方程的应用",
+    "level": 2,
+    "page": 124,
+    "block_range": {
+      "start": 1867,
+      "end": 3115
+    },
+    "parent_id": 1271
+  }
+]
