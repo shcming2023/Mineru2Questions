@@ -1,0 +1,8585 @@
+[
+    {
+        "type": "text",
+        "text": "学习",
+        "bbox": [
+            85,
+            109,
+            139,
+            129
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "唯有，如影随形，如鸟觅食",
+        "bbox": [
+            87,
+            135,
+            374,
+            155
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "才可能，如诗如画",
+        "bbox": [
+            87,
+            159,
+            280,
+            179
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/a222dc8c5db47c3a4b045f7cbb2f948131723287e044258e24cf57e37b905873.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            386,
+            39,
+            966,
+            441
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "同步练习册",
+        "text_level": 1,
+        "bbox": [
+            92,
+            464,
+            690,
+            551
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "数学 第5章 六年级下",
+        "text_level": 1,
+        "bbox": [
+            94,
+            568,
+            949,
+            698
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "MATH",
+        "bbox": [
+            99,
+            783,
+            260,
+            819
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "EXERCISE BOOK",
+        "bbox": [
+            100,
+            827,
+            547,
+            863
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "5.1比的意义",
+        "text_level": 1,
+        "bbox": [
+            411,
+            86,
+            566,
+            106
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            470,
+            119,
+            510,
+            136
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "1. 下列各数中，与5：2不相等的是（ ）.",
+        "bbox": [
+            149,
+            143,
+            492,
+            163
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{10}{4}$",
+        "bbox": [
+            166,
+            171,
+            228,
+            201
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{5}{2}$",
+        "bbox": [
+            336,
+            172,
+            389,
+            201
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{2}{5}$",
+        "bbox": [
+            505,
+            172,
+            557,
+            201
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（D）  $\\frac{15}{6}$",
+        "bbox": [
+            673,
+            171,
+            732,
+            201
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "2. 0.25吨：40千克的比值是（B）.",
+        "bbox": [
+            147,
+            206,
+            448,
+            226
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(A) 0.00625",
+        "bbox": [
+            166,
+            238,
+            273,
+            252
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（B）6.25",
+        "bbox": [
+            337,
+            238,
+            408,
+            252
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（C）0.16",
+        "bbox": [
+            505,
+            238,
+            576,
+            252
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（D）1.6",
+        "bbox": [
+            673,
+            238,
+            737,
+            252
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "3. 某班有学生50名，其中男女学生人数之比是2:3，男生人数为（C）.",
+        "bbox": [
+            147,
+            263,
+            709,
+            281
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(A) 2人",
+        "bbox": [
+            166,
+            292,
+            248,
+            307
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（B）3人",
+        "bbox": [
+            336,
+            292,
+            416,
+            307
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（C）20人",
+        "bbox": [
+            505,
+            292,
+            584,
+            307
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（D）30人",
+        "bbox": [
+            673,
+            292,
+            752,
+            307
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "4.2.75:5  $\\frac{1}{2}$  的比值是（B）.",
+        "bbox": [
+            147,
+            317,
+            389,
+            347
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(A) 2",
+        "bbox": [
+            176,
+            359,
+            221,
+            374
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(B) 0.5",
+        "bbox": [
+            339,
+            359,
+            401,
+            372
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{2}{11}$",
+        "bbox": [
+            510,
+            353,
+            566,
+            383
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（D）  $\\frac{4}{11}$",
+        "bbox": [
+            677,
+            353,
+            734,
+            383
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "5. 一个比的前项是12，后项是15，这个比是  $12:15$  ，比值是  $\\frac{4}{5}$",
+        "bbox": [
+            147,
+            383,
+            719,
+            408
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "6.如果比的前项与后项相等，那么比值是",
+        "bbox": [
+            147,
+            418,
+            549,
+            434
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "7. 求比值：  $60:5 = 12$ $\\frac{1}{8}: \\frac{1}{4} = \\frac{1}{2}$",
+        "bbox": [
+            147,
+            440,
+            519,
+            473
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "8. 求比值：30厘米：1.2米  $= 0.25$  ，  $\\frac{1}{5}$  小时：20分钟  $= 0.6$",
+        "bbox": [
+            147,
+            480,
+            680,
+            509
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "9. 某校六（1）班有50位学生，今天有1位学生病假，则该班今天到校的学生人数与全班人数的比是  $49:50$  ，病假学生人数：到校学生人数的比值是  $\\frac{1}{49}$",
+        "bbox": [
+            147,
+            517,
+            826,
+            561
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "10. 一个比的后项是18，比值是  $\\frac{2}{3}$ ，则这个比的前项是  $12$",
+        "bbox": [
+            147,
+            570,
+            648,
+            600
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "11. 求下列各比的比值：",
+        "bbox": [
+            147,
+            608,
+            329,
+            624
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（1）14:21",
+        "bbox": [
+            174,
+            636,
+            253,
+            649
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l} \\mathrm {解} \\because 1 4 \\div 2 1 \\\\ = \\frac {1 4}{2} \\times \\frac {1}{2 4} \\\\ = \\frac {2}{3} \\\\ \\end{array}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            164,
+            650,
+            260,
+            709
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（2）7.5:6",
+        "bbox": [
+            415,
+            636,
+            495,
+            649
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l} \\mathrm {解}: = \\frac {1 5}{2} \\div 6 \\\\ = \\frac {\\frac {1}{2}}{\\frac {5}{4}} \\times \\frac {1}{6 2} \\\\ \\end{array}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            403,
+            650,
+            505,
+            710
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（3）0.6:1.5",
+        "bbox": [
+            589,
+            636,
+            695,
+            650
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l} \\mathrm {角 甲} = \\frac {3}{5} \\div \\frac {3}{2} \\\\ = \\frac {\\frac {2}{3}}{\\frac {2}{5}} \\times \\frac {2}{3} \\\\ \\end{array}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            579,
+            652,
+            687,
+            713
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(4)  $\\frac{7}{8}: \\frac{2}{21}$",
+        "bbox": [
+            174,
+            742,
+            253,
+            771
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "解：  $= \\frac{7}{8} \\times  \\frac{21}{2}$",
+        "bbox": [
+            147,
+            775,
+            262,
+            798
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n= \\frac {1 4 7}{1 6}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            193,
+            799,
+            236,
+            820
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "(5)  $1\\frac{1}{2}: 2\\frac{2}{3}$",
+        "bbox": [
+            418,
+            742,
+            512,
+            771
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l} \\mathrm {解}: = \\frac {3}{2} \\div \\frac {8}{3} \\\\ = \\frac {3}{2} \\times \\frac {3}{8} \\\\ = \\frac {9}{1 6} \\\\ \\end{array}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            430,
+            771,
+            521,
+            836
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "（6）  $2\\frac{2}{3}\\div 1.6$",
+        "bbox": [
+            618,
+            742,
+            714,
+            771
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l} \\mathrm {解} = \\frac {8}{3} \\div \\frac {8}{5} \\\\ = \\frac {1 8}{5} \\times \\frac {5}{2 1} \\\\ = \\frac {5}{3} \\\\ \\end{array}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            618,
+            771,
+            712,
+            840
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "中",
+        "bbox": [
+            105,
+            43,
+            152,
+            78
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            154,
+            58,
+            344,
+            72
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "header",
+        "text": "彭温暖",
+        "bbox": [
+            870,
+            29,
+            939,
+            54
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "1",
+        "bbox": [
+            485,
+            902,
+            495,
+            912
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "12. 汽车3小时行135千米，自行车2小时行24千米，求：",
+        "bbox": [
+            86,
+            81,
+            311,
+            98
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(1) 汽车行的路程与自行车行的路程的比的比值:  ${135} \\div  {24} = \\frac{{135}^{45}}{248} = \\frac{45}{8}$",
+            "（2）自行车所用的时间与汽车所用的时间的比；  $2:3$",
+            "（3）自行车行的速度与汽车行的速的比的比值"
+        ],
+        "bbox": [
+            98,
+            96,
+            371,
+            178
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\begin{array}{l} 2 4 \\div 2 = 1 2 (k m / h) \\\\ 1 3 5 \\div 3 = 4 5 (k m / h) \\\\ 1 2: 4 5 = \\frac {1 3}{4 5 . 1 5} = \\frac {4}{1 5} \\\\ \\end{array}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            122,
+            179,
+            203,
+            238
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "13. 单独完成一项工程，甲队需 15 天，乙队需 17 天，求：",
+        "bbox": [
+            86,
+            352,
+            305,
+            370
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）单独完成这项工程甲队与乙队所用时间之比； 15:17",
+            "(2)甲队与乙队的工作效率之比的比值.  $\\frac{1}{15} \\div  \\frac{1}{17} = \\frac{17}{15}$"
+        ],
+        "bbox": [
+            98,
+            378,
+            316,
+            428
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "14. 东方明珠电视塔的高度是468米，上海中心大厦的高度是632米，求东方明珠电视塔与",
+        "bbox": [
+            85,
+            622,
+            424,
+            638
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "上海中心大厦的高度之比",
+        "bbox": [
+            100,
+            649,
+            197,
+            665
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "[{468} \\div  {632} = {468} \\cdot  {632}]",
+        "bbox": [
+            106,
+            669,
+            187,
+            688
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            731,
+            85,
+            750,
+            100
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "4. 已知一杯糖水中糖与水的重量之比是 1:100, 这个比的意义是 (C).",
+        "bbox": [
+            568,
+            110,
+            849,
+            129
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "（A）每100克糖水中含有1克糖",
+        "bbox": [
+            581,
+            138,
+            704,
+            155
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "（B）糖的比水的重量少99克",
+        "bbox": [
+            776,
+            137,
+            883,
+            153
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "（C）每1份糖中要倒入100份水",
+        "bbox": [
+            581,
+            166,
+            703,
+            182
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "（D）水的重量比糖的重量多99克",
+        "bbox": [
+            776,
+            163,
+            900,
+            180
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "2. 如果  $a$  是  $b$  的  $\\frac{7}{10}$ , 那么  $b$  和  $a$  的比为  $(B)$ . 表示  $a$  和  $b$  的 7:1 分, 则  $b$  和  $10$  分",
+        "bbox": [
+            572,
+            191,
+            762,
+            235
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(A) 7:10",
+        "bbox": [
+            587,
+            235,
+            623,
+            249
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(B) 10:7",
+        "bbox": [
+            680,
+            235,
+            716,
+            249
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "（C）3:7",
+        "bbox": [
+            779,
+            233,
+            810,
+            248
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(D)  $1 \\frac{3}{7}$",
+        "bbox": [
+            872,
+            225,
+            902,
+            256
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "3. 时钟的分针与时针的旋转速度的比值为12",
+        "bbox": [
+            572,
+            266,
+            766,
+            282
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "4. 妈妈买5斤苹果用去10元，买3斤梨用去3.6元，苹果与梨的单价比的比值为  $\\frac{5}{3}$",
+        "bbox": [
+            572,
+            285,
+            910,
+            309
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "5. 求下列各式中的  $x$  值：",
+        "bbox": [
+            572,
+            320,
+            667,
+            336
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(1)  $8.4: x = 1.5$ ;",
+        "bbox": [
+            581,
+            352,
+            645,
+            366
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\mathrm {解}: 8. 4 \\div x = 1. 5\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            584,
+            368,
+            644,
+            385
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n1. 5 x = 8. 4\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            613,
+            388,
+            647,
+            403
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\nx = 5 \\cdot 6\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            620,
+            403,
+            647,
+            416
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "(2)  $x:3\\frac{1}{2} = 2\\frac{1}{3}$ .",
+        "bbox": [
+            772,
+            343,
+            842,
+            371
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\mathrm {解} \\quad x \\div \\frac {7}{2} = \\frac {7}{3}   x = \\frac {4 9}{6}\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            781,
+            372,
+            841,
+            408
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "6. 一大一小两个圆，已知重叠部分的面积既是大圆面积的  $\\frac{1}{7}$ ，又是小圆面积的  $\\frac{1}{4}$ ，求大圆非重叠部分面积与小圆非重叠部分面积的比值。",
+        "bbox": [
+            572,
+            488,
+            906,
+            543
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "解：设大圆重叠为  $x$",
+        "bbox": [
+            603,
+            554,
+            688,
+            581
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\therefore 7 x - x = 6 x\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            620,
+            583,
+            672,
+            598
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\mathrm {设 小 圆 重 叠 为} y\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            623,
+            599,
+            696,
+            628
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\therefore 4 y - y = 3 y\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            625,
+            628,
+            685,
+            649
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n6 x: 3 y = 6 \\div 3 = 2\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            634,
+            653,
+            701,
+            674
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/dab58c038fabb34499c0e1dd56f66abac4f4330e94b06a11f93aed6df7ec5579.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            813,
+            541,
+            895,
+            642
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            64,
+            43,
+            88,
+            77
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            88,
+            55,
+            184,
+            71
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "2",
+        "bbox": [
+            251,
+            896,
+            259,
+            909
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            550,
+            47,
+            573,
+            81
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            574,
+            59,
+            670,
+            74
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "3",
+        "bbox": [
+            743,
+            901,
+            748,
+            913
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "5.2 比的基本性质（1）",
+        "text_level": 1,
+        "bbox": [
+            188,
+            85,
+            320,
+            106
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "bbox": [
+            248,
+            119,
+            268,
+            136
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 比的基本性质：",
+            "2. 请用表达式表示比的基本性质："
+        ],
+        "bbox": [
+            86,
+            144,
+            420,
+            191
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "3. (1)  $0.7:0.5 = \\_\\_\\_\\_\\_\\_\\_\\_\\_\\_ : 5.$",
+            "（2）  $60:45 = 4$"
+        ],
+        "bbox": [
+            86,
+            200,
+            199,
+            243
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "4.  $12:8 = 24:$ $= \\_ :4 = 27$",
+            "5. 在括号内填上适当的数："
+        ],
+        "bbox": [
+            86,
+            255,
+            267,
+            296
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "(1)  $\\frac{81}{(\\quad)} = 9:5$",
+            "(2)  $\\frac{2}{3} = \\frac{2 + 4}{3 + (\\quad)}$",
+            "6. 化简  $\\frac{2}{5}: 4$  得（ ）."
+        ],
+        "bbox": [
+            86,
+            305,
+            296,
+            372
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(A) 1:10",
+        "bbox": [
+            98,
+            380,
+            136,
+            395
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(B) 8:5",
+        "bbox": [
+            185,
+            381,
+            217,
+            396
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（C）10:1",
+        "bbox": [
+            266,
+            381,
+            302,
+            397
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(D)·5:8",
+        "bbox": [
+            352,
+            381,
+            384,
+            397
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "7. 5克盐溶解在45克水中，则盐和盐水质量的最简整数比为（ ）.",
+        "bbox": [
+            86,
+            407,
+            352,
+            425
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(A) 1:9",
+        "bbox": [
+            98,
+            434,
+            131,
+            450
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(B) 9:1",
+        "bbox": [
+            185,
+            435,
+            217,
+            450
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（C）1:10",
+        "bbox": [
+            267,
+            435,
+            304,
+            450
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(D) 10:1",
+        "bbox": [
+            353,
+            435,
+            389,
+            452
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "8. 把下列各比化成后项是 100 的比",
+        "bbox": [
+            86,
+            461,
+            222,
+            477
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（1）3:20",
+        "bbox": [
+            98,
+            488,
+            136,
+            504
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（2）48:500",
+        "bbox": [
+            269,
+            489,
+            315,
+            505
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(3) 1.2:2",
+        "bbox": [
+            98,
+            598,
+            140,
+            616
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(4)  $1\\frac{1}{8}: 1\\frac{1}{4}$",
+        "bbox": [
+            269,
+            593,
+            314,
+            627
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "9. 把下列各比化成最简整数比：",
+        "bbox": [
+            86,
+            739,
+            205,
+            757
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（1）25:40",
+        "bbox": [
+            98,
+            767,
+            139,
+            783
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\mathrm {解}: = (2 5 \\div 5): (4 0 \\div 5)\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            98,
+            783,
+            185,
+            806
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n= 5: 8\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            116,
+            807,
+            139,
+            823
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（2）0.75:4.5",
+        "bbox": [
+            204,
+            768,
+            258,
+            783
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n\\mathrm {解} = (0. 7 5 \\div 0. 7 5): (4. 5 \\div 0. 7 5) \\mathrm {解} =\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            204,
+            783,
+            349,
+            808
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "equation",
+        "text": "\n$$\n= 1: 6\n$$\n",
+        "text_format": "latex",
+        "bbox": [
+            221,
+            809,
+            244,
+            828
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（3）0.85:0.25",
+        "bbox": [
+            324,
+            769,
+            381,
+            783
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(4)  $1.5: \\frac{1}{3}$",
+        "bbox": [
+            588,
+            81,
+            630,
+            112
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(5)  $\\frac{2}{5}: 4$",
+        "bbox": [
+            697,
+            81,
+            732,
+            112
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(6)  $\\frac{2}{3}:\\frac{3}{4}$",
+        "bbox": [
+            817,
+            81,
+            854,
+            112
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(7)  $2\\frac{4}{5}: 3.5$",
+        "bbox": [
+            588,
+            226,
+            636,
+            257
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(8)  $1\\frac{3}{4}:\\frac{5}{6}$",
+        "bbox": [
+            696,
+            226,
+            736,
+            257
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "(9)  $1\\frac{4}{5}: 1\\frac{1}{6}$",
+        "bbox": [
+            816,
+            226,
+            861,
+            257
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "10. 把下列各比化成最简整数比：",
+        "bbox": [
+            576,
+            372,
+            700,
+            389
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（1）  $1\\frac{1}{2}$  千克：500克",
+        "bbox": [
+            584,
+            397,
+            661,
+            429
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（2）1.2时：1时20分",
+        "bbox": [
+            698,
+            397,
+            780,
+            420
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（3） $\\frac{1}{5}$  小时：12分钟",
+        "bbox": [
+            817,
+            397,
+            893,
+            428
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "11. 六 (1) 班有男生 20 人, 女生 18 人, 求下列各比:",
+        "bbox": [
+            576,
+            543,
+            778,
+            561
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（1）男生人数：女生人数",
+        "bbox": [
+            588,
+            571,
+            681,
+            587
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（2）女生人数：男生人数",
+        "bbox": [
+            765,
+            571,
+            855,
+            587
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（3）男生人数：全班人数",
+        "bbox": [
+            594,
+            733,
+            685,
+            750
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "（4）女生人数：全班人数",
+        "bbox": [
+            768,
+            733,
+            861,
+            750
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            66,
+            43,
+            89,
+            77
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            90,
+            55,
+            185,
+            71
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "4",
+        "bbox": [
+            251,
+            897,
+            258,
+            910
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            553,
+            45,
+            576,
+            79
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            577,
+            58,
+            673,
+            72
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "page_number",
+        "text": "5",
+        "bbox": [
+            743,
+            900,
+            748,
+            912
+        ],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            247,
+            83,
+            267,
+            99
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 两个数的比值是  $\\frac{4}{3}$ ，比的前项与后项同时乘以3，那么最简整数比是",
+            "2. 如果  $x:y = 7:15$  ，那么  $x:(x + y) = \\_ \\_$",
+            "3. 某年级的男、女人数比是 5:7，共 144 人，则男生有 ______ 人。",
+            "4. 将一个比的前项扩大2倍，比的后项扩大3倍，这个比的比值与原来比值相比（）"
+        ],
+        "bbox": [
+            85,
+            109,
+            422,
+            226
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（A）扩大了",
+        "bbox": [
+            99,
+            235,
+            144,
+            252
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（B）缩小了",
+        "bbox": [
+            194,
+            236,
+            239,
+            252
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（C）不变",
+        "bbox": [
+            285,
+            237,
+            322,
+            252
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（D）无法确定",
+        "bbox": [
+            371,
+            237,
+            424,
+            252
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "5. 一段绳子原长15米，用去了3米，余下的绳长与原来的绳长的最简整数比是（ ）.",
+        "bbox": [
+            85,
+            263,
+            423,
+            280
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(A) 5:1",
+        "bbox": [
+            99,
+            290,
+            131,
+            305
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(B) 1:5",
+        "bbox": [
+            194,
+            290,
+            225,
+            305
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（C）4:5",
+        "bbox": [
+            284,
+            290,
+            315,
+            305
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（D）5:4",
+        "bbox": [
+            369,
+            292,
+            400,
+            306
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "6. 一项工程，如果甲队单独做3天完成，乙队单独做5天完成，那么甲、乙两队的工作效率的最简整数比是（ ）.",
+        "bbox": [
+            85,
+            317,
+            426,
+            359
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(A) 3:5",
+        "bbox": [
+            99,
+            372,
+            131,
+            390
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{1}{3}:\\frac{1}{5}$",
+        "bbox": [
+            194,
+            369,
+            230,
+            400
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（C）5:3",
+        "bbox": [
+            284,
+            377,
+            315,
+            391
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(D) 3:2",
+        "bbox": [
+            369,
+            377,
+            400,
+            391
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "7. 甲、乙两人加工300个同样的零件，甲在10分钟内完成6个，乙在5分钟内完成6个，求：（1）甲、乙两人各完成300个零件的速度比.",
+        "bbox": [
+            85,
+            407,
+            411,
+            451
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（2）甲、乙两人各完成300个零件的时间比",
+        "bbox": [
+            101,
+            622,
+            269,
+            640
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "5.2 比的基本性质（2）",
+        "text_level": 1,
+        "bbox": [
+            673,
+            87,
+            805,
+            108
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            733,
+            122,
+            753,
+            138
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 如果  $a:b = m:n$  ，  $b:c = n:k$  ，那么  $a:b:c =$",
+            "2. 如果  $k \\neq 0$ ，那么  $a:b:c = ak: \\quad \\therefore \\quad = \\frac{a}{k}: \\quad \\therefore \\quad : \\quad .$",
+            "3. 化成最简整数比:  $\\frac{1}{2}: \\frac{1}{3}: \\frac{1}{6} =$",
+            "4. 因为  $x:y = 0.8:1.2 = \\_$  :6，  $y:z = 2:7 = 6:\\_$ ，所以  $x:y:z = \\_$ .",
+            "5. 如果  $a:b = 3:4$  ，  $b:c = 4:3$  ，那么  $a:b:c =$",
+            "6. 如果  $x:y = 2:3$  ，  $y:z = 6:5$  ，那么  $x:y:z =$",
+            "7. 如果  $a:b = 2:3$  ，  $a:c = 2:5$  ，那么  $a:b:c =$",
+            "8. 超市销售一种什锦糖果，其中含6千克的水果软糖，9千克的水果硬糖和15千克的咖啡软糖，则水果软糖与水果硬糖的质量比为 ，三种糖果的质量之比为",
+            "9. 将 16:64:24 化成最简整数比为（A）."
+        ],
+        "bbox": [
+            572,
+            149,
+            908,
+            437
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(A)  $2 : 8 : 3$",
+        "bbox": [
+            586,
+            447,
+            628,
+            463
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（B）4:16:6",
+        "bbox": [
+            660,
+            447,
+            705,
+            463
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（C）2:8:5",
+        "bbox": [
+            751,
+            447,
+            792,
+            463
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（D）10:32:5",
+        "bbox": [
+            837,
+            447,
+            886,
+            463
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "10. 已知  $x:y = 2:3$  ，  $y:z = 5:7$  ，则  $x:y:z$  等于（B）.",
+        "bbox": [
+            573,
+            472,
+            797,
+            491
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(A)  $2 : 3 : 7$",
+        "bbox": [
+            586,
+            501,
+            628,
+            517
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(B) 10:15:21",
+        "bbox": [
+            660,
+            501,
+            713,
+            516
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（C）2:7:15",
+        "bbox": [
+            751,
+            501,
+            795,
+            516
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(D)  $2: 8: 7$",
+        "bbox": [
+            836,
+            501,
+            875,
+            515
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "11. 如果  $x:y = 0.5:3$  ，  $y:z = 3:0.8$  ，则  $x:y:z$  是（D）.",
+        "bbox": [
+            573,
+            524,
+            808,
+            545
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(A)  $5:3:8$",
+        "bbox": [
+            586,
+            555,
+            628,
+            571
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(B) 1:6:8",
+        "bbox": [
+            660,
+            555,
+            701,
+            571
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（C）5:30:4",
+        "bbox": [
+            751,
+            555,
+            796,
+            570
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(D)  $5: 30: 8$",
+        "bbox": [
+            837,
+            555,
+            881,
+            570
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "12. 把下列各连比化成最简整数比：",
+        "bbox": [
+            574,
+            583,
+            708,
+            599
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（1）12:24:32",
+        "bbox": [
+            586,
+            615,
+            644,
+            631
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "(2)  $\\frac{1}{3}: \\frac{1}{4}: \\frac{1}{5}$",
+        "bbox": [
+            768,
+            606,
+            814,
+            638
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（3）1.6:2.4:4",
+        "bbox": [
+            586,
+            701,
+            644,
+            716
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（4）0.45米：3.6分米：8.1厘米",
+        "bbox": [
+            768,
+            699,
+            887,
+            714
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（5）15分：1.5时：1时15分",
+        "bbox": [
+            586,
+            782,
+            698,
+            798
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "（6）120分钟：1.2小时：1小时20分钟",
+        "bbox": [
+            768,
+            781,
+            914,
+            796
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            64,
+            43,
+            87,
+            77
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            88,
+            57,
+            184,
+            71
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "6",
+        "bbox": [
+            252,
+            897,
+            258,
+            909
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "中",
+        "bbox": [
+            551,
+            48,
+            575,
+            81
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            575,
+            61,
+            670,
+            74
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "page_number",
+        "text": "7",
+        "bbox": [
+            743,
+            902,
+            748,
+            913
+        ],
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "13. 利用已知条件，求  $a:b:c$ .",
+        "bbox": [
+            88,
+            83,
+            204,
+            99
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（1）  $a:b = 2:3$  ，  $b:c = 4:5$",
+        "bbox": [
+            101,
+            110,
+            206,
+            125
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(2)  $a:b = 3:5, b:c = 6:7$",
+        "bbox": [
+            270,
+            110,
+            373,
+            128
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(3)  $a:b = 8:9, b:c = 3:4$",
+        "bbox": [
+            101,
+            220,
+            206,
+            239
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(4)  $a:b = 3:4, b:c = \\frac{1}{4}: \\frac{1}{3}$",
+        "bbox": [
+            269,
+            217,
+            376,
+            250
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（5）  $a:b = 0.5:0.8$  ，  $b:c = 1.2:0.5$",
+        "bbox": [
+            100,
+            334,
+            230,
+            352
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(6)  $a:b = 2:5$  ，  $a:c = 5:8$",
+        "bbox": [
+            268,
+            337,
+            372,
+            353
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(7)  $a:b = \\frac{1}{2}: \\frac{1}{3}, a:c = \\frac{1}{4}: \\frac{1}{2}$",
+        "bbox": [
+            99,
+            440,
+            213,
+            473
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(8)  $a:b = 0.2:0.3$ ,  $c:b = \\frac{1}{4}: \\frac{1}{3}$",
+        "bbox": [
+            263,
+            441,
+            383,
+            473
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            245,
+            587,
+            266,
+            605
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 已知  $a$  是  $b$  的  $\\frac{3}{5}$ ,  $b$  是  $c$  的  $\\frac{1}{2}$ , 则  $a:b:c =$  ________.",
+            "2. 若  $ab:bc:ac = 10:12:15$  ，则  $a:b:c =$",
+            "3. 已知甲的  $\\frac{4}{5}$  正好是乙数的  $\\frac{5}{6}$ ，则甲、乙两个数的比值是",
+            "4. 把 4 米长的竹竿插入水中，露出水面部分是  $2 \\frac{3}{5}$  米，那么入水部分和露出水面部分的长度之比是",
+            "5. 小明 2 分钟打 140 个字, 小杰 3 分钟打 180 个字, 则小明与小杰打字的速度比是",
+            "6. 若三角形三个内角的度数之比为  $2:3:1$ ，则其中最大的角的度数为（ ）."
+        ],
+        "bbox": [
+            84,
+            611,
+            420,
+            849
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(A)  $60^{\\circ}$",
+        "bbox": [
+            98,
+            858,
+            130,
+            872
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（B）  $90^{\\circ}$",
+        "bbox": [
+            183,
+            859,
+            214,
+            872
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（C）  $120^{\\circ}$",
+        "bbox": [
+            269,
+            859,
+            303,
+            874
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（D）  $150^{\\circ}$",
+        "bbox": [
+            362,
+            861,
+            397,
+            876
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "7. 在8:9中，如果前项增加16，要使比值不变，那么后项应（ ）.",
+        "bbox": [
+            574,
+            86,
+            840,
+            102
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（A）增加16",
+        "bbox": [
+            586,
+            112,
+            635,
+            129
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（B）乘以3",
+        "bbox": [
+            674,
+            112,
+            716,
+            129
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（C）不变",
+        "bbox": [
+            762,
+            112,
+            796,
+            129
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（D）无法确定",
+        "bbox": [
+            854,
+            112,
+            907,
+            128
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "8. 如果一项工程，甲队单独做3天完成，乙队单独做5天完成，丙队单独做6天完成，那么甲、乙、丙三队的工作效率最简整数比是（ ）.",
+        "bbox": [
+            574,
+            138,
+            913,
+            184
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(A)  $3:5:6$",
+        "bbox": [
+            586,
+            199,
+            628,
+            214
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(B)  $1 : 5 : 2$",
+        "bbox": [
+            674,
+            199,
+            714,
+            214
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "（C）10:6:5",
+        "bbox": [
+            763,
+            199,
+            807,
+            213
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "(D)  $\\frac{1}{3}: \\frac{1}{5}: \\frac{1}{6}$",
+        "bbox": [
+            856,
+            191,
+            909,
+            222
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "9. 如图，大小两个圆重叠在一起，重叠部分占小圆的  $\\frac{2}{5}$ ，占大圆的  $\\frac{1}{7}$ ，求小圆面积与大圆面积之比。",
+        "bbox": [
+            574,
+            229,
+            906,
+            283
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/0b54b3d5014b42c9a00ed5e139fde82e6fc2b8e892bc6117fe826f263c0ce5dc.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            824,
+            270,
+            912,
+            358
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "10. 下图是某公园的设计图，其中正方形的  $\\frac{3}{4}$  是草地，圆的  $\\frac{6}{7}$  是竹林，求正方形与圆的面积比。",
+        "bbox": [
+            574,
+            427,
+            910,
+            483
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "image",
+        "img_path": "images/764741e7ff60d335f3856ecfe1988f676802e6124dbdc55c65245fbeaf46a77e.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            798,
+            477,
+            933,
+            615
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "11．黑火药是我国的四大发明之一，它所用的主要原料有硝酸钾、硫磺、木炭，这三种原料的重量配比是15:2:3，要配制这种火药240千克，需取三种原料各多少千克？",
+        "bbox": [
+            575,
+            681,
+            910,
+            726
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            67,
+            42,
+            89,
+            77
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            90,
+            55,
+            186,
+            71
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "8",
+        "bbox": [
+            251,
+            897,
+            257,
+            909
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            553,
+            48,
+            575,
+            81
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            576,
+            61,
+            671,
+            74
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "page_number",
+        "text": "9",
+        "bbox": [
+            743,
+            903,
+            749,
+            914
+        ],
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "5.3 比例（1）",
+        "text_level": 1,
+        "bbox": [
+            217,
+            86,
+            296,
+            108
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "bbox": [
+            248,
+            119,
+            269,
+            137
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1.  $a, b, c, d$  四个量中，如果__________，那么就说  $a, b, c, d$  成比例。也就是表示两个比__________的式子叫做比例。",
+            "2. 其中第____比例项  $a$  和第____比例项  $d$  叫做____，第____比例项  $b$  和第____比例项  $c$  叫做____。",
+            "3. 如果两个 _______ 相同，即  $a:b = b:c$ ，那么把  $b$  叫做  $a$  和  $c$  的 _______。",
+            "4. 比例的基本性质：如果  $a:b = c:d$  （或  $\\frac{a}{b} = \\frac{c}{d}$ ），那么________。反之，如果  $a, b, c, d$  ______，且  $ab = cd$ ，那么________或________。",
+            "5. 比例的基本性质实现了 ______ 与 ______ 之间的转化。",
+            "6. 比例  $\\frac{4}{6} = \\frac{2}{3}$  中，比例内项是 ________；比例外项是 ________。",
+            "7. 如果  $0.7 \\times 8 = 1.4 \\times 4$ ，用0.7和8做内项，写出一个比例式为",
+            "8. 已知  $4: x = 5: 12$  ，则  $x =$",
+            "9.如果2是  $x$  和5的比例中项，那么  $x = \\_$  已知  $b$  正整数，且  $b$  是4和9的比例中项，则  $b = \\_$",
+            "10. 若  $4x = 5y$  ，则  $x:y =$",
+            "11. 若  $7: x = 4: y$ ，则  $x: y =$  ________.",
+            "12. 下列各比能与3:2组成比例的是（ ）."
+        ],
+        "bbox": [
+            87,
+            146,
+            426,
+            605
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(A) 6:4",
+        "bbox": [
+            99,
+            615,
+            135,
+            631
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(B) 9:4",
+        "bbox": [
+            189,
+            616,
+            224,
+            631
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（C）2:3",
+        "bbox": [
+            279,
+            617,
+            313,
+            631
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(D) 4:6",
+        "bbox": [
+            367,
+            617,
+            402,
+            633
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "13. 下列四组数不能组成比例式的是（ ）.",
+        "bbox": [
+            87,
+            642,
+            260,
+            657
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(A) 2、3、4、6",
+        "bbox": [
+            99,
+            669,
+            161,
+            685
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（B）1、2、2、4",
+        "bbox": [
+            279,
+            671,
+            340,
+            686
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（C）0.1、0.3、0.5、1.5",
+        "bbox": [
+            99,
+            700,
+            195,
+            716
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（D）  $\\frac{1}{2},\\frac{1}{3},\\frac{1}{4},\\frac{1}{5}$",
+        "bbox": [
+            279,
+            695,
+            358,
+            726
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "14. 已知一个比例的两个内项之积为 40，则两个外项不可能是（ ）.",
+        "bbox": [
+            87,
+            732,
+            356,
+            750
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(A) 40和1",
+        "bbox": [
+            99,
+            760,
+            147,
+            775
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（B）2和15",
+        "bbox": [
+            189,
+            760,
+            238,
+            775
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（C）2和20",
+        "bbox": [
+            279,
+            761,
+            328,
+            776
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（D）4和10",
+        "bbox": [
+            368,
+            761,
+            412,
+            776
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "15. 如果  $4: a = 7: b$  ，那么  $a: b$  等于（ ）.",
+        "bbox": [
+            87,
+            787,
+            253,
+            802
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(A) 4:7",
+        "bbox": [
+            98,
+            814,
+            134,
+            828
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(B) 7:4",
+        "bbox": [
+            189,
+            815,
+            223,
+            828
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（C）28:1",
+        "bbox": [
+            279,
+            815,
+            316,
+            830
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(D) 1:28",
+        "bbox": [
+            368,
+            817,
+            404,
+            831
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "16. 已知  $a \\times \\frac{1}{4} = b \\times \\frac{1}{3}$ , 那么下列各式成立的是（ ）.",
+        "bbox": [
+            575,
+            85,
+            783,
+            114
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(A)  $a:b = \\frac{1}{4}:\\frac{1}{3}$",
+        "bbox": [
+            588,
+            119,
+            649,
+            150
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "（B）  $b:a = \\frac{1}{3}:\\frac{1}{4}$",
+        "bbox": [
+            673,
+            119,
+            732,
+            149
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(C)  $a:b = \\frac{1}{3}:\\frac{1}{4}$",
+        "bbox": [
+            763,
+            119,
+            821,
+            149
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(D)  $a:3 = b:4$",
+        "bbox": [
+            851,
+            123,
+            908,
+            140
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "17. 求下列各式中的  $x$  :",
+        "bbox": [
+            575,
+            159,
+            664,
+            175
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(1)  $6: 10 = x: 7$ ;",
+        "bbox": [
+            588,
+            187,
+            652,
+            205
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(2)  $\\frac{x}{16} = \\frac{3}{2}$ ;",
+        "bbox": [
+            708,
+            184,
+            757,
+            213
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(3)  $x:\\frac{4}{3} = \\frac{1}{2}:\\frac{8}{3}$ ;",
+        "bbox": [
+            812,
+            182,
+            879,
+            213
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(4)  $x: 13.5 = 2\\frac{4}{5}$ ;",
+        "bbox": [
+            588,
+            328,
+            654,
+            358
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(5)  $3:2 = (x + 4):x$",
+        "bbox": [
+            705,
+            331,
+            785,
+            350
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "(6)  $1\\frac{3}{4} = \\frac{x + 10}{12}$ .",
+        "bbox": [
+            811,
+            326,
+            876,
+            357
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "18. 当  $x$  取何值时，它与2、3、4可以组成一个比例？",
+        "bbox": [
+            575,
+            473,
+            777,
+            491
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "19. 已知  $a:b:c = 2:3:4$  ，  $a + b + c = 27$  ，求  $2a - 3b + 4c$  的值",
+        "bbox": [
+            576,
+            610,
+            811,
+            625
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "20. 已知  $\\frac{a}{2} = \\frac{b}{3} = \\frac{c}{4}$ , 求  $a:b:c$  ( $a, b, c$  均不为零).",
+        "bbox": [
+            576,
+            744,
+            776,
+            774
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            66,
+            43,
+            91,
+            78
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            91,
+            57,
+            187,
+            72
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "10",
+        "bbox": [
+            251,
+            899,
+            260,
+            910
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            553,
+            48,
+            575,
+            81
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            576,
+            61,
+            671,
+            74
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "page_number",
+        "text": "11",
+        "bbox": [
+            742,
+            902,
+            751,
+            914
+        ],
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            250,
+            85,
+            268,
+            100
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 若  $b$  是  $a$  和  $c$  的比例中项，则  $\\therefore b = c$  或  $b^2 = c$ .",
+            "2. 如果  $3.75 \\times 2 = 1.2 \\times 6.25$ ，用3.75和2作比例外项，写出一个比例式",
+            "3. 如果  $a \\times 8 = b \\div 6$ ，那么  $a:b = \\_$ ：",
+            "4. 已知被减数与差的比 5:3，减数是 120，被减数是",
+            "5. 下列说法不正确的是（ ）."
+        ],
+        "bbox": [
+            88,
+            116,
+            381,
+            271
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（A）若  $a, b, c, d$  成比例，则  $2a, 2b, 2c, 2d$  也成比例；",
+            "（B）若  $a$  ，  $b$  ，  $c$  ，  $d$  成比例，则  $a$  ，  $2b$  ，  $2c$  ，  $d$  也成比例；",
+            "（C）若  $a, b, c, d$  成比例，则  $2a, 2b, c, d$  也成比例；",
+            "（D）若  $a$  ，  $b$  ，  $c$  ，  $d$  成比例，则  $2a$  ，  $b$  ，  $2c$  ，  $d$  也成比例"
+        ],
+        "bbox": [
+            101,
+            281,
+            339,
+            380
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "6. 如果  $a = 2$  ，  $b = 4$  ，  $c = 8$  ，那么（ ）.",
+        "bbox": [
+            87,
+            389,
+            262,
+            406
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（A）  $a$  ，  $b$  ，  $c$  的第四比例项是7",
+        "bbox": [
+            101,
+            416,
+            226,
+            434
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（B）  $3a$  ，  $2b$  和  $3c$  的第四比例项为18",
+        "bbox": [
+            280,
+            418,
+            419,
+            435
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）  $c$  是  $a$  ，  $b$  的比例中项",
+        "bbox": [
+            101,
+            444,
+            202,
+            460
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（D）  $b$  是  $a$  ，  $c$  的比例中项",
+        "bbox": [
+            281,
+            445,
+            382,
+            461
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "7. 已知  $x:2y = 3:4$  ，则  $x:y$  为（ ）.",
+        "bbox": [
+            87,
+            469,
+            244,
+            486
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(A) 3:8",
+        "bbox": [
+            101,
+            497,
+            134,
+            514
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(B) 3:2",
+        "bbox": [
+            190,
+            500,
+            222,
+            513
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）6:2",
+        "bbox": [
+            281,
+            500,
+            315,
+            514
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(D) 6:8",
+        "bbox": [
+            367,
+            500,
+            399,
+            515
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "8. 一张照片长12厘米，宽8厘米，将它缩印后放到书里，长变为5厘米，则宽是多少厘米？",
+        "bbox": [
+            87,
+            524,
+            422,
+            567
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5.3比例（2）",
+        "text_level": 1,
+        "bbox": [
+            703,
+            87,
+            780,
+            108
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            735,
+            122,
+            754,
+            138
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 小丽买5个梨用去3.3元，现在购买18个梨需要 元",
+            "2. 房产博览会上，某楼盘的模型是按照1:500的比例尺制作的，该楼盘1号楼模型高7厘米，它的实际高度是 米.",
+            "3. 一张照片长12厘米，宽8厘米，将它缩印后放到书里，宽变为5厘米，则长是 厘米.",
+            "4. 已知长方形的长与宽的比是 5:3，若宽为 6 厘米，则长方形的面积是 ______ 平方厘米。"
+        ],
+        "bbox": [
+            574,
+            148,
+            913,
+            301
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "5. 如图，平行四边形中相邻两边  $AB:AD = 4:3$  ，如果 $AD = 4.5$  厘米，那么  $AB$  的长度是 厘米",
+        "bbox": [
+            574,
+            339,
+            782,
+            383
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "image",
+        "img_path": "images/d56116a68d0c8503fecb4941b599c0e8a4bdf080018fa822a75c3d4891596909.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            802,
+            323,
+            896,
+            378
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "6. 已知线段  $AB = 2$  厘米， $CD = 8$  厘米，若线段  $EF$  是  $AB$  与  $CD$  的比例中项，则  $EF$  长为 ______ 厘米.",
+            "7. 已知  $x$  是 3、4、5 的第四比例项，则  $x =$",
+            "8. 将  $2 \\times 1.5 = 0.5 \\times 6$  化成比例式，正确的是（ ）."
+        ],
+        "bbox": [
+            574,
+            391,
+            913,
+            491
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{2}{1.5} = \\frac{0.5}{6}$",
+        "bbox": [
+            588,
+            500,
+            642,
+            530
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(B)  $2:6 = 1.5:0.5$",
+        "bbox": [
+            667,
+            507,
+            736,
+            522
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）  $6:1.5 = 2:0.5$",
+        "bbox": [
+            749,
+            505,
+            818,
+            520
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(D)  $6:0.5 = 1.5:2$",
+        "bbox": [
+            835,
+            505,
+            903,
+            520
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "9. 已知  $\\frac{1}{3} \\times 4.5 = \\frac{3}{5} \\times 2.5$ ，下面哪个比例式不成立（ ）.",
+        "bbox": [
+            575,
+            535,
+            797,
+            567
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{1}{3}:\\frac{3}{5} = 4.5:2.5$",
+        "bbox": [
+            588,
+            571,
+            661,
+            602
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{1}{3}: \\frac{3}{5} = 2.5: 4.5$",
+        "bbox": [
+            668,
+            571,
+            742,
+            602
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）  $4.5:\\frac{3}{5} = 2.5:\\frac{1}{3}$",
+        "bbox": [
+            749,
+            571,
+            821,
+            602
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(D)  $2.5:\\frac{1}{3} = 4.5:\\frac{3}{5}$",
+        "bbox": [
+            833,
+            571,
+            905,
+            602
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "10. 一个零件长为2.5厘米，如果画在图纸上为5厘米，那么图纸上的尺寸与实际尺寸的比是（ ）.",
+        "bbox": [
+            575,
+            609,
+            910,
+            653
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(A) 1:20",
+        "bbox": [
+            589,
+            665,
+            626,
+            680
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(B) 20:1",
+        "bbox": [
+            669,
+            666,
+            705,
+            680
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）1:2",
+        "bbox": [
+            749,
+            666,
+            779,
+            679
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(D) 2:1",
+        "bbox": [
+            835,
+            665,
+            867,
+            679
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "11. 妈妈买8斤猪肉用了60元，如果买同样的5斤猪肉要用（ ）.",
+        "bbox": [
+            575,
+            691,
+            842,
+            707
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（A）35元",
+        "bbox": [
+            589,
+            719,
+            629,
+            735
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（B）42元",
+        "bbox": [
+            670,
+            720,
+            710,
+            733
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）37.5元",
+        "bbox": [
+            748,
+            719,
+            796,
+            733
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（D）40元",
+        "bbox": [
+            837,
+            719,
+            877,
+            733
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "12. 如果 20 元钱可以买 3 个西瓜，现在要买 9 个这样的西瓜需要（ ）.",
+        "bbox": [
+            575,
+            745,
+            857,
+            762
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（A）30元",
+        "bbox": [
+            589,
+            774,
+            627,
+            789
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（B）27元",
+        "bbox": [
+            671,
+            774,
+            709,
+            788
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）60元",
+        "bbox": [
+            751,
+            774,
+            788,
+            788
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（D）90元",
+        "bbox": [
+            838,
+            774,
+            875,
+            788
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "13. 一辆汽车2小时行驶120千米，按照这样的速度，3.5小时行驶（ ）千米",
+        "bbox": [
+            575,
+            799,
+            886,
+            817
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(A) 180",
+        "bbox": [
+            590,
+            828,
+            621,
+            843
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "(B) 210",
+        "bbox": [
+            672,
+            828,
+            702,
+            842
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（C）240",
+        "bbox": [
+            753,
+            828,
+            784,
+            842
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "（D）350",
+        "bbox": [
+            838,
+            828,
+            869,
+            842
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "35",
+        "bbox": [
+            67,
+            43,
+            91,
+            77
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            91,
+            57,
+            187,
+            72
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "12",
+        "bbox": [
+            251,
+            897,
+            260,
+            910
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "华",
+        "bbox": [
+            553,
+            48,
+            575,
+            81
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            576,
+            61,
+            672,
+            74
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "page_number",
+        "text": "13",
+        "bbox": [
+            743,
+            903,
+            752,
+            914
+        ],
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "14. 某工人 4 小时加工零件 120 个，他加工 600 个零件需要多少小时？",
+        "bbox": [
+            89,
+            84,
+            353,
+            100
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "15. 小杰 12 分钟可以打 480 个字. 照这样的速度, 他 1 小时可以打多少个字?",
+        "bbox": [
+            88,
+            245,
+            377,
+            264
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "16. 有一种小瓶装消毒液净重50克，小明妈妈买回8千克瓜果，现需将这些生吃的瓜果进行消毒，取出10克消毒液需加水多少千克？",
+        "bbox": [
+            87,
+            408,
+            427,
+            452
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "（消毒参考值：1.瓜果、餐具、厨房用品1:500；2.衣物、物体表面1:300）",
+        "bbox": [
+            101,
+            461,
+            381,
+            480
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "17. 如图，将 1.5 米长的竹竿直立在地面上，测得竹竿的影长为 1.6 米，同时测得旗杆的影长为 8 米。已知旗杆的高与其影长的比等于竹竿的长与其影长的比，求旗杆的高。",
+        "bbox": [
+            87,
+            650,
+            421,
+            695
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "image",
+        "img_path": "images/517b992176ab64fab8804e283cc63ac76dbe82ef7d8f9af97f6b57509c361878.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            321,
+            699,
+            424,
+            813
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "18. 一个比例的两个外项互为倒数，其中一个内项是2.4，求另一个内项是多少？",
+        "bbox": [
+            576,
+            86,
+            879,
+            100
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            736,
+            220,
+            755,
+            236
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 在一幅比例尺1:5000000的地图上测量得到  $A$  市与  $B$  市之间的距离是2.5厘米，则  $A$  市与  $B$  市之间的实际距离是 ______ 千米.",
+            "2. 在一幅地图上量得甲、乙两地相距6厘米，乙、丙两地相距8厘米，已知甲、乙两地间的实际距离是120千米，乙、丙两地的实际距离是________；这幅地图的比例尺是________。",
+            "3. 两个三角形的面积相等，若底边之比为  $3:2$  ，则底边上的高之比是",
+            "4. 用2，3，4再配一个比这三个数都大的数________，使它们组成比例，组成的比例式是________。",
+            "5. 某校语文教师人数与数学教师人数之比是13:7，若语文教师2人改行教数学，则人数的比是3:2，原来语文、数学教师各有多少人？"
+        ],
+        "bbox": [
+            575,
+            247,
+            914,
+            508
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "6. 某校女生与全校总人数的比是  $7:15$ ，转进8名女生后. 女生占全校人数的  $\\frac{15}{31}$ ，现在该校有多少名学生？",
+        "bbox": [
+            576,
+            679,
+            910,
+            733
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "中",
+        "bbox": [
+            67,
+            43,
+            91,
+            78
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            92,
+            58,
+            187,
+            72
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "14",
+        "bbox": [
+            252,
+            899,
+            260,
+            910
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            554,
+            47,
+            577,
+            81
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            578,
+            61,
+            673,
+            74
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "page_number",
+        "text": "15",
+        "bbox": [
+            744,
+            902,
+            752,
+            913
+        ],
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "5.4 百分比的意义（1）",
+        "text_level": 1,
+        "bbox": [
+            189,
+            86,
+            320,
+            106
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            248,
+            119,
+            269,
+            136
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "1. 把  $\\frac{16}{25}$  写成百分比是（ ）.",
+        "bbox": [
+            88,
+            144,
+            211,
+            175
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(A)  $0.64\\%$",
+        "bbox": [
+            101,
+            182,
+            146,
+            199
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(B)  $6.4\\%$",
+        "bbox": [
+            179,
+            182,
+            219,
+            199
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（C）  $64\\%$",
+        "bbox": [
+            253,
+            184,
+            291,
+            199
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（D）  $640\\%$",
+        "bbox": [
+            329,
+            185,
+            370,
+            200
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "2. 百分数  $150\\%$  化为最简分数为（ ）.",
+        "bbox": [
+            87,
+            209,
+            248,
+            226
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{2}{3}$",
+        "bbox": [
+            101,
+            235,
+            132,
+            264
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(B)  $1\\frac{1}{2}$",
+        "bbox": [
+            177,
+            236,
+            208,
+            264
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(C)  $\\frac{15}{100}$",
+        "bbox": [
+            251,
+            236,
+            291,
+            266
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（D）  $1\\frac{5}{10}$",
+        "bbox": [
+            328,
+            236,
+            362,
+            267
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "3. 一批产品，其中合格产品与不合格产品的比是4:1. 不合格产品的数量占这批产品总数的（ ）.",
+        "bbox": [
+            87,
+            273,
+            421,
+            315
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(A)  $25\\%$",
+        "bbox": [
+            101,
+            327,
+            139,
+            343
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(B)  $20\\%$",
+        "bbox": [
+            177,
+            328,
+            215,
+            343
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（C）  $30\\%$",
+        "bbox": [
+            253,
+            328,
+            291,
+            343
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（D）以上答案都不正确",
+        "bbox": [
+            328,
+            328,
+            419,
+            345
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "4. 已知甲重60千克，乙重54千克，下列表述正确的是（ ）.",
+        "bbox": [
+            87,
+            353,
+            335,
+            371
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（A）甲比乙重  $10\\%$",
+        "bbox": [
+            101,
+            381,
+            172,
+            397
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（B）乙比甲约轻  $11\\%$",
+        "bbox": [
+            253,
+            382,
+            332,
+            397
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（C）甲比乙约重  $10\\%$",
+        "bbox": [
+            101,
+            408,
+            180,
+            423
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（D）乙比甲轻  $10\\%$",
+        "bbox": [
+            253,
+            409,
+            324,
+            425
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "5.  $30.5\\%$  读作________；百分之十点七写作________。",
+            "6. 把小数化成百分数：0.37=________，2.073=________.",
+            "7. 把百分数化成小数：  $46\\% = \\_$  ，  $320\\% = \\_$",
+            "8. 把分数化为百分数：  $\\frac{1}{2} = \\_$  ，  $1\\frac{5}{8} = \\_$",
+            "9. 把百分数化成分数：  $75\\% = \\_ \\_ \\_ \\_ \\_ \\_ , 120\\% = \\_ \\_ \\_ \\_ \\_ \\_ .$"
+        ],
+        "bbox": [
+            87,
+            435,
+            323,
+            570
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "10. 如图，阴影部分面积占整个图形面积的百分之几",
+        "bbox": [
+            87,
+            579,
+            288,
+            596
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "image",
+        "img_path": "images/c10ac5071955bd470c5a71b81e2dc4d4b032ec1146b2f3722ffd3df3ec797702.jpg",
+        "image_caption": [
+            "$\\%$"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            90,
+            606,
+            168,
+            723
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "image",
+        "img_path": "images/b3d8a77f539f60f32f3af0c595e0323931f34aac6beef3ebdee3d80df984854e.jpg",
+        "image_caption": [
+            "$\\%$"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            179,
+            627,
+            235,
+            712
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "image",
+        "img_path": "images/83380494f53da05fc845d25d555a81a7debadad8d967efd6dcdac67d30385293.jpg",
+        "image_caption": [
+            "$\\%$"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            251,
+            631,
+            303,
+            711
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "image",
+        "img_path": "images/73b25dbddac6f98e25f5dc53ef44f43d38986071ec99901130c3d1b2a523a33c.jpg",
+        "image_caption": [
+            "$\\%$"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            317,
+            631,
+            374,
+            712
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "11. 把下列各比化成后项是 100 的比",
+        "bbox": [
+            87,
+            758,
+            227,
+            775
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（1）320:500",
+        "bbox": [
+            101,
+            790,
+            149,
+            805
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(2)  $1\\frac{1}{2}: 2$",
+        "bbox": [
+            211,
+            786,
+            256,
+            815
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(3) 1.3:25",
+        "bbox": [
+            337,
+            793,
+            381,
+            807
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "12. 将下列的百分数化成最简分数",
+        "bbox": [
+            574,
+            86,
+            707,
+            102
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（1）  $4\\%$",
+        "bbox": [
+            587,
+            114,
+            620,
+            129
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(2）  $65\\%$",
+        "bbox": [
+            701,
+            114,
+            738,
+            128
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(3)  $12.5\\%$",
+        "bbox": [
+            824,
+            112,
+            865,
+            128
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "13. 某学校有学生 2000 人，六年级学生共 400 人，六 (1) 班学生 40 人. 问：",
+        "bbox": [
+            574,
+            248,
+            857,
+            264
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（1）六（1）班学生占六年级学生人数的百分之几？",
+        "bbox": [
+            587,
+            276,
+            777,
+            292
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（2）六（1）班学生占全校学生人数的百分之几？",
+        "bbox": [
+            587,
+            410,
+            770,
+            428
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            735,
+            547,
+            754,
+            562
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "1. 在  $2\\frac{1}{3}$ ，2.3， $233\\%$ ，2.3这四个数中，最小的数是（ ）.",
+        "bbox": [
+            574,
+            572,
+            816,
+            604
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(A)  $2\\frac{1}{3}$",
+        "bbox": [
+            588,
+            609,
+            620,
+            638
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(B) 2.3",
+        "bbox": [
+            670,
+            614,
+            701,
+            630
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（C）  $233\\%$",
+        "bbox": [
+            751,
+            614,
+            792,
+            629
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(D) 2.3",
+        "bbox": [
+            842,
+            612,
+            873,
+            628
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "2.下列说法中，正确的是（ ）.",
+        "bbox": [
+            574,
+            647,
+            711,
+            663
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "(A)  $a:b = \\frac{2}{5}$ , 表示  $a$  是  $b$  的  $4\\%$",
+        "bbox": [
+            588,
+            672,
+            711,
+            701
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（B）百分数都不大于1",
+        "bbox": [
+            754,
+            676,
+            838,
+            692
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（C）一个数的  $\\frac{1}{4}$  与它的  $25\\%$  一定相等",
+        "bbox": [
+            588,
+            710,
+            729,
+            738
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "（D） $95\\%$  是 9.5",
+        "bbox": [
+            753,
+            714,
+            814,
+            729
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "3. 比较大小：  $6.5\\%$  6.5",
+            "4. 甲数是乙数的  $25\\%$  ，则乙数是甲数的  $\\%$",
+            "5. 1小时的  $40\\%$  是 分钟",
+            "6.  $4:2 = \\frac{1}{4}$  ：  $= 200\\%$"
+        ],
+        "bbox": [
+            574,
+            747,
+            779,
+            855
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            66,
+            43,
+            89,
+            78
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            91,
+            57,
+            186,
+            72
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "16",
+        "bbox": [
+            252,
+            899,
+            260,
+            909
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            553,
+            48,
+            575,
+            81
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            576,
+            61,
+            671,
+            74
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "page_number",
+        "text": "17",
+        "bbox": [
+            742,
+            903,
+            750,
+            913
+        ],
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "7. 把下列各比化成百分比：",
+        "bbox": [
+            86,
+            89,
+            191,
+            105
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(1)  $1:4$",
+        "bbox": [
+            100,
+            116,
+            135,
+            131
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(2) 2.1:2.5",
+        "bbox": [
+            262,
+            116,
+            313,
+            131
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(3)  $1.8: 2\\frac{2}{5}$",
+        "bbox": [
+            100,
+            195,
+            151,
+            225
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(4)  $2 \\frac{1}{4}: 1 \\frac{2}{7}$",
+        "bbox": [
+            261,
+            195,
+            309,
+            226
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "8. 计算：",
+        "bbox": [
+            86,
+            287,
+            123,
+            304
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(1)  $1\\frac{1}{4} \\times 3\\frac{1}{5} + (1 + 25\\%) \\times 4\\frac{5}{6}$",
+        "bbox": [
+            100,
+            312,
+            209,
+            343
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(2)  $(3 - 45\\% \\div 90\\%) \\div 60\\%$",
+        "bbox": [
+            263,
+            318,
+            368,
+            336
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(3)  $(12.5\\% \\times \\frac{1}{9}) \\times 40\\% \\times 18$",
+        "bbox": [
+            100,
+            429,
+            201,
+            459
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(4)  $2\\frac{3}{5} - \\frac{8}{13} \\times 260\\%$",
+        "bbox": [
+            265,
+            429,
+            343,
+            460
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "5.4 百分比的意义（2）",
+        "text_level": 1,
+        "bbox": [
+            674,
+            89,
+            804,
+            110
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            733,
+            123,
+            753,
+            138
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "1. 下列各数中与  $\\frac{4}{5}$  不相等的是（ ）.",
+        "bbox": [
+            572,
+            148,
+            727,
+            179
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(A) 0.8",
+        "bbox": [
+            586,
+            191,
+            623,
+            206
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(B)  $80\\%$",
+        "bbox": [
+            681,
+            190,
+            718,
+            206
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{8}{10}$",
+        "bbox": [
+            770,
+            185,
+            798,
+            214
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（D）  $8\\%$",
+        "bbox": [
+            846,
+            188,
+            877,
+            204
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "2.  $1 + 0.5\\%$  等于（ ）.",
+        "bbox": [
+            572,
+            223,
+            675,
+            239
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(A)  $1.5\\%$",
+        "bbox": [
+            586,
+            251,
+            629,
+            266
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(B)  $1.05\\%$",
+        "bbox": [
+            680,
+            251,
+            725,
+            264
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（C）  $100.5\\%$",
+        "bbox": [
+            769,
+            251,
+            813,
+            264
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（D）  $105\\%$",
+        "bbox": [
+            848,
+            250,
+            887,
+            264
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "3. 一桶油用去  $40\\%$  ，正好用了20千克，这桶油原来的重量是（ ）.",
+        "bbox": [
+            572,
+            277,
+            845,
+            293
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（A）40千克",
+        "bbox": [
+            586,
+            305,
+            634,
+            320
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（B）24千克",
+        "bbox": [
+            681,
+            305,
+            728,
+            320
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（C）50千克",
+        "bbox": [
+            770,
+            304,
+            818,
+            319
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（D）8千克",
+        "bbox": [
+            850,
+            302,
+            893,
+            319
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "4. 火车从  $A$  地到  $B$  地，原来要5小时，现在只要4小时，时间减少了（ ）",
+        "bbox": [
+            572,
+            331,
+            871,
+            347
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(A)  $20\\%$",
+        "bbox": [
+            586,
+            359,
+            625,
+            375
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(B)  $25\\%$",
+        "bbox": [
+            681,
+            359,
+            719,
+            374
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（C）  $10\\%$",
+        "bbox": [
+            770,
+            359,
+            805,
+            372
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（D）  $80\\%$",
+        "bbox": [
+            848,
+            359,
+            885,
+            372
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "5.  $3.5\\%$  写成小数是  $\\frac{4}{25}$  化成百分数是",
+            "6. 把  $1\\frac{3}{4}$  化成百分数 _______，把  $25\\%$  化成小数是 _______.",
+            "7.30米是120米的  $\\%$",
+            "8. 某数的  $30\\%$  是54，这个数是",
+            "9.  $5:4 = \\_$  ________ % = ________ （小数）.",
+            "10. 120 的  $20\\%$  是 ________；一个数的  $20\\%$  是 120，这个数是 ________。",
+            "11. 把下列各数化成百分数："
+        ],
+        "bbox": [
+            572,
+            384,
+            871,
+            583
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(1) 0.1",
+        "bbox": [
+            588,
+            597,
+            619,
+            612
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(2）0.0102",
+        "bbox": [
+            679,
+            593,
+            722,
+            611
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(3)  $\\frac{3}{10}$",
+        "bbox": [
+            783,
+            592,
+            811,
+            621
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(4) 1",
+        "bbox": [
+            869,
+            596,
+            890,
+            611
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "12. 把下列各百分数化成小数或整数：",
+        "bbox": [
+            575,
+            684,
+            717,
+            700
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（1）  $5\\%$",
+        "bbox": [
+            588,
+            712,
+            621,
+            728
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(2）  $60\\%$",
+        "bbox": [
+            679,
+            712,
+            716,
+            726
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(3)  $1.75\\%$",
+        "bbox": [
+            783,
+            711,
+            825,
+            726
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（4）  $150\\%$",
+        "bbox": [
+            870,
+            711,
+            910,
+            725
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "13. 把下列各百分数化成最简分数：",
+        "bbox": [
+            575,
+            793,
+            709,
+            809
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(1)  $0.2\\%$",
+        "bbox": [
+            588,
+            821,
+            629,
+            836
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "(2）  $40\\%$",
+        "bbox": [
+            680,
+            821,
+            717,
+            836
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（3）  $32\\%$",
+        "bbox": [
+            785,
+            820,
+            823,
+            834
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "E",
+        "bbox": [
+            66,
+            49,
+            89,
+            83
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            89,
+            62,
+            185,
+            78
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "18",
+        "bbox": [
+            252,
+            903,
+            261,
+            915
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            551,
+            49,
+            575,
+            83
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            575,
+            62,
+            671,
+            76
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "page_number",
+        "text": "19",
+        "bbox": [
+            742,
+            904,
+            751,
+            915
+        ],
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "（4）  $37.5\\%$",
+        "bbox": [
+            101,
+            87,
+            145,
+            102
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（5）  $337.5\\%$",
+        "bbox": [
+            191,
+            87,
+            240,
+            102
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(6)  $20.23\\%$",
+        "bbox": [
+            295,
+            87,
+            344,
+            102
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "14. 求下列各题的商，并把所得的商化成百分数（除不尽的在百分号前保留一位小数）.",
+        "bbox": [
+            88,
+            195,
+            416,
+            211
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(1)  $2 \\div 7$",
+        "bbox": [
+            101,
+            223,
+            137,
+            239
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（2）  $280\\div 70$",
+        "bbox": [
+            178,
+            223,
+            225,
+            239
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(3)  $\\frac{12}{13} \\div \\frac{7}{6}$",
+        "bbox": [
+            266,
+            220,
+            307,
+            249
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(3)  $3 \\div \\frac{2}{3}$",
+        "bbox": [
+            350,
+            222,
+            385,
+            249
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            248,
+            339,
+            268,
+            356
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "1. 如果甲：乙  $= 3:2$  ，则甲是乙的（ ）.",
+        "bbox": [
+            88,
+            366,
+            246,
+            382
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(A)  $150\\%$",
+        "bbox": [
+            101,
+            394,
+            143,
+            409
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(B)  $66.7\\%$",
+        "bbox": [
+            185,
+            394,
+            229,
+            409
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（C）  $15\\%$",
+        "bbox": [
+            268,
+            394,
+            302,
+            409
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(D)  $60\\%$",
+        "bbox": [
+            342,
+            394,
+            379,
+            409
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "2.一台电脑原价2800元，现打八折，那么这台电脑的现价为（ ）.",
+        "bbox": [
+            88,
+            420,
+            356,
+            435
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(A) 原价的  $80\\%$",
+        "bbox": [
+            101,
+            447,
+            164,
+            463
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（B）原价的  $8.5\\%$",
+        "bbox": [
+            184,
+            448,
+            246,
+            463
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（C）原价的  $5\\%$",
+        "bbox": [
+            267,
+            448,
+            322,
+            463
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（D）比原价降低  $3.95\\%$",
+        "bbox": [
+            342,
+            448,
+            425,
+            463
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "3. 甲数和乙数的比是  $3:4$ ，甲数是乙数的  $\\%$ 。",
+            "4. 将 1.22、1.2、 $1\\frac{2}{100}$ 、 $120\\%$  按从小到大的顺序排列是",
+            "5. 0.36里有 个  $1\\%$",
+            "6.  $\\frac{2}{3}$  的  $25\\%$  是 ，  $\\frac{2}{3}$  是  $\\frac{8}{15}$  的",
+            "7. 某厂上半年完成计划产值的  $44\\%$  ，下半年又完成计划产值的  $66\\%$  ，则这个厂全年增产多少？",
+            "8. 上海某工业园区是市政府与外商共同投资兴建的。其中市政府投资30亿元，占外商投资的  $10\\%$  ，那么建设此工业园区共投资了多少亿元？"
+        ],
+        "bbox": [
+            88,
+            475,
+            427,
+            779
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "5.5 百分比的应用（1）",
+        "text_level": 1,
+        "bbox": [
+            672,
+            87,
+            801,
+            109
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            731,
+            122,
+            750,
+            138
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "1. 某班昨天上课出席48人，缺席2人，则出席率的算式是（ ）.",
+        "bbox": [
+            570,
+            148,
+            831,
+            165
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{2}{48} \\times 100\\%$",
+        "bbox": [
+            584,
+            175,
+            642,
+            204
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{2}{48 + 2} \\times 100\\%$",
+        "bbox": [
+            664,
+            175,
+            733,
+            204
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{48}{48} \\times 100\\%$",
+        "bbox": [
+            756,
+            175,
+            813,
+            203
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(D)  $\\frac{48}{48 + 2} \\times 100\\%$",
+        "bbox": [
+            836,
+            175,
+            905,
+            204
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "2. 小兰养了98只蚕，全部存活，则存活率是（ ）.",
+        "bbox": [
+            570,
+            212,
+            779,
+            228
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(A)  $98\\%$",
+        "bbox": [
+            584,
+            241,
+            620,
+            255
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(B)  $80\\%$",
+        "bbox": [
+            663,
+            241,
+            699,
+            255
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（C）  $100\\%$",
+        "bbox": [
+            756,
+            241,
+            796,
+            255
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（D）98",
+        "bbox": [
+            839,
+            241,
+            865,
+            254
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "3. 一堆煤重1000吨，每天用去120吨，则每天用煤（ ）.",
+        "bbox": [
+            570,
+            267,
+            804,
+            283
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(A)  $12\\%$",
+        "bbox": [
+            584,
+            295,
+            619,
+            309
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(B)  $2.4\\%$",
+        "bbox": [
+            665,
+            295,
+            705,
+            309
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（C）  $120\\%$",
+        "bbox": [
+            756,
+            295,
+            796,
+            309
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(D)  $1.2\\%$",
+        "bbox": [
+            839,
+            295,
+            875,
+            309
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "4. 将一包种子做发芽试验，其中发芽的90粒，没有发芽的10粒，发芽率是（ ）.",
+        "bbox": [
+            570,
+            320,
+            894,
+            336
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(A)  $10\\%$",
+        "bbox": [
+            584,
+            349,
+            619,
+            363
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(B)  $90\\%$",
+        "bbox": [
+            665,
+            349,
+            702,
+            363
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "（C）  $90.9\\%$",
+        "bbox": [
+            756,
+            349,
+            798,
+            363
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "(D)  $110\\%$",
+        "bbox": [
+            839,
+            349,
+            878,
+            362
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "5. 32是50的  $\\%$  ，60是80的  $\\%$",
+            "6. 一根长10米的绳子，剪去4米，剪去了  $\\%$",
+            "7. 一根长10米的绳子，剪去它的  $40\\%$  ，剪去 米",
+            "8. 某班有40人，数学期中考试5人不及格，及格人数是全班总人数的  $\\%$",
+            "9. 小明五年级期末考试数学成绩为80分，这次期中的成绩提高了  $10\\%$  ，他这次期中考试的成绩是 分.",
+            "10. 小明五年级期末考试数学成绩为80分，这次考试是88分，他的数学成绩提  $\\%$",
+            "11. 赵叔叔做了 1500 个零件，经过检验，发现有 3 个废品，求合格率是多少？废品率是多少？"
+        ],
+        "bbox": [
+            570,
+            375,
+            903,
+            606
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "table",
+        "img_path": "images/3b9c725798b42179f7f63930c72f5e74305330bd61e1d3a4348c1e6eeb6b3d93.jpg",
+        "table_caption": [
+            "12. 下面是某校六（1）班数学期中考试成绩统计表："
+        ],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>成绩</td><td>100分</td><td>90-99分</td><td>80-89分</td><td>70-79分</td><td>60-69分</td><td>59分以下</td></tr><tr><td>人数</td><td>1</td><td>10</td><td>14</td><td>7</td><td>5</td><td>3</td></tr></table>",
+        "bbox": [
+            571,
+            692,
+            912,
+            751
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "若60分以上是及格，80分以上是良好，90分以上是优秀，求这个班这次数学考试成绩的优秀率、良好率和及格率.",
+        "bbox": [
+            570,
+            756,
+            906,
+            800
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            66,
+            47,
+            89,
+            81
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            89,
+            61,
+            186,
+            74
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "",
+        "bbox": [
+            548,
+            47,
+            573,
+            81
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            573,
+            61,
+            667,
+            74
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "page_number",
+        "text": "20",
+        "bbox": [
+            254,
+            901,
+            263,
+            912
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "page_number",
+        "text": "21",
+        "bbox": [
+            737,
+            901,
+            746,
+            912
+        ],
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "13. 一汽汽车销售公司，今年4月份销售了250辆  $A$  型汽车，5月份销售  $A$  型汽车的数量比4月份下降了  $20\\%$ 。预计6月份的销售量将比5月份的销售量再下降  $5\\%$ 。求：",
+        "bbox": [
+            92,
+            86,
+            426,
+            129
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）5月份这个销售公司销售了  $A$  型汽车多少辆？",
+            "（2）6月份这个销售公司将销售  $A$  型汽车多少辆？"
+        ],
+        "bbox": [
+            105,
+            140,
+            291,
+            182
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "14. 下表是某超市2015年各季度产值统计表：",
+        "bbox": [
+            92,
+            302,
+            265,
+            319
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "table",
+        "img_path": "images/a699bb6791b9dc00c3044b88a62c827ccce73c0b8715d72145bca276cb922c95.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>季度</td><td>第一季度</td><td>第二季度</td><td>第三季度</td><td>第四季度</td></tr><tr><td>产值（万元）</td><td>380</td><td>400</td><td>432</td><td></td></tr></table>",
+        "bbox": [
+            92,
+            323,
+            433,
+            383
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）计算第三季度产值比第二季度产值增长百分之几",
+            "（2）若计划第四季度的增长率比第三季度再提高2个百分点，则第四季度的产值是多少万元？"
+        ],
+        "bbox": [
+            96,
+            385,
+            432,
+            456
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            252,
+            576,
+            272,
+            592
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "1. 某商店一套电动玩具 11 月份的售价是 108 元，12 月份的售价是 84 元，那么这套玩具约降价了（ ）.",
+        "bbox": [
+            92,
+            603,
+            426,
+            646
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(A)  $28.6\\%$",
+        "bbox": [
+            105,
+            657,
+            150,
+            673
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(B)  $22.2\\%$",
+        "bbox": [
+            191,
+            657,
+            235,
+            673
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(C)  $20.3\\%$",
+        "bbox": [
+            277,
+            657,
+            321,
+            673
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "（D）  $24\\%$",
+        "bbox": [
+            363,
+            657,
+            400,
+            673
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "2. 六（1）班50人参加数学测验，试卷上有5道应用题，全班共错了23道题，这个班的学生解应用题的正确率是（ ）.",
+        "bbox": [
+            92,
+            684,
+            432,
+            728
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(A)  $90.8\\%$",
+        "bbox": [
+            105,
+            739,
+            150,
+            754
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "(B)  $46\\%$",
+        "bbox": [
+            191,
+            739,
+            227,
+            754
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "（C）  $42.5\\%$",
+        "bbox": [
+            275,
+            739,
+            319,
+            754
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "（D）  $57.5\\%$",
+        "bbox": [
+            361,
+            739,
+            404,
+            754
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "3. 小明这次期中考试考了88分，比五年级期末提高了  $10\\%$  ，他五年级期末考试考了 分.",
+            "4. 一件商品，原价比现价少  $30\\%$  ，若现价为560元，则原价为 元",
+            "5. 检验一批零件，117个合格，3个不合格，它的不合格率是"
+        ],
+        "bbox": [
+            92,
+            766,
+            411,
+            863
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "6. 右图中阴影部分的面积占全图面积的  $\\%$",
+        "bbox": [
+            571,
+            87,
+            778,
+            105
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "image",
+        "img_path": "images/a7952aeb220c9532ac6702673a2cbdf3e382c22e3f5ead28566b61e3e34678cd.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            801,
+            93,
+            911,
+            152
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "7. 100个零件， $3\\%$  是不合格的，取出25个合格的零件后，不合格的目前占了百分之几？",
+        "bbox": [
+            571,
+            169,
+            907,
+            186
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "8. 检验员检验一批电脑的合格率是  $98\\%$  ，不合格的电脑有98台，求合格的电脑有多少台？",
+        "bbox": [
+            570,
+            332,
+            907,
+            349
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            70,
+            46,
+            93,
+            81
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            94,
+            60,
+            191,
+            74
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "page_number",
+        "text": "22",
+        "bbox": [
+            258,
+            903,
+            267,
+            914
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            550,
+            48,
+            573,
+            81
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            573,
+            62,
+            669,
+            76
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "page_number",
+        "text": "23",
+        "bbox": [
+            735,
+            903,
+            744,
+            915
+        ],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "5.5 百分比的应用（2）",
+        "text_level": 1,
+        "bbox": [
+            193,
+            90,
+            322,
+            112
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "bbox": [
+            251,
+            124,
+            271,
+            141
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "1. 今年来我国国内生产总值的变化统计图如图，从图上判断，下列结论中，不正确的是（ ）.",
+        "bbox": [
+            91,
+            150,
+            324,
+            195
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（A）水平的数轴表示的含义是年份",
+            "（B）竖直的数轴表示的含义是国内生产总值",
+            "（C）这4年中，每年的国内生产总值不断增长",
+            "（D）这4年中，每年的国内生产总值不断减少"
+        ],
+        "bbox": [
+            105,
+            206,
+            277,
+            302
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/d8caff966f8ffb386244c2aa79089a6373dd224a69c62fd867fdfb2338af919f.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            329,
+            150,
+            441,
+            264
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "2. 在如图中应当填入的百分比是（ ）.",
+        "bbox": [
+            91,
+            314,
+            254,
+            331
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(A)  $30\\%$",
+        "bbox": [
+            105,
+            342,
+            140,
+            357
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(B)  $25\\%$",
+        "bbox": [
+            174,
+            342,
+            211,
+            357
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "（C）  $35\\%$",
+        "bbox": [
+            245,
+            342,
+            281,
+            357
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "（D）  $60\\%$",
+        "bbox": [
+            315,
+            342,
+            351,
+            357
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/5ba3f68376c84c52d1fafa767ecc7fd9c55a52eb30b0a805e47862d6c4c60cd9.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            385,
+            285,
+            444,
+            366
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "3. 如图，某中学制作了300名学生选择棋类、武术、摄影、刺绣四门校本课程情况的扇形统计图，从图中可以看出选择刺绣的学生的人数为（ ）名。",
+        "bbox": [
+            91,
+            368,
+            389,
+            413
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(A) 33",
+        "bbox": [
+            105,
+            423,
+            132,
+            438
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(B) 3",
+        "bbox": [
+            177,
+            423,
+            200,
+            437
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "（C）39",
+        "bbox": [
+            246,
+            423,
+            273,
+            437
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "(D) 42",
+        "bbox": [
+            315,
+            423,
+            341,
+            437
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/0013f410ef7d47e4a8363bb947b7ea5cceaded6b1dab03fcf0504d6d9926f6ff.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            425,
+            374,
+            455,
+            454
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "4. 如图是我国在28届奥林匹克运动会上获得奖牌数的统计图，则获得的金牌数占所获得的奖牌数的  $\\%$  （保留1位小数）",
+        "bbox": [
+            91,
+            448,
+            384,
+            494
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "5. 六（1）班同学每个月收看电视节目的情况，经调查如统计表所示：",
+        "bbox": [
+            91,
+            504,
+            345,
+            520
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "table",
+        "img_path": "images/c5c1dbe1102156fefee02a8cdce663e57a59116ee3f83c43327442862497bb6c.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td></td><td>看动画</td><td>看连续剧</td><td>看体育</td><td>看新闻</td></tr><tr><td>人数</td><td>18</td><td>8</td><td>10</td><td>5</td></tr></table>",
+        "bbox": [
+            118,
+            524,
+            317,
+            581
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/6cb9ebb0307ec7026e881a98bbcb0704a4467739ba25ca9409509458546891f7.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            357,
+            475,
+            463,
+            567
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "则看新闻的人数占全班人数的百分比是 ________。（保留1位小数）",
+        "bbox": [
+            112,
+            587,
+            372,
+            604
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "6. 某校对六年级300名新生进行了数学摸底考试，请根据下表计算出各分数段的人数占全体学生人数的百分数.",
+        "bbox": [
+            91,
+            614,
+            432,
+            657
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "（注：原始成绩均为整数，分数段中的成绩可含最低值，不含最高值）",
+        "bbox": [
+            105,
+            668,
+            363,
+            685
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "table",
+        "img_path": "images/cc6dc0a158c9ae9f6961187e0efba3f723232b38e940961c30eb3a347d542244.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>分数段</td><td>人数</td><td>百分比</td></tr><tr><td>0~60</td><td>27</td><td></td></tr><tr><td>60~70</td><td>39</td><td></td></tr><tr><td>70~80</td><td>75</td><td></td></tr><tr><td>80~90</td><td></td><td></td></tr><tr><td>90~101</td><td>63</td><td></td></tr></table>",
+        "bbox": [
+            118,
+            688,
+            244,
+            858
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "7. 某校六年级共有两个班级，两个班男、女生人数统计如图所示，求该年级中男生人数是",
+        "bbox": [
+            570,
+            87,
+            909,
+            104
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "年级总人数的百分比.",
+        "bbox": [
+            581,
+            114,
+            663,
+            130
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/95f38cd3f915b9865ac0b99858a4c4972d3aed33324539777d3ce490890df36d.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            785,
+            114,
+            912,
+            231
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "8. 如图为一箱鸡蛋的重量分布直方图，根据图表提供的信息回答下列问题：",
+        "bbox": [
+            575,
+            302,
+            858,
+            320
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）重量在56克～65克的鸡蛋个数占这箱鸡蛋总数的几分之几？",
+            "（2）重量在56克以下与重量在60克以上的鸡蛋个数的比是多少？"
+        ],
+        "bbox": [
+            582,
+            330,
+            828,
+            372
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/621793976a1642a0b6917b8397ebdd274ff06bf25d6d49f7494a6573120081f2.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            782,
+            382,
+            929,
+            505
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "9. 如图是某校一年的支出经费的具体情况，根据图中的信息，回答下列问题：",
+        "bbox": [
+            575,
+            573,
+            866,
+            590
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）求课时经费的支出是所有费用的百分之几？",
+            "（2）该学校这一年的支出费用是多少？"
+        ],
+        "bbox": [
+            586,
+            600,
+            763,
+            643
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/30b96a5d053ebf33fdb8753eff61e1077a4bf2d283327c2df2a173af4cd5b8f1.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            823,
+            600,
+            895,
+            704
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            69,
+            49,
+            91,
+            83
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            92,
+            62,
+            189,
+            77
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "page_number",
+        "text": "24",
+        "bbox": [
+            258,
+            904,
+            267,
+            916
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            548,
+            48,
+            571,
+            81
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            572,
+            61,
+            668,
+            74
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "page_number",
+        "text": "25",
+        "bbox": [
+            735,
+            902,
+            743,
+            913
+        ],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            254,
+            87,
+            273,
+            103
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "1. 如图是某超市在月底盘点时对饮料和饼干类食品销售的统计情况：",
+        "bbox": [
+            99,
+            114,
+            356,
+            130
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）矿泉水占饮料类和饼干类这两类消费的百分之几？",
+            "（2）如果果汁出售了500千克，问：饼干卖出多少千克？"
+        ],
+        "bbox": [
+            113,
+            140,
+            326,
+            184
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/eeaadcf875382388f6a5ad8c174fa0b709b432be285b5a3fcb5eea8cfbf668d5.jpg",
+        "image_caption": [
+            "饮料类"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            271,
+            200,
+            347,
+            306
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "image",
+        "img_path": "images/1b2da8eb29f5aa76d5640f58b921d394bad180cd63bc8e1e140a05359c3e8b9a.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            367,
+            200,
+            442,
+            306
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "2. 某次测验，全班平均分为77分，及格率为  $90\\%$  ，及格学生的平均分为80分，问：不及格学生的平均分是多少？",
+        "bbox": [
+            98,
+            492,
+            432,
+            536
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "5.5百分比的应用（3）",
+        "text_level": 1,
+        "bbox": [
+            672,
+            91,
+            802,
+            112
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            730,
+            125,
+            750,
+            141
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "1. 一种电视机现以七五折出售，就是指现价是（ ）.",
+        "bbox": [
+            570,
+            150,
+            784,
+            168
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（A）原价的  $75\\%$",
+        "bbox": [
+            583,
+            178,
+            647,
+            195
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（B）原价的  $25\\%$",
+        "bbox": [
+            755,
+            179,
+            818,
+            195
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（C）原价的  $7.5\\%$",
+        "bbox": [
+            583,
+            205,
+            649,
+            220
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（D）比原价降低了的  $75\\%$",
+        "bbox": [
+            755,
+            206,
+            852,
+            223
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "2. 一件外套原价每件300元，在降价60元后出售，这件外套的售价打（ ）.",
+        "bbox": [
+            570,
+            233,
+            872,
+            250
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（A）六折",
+        "bbox": [
+            583,
+            258,
+            619,
+            276
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（B） 七折",
+        "bbox": [
+            668,
+            258,
+            709,
+            276
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（C） 七五折",
+        "bbox": [
+            758,
+            260,
+            807,
+            277
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（D）八折",
+        "bbox": [
+            856,
+            261,
+            892,
+            277
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "3. 一件标有一定价格的商品，如果先提价  $10\\%$  ，然后又降价  $10\\%$  出售，那么这件商品的售价与原价相比是（ ）.",
+        "bbox": [
+            570,
+            287,
+            908,
+            330
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（A）提价了",
+        "bbox": [
+            582,
+            340,
+            627,
+            358
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（B）降价了",
+        "bbox": [
+            668,
+            340,
+            717,
+            358
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（C）没降也没提",
+        "bbox": [
+            759,
+            340,
+            821,
+            358
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "（D）无法确",
+        "bbox": [
+            858,
+            342,
+            902,
+            358
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "定",
+        "bbox": [
+            570,
+            368,
+            581,
+            383
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "4. 某品牌手机进价为 800 元。现在 1000 元售出，盈利 ______ 元，盈利率 ______ 。",
+            "5. 一件商品的售价为2000元, 其盈利率为  $25\\%$ , 则此商品的成本价 ________ 元.",
+            "6. 一种新款电冰箱提价  $10\\%$  出售，就是提价 成. 现价是原价的  $\\%$",
+            "7. 某商店每台电扇的成本250元，盈利率  $20\\%$  ，商家每售出一台电扇，赚了 元",
+            "8.一台电视机成本价是2000元，商店以2600元出售，商店的盈利率是  $\\%$",
+            "9. 一套玩具的成本是50元，如果制造商赚  $20\\%$  ，零售商赚  $10\\%$  。问："
+        ],
+        "bbox": [
+            570,
+            395,
+            891,
+            547
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）零售商进货一套需多少元钱？",
+            "（2）零售商出售这套玩具的定价是多少元？"
+        ],
+        "bbox": [
+            582,
+            557,
+            742,
+            600
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "10. 某商场“十一”酬宾，所有商品九五折出售。",
+        "bbox": [
+            569,
+            719,
+            753,
+            736
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）一台冰箱原价2700元，现在售价为多少元？",
+            "（2）小明家买了一台彩电，付了1900元，这台彩电原价为多少元？"
+        ],
+        "bbox": [
+            582,
+            745,
+            832,
+            790
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            70,
+            47,
+            94,
+            81
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            95,
+            61,
+            191,
+            74
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "page_number",
+        "text": "26",
+        "bbox": [
+            259,
+            903,
+            267,
+            914
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "中",
+        "bbox": [
+            549,
+            49,
+            573,
+            81
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            571,
+            62,
+            668,
+            76
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "page_number",
+        "text": "27",
+        "bbox": [
+            732,
+            904,
+            742,
+            915
+        ],
+        "page_idx": 14
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "11. 一双运动鞋售价525元，其盈利率为  $40\\%$  ，求这双运动鞋的成本价？",
+            "12. 建造一栋大楼，实际投资 1800 万元，比计划节约了两成，求计划投资多少万元？",
+            "13. 某书店开展喜迎元旦双重促销活动：①凡购买故事书有相应的折扣（见下表）；②折扣后金额超过50元而不超过100元的减5元，折扣后金额超过100元而不超过200元的减10元，折扣后金额超过200元减20元。"
+        ],
+        "bbox": [
+            89,
+            115,
+            431,
+            456
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "table",
+        "img_path": "images/20f387f366cb587448b9139186129b3696e0ba0d6414bef6821f465c97aeb885.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>故事书数量（本）</td><td>折扣</td></tr><tr><td>1——10</td><td>九折</td></tr><tr><td>11——20</td><td>八五折</td></tr><tr><td>20本以上</td><td>八折</td></tr></table>",
+        "bbox": [
+            159,
+            460,
+            363,
+            573
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）小红买了3本故事书付了36元，求这3本故事书的原价是多少元？",
+            "（2）小明买了13本故事书付了126元，求这13本故事书的原价是多少元？"
+        ],
+        "bbox": [
+            103,
+            578,
+            384,
+            622
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            728,
+            115,
+            748,
+            131
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "1. 一商店批进衬衫500件，每件进货价为30元，准备每件加价  $30\\%$  出售",
+        "bbox": [
+            568,
+            141,
+            848,
+            159
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "问：（1）预计总共可以盈利多少元？",
+            "（2）当这批衬衫售出  $90\\%$  以后，决定将余下的按八折继续售出，这样这批衬衫全部售完，实际盈利多少元？"
+        ],
+        "bbox": [
+            579,
+            168,
+            900,
+            239
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "2. “六一”儿童节到了，许多商家为了吸引顾客，纷纷使出打折的招数。有一件玩具原价200元，打六折后商家的盈利率还是达到了  $20\\%$  ，求这件玩具的成本价。",
+            "3. 房地产商有两套住房均以 300 万元的价格卖出，其中一套赚了  $25\\%$  ，另一套亏了  $25\\%$  ，试判断房地产商是赚了还是亏了，或者是不赚不亏？如果是赚或亏，那么赚了或亏了多少？"
+        ],
+        "bbox": [
+            566,
+            385,
+            902,
+            644
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            67,
+            48,
+            92,
+            83
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            93,
+            62,
+            189,
+            77
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            546,
+            48,
+            570,
+            81
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            570,
+            62,
+            666,
+            76
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "page_number",
+        "text": "28",
+        "bbox": [
+            257,
+            904,
+            266,
+            916
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "page_number",
+        "text": "29",
+        "bbox": [
+            731,
+            902,
+            739,
+            914
+        ],
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "5.5 百分比的应用（4）",
+        "text_level": 1,
+        "bbox": [
+            193,
+            89,
+            323,
+            112
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            251,
+            123,
+            271,
+            140
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "1. 下列数量关系中错误的是（ ）.",
+        "bbox": [
+            91,
+            150,
+            233,
+            167
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "（A）利息  $=$  本金  $\\times$  利率  $\\times$  期数",
+        "bbox": [
+            103,
+            176,
+            214,
+            195
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "（B）利息税  $=$  利息  $\\times$  税率",
+        "bbox": [
+            245,
+            178,
+            337,
+            194
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "（C）本利和  $=$  本金  $+$  利息",
+        "bbox": [
+            103,
+            205,
+            191,
+            220
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "（D）税后本利和  $=$  （本金  $+$  利息）  $\\times$  税率",
+        "bbox": [
+            245,
+            205,
+            384,
+            220
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "2. 若银行定期储蓄一年的年利率是  $2.25\\%$  ，则月利率应该是（ ）.",
+        "bbox": [
+            90,
+            232,
+            353,
+            248
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "(A)  $2.25\\%$",
+        "bbox": [
+            103,
+            258,
+            149,
+            276
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "(B)  $27\\%$",
+        "bbox": [
+            181,
+            258,
+            219,
+            275
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "（C）  $0.1875\\%$",
+        "bbox": [
+            248,
+            258,
+            301,
+            275
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "(D)  $0.225\\%$",
+        "bbox": [
+            325,
+            258,
+            374,
+            275
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "3. 三年存款的月利率为  $0.25\\%$  ，则这种存款的年利率为",
+            "4. 计税金额是200000元，适用税率是  $15\\%$  ，应交纳税额是 元.",
+            "5. 计税金额是 40000 元，应交纳税额 4200 元，税率是 ________。",
+            "6. 小丽将 2000 元存入银行，存期三年，年利率是  $2.8\\%$  ，问到期后小丽可从银行取回本利和 ______ 元。",
+            "7. 小明买彩票中了 500 万元大奖，需缴纳  $20\\%$  的个人所得税，那么小明实际可以获得 ______ 万元。",
+            "8. 小丽将压岁钱 1500 元存入银行，定期 3 年，到期得到税前本利和 1770 元，则定期三年的存款的年利率为",
+            "9. 超市六月份营业额3000万元，缴纳了150万元的营业税．那么营业税的税率是",
+            "10. 服装厂去年以全年产值为计税金额，共应纳税额28万元，服装产值税率为  $7\\%$  ，该服装厂去年全年产值为 ______ 万元。",
+            "11. 王老师从报社获得了 1800 元的稿费，按照国家税收标准，超过 1000 元的部分按照  $20\\%$  的税率纳税，王老师实际得到稿费 ______ 元。",
+            "12. 王阿姨将4万元存入银行，存期五年，存款年利率是  $4.5\\%$  ，到期需付  $20\\%$  的利息税，问王阿姨到期可得税后利息多少元？"
+        ],
+        "bbox": [
+            90,
+            286,
+            431,
+            710
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "13. 某单位向银行贷款20万元，月利率为  $0.8\\%$  ，借期3年，问该单位货款到期应向银行还本利和共多少万元？",
+            "14. 教育储蓄所得的利息不用纳利息税。爸爸为笑笑存了三年期的教育储蓄基金，年利率为  $5.40\\%$  ，到期后共领到了本金和利息 23240 元。爸爸为笑笑存的教育储蓄基金的本金是多少？",
+            "15. 某酒店平均每月营业额40万元，按规定除了按营业额的  $5\\%$  交纳营业税以外，还要按营业税的  $7\\%$  缴纳城市维护建设税。该酒店一年应缴纳这两种税共多少万元？"
+        ],
+        "bbox": [
+            567,
+            87,
+            904,
+            647
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            69,
+            49,
+            91,
+            81
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            92,
+            62,
+            189,
+            76
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "page_number",
+        "text": "30",
+        "bbox": [
+            257,
+            904,
+            267,
+            916
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            546,
+            48,
+            570,
+            81
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            570,
+            62,
+            666,
+            76
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "page_number",
+        "text": "31",
+        "bbox": [
+            730,
+            902,
+            740,
+            915
+        ],
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            251,
+            87,
+            271,
+            104
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "1. 银行加息是控制通胀的一种有效的调控手段，2010年银行将一年期存款利率在原来2.",
+            "2.25%的基础上提高了0.25个百分点，小明在利率提高后将自己的压岁钱2000元存入银行，存期一年，求到期后小明税前能比原来多拿多少利息？"
+        ],
+        "bbox": [
+            89,
+            115,
+            429,
+            186
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "2. 依法纳税是每个公民应尽的义务。《中华人民共和国个人所得税法》规定，公民的每月工资、薪金不超过800元不需交税，超过部分按不同的税率交税，详细的税率如下表：",
+        "bbox": [
+            89,
+            372,
+            426,
+            416
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "table",
+        "img_path": "images/c04803293e717e5b9749154eb4d6f5f5d74a94e32cf5a813344867a0948cc035.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "<table><tr><td>级别</td><td>全月应纳所得税金额</td><td>税率（%）</td></tr><tr><td>1</td><td>不超过500部分</td><td>5</td></tr><tr><td>2</td><td>超过500元至2000元部分</td><td>10</td></tr><tr><td>3</td><td>超过2000元至5000元部分</td><td>15</td></tr><tr><td>4</td><td>超过5000元至10000元部分</td><td>20</td></tr><tr><td>…</td><td>…</td><td>…</td></tr></table>",
+        "bbox": [
+            127,
+            423,
+            394,
+            592
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）某企业经理月薪7000元，他每月应交税多少元？",
+            "（2）若他本月交税400元，那么他的工资是多少元？"
+        ],
+        "bbox": [
+            103,
+            617,
+            304,
+            660
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "5.6等可能事件（1）",
+        "text_level": 1,
+        "bbox": [
+            676,
+            91,
+            793,
+            112
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            728,
+            125,
+            748,
+            141
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "1. 不透明的袋子里有除颜色外其他都相同的红、黄、绿3只小球，随意摸出1只，它是（ ）.",
+        "bbox": [
+            567,
+            150,
+            894,
+            193
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（A）红色小球",
+        "bbox": [
+            575,
+            205,
+            631,
+            220
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（B）黄色小球",
+        "bbox": [
+            662,
+            205,
+            716,
+            220
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（C）绿色小球",
+        "bbox": [
+            748,
+            206,
+            800,
+            222
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（D）都有可能",
+        "bbox": [
+            824,
+            207,
+            877,
+            223
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "2. 小红在解一道4选1的选择题时，由于她不会做，于是就猜了一个答案，则小红本题答对的可能性大小是（ ）.",
+        "bbox": [
+            567,
+            232,
+            906,
+            276
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{1}{4}$",
+        "bbox": [
+            575,
+            283,
+            602,
+            315
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{1}{3}$",
+        "bbox": [
+            665,
+            285,
+            691,
+            315
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{1}{2}$",
+        "bbox": [
+            750,
+            285,
+            777,
+            315
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(D)  $\\frac{2}{3}$",
+        "bbox": [
+            827,
+            285,
+            853,
+            317
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "3. 一本200页的书，随手翻开1页，则翻到页码数能被4整除的可能性大小是（ ）.",
+        "bbox": [
+            566,
+            323,
+            899,
+            340
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{1}{6}$",
+        "bbox": [
+            575,
+            347,
+            603,
+            378
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{1}{2}$",
+        "bbox": [
+            665,
+            347,
+            692,
+            378
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{1}{4}$",
+        "bbox": [
+            748,
+            347,
+            774,
+            378
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(D)  $\\frac{1}{3}$",
+        "bbox": [
+            827,
+            347,
+            853,
+            380
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "4. 有编号为1到10的10个篮球，小丽从中任意拿走一个，那么小丽拿到的篮球的编号为5的整数倍的可能性的大小是（ ）.",
+        "bbox": [
+            566,
+            385,
+            906,
+            429
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{1}{10}$",
+        "bbox": [
+            575,
+            437,
+            605,
+            469
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{1}{5}$",
+        "bbox": [
+            666,
+            437,
+            695,
+            469
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{1}{20}$",
+        "bbox": [
+            745,
+            437,
+            776,
+            469
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "(D)  $\\frac{1}{2}$",
+        "bbox": [
+            826,
+            437,
+            853,
+            469
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "5. 把一枚质地均匀的硬币抛掷 1 次，反面向上的可能性大小是 ________；若掷 2 次，得到 2 次国徽朝上的可能性大小是 ________。",
+            "6. 掷一枚骰子，点数 5 朝上的可能性的大小是 ______；朝上的数是 3 的倍数的可能性的大小是 ______。",
+            "7. 掷一枚骰子，点数大于2的可能性大小为",
+            "8. 有50张已编号的卡片（从1号到5号），从中取1张卡号是3的倍数的可能性大小为",
+            "9.6（1）班有男生22人，女生18人，老师随机叫1位同学，被叫到的同学是女生的可能性大小是",
+            "10. 一个布袋中装有5个白球，2个红球，8个黄球，每个球除颜色外都相同，搅匀后，随机从布袋中摸出1个黄球的可能性的大小是"
+        ],
+        "bbox": [
+            566,
+            502,
+            904,
+            790
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            67,
+            48,
+            92,
+            83
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            93,
+            62,
+            189,
+            77
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "page_number",
+        "text": "32",
+        "bbox": [
+            257,
+            904,
+            267,
+            916
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            545,
+            48,
+            570,
+            81
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            569,
+            61,
+            666,
+            76
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "page_number",
+        "text": "33",
+        "bbox": [
+            730,
+            903,
+            739,
+            915
+        ],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "11. 一个圆盘等分为8块扇形区域，其中有1块蓝色区域、2块红色区域、3块白色区域、2块黄色区域，指针绕着中心旋转，求：",
+        "bbox": [
+            90,
+            87,
+            425,
+            131
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）指针落在白色区域的可能性的大小；",
+            "（2）指针落在黄色区域的可能性的大小."
+        ],
+        "bbox": [
+            102,
+            142,
+            254,
+            186
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "12. 任意掷一枚骰子，求：",
+        "bbox": [
+            90,
+            277,
+            190,
+            295
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）点数4朝上的可能性的大小；",
+            "（2）素数点数朝上的可能性的大小"
+        ],
+        "bbox": [
+            102,
+            305,
+            235,
+            349
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "13. 一副52张的扑克牌（无大王、小王），从中任意取出一张，共有52种等可能的结果。",
+        "bbox": [
+            90,
+            440,
+            424,
+            457
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）说出抽到  $A$  的所有可能的结果；",
+            "（2）求抽到梅花  $A$  的可能性的大小；",
+            "（3）求抽到  $A$  的可能性的大小；",
+            "（4）求抽到梅花的可能性的大小"
+        ],
+        "bbox": [
+            102,
+            467,
+            238,
+            566
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "14. 任意掷一枚骰子，求：",
+        "bbox": [
+            90,
+            685,
+            190,
+            701
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）偶数点朝上的可能性的大小；",
+            "（2）是3的倍数的点数朝上的可能性的大小；",
+            "（3）是合数的点数朝上的可能性的大小."
+        ],
+        "bbox": [
+            102,
+            711,
+            272,
+            782
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "15. 六（2）班举行联欢活动，同学们把写有 1 号到 40 号学号的小纸条放入一个箱中，从中任意抽取一张纸条，求：",
+        "bbox": [
+            566,
+            84,
+            906,
+            128
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）抽到学号是25号的可能性的大小；",
+            "（2）抽到能被5整除的学号的可能性的大小"
+        ],
+        "bbox": [
+            578,
+            138,
+            746,
+            181
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            725,
+            353,
+            745,
+            371
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "1. 如图，甲转盘被分成3个面积相等的扇形，乙转盘被分成2个面积相等的扇形，小丽和小杰利用它们来做决定获胜与否的游戏。规定小丽转甲盘一次、小杰转乙盘一次为一次游戏，若两个指针所指区域内的数之和为6或7，则小丽获胜；否则，是小杰获胜。请你",
+        "bbox": [
+            564,
+            381,
+            906,
+            452
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "写出两人获胜的可能性大小分别是多少？",
+        "bbox": [
+            576,
+            461,
+            730,
+            479
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "image",
+        "img_path": "images/51c941bbcd66c26de08baefa912754b6024ab16a3a9eb9224354ba6980d96099.jpg",
+        "image_caption": [
+            "甲"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            750,
+            464,
+            821,
+            564
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "image",
+        "img_path": "images/ce50ecf3cc204afc3cff6eb7f2146dfc0c63a24462c8c4dfa52965fd36273ac7.jpg",
+        "image_caption": [
+            "乙"
+        ],
+        "image_footnote": [],
+        "bbox": [
+            836,
+            463,
+            906,
+            564
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "2. 有两个圆盘，一个四等分，一个三等分，用字母和数字表示区域，如  $A1$  ，  $A2$  等",
+        "bbox": [
+            564,
+            624,
+            883,
+            641
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）写出所有的结果；",
+            "（2）求结果是  $B$  奇数的可能性的大小"
+        ],
+        "bbox": [
+            578,
+            652,
+            719,
+            695
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "image",
+        "img_path": "images/6172eb63d77c2ac4b274ee1f52fc4cd00bccba72d07456a371b3557a2ac405b3.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            734,
+            659,
+            813,
+            771
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "image",
+        "img_path": "images/258922ba50a4675ee9dd2ceef8debdff65a9c29ecf5aedf5f3207dccc2a01d13.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            830,
+            659,
+            908,
+            770
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "header",
+        "text": "中",
+        "bbox": [
+            67,
+            49,
+            92,
+            83
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            93,
+            62,
+            189,
+            77
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "page_number",
+        "text": "34",
+        "bbox": [
+            257,
+            904,
+            267,
+            916
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            544,
+            45,
+            567,
+            79
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            568,
+            58,
+            664,
+            72
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "page_number",
+        "text": "35",
+        "bbox": [
+            730,
+            897,
+            740,
+            910
+        ],
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "5.6等可能事件（2）",
+        "text_level": 1,
+        "bbox": [
+            201,
+            85,
+            318,
+            106
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "A组",
+        "text_level": 1,
+        "bbox": [
+            253,
+            119,
+            273,
+            136
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "1. 气象预报员报道：“本市明天降雨的概率是  $90\\%$ ”这句话的意思是（ ）.",
+        "bbox": [
+            92,
+            147,
+            389,
+            163
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（A）明天  $90\\%$  的时间要下雨",
+            "（B）明天一定会下雨",
+            "（C）明天  $10\\%$  的时间不下雨",
+            "（D）明天下雨的可能性是  $90\\%$  ，但也有可能不下雨"
+        ],
+        "bbox": [
+            105,
+            174,
+            298,
+            271
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "2. 把一个圆盘8等分，指针落在某一个区域的可能性是（ ）.",
+        "bbox": [
+            91,
+            283,
+            340,
+            299
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "(A)  $\\frac{1}{4}$",
+        "bbox": [
+            109,
+            307,
+            137,
+            337
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "(B)  $\\frac{1}{6}$",
+        "bbox": [
+            186,
+            307,
+            213,
+            338
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "（C）  $\\frac{1}{8}$",
+        "bbox": [
+            270,
+            307,
+            297,
+            338
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "(D)  $\\frac{1}{2}$",
+        "bbox": [
+            354,
+            308,
+            381,
+            338
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "3. 有10张卡片，上面的编号为1到10，从中任取1张，则抽到卡号为合数的可能性为（ ）.",
+        "bbox": [
+            91,
+            346,
+            430,
+            362
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "(A)  $10\\%$",
+        "bbox": [
+            105,
+            372,
+            142,
+            388
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "(B)  $20\\%$",
+        "bbox": [
+            185,
+            372,
+            222,
+            388
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "（c）  $30\\%$",
+        "bbox": [
+            270,
+            374,
+            306,
+            388
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "(D)  $50\\%$",
+        "bbox": [
+            353,
+            374,
+            390,
+            388
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "4. 将圆盘分成7块，其中有3块红色区域，3块蓝色区域，1块白色区域，指针绕着中心旋转，以下判断正确的是（ ）.",
+        "bbox": [
+            91,
+            400,
+            428,
+            442
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（A）指针箭头停在红色区域的可能性大小是  $\\frac{1}{3}$",
+            "（B）指针箭头停在红色区域的可能性是停在白色区域可能性的3倍",
+            "（C）指针箭头停在红色区域的可能性和停在蓝色区域的可能性大小一样",
+            "（D）以上说法都不对"
+        ],
+        "bbox": [
+            105,
+            451,
+            372,
+            559
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "5. 投掷两枚大小相同的均匀骰子，所得点数之和是 5 的可能性为 _______.",
+            "6. 把只有颜色不同的 1 个红球和 2 个白球装入一个不透明的口袋里搅匀，从中随机地一次摸出 2 个球，得 1 红球 1 白球得可能性得大小是",
+            "7. 有两把不同的锁和三把钥匙，其中两把钥匙分别能打开其中一把锁，第三把钥匙不能打开这两把锁，任意取出一把钥匙去开任意的一把锁，一次打开锁的可能性大小为 _______.",
+            "8. 把一圆盘分成面积大小之比为  $1:2:3$  三个区域，指针绕着中心旋转，求指针落在最小区域的可能性大小是"
+        ],
+        "bbox": [
+            91,
+            571,
+            432,
+            751
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "9. 将分别标有数字 2、3、5 的三张质地、大小完全一样的卡片背面朝上放在桌子上.",
+        "bbox": [
+            566,
+            87,
+            883,
+            104
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）随意抽取一张，求抽到奇数的可能性大小；",
+            "（2）随意抽取一张作为个位上的数字（不放回），再抽取一张作为十位上的数字，能组成哪些两位数？并求出抽取到的两位数恰好是35的可能性大小."
+        ],
+        "bbox": [
+            579,
+            114,
+            901,
+            185
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "10. 盒子内有黑、白、红三种球共 100 个，如果黑球个数：白球个数  $= 1:3$ ，白球个数：红球个数  $= 1:2$ ，那么从盒子中任意拿 1 个球，求：",
+        "bbox": [
+            566,
+            304,
+            906,
+            347
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）拿到红球的可能性的大小；",
+            "（2）拿到1个黑球或1个白球的可能性的大小"
+        ],
+        "bbox": [
+            580,
+            357,
+            756,
+            401
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "11. 甲袋中有红球4个、白球2个，乙袋中有蓝球7个，白球1个，每个球除颜色外都相同。问：从甲袋中任意摸1球，从乙袋中也任意摸1球，都摸到白球的可能性是多少？",
+        "bbox": [
+            564,
+            520,
+            900,
+            565
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "12. 图为梅花和红心两组牌, 每组牌面上的数字都分别是 1, 2, 3, 如果从每组牌中各抽 1 张,",
+        "bbox": [
+            564,
+            655,
+            899,
+            672
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "并将牌面上的数字相加，得数字和，求：",
+        "bbox": [
+            580,
+            682,
+            732,
+            698
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）牌面上的数字和为偶数的可能性大小；",
+            "（2）牌面上的数字和为几的可能性最大？这个可能性是多少？"
+        ],
+        "bbox": [
+            580,
+            707,
+            809,
+            752
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "image",
+        "img_path": "images/1702b8db0db7b094a511cadb61582569979d6ecdadb45c580c94c6403f737700.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            822,
+            687,
+            890,
+            793
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            70,
+            43,
+            93,
+            77
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            94,
+            57,
+            191,
+            72
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "page_number",
+        "text": "36",
+        "bbox": [
+            259,
+            900,
+            267,
+            910
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            544,
+            46,
+            569,
+            81
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            569,
+            61,
+            665,
+            74
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "page_number",
+        "text": "37",
+        "bbox": [
+            730,
+            902,
+            738,
+            913
+        ],
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "13. 小明和小亮玩一个游戏，三张大小、质地都相同的卡片上分别标有数字 1，2，3，现将标有数字一面朝下，小明从中任意抽取 1 张，记下数字后放回洗匀，然后小亮从中任意抽取 1 张，计算小明和小亮抽得的两个数字之和，如果和为奇数则小明胜，如果和为偶数则小亮胜。",
+        "bbox": [
+            92,
+            87,
+            432,
+            186
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）用列表法，列出小明和小亮抽得的数字之和所有可能出现的情况；",
+            "（2）请判断该游戏对双方是否公平，并说明理由"
+        ],
+        "bbox": [
+            107,
+            195,
+            369,
+            239
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "B组",
+        "text_level": 1,
+        "bbox": [
+            253,
+            467,
+            272,
+            483
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "1. 随机抛掷一枚用均匀材料做的骰子，计算：",
+        "bbox": [
+            92,
+            494,
+            269,
+            510
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）抛掷一次，朝上的一面出现的点数是素数的可能性是多少？",
+            "（2）抛掷两次，将第一次朝上的一面的点数作为十位上的数字，第二次朝上的点数作为一个位上的数字，组成的两位数是素数的可能性是多少？",
+            "（3）抛掷三次，依次把第一次、第二次、第三次朝上的点数作为三位数的百位上的数、十位上的数、个位上的数，组成的三位数是5的倍数的可能性是多少？"
+        ],
+        "bbox": [
+            107,
+            521,
+            426,
+            646
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "2. 一个不透明口袋中装有红球6个，黄球9个，绿球3个，这些球除颜色外没有区别。从中任意摸出一个球。",
+        "bbox": [
+            566,
+            84,
+            900,
+            127
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "（1）计算摸到的是绿球的可能性的大小；",
+            "（2）如果要使摸到绿球的可能性为  $\\frac{1}{4}$ ，需要在这这个口袋中再放入多少个绿球？"
+        ],
+        "bbox": [
+            578,
+            138,
+            878,
+            193
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            69,
+            48,
+            92,
+            83
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            93,
+            61,
+            190,
+            76
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "header",
+        "text": "#",
+        "bbox": [
+            544,
+            45,
+            567,
+            79
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "header",
+        "text": "协和教科六年级数学第2学期",
+        "bbox": [
+            568,
+            58,
+            664,
+            73
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "page_number",
+        "text": "38",
+        "bbox": [
+            259,
+            904,
+            268,
+            915
+        ],
+        "page_idx": 20
+    },
+    {
+        "type": "page_number",
+        "text": "39",
+        "bbox": [
+            731,
+            899,
+            739,
+            910
+        ],
+        "page_idx": 20
+    }
+]

@@ -1,0 +1,145 @@
+[
+  {
+    "id": 8,
+    "text": "5.1比的意义",
+    "level": 2,
+    "page": 1,
+    "block_range": {
+      "start": 8,
+      "end": 95
+    },
+    "parent_id": null
+  },
+  {
+    "id": 95,
+    "text": "5.2 比的基本性质（1）",
+    "level": 2,
+    "page": 3,
+    "block_range": {
+      "start": 95,
+      "end": 162
+    },
+    "parent_id": null
+  },
+  {
+    "id": 162,
+    "text": "5.2 比的基本性质（2）",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 162,
+      "end": 228
+    },
+    "parent_id": null
+  },
+  {
+    "id": 228,
+    "text": "5.3 比例（1）",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 228,
+      "end": 285
+    },
+    "parent_id": null
+  },
+  {
+    "id": 285,
+    "text": "5.3比例（2）",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 285,
+      "end": 342
+    },
+    "parent_id": null
+  },
+  {
+    "id": 342,
+    "text": "5.4 百分比的意义（1）",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 342,
+      "end": 409
+    },
+    "parent_id": null
+  },
+  {
+    "id": 409,
+    "text": "5.4 百分比的意义（2）",
+    "level": 2,
+    "page": 10,
+    "block_range": {
+      "start": 409,
+      "end": 471
+    },
+    "parent_id": null
+  },
+  {
+    "id": 471,
+    "text": "5.5 百分比的应用（1）",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 471,
+      "end": 529
+    },
+    "parent_id": null
+  },
+  {
+    "id": 529,
+    "text": "5.5 百分比的应用（2）",
+    "level": 2,
+    "page": 13,
+    "block_range": {
+      "start": 529,
+      "end": 575
+    },
+    "parent_id": null
+  },
+  {
+    "id": 575,
+    "text": "5.5百分比的应用（3）",
+    "level": 2,
+    "page": 14,
+    "block_range": {
+      "start": 575,
+      "end": 616
+    },
+    "parent_id": null
+  },
+  {
+    "id": 616,
+    "text": "5.5 百分比的应用（4）",
+    "level": 2,
+    "page": 16,
+    "block_range": {
+      "start": 616,
+      "end": 641
+    },
+    "parent_id": null
+  },
+  {
+    "id": 641,
+    "text": "5.6等可能事件（1）",
+    "level": 2,
+    "page": 17,
+    "block_range": {
+      "start": 641,
+      "end": 695
+    },
+    "parent_id": null
+  },
+  {
+    "id": 695,
+    "text": "5.6等可能事件（2）",
+    "level": 2,
+    "page": 19,
+    "block_range": {
+      "start": 695,
+      "end": 740
+    },
+    "parent_id": null
+  }
+]

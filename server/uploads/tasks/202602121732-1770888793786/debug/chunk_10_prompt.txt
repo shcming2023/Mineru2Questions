@@ -1,0 +1,679 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 700,
+    "type": "text",
+    "text": "10. 一个布袋中装有5个白球，2个红球，8个黄球，每个球除颜色外都相同，搅匀后，随机从布袋中摸出1个黄球的可能性的大小是",
+    "page_idx": 17
+  },
+  {
+    "id": 701,
+    "type": "text",
+    "page_idx": 18,
+    "text": "11. 一个圆盘等分为8块扇形区域，其中有1块蓝色区域、2块红色区域、3块白色区域、2块黄色区域，指针绕着中心旋转，求："
+  },
+  {
+    "id": 702,
+    "type": "text",
+    "text": "（1）指针落在白色区域的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 703,
+    "type": "text",
+    "text": "（2）指针落在黄色区域的可能性的大小.",
+    "page_idx": 18
+  },
+  {
+    "id": 704,
+    "type": "text",
+    "page_idx": 18,
+    "text": "12. 任意掷一枚骰子，求："
+  },
+  {
+    "id": 705,
+    "type": "text",
+    "text": "（1）点数4朝上的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 706,
+    "type": "text",
+    "text": "（2）素数点数朝上的可能性的大小",
+    "page_idx": 18
+  },
+  {
+    "id": 707,
+    "type": "text",
+    "page_idx": 18,
+    "text": "13. 一副52张的扑克牌（无大王、小王），从中任意取出一张，共有52种等可能的结果。"
+  },
+  {
+    "id": 708,
+    "type": "text",
+    "text": "（1）说出抽到  $A$  的所有可能的结果；",
+    "page_idx": 18
+  },
+  {
+    "id": 709,
+    "type": "text",
+    "text": "（2）求抽到梅花  $A$  的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 710,
+    "type": "text",
+    "text": "（3）求抽到  $A$  的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 711,
+    "type": "text",
+    "text": "（4）求抽到梅花的可能性的大小",
+    "page_idx": 18
+  },
+  {
+    "id": 712,
+    "type": "text",
+    "page_idx": 18,
+    "text": "14. 任意掷一枚骰子，求："
+  },
+  {
+    "id": 713,
+    "type": "text",
+    "text": "（1）偶数点朝上的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 714,
+    "type": "text",
+    "text": "（2）是3的倍数的点数朝上的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 715,
+    "type": "text",
+    "text": "（3）是合数的点数朝上的可能性的大小.",
+    "page_idx": 18
+  },
+  {
+    "id": 716,
+    "type": "text",
+    "page_idx": 18,
+    "text": "15. 六（2）班举行联欢活动，同学们把写有 1 号到 40 号学号的小纸条放入一个箱中，从中任意抽取一张纸条，求："
+  },
+  {
+    "id": 717,
+    "type": "text",
+    "text": "（1）抽到学号是25号的可能性的大小；",
+    "page_idx": 18
+  },
+  {
+    "id": 718,
+    "type": "text",
+    "text": "（2）抽到能被5整除的学号的可能性的大小",
+    "page_idx": 18
+  },
+  {
+    "id": 719,
+    "type": "text",
+    "page_idx": 18,
+    "text": "B组"
+  },
+  {
+    "id": 720,
+    "type": "text",
+    "page_idx": 18,
+    "text": "1. 如图，甲转盘被分成3个面积相等的扇形，乙转盘被分成2个面积相等的扇形，小丽和小杰利用它们来做决定获胜与否的游戏。规定小丽转甲盘一次、小杰转乙盘一次为一次游戏，若两个指针所指区域内的数之和为6或7，则小丽获胜；否则，是小杰获胜。请你"
+  },
+  {
+    "id": 721,
+    "type": "text",
+    "page_idx": 18,
+    "text": "写出两人获胜的可能性大小分别是多少？"
+  },
+  {
+    "id": 722,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/51c941bbcd66c26de08baefa912754b6024ab16a3a9eb9224354ba6980d96099.jpg",
+    "image_caption": "甲"
+  },
+  {
+    "id": 723,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/ce50ecf3cc204afc3cff6eb7f2146dfc0c63a24462c8c4dfa52965fd36273ac7.jpg",
+    "image_caption": "乙"
+  },
+  {
+    "id": 724,
+    "type": "text",
+    "page_idx": 18,
+    "text": "2. 有两个圆盘，一个四等分，一个三等分，用字母和数字表示区域，如  $A1$  ，  $A2$  等"
+  },
+  {
+    "id": 725,
+    "type": "text",
+    "text": "（1）写出所有的结果；",
+    "page_idx": 18
+  },
+  {
+    "id": 726,
+    "type": "text",
+    "text": "（2）求结果是  $B$  奇数的可能性的大小",
+    "page_idx": 18
+  },
+  {
+    "id": 727,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/6172eb63d77c2ac4b274ee1f52fc4cd00bccba72d07456a371b3557a2ac405b3.jpg"
+  },
+  {
+    "id": 728,
+    "type": "image",
+    "page_idx": 18,
+    "img_path": "images/258922ba50a4675ee9dd2ceef8debdff65a9c29ecf5aedf5f3207dccc2a01d13.jpg"
+  },
+  {
+    "id": 729,
+    "type": "text",
+    "page_idx": 19,
+    "text": "5.6等可能事件（2）"
+  },
+  {
+    "id": 730,
+    "type": "text",
+    "page_idx": 19,
+    "text": "A组"
+  },
+  {
+    "id": 731,
+    "type": "text",
+    "page_idx": 19,
+    "text": "1. 气象预报员报道：“本市明天降雨的概率是  $90\\%$ ”这句话的意思是（ ）."
+  },
+  {
+    "id": 732,
+    "type": "text",
+    "text": "（A）明天  $90\\%$  的时间要下雨",
+    "page_idx": 19
+  },
+  {
+    "id": 733,
+    "type": "text",
+    "text": "（B）明天一定会下雨",
+    "page_idx": 19
+  },
+  {
+    "id": 734,
+    "type": "text",
+    "text": "（C）明天  $10\\%$  的时间不下雨",
+    "page_idx": 19
+  },
+  {
+    "id": 735,
+    "type": "text",
+    "text": "（D）明天下雨的可能性是  $90\\%$  ，但也有可能不下雨",
+    "page_idx": 19
+  },
+  {
+    "id": 736,
+    "type": "text",
+    "page_idx": 19,
+    "text": "2. 把一个圆盘8等分，指针落在某一个区域的可能性是（ ）."
+  },
+  {
+    "id": 737,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(A)  $\\frac{1}{4}$"
+  },
+  {
+    "id": 738,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(B)  $\\frac{1}{6}$"
+  },
+  {
+    "id": 739,
+    "type": "text",
+    "page_idx": 19,
+    "text": "（C）  $\\frac{1}{8}$"
+  },
+  {
+    "id": 740,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(D)  $\\frac{1}{2}$"
+  },
+  {
+    "id": 741,
+    "type": "text",
+    "page_idx": 19,
+    "text": "3. 有10张卡片，上面的编号为1到10，从中任取1张，则抽到卡号为合数的可能性为（ ）."
+  },
+  {
+    "id": 742,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(A)  $10\\%$"
+  },
+  {
+    "id": 743,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(B)  $20\\%$"
+  },
+  {
+    "id": 744,
+    "type": "text",
+    "page_idx": 19,
+    "text": "（c）  $30\\%$"
+  },
+  {
+    "id": 745,
+    "type": "text",
+    "page_idx": 19,
+    "text": "(D)  $50\\%$"
+  },
+  {
+    "id": 746,
+    "type": "text",
+    "page_idx": 19,
+    "text": "4. 将圆盘分成7块，其中有3块红色区域，3块蓝色区域，1块白色区域，指针绕着中心旋转，以下判断正确的是（ ）."
+  },
+  {
+    "id": 747,
+    "type": "text",
+    "text": "（A）指针箭头停在红色区域的可能性大小是  $\\frac{1}{3}$",
+    "page_idx": 19
+  },
+  {
+    "id": 748,
+    "type": "text",
+    "text": "（B）指针箭头停在红色区域的可能性是停在白色区域可能性的3倍",
+    "page_idx": 19
+  },
+  {
+    "id": 749,
+    "type": "text",
+    "text": "（C）指针箭头停在红色区域的可能性和停在蓝色区域的可能性大小一样",
+    "page_idx": 19
+  },
+  {
+    "id": 750,
+    "type": "text",
+    "text": "（D）以上说法都不对",
+    "page_idx": 19
+  },
+  {
+    "id": 751,
+    "type": "text",
+    "text": "5. 投掷两枚大小相同的均匀骰子，所得点数之和是 5 的可能性为 _______.",
+    "page_idx": 19
+  },
+  {
+    "id": 752,
+    "type": "text",
+    "text": "6. 把只有颜色不同的 1 个红球和 2 个白球装入一个不透明的口袋里搅匀，从中随机地一次摸出 2 个球，得 1 红球 1 白球得可能性得大小是",
+    "page_idx": 19
+  },
+  {
+    "id": 753,
+    "type": "text",
+    "text": "7. 有两把不同的锁和三把钥匙，其中两把钥匙分别能打开其中一把锁，第三把钥匙不能打开这两把锁，任意取出一把钥匙去开任意的一把锁，一次打开锁的可能性大小为 _______.",
+    "page_idx": 19
+  },
+  {
+    "id": 754,
+    "type": "text",
+    "text": "8. 把一圆盘分成面积大小之比为  $1:2:3$  三个区域，指针绕着中心旋转，求指针落在最小区域的可能性大小是",
+    "page_idx": 19
+  },
+  {
+    "id": 755,
+    "type": "text",
+    "page_idx": 19,
+    "text": "9. 将分别标有数字 2、3、5 的三张质地、大小完全一样的卡片背面朝上放在桌子上."
+  },
+  {
+    "id": 756,
+    "type": "text",
+    "text": "（1）随意抽取一张，求抽到奇数的可能性大小；",
+    "page_idx": 19
+  },
+  {
+    "id": 757,
+    "type": "text",
+    "text": "（2）随意抽取一张作为个位上的数字（不放回），再抽取一张作为十位上的数字，能组成哪些两位数？并求出抽取到的两位数恰好是35的可能性大小.",
+    "page_idx": 19
+  },
+  {
+    "id": 758,
+    "type": "text",
+    "page_idx": 19,
+    "text": "10. 盒子内有黑、白、红三种球共 100 个，如果黑球个数：白球个数  $= 1:3$ ，白球个数：红球个数  $= 1:2$ ，那么从盒子中任意拿 1 个球，求："
+  },
+  {
+    "id": 759,
+    "type": "text",
+    "text": "（1）拿到红球的可能性的大小；",
+    "page_idx": 19
+  },
+  {
+    "id": 760,
+    "type": "text",
+    "text": "（2）拿到1个黑球或1个白球的可能性的大小",
+    "page_idx": 19
+  },
+  {
+    "id": 761,
+    "type": "text",
+    "page_idx": 19,
+    "text": "11. 甲袋中有红球4个、白球2个，乙袋中有蓝球7个，白球1个，每个球除颜色外都相同。问：从甲袋中任意摸1球，从乙袋中也任意摸1球，都摸到白球的可能性是多少？"
+  },
+  {
+    "id": 762,
+    "type": "text",
+    "page_idx": 19,
+    "text": "12. 图为梅花和红心两组牌, 每组牌面上的数字都分别是 1, 2, 3, 如果从每组牌中各抽 1 张,"
+  },
+  {
+    "id": 763,
+    "type": "text",
+    "page_idx": 19,
+    "text": "并将牌面上的数字相加，得数字和，求："
+  },
+  {
+    "id": 764,
+    "type": "text",
+    "text": "（1）牌面上的数字和为偶数的可能性大小；",
+    "page_idx": 19
+  },
+  {
+    "id": 765,
+    "type": "text",
+    "text": "（2）牌面上的数字和为几的可能性最大？这个可能性是多少？",
+    "page_idx": 19
+  },
+  {
+    "id": 766,
+    "type": "image",
+    "page_idx": 19,
+    "img_path": "images/1702b8db0db7b094a511cadb61582569979d6ecdadb45c580c94c6403f737700.jpg"
+  },
+  {
+    "id": 767,
+    "type": "text",
+    "page_idx": 20,
+    "text": "13. 小明和小亮玩一个游戏，三张大小、质地都相同的卡片上分别标有数字 1，2，3，现将标有数字一面朝下，小明从中任意抽取 1 张，记下数字后放回洗匀，然后小亮从中任意抽取 1 张，计算小明和小亮抽得的两个数字之和，如果和为奇数则小明胜，如果和为偶数则小亮胜。"
+  },
+  {
+    "id": 768,
+    "type": "text",
+    "text": "（1）用列表法，列出小明和小亮抽得的数字之和所有可能出现的情况；",
+    "page_idx": 20
+  },
+  {
+    "id": 769,
+    "type": "text",
+    "text": "（2）请判断该游戏对双方是否公平，并说明理由",
+    "page_idx": 20
+  },
+  {
+    "id": 770,
+    "type": "text",
+    "page_idx": 20,
+    "text": "B组"
+  },
+  {
+    "id": 771,
+    "type": "text",
+    "page_idx": 20,
+    "text": "1. 随机抛掷一枚用均匀材料做的骰子，计算："
+  },
+  {
+    "id": 772,
+    "type": "text",
+    "text": "（1）抛掷一次，朝上的一面出现的点数是素数的可能性是多少？",
+    "page_idx": 20
+  },
+  {
+    "id": 773,
+    "type": "text",
+    "text": "（2）抛掷两次，将第一次朝上的一面的点数作为十位上的数字，第二次朝上的点数作为一个位上的数字，组成的两位数是素数的可能性是多少？",
+    "page_idx": 20
+  },
+  {
+    "id": 774,
+    "type": "text",
+    "text": "（3）抛掷三次，依次把第一次、第二次、第三次朝上的点数作为三位数的百位上的数、十位上的数、个位上的数，组成的三位数是5的倍数的可能性是多少？",
+    "page_idx": 20
+  },
+  {
+    "id": 775,
+    "type": "text",
+    "page_idx": 20,
+    "text": "2. 一个不透明口袋中装有红球6个，黄球9个，绿球3个，这些球除颜色外没有区别。从中任意摸出一个球。"
+  },
+  {
+    "id": 776,
+    "type": "text",
+    "text": "（1）计算摸到的是绿球的可能性的大小；",
+    "page_idx": 20
+  },
+  {
+    "id": 777,
+    "type": "text",
+    "text": "（2）如果要使摸到绿球的可能性为  $\\frac{1}{4}$ ，需要在这这个口袋中再放入多少个绿球？",
+    "page_idx": 20
+  }
+]
+```

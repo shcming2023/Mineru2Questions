@@ -1,0 +1,813 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 280,
+    "type": "text",
+    "text": "（C）若  $a, b, c, d$  成比例，则  $2a, 2b, c, d$  也成比例；",
+    "page_idx": 7
+  },
+  {
+    "id": 281,
+    "type": "text",
+    "text": "（D）若  $a$  ，  $b$  ，  $c$  ，  $d$  成比例，则  $2a$  ，  $b$  ，  $2c$  ，  $d$  也成比例",
+    "page_idx": 7
+  },
+  {
+    "id": 282,
+    "type": "text",
+    "page_idx": 7,
+    "text": "6. 如果  $a = 2$  ，  $b = 4$  ，  $c = 8$  ，那么（ ）."
+  },
+  {
+    "id": 283,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（A）  $a$  ，  $b$  ，  $c$  的第四比例项是7"
+  },
+  {
+    "id": 284,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（B）  $3a$  ，  $2b$  和  $3c$  的第四比例项为18"
+  },
+  {
+    "id": 285,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）  $c$  是  $a$  ，  $b$  的比例中项"
+  },
+  {
+    "id": 286,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（D）  $b$  是  $a$  ，  $c$  的比例中项"
+  },
+  {
+    "id": 287,
+    "type": "text",
+    "page_idx": 7,
+    "text": "7. 已知  $x:2y = 3:4$  ，则  $x:y$  为（ ）."
+  },
+  {
+    "id": 288,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(A) 3:8"
+  },
+  {
+    "id": 289,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(B) 3:2"
+  },
+  {
+    "id": 290,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）6:2"
+  },
+  {
+    "id": 291,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(D) 6:8"
+  },
+  {
+    "id": 292,
+    "type": "text",
+    "page_idx": 7,
+    "text": "8. 一张照片长12厘米，宽8厘米，将它缩印后放到书里，长变为5厘米，则宽是多少厘米？"
+  },
+  {
+    "id": 293,
+    "type": "text",
+    "page_idx": 7,
+    "text": "5.3比例（2）"
+  },
+  {
+    "id": 294,
+    "type": "text",
+    "page_idx": 7,
+    "text": "A组"
+  },
+  {
+    "id": 295,
+    "type": "text",
+    "text": "1. 小丽买5个梨用去3.3元，现在购买18个梨需要 元",
+    "page_idx": 7
+  },
+  {
+    "id": 296,
+    "type": "text",
+    "text": "2. 房产博览会上，某楼盘的模型是按照1:500的比例尺制作的，该楼盘1号楼模型高7厘米，它的实际高度是 米.",
+    "page_idx": 7
+  },
+  {
+    "id": 297,
+    "type": "text",
+    "text": "3. 一张照片长12厘米，宽8厘米，将它缩印后放到书里，宽变为5厘米，则长是 厘米.",
+    "page_idx": 7
+  },
+  {
+    "id": 298,
+    "type": "text",
+    "text": "4. 已知长方形的长与宽的比是 5:3，若宽为 6 厘米，则长方形的面积是 ______ 平方厘米。",
+    "page_idx": 7
+  },
+  {
+    "id": 299,
+    "type": "text",
+    "page_idx": 7,
+    "text": "5. 如图，平行四边形中相邻两边  $AB:AD = 4:3$  ，如果 $AD = 4.5$  厘米，那么  $AB$  的长度是 厘米"
+  },
+  {
+    "id": 300,
+    "type": "image",
+    "page_idx": 7,
+    "img_path": "images/d56116a68d0c8503fecb4941b599c0e8a4bdf080018fa822a75c3d4891596909.jpg"
+  },
+  {
+    "id": 301,
+    "type": "text",
+    "text": "6. 已知线段  $AB = 2$  厘米， $CD = 8$  厘米，若线段  $EF$  是  $AB$  与  $CD$  的比例中项，则  $EF$  长为 ______ 厘米.",
+    "page_idx": 7
+  },
+  {
+    "id": 302,
+    "type": "text",
+    "text": "7. 已知  $x$  是 3、4、5 的第四比例项，则  $x =$",
+    "page_idx": 7
+  },
+  {
+    "id": 303,
+    "type": "text",
+    "text": "8. 将  $2 \\times 1.5 = 0.5 \\times 6$  化成比例式，正确的是（ ）.",
+    "page_idx": 7
+  },
+  {
+    "id": 304,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(A)  $\\frac{2}{1.5} = \\frac{0.5}{6}$"
+  },
+  {
+    "id": 305,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(B)  $2:6 = 1.5:0.5$"
+  },
+  {
+    "id": 306,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）  $6:1.5 = 2:0.5$"
+  },
+  {
+    "id": 307,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(D)  $6:0.5 = 1.5:2$"
+  },
+  {
+    "id": 308,
+    "type": "text",
+    "page_idx": 7,
+    "text": "9. 已知  $\\frac{1}{3} \\times 4.5 = \\frac{3}{5} \\times 2.5$ ，下面哪个比例式不成立（ ）."
+  },
+  {
+    "id": 309,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(A)  $\\frac{1}{3}:\\frac{3}{5} = 4.5:2.5$"
+  },
+  {
+    "id": 310,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(B)  $\\frac{1}{3}: \\frac{3}{5} = 2.5: 4.5$"
+  },
+  {
+    "id": 311,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）  $4.5:\\frac{3}{5} = 2.5:\\frac{1}{3}$"
+  },
+  {
+    "id": 312,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(D)  $2.5:\\frac{1}{3} = 4.5:\\frac{3}{5}$"
+  },
+  {
+    "id": 313,
+    "type": "text",
+    "page_idx": 7,
+    "text": "10. 一个零件长为2.5厘米，如果画在图纸上为5厘米，那么图纸上的尺寸与实际尺寸的比是（ ）."
+  },
+  {
+    "id": 314,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(A) 1:20"
+  },
+  {
+    "id": 315,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(B) 20:1"
+  },
+  {
+    "id": 316,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）1:2"
+  },
+  {
+    "id": 317,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(D) 2:1"
+  },
+  {
+    "id": 318,
+    "type": "text",
+    "page_idx": 7,
+    "text": "11. 妈妈买8斤猪肉用了60元，如果买同样的5斤猪肉要用（ ）."
+  },
+  {
+    "id": 319,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（A）35元"
+  },
+  {
+    "id": 320,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（B）42元"
+  },
+  {
+    "id": 321,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）37.5元"
+  },
+  {
+    "id": 322,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（D）40元"
+  },
+  {
+    "id": 323,
+    "type": "text",
+    "page_idx": 7,
+    "text": "12. 如果 20 元钱可以买 3 个西瓜，现在要买 9 个这样的西瓜需要（ ）."
+  },
+  {
+    "id": 324,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（A）30元"
+  },
+  {
+    "id": 325,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（B）27元"
+  },
+  {
+    "id": 326,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）60元"
+  },
+  {
+    "id": 327,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（D）90元"
+  },
+  {
+    "id": 328,
+    "type": "text",
+    "page_idx": 7,
+    "text": "13. 一辆汽车2小时行驶120千米，按照这样的速度，3.5小时行驶（ ）千米"
+  },
+  {
+    "id": 329,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(A) 180"
+  },
+  {
+    "id": 330,
+    "type": "text",
+    "page_idx": 7,
+    "text": "(B) 210"
+  },
+  {
+    "id": 331,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（C）240"
+  },
+  {
+    "id": 332,
+    "type": "text",
+    "page_idx": 7,
+    "text": "（D）350"
+  },
+  {
+    "id": 333,
+    "type": "text",
+    "page_idx": 8,
+    "text": "14. 某工人 4 小时加工零件 120 个，他加工 600 个零件需要多少小时？"
+  },
+  {
+    "id": 334,
+    "type": "text",
+    "page_idx": 8,
+    "text": "15. 小杰 12 分钟可以打 480 个字. 照这样的速度, 他 1 小时可以打多少个字?"
+  },
+  {
+    "id": 335,
+    "type": "text",
+    "page_idx": 8,
+    "text": "16. 有一种小瓶装消毒液净重50克，小明妈妈买回8千克瓜果，现需将这些生吃的瓜果进行消毒，取出10克消毒液需加水多少千克？"
+  },
+  {
+    "id": 336,
+    "type": "text",
+    "page_idx": 8,
+    "text": "（消毒参考值：1.瓜果、餐具、厨房用品1:500；2.衣物、物体表面1:300）"
+  },
+  {
+    "id": 337,
+    "type": "text",
+    "page_idx": 8,
+    "text": "17. 如图，将 1.5 米长的竹竿直立在地面上，测得竹竿的影长为 1.6 米，同时测得旗杆的影长为 8 米。已知旗杆的高与其影长的比等于竹竿的长与其影长的比，求旗杆的高。"
+  },
+  {
+    "id": 338,
+    "type": "image",
+    "page_idx": 8,
+    "img_path": "images/517b992176ab64fab8804e283cc63ac76dbe82ef7d8f9af97f6b57509c361878.jpg"
+  },
+  {
+    "id": 339,
+    "type": "text",
+    "page_idx": 8,
+    "text": "18. 一个比例的两个外项互为倒数，其中一个内项是2.4，求另一个内项是多少？"
+  },
+  {
+    "id": 340,
+    "type": "text",
+    "page_idx": 8,
+    "text": "B组"
+  },
+  {
+    "id": 341,
+    "type": "text",
+    "text": "1. 在一幅比例尺1:5000000的地图上测量得到  $A$  市与  $B$  市之间的距离是2.5厘米，则  $A$  市与  $B$  市之间的实际距离是 ______ 千米.",
+    "page_idx": 8
+  },
+  {
+    "id": 342,
+    "type": "text",
+    "text": "2. 在一幅地图上量得甲、乙两地相距6厘米，乙、丙两地相距8厘米，已知甲、乙两地间的实际距离是120千米，乙、丙两地的实际距离是________；这幅地图的比例尺是________。",
+    "page_idx": 8
+  },
+  {
+    "id": 343,
+    "type": "text",
+    "text": "3. 两个三角形的面积相等，若底边之比为  $3:2$  ，则底边上的高之比是",
+    "page_idx": 8
+  },
+  {
+    "id": 344,
+    "type": "text",
+    "text": "4. 用2，3，4再配一个比这三个数都大的数________，使它们组成比例，组成的比例式是________。",
+    "page_idx": 8
+  },
+  {
+    "id": 345,
+    "type": "text",
+    "text": "5. 某校语文教师人数与数学教师人数之比是13:7，若语文教师2人改行教数学，则人数的比是3:2，原来语文、数学教师各有多少人？",
+    "page_idx": 8
+  },
+  {
+    "id": 346,
+    "type": "text",
+    "page_idx": 8,
+    "text": "6. 某校女生与全校总人数的比是  $7:15$ ，转进8名女生后. 女生占全校人数的  $\\frac{15}{31}$ ，现在该校有多少名学生？"
+  },
+  {
+    "id": 347,
+    "type": "text",
+    "page_idx": 9,
+    "text": "5.4 百分比的意义（1）"
+  },
+  {
+    "id": 348,
+    "type": "text",
+    "page_idx": 9,
+    "text": "A组"
+  },
+  {
+    "id": 349,
+    "type": "text",
+    "page_idx": 9,
+    "text": "1. 把  $\\frac{16}{25}$  写成百分比是（ ）."
+  },
+  {
+    "id": 350,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(A)  $0.64\\%$"
+  },
+  {
+    "id": 351,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(B)  $6.4\\%$"
+  },
+  {
+    "id": 352,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（C）  $64\\%$"
+  },
+  {
+    "id": 353,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（D）  $640\\%$"
+  },
+  {
+    "id": 354,
+    "type": "text",
+    "page_idx": 9,
+    "text": "2. 百分数  $150\\%$  化为最简分数为（ ）."
+  },
+  {
+    "id": 355,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(A)  $\\frac{2}{3}$"
+  },
+  {
+    "id": 356,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(B)  $1\\frac{1}{2}$"
+  },
+  {
+    "id": 357,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(C)  $\\frac{15}{100}$"
+  },
+  {
+    "id": 358,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（D）  $1\\frac{5}{10}$"
+  },
+  {
+    "id": 359,
+    "type": "text",
+    "page_idx": 9,
+    "text": "3. 一批产品，其中合格产品与不合格产品的比是4:1. 不合格产品的数量占这批产品总数的（ ）."
+  },
+  {
+    "id": 360,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(A)  $25\\%$"
+  },
+  {
+    "id": 361,
+    "type": "text",
+    "page_idx": 9,
+    "text": "(B)  $20\\%$"
+  },
+  {
+    "id": 362,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（C）  $30\\%$"
+  },
+  {
+    "id": 363,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（D）以上答案都不正确"
+  },
+  {
+    "id": 364,
+    "type": "text",
+    "page_idx": 9,
+    "text": "4. 已知甲重60千克，乙重54千克，下列表述正确的是（ ）."
+  },
+  {
+    "id": 365,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（A）甲比乙重  $10\\%$"
+  },
+  {
+    "id": 366,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（B）乙比甲约轻  $11\\%$"
+  },
+  {
+    "id": 367,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（C）甲比乙约重  $10\\%$"
+  },
+  {
+    "id": 368,
+    "type": "text",
+    "page_idx": 9,
+    "text": "（D）乙比甲轻  $10\\%$"
+  },
+  {
+    "id": 369,
+    "type": "text",
+    "text": "5.  $30.5\\%$  读作________；百分之十点七写作________。",
+    "page_idx": 9
+  },
+  {
+    "id": 370,
+    "type": "text",
+    "text": "6. 把小数化成百分数：0.37=________，2.073=________.",
+    "page_idx": 9
+  },
+  {
+    "id": 371,
+    "type": "text",
+    "text": "7. 把百分数化成小数：  $46\\% = \\_$  ，  $320\\% = \\_$",
+    "page_idx": 9
+  },
+  {
+    "id": 372,
+    "type": "text",
+    "text": "8. 把分数化为百分数：  $\\frac{1}{2} = \\_$  ，  $1\\frac{5}{8} = \\_$",
+    "page_idx": 9
+  },
+  {
+    "id": 373,
+    "type": "text",
+    "text": "9. 把百分数化成分数：  $75\\% = \\_ \\_ \\_ \\_ \\_ \\_ , 120\\% = \\_ \\_ \\_ \\_ \\_ \\_ .$",
+    "page_idx": 9
+  },
+  {
+    "id": 374,
+    "type": "text",
+    "page_idx": 9,
+    "text": "10. 如图，阴影部分面积占整个图形面积的百分之几"
+  },
+  {
+    "id": 375,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/c10ac5071955bd470c5a71b81e2dc4d4b032ec1146b2f3722ffd3df3ec797702.jpg",
+    "image_caption": "$\\%$"
+  },
+  {
+    "id": 376,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/b3d8a77f539f60f32f3af0c595e0323931f34aac6beef3ebdee3d80df984854e.jpg",
+    "image_caption": "$\\%$"
+  },
+  {
+    "id": 377,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/83380494f53da05fc845d25d555a81a7debadad8d967efd6dcdac67d30385293.jpg",
+    "image_caption": "$\\%$"
+  },
+  {
+    "id": 378,
+    "type": "image",
+    "page_idx": 9,
+    "img_path": "images/73b25dbddac6f98e25f5dc53ef44f43d38986071ec99901130c3d1b2a523a33c.jpg",
+    "image_caption": "$\\%$"
+  },
+  {
+    "id": 379,
+    "type": "text",
+    "page_idx": 9,
+    "text": "11. 把下列各比化成后项是 100 的比"
+  }
+]
+```
