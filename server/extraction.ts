@@ -426,7 +426,7 @@ function deduplicateQuestions(questions: ExtractedQuestion[]): ExtractedQuestion
       if (existingIds.size === 0) continue;
 
       const sim = jaccard(qIds, existingIds);
-      if (sim > 0.5) {
+      if (sim >= 0.5) {
         // 重叠！保留 ID 集合更大的（更完整的）
         if (qIds.size > existingIds.size) {
           unique[i] = q;
