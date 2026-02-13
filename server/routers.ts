@@ -210,8 +210,12 @@ const taskRouter = router({
         }
       }
       
-      // 章节预处理配置：如果没有指定，尝试使用用户的默认长文本配置
+      // 章节预处理配置：如果没有指定，默认使用提取任务的 LLM 配置
+      // 这确保了 v9.1 流程（章节预处理）默认启用
       let chapterConfigId = input.chapterConfigId;
+      if (!chapterConfigId && configId) {
+        chapterConfigId = configId;
+      }
       
       const id = await createExtractionTask({
         ...input,
