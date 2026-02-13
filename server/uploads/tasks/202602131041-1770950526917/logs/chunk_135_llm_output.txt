@@ -1,6 +1,0 @@
-<chapter><title>9507</title>
-<qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>9513,9514,9515,9516,9517</question>
-<solution>9518,9519,9520,9521,9522,9523</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>9538,9539,9540,9541,9542,9543</question>
-<solution>9544,9545,9546,9547,9548,9549</solution></qa_pair>
-</chapter>

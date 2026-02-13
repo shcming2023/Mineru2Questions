@@ -1,0 +1,7 @@
+<chapter><title>3434</title>
+<qa_pair><label>d</label><type>exercise</type><question>3430</question><solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>3431,3432,3433</question><solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>3490,3491,3492,3494,3495,3496</question><solution>3493,3497</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5 CONTINUED C</label><type>example</type><question>3498,3499,3500,3501</question><solution>3502,3503,3504,3505,3506</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>3509,3510,3511,3512,3513,3514,3517,3518,3519,3523,3524,3525</question><solution>3515,3516,3520,3521,3522,3526,3527,3528</solution></qa_pair>
+</chapter>

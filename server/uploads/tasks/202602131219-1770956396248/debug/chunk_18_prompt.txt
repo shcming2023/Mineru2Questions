@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1260,
+    "type": "text",
+    "page_idx": 56,
+    "text": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors."
+  },
+  {
+    "id": 1261,
+    "type": "equation",
+    "page_idx": 56,
+    "text": "$$\n9. 2 9 6 \\times 1 0 ^ {7}\n$$"
+  },
+  {
+    "id": 1262,
+    "type": "text",
+    "page_idx": 56,
+    "text": "The first factor is always a number greater than or equal to 1 and less than 10."
+  },
+  {
+    "id": 1263,
+    "type": "text",
+    "page_idx": 56,
+    "text": "The second factor is always a power of 10."
+  },
+  {
+    "id": 1264,
+    "type": "text",
+    "page_idx": 56,
+    "text": "Write the number in standard form in scientific notation."
+  },
+  {
+    "id": 1265,
+    "type": "text",
+    "page_idx": 56,
+    "text": "Place the decimal point after the first nonzero digit."
+  },
+  {
+    "id": 1266,
+    "type": "image",
+    "page_idx": 56,
+    "img_path": "images/5e26ce8c26f905eb8cb54f0fbef0df968a09052298d5a9ad1c8ab5f349d7ccb8.jpg"
+  },
+  {
+    "id": 1267,
+    "type": "text",
+    "page_idx": 56,
+    "text": "Count the number of digits after the decimal point to determine the power of 10."
+  },
+  {
+    "id": 1268,
+    "type": "text",
+    "page_idx": 56,
+    "text": "The two numbers represent the same distance."
+  },
+  {
+    "id": 1269,
+    "type": "image",
+    "page_idx": 56,
+    "img_path": "images/cd05721c75b3d3d6a116f0c2e040fee04acf90e88ca6f1d9d127909abfc40334.jpg"
+  },
+  {
+    "id": 1270,
+    "type": "text",
+    "page_idx": 56,
+    "text": "Try It!"
+  },
+  {
+    "id": 1271,
+    "type": "text",
+    "page_idx": 56,
+    "text": "The height of Angel Falls, the tallest waterfall in the world, is 3,212 feet. How do you write this number in scientific notation?"
+  },
+  {
+    "id": 1272,
+    "type": "image",
+    "page_idx": 56,
+    "img_path": "images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg"
+  },
+  {
+    "id": 1273,
+    "type": "text",
+    "page_idx": 56,
+    "text": "Convince Me! Why do very large numbers have positive exponents when written in scientific notation? Explain."
+  },
+  {
+    "id": 1274,
+    "type": "text",
+    "page_idx": 57,
+    "text": "EXAMPLE 2"
+  },
+  {
+    "id": 1275,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/e6ddb421c0d74fa32fba4f300478619e7cf9f56203a5725ca586a0173ae78292.jpg"
+  },
+  {
+    "id": 1276,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Write Small Numbers in Scientific Notation"
+  },
+  {
+    "id": 1277,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/4ac13dcdfe2bb6271dc7c316f4756594a63a11c123ae57ed44631b6a74eb4133.jpg"
+  },
+  {
+    "id": 1278,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/c118654a3e3a027f8d68c155932cf9aae991605c154d400949695ba382fec12e.jpg"
+  },
+  {
+    "id": 1279,
+    "type": "text",
+    "page_idx": 57,
+    "text": "ACTIVITY"
+  },
+  {
+    "id": 1280,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/5139c0363d53bdaba1aaf5f76a4941f037a219f8b20d38cc966af3e2ba200824.jpg"
+  },
+  {
+    "id": 1281,
+    "type": "text",
+    "page_idx": 57,
+    "text": "ASSESS"
+  },
+  {
+    "id": 1282,
+    "type": "text",
+    "page_idx": 57,
+    "text": "What is the width of a red blood cell written in scientific notation?"
+  },
+  {
+    "id": 1283,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Write the number as the product of two factors."
+  },
+  {
+    "id": 1284,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Place the decimal after the first nonzero digit."
+  },
+  {
+    "id": 1285,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Count the number of digits before the decimal point to determine the power of 10."
+  },
+  {
+    "id": 1286,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/f434c3906b3735bb8a85ab1d22d699941aca8902e9a5336956342f3be6d93db2.jpg"
+  },
+  {
+    "id": 1287,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/dc09aae652f7e8bdce3a218ff986b5d4ffdb0ace05669eb629b0f5478a694d2d.jpg"
+  },
+  {
+    "id": 1288,
+    "type": "text",
+    "page_idx": 57,
+    "text": "The width of the red blood cell, expressed in scientific notation, is  $7.03 \\times 10^{-6}$  meter."
+  },
+  {
+    "id": 1289,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/ec98b4fbeafc480b6cd9099279ec7603b43cf33dbc1b198080accca5333198dd.jpg"
+  },
+  {
+    "id": 1290,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/45e53245c5b36a9513d4a3523f1facb4cf7c08eebc3d79a5c4a557af6dc06796.jpg"
+  },
+  {
+    "id": 1291,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Try It!"
+  },
+  {
+    "id": 1292,
+    "type": "text",
+    "page_idx": 57,
+    "text": "A common mechanical pencil lead measures about 0.005 meter in diameter. How can you express this measurement using scientific notation?"
+  },
+  {
+    "id": 1293,
+    "type": "text",
+    "page_idx": 57,
+    "text": "EXAMPLE 3"
+  },
+  {
+    "id": 1294,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/b714529dc9076fc5a004114b35e2e11e836a149f32d91f7fd503dcc6ee0119f8.jpg"
+  },
+  {
+    "id": 1295,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Convert Scientific Notation to Standard Form"
+  },
+  {
+    "id": 1296,
+    "type": "text",
+    "page_idx": 57,
+    "text": "A. Kelly used a calculator to multiply large numbers. How can she write the number on her calculator screen in standard form?"
+  },
+  {
+    "id": 1297,
+    "type": "equation",
+    "page_idx": 57,
+    "text": "$$\n3. 5 \\times 1 0 ^ {1 5} = 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0\n$$"
+  },
+  {
+    "id": 1298,
+    "type": "text",
+    "page_idx": 57,
+    "text": "The exponent is positive so move the decimal point to the right."
+  },
+  {
+    "id": 1299,
+    "type": "text",
+    "page_idx": 57,
+    "text": "B. How can Charlie write the number on the calculator screen in standard form?"
+  },
+  {
+    "id": 1300,
+    "type": "equation",
+    "page_idx": 57,
+    "text": "$$\n8 \\times 1 0 ^ {- 9} = 0. \\overbrace {0 . 0 0 0 0 0 0 0 8} ^ {1 0 ^ {- 9}}\n$$"
+  },
+  {
+    "id": 1301,
+    "type": "text",
+    "page_idx": 57,
+    "text": "The exponent is negative so move the decimal point to the left."
+  },
+  {
+    "id": 1302,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/33ce741d4da6bee985eb39a46c31aa1ab4224f8ad94e46138d11174a433bec49.jpg"
+  },
+  {
+    "id": 1303,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/773a7a73a0772333ec366b1f5f3200fdcffb47a63e9e561f43023d19f9ca0c2a.jpg"
+  },
+  {
+    "id": 1304,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Use Appropriate Tools Certain calculators may display scientific notation using the symbol EE or E. The number that follows is the power of 10."
+  },
+  {
+    "id": 1305,
+    "type": "image",
+    "page_idx": 57,
+    "img_path": "images/e0b7cbff919384942ce7b1139c0bc95e625cf97642b67c80b0118efc3ec097ac.jpg"
+  },
+  {
+    "id": 1306,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Try It!"
+  },
+  {
+    "id": 1307,
+    "type": "text",
+    "page_idx": 57,
+    "text": "Write the numbers in standard form."
+  },
+  {
+    "id": 1308,
+    "type": "equation",
+    "page_idx": 57,
+    "text": "$$\na. 9. 2 2 5 \\times 1 0 ^ {1 8}\n$$"
+  },
+  {
+    "id": 1309,
+    "type": "equation",
+    "page_idx": 57,
+    "text": "$$\n\\mathrm {b .} 6. 3 \\times 1 0 ^ {- 8}\n$$"
+  },
+  {
+    "id": 1310,
+    "type": "text",
+    "page_idx": 58,
+    "text": "Scientific notation is a way to write very large numbers or very small numbers. Scientists use scientific notation as a more efficient and convenient way of writing such numbers."
+  },
+  {
+    "id": 1311,
+    "type": "text",
+    "page_idx": 58,
+    "text": "A number in scientific notation is the product of two factors. The first factor must be greater than or equal to 1 and less than 10. The second factor is a power of 10."
+  },
+  {
+    "id": 1312,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/b0903c11eaca1fb7b514c5489d5419ee3cde3cba9df969453cbd2b3f6e63b29e.jpg"
+  },
+  {
+    "id": 1313,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/c1ceb51d17f3f08523c14265ff849668bc4c2e2796283cf4a18c31ead3d75340.jpg"
+  },
+  {
+    "id": 1314,
+    "type": "text",
+    "page_idx": 58,
+    "text": "To write a number in scientific notation in standard form, multiply the decimal number by the power of 10."
+  },
+  {
+    "id": 1315,
+    "type": "text",
+    "page_idx": 58,
+    "text": "Do You Understand?"
+  },
+  {
+    "id": 1316,
+    "type": "text",
+    "text": "1. Essential Question What is scientific notation and why is it used?",
+    "page_idx": 58
+  },
+  {
+    "id": 1317,
+    "type": "text",
+    "text": "2. Critique Reasoning Taylor states that 2,800,000 in scientific notation is  $2.8 \\times 10^{-6}$  because the number has six places to the right of the 2. Is Taylor's reasoning correct?",
+    "page_idx": 58
+  },
+  {
+    "id": 1318,
+    "type": "text",
+    "text": "3. Construct Arguments Sam will write 0.000032 in scientific notation. Sam thinks that the exponent of 10 will be positive. Do you agree? Construct an argument to support your response.",
+    "page_idx": 58
+  },
+  {
+    "id": 1319,
+    "type": "text",
+    "page_idx": 58,
+    "text": "Do You Know How?"
+  },
+  {
+    "id": 1320,
+    "type": "text",
+    "text": "4. Express 586,400,000 in scientific notation.",
+    "page_idx": 58
+  },
+  {
+    "id": 1321,
+    "type": "text",
+    "text": "5. The genetic information of almost every living thing is stored in a tiny strand called DNA. Human DNA is  $3.4 \\times 10^{-8}$  meter long. Write the length in standard form.",
+    "page_idx": 58
+  },
+  {
+    "id": 1322,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/d3766bf47e84fca2b15e9ab337a2eac3e2889fa4a5c5ae127768360dea06fb1b.jpg"
+  },
+  {
+    "id": 1323,
+    "type": "text",
+    "text": "6. The largest virus known to man is the Megavirus, which measures 0.00000044 meter across. Express this number in scientific notation.",
+    "page_idx": 58
+  },
+  {
+    "id": 1324,
+    "type": "text",
+    "text": "7. How would you write the number displayed on the calculator screen in standard form?",
+    "page_idx": 58
+  },
+  {
+    "id": 1325,
+    "type": "image",
+    "page_idx": 58,
+    "img_path": "images/f8247cb065cc4b1608f6046201b851041518a962ff6fffe08f6d3e5e7c6343f6.jpg"
+  },
+  {
+    "id": 1326,
+    "type": "text",
+    "page_idx": 59,
+    "text": "Practice & Problem Solving"
+  },
+  {
+    "id": 1327,
+    "type": "image",
+    "page_idx": 59,
+    "img_path": "images/0b8a2bc538c262b55e151fb38c8295896eb9140ef662ab2935acf62c0a80eb4c.jpg"
+  },
+  {
+    "id": 1328,
+    "type": "text",
+    "page_idx": 59,
+    "text": "Leveled Practice In 8 and 9, write the numbers in the correct format."
+  },
+  {
+    "id": 1329,
+    "type": "text",
+    "page_idx": 59,
+    "text": "8. The Sun is  $1.5 \\times 10^{8}$  kilometers from Earth."
+  },
+  {
+    "id": 1330,
+    "type": "text",
+    "page_idx": 59,
+    "text": "$1.5 \\times 10^{8}$  is written as in standard form."
+  },
+  {
+    "id": 1331,
+    "type": "text",
+    "page_idx": 59,
+    "text": "9. Brenna wants an easier way to write 0.000000000000000587."
+  },
+  {
+    "id": 1332,
+    "type": "text",
+    "page_idx": 59,
+    "text": "0.0000000000000000587 is written as  $\\times 10$  in scientific notation."
+  },
+  {
+    "id": 1333,
+    "type": "text",
+    "page_idx": 59,
+    "text": "10. Is  $23 \\times 10^{-8}$  written in scientific notation? Justify your response."
+  },
+  {
+    "id": 1334,
+    "type": "text",
+    "page_idx": 59,
+    "text": "11. Is  $8.6 \\times 10^{7}$  written in scientific notation? Justify your response."
+  },
+  {
+    "id": 1335,
+    "type": "text",
+    "page_idx": 59,
+    "text": "12. Simone evaluates an expression using her calculator. The calculator display is shown at the right. Express the number in standard form."
+  },
+  {
+    "id": 1336,
+    "type": "image",
+    "page_idx": 59,
+    "img_path": "images/9eaf6fcec04241deaa1457ec5ae4c34357215f08849f8afdf21a44e8925b0cae.jpg"
+  },
+  {
+    "id": 1337,
+    "type": "text",
+    "page_idx": 59,
+    "text": "13. Express the number 0.00001038 in scientific notation."
+  },
+  {
+    "id": 1338,
+    "type": "text",
+    "page_idx": 59,
+    "text": "14. Express the number 80,000 in scientific notation."
+  },
+  {
+    "id": 1339,
+    "type": "text",
+    "page_idx": 59,
+    "text": "15. Peter evaluates an expression using his calculator. The calculator display is shown at the right. Express the number in standard form."
+  },
+  {
+    "id": 1340,
+    "type": "image",
+    "page_idx": 59,
+    "img_path": "images/df332c2843d1ab0334780b0ed7b08b8cce78708173865a4123b90f23f1913baf.jpg"
+  },
+  {
+    "id": 1341,
+    "type": "text",
+    "page_idx": 60,
+    "text": "16. a. What should you do first to write  $5.871 \\times 10^{-7}$  in standard form?"
+  },
+  {
+    "id": 1342,
+    "type": "text",
+    "page_idx": 60,
+    "text": "b. Express the number in standard form."
+  },
+  {
+    "id": 1343,
+    "type": "text",
+    "page_idx": 60,
+    "text": "18. At a certain point, the Grand Canyon is approximately 1,600,000 centimeters across. Express this number in scientific notation."
+  },
+  {
+    "id": 1344,
+    "type": "text",
+    "page_idx": 60,
+    "text": "17. Express  $2.58 \\times 10^{-2}$  in standard form."
+  },
+  {
+    "id": 1345,
+    "type": "image",
+    "page_idx": 60,
+    "img_path": "images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg"
+  },
+  {
+    "id": 1346,
+    "type": "text",
+    "page_idx": 60,
+    "text": "19. The length of a bacterial cell is  $5.2 \\times 10^{-6}$  meter. Express the length of the cell in standard form."
+  },
+  {
+    "id": 1347,
+    "type": "text",
+    "page_idx": 60,
+    "text": "20. Higher Order Thinking Express the distance 4,300,000 meters using scientific notation in meters, and then in millimeters."
+  },
+  {
+    "id": 1348,
+    "type": "image",
+    "page_idx": 60,
+    "img_path": "images/e04b8468a67a21e56d38aad5f0064409bc62ebdb3628475f6fe56c7af6e53c61.jpg"
+  },
+  {
+    "id": 1349,
+    "type": "text",
+    "page_idx": 60,
+    "text": "Assessment Practice"
+  },
+  {
+    "id": 1350,
+    "type": "text",
+    "page_idx": 60,
+    "text": "21. Which of the following numbers are written in scientific notation? 8.EE.1.3"
+  },
+  {
+    "id": 1351,
+    "type": "text",
+    "text": "${12} \\times  {10}^{6}$",
+    "page_idx": 60
+  },
+  {
+    "id": 1352,
+    "type": "text",
+    "text": "12",
+    "page_idx": 60
+  },
+  {
+    "id": 1353,
+    "type": "text",
+    "text": "${6.89} \\times  {10}^{6}$",
+    "page_idx": 60
+  },
+  {
+    "id": 1354,
+    "type": "text",
+    "text": "6.89",
+    "page_idx": 60
+  },
+  {
+    "id": 1355,
+    "type": "text",
+    "text": "0.4",
+    "page_idx": 60
+  },
+  {
+    "id": 1356,
+    "type": "text",
+    "text": "$4 \\times  {10}^{-1}$",
+    "page_idx": 60
+  },
+  {
+    "id": 1357,
+    "type": "text",
+    "page_idx": 60,
+    "text": "22. Jean's calculator display shows the number to the right. 8.EE.1.4"
+  },
+  {
+    "id": 1358,
+    "type": "text",
+    "page_idx": 60,
+    "text": "PART A"
+  },
+  {
+    "id": 1359,
+    "type": "text",
+    "page_idx": 60,
+    "text": "Express this number in scientific notation."
+  }
+]
+```

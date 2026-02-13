@@ -1,0 +1,40 @@
+<chapter><title>665</title>
+<qa_pair><label>8</label><type>exercise</type><question>630,631,632,633,634</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>635</question>
+<solution></solution></qa_pair>
+<qa_pair><label>10</label><type>exercise</type><question>636</question>
+<solution></solution></qa_pair>
+<qa_pair><label>11</label><type>exercise</type><question>637</question>
+<solution></solution></qa_pair>
+<qa_pair><label>12</label><type>exercise</type><question>638</question>
+<solution></solution></qa_pair>
+<qa_pair><label>13</label><type>exercise</type><question>639,640</question>
+<solution></solution></qa_pair>
+<qa_pair><label>14</label><type>exercise</type><question>641</question>
+<solution></solution></qa_pair>
+<qa_pair><label>15</label><type>exercise</type><question>642</question>
+<solution></solution></qa_pair>
+<qa_pair><label>16</label><type>exercise</type><question>643,644,645</question>
+<solution></solution></qa_pair>
+<qa_pair><label>17</label><type>exercise</type><question>647,648,649,650,651</question>
+<solution></solution></qa_pair>
+<qa_pair><label>18</label><type>exercise</type><question>652,653,654,655,656,657</question>
+<solution></solution></qa_pair>
+<qa_pair><label>662</label><type>exercise</type><question>662,663,664</question>
+<solution></solution></qa_pair>
+<qa_pair><label>679</label><type>exercise</type><question>679</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 1</label><type>example</type><question>680,681,682,684,685,686,687,688,689,690,691,692,693,694</question>
+<solution>695,696</solution></qa_pair>
+<qa_pair><label>Try It!</label><type>exercise</type><question>697,698,699,700,701</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Convince Me!</label><type>exercise</type><question>702</question>
+<solution></solution></qa_pair>
+<qa_pair><label>703</label><type>exercise</type><question>703,704,705,706,707,708,709</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Try It!</label><type>exercise</type><question>710,711</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 3</label><type>example</type><question>712,713,714,715,716,717,718,719,720,721,722,723,724,725,726</question>
+<solution>727,728,729</solution></qa_pair>
+</chapter>

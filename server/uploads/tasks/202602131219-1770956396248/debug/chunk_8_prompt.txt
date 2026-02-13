@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 560,
+    "type": "text",
+    "page_idx": 24,
+    "text": "The symbol  $\\sqrt[3]{\\cdot}$  means the cube root of a number."
+  },
+  {
+    "id": 561,
+    "type": "equation",
+    "page_idx": 24,
+    "text": "$$\n\\begin{array}{l} \\sqrt [ 3 ]{2 1 6} = \\sqrt [ 3 ]{6 \\cdot 6 \\cdot 6} \\\\ = \\sqrt [ 3 ]{6 ^ {3}} \\\\ = 6 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 562,
+    "type": "text",
+    "page_idx": 24,
+    "text": "Taking the cube root and cubing a number are inverse operations."
+  },
+  {
+    "id": 563,
+    "type": "text",
+    "page_idx": 24,
+    "text": "The dimensions of each square piece of wood are 6 inches by 6 inches."
+  },
+  {
+    "id": 564,
+    "type": "image",
+    "page_idx": 24,
+    "img_path": "images/0132d9a5449fe6d2483f4a11bb67bdbfa984505f2095ea2fd988a14fe19b34eb.jpg"
+  },
+  {
+    "id": 565,
+    "type": "text",
+    "page_idx": 24,
+    "text": "Try It!"
+  },
+  {
+    "id": 566,
+    "type": "text",
+    "page_idx": 24,
+    "text": "A cube-shaped art sculpture has a volume of 64 cubic feet. What is the length of each edge of the cube?"
+  },
+  {
+    "id": 567,
+    "type": "text",
+    "page_idx": 24,
+    "text": "The length of each edge is feet."
+  },
+  {
+    "id": 568,
+    "type": "equation",
+    "page_idx": 24,
+    "text": "$$\n\\begin{array}{l} \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{\\square \\cdot \\square \\cdot \\square} \\\\ \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{\\square} ^ {3} \\\\ \\sqrt [ 3 ]{6 4} = \\boxed {} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 569,
+    "type": "text",
+    "page_idx": 24,
+    "text": "Convince Me! How can you find the cube root of 64?"
+  },
+  {
+    "id": 570,
+    "type": "text",
+    "page_idx": 25,
+    "text": "EXAMPLE 2"
+  },
+  {
+    "id": 571,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/b9bbdc37c1625c9aac16616a67ac9aa23980b73b6e84b29854658692c5c3b98f.jpg"
+  },
+  {
+    "id": 572,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Evaluate Perfect Squares and Perfect Cubes"
+  },
+  {
+    "id": 573,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/efef7f4f1aad0bf8f2ec41bcebd58581e3f67ca536054c3d260f8b99acd7dfd9.jpg"
+  },
+  {
+    "id": 574,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/ae9c677ba2dd437b428332722fad832a7ff5ef9c320d809cafa2fcdb389b5237.jpg"
+  },
+  {
+    "id": 575,
+    "type": "text",
+    "page_idx": 25,
+    "text": "ACTIVITY"
+  },
+  {
+    "id": 576,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/77f64561cd6df555291de0ffa23fb32246a05a46ad27e0a7c335695399dd17a1.jpg"
+  },
+  {
+    "id": 577,
+    "type": "text",
+    "page_idx": 25,
+    "text": "ASSESS"
+  },
+  {
+    "id": 578,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Evaluate."
+  },
+  {
+    "id": 579,
+    "type": "text",
+    "page_idx": 25,
+    "text": "A.  $\\sqrt[3]{64}$"
+  },
+  {
+    "id": 580,
+    "type": "equation",
+    "page_idx": 25,
+    "text": "$$\n\\begin{array}{l} \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{4 \\cdot 4 \\cdot 4} \\\\ = \\sqrt [ 3 ]{4 ^ {3}} \\\\ = 4 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 581,
+    "type": "text",
+    "page_idx": 25,
+    "text": "B.  $\\sqrt{100}$"
+  },
+  {
+    "id": 582,
+    "type": "equation",
+    "page_idx": 25,
+    "text": "$$\n\\begin{array}{l} \\sqrt {1 0 0} = \\sqrt {1 0 \\cdot 1 0} \\\\ = \\sqrt {1 0 ^ {2}} \\\\ = 1 0 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 583,
+    "type": "text",
+    "page_idx": 25,
+    "text": "C.  $\\sqrt{49}$"
+  },
+  {
+    "id": 584,
+    "type": "equation",
+    "page_idx": 25,
+    "text": "$$\n\\begin{array}{l} \\sqrt {4 9} = \\sqrt {7 \\cdot 7} \\\\ = \\sqrt {7 ^ {2}} \\\\ = 7 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 585,
+    "type": "text",
+    "page_idx": 25,
+    "text": "D.  $\\sqrt[3]{8}$"
+  },
+  {
+    "id": 586,
+    "type": "equation",
+    "page_idx": 25,
+    "text": "$$\n\\begin{array}{l} \\sqrt [ 3 ]{8} = \\sqrt [ 3 ]{2 \\cdot 2 \\cdot 2} \\\\ = \\sqrt [ 3 ]{2 ^ {3}} \\\\ = 2 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 587,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/db4b17f22dd68be3b253884aade4bc63144b7fb046cf010c30df8904d4b60bf8.jpg"
+  },
+  {
+    "id": 588,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Try It!"
+  },
+  {
+    "id": 589,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Evaluate."
+  },
+  {
+    "id": 590,
+    "type": "text",
+    "page_idx": 25,
+    "text": "a.  $\\sqrt[3]{27}$"
+  },
+  {
+    "id": 591,
+    "type": "text",
+    "page_idx": 25,
+    "text": "b.  $\\sqrt{25}$"
+  },
+  {
+    "id": 592,
+    "type": "text",
+    "page_idx": 25,
+    "text": "c.  $\\sqrt{81}$"
+  },
+  {
+    "id": 593,
+    "type": "text",
+    "page_idx": 25,
+    "text": "d.  $\\sqrt[3]{1}$"
+  },
+  {
+    "id": 594,
+    "type": "text",
+    "page_idx": 25,
+    "text": "EXAMPLE 3"
+  },
+  {
+    "id": 595,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Evaluate Square Roots to Solve Problems"
+  },
+  {
+    "id": 596,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Sean cuts one sheet of colorful poster paper to cover the bulletin board exactly. What are the dimensions of the poster paper?"
+  },
+  {
+    "id": 597,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Find the square root of the area to find the side lengths of the bulletin board."
+  },
+  {
+    "id": 598,
+    "type": "equation",
+    "page_idx": 25,
+    "text": "$$\n\\begin{array}{l} \\sqrt {1 4 4} = \\sqrt {1 2 \\cdot 1 2} \\\\ = \\sqrt {1 2 ^ {2}} \\\\ = 1 2 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 599,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Each side of the bulletin board measures 12 inches. Sean will need to cut a 12-inch by 12-inch sheet of poster paper."
+  },
+  {
+    "id": 600,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/d69f197ea8e8401bf0d1af72322ec543d73c629ded4ec2e2114234cc40bc269b.jpg"
+  },
+  {
+    "id": 601,
+    "type": "image",
+    "page_idx": 25,
+    "img_path": "images/8371997272bee6f2f3fb399cf6c629d3acff3386fee6f11444a1b1a7ae25a8ee.jpg"
+  },
+  {
+    "id": 602,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Try It!"
+  },
+  {
+    "id": 603,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Emily wants to buy a tablecloth to cover a square card table. She knows the tabletop has an area of 9 square feet. What are the minimum dimensions of the tablecloth Emily needs?"
+  },
+  {
+    "id": 604,
+    "type": "text",
+    "page_idx": 25,
+    "text": "Emily should buy a tablecloth that measures at least feet by feet."
+  },
+  {
+    "id": 605,
+    "type": "equation",
+    "page_idx": 25,
+    "text": "$$\n\\begin{array}{l} \\sqrt {9} = \\sqrt {\\square \\cdot \\square} \\\\ = \\sqrt {\\square} ^ {2} \\\\ = \\square \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 606,
+    "type": "text",
+    "page_idx": 26,
+    "text": "The cube root of a number is a number whose cube is equal to that number."
+  },
+  {
+    "id": 607,
+    "type": "equation",
+    "page_idx": 26,
+    "text": "$$\n\\sqrt [ 3 ]{1 2 5} = \\sqrt [ 3 ]{5 \\cdot 5 \\cdot 5}\n$$"
+  },
+  {
+    "id": 608,
+    "type": "equation",
+    "page_idx": 26,
+    "text": "$$\n\\begin{array}{l} = \\sqrt [ 3 ]{5 ^ {3}} \\\\ = 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 609,
+    "type": "text",
+    "page_idx": 26,
+    "text": "Cubing a number and taking the cube root of the number are inverse operations."
+  },
+  {
+    "id": 610,
+    "type": "text",
+    "page_idx": 26,
+    "text": "The square root of a number is a number whose square is equal to that number."
+  },
+  {
+    "id": 611,
+    "type": "equation",
+    "page_idx": 26,
+    "text": "$$\n\\begin{array}{l} \\sqrt {4} = \\sqrt {2 \\cdot 2} \\\\ = \\sqrt {2 ^ {2}} \\\\ = 2 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 612,
+    "type": "text",
+    "page_idx": 26,
+    "text": "Squaring a number and taking the square root of the number are inverse operations."
+  },
+  {
+    "id": 613,
+    "type": "text",
+    "page_idx": 26,
+    "text": "Do You Understand?"
+  },
+  {
+    "id": 614,
+    "type": "text",
+    "text": "1. Essential Question How do you evaluate cube roots and square roots?",
+    "page_idx": 26
+  },
+  {
+    "id": 615,
+    "type": "text",
+    "text": "2. Generalize A certain number is both a perfect square and a perfect cube. Will its square root and its cube root always be different numbers? Explain.",
+    "page_idx": 26
+  },
+  {
+    "id": 616,
+    "type": "text",
+    "text": "3. Critique Reasoning A cube-shaped box has a volume of 27 cubic inches. Bethany says each side of the cube measures 9 inches because  $9 \\times 3 = 27$ . Is Bethany correct? Explain your reasoning.",
+    "page_idx": 26
+  },
+  {
+    "id": 617,
+    "type": "text",
+    "page_idx": 26,
+    "text": "Do You Know How?"
+  },
+  {
+    "id": 618,
+    "type": "text",
+    "text": "4. A cube has a volume of 8 cubic inches. What is the length of each edge of the cube?",
+    "page_idx": 26
+  },
+  {
+    "id": 619,
+    "type": "text",
+    "text": "5. Below is a model of the infeld of a baseball stadium. How long is each side of the infeld?",
+    "page_idx": 26
+  },
+  {
+    "id": 620,
+    "type": "image",
+    "page_idx": 26,
+    "img_path": "images/b548436ad125a0c82aed09f8906d446499f20e7b0664f680cd6f89b46b0ac630.jpg"
+  },
+  {
+    "id": 621,
+    "type": "text",
+    "page_idx": 26,
+    "text": "6. Julio cubes a number and then takes the cube root of the result. He ends up with 20. What number did Julio start with?"
+  },
+  {
+    "id": 622,
+    "type": "text",
+    "page_idx": 27,
+    "text": "Practice & Problem Solving"
+  },
+  {
+    "id": 623,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/220875f31dc9c72ca99e4631dcc5b333e78bb7eea2d3c946c4b0fb8389369c35.jpg"
+  },
+  {
+    "id": 624,
+    "type": "text",
+    "page_idx": 27,
+    "text": "Scan for Multimedia"
+  },
+  {
+    "id": 625,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/0e4c08f85555d108c87f76ce5dc1e08665e00c21d36f0962883f9461babc445d.jpg"
+  },
+  {
+    "id": 626,
+    "type": "text",
+    "page_idx": 27,
+    "text": "Leveled Practice In 7 and 8, evaluate the cube root or square root."
+  },
+  {
+    "id": 627,
+    "type": "text",
+    "page_idx": 27,
+    "text": "7. Relate the volume of the cube to the length of each edge."
+  },
+  {
+    "id": 628,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/a35e99c21fabec5263c87afa2b2ecae32b90a81e31344c7eea496b7d42d5ca70.jpg"
+  },
+  {
+    "id": 629,
+    "type": "text",
+    "page_idx": 27,
+    "text": "Edge length Edge length Edge length"
+  },
+  {
+    "id": 630,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/79f276bb609a138c09e524f278f944d448be1c14be8e3533123126ddb300751d.jpg"
+  },
+  {
+    "id": 631,
+    "type": "text",
+    "page_idx": 27,
+    "text": "8. Relate the area of the square to the length of each side."
+  },
+  {
+    "id": 632,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/4bedf4935a7eacd2ac584210bb2f4cccb0ce8b99737b890cd826d32a720fc972.jpg"
+  },
+  {
+    "id": 633,
+    "type": "text",
+    "page_idx": 27,
+    "text": "Side length Side length"
+  },
+  {
+    "id": 634,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/9fb5eb62f4467e46c434f2cb2c5077983e9a33930dede4dc1fd0ebcf5b44abb1.jpg"
+  },
+  {
+    "id": 635,
+    "type": "text",
+    "page_idx": 27,
+    "text": "9. Would you classify the number 169 as a perfect square, a perfect cube, both, or neither? Explain."
+  },
+  {
+    "id": 636,
+    "type": "text",
+    "page_idx": 27,
+    "text": "10. The volume of a cube is 512 cubic inches. What is the length of each side of the cube?"
+  },
+  {
+    "id": 637,
+    "type": "text",
+    "page_idx": 27,
+    "text": "11. A square technology chip has an area of 25 square centimeters. How long is each side of the chip?"
+  },
+  {
+    "id": 638,
+    "type": "text",
+    "page_idx": 27,
+    "text": "12. Would you classify the number 200 as a perfect square, a perfect cube, both, or neither? Explain."
+  },
+  {
+    "id": 639,
+    "type": "text",
+    "page_idx": 27,
+    "text": "13. A company is making building blocks. What is the length of each side of the block?"
+  },
+  {
+    "id": 640,
+    "type": "image",
+    "page_idx": 27,
+    "img_path": "images/1e5caaf664f07acc254f0ec8db0f1d140db267abe03f496dec740246d1422f5c.jpg"
+  },
+  {
+    "id": 641,
+    "type": "text",
+    "page_idx": 28,
+    "text": "14. Mrs. Drew wants to build a square sandbox with an area of 121 square feet. What is the total length of wood Mrs. Drew needs to make the sides of the sandbox?"
+  },
+  {
+    "id": 642,
+    "type": "text",
+    "page_idx": 28,
+    "text": "15. Construct Arguments Diego says that if you cube the number 4 and then take the cube root of the result, you end up with 8. Is Diego correct? Explain."
+  },
+  {
+    "id": 643,
+    "type": "text",
+    "page_idx": 28,
+    "text": "16. Higher Order Thinking Talia is packing a moving box. She has a square-framed poster with an area of 9 square feet. The cube-shaped box has a volume of 30 cubic feet. Will the poster lie flat in the box? Explain."
+  },
+  {
+    "id": 644,
+    "type": "image",
+    "page_idx": 28,
+    "img_path": "images/1d717f706bcd18dd39f1ebffb2c1b7883e6382e7abf1b25a457d5b4c41cd781a.jpg"
+  },
+  {
+    "id": 645,
+    "type": "image",
+    "page_idx": 28,
+    "img_path": "images/085d508373b230ff6b4e55650bf6fd04f5470f37c6a94d225cafac955b4d9b01.jpg"
+  },
+  {
+    "id": 646,
+    "type": "text",
+    "page_idx": 28,
+    "text": "Assessment Practice"
+  },
+  {
+    "id": 647,
+    "type": "text",
+    "page_idx": 28,
+    "text": "17. Which expression has the greatest value? 8.EE.1.2"
+  },
+  {
+    "id": 648,
+    "type": "text",
+    "text": "A  $\\sqrt{49} \\cdot 2$",
+    "page_idx": 28
+  },
+  {
+    "id": 649,
+    "type": "text",
+    "text": "B  $\\sqrt{49} -\\sqrt{16}$",
+    "page_idx": 28
+  },
+  {
+    "id": 650,
+    "type": "text",
+    "text": "$\\odot \\sqrt{25} +\\sqrt{16}$",
+    "page_idx": 28
+  },
+  {
+    "id": 651,
+    "type": "text",
+    "text": "D  $\\sqrt{25} \\cdot 3$",
+    "page_idx": 28
+  },
+  {
+    "id": 652,
+    "type": "text",
+    "page_idx": 28,
+    "text": "18. A toy has various shaped objects that a child can push through matching holes. The area of the square hole is 8 square centimeters. The volume of a cube-shaped block is 64 cubic centimeters. 8.EE.1.2"
+  },
+  {
+    "id": 653,
+    "type": "text",
+    "page_idx": 28,
+    "text": "PART A"
+  },
+  {
+    "id": 654,
+    "type": "text",
+    "page_idx": 28,
+    "text": "Which edge length can you find? Explain."
+  },
+  {
+    "id": 655,
+    "type": "text",
+    "page_idx": 28,
+    "text": "PART B"
+  },
+  {
+    "id": 656,
+    "type": "text",
+    "page_idx": 28,
+    "text": "Will the block fit in the square hole? Explain."
+  },
+  {
+    "id": 657,
+    "type": "image",
+    "page_idx": 29,
+    "img_path": "images/ab5b924fb211239571714e25aca83102124761aae6ab5ac1e034896e718dd05b.jpg"
+  },
+  {
+    "id": 658,
+    "type": "text",
+    "page_idx": 29,
+    "text": "Solve & Discuss It!"
+  },
+  {
+    "id": 659,
+    "type": "image",
+    "page_idx": 29,
+    "img_path": "images/364a92650bbfaa039d4bb729df87ca422fefb92c9ca6eb0c2fc07fa7ad79d49a.jpg"
+  }
+]
+```
