@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 12110,
+    "type": "image",
+    "page_idx": 380,
+    "img_path": "images/cff9c38848a00a722aef5cf4d57cfc7551d4b1d9d87e8aa8f82f1a4996ae941b.jpg"
+  },
+  {
+    "id": 12111,
+    "type": "text",
+    "page_idx": 380,
+    "text": "Dealing with extreme values"
+  },
+  {
+    "id": 12112,
+    "type": "text",
+    "page_idx": 380,
+    "text": "Sometimes your set of data may contain values that are extreme in some way. For example, if you measure the speeds of cars passing a certain point you may find that some cars are moving unusually slowly or unusually quickly. It is also possible that you may have made a mistake and measured a speed incorrectly or just written down the wrong number!"
+  },
+  {
+    "id": 12113,
+    "type": "text",
+    "page_idx": 380,
+    "text": "Imagine these are the speeds (in kilometres per hour) of six cars passing a certain point in a five-minute period:"
+  },
+  {
+    "id": 12114,
+    "type": "text",
+    "page_idx": 380,
+    "text": "67.2 58.3 128.9 65.0 49.0 55.7"
+  },
+  {
+    "id": 12115,
+    "type": "text",
+    "page_idx": 380,
+    "text": "The value  $128.9\\mathrm{km/h}$  seems much faster than any other car. How does this extreme value affect your averages?"
+  },
+  {
+    "id": 12116,
+    "type": "text",
+    "page_idx": 380,
+    "text": "You can check yourself that the mean of the above data including the extreme value is  $70.7\\mathrm{km / h}$"
+  },
+  {
+    "id": 12117,
+    "type": "text",
+    "page_idx": 380,
+    "text": "This average is larger than all but one of the values and is not representative of the data. This means that in this situation the mean might be a poor choice of average. If you discover that the highest speed was a mistake, you can exclude it from the calculation and get the much more realistic value of  $59.0\\mathrm{km / h}$ . (Try the calculation for yourself.)"
+  },
+  {
+    "id": 12118,
+    "type": "text",
+    "page_idx": 380,
+    "text": "If the extreme value is genuine and you cannot exclude it, then using the median is a better way to represent the main body of data. Start by writing the data in ascending order:"
+  },
+  {
+    "id": 12119,
+    "type": "text",
+    "page_idx": 380,
+    "text": "49.0 55.7 58.3 65.0 67.2 128.9"
+  },
+  {
+    "id": 12120,
+    "type": "text",
+    "page_idx": 380,
+    "text": "The median is the mean of 58.3 and 65.0. This is 61.7. Notice that if you remove the highest value, the median reduces to 58.3, so this doesn't change things very much."
+  },
+  {
+    "id": 12121,
+    "type": "text",
+    "page_idx": 380,
+    "text": "There is no mode for these data."
+  },
+  {
+    "id": 12122,
+    "type": "text",
+    "page_idx": 380,
+    "text": "TIP"
+  },
+  {
+    "id": 12123,
+    "type": "text",
+    "page_idx": 380,
+    "text": "The number of data values is even, so the median is the mean of the 3rd and 4th data points."
+  },
+  {
+    "id": 12124,
+    "type": "text",
+    "page_idx": 381,
+    "text": "LINK"
+  },
+  {
+    "id": 12125,
+    "type": "text",
+    "page_idx": 381,
+    "text": "Most numerical quantities in physics are predictable, at least approximately, by using mathematical formulae to describe the situation. In these situations, extreme measurements that don't appear to follow a broad pattern need to be checked carefully. Any that are errors should be removed from the data. But remember, you can only remove the data if it really is incorrect."
+  },
+  {
+    "id": 12126,
+    "type": "text",
+    "page_idx": 381,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 12127,
+    "type": "text",
+    "page_idx": 381,
+    "text": "After six tests, Gad has a mean average score of  $48\\%$ . He takes a seventh test and scores  $83\\%$ ."
+  },
+  {
+    "id": 12128,
+    "type": "text",
+    "text": "What is Gadl's total score after six tests?",
+    "page_idx": 381
+  },
+  {
+    "id": 12129,
+    "type": "text",
+    "text": "b What is Gad's mean average score after seven tests?",
+    "page_idx": 381
+  },
+  {
+    "id": 12130,
+    "type": "text",
+    "page_idx": 381,
+    "text": "Answers"
+  },
+  {
+    "id": 12131,
+    "type": "text",
+    "page_idx": 381,
+    "text": "a Since mean= total of all data number of values"
+  },
+  {
+    "id": 12132,
+    "type": "text",
+    "page_idx": 381,
+    "text": "them, total of all data = mean × number of values"
+  },
+  {
+    "id": 12133,
+    "type": "equation",
+    "page_idx": 381,
+    "text": "$$\n\\begin{array}{l} = 4 8 \\times 6 \\\\ = 2 8 8 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 12134,
+    "type": "text",
+    "page_idx": 381,
+    "text": "Total of all seven scores  $=$  total of first six plus seventh"
+  },
+  {
+    "id": 12135,
+    "type": "equation",
+    "page_idx": 381,
+    "text": "$$\n\\begin{array}{l} = 2 8 8 + 8 3 \\\\ = 3 7 1 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 12136,
+    "type": "equation",
+    "page_idx": 381,
+    "text": "$$\nm e a m = \\frac {371}{7} = 53 \\%\n$$"
+  },
+  {
+    "id": 12137,
+    "type": "text",
+    "page_idx": 381,
+    "text": "TIP"
+  },
+  {
+    "id": 12138,
+    "type": "text",
+    "page_idx": 381,
+    "text": "You could be asked to give reasons for choosing the mean or median as your average."
+  },
+  {
+    "id": 12139,
+    "type": "text",
+    "page_idx": 381,
+    "text": "TIP"
+  },
+  {
+    "id": 12140,
+    "type": "text",
+    "page_idx": 381,
+    "text": "This is good example of where you need to think before you conclude that Gad is a typical student (sconing  $53\\%$ ). He may have had extra tuition and will get above  $80\\%$  for all future tests."
+  },
+  {
+    "id": 12141,
+    "type": "text",
+    "page_idx": 381,
+    "text": "Exercise 12.1"
+  },
+  {
+    "id": 12142,
+    "type": "text",
+    "page_idx": 381,
+    "text": "1 For each of the following data sets calculate:"
+  },
+  {
+    "id": 12143,
+    "type": "text",
+    "page_idx": 381,
+    "text": "the mode"
+  },
+  {
+    "id": 12144,
+    "type": "text",
+    "page_idx": 381,
+    "text": "ii the medium"
+  },
+  {
+    "id": 12145,
+    "type": "text",
+    "page_idx": 381,
+    "text": "the mean."
+  },
+  {
+    "id": 12146,
+    "type": "text",
+    "text": "a 12 2 5 6 9 3 12 13 10",
+    "page_idx": 381
+  },
+  {
+    "id": 12147,
+    "type": "text",
+    "text": "b59738258882",
+    "page_idx": 381
+  },
+  {
+    "id": 12148,
+    "type": "text",
+    "text": "2.1 3.8 2.4 7.6 8.2 3.4 5.6 8.2 4.5 2.1",
+    "page_idx": 381
+  },
+  {
+    "id": 12149,
+    "type": "text",
+    "text": "d 12 2 5 6 9 3 12 13 43",
+    "page_idx": 381
+  },
+  {
+    "id": 12150,
+    "type": "text",
+    "page_idx": 381,
+    "text": "2 Look carefully at the data in parts (a) and (d) of question 1. What is different?"
+  },
+  {
+    "id": 12151,
+    "type": "text",
+    "page_idx": 381,
+    "text": "How did your mean, medium and mode change?"
+  },
+  {
+    "id": 12152,
+    "type": "text",
+    "page_idx": 381,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 12153,
+    "type": "text",
+    "page_idx": 381,
+    "text": "You can see from the contexts in some of these questions that averages can appear in just about any aspect of our lives, whether studying, reading the mews or investigating behavioural patterns. Can you think of any ways that you use averages im your everyday life?"
+  },
+  {
+    "id": 12154,
+    "type": "text",
+    "page_idx": 382,
+    "text": "3 Ali and Bo decide to investigate their television watching patterns. They record the number of minutes that they watch television for eight days:"
+  },
+  {
+    "id": 12155,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Ali:</td><td>38</td><td>10</td><td>65</td><td>43</td><td>125</td><td>225</td><td>128</td><td>40</td></tr>",
+    "page_idx": 382
+  },
+  {
+    "id": 12156,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Boc:</td><td>25</td><td>15</td><td>10</td><td>65</td><td>90</td><td>300</td><td>254</td><td>32</td></tr>",
+    "page_idx": 382
+  },
+  {
+    "id": 12157,
+    "type": "text",
+    "page_idx": 382,
+    "text": "a Find the median number of minutes spent watching television for:"
+  },
+  {
+    "id": 12158,
+    "type": "text",
+    "page_idx": 382,
+    "text": "Aii Baa"
+  },
+  {
+    "id": 12159,
+    "type": "text",
+    "page_idx": 382,
+    "text": "b Find the mean number of minutes spent watching television for:"
+  },
+  {
+    "id": 12160,
+    "type": "text",
+    "page_idx": 382,
+    "text": "Aii B0"
+  },
+  {
+    "id": 12161,
+    "type": "text",
+    "text": "4 Find a list of five numbers with a mean that is larger than all but one of the numbers.",
+    "page_idx": 382
+  },
+  {
+    "id": 12162,
+    "type": "text",
+    "text": "5 A keen ten pin bowler plays five rounds in one evening. His scores are 98, 64, 103, 108 and 109. Which average (mode, mean or median) will he choose to report to his friends at the end of the evening? Explain your answer carefully, showing all your calculations clearly.",
+    "page_idx": 382
+  },
+  {
+    "id": 12163,
+    "type": "text",
+    "page_idx": 382,
+    "text": "LINK"
+  },
+  {
+    "id": 12164,
+    "type": "text",
+    "page_idx": 382,
+    "text": "Cricket players often talk about 'batting averages'. These usually refer to the mean number of runs per innings."
+  },
+  {
+    "id": 12165,
+    "type": "text",
+    "text": "If the mean height of 31 children is  $143.6\\mathrm{cm}$ , calculate the sum of the heights used to calculate the mean.",
+    "page_idx": 382
+  },
+  {
+    "id": 12166,
+    "type": "text",
+    "text": "7 The mean mass of 12 bags of potatoes is  $2.4\\mathrm{kg}$ . If a 13th bag containing  $2.2\\mathrm{kg}$  of potatoes is added, what will the new mean mass of the 13 bags be?",
+    "page_idx": 382
+  },
+  {
+    "id": 12167,
+    "type": "text",
+    "text": "8 The mean temperature of 10 cups of coffee is  $89.6^{\\circ}C$ . The mean temperature of a different collection of 20 cups of coffee is  $92.1^{\\circ}C$ . What is the mean temperature of all 30 cups of coffee?",
+    "page_idx": 382
+  },
+  {
+    "id": 12168,
+    "type": "text",
+    "text": "9 Find a set of five numbers with mean five, median four and mode four.",
+    "page_idx": 382
+  },
+  {
+    "id": 12169,
+    "type": "text",
+    "text": "10 Find a set of five different whole numbers with mean five and median four.",
+    "page_idx": 382
+  },
+  {
+    "id": 12170,
+    "type": "text",
+    "text": "11 The mean mass of a group of  $m$  green apples is  $X$  kg and the mean mass of a group of  $n$  red apples is  $Y$  kg. Find the mean mass of all the apples combined.",
+    "page_idx": 382
+  },
+  {
+    "id": 12171,
+    "type": "text",
+    "page_idx": 382,
+    "text": "12.2 Making comparisons using averages and ranges"
+  },
+  {
+    "id": 12172,
+    "type": "text",
+    "page_idx": 382,
+    "text": "Now you know how to find an average value to represent your data, you can compare two or more sets of data. However, just comparing the averages can sometimes be misleading."
+  },
+  {
+    "id": 12173,
+    "type": "text",
+    "page_idx": 382,
+    "text": "It can also be helpful to know how consistent the data is. You do this by thinking about how scattered – or spread – the values are. A simple measure of spread is the range."
+  },
+  {
+    "id": 12174,
+    "type": "text",
+    "page_idx": 382,
+    "text": "Range = largest value - smallest value"
+  },
+  {
+    "id": 12175,
+    "type": "text",
+    "page_idx": 382,
+    "text": "TIP"
+  },
+  {
+    "id": 12176,
+    "type": "text",
+    "page_idx": 382,
+    "text": "Think about whether the player will choose an average that helps them claim they are a good player or an average that is a fair representation of their scores."
+  },
+  {
+    "id": 12177,
+    "type": "text",
+    "page_idx": 383,
+    "text": "The larger the range, the more spread out the data is and the less consistent the values are with one another."
+  },
+  {
+    "id": 12178,
+    "type": "text",
+    "page_idx": 383,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 12179,
+    "type": "text",
+    "page_idx": 383,
+    "text": "Two groups of athletes want to compare their  $100\\mathrm{m}$  sprint times. Each person runs once and records their time in seconds."
+  },
+  {
+    "id": 12180,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Team Pythagoras</td><td>14.3</td><td>16.6</td><td>14.3</td><td>17.9</td><td>14.1</td><td>15.7</td></tr>",
+    "page_idx": 383
+  },
+  {
+    "id": 12181,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Team Socrates</td><td>13.2</td><td>16.8</td><td>14.7</td><td>14.7</td><td>13.6</td><td>16.2</td></tr>",
+    "page_idx": 383
+  },
+  {
+    "id": 12182,
+    "type": "text",
+    "text": "a Calculate the mean 100m time for each team.",
+    "page_idx": 383
+  },
+  {
+    "id": 12183,
+    "type": "text",
+    "text": "b Which is the smaller mean?",
+    "page_idx": 383
+  },
+  {
+    "id": 12184,
+    "type": "text",
+    "text": "c What does this tell you about the  $100\\mathrm{m}$  times for Team Pythagoras compared to those for Team Socrates?",
+    "page_idx": 383
+  },
+  {
+    "id": 12185,
+    "type": "text",
+    "text": "d Calculate the range for each team.",
+    "page_idx": 383
+  },
+  {
+    "id": 12186,
+    "type": "text",
+    "text": "e What does this tell you about the performance of each team?",
+    "page_idx": 383
+  },
+  {
+    "id": 12187,
+    "type": "text",
+    "page_idx": 383,
+    "text": "Answers"
+  },
+  {
+    "id": 12188,
+    "type": "text",
+    "page_idx": 383,
+    "text": "a Team Pythagoras:"
+  },
+  {
+    "id": 12189,
+    "type": "equation",
+    "page_idx": 383,
+    "text": "$$\n\\text {M e a n} = \\frac {1 4 . 3 + 1 6 . 6 + 1 4 . 3 + 1 7 . 9 + 1 4 . 1 + 1 5 . 7}{6} = \\frac {9 2 . 9}{6} = 1 5. 4 8 \\text {s e c o n d s}\n$$"
+  },
+  {
+    "id": 12190,
+    "type": "equation",
+    "page_idx": 383,
+    "text": "$$\n\\text {M e a n} = \\frac {1 3 . 2 + 1 6 . 8 + 1 4 . 7 + 1 4 . 7 + 1 3 . 6 + 1 6 . 2}{6} = \\frac {8 9 . 2}{6} = 1 4. 8 7 \\text {s e c o n d s}\n$$"
+  },
+  {
+    "id": 12191,
+    "type": "text",
+    "text": "b Team Socrates have the smaller mean 100m time.",
+    "page_idx": 383
+  },
+  {
+    "id": 12192,
+    "type": "text",
+    "text": "c The smaller time means that Team Socrates are slightly faster as a team than Team Pythagoras.",
+    "page_idx": 383
+  },
+  {
+    "id": 12193,
+    "type": "text",
+    "text": "d Team Pythagoras' range  $= 17.9 - 14.1 = 3.8$  seconds Team Socrates' range  $= 16.8 - 13.2 = 3.6$  seconds",
+    "page_idx": 383
+  },
+  {
+    "id": 12194,
+    "type": "text",
+    "text": "e Team Socrates are slightly faster as a whole and they are slightly more consistent.",
+    "page_idx": 383
+  },
+  {
+    "id": 12195,
+    "type": "text",
+    "page_idx": 383,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 12196,
+    "type": "text",
+    "page_idx": 383,
+    "text": "Units for averages"
+  },
+  {
+    "id": 12197,
+    "type": "text",
+    "page_idx": 383,
+    "text": "You need to use the same units when comparing averages or ranges. There is no point in comparing one average or range measured in kilometres with another average or range measured in metres."
+  },
+  {
+    "id": 12198,
+    "type": "text",
+    "page_idx": 383,
+    "text": "1.1 Calculate the mean and range of these lengths:"
+  },
+  {
+    "id": 12199,
+    "type": "text",
+    "page_idx": 383,
+    "text": "3.2m"
+  },
+  {
+    "id": 12200,
+    "type": "text",
+    "page_idx": 383,
+    "text": "2.8m"
+  },
+  {
+    "id": 12201,
+    "type": "text",
+    "page_idx": 383,
+    "text": "4.1m"
+  },
+  {
+    "id": 12202,
+    "type": "text",
+    "page_idx": 383,
+    "text": "1.6m"
+  },
+  {
+    "id": 12203,
+    "type": "text",
+    "page_idx": 383,
+    "text": "4.4m"
+  },
+  {
+    "id": 12204,
+    "type": "text",
+    "page_idx": 383,
+    "text": "TIP"
+  },
+  {
+    "id": 12205,
+    "type": "text",
+    "page_idx": 383,
+    "text": "When comparing means or ranges, make sure that you refer to the original context of the question. If you are comparing waiting times in queues at different airports, for example, your conclusions should mention waiting times in queues at different airports!"
+  },
+  {
+    "id": 12206,
+    "type": "text",
+    "page_idx": 384,
+    "text": "INVESTIGATION CONTINUED"
+  },
+  {
+    "id": 12207,
+    "type": "text",
+    "text": "2 Rewrite the lengths in centimetres. Calculate the mean and range of the new data. What do you notice?",
+    "page_idx": 384
+  },
+  {
+    "id": 12208,
+    "type": "text",
+    "text": "3 Try multiplying the original data by a fixed number and working out the mean and range again? What happens?",
+    "page_idx": 384
+  },
+  {
+    "id": 12209,
+    "type": "text",
+    "text": "4 Try to explain why this means you need to use the same units when comparing means or ranges.",
+    "page_idx": 384
+  }
+]
+```

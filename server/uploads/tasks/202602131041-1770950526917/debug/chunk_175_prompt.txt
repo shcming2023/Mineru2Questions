@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 12250,
+    "type": "text",
+    "page_idx": 385,
+    "text": "Median number of visits per hour: 140"
+  },
+  {
+    "id": 12251,
+    "type": "text",
+    "page_idx": 385,
+    "text": "Mode: 135 visits per hour"
+  },
+  {
+    "id": 12252,
+    "type": "text",
+    "page_idx": 385,
+    "text": "Range: 200"
+  },
+  {
+    "id": 12253,
+    "type": "text",
+    "page_idx": 385,
+    "text": "What could the developer say to compare the two sets of data? [3]"
+  },
+  {
+    "id": 12254,
+    "type": "text",
+    "page_idx": 386,
+    "text": "SELF ASSESSMENT CONTINUED"
+  },
+  {
+    "id": 12255,
+    "type": "text",
+    "page_idx": 386,
+    "text": "2 Here is one student's answer to the homework activity."
+  },
+  {
+    "id": 12256,
+    "type": "text",
+    "page_idx": 386,
+    "text": "What mark would you give this student out of 10? Why?"
+  },
+  {
+    "id": 12257,
+    "type": "text",
+    "page_idx": 386,
+    "text": "1 a Mean  $=$  sum of values/number of values  $= 8394 / 48$ $= 174.88$  visits per hour (2 dp.) Median  $= (179 + 183) / 2 = 181$  visits per hour Mode  $= 148$  b Range  $= 238 - 100 = 138$"
+  },
+  {
+    "id": 12258,
+    "type": "text",
+    "text": "2 The website consistently gets over 100 visits per hour with an average of 175 visits per hour.",
+    "page_idx": 386
+  },
+  {
+    "id": 12259,
+    "type": "text",
+    "text": "3 The mean number of visits to Company B's website is a bit higher than Company A's but the median number of visits to Company B is much lower. This suggests that the mean of Company B is affected by a few high values and the usual number of visits is actually lower. The data for Company B has quite a wide range and this suggests that the data is spread out and the number of visits per hour is less consistent than for Company A.",
+    "page_idx": 386
+  },
+  {
+    "id": 12260,
+    "type": "text",
+    "page_idx": 386,
+    "text": "3 The work above is an example of a model answer."
+  },
+  {
+    "id": 12261,
+    "type": "text",
+    "text": "a Did this student do anything differently to how you would have worked? What?",
+    "page_idx": 386
+  },
+  {
+    "id": 12262,
+    "type": "text",
+    "text": "b How can examples of good work like this one help you to improve your own work?",
+    "page_idx": 386
+  },
+  {
+    "id": 12263,
+    "type": "text",
+    "page_idx": 386,
+    "text": "12.3 Calculating averages and ranges for frequency data"
+  },
+  {
+    "id": 12264,
+    "type": "text",
+    "page_idx": 386,
+    "text": "So far, you have calculated averages for quite small sets of data. When you have larger sets with more than 20 pieces of data, it is better to collect the data with the same value together and record it in a frequency distribution table."
+  },
+  {
+    "id": 12265,
+    "type": "text",
+    "page_idx": 386,
+    "text": "TIP"
+  },
+  {
+    "id": 12266,
+    "type": "text",
+    "page_idx": 386,
+    "text": "Sometimes a frequency distribution table is simply called a frequency distribution."
+  },
+  {
+    "id": 12267,
+    "type": "text",
+    "page_idx": 387,
+    "text": "Data shown in a frequency distribution table"
+  },
+  {
+    "id": 12268,
+    "type": "text",
+    "page_idx": 387,
+    "text": "If you throw a single dice 100 times, each of the six numbers will appear several times. You can record the number of times each number appears in a table:"
+  },
+  {
+    "id": 12269,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number showing on the upper face</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12270,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Frequency</td><td>16</td><td>13</td><td>14</td><td>17</td><td>19</td><td>21</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12271,
+    "type": "text",
+    "page_idx": 387,
+    "text": "Mean"
+  },
+  {
+    "id": 12272,
+    "type": "text",
+    "page_idx": 387,
+    "text": "To calculate the mean, you first need to find the total of all 100 throws. There are sixteen 1s, which give a subtotal of  $1 \\times 16 = 16$ , thirteen 2s giving a subtotal of  $13 \\times 2 = 26$  and so on. You can extend your table to show this:"
+  },
+  {
+    "id": 12273,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number showing on the upper face</td><td>Frequency</td><td>Frequency x number on the upper face</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12274,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td>16</td><td>1 x 16 = 16</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12275,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2</td><td>13</td><td>2 x 13 = 26</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12276,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td>14</td><td>3 x 14 = 42</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12277,
+    "type": "text",
+    "text": "[Table Row] <tr><td>4</td><td>17</td><td>17 x 4 = 68</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12278,
+    "type": "text",
+    "text": "[Table Row] <tr><td>5</td><td>19</td><td>19 x 5 = 95</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12279,
+    "type": "text",
+    "text": "[Table Row] <tr><td>6</td><td>21</td><td>21 x 6 = 126</td></tr>",
+    "page_idx": 387
+  },
+  {
+    "id": 12280,
+    "type": "text",
+    "page_idx": 387,
+    "text": "The total of all 100 throws is the sum of all values in this third column:"
+  },
+  {
+    "id": 12281,
+    "type": "equation",
+    "page_idx": 387,
+    "text": "$$\n\\begin{array}{l} \\text {T o t a l s c o r e} = 1 6 + 2 6 + 4 2 + 6 8 + 9 5 + 1 2 6 \\\\ = 3 7 3 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 12282,
+    "type": "text",
+    "page_idx": 387,
+    "text": "So the mean score per throw  $= \\frac{\\text{total score}}{\\text{total number of throws}} = \\frac{373}{100} = 3.73$ ."
+  },
+  {
+    "id": 12283,
+    "type": "text",
+    "page_idx": 387,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 12284,
+    "type": "text",
+    "page_idx": 387,
+    "text": "In Chapter 8 you studied the idea of 'experimental probability'. Notice that you also recorded data in frequency tables, so that you could estimate probabilities of different events."
+  },
+  {
+    "id": 12285,
+    "type": "text",
+    "page_idx": 387,
+    "text": "Median"
+  },
+  {
+    "id": 12286,
+    "type": "text",
+    "page_idx": 387,
+    "text": "There are 100 throws, which is an even number, so the median will be the mean of a middle pair. The first of this middle pair is in position  $\\frac{100}{2} = 50$ ."
+  },
+  {
+    "id": 12287,
+    "type": "text",
+    "page_idx": 387,
+    "text": "The values are all in order in the table. The first 16 are 1s, the next 13 are 2s and so on. If you add the first three frequencies, you get  $16 + 13 + 14 = 43$ . This means that the first 43 values are 1, 2 or 3. The next 17 values are all 4s, so the 50th and 51st values are both 4. The mean of two 4s is 4, so this is the median."
+  },
+  {
+    "id": 12288,
+    "type": "image",
+    "page_idx": 387,
+    "img_path": "images/8a630d264a6df9d5eb49f655d153b62f8a4ae82c174d804d16b35f980c03da4f.jpg"
+  },
+  {
+    "id": 12289,
+    "type": "text",
+    "page_idx": 387,
+    "text": "TIP"
+  },
+  {
+    "id": 12290,
+    "type": "text",
+    "page_idx": 387,
+    "text": "You can add columns to a table given to you to help organise your calculations. In this case you need to swap the rows and columns to make it easier to use."
+  },
+  {
+    "id": 12291,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Mode"
+  },
+  {
+    "id": 12292,
+    "type": "text",
+    "page_idx": 388,
+    "text": "For the mode you simply need to find the value that has the highest frequency. The number 6 occurs most often (21 times), so 6 is the mode."
+  },
+  {
+    "id": 12293,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Range"
+  },
+  {
+    "id": 12294,
+    "type": "text",
+    "page_idx": 388,
+    "text": "The highest and lowest values are known, so the range is  $6 - 1 = 5$"
+  },
+  {
+    "id": 12295,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Data organised into a stem-and-leaf diagram"
+  },
+  {
+    "id": 12296,
+    "type": "text",
+    "page_idx": 388,
+    "text": "You can determine averages and the range from stem-and-leaf diagrams."
+  },
+  {
+    "id": 12297,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Mean"
+  },
+  {
+    "id": 12298,
+    "type": "text",
+    "page_idx": 388,
+    "text": "A stem-and-leaf diagram shows all the data values, so you find the mean by adding all the values and dividing them by the number of values in the same way you find the mean of any data set."
+  },
+  {
+    "id": 12299,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Median"
+  },
+  {
+    "id": 12300,
+    "type": "text",
+    "page_idx": 388,
+    "text": "You can use an ordered stem-and-leaf diagram to find the median. In an ordered stem-and-leaf diagram the leaves for each stem are arranged in order from smallest to greatest."
+  },
+  {
+    "id": 12301,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Mode"
+  },
+  {
+    "id": 12302,
+    "type": "text",
+    "page_idx": 388,
+    "text": "An ordered stem-and-leaf diagram allows you see which values are repeated in each row. You can compare these to find the mode."
+  },
+  {
+    "id": 12303,
+    "type": "text",
+    "page_idx": 388,
+    "text": "Range"
+  },
+  {
+    "id": 12304,
+    "type": "text",
+    "page_idx": 388,
+    "text": "You can use the first and last value in an ordered stem-and-leaf diagram to find the range."
+  },
+  {
+    "id": 12305,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Stem</td><td>Leaf</td><td>Key</td></tr>",
+    "page_idx": 388
+  },
+  {
+    "id": 12306,
+    "type": "text",
+    "text": "[Table Row] <tr><td>0</td><td>2 5 5 6 6 6 6</td><td rowspan=\"3\">0 | 2 represents 2 customers</td></tr>",
+    "page_idx": 388
+  },
+  {
+    "id": 12307,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td>1 3 3 5 5 6 7 7</td></tr>",
+    "page_idx": 388
+  },
+  {
+    "id": 12308,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2</td><td>1</td></tr>",
+    "page_idx": 388
+  },
+  {
+    "id": 12309,
+    "type": "text",
+    "page_idx": 388,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 12310,
+    "type": "text",
+    "page_idx": 388,
+    "text": "You learnt about stem-and-leaf diagrams in Chapter 4."
+  },
+  {
+    "id": 12311,
+    "type": "text",
+    "page_idx": 389,
+    "text": "WORKED EXAMPLE 3 CONTINUED"
+  },
+  {
+    "id": 12312,
+    "type": "text",
+    "page_idx": 389,
+    "text": "Answers"
+  },
+  {
+    "id": 12313,
+    "type": "text",
+    "text": "a The lowest number is 2 and the highest number is 21. The range is  $21 - 2 = 19$  customers.",
+    "page_idx": 389
+  },
+  {
+    "id": 12314,
+    "type": "text",
+    "text": "b 6 is the value that appears most often.",
+    "page_idx": 389
+  },
+  {
+    "id": 12315,
+    "type": "text",
+    "text": "c There are 16 pieces of data, so the median is the mean of the 8th and 9th values:",
+    "page_idx": 389
+  },
+  {
+    "id": 12316,
+    "type": "equation",
+    "page_idx": 389,
+    "text": "$$\n\\frac {(1 1 + 1 3)}{2} = \\frac {2 4}{2} = 1 2\n$$"
+  },
+  {
+    "id": 12317,
+    "type": "text",
+    "page_idx": 389,
+    "text": "d To calculate the total number of customers, find the sum of all the values. Find the total for each row and combine them to find the overall total:"
+  },
+  {
+    "id": 12318,
+    "type": "text",
+    "page_idx": 389,
+    "text": "Row 1:  $2 + 5 + 5 + 6 + 6 + 6 + 6 = 36$   \nRow 2:  $11 + 13 + 13 + 15 + 15 + 16 + 17 + 17 = 117$   \nRow 3: 21  \n $36 + 117 + 21 = 174$  customers in total"
+  },
+  {
+    "id": 12319,
+    "type": "text",
+    "page_idx": 389,
+    "text": "e Mean  $= \\frac{\\text{sum of data values}}{\\text{number of data values}} = \\frac{174}{16} = 10.875$  customers per half hour"
+  },
+  {
+    "id": 12320,
+    "type": "text",
+    "page_idx": 389,
+    "text": "In summary:"
+  },
+  {
+    "id": 12321,
+    "type": "text",
+    "text": "Mode The value that has the highest frequency is the mode. If more than one value has the same highest frequency, then there is no single mode.",
+    "page_idx": 389
+  },
+  {
+    "id": 12322,
+    "type": "text",
+    "text": "Mean total of all data sum of frequency  $\\times$  value number of values total frequency",
+    "page_idx": 389
+  },
+  {
+    "id": 12323,
+    "type": "text",
+    "page_idx": 389,
+    "text": "(Remember to extend the table so that you can fill in a column for calculating frequency  $\\times$  value in each case.)"
+  },
+  {
+    "id": 12324,
+    "type": "text",
+    "text": "- Median - If the number of data values is  $n$  and  $n$  is odd, then  $\\frac{n + 1}{2}$  gives the position of the median. Add the frequencies until you reach the median position. The value in this position is the median.",
+    "page_idx": 389
+  },
+  {
+    "id": 12325,
+    "type": "text",
+    "text": "If  $n$  is even, then  $\\frac{n}{2}$  gives the position of the first of the middle pair. Add the frequencies until you reach this position and then find the mean of the pair.",
+    "page_idx": 389
+  },
+  {
+    "id": 12326,
+    "type": "text",
+    "page_idx": 389,
+    "text": "Exercise 12.3"
+  },
+  {
+    "id": 12327,
+    "type": "text",
+    "page_idx": 389,
+    "text": "1 Construct a frequency table for the following data and calculate:"
+  },
+  {
+    "id": 12328,
+    "type": "text",
+    "page_idx": 389,
+    "text": "a the mean"
+  },
+  {
+    "id": 12329,
+    "type": "text",
+    "page_idx": 389,
+    "text": "b the median"
+  },
+  {
+    "id": 12330,
+    "type": "text",
+    "page_idx": 389,
+    "text": "the mode"
+  },
+  {
+    "id": 12331,
+    "type": "text",
+    "page_idx": 389,
+    "text": "d the range."
+  },
+  {
+    "id": 12332,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td>4</td><td>5</td><td>1</td><td>2</td><td>8</td><td>9</td><td>6</td><td>5</td><td>3</td><td>2</td><td>1</td><td>6</td><td>4</td><td>7</td><td>8</td><td>1</td></tr>",
+    "page_idx": 389
+  },
+  {
+    "id": 12333,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td>5</td><td>5</td><td>2</td><td>3</td><td>4</td><td>5</td><td>7</td><td>8</td><td>3</td><td>4</td><td>2</td><td>5</td><td>1</td><td>9</td><td>4</td><td>5</td></tr>",
+    "page_idx": 389
+  },
+  {
+    "id": 12334,
+    "type": "text",
+    "text": "[Table Row] <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>2</td><td>1</td><td>5</td><td>4</td><td>3</td><td>4</td><td>5</td><td>6</td><td>1</td><td>4</td><td>4</td><td>8</td><td></td></tr>",
+    "page_idx": 389
+  },
+  {
+    "id": 12335,
+    "type": "text",
+    "page_idx": 390,
+    "text": "2 Tickets for a show were sold at the following prices: 180 at $6.50 each, 215 at $8 each and 124 at $10 each."
+  },
+  {
+    "id": 12336,
+    "type": "text",
+    "text": "a Present this information in a frequency table.",
+    "page_idx": 390
+  },
+  {
+    "id": 12337,
+    "type": "text",
+    "text": "b Calculate the mean price of the tickets sold (give your answer to 3 significant figures).",
+    "page_idx": 390
+  },
+  {
+    "id": 12338,
+    "type": "text",
+    "page_idx": 390,
+    "text": "3 A receptionist kept count of the number of courier deliveries received each day over a period of 60 days. The results are shown in the table."
+  },
+  {
+    "id": 12339,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of deliveries per day</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>",
+    "page_idx": 390
+  },
+  {
+    "id": 12340,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Frequency</td><td>28</td><td>21</td><td>6</td><td>3</td><td>1</td><td>1</td></tr>",
+    "page_idx": 390
+  },
+  {
+    "id": 12341,
+    "type": "text",
+    "page_idx": 390,
+    "text": "For this distribution, find:"
+  },
+  {
+    "id": 12342,
+    "type": "text",
+    "page_idx": 390,
+    "text": "a the mode"
+  },
+  {
+    "id": 12343,
+    "type": "text",
+    "page_idx": 390,
+    "text": "b the median"
+  },
+  {
+    "id": 12344,
+    "type": "text",
+    "page_idx": 390,
+    "text": "c the mean"
+  },
+  {
+    "id": 12345,
+    "type": "text",
+    "page_idx": 390,
+    "text": "the range."
+  },
+  {
+    "id": 12346,
+    "type": "text",
+    "page_idx": 390,
+    "text": "4 A survey of the number of children in 100 families gave the following distribution:"
+  },
+  {
+    "id": 12347,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of children in family</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>",
+    "page_idx": 390
+  },
+  {
+    "id": 12348,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of families</td><td>4</td><td>36</td><td>27</td><td>21</td><td>5</td><td>4</td><td>2</td><td>1</td></tr>",
+    "page_idx": 390
+  },
+  {
+    "id": 12349,
+    "type": "text",
+    "page_idx": 390,
+    "text": "For this distribution, find:"
+  }
+]
+```

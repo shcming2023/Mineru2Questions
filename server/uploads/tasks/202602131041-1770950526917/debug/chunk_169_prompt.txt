@@ -1,0 +1,813 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 11830,
+    "type": "text",
+    "page_idx": 367,
+    "text": "The two shapes shown in the diagram are mathematically similar. If the area of the larger shape is  $216\\mathrm{cm}^2$ , and the area of the smaller shape is  $24\\mathrm{cm}^2$ , find the length  $x$  in the diagram."
+  },
+  {
+    "id": 11831,
+    "type": "image",
+    "page_idx": 367,
+    "img_path": "images/e8c4c8402d95511dc557e319ef7e616be403f742c8cd5fb6315a39d5cac37c6d.jpg"
+  },
+  {
+    "id": 11832,
+    "type": "text",
+    "page_idx": 367,
+    "text": "Answer"
+  },
+  {
+    "id": 11833,
+    "type": "text",
+    "page_idx": 367,
+    "text": "Scale factor of areas  $= \\frac{216}{24} = 9$"
+  },
+  {
+    "id": 11834,
+    "type": "equation",
+    "page_idx": 367,
+    "text": "$$\n\\begin{array}{l} \\Rightarrow (\\text {S c a l e f a c t o r o f l e n g t h s}) ^ {2} = 9 \\\\ \\Rightarrow \\text {S c a l e f a c t o r o f l e n g t h s} = \\sqrt {9} = 3 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 11835,
+    "type": "equation",
+    "page_idx": 367,
+    "text": "$$\n\\mathrm {S o}: x = 3 \\times 1 2 = 3 6 \\mathrm {c m}\n$$"
+  },
+  {
+    "id": 11836,
+    "type": "text",
+    "page_idx": 367,
+    "text": "WORKED EXAMPLE 14"
+  },
+  {
+    "id": 11837,
+    "type": "text",
+    "page_idx": 367,
+    "text": "A shipping crate has a volume of  $2000\\mathrm{cm}^3$ . If the dimensions of the crate are doubled, what will its new volume be?"
+  },
+  {
+    "id": 11838,
+    "type": "text",
+    "page_idx": 367,
+    "text": "Answer"
+  },
+  {
+    "id": 11839,
+    "type": "equation",
+    "page_idx": 367,
+    "text": "$$\n\\begin{array}{l} \\frac {\\text {O r i g i n a l v o l u m e}}{\\text {N e w v o l u m e}} = \\left(\\frac {\\text {o r i g i n a l d i m e n s i o n s}}{\\text {n e w d i m e n s i o n s}}\\right) ^ {3} \\\\ \\frac {2 0 0 0}{\\text {N e w v o l u m e}} = \\left(\\frac {1}{2}\\right) ^ {3} \\\\ \\frac {2 0 0 0}{\\text {N e w v o l u m e}} = \\frac {1}{8} \\\\ \\text {N e w v o l u m e} = 2 0 0 0 \\times 8 \\\\ \\text {N e w v o l u m e} = 1 6 0 0 0 \\mathrm {c m} ^ {3} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 11840,
+    "type": "text",
+    "page_idx": 368,
+    "text": "WORKED EXAMPLE 15"
+  },
+  {
+    "id": 11841,
+    "type": "text",
+    "page_idx": 368,
+    "text": "The two cuboids  $A$  and  $B$  are similar. The larger cuboid has a surface area of  $608 \\, \\text{cm}^2$ . What is the surface area of the smaller cuboid?"
+  },
+  {
+    "id": 11842,
+    "type": "image",
+    "page_idx": 368,
+    "img_path": "images/75d0bbe6b9f46cb32ddffaeed56c35a1d8a86f44d521856594eeed1eeef18e9c.jpg"
+  },
+  {
+    "id": 11843,
+    "type": "image",
+    "page_idx": 368,
+    "img_path": "images/f54200cf79cf9cbffcfc5bf1fec527d0d5a481bf1d40306988ea3d377a036eb8.jpg"
+  },
+  {
+    "id": 11844,
+    "type": "text",
+    "page_idx": 368,
+    "text": "Answer"
+  },
+  {
+    "id": 11845,
+    "type": "equation",
+    "page_idx": 368,
+    "text": "$$\n\\frac {\\text {S u r f a c e a r e a} A}{\\text {S u r f a c e a r e a} B} = \\left(\\frac {\\text {w i d t h} A}{\\text {w i d t h} B}\\right) ^ {2}\n$$"
+  },
+  {
+    "id": 11846,
+    "type": "equation",
+    "page_idx": 368,
+    "text": "$$\n\\frac {\\text {S u r f a c e a r e a A}}{6 0 8} = \\left(\\frac {5}{8}\\right) ^ {2}\n$$"
+  },
+  {
+    "id": 11847,
+    "type": "equation",
+    "page_idx": 368,
+    "text": "$$\n\\frac {\\text {S u r f a c e a r e a A}}{6 0 8} = \\frac {2 5}{6 4}\n$$"
+  },
+  {
+    "id": 11848,
+    "type": "equation",
+    "page_idx": 368,
+    "text": "$$\n\\text {S u r f a c e a r e a} A = \\frac {2 5}{6 4} \\times 6 0 8\n$$"
+  },
+  {
+    "id": 11849,
+    "type": "equation",
+    "page_idx": 368,
+    "text": "$$\n\\text {S u r f a c e a r e a} A = 2 3 7. 5 \\mathrm {c m} ^ {2}\n$$"
+  },
+  {
+    "id": 11850,
+    "type": "text",
+    "page_idx": 368,
+    "text": "Cuboid A has a surface area of  $237.5\\mathrm{cm}^2$"
+  },
+  {
+    "id": 11851,
+    "type": "text",
+    "page_idx": 368,
+    "text": "Exercise 11.6"
+  },
+  {
+    "id": 11852,
+    "type": "text",
+    "page_idx": 368,
+    "text": "1 Copy and complete the statement."
+  },
+  {
+    "id": 11853,
+    "type": "text",
+    "page_idx": 368,
+    "text": "When the dimensions of a solid are multiplied by  $k$ , the surface area is multiplied by  $\\_$  and the volume is multiplied by  $\\_$ ."
+  },
+  {
+    "id": 11854,
+    "type": "text",
+    "page_idx": 368,
+    "text": "2 Two similar cubes  $A$  and  $B$  have sides of  $20\\mathrm{cm}$  and  $5\\mathrm{cm}$  respectively."
+  },
+  {
+    "id": 11855,
+    "type": "text",
+    "text": "a What is the scale factor of  $A$  to  $B$",
+    "page_idx": 368
+  },
+  {
+    "id": 11856,
+    "type": "text",
+    "text": "b What is the ratio of their surface areas?",
+    "page_idx": 368
+  },
+  {
+    "id": 11857,
+    "type": "text",
+    "text": "c What is the ratio of their volumes?",
+    "page_idx": 368
+  },
+  {
+    "id": 11858,
+    "type": "text",
+    "page_idx": 368,
+    "text": "3 Pyramid  $A$  and pyramid  $B$  are similar. Find the surface area of pyramid  $A$ ."
+  },
+  {
+    "id": 11859,
+    "type": "image",
+    "page_idx": 368,
+    "img_path": "images/da74fc72137531b9cdc159d4d2e761ae116695ab7c69b065391997a8c95faaff.jpg"
+  },
+  {
+    "id": 11860,
+    "type": "image",
+    "page_idx": 368,
+    "img_path": "images/e3ef6c9e665e907d893a1f7eb5d36d15c9ee02b3b98d9cb93d3e5ba16cf43117.jpg",
+    "image_caption": "Surface area  $= 600\\mathrm{cm}^2$"
+  },
+  {
+    "id": 11861,
+    "type": "text",
+    "page_idx": 368,
+    "text": "4 Yu has two similar cylindrical metal rods. The smaller rod has a diameter of  $4\\mathrm{cm}$  and a surface area of  $110\\mathrm{cm}^2$ . The larger rod has a diameter of  $5\\mathrm{cm}$ ."
+  },
+  {
+    "id": 11862,
+    "type": "text",
+    "page_idx": 368,
+    "text": "Find the surface area of the larger rod."
+  },
+  {
+    "id": 11863,
+    "type": "text",
+    "page_idx": 369,
+    "text": "5 Cuboid  $X$  and cuboid  $Y$  are similar. The scale factor  $X$  to  $Y$  is  $\\frac{3}{4}$ ."
+  },
+  {
+    "id": 11864,
+    "type": "text",
+    "text": "a If a linear measure in cuboid  $X$  is  $12\\mathrm{mm}$  what is the length of the corresponding measure on cuboid  $Y?$",
+    "page_idx": 369
+  },
+  {
+    "id": 11865,
+    "type": "text",
+    "text": "b Cuboid  $X$  has a surface area of  $88.8\\mathrm{cm}^2$  . What is the surface area of cuboid  $Y?$",
+    "page_idx": 369
+  },
+  {
+    "id": 11866,
+    "type": "text",
+    "text": "c If cuboid  $X$  has a volume of  $35.1\\mathrm{cm}^3$  , what is the volume of cuboid  $Y?$",
+    "page_idx": 369
+  },
+  {
+    "id": 11867,
+    "type": "text",
+    "page_idx": 369,
+    "text": "6 For each part of this question, the solids are similar. Find the unknown volume."
+  },
+  {
+    "id": 11868,
+    "type": "text",
+    "page_idx": 369,
+    "text": "a"
+  },
+  {
+    "id": 11869,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/dcf25f807b04527018a11fe66cb8218a0b4bdc4bef8c211e8e43fdfd07d13ff5.jpg"
+  },
+  {
+    "id": 11870,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/b2f8c1d5a599310e4d72ca9e3430143c2bd8880209e85af58b6689a6edd0ab48.jpg"
+  },
+  {
+    "id": 11871,
+    "type": "equation",
+    "page_idx": 369,
+    "text": "$$\n\\text {V o l u m e} = 2 8 8 \\mathrm {c m} ^ {3}\n$$"
+  },
+  {
+    "id": 11872,
+    "type": "text",
+    "page_idx": 369,
+    "text": "b"
+  },
+  {
+    "id": 11873,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/f61262e9875dc7db2b8d479e5e39d97aa14c2c54a3290d96073ae02a127b2b2c.jpg"
+  },
+  {
+    "id": 11874,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/02a0c392e3a30dceee6ebd8730fe583c5379dc083b59ab6614ce7c2fd74164aa.jpg"
+  },
+  {
+    "id": 11875,
+    "type": "equation",
+    "page_idx": 369,
+    "text": "$$\n\\text {V o l u m e} = 9 \\text {m m} ^ {3}\n$$"
+  },
+  {
+    "id": 11876,
+    "type": "text",
+    "page_idx": 369,
+    "text": "C"
+  },
+  {
+    "id": 11877,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/acf6cb2fd917a932c09b265db66e31409802672c18f27170779724b4acb3ba03.jpg"
+  },
+  {
+    "id": 11878,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/f8b6fc9ecb83fff55cb3681b83a2e25ee683aa8951b2e4ae9071a456beda48c7.jpg"
+  },
+  {
+    "id": 11879,
+    "type": "text",
+    "page_idx": 369,
+    "text": "d"
+  },
+  {
+    "id": 11880,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/1f801e6e17a5aca65e14d8a5a8ba29845b8b918c00ec2d6d29b8d2e3b52adab2.jpg"
+  },
+  {
+    "id": 11881,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/0a4347440da107720b748bf8ff29dc01502ac19f51f8fbe6dd83fc9f87f945cd.jpg"
+  },
+  {
+    "id": 11882,
+    "type": "equation",
+    "page_idx": 369,
+    "text": "$$\n\\text {V o l u m e} = 8 0. 6 4 \\mathrm {m} ^ {3}\n$$"
+  },
+  {
+    "id": 11883,
+    "type": "equation",
+    "page_idx": 369,
+    "text": "$$\n\\text {V o l u m e} = 0. 3 8 4 \\mathrm {m} ^ {3}\n$$"
+  },
+  {
+    "id": 11884,
+    "type": "text",
+    "page_idx": 369,
+    "text": "7 Find the unknown quantity for each of the following pairs of similar shapes."
+  },
+  {
+    "id": 11885,
+    "type": "text",
+    "page_idx": 369,
+    "text": "a"
+  },
+  {
+    "id": 11886,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/ee143fbc99a594c2eefd9471239526fe631ffedf6a77533f908be62857b714fc.jpg"
+  },
+  {
+    "id": 11887,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/c8ec52f0ca1494495e4f12ccb8cb1e0a8d5405f788218921df8c60f3e74fe49e.jpg"
+  },
+  {
+    "id": 11888,
+    "type": "text",
+    "page_idx": 369,
+    "text": "b"
+  },
+  {
+    "id": 11889,
+    "type": "text",
+    "page_idx": 369,
+    "text": "Volume  $= 20\\mathrm{cm}^3$"
+  },
+  {
+    "id": 11890,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/de1bc7d952d89e7247cea5e226ccb05926f5a2195a0f7dfa0b343809af6f38e3.jpg"
+  },
+  {
+    "id": 11891,
+    "type": "image",
+    "page_idx": 369,
+    "img_path": "images/a6c79fad4028c09940bb31774adda514418f279225062950331d0e76ed6298e6.jpg"
+  },
+  {
+    "id": 11892,
+    "type": "equation",
+    "page_idx": 369,
+    "text": "$$\n\\begin{array}{c} \\text {V o l u m e} = \\\\ \\text {y c m} ^ {3} \\end{array}\n$$"
+  },
+  {
+    "id": 11893,
+    "type": "image",
+    "page_idx": 370,
+    "img_path": "images/3f021a8c51c55089f4f19a68f383dc69d99bc9d329718fc45d08a2c02f746e44.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 11894,
+    "type": "image",
+    "page_idx": 370,
+    "img_path": "images/60cc58a2faa3be28012009848b832dab8227fc50a7c1cf6560bc63d184780b5a.jpg"
+  },
+  {
+    "id": 11895,
+    "type": "image",
+    "page_idx": 370,
+    "img_path": "images/522cd41580d5fd88e2db355f5642175e8e6ea9a0ee5668fee049e2f758046b94.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 11896,
+    "type": "image",
+    "page_idx": 370,
+    "img_path": "images/3ca88ac95e9f1ce6828a88c20e6b330ef9f3f52c0d36108a0b14a102edb83e40.jpg"
+  },
+  {
+    "id": 11897,
+    "type": "text",
+    "page_idx": 370,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 11898,
+    "type": "text",
+    "page_idx": 370,
+    "text": "8 Karen has this set of three dolls. The heights of the dolls are  $13\\mathrm{cm}$  11 cm and 9 cm. Draw a table to compare the surface area and volume. of the three dolls in algebraic terms."
+  },
+  {
+    "id": 11899,
+    "type": "image",
+    "page_idx": 370,
+    "img_path": "images/0ef579db7d1ac9ba2519b76279d61b943a0ca8a8b6fb786e9d7e833d45cf07a0.jpg"
+  },
+  {
+    "id": 11900,
+    "type": "text",
+    "page_idx": 370,
+    "text": "9 A manufacturer is making pairs of weights from metal cones that have been cut along a plane parallel to the base. The diagram shows a pair of these weights. If the volume of the larger (uncut) cone is  $128\\mathrm{cm}^3$  and the volume of the smaller cone cut off the top is  $42\\mathrm{cm}^3$  find the length  $x$ ."
+  },
+  {
+    "id": 11901,
+    "type": "image",
+    "page_idx": 370,
+    "img_path": "images/6891978e9bb178ffaca3064b49d77ff8d90e3dc85e286097985acff46d61ad2f.jpg"
+  },
+  {
+    "id": 11902,
+    "type": "text",
+    "page_idx": 370,
+    "text": "TIP"
+  },
+  {
+    "id": 11903,
+    "type": "text",
+    "page_idx": 370,
+    "text": "Organised tables and lists are a useful problem-solving strategy. Include headings for rows and/or columns to make sure your table is easy to understand."
+  },
+  {
+    "id": 11904,
+    "type": "text",
+    "page_idx": 370,
+    "text": "TIP"
+  },
+  {
+    "id": 11905,
+    "type": "text",
+    "page_idx": 370,
+    "text": "A cone cut along a plane parallel to its base produces a smaller cone and a solid called a frustum."
+  },
+  {
+    "id": 11906,
+    "type": "text",
+    "page_idx": 371,
+    "text": "11.4 Understanding congruence"
+  },
+  {
+    "id": 11907,
+    "type": "text",
+    "page_idx": 371,
+    "text": "Two shapes are congruent if they are the same shape and size."
+  },
+  {
+    "id": 11908,
+    "type": "text",
+    "page_idx": 371,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 11909,
+    "type": "text",
+    "page_idx": 371,
+    "text": "You will meet rotations and reflections in Chapter 19. When an object is reflected or rotated its shape and size remain unchanged. The resulting object is congruent to the original."
+  },
+  {
+    "id": 11910,
+    "type": "text",
+    "page_idx": 371,
+    "text": "If two shapes are congruent then:"
+  },
+  {
+    "id": 11911,
+    "type": "text",
+    "text": "corresponding sides are equal in length.",
+    "page_idx": 371
+  },
+  {
+    "id": 11912,
+    "type": "text",
+    "text": "corresponding angles are equal",
+    "page_idx": 371
+  },
+  {
+    "id": 11913,
+    "type": "text",
+    "text": "the shapes have the same area.",
+    "page_idx": 371
+  },
+  {
+    "id": 11914,
+    "type": "text",
+    "page_idx": 371,
+    "text": "Look at these pairs of congruent shapes. The corresponding sides and angles on each shape are marked using the same colours and symbols."
+  },
+  {
+    "id": 11915,
+    "type": "image",
+    "page_idx": 371,
+    "img_path": "images/c06ce157bf698003e82b6cf8b9704372c874cf336c1c7fe76526a79ac8658cea.jpg"
+  },
+  {
+    "id": 11916,
+    "type": "image",
+    "page_idx": 371,
+    "img_path": "images/070e1d4d3962978021e1c642adad3b3d003163d93818cec9b6f3cb22b6604fb0.jpg"
+  },
+  {
+    "id": 11917,
+    "type": "image",
+    "page_idx": 371,
+    "img_path": "images/acb2ad8ec7d484689b8888bad4ee713786e3320ac32b464995f334f89fcdfc2d.jpg",
+    "image_caption": "0"
+  },
+  {
+    "id": 11918,
+    "type": "image",
+    "page_idx": 371,
+    "img_path": "images/49a529cfdd042b4676863a24d3b81d77726fadeb03ccb969d27c4f383077932f.jpg"
+  },
+  {
+    "id": 11919,
+    "type": "text",
+    "page_idx": 371,
+    "text": "When you make a congruency statement, you name the shape so that corresponding vertices are in the same order."
+  },
+  {
+    "id": 11920,
+    "type": "text",
+    "page_idx": 371,
+    "text": "For the shapes above:"
+  },
+  {
+    "id": 11921,
+    "type": "text",
+    "text": "ABCD is congruent to EFGH",
+    "page_idx": 371
+  },
+  {
+    "id": 11922,
+    "type": "text",
+    "text": "MNOP is congruent to RQTS.",
+    "page_idx": 371
+  },
+  {
+    "id": 11923,
+    "type": "text",
+    "page_idx": 371,
+    "text": "Exercise 11.7"
+  },
+  {
+    "id": 11924,
+    "type": "text",
+    "page_idx": 371,
+    "text": "1 These two figures are congruent."
+  },
+  {
+    "id": 11925,
+    "type": "image",
+    "page_idx": 371,
+    "img_path": "images/7d7adab8fb35cc071d4f404b446948cef81642777455011c56e24f68219e70f8.jpg"
+  },
+  {
+    "id": 11926,
+    "type": "image",
+    "page_idx": 371,
+    "img_path": "images/1808482a7c528dcdc8a8821ede6a0916c5ee0eedb822868ec256a16f3be09a24.jpg"
+  },
+  {
+    "id": 11927,
+    "type": "text",
+    "page_idx": 372,
+    "text": "a Which side is equal in length to:"
+  },
+  {
+    "id": 11928,
+    "type": "text",
+    "page_idx": 372,
+    "text": "i AB?"
+  },
+  {
+    "id": 11929,
+    "type": "text",
+    "page_idx": 372,
+    "text": "ii  ${EF}$  ?"
+  }
+]
+```

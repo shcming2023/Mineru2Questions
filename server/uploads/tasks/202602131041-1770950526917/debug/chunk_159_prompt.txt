@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 11130,
+    "type": "text",
+    "page_idx": 339,
+    "text": "b x²-1 4"
+  },
+  {
+    "id": 11131,
+    "type": "text",
+    "page_idx": 339,
+    "text": "16y²-25w²"
+  },
+  {
+    "id": 11132,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Answers"
+  },
+  {
+    "id": 11133,
+    "type": "text",
+    "page_idx": 339,
+    "text": "a  $49 = 7^{2}$"
+  },
+  {
+    "id": 11134,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n\\begin{array}{l} x ^ {2} - 4 9 = x ^ {2} - 7 ^ {2} \\\\ = (x - 7) (x + 7) \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 11135,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Use the formula for the difference between two squares:"
+  },
+  {
+    "id": 11136,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\nx ^ {2} - a ^ {2} = (x - a) (x + a).\n$$"
+  },
+  {
+    "id": 11137,
+    "type": "text",
+    "page_idx": 339,
+    "text": "You know that  $\\sqrt{49} = 7$  so you can write 49 as  $7^{2}$ . This gives you  $a^2$ . Substitute  $7^2$  into the formula."
+  },
+  {
+    "id": 11138,
+    "type": "text",
+    "page_idx": 339,
+    "text": "b  $\\left(\\frac{1}{2}\\right)^{2} = \\frac{1}{4}$"
+  },
+  {
+    "id": 11139,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n\\begin{array}{l} x ^ {2} - \\frac {1}{4} = x ^ {2} - \\left(\\frac {1}{2}\\right) ^ {2} \\\\ = \\left(x - \\frac {1}{2}\\right) \\left(x + \\frac {1}{2}\\right) \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 11140,
+    "type": "text",
+    "page_idx": 339,
+    "text": "$\\sqrt{\\frac{1}{4}}$  is  $\\frac{1}{2}$  so you can rewrite  $\\frac{1}{4}$  as  $\\left(\\frac{1}{2}\\right)^2$"
+  },
+  {
+    "id": 11141,
+    "type": "text",
+    "page_idx": 339,
+    "text": "and substitute it into the formula for the difference between two squares."
+  },
+  {
+    "id": 11142,
+    "type": "text",
+    "page_idx": 339,
+    "text": "$(4y)^2 = 4y \\times 4y = 16y^2$  and"
+  },
+  {
+    "id": 11143,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n1 6 y ^ {2} = (4 y) ^ {2}\n$$"
+  },
+  {
+    "id": 11144,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n(5 w) ^ {2} = 5 w \\times 5 w = 2 5 w ^ {2}\n$$"
+  },
+  {
+    "id": 11145,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n2 5 w ^ {2} = (5 w) ^ {2}\n$$"
+  },
+  {
+    "id": 11146,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n1 6 y ^ {2} - 2 5 w ^ {2} = (4 y) ^ {2} - (5 w) ^ {2}\n$$"
+  },
+  {
+    "id": 11147,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Substitute in  $(4y)^2$  and  $(5w)^2$"
+  },
+  {
+    "id": 11148,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n= (4 y - 5 w) (4 y + 5 w)\n$$"
+  },
+  {
+    "id": 11149,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Perfect squares"
+  },
+  {
+    "id": 11150,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Consider what happens when you expand expressions of the form  $(a + b)^2$  and  $(a - b)^2$ ."
+  },
+  {
+    "id": 11151,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n(a + b) ^ {2} = (a + b) (a + b) = a ^ {2} + 2 a b + b ^ {2}\n$$"
+  },
+  {
+    "id": 11152,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n(a - b) ^ {2} = (a - b) (a - b) = a ^ {2} - 2 a b + b ^ {2}\n$$"
+  },
+  {
+    "id": 11153,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Expressions in the form  $(a + b)^2$  and  $(a - b)^2$  are perfect squares."
+  },
+  {
+    "id": 11154,
+    "type": "text",
+    "page_idx": 339,
+    "text": "You can use the results of the expansions in reverse to factorise expressions that follow this pattern."
+  },
+  {
+    "id": 11155,
+    "type": "text",
+    "page_idx": 339,
+    "text": "WORKED EXAMPLE 16"
+  },
+  {
+    "id": 11156,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Factorise:"
+  },
+  {
+    "id": 11157,
+    "type": "text",
+    "page_idx": 339,
+    "text": "a  $x^{2} + 8x + 16$"
+  },
+  {
+    "id": 11158,
+    "type": "text",
+    "page_idx": 339,
+    "text": "b  $x^{2} - 10x + 25$"
+  },
+  {
+    "id": 11159,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Answers"
+  },
+  {
+    "id": 11160,
+    "type": "text",
+    "page_idx": 339,
+    "text": "a  $x^{2} + 8x + 16$"
+  },
+  {
+    "id": 11161,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n\\begin{array}{l} = (x + 4) (x + 4) \\\\ = (x + 4) ^ {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 11162,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Check for the perfect square pattern."
+  },
+  {
+    "id": 11163,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Take the root of each square. Note the signs are both positive."
+  },
+  {
+    "id": 11164,
+    "type": "text",
+    "page_idx": 339,
+    "text": "b  $x^{2} - 10x + 25$"
+  },
+  {
+    "id": 11165,
+    "type": "equation",
+    "page_idx": 339,
+    "text": "$$\n\\begin{array}{l} = (x - 5) (x - 5) \\\\ = (x - 5) ^ {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 11166,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Check for the perfect square pattern."
+  },
+  {
+    "id": 11167,
+    "type": "text",
+    "page_idx": 339,
+    "text": "Take the root of each square. Note the signs are both negative."
+  },
+  {
+    "id": 11168,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Exercise 10.11"
+  },
+  {
+    "id": 11169,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Factorise each of the following."
+  },
+  {
+    "id": 11170,
+    "type": "text",
+    "page_idx": 340,
+    "text": "a  $x^{2} - 36$"
+  },
+  {
+    "id": 11171,
+    "type": "text",
+    "page_idx": 340,
+    "text": "b  $p^2 -81$"
+  },
+  {
+    "id": 11172,
+    "type": "text",
+    "page_idx": 340,
+    "text": "c  $w^{2} - 16$"
+  },
+  {
+    "id": 11173,
+    "type": "text",
+    "page_idx": 340,
+    "text": "d  $q^{2} - 9$"
+  },
+  {
+    "id": 11174,
+    "type": "text",
+    "page_idx": 340,
+    "text": "e  ${k}^{2} - {400}$"
+  },
+  {
+    "id": 11175,
+    "type": "text",
+    "page_idx": 340,
+    "text": "f t2-121"
+  },
+  {
+    "id": 11176,
+    "type": "text",
+    "page_idx": 340,
+    "text": "g  $x^{2} - y^{2}$"
+  },
+  {
+    "id": 11177,
+    "type": "text",
+    "page_idx": 340,
+    "text": "h  $81h^{2} - 16g^{2}$"
+  },
+  {
+    "id": 11178,
+    "type": "text",
+    "page_idx": 340,
+    "text": "i  $16p^{2} - 36q^{2}$"
+  },
+  {
+    "id": 11179,
+    "type": "text",
+    "page_idx": 340,
+    "text": "144s²-c²"
+  },
+  {
+    "id": 11180,
+    "type": "text",
+    "page_idx": 340,
+    "text": "k  $64h^{2} - 49g^{2}$"
+  },
+  {
+    "id": 11181,
+    "type": "text",
+    "page_idx": 340,
+    "text": "27x²-48y²"
+  },
+  {
+    "id": 11182,
+    "type": "text",
+    "page_idx": 340,
+    "text": "m  $200q^{2} - 98p^{2}$"
+  },
+  {
+    "id": 11183,
+    "type": "text",
+    "page_idx": 340,
+    "text": "n  $20d^{2} - 125e^{2}$"
+  },
+  {
+    "id": 11184,
+    "type": "text",
+    "page_idx": 340,
+    "text": "${x}^{4} - {y}^{4}$"
+  },
+  {
+    "id": 11185,
+    "type": "text",
+    "page_idx": 340,
+    "text": "P  $xy^{2} - x^{3}$"
+  },
+  {
+    "id": 11186,
+    "type": "text",
+    "page_idx": 340,
+    "text": "2 Factorise each expression."
+  },
+  {
+    "id": 11187,
+    "type": "text",
+    "page_idx": 340,
+    "text": "a  $x^{2} + 6x + 9$"
+  },
+  {
+    "id": 11188,
+    "type": "text",
+    "page_idx": 340,
+    "text": "b  $x^{2} + 4x + 4$"
+  },
+  {
+    "id": 11189,
+    "type": "text",
+    "page_idx": 340,
+    "text": "c  $x^{2} - 14x + 49$"
+  },
+  {
+    "id": 11190,
+    "type": "text",
+    "page_idx": 340,
+    "text": "d  $x^{2} - 18x + 81$"
+  },
+  {
+    "id": 11191,
+    "type": "text",
+    "page_idx": 340,
+    "text": "e  $36 + 12x + x^{2}$"
+  },
+  {
+    "id": 11192,
+    "type": "text",
+    "page_idx": 340,
+    "text": "49+14x+x²"
+  },
+  {
+    "id": 11193,
+    "type": "text",
+    "page_idx": 340,
+    "text": "g 4-4x+x2"
+  },
+  {
+    "id": 11194,
+    "type": "text",
+    "page_idx": 340,
+    "text": "25-10x+x2"
+  },
+  {
+    "id": 11195,
+    "type": "text",
+    "page_idx": 340,
+    "text": "i  $4x^{2} + 20x + 25$"
+  },
+  {
+    "id": 11196,
+    "type": "text",
+    "text": "3 Factorise and simplify  $36^{2} - 35^{2}$  without using a calculator.",
+    "page_idx": 340
+  },
+  {
+    "id": 11197,
+    "type": "text",
+    "text": "Factorise and simplify  $(6\\frac{1}{2})^2 - (5\\frac{1}{2})^2$  without using a calculator.",
+    "page_idx": 340
+  },
+  {
+    "id": 11198,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Using factors to solve quadratic equations"
+  },
+  {
+    "id": 11199,
+    "type": "text",
+    "page_idx": 340,
+    "text": "You can now use the factorisation method to solve some quadratic equations A quadratic equation is an equation of the form  $ax^2 + bx + c = 0$ . The method is illustrated in Worked example 17."
+  },
+  {
+    "id": 11200,
+    "type": "text",
+    "page_idx": 340,
+    "text": "WORKED EXAMPLE 17"
+  },
+  {
+    "id": 11201,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Solve each of the following equations for  $x$ ."
+  },
+  {
+    "id": 11202,
+    "type": "text",
+    "page_idx": 340,
+    "text": "a  $x^{2} - 3x = 0$"
+  },
+  {
+    "id": 11203,
+    "type": "text",
+    "page_idx": 340,
+    "text": "b  $x^{2} - 7x + 12 = 0$"
+  },
+  {
+    "id": 11204,
+    "type": "text",
+    "page_idx": 340,
+    "text": "$x^{2} + 6x - 4 = 12$"
+  },
+  {
+    "id": 11205,
+    "type": "text",
+    "page_idx": 340,
+    "text": "d  $x^{2} - 8x + 16 = 0$"
+  },
+  {
+    "id": 11206,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Answers"
+  },
+  {
+    "id": 11207,
+    "type": "text",
+    "page_idx": 340,
+    "text": "a  $x^{2} - 3x = 0$"
+  },
+  {
+    "id": 11208,
+    "type": "equation",
+    "page_idx": 340,
+    "text": "$$\nx (x - 3) = 0\n$$"
+  },
+  {
+    "id": 11209,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Now the key point:"
+  },
+  {
+    "id": 11210,
+    "type": "text",
+    "page_idx": 340,
+    "text": "If two or more quantities multiply to give zero, then at least one of the quantities must be zero."
+  },
+  {
+    "id": 11211,
+    "type": "text",
+    "page_idx": 340,
+    "text": "So either  $x = 0$  or  $x - 3 = 0 \\Rightarrow x = 3$ ."
+  },
+  {
+    "id": 11212,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Check:  $0^2 - 3 \\times 0 = 0$  (this works)."
+  },
+  {
+    "id": 11213,
+    "type": "text",
+    "page_idx": 340,
+    "text": "$3^{2} - 3 \\times 3 = 9 - 9 = 0$  (this also works)"
+  },
+  {
+    "id": 11214,
+    "type": "text",
+    "page_idx": 340,
+    "text": "In fact both  $x = 0$  and  $x = 3$  are solutions."
+  },
+  {
+    "id": 11215,
+    "type": "text",
+    "page_idx": 340,
+    "text": "b  $x^{2} - 7x + 12 = 0$"
+  },
+  {
+    "id": 11216,
+    "type": "equation",
+    "page_idx": 340,
+    "text": "$$\n(x - 4) (x - 3) = 0\n$$"
+  },
+  {
+    "id": 11217,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Therefore either  $x - 4 = 0 \\Rightarrow x = 4$ ."
+  },
+  {
+    "id": 11218,
+    "type": "equation",
+    "page_idx": 340,
+    "text": "$$\n\\text {o r} x - 3 = 0 \\Rightarrow x = 3.\n$$"
+  },
+  {
+    "id": 11219,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Again, there are two possible values of  $x$ ."
+  },
+  {
+    "id": 11220,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Notice that both terms of the left-hand side are multiples of  $x$  so you can take out a common factor of  $x$ ."
+  },
+  {
+    "id": 11221,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Use the factorisation method of Worked example 14 on the left-hand side of the equation."
+  },
+  {
+    "id": 11222,
+    "type": "text",
+    "page_idx": 340,
+    "text": "TIP"
+  },
+  {
+    "id": 11223,
+    "type": "text",
+    "page_idx": 340,
+    "text": "Where the numbers are not square, try taking a common factor out first."
+  },
+  {
+    "id": 11224,
+    "type": "text",
+    "page_idx": 340,
+    "text": "TIP"
+  },
+  {
+    "id": 11225,
+    "type": "text",
+    "page_idx": 340,
+    "text": "When you solve quadratic equations, you should rearrange them so that a zero appears on one side, i.e. so that they are in the form  $ax^2 + bx + c = 0$"
+  },
+  {
+    "id": 11226,
+    "type": "text",
+    "page_idx": 340,
+    "text": "TIP"
+  },
+  {
+    "id": 11227,
+    "type": "text",
+    "page_idx": 340,
+    "text": "There are still two solutions here, but they are identical. When a quadratic equation has solutions, there are always two of them, even if they are both the same!"
+  },
+  {
+    "id": 11228,
+    "type": "aside_text",
+    "page_idx": 340,
+    "text": "国国国"
+  },
+  {
+    "id": 11229,
+    "type": "text",
+    "page_idx": 341,
+    "text": "WORKED EXAMPLE 17 CONTINUED"
+  }
+]
+```

@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 5740,
+    "type": "text",
+    "page_idx": 189,
+    "text": "salary increase over that time. [3]"
+  },
+  {
+    "id": 5741,
+    "type": "text",
+    "page_idx": 189,
+    "text": "6  $n = \\frac{ab}{a + b}$"
+  },
+  {
+    "id": 5742,
+    "type": "text",
+    "page_idx": 189,
+    "text": "If  $a = 3 \\times 10^8$  and  $b = 2 \\times 10^7$ , determine the value of  $n$ . Give your answer in"
+  },
+  {
+    "id": 5743,
+    "type": "text",
+    "page_idx": 189,
+    "text": "standard form correct to 3 significant figures. [3]"
+  },
+  {
+    "id": 5744,
+    "type": "text",
+    "page_idx": 189,
+    "text": "7 A light year is the distance light travels in a year. The speed of light is  $3.0 \\times 10^{5}$"
+  },
+  {
+    "id": 5745,
+    "type": "text",
+    "page_idx": 189,
+    "text": "kilometres per second."
+  },
+  {
+    "id": 5746,
+    "type": "text",
+    "page_idx": 189,
+    "text": "a Calculate, to the nearest kilometre, the number of kilometres in one light year."
+  },
+  {
+    "id": 5747,
+    "type": "text",
+    "page_idx": 189,
+    "text": "[3]"
+  },
+  {
+    "id": 5748,
+    "type": "text",
+    "page_idx": 189,
+    "text": "b Proxima Centauri is  $4.0 \\times 10^{13}$  kilometres from our Sun. Work out how many light years there are in  $4.0 \\times 10^{13}$  kilometres. Give your answer to 3 significant figures."
+  },
+  {
+    "id": 5749,
+    "type": "text",
+    "page_idx": 189,
+    "text": "[2]"
+  },
+  {
+    "id": 5750,
+    "type": "text",
+    "page_idx": 189,
+    "text": "There are approximately 0.625 miles in a kilometre. Calculate the speed of light in miles per second, giving your answer in standard form, to"
+  },
+  {
+    "id": 5751,
+    "type": "text",
+    "page_idx": 189,
+    "text": "3 significant figures. [2]"
+  },
+  {
+    "id": 5752,
+    "type": "text",
+    "page_idx": 189,
+    "text": "8 Between January 2020 and January 2021, Mongolia's population increased by  $1.6\\%$  to 3.352 million."
+  },
+  {
+    "id": 5753,
+    "type": "text",
+    "page_idx": 189,
+    "text": "Calculate Mongolia's population in 2020, giving your answer to"
+  },
+  {
+    "id": 5754,
+    "type": "text",
+    "page_idx": 189,
+    "text": "the nearest 1000. [3]"
+  },
+  {
+    "id": 5755,
+    "type": "text",
+    "page_idx": 190,
+    "text": "$x = a\\times 10^{m},y = b\\times 10^{n}$  and  $100 <   ab <   1000$"
+  },
+  {
+    "id": 5756,
+    "type": "text",
+    "page_idx": 190,
+    "text": "Find  $xy$  in standard form. [3]"
+  },
+  {
+    "id": 5757,
+    "type": "text",
+    "page_idx": 190,
+    "text": "10 The value of a car decreases by  $12\\%$  per year. A car is two years old and its value is now $3875."
+  },
+  {
+    "id": 5758,
+    "type": "text",
+    "text": "a What was the car's value when it was one year old? [2]",
+    "page_idx": 190
+  },
+  {
+    "id": 5759,
+    "type": "text",
+    "text": "b What was the original price of the car? [2]",
+    "page_idx": 190
+  },
+  {
+    "id": 5760,
+    "type": "text",
+    "text": "If the value of a car decreases by x% per year and the original value of the car is $V, find a formula (in terms of x, V and n) for the value of the car after n years. [3]",
+    "page_idx": 190
+  },
+  {
+    "id": 5761,
+    "type": "text",
+    "page_idx": 190,
+    "text": "11 The value of a painting increases by 2% per year. The painting was bought on 1 January 2021 for $1800. During which year will the painting first be worth more than $2500? [3]"
+  },
+  {
+    "id": 5762,
+    "type": "text",
+    "page_idx": 190,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 5763,
+    "type": "text",
+    "page_idx": 190,
+    "text": "Analysing your mistakes can help you improve."
+  },
+  {
+    "id": 5764,
+    "type": "text",
+    "page_idx": 190,
+    "text": "Consider any questions that you got wrong."
+  },
+  {
+    "id": 5765,
+    "type": "text",
+    "text": "Did you understand the question and know what to do? If not, what can you do about this?",
+    "page_idx": 190
+  },
+  {
+    "id": 5766,
+    "type": "text",
+    "text": "- Did you make any errors in your calculations? If so, what can you do to avoid these errors in future?",
+    "page_idx": 190
+  },
+  {
+    "id": 5767,
+    "type": "equation",
+    "page_idx": 191,
+    "text": "$$\n\\begin{array}{l} \\nabla \\cdot T + f \\\\ \\partial B \\end{array} \\quad H _ {n} = \\frac {n}{\\sum_ {i} ^ {n} \\frac {1}{x _ {i}}} = \\frac {n}{\\frac {1}{x _ {1}} + \\frac {1}{x _ {2}} + \\cdots + \\frac {1}{x _ {n}}}\n$$"
+  },
+  {
+    "id": 5768,
+    "type": "text",
+    "page_idx": 191,
+    "text": "Chapter 6"
+  },
+  {
+    "id": 5769,
+    "type": "text",
+    "page_idx": 191,
+    "text": "Equations, factors and formulae"
+  },
+  {
+    "id": 5770,
+    "type": "text",
+    "page_idx": 191,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 5771,
+    "type": "text",
+    "text": "- solve a linear equation",
+    "page_idx": 191
+  },
+  {
+    "id": 5772,
+    "type": "text",
+    "text": "- solve equations where the unknown is a power",
+    "page_idx": 191
+  },
+  {
+    "id": 5773,
+    "type": "text",
+    "text": "factorise algebraic expressions",
+    "page_idx": 191
+  },
+  {
+    "id": 5774,
+    "type": "text",
+    "text": "rearrange a formula to change the subject.",
+    "page_idx": 191
+  },
+  {
+    "id": 5775,
+    "type": "equation",
+    "page_idx": 191,
+    "text": "$$\n\\sqrt {\\left(\\frac {q}{2}\\right) ^ {2} + \\left(\\frac {p}{3}\\right) ^ {3}} + \\omega \\sqrt {- \\frac {q}{2} - \\sqrt {\\frac {q}{2}}} = \\frac {\\sqrt {\\frac {q}{3}}}{\\sqrt [ n ]{b}} (a > 0, b > 0)\n$$"
+  },
+  {
+    "id": 5776,
+    "type": "equation",
+    "page_idx": 191,
+    "text": "$$\n= 0, \\frac {1 8 0}{\\infty} + \\frac {1}{x _ {2}} + \\frac {1}{x _ {3}} = - \\frac {p}{q}, x _ {1} x _ {2} x _ {3} = - q\n$$"
+  },
+  {
+    "id": 5777,
+    "type": "text",
+    "page_idx": 192,
+    "text": "Have you seen any of the equations in the image on the previous page before? What do they mean?"
+  },
+  {
+    "id": 5778,
+    "type": "text",
+    "page_idx": 192,
+    "text": "Equations are used to easily record and manipulate mathematical problems. Drawing straight lines or curves can take a lot of time, but you can write their equations quickly, and formulae for calculating areas of shapes and volumes of solids can be recorded using a few easily remembered symbols."
+  },
+  {
+    "id": 5779,
+    "type": "text",
+    "page_idx": 192,
+    "text": "You can use formulae to help you work out how long it takes to cook your dinner, how well your car is performing or how efficient the insulation is in your house."
+  },
+  {
+    "id": 5780,
+    "type": "text",
+    "page_idx": 192,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 5781,
+    "type": "text",
+    "page_idx": 192,
+    "text": "factorisation"
+  },
+  {
+    "id": 5782,
+    "type": "text",
+    "page_idx": 192,
+    "text": "linear equation"
+  },
+  {
+    "id": 5783,
+    "type": "text",
+    "page_idx": 192,
+    "text": "solution"
+  },
+  {
+    "id": 5784,
+    "type": "text",
+    "page_idx": 192,
+    "text": "subject"
+  },
+  {
+    "id": 5785,
+    "type": "text",
+    "page_idx": 192,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 5786,
+    "type": "text",
+    "page_idx": 192,
+    "text": "In each diagram, the numbers or expressions in any pair of circles add up to the number or expression in the square between them. Copy and complete each diagram by working out the missing numbers or expressions."
+  },
+  {
+    "id": 5787,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/c886a83989a1907b3bbc74cdece02e92c50a04f5506f6b1428dd2b7c3e58c47a.jpg"
+  },
+  {
+    "id": 5788,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/e056d0926796210b68e8e89258f5ae1b0ac23a55686e25fdb9157a4ce083372b.jpg"
+  },
+  {
+    "id": 5789,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/b9102ef3118011f18f3256600ded2f997cbca5491721b1593bef5ec6182f43fc.jpg"
+  },
+  {
+    "id": 5790,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/30dd52f1317e18f0bf25035a6ada91205de4259353cf317651591c4a952e7f52.jpg"
+  },
+  {
+    "id": 5791,
+    "type": "text",
+    "page_idx": 192,
+    "text": "6.1 Solving equations"
+  },
+  {
+    "id": 5792,
+    "type": "text",
+    "page_idx": 192,
+    "text": "I think of a number, x. If I multiply my number by three and then add one, the answer is 13. What is my number?"
+  },
+  {
+    "id": 5793,
+    "type": "text",
+    "page_idx": 192,
+    "text": "To solve this problem you need to understand what is happening to  $x$  and then undo the operations in reverse order. This diagram (sometimes called a function machine) shows what is happening to  $x$ , with the reverse process written underneath. Notice how the answer to the problem appears quite easily:"
+  },
+  {
+    "id": 5794,
+    "type": "image",
+    "page_idx": 192,
+    "img_path": "images/f21f13a6577d5728fc7fca3888506652045eb9f24d6a61203c9fc6242a0cb521.jpg"
+  },
+  {
+    "id": 5795,
+    "type": "text",
+    "page_idx": 192,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 5796,
+    "type": "text",
+    "page_idx": 192,
+    "text": "The order of operations is very important here. You learnt about this in Chapter 1 and you can use the word BODMAS to help you remember the correct order."
+  },
+  {
+    "id": 5797,
+    "type": "text",
+    "page_idx": 193,
+    "text": "You can reach the solution more efficiently using algebra. Follow the instructions in the question:"
+  },
+  {
+    "id": 5798,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td>The number is x:</td><td>x</td></tr>",
+    "page_idx": 193
+  },
+  {
+    "id": 5799,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2</td><td>Multiply this number by three:</td><td>3x</td></tr>",
+    "page_idx": 193
+  },
+  {
+    "id": 5800,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td>Then add one:</td><td>3x+1</td></tr>",
+    "page_idx": 193
+  },
+  {
+    "id": 5801,
+    "type": "text",
+    "text": "[Table Row] <tr><td>4</td><td>The answer is 13:</td><td>3x+1=13</td></tr>",
+    "page_idx": 193
+  },
+  {
+    "id": 5802,
+    "type": "text",
+    "page_idx": 193,
+    "text": "This is called a linear equation 'Linear' means there are no powers of  $x$  other than one."
+  },
+  {
+    "id": 5803,
+    "type": "text",
+    "page_idx": 193,
+    "text": "LINK"
+  },
+  {
+    "id": 5804,
+    "type": "text",
+    "page_idx": 193,
+    "text": "Accounting uses a lot of mathematics. Accountants use computer spreadsheets to calculate and analyse financial data. Although the programs do the calculations, the user has to know which equations and formulae to insert to tell the program what to do. Most computer systems use the same rules for the order of operations."
+  },
+  {
+    "id": 5805,
+    "type": "text",
+    "page_idx": 193,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 5806,
+    "type": "text",
+    "page_idx": 193,
+    "text": "You will study equations of straight lines in Chapter 10. Any equation in the form  $y = mx + c$  is the equation of a straight line. This is why equations involving only the first power of  $x$  and constants are known as linear equations."
+  },
+  {
+    "id": 5807,
+    "type": "text",
+    "page_idx": 193,
+    "text": "You can change the way an equation is written without changing the solution (the value of  $x$  for which the equation is true), as long as you do the same thing to both sides of the equation at the same time."
+  },
+  {
+    "id": 5808,
+    "type": "text",
+    "page_idx": 193,
+    "text": "Follow the reverse process shown in the function machine on the previous page but carry out the instruction on both sides of the equation:"
+  },
+  {
+    "id": 5809,
+    "type": "equation",
+    "page_idx": 193,
+    "text": "$$\n3 x + 1 = 1 3\n$$"
+  },
+  {
+    "id": 5810,
+    "type": "equation",
+    "page_idx": 193,
+    "text": "$$\n\\begin{array}{l} 3 x + 1 - 1 = 1 3 - 1 \\quad \\text {(s u b t r a c t o n e f r o m b o t h s i d e s)} \\\\ 3 x = 1 2 \\\\ \\frac {3 x}{3} = \\frac {1 2}{3} \\quad \\text {(d i v i d e b o t h s i d e s b y t h r e e)} \\\\ x = 4 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5811,
+    "type": "text",
+    "page_idx": 193,
+    "text": "TIP"
+  },
+  {
+    "id": 5812,
+    "type": "text",
+    "page_idx": 193,
+    "text": "Even if you can see what the solution is going to be easily you must show working."
+  },
+  {
+    "id": 5813,
+    "type": "text",
+    "page_idx": 193,
+    "text": "Sometimes linear equations contain brackets, and sometimes they can also have unknown values (like  $x$ , though you can use any letter or symbol) on both sides of the equals sign."
+  },
+  {
+    "id": 5814,
+    "type": "text",
+    "page_idx": 193,
+    "text": "Worked example 1 shows you how to solve some different types of linear equations."
+  },
+  {
+    "id": 5815,
+    "type": "text",
+    "page_idx": 193,
+    "text": "TIP"
+  },
+  {
+    "id": 5816,
+    "type": "text",
+    "page_idx": 193,
+    "text": "Always line up the  ${}^{\\prime} = {}^{\\prime}$  signs because this makes your working much clearer."
+  },
+  {
+    "id": 5817,
+    "type": "text",
+    "page_idx": 194,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 5818,
+    "type": "text",
+    "page_idx": 194,
+    "text": "An equation with  $x$  on both sides and all  $x$  terms with the same sign:"
+  },
+  {
+    "id": 5819,
+    "type": "text",
+    "page_idx": 194,
+    "text": "a Solve the equation  $5x - 2 = 3x + 6$"
+  },
+  {
+    "id": 5820,
+    "type": "text",
+    "page_idx": 194,
+    "text": "Answer"
+  },
+  {
+    "id": 5821,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n5 x - 2 = 3 x + 6\n$$"
+  },
+  {
+    "id": 5822,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n5 x - 2 - 3 x = 3 x + 6 - 3 x\n$$"
+  },
+  {
+    "id": 5823,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n2 x - 2 = 6\n$$"
+  },
+  {
+    "id": 5824,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n2 x - 2 + 2 = 6 + 2\n$$"
+  },
+  {
+    "id": 5825,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n2 x = 8\n$$"
+  },
+  {
+    "id": 5826,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n\\frac {2 x}{2} = \\frac {8}{2}\n$$"
+  },
+  {
+    "id": 5827,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\nx = 4\n$$"
+  },
+  {
+    "id": 5828,
+    "type": "text",
+    "page_idx": 194,
+    "text": "Subtract  $3x$  from both sides."
+  },
+  {
+    "id": 5829,
+    "type": "text",
+    "page_idx": 194,
+    "text": "Add 2 to both sides."
+  },
+  {
+    "id": 5830,
+    "type": "text",
+    "page_idx": 194,
+    "text": "Divide both sides by 2."
+  },
+  {
+    "id": 5831,
+    "type": "text",
+    "page_idx": 194,
+    "text": "An equation with  $x$  on both sides and  $x$  terms with different signs:"
+  },
+  {
+    "id": 5832,
+    "type": "text",
+    "page_idx": 194,
+    "text": "b Solve the equation  $5x + 12 = 20 - 11x$"
+  },
+  {
+    "id": 5833,
+    "type": "text",
+    "page_idx": 194,
+    "text": "Answer"
+  },
+  {
+    "id": 5834,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n5 x + 1 2 = 2 0 - 1 1 x\n$$"
+  },
+  {
+    "id": 5835,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n5 x + 1 2 + 1 1 x = 2 0 - 1 1 x + 1 1 x\n$$"
+  },
+  {
+    "id": 5836,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n1 6 x + 1 2 = 2 0\n$$"
+  },
+  {
+    "id": 5837,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n1 6 x + 1 2 - 1 2 = 2 0 - 1 2\n$$"
+  },
+  {
+    "id": 5838,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n1 6 x = 8\n$$"
+  },
+  {
+    "id": 5839,
+    "type": "equation",
+    "page_idx": 194,
+    "text": "$$\n\\frac {1 6 x}{1 6} = \\frac {8}{1 6}\n$$"
+  }
+]
+```

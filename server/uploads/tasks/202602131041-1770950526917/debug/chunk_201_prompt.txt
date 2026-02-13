@@ -1,0 +1,810 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 14070,
+    "type": "text",
+    "page_idx": 455,
+    "text": "g"
+  },
+  {
+    "id": 14071,
+    "type": "text",
+    "page_idx": 455,
+    "text": "h  $5p - 3 > 12$"
+  },
+  {
+    "id": 14072,
+    "type": "text",
+    "page_idx": 455,
+    "text": "$\\frac{x}{3} + 7 > 2$"
+  },
+  {
+    "id": 14073,
+    "type": "text",
+    "page_idx": 455,
+    "text": "j  $12g - 14\\geqslant 34$"
+  },
+  {
+    "id": 14074,
+    "type": "text",
+    "page_idx": 455,
+    "text": "k 22(w-4) < 88"
+  },
+  {
+    "id": 14075,
+    "type": "text",
+    "page_idx": 455,
+    "text": "1  $10 - 10k > 3$"
+  },
+  {
+    "id": 14076,
+    "type": "text",
+    "page_idx": 455,
+    "text": "2 Solve these inequalities."
+  },
+  {
+    "id": 14077,
+    "type": "text",
+    "page_idx": 455,
+    "text": "a  $\\frac{y + 6}{4} > 9$"
+  },
+  {
+    "id": 14078,
+    "type": "text",
+    "page_idx": 455,
+    "text": "b  $\\frac{y + 6}{4}\\leq 9$"
+  },
+  {
+    "id": 14079,
+    "type": "text",
+    "page_idx": 455,
+    "text": "z-2-7>13"
+  },
+  {
+    "id": 14080,
+    "type": "text",
+    "page_idx": 455,
+    "text": "d  $\\frac{3k - 1}{7} -7 > 7$"
+  },
+  {
+    "id": 14081,
+    "type": "text",
+    "page_idx": 455,
+    "text": "e"
+  },
+  {
+    "id": 14082,
+    "type": "text",
+    "page_idx": 455,
+    "text": "3 Solve these inequalities."
+  },
+  {
+    "id": 14083,
+    "type": "text",
+    "page_idx": 455,
+    "text": "a  $10q - 12 <   48 + 5q$"
+  },
+  {
+    "id": 14084,
+    "type": "text",
+    "page_idx": 455,
+    "text": "b  $3g - 7\\geqslant 5g - 18$"
+  },
+  {
+    "id": 14085,
+    "type": "text",
+    "page_idx": 455,
+    "text": "c  $3 - 7h\\leq 6 - 5h$"
+  },
+  {
+    "id": 14086,
+    "type": "text",
+    "page_idx": 455,
+    "text": "d  $3(h - 4) > 5(h - 10)$"
+  },
+  {
+    "id": 14087,
+    "type": "text",
+    "page_idx": 455,
+    "text": "$2(y - 7) + 6\\leqslant 5(y + 3) + 21$"
+  },
+  {
+    "id": 14088,
+    "type": "text",
+    "page_idx": 455,
+    "text": "f  $6(n - 4) - 2(n + 1) <   3(n + 7) + 1.$"
+  },
+  {
+    "id": 14089,
+    "type": "text",
+    "page_idx": 455,
+    "text": "g  $5(2\\nu -3) - 2(4\\nu -5)\\geqslant 8(\\nu +1)$"
+  },
+  {
+    "id": 14090,
+    "type": "text",
+    "page_idx": 455,
+    "text": "h  $\\frac{2e + 1}{9} >7 - 6e$"
+  },
+  {
+    "id": 14091,
+    "type": "text",
+    "page_idx": 455,
+    "text": "i 2t-2t+1>12"
+  },
+  {
+    "id": 14092,
+    "type": "text",
+    "page_idx": 455,
+    "text": "j 2t-2t+1>12 3 9"
+  },
+  {
+    "id": 14093,
+    "type": "text",
+    "page_idx": 455,
+    "text": "k 2t-2t+1>12 7 9"
+  },
+  {
+    "id": 14094,
+    "type": "text",
+    "page_idx": 455,
+    "text": "4 Solve these inequalities."
+  },
+  {
+    "id": 14095,
+    "type": "text",
+    "page_idx": 455,
+    "text": "a  $5 <   1 - 2x <   12$"
+  },
+  {
+    "id": 14096,
+    "type": "text",
+    "page_idx": 455,
+    "text": "b  $0 <   x + 3\\leqslant 12$"
+  },
+  {
+    "id": 14097,
+    "type": "text",
+    "page_idx": 455,
+    "text": "c  $0 <   x - 6\\leq 7$"
+  },
+  {
+    "id": 14098,
+    "type": "text",
+    "page_idx": 455,
+    "text": "d  $18 <   3x + 2\\leqslant 23$"
+  },
+  {
+    "id": 14099,
+    "type": "text",
+    "page_idx": 455,
+    "text": "$12x + 6\\leq -5x + 2 <   18$"
+  },
+  {
+    "id": 14100,
+    "type": "text",
+    "page_idx": 456,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 14101,
+    "type": "text",
+    "page_idx": 456,
+    "text": "5 The reserve price at an auction is the lowest price that will be accepted. The reserve price of a sculpture is $1700000."
+  },
+  {
+    "id": 14102,
+    "type": "text",
+    "text": "a Represent all the possible selling prices  $(p)$  on a number line.",
+    "page_idx": 456
+  },
+  {
+    "id": 14103,
+    "type": "text",
+    "text": "b Write the inequality that represents this.",
+    "page_idx": 456
+  },
+  {
+    "id": 14104,
+    "type": "text",
+    "page_idx": 456,
+    "text": "6 The sign in a goods elevator says the maximum weight allowed is 630 kilograms. A delivery person has to load boxes of books (b) each with a mass of 28 kg. Given the delivery person weighs 78 kilograms, write an inequality to represent this situation and solve it to find the largest number of boxes that can be safely loaded into the elevator."
+  },
+  {
+    "id": 14105,
+    "type": "text",
+    "page_idx": 456,
+    "text": "14.3 Regions in a plane"
+  },
+  {
+    "id": 14106,
+    "type": "text",
+    "page_idx": 456,
+    "text": "So far, you have only looked at inequalities involving a single variable. Now you will look at what happens when there are two variables connected with an inequality. In these situations you need to think about a region, which is a set of points in the coordinate plane."
+  },
+  {
+    "id": 14107,
+    "type": "text",
+    "page_idx": 456,
+    "text": "LINK"
+  },
+  {
+    "id": 14108,
+    "type": "text",
+    "page_idx": 456,
+    "text": "You will often hear the word 'region' used in geography. It refers to a section of land or sea contained within a boundary. The region might be a whole continent, a collection of countries or even a national park or shipping lane. These regions are often marked with clear boundaries on a map, or they may be shaded in different colours."
+  },
+  {
+    "id": 14109,
+    "type": "text",
+    "page_idx": 456,
+    "text": "The diagram shows a broken line that is parallel to the  $x$ -axis. Every point on the line has a  $y$ -coordinate of 3. This means that the equation of the line is  $y = 3$ ."
+  },
+  {
+    "id": 14110,
+    "type": "image",
+    "page_idx": 456,
+    "img_path": "images/69edac9f4b97acac3dc37252f9cd0dba14ede0a1e329c62364370fbdcbc4adf8.jpg"
+  },
+  {
+    "id": 14111,
+    "type": "text",
+    "page_idx": 456,
+    "text": "All of the points above the line  $y = 3$  have  $y$ -coordinates that are greater than 3. The region above the line represents the inequality  $y > 3$ . Similarly, the region below the line represents the inequality  $y < 3$ ."
+  },
+  {
+    "id": 14112,
+    "type": "text",
+    "page_idx": 457,
+    "text": "The regions  $y > 3$  and  $y < 3$  are shown on this diagram."
+  },
+  {
+    "id": 14113,
+    "type": "image",
+    "page_idx": 457,
+    "img_path": "images/0ab828e5516cf80a8f4f37d4687dd28a02d9c4d5dd9270ccfe1814c00052055e.jpg"
+  },
+  {
+    "id": 14114,
+    "type": "image",
+    "page_idx": 457,
+    "img_path": "images/cf93467c723bb78fbd500a292df96d3efb870884221e964ccae50dcfe31f6dcc.jpg"
+  },
+  {
+    "id": 14115,
+    "type": "text",
+    "page_idx": 457,
+    "text": "In the diagram below, the graph of  $y = 2x + 1$  is shown as a broken line. Every point on the line has coordinates  $(x, y)$  which satisfy  $y = 2x + 1$ ."
+  },
+  {
+    "id": 14116,
+    "type": "text",
+    "page_idx": 457,
+    "text": "$Q$  is a point on the line. Point  $P$  has a  $y$ -coordinate that is greater than the  $y$ -coordinate of  $Q$ .  $P$  and  $Q$  have the same  $x$ -coordinate. This means that for any point  $P$  in the region above the line,  $y > 2x + 1$ ."
+  },
+  {
+    "id": 14117,
+    "type": "image",
+    "page_idx": 457,
+    "img_path": "images/40c3b4f73902857e66e78f7dec86554d1a539f5c1b2d1c06e04df625a67389ea.jpg"
+  },
+  {
+    "id": 14118,
+    "type": "text",
+    "page_idx": 457,
+    "text": "The region above the line represents the inequality  $y > 2x + 1$ ."
+  },
+  {
+    "id": 14119,
+    "type": "text",
+    "page_idx": 457,
+    "text": "Similarly, the region below the line represents the inequality  $y < 2x + 1$ ."
+  },
+  {
+    "id": 14120,
+    "type": "text",
+    "page_idx": 457,
+    "text": "You can see this on the following diagram."
+  },
+  {
+    "id": 14121,
+    "type": "image",
+    "page_idx": 458,
+    "img_path": "images/bfe125dc9491cc62293ec81c0008a94f7e0a7c74d4680a92416a4e35047b2ceb.jpg"
+  },
+  {
+    "id": 14122,
+    "type": "text",
+    "page_idx": 458,
+    "text": "If the equation of the line is in the form  $y = mx + c$ , then:"
+  },
+  {
+    "id": 14123,
+    "type": "text",
+    "text": "the inequality  $y > mx + c$  is above the line",
+    "page_idx": 458
+  },
+  {
+    "id": 14124,
+    "type": "text",
+    "text": "the inequality  $y <   mx + c$  is below the line.",
+    "page_idx": 458
+  },
+  {
+    "id": 14125,
+    "type": "text",
+    "page_idx": 458,
+    "text": "If the equation is not in the form  $y = mx + c$ , you have to find a way to check which region represents which inequality."
+  },
+  {
+    "id": 14126,
+    "type": "text",
+    "page_idx": 458,
+    "text": "WORKED EXAMPLE 11"
+  },
+  {
+    "id": 14127,
+    "type": "text",
+    "page_idx": 458,
+    "text": "On a diagram, show the regions that represent the inequalities  $2x - 3y < 6$  and  $2x - 3y > 6$ ."
+  },
+  {
+    "id": 14128,
+    "type": "image",
+    "page_idx": 458,
+    "img_path": "images/64b5f63914b1cd57f133ad0bb3881b09783413ec59155866f18269e3ce682a8b.jpg",
+    "image_caption": "Answer"
+  },
+  {
+    "id": 14129,
+    "type": "text",
+    "page_idx": 458,
+    "text": "The boundary between the two required regions is the line  $2x - 3y = 6$"
+  },
+  {
+    "id": 14130,
+    "type": "text",
+    "page_idx": 458,
+    "text": "This line crosses the  $x$ -axis at  $(3,0)$  and the  $y$ -axis at  $(0, -2)$ . It is shown as a broken line in the diagram."
+  },
+  {
+    "id": 14131,
+    "type": "text",
+    "page_idx": 458,
+    "text": "Consider any point in the region above the line. The easiest point to use is the origin  $(0,0)$ . When  $x = 0$  and  $y = 0$ ,  $2x - 3y = 0$ . Since 0 is less than 6, the region above the line represents the inequality  $2x - 3y < 6$ ."
+  },
+  {
+    "id": 14132,
+    "type": "text",
+    "page_idx": 458,
+    "text": "Rules for boundaries and shading of regions"
+  },
+  {
+    "id": 14133,
+    "type": "text",
+    "page_idx": 458,
+    "text": "You have already seen inequalities are not always  $<$  or  $>$ . They may also be  $\\leqslant$  or  $\\geqslant$ . Graphical representations have to show the difference between these variations."
+  },
+  {
+    "id": 14134,
+    "type": "text",
+    "page_idx": 458,
+    "text": "When the inequality includes equal to  $(\\leqslant$  or  $\\geqslant$  ), the boundary line must be included in the graphical representation. It is therefore shown as a solid line."
+  },
+  {
+    "id": 14135,
+    "type": "text",
+    "page_idx": 459,
+    "text": "When the inequality does not include equal to  $(< \\text{or} >)$ , the boundary line is not included in the graphical representation, so it is shown as a broken line."
+  },
+  {
+    "id": 14136,
+    "type": "text",
+    "page_idx": 459,
+    "text": "TIP"
+  },
+  {
+    "id": 14137,
+    "type": "text",
+    "page_idx": 459,
+    "text": "Sometimes it is better to shade out the unwanted region."
+  },
+  {
+    "id": 14138,
+    "type": "text",
+    "page_idx": 459,
+    "text": "WORKED EXAMPLE 12"
+  },
+  {
+    "id": 14139,
+    "type": "text",
+    "page_idx": 459,
+    "text": "By shading the unwanted region, show the region that represents the inequality  $3x - 5y \\leqslant 15$ ."
+  },
+  {
+    "id": 14140,
+    "type": "text",
+    "page_idx": 459,
+    "text": "Answer"
+  },
+  {
+    "id": 14141,
+    "type": "image",
+    "page_idx": 459,
+    "img_path": "images/f331557493516c2de28b36e439b594cf304f074f91a7f203710dda807368e831.jpg"
+  },
+  {
+    "id": 14142,
+    "type": "text",
+    "page_idx": 459,
+    "text": "The boundary line is  $3x - 5y = 15$  and it is included in the region (because the inequality includes equal to)."
+  },
+  {
+    "id": 14143,
+    "type": "text",
+    "page_idx": 459,
+    "text": "This line crosses the  $x$  -axis at (5, 0) and crosses the  $y$  -axis at  $(0, - 3)$  .It is shown as a solid line in the diagram."
+  },
+  {
+    "id": 14144,
+    "type": "text",
+    "page_idx": 459,
+    "text": "When  $x = 0$  and  $y = 0$ ,  $3x - 5y = 0$ . Since 0 is less than 15, the origin (0, 0) is in the required region. (Alternatively, rearrange  $3x - 5y \\leqslant 15$  to get  $y \\geqslant \\frac{3}{5}x - 3$  and deduce that the required region is above the line.) The unshaded region in this diagram represents the inequality  $3x - 5y \\leqslant 15$ ."
+  },
+  {
+    "id": 14145,
+    "type": "text",
+    "page_idx": 459,
+    "text": "WORKED EXAMPLE 13"
+  },
+  {
+    "id": 14146,
+    "type": "text",
+    "page_idx": 459,
+    "text": "By shading the unwanted region, show the region that represents the inequality  $3x - 2y \\geq 0$ ."
+  },
+  {
+    "id": 14147,
+    "type": "text",
+    "page_idx": 459,
+    "text": "Answer"
+  },
+  {
+    "id": 14148,
+    "type": "image",
+    "page_idx": 459,
+    "img_path": "images/03c338337a682ed02b0cefc3dd2304249ad2303e38924afee579c89a236bbafe.jpg"
+  },
+  {
+    "id": 14149,
+    "type": "text",
+    "page_idx": 459,
+    "text": "You cannot take the origin as the checking point because it lies on the boundary line. Instead take the point  $P(0,2)$ , which is above the line. When  $x = 0$  and  $y = 2$ ,  $3x - 2y = -4$ , which is less than 0. Hence  $P$  is not in the required region."
+  },
+  {
+    "id": 14150,
+    "type": "text",
+    "page_idx": 459,
+    "text": "The boundary line is  $3x - 2y = 0$  and it is included in the region. It is shown as a solid line in the diagram."
+  },
+  {
+    "id": 14151,
+    "type": "text",
+    "page_idx": 460,
+    "text": "WORKED EXAMPLE 14"
+  },
+  {
+    "id": 14152,
+    "type": "text",
+    "page_idx": 460,
+    "text": "Find the inequality that is represented by the unshaded region in this diagram."
+  },
+  {
+    "id": 14153,
+    "type": "image",
+    "page_idx": 460,
+    "img_path": "images/8c98cf8f6669d84114baad161e1c4cf4294f1503e44baa5bd924bebd404d2d85.jpg"
+  },
+  {
+    "id": 14154,
+    "type": "text",
+    "page_idx": 460,
+    "text": "Answer"
+  },
+  {
+    "id": 14155,
+    "type": "text",
+    "page_idx": 460,
+    "text": "First find the equation of the boundary. Its gradient  $= \\frac{-4}{2} = -2$  and its intercept on the  $y$ -axis is  $y = 4$ . Therefore the boundary line is  $y = -2x + 4$ . This can be rewritten as  $y + 2x = 4$ . Take  $P(3,2)$  in the unshaded region as the check-point:  $2 + 6 = 8$ . Note that 8 is greater than 4 and hence the unshaded region represents  $y + 2x > 4$ . As the boundary is a broken line, it is not included, and so the sign is not  $\\geq$ ."
+  },
+  {
+    "id": 14156,
+    "type": "text",
+    "page_idx": 460,
+    "text": "Exercise 14.5"
+  },
+  {
+    "id": 14157,
+    "type": "text",
+    "page_idx": 460,
+    "text": "For questions 1 to 3, show your answers on a grid with  $x$ - and  $y$ -axes running from -3 to +4."
+  },
+  {
+    "id": 14158,
+    "type": "text",
+    "text": "1 By shading the unwanted region, show the region that represents the inequality  $2y - 3x \\geq 6$ .",
+    "page_idx": 460
+  },
+  {
+    "id": 14159,
+    "type": "text",
+    "text": "2 By shading the unwanted region, show the region that represents the inequality  $x + 2y < 4$ .",
+    "page_idx": 460
+  },
+  {
+    "id": 14160,
+    "type": "text",
+    "text": "3 By shading the unwanted region, show the region that represents the inequality  $x - y \\geq 0$ .",
+    "page_idx": 460
+  },
+  {
+    "id": 14161,
+    "type": "text",
+    "text": "4 Shade the region that represents each inequality.",
+    "page_idx": 460
+  },
+  {
+    "id": 14162,
+    "type": "text",
+    "page_idx": 460,
+    "text": "a  $y > 3 - {3x}$"
+  },
+  {
+    "id": 14163,
+    "type": "text",
+    "page_idx": 460,
+    "text": "b  $3x - 2y\\geq 6$"
+  },
+  {
+    "id": 14164,
+    "type": "text",
+    "page_idx": 460,
+    "text": "c  $x\\leqslant 5$"
+  },
+  {
+    "id": 14165,
+    "type": "text",
+    "page_idx": 460,
+    "text": "d  $y > 3$"
+  },
+  {
+    "id": 14166,
+    "type": "text",
+    "page_idx": 460,
+    "text": "$x + 3y\\leqslant 10$"
+  },
+  {
+    "id": 14167,
+    "type": "text",
+    "page_idx": 460,
+    "text": "[ - 3 < x < 5]"
+  },
+  {
+    "id": 14168,
+    "type": "text",
+    "page_idx": 460,
+    "text": "g  $0\\leqslant x\\leqslant 2$"
+  },
+  {
+    "id": 14169,
+    "type": "text",
+    "page_idx": 460,
+    "text": "5 Copy and complete these statements by choosing the correct option:"
+  }
+]
+```

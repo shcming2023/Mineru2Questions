@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 12880,
+    "type": "text",
+    "page_idx": 412,
+    "text": "metric"
+  },
+  {
+    "id": 12881,
+    "type": "text",
+    "page_idx": 412,
+    "text": "upper bound"
+  },
+  {
+    "id": 12882,
+    "type": "text",
+    "page_idx": 412,
+    "text": "13.1 Understanding units"
+  },
+  {
+    "id": 12883,
+    "type": "text",
+    "page_idx": 412,
+    "text": "Vishal has a  $1\\mathrm{m} \\times 1\\mathrm{m} \\times 1\\mathrm{m}$  box and has collected a large number of  $1\\mathrm{cm} \\times 1\\mathrm{cm} \\times 1\\mathrm{cm}$  building blocks. He decides to stack all the cubes neatly into the box."
+  },
+  {
+    "id": 12884,
+    "type": "text",
+    "page_idx": 412,
+    "text": "Try to imagine a  $1\\mathrm{m}\\times 1\\mathrm{m}\\times 1\\mathrm{m}$  box."
+  },
+  {
+    "id": 12885,
+    "type": "text",
+    "page_idx": 412,
+    "text": "The length of each side is  $1\\mathrm{m} = 100\\mathrm{cm}$ . The total number of  $1\\mathrm{cm} \\times 1\\mathrm{cm} \\times 1\\mathrm{cm}$  cubes that fit inside is  $100 \\times 100 \\times 100 = 1000000$ ."
+  },
+  {
+    "id": 12886,
+    "type": "text",
+    "page_idx": 412,
+    "text": "This means that one cubic metre is equivalent to one million cubic centimetres! So, you can see that if you change the units you measure with, the number of units can be very different."
+  },
+  {
+    "id": 12887,
+    "type": "image",
+    "page_idx": 412,
+    "img_path": "images/5aee5e1a45439254b61ff0d90a8d45186e6da66684131015a1ba3c0f695e7607.jpg"
+  },
+  {
+    "id": 12888,
+    "type": "text",
+    "page_idx": 412,
+    "text": "LINK"
+  },
+  {
+    "id": 12889,
+    "type": "text",
+    "page_idx": 412,
+    "text": "Almost all work in physics involves studying the relationships between different quantities we can measure. Physicists need to understand how units relate to one another. The way in which we express masses, speeds, temperatures and a vast array of other quantities can depend on the units used."
+  },
+  {
+    "id": 12890,
+    "type": "text",
+    "page_idx": 413,
+    "text": "LINK"
+  },
+  {
+    "id": 12891,
+    "type": "text",
+    "page_idx": 413,
+    "text": "Centimetres and metres are examples of metric measurements. The table below shows some important conversions."
+  },
+  {
+    "id": 12892,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Measure</td><td>Units used</td><td>Equivalent to ...</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12893,
+    "type": "text",
+    "text": "[Table Row] <tr><td rowspan=\"4\">Length - how long (or tall) something is.</td><td>Millimetres (mm)</td><td>10mm = 1cm</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12894,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Centimetres (cm)</td><td>100cm = 1m</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12895,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Metres (m)</td><td>1000m = 1km</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12896,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Kilometres (km)</td><td>1km = 1000000mm</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12897,
+    "type": "text",
+    "text": "[Table Row] <tr><td rowspan=\"4\">Mass - the amount of material in an object.</td><td>Milligrams (mg)</td><td>1000mg = 1g</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12898,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Grams (g)</td><td>1000g = 1kg</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12899,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Kilograms (kg)</td><td>1000kg = 1t</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12900,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Tonnes (t)</td><td>1t = 1000000g</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12901,
+    "type": "text",
+    "text": "[Table Row] <tr><td rowspan=\"3\">Capacity - the inside volume of a container; how much it can hold.</td><td>Millilitres (ml)</td><td>10ml = 1cl</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12902,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Centilitres (cl)</td><td>100cl = 1l</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12903,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Litres (l)</td><td>1l = 1000ml</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12904,
+    "type": "text",
+    "text": "[Table Row] <tr><td rowspan=\"5\">Area - the amount of space taken up by a flat (two-dimensional) shape, always measured in square units.</td><td>Square millimetres (mm2)</td><td>100mm2 = 1cm2</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12905,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Square centimetres (cm2)</td><td>10000cm2 = 1m2</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12906,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Square metres (m2)</td><td>1000000m2 = 1km2</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12907,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Square kilometres (km2)</td><td>1km2 = 100ha</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12908,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Hectares (ha)</td><td>1ha = 10000m2</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12909,
+    "type": "text",
+    "text": "[Table Row] <tr><td rowspan=\"4\">Volume - the amount of space taken up by a three-dimensional object, always measured in cubic units (or their equivalent liquid measurements, e.g. ml).</td><td>Cubic millimetres (mm3)</td><td>1000mm3 = 1cm3</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12910,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Cubic centimetres (cm3)</td><td>1000000cm3 = 1m3</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12911,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Cubic metres (m3)</td><td>1m3 = 1000l</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12912,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Millilitres (ml)</td><td>1cm3 = 1ml</td></tr>",
+    "page_idx": 413
+  },
+  {
+    "id": 12913,
+    "type": "text",
+    "page_idx": 413,
+    "text": "LINK"
+  },
+  {
+    "id": 12914,
+    "type": "text",
+    "page_idx": 413,
+    "text": "The International System of Units (known as S.I. units, from the French name Système International) is the most commonly accepted and used system for units in science. It was developed over many years, starting around 1742 when the Swedish astronomer Anders Celsius devised a standard temperature scale. You can look up the units included in this system and see how many you recognise."
+  },
+  {
+    "id": 12915,
+    "type": "text",
+    "page_idx": 413,
+    "text": "TIP"
+  },
+  {
+    "id": 12916,
+    "type": "text",
+    "page_idx": 413,
+    "text": "Capacity measures what something can contain, not how much it does contain. For example, a jug with a capacity of 1 litre might be half full and only contain 500 ml. In this case, you can say the volume of liquid in the jug is 500 ml."
+  },
+  {
+    "id": 12917,
+    "type": "text",
+    "page_idx": 414,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 12918,
+    "type": "text",
+    "page_idx": 414,
+    "text": "Express:"
+  },
+  {
+    "id": 12919,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a 5km in cm"
+  },
+  {
+    "id": 12920,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b 3.2cm in m"
+  },
+  {
+    "id": 12921,
+    "type": "text",
+    "page_idx": 414,
+    "text": "2000000cm² in m²."
+  },
+  {
+    "id": 12922,
+    "type": "text",
+    "page_idx": 414,
+    "text": "Answers"
+  },
+  {
+    "id": 12923,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a  $1\\mathrm{km} = 1000\\mathrm{m} = 1000\\times 100\\mathrm{cm} = 100000\\mathrm{cm}$"
+  },
+  {
+    "id": 12924,
+    "type": "text",
+    "page_idx": 414,
+    "text": "So.  $5\\mathrm{km} = 5\\times 100000\\mathrm{cm} = 500000\\mathrm{cm}$"
+  },
+  {
+    "id": 12925,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b  $100\\mathrm{cm} = 1\\mathrm{m}$  so  $1\\mathrm{cm} = 0.01\\mathrm{m}$"
+  },
+  {
+    "id": 12926,
+    "type": "text",
+    "page_idx": 414,
+    "text": "So,  $3.2\\mathrm{cm} = 3.2 \\times 0.01 = 0.032\\mathrm{m}$"
+  },
+  {
+    "id": 12927,
+    "type": "text",
+    "page_idx": 414,
+    "text": "$1\\mathrm{m}^2 = 100\\mathrm{cm}\\times 100\\mathrm{cm} = 10000\\mathrm{cm}^2$"
+  },
+  {
+    "id": 12928,
+    "type": "text",
+    "page_idx": 414,
+    "text": "So,  $2000000\\mathrm{cm}^2 = \\frac{2000000}{10000} = 200\\mathrm{m}^2$"
+  },
+  {
+    "id": 12929,
+    "type": "text",
+    "page_idx": 414,
+    "text": "Exercise 13.1"
+  },
+  {
+    "id": 12930,
+    "type": "text",
+    "page_idx": 414,
+    "text": "Express each quantity in the unit given in brackets."
+  },
+  {
+    "id": 12931,
+    "type": "text",
+    "page_idx": 414,
+    "text": "4kg (g)"
+  },
+  {
+    "id": 12932,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b 5km (m)"
+  },
+  {
+    "id": 12933,
+    "type": "text",
+    "page_idx": 414,
+    "text": "35mm (cm)"
+  },
+  {
+    "id": 12934,
+    "type": "text",
+    "page_idx": 414,
+    "text": "d 81 mm (cm)"
+  },
+  {
+    "id": 12935,
+    "type": "text",
+    "page_idx": 414,
+    "text": "e  $7.3\\mathrm{g(mg)}$"
+  },
+  {
+    "id": 12936,
+    "type": "text",
+    "page_idx": 414,
+    "text": "f 5760kg(t)"
+  },
+  {
+    "id": 12937,
+    "type": "text",
+    "page_idx": 414,
+    "text": "g 2.1 m (cm)"
+  },
+  {
+    "id": 12938,
+    "type": "text",
+    "page_idx": 414,
+    "text": "2t (kg)"
+  },
+  {
+    "id": 12939,
+    "type": "text",
+    "page_idx": 414,
+    "text": "140cm(m)"
+  },
+  {
+    "id": 12940,
+    "type": "text",
+    "page_idx": 414,
+    "text": "2024g(kg)"
+  },
+  {
+    "id": 12941,
+    "type": "text",
+    "page_idx": 414,
+    "text": "121mg (g)"
+  },
+  {
+    "id": 12942,
+    "type": "text",
+    "page_idx": 414,
+    "text": "23m (mm)"
+  },
+  {
+    "id": 12943,
+    "type": "text",
+    "page_idx": 414,
+    "text": "m 3cm 5mm (mm)"
+  },
+  {
+    "id": 12944,
+    "type": "text",
+    "page_idx": 414,
+    "text": "8km36m(m)"
+  },
+  {
+    "id": 12945,
+    "type": "text",
+    "page_idx": 414,
+    "text": "9g77mg(g)"
+  },
+  {
+    "id": 12946,
+    "type": "text",
+    "page_idx": 414,
+    "text": "2 Arrange the following lengths in order of size, starting with the smallest."
+  },
+  {
+    "id": 12947,
+    "type": "text",
+    "page_idx": 414,
+    "text": "324cm,3.22m,3m"
+  },
+  {
+    "id": 12948,
+    "type": "text",
+    "page_idx": 414,
+    "text": "3 Write the following volumes in order, starting with the smallest."
+  },
+  {
+    "id": 12949,
+    "type": "text",
+    "page_idx": 414,
+    "text": "1 litre, 780 ml, 125 ml, 0.65 litres"
+  },
+  {
+    "id": 12950,
+    "type": "text",
+    "page_idx": 414,
+    "text": "How many 5ml spoonfuls are there in a bottle that contains 0.3 litres of medicine?"
+  },
+  {
+    "id": 12951,
+    "type": "text",
+    "page_idx": 414,
+    "text": "5 Express each quantity in the units given in brackets."
+  },
+  {
+    "id": 12952,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a 14.23m (mm.km)"
+  },
+  {
+    "id": 12953,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b 19.06 g (mg. t)"
+  },
+  {
+    "id": 12954,
+    "type": "text",
+    "page_idx": 414,
+    "text": "23 litres (ml, cl)"
+  },
+  {
+    "id": 12955,
+    "type": "text",
+    "page_idx": 414,
+    "text": "d  $4\\mathrm{m}^2 (\\mathrm{mm}^2,\\mathrm{ha})$"
+  },
+  {
+    "id": 12956,
+    "type": "text",
+    "page_idx": 414,
+    "text": "13cm²（mm²，ha）"
+  },
+  {
+    "id": 12957,
+    "type": "text",
+    "page_idx": 414,
+    "text": "10cm3(mm3,m3)"
+  },
+  {
+    "id": 12958,
+    "type": "text",
+    "page_idx": 414,
+    "text": "6 A cube has sides of length  $3\\mathrm{m}$  . Find the volume of the cube in:"
+  },
+  {
+    "id": 12959,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a m"
+  },
+  {
+    "id": 12960,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b cm³"
+  },
+  {
+    "id": 12961,
+    "type": "text",
+    "page_idx": 414,
+    "text": "$\\mathbb{C}$  mm3 (give your answer in standard form)."
+  },
+  {
+    "id": 12962,
+    "type": "text",
+    "page_idx": 414,
+    "text": "The average radius of the Earth is  $6378\\mathrm{km}$"
+  },
+  {
+    "id": 12963,
+    "type": "text",
+    "page_idx": 414,
+    "text": "Assuming the Earth is a sphere, find the volume of the Earth, using each of the following units. Give your answers in standard form to 3 significant figures."
+  },
+  {
+    "id": 12964,
+    "type": "text",
+    "page_idx": 414,
+    "text": "The volume of a sphere  $= \\frac{4}{3}\\pi r^3$"
+  },
+  {
+    "id": 12965,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a km³"
+  },
+  {
+    "id": 12966,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b m"
+  },
+  {
+    "id": 12967,
+    "type": "text",
+    "page_idx": 414,
+    "text": "c mm"
+  },
+  {
+    "id": 12968,
+    "type": "image",
+    "page_idx": 414,
+    "img_path": "images/edb35d6485d32d309d20050c608dcf22946199bcd7d6d1fbd0dfeb800f3dc7cd.jpg"
+  },
+  {
+    "id": 12969,
+    "type": "text",
+    "page_idx": 414,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 12970,
+    "type": "text",
+    "page_idx": 414,
+    "text": "You learnt how to calculate volumes of three-dimensional shapes in Chapter"
+  },
+  {
+    "id": 12971,
+    "type": "text",
+    "page_idx": 414,
+    "text": "7. You also need to remember what you learnt about standard form in Chapter 5."
+  },
+  {
+    "id": 12972,
+    "type": "text",
+    "page_idx": 415,
+    "text": "8 The dimensions of the cone shown in the diagram are given in cm."
+  },
+  {
+    "id": 12973,
+    "type": "text",
+    "page_idx": 415,
+    "text": "Calculate the volume of the cone in:"
+  },
+  {
+    "id": 12974,
+    "type": "text",
+    "page_idx": 415,
+    "text": "a cm"
+  },
+  {
+    "id": 12975,
+    "type": "text",
+    "page_idx": 415,
+    "text": "b mm"
+  },
+  {
+    "id": 12976,
+    "type": "text",
+    "page_idx": 415,
+    "text": "C"
+  },
+  {
+    "id": 12977,
+    "type": "text",
+    "page_idx": 415,
+    "text": "km"
+  },
+  {
+    "id": 12978,
+    "type": "text",
+    "page_idx": 415,
+    "text": "Give your answers in standard form to 3 significant figures."
+  },
+  {
+    "id": 12979,
+    "type": "text",
+    "page_idx": 415,
+    "text": "MATHEMATICAL CONNECTIONS"
+  }
+]
+```

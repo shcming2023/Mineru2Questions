@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 12670,
+    "type": "text",
+    "text": "j Explain why either the range or the interquartile range would be a suitable measure of spread for this data. [2]",
+    "page_idx": 401
+  },
+  {
+    "id": 12671,
+    "type": "text",
+    "page_idx": 401,
+    "text": "4 The following data shows the shoe sizes of people who use a bouncy castle."
+  },
+  {
+    "id": 12672,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Shoe size</td><td>Frequency</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12673,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2</td><td>21</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12674,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td>11</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12675,
+    "type": "text",
+    "text": "[Table Row] <tr><td>4</td><td>2</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12676,
+    "type": "text",
+    "text": "[Table Row] <tr><td>5</td><td>n</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12677,
+    "type": "text",
+    "text": "[Table Row] <tr><td>6</td><td>5</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12678,
+    "type": "text",
+    "text": "[Table Row] <tr><td>7</td><td>2</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12679,
+    "type": "text",
+    "text": "[Table Row] <tr><td>8</td><td>1</td></tr>",
+    "page_idx": 401
+  },
+  {
+    "id": 12680,
+    "type": "text",
+    "text": "a The median shoe size is known to be 3. Find the smallest and largest possible values of  $n$  [3]",
+    "page_idx": 401
+  },
+  {
+    "id": 12681,
+    "type": "text",
+    "text": "Find the mean shoe size, giving your answer in terms of  $n$ . [2]",
+    "page_idx": 401
+  },
+  {
+    "id": 12682,
+    "type": "text",
+    "page_idx": 402,
+    "text": "The mean shoe size is known to be 3.5. Find the number of people with size 5 shoes."
+  },
+  {
+    "id": 12683,
+    "type": "text",
+    "page_idx": 402,
+    "text": "[3]"
+  },
+  {
+    "id": 12684,
+    "type": "text",
+    "page_idx": 402,
+    "text": "State the modal shoe size."
+  },
+  {
+    "id": 12685,
+    "type": "text",
+    "page_idx": 402,
+    "text": "[1]"
+  },
+  {
+    "id": 12686,
+    "type": "text",
+    "page_idx": 402,
+    "text": "5 The temperature,  $T^{\\circ}C$  , in a hotel room is recorded several times in a single day."
+  },
+  {
+    "id": 12687,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Temp (T°C)</td><td>25 &lt; T ≤ 30</td><td>30 &lt; T ≤ 35</td><td>35 &lt; T ≤ 40</td><td>40 &lt; T ≤ 45</td></tr>",
+    "page_idx": 402
+  },
+  {
+    "id": 12688,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Frequency</td><td>16</td><td>5</td><td>2</td><td>1</td></tr>",
+    "page_idx": 402
+  },
+  {
+    "id": 12689,
+    "type": "text",
+    "text": "a Find the number of times the temperature of the room was recorded. [2]",
+    "page_idx": 402
+  },
+  {
+    "id": 12690,
+    "type": "text",
+    "text": "b State the modal class. [1]",
+    "page_idx": 402
+  },
+  {
+    "id": 12691,
+    "type": "text",
+    "text": "c Calculate an estimate for the mean room temperature. [3]",
+    "page_idx": 402
+  },
+  {
+    "id": 12692,
+    "type": "text",
+    "page_idx": 402,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 12693,
+    "type": "text",
+    "page_idx": 402,
+    "text": "Analysing your mistakes can help you improve."
+  },
+  {
+    "id": 12694,
+    "type": "text",
+    "page_idx": 402,
+    "text": "Consider any questions that you got wrong."
+  },
+  {
+    "id": 12695,
+    "type": "text",
+    "text": "Did you understand the question and know what to do? If not, what can you do about this?",
+    "page_idx": 402
+  },
+  {
+    "id": 12696,
+    "type": "text",
+    "text": "- Did you make any errors in your calculations? If so, what can you do to avoid these errors in future?",
+    "page_idx": 402
+  },
+  {
+    "id": 12697,
+    "type": "text",
+    "text": "- Would doing corrections help you? If so, redo the questions you got wrong.",
+    "page_idx": 402
+  },
+  {
+    "id": 12698,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Past paper questions"
+  },
+  {
+    "id": 12699,
+    "type": "text",
+    "page_idx": 403,
+    "text": "1 The nth term of a sequence is  $6n - 4$"
+  },
+  {
+    "id": 12700,
+    "type": "text",
+    "text": "a Write down the first 3 terms in this sequence.",
+    "page_idx": 403
+  },
+  {
+    "id": 12701,
+    "type": "text",
+    "text": "b The  $k$ th term of this sequence is 422.",
+    "page_idx": 403
+  },
+  {
+    "id": 12702,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Work out the value of  $k$ ."
+  },
+  {
+    "id": 12703,
+    "type": "text",
+    "page_idx": 403,
+    "text": "[1]"
+  },
+  {
+    "id": 12704,
+    "type": "text",
+    "page_idx": 403,
+    "text": "TIP"
+  },
+  {
+    "id": 12705,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Unit 3 Past Paper"
+  },
+  {
+    "id": 12706,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Questions Resource"
+  },
+  {
+    "id": 12707,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Sheet is available on"
+  },
+  {
+    "id": 12708,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Cambridge O."
+  },
+  {
+    "id": 12709,
+    "type": "text",
+    "page_idx": 403,
+    "text": "[2]"
+  },
+  {
+    "id": 12710,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q12, June 2021"
+  },
+  {
+    "id": 12711,
+    "type": "text",
+    "page_idx": 403,
+    "text": "2 Expand and simplify."
+  },
+  {
+    "id": 12712,
+    "type": "equation",
+    "page_idx": 403,
+    "text": "$$\n(x - 5) (x - 7)\n$$"
+  },
+  {
+    "id": 12713,
+    "type": "text",
+    "page_idx": 403,
+    "text": "[2]"
+  },
+  {
+    "id": 12714,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q17, June 2020"
+  },
+  {
+    "id": 12715,
+    "type": "image",
+    "page_idx": 403,
+    "img_path": "images/4fad025446aaf79ff3b6c1d30a6019052a4e08ce2baf6757dcb5d14b3cf40e9d.jpg"
+  },
+  {
+    "id": 12716,
+    "type": "text",
+    "page_idx": 403,
+    "text": "The diagram shows a right-angled triangle."
+  },
+  {
+    "id": 12717,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Calculate the value of  $x$ ."
+  },
+  {
+    "id": 12718,
+    "type": "text",
+    "page_idx": 403,
+    "text": "[2]"
+  },
+  {
+    "id": 12719,
+    "type": "text",
+    "page_idx": 403,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q12, June 2019"
+  },
+  {
+    "id": 12720,
+    "type": "text",
+    "page_idx": 404,
+    "text": "4 The diagram shows a point  $P$  and a line  $L$ ."
+  },
+  {
+    "id": 12721,
+    "type": "image",
+    "page_idx": 404,
+    "img_path": "images/5ac5c75f8daa7ebbe4186cec4c1f394aedc613a97ef4bae1d1cdc7426286d191.jpg"
+  },
+  {
+    "id": 12722,
+    "type": "text",
+    "page_idx": 404,
+    "text": "a Write down the co-ordinates of point  $P$"
+  },
+  {
+    "id": 12723,
+    "type": "text",
+    "page_idx": 404,
+    "text": "[1]"
+  },
+  {
+    "id": 12724,
+    "type": "text",
+    "page_idx": 404,
+    "text": "b Find the gradient of line  $L$"
+  },
+  {
+    "id": 12725,
+    "type": "text",
+    "page_idx": 404,
+    "text": "[2]"
+  },
+  {
+    "id": 12726,
+    "type": "text",
+    "page_idx": 404,
+    "text": "c Write down the equation of line  $L$  in the form  $y = mx + c$"
+  },
+  {
+    "id": 12727,
+    "type": "text",
+    "page_idx": 404,
+    "text": "[2]"
+  },
+  {
+    "id": 12728,
+    "type": "text",
+    "page_idx": 404,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q22, June 2019"
+  },
+  {
+    "id": 12729,
+    "type": "text",
+    "page_idx": 404,
+    "text": "5"
+  },
+  {
+    "id": 12730,
+    "type": "image",
+    "page_idx": 404,
+    "img_path": "images/5b0e3fe8dc69873cabb91840331d6a991163364c7de95843c96d5eb0a700e3e0.jpg"
+  },
+  {
+    "id": 12731,
+    "type": "image",
+    "page_idx": 404,
+    "img_path": "images/a2ca070377ac5a05c66b9ee57d42c740ca491c7ace19d66297d4a5d0e5ef029d.jpg"
+  },
+  {
+    "id": 12732,
+    "type": "text",
+    "page_idx": 404,
+    "text": "a Explain why triangle ABC and triangle PQR are similar."
+  },
+  {
+    "id": 12733,
+    "type": "text",
+    "page_idx": 404,
+    "text": "[1]"
+  },
+  {
+    "id": 12734,
+    "type": "text",
+    "page_idx": 404,
+    "text": "b' Find AC."
+  },
+  {
+    "id": 12735,
+    "type": "text",
+    "page_idx": 404,
+    "text": "[2]"
+  },
+  {
+    "id": 12736,
+    "type": "text",
+    "page_idx": 404,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q17, June 2019"
+  },
+  {
+    "id": 12737,
+    "type": "text",
+    "page_idx": 405,
+    "text": "6 These are the first four terms of a sequence."
+  },
+  {
+    "id": 12738,
+    "type": "text",
+    "page_idx": 405,
+    "text": "5 8 11 14"
+  },
+  {
+    "id": 12739,
+    "type": "text",
+    "page_idx": 405,
+    "text": "a Write down the next term."
+  },
+  {
+    "id": 12740,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[1]"
+  },
+  {
+    "id": 12741,
+    "type": "text",
+    "page_idx": 405,
+    "text": "b Find an expression, in terms of  $n$ , for the  $n$ th term."
+  },
+  {
+    "id": 12742,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[2]"
+  },
+  {
+    "id": 12743,
+    "type": "text",
+    "page_idx": 405,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q16, June 2019"
+  },
+  {
+    "id": 12744,
+    "type": "text",
+    "page_idx": 405,
+    "text": "7 The diagram shows a line  $L$  and two points,  $A$  and  $B$ , on a grid."
+  },
+  {
+    "id": 12745,
+    "type": "image",
+    "page_idx": 405,
+    "img_path": "images/682a3aaef47b007dd4d90c48ae1fb58472e91cea61c8d647e11953ef0fff5b5d.jpg"
+  },
+  {
+    "id": 12746,
+    "type": "text",
+    "page_idx": 405,
+    "text": "a Write down the coordinates of point  $A$"
+  },
+  {
+    "id": 12747,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[1]"
+  },
+  {
+    "id": 12748,
+    "type": "text",
+    "page_idx": 405,
+    "text": "Find the gradient of line  $L$"
+  },
+  {
+    "id": 12749,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[1]"
+  },
+  {
+    "id": 12750,
+    "type": "text",
+    "page_idx": 405,
+    "text": "Write down the equation of line  $L$  in the form  $y = mx + c$"
+  },
+  {
+    "id": 12751,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[2]"
+  },
+  {
+    "id": 12752,
+    "type": "text",
+    "page_idx": 405,
+    "text": "c i Draw a line that is perpendicular to line  $L$  and passes through the point  $A$"
+  },
+  {
+    "id": 12753,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[Using Figure 1 in the Unit 3 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 12754,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[1]"
+  },
+  {
+    "id": 12755,
+    "type": "text",
+    "page_idx": 405,
+    "text": "This line crosses the  $x$ -axis at point  $C$ ."
+  },
+  {
+    "id": 12756,
+    "type": "text",
+    "page_idx": 405,
+    "text": "Mark point  $C$  on the grid and write down the coordinates of point  $C$ ."
+  },
+  {
+    "id": 12757,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[Using Figure 1 in the Unit 3 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 12758,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[1]"
+  },
+  {
+    "id": 12759,
+    "type": "text",
+    "page_idx": 405,
+    "text": "iii Find, by measuring, the perimeter of triangle ABC."
+  },
+  {
+    "id": 12760,
+    "type": "text",
+    "page_idx": 405,
+    "text": "[2]"
+  },
+  {
+    "id": 12761,
+    "type": "text",
+    "page_idx": 405,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 31 Q4, June 2021"
+  },
+  {
+    "id": 12762,
+    "type": "text",
+    "page_idx": 406,
+    "text": "8 a On Monday, Main Street station sells 40 tickets."
+  },
+  {
+    "id": 12763,
+    "type": "text",
+    "page_idx": 406,
+    "text": "There are four types of ticket: infant, child, adult and senior."
+  },
+  {
+    "id": 12764,
+    "type": "text",
+    "page_idx": 406,
+    "text": "The bar chart shows the number of infant, child and adult tickets sold."
+  },
+  {
+    "id": 12765,
+    "type": "image",
+    "page_idx": 406,
+    "img_path": "images/22eec4908f0985c2cf5036e2e1edec00d503f627373f9b3d3d3c3e2cde1d8667.jpg"
+  },
+  {
+    "id": 12766,
+    "type": "text",
+    "page_idx": 406,
+    "text": "Complete the bar chart. [Using Figure 2 in the Unit 3 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 12767,
+    "type": "text",
+    "page_idx": 406,
+    "text": "[1]"
+  },
+  {
+    "id": 12768,
+    "type": "text",
+    "page_idx": 406,
+    "text": "ii Find how many more adult tickets were sold than child tickets."
+  },
+  {
+    "id": 12769,
+    "type": "text",
+    "page_idx": 406,
+    "text": "[1]"
+  }
+]
+```

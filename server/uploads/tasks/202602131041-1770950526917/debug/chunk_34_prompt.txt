@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2380,
+    "type": "equation",
+    "page_idx": 65,
+    "text": "$$\nx (y - z) = x y - x z\n$$"
+  },
+  {
+    "id": 2381,
+    "type": "equation",
+    "page_idx": 65,
+    "text": "$$\n- x (y + z) = - x y - x z\n$$"
+  },
+  {
+    "id": 2382,
+    "type": "equation",
+    "page_idx": 65,
+    "text": "$$\n- x (y - z) = - x y + x z\n$$"
+  },
+  {
+    "id": 2383,
+    "type": "text",
+    "page_idx": 65,
+    "text": "TIP"
+  },
+  {
+    "id": 2384,
+    "type": "text",
+    "page_idx": 65,
+    "text": "Expanding brackets is really just multiplying, so the same rules you used for multiplication apply in these examples."
+  },
+  {
+    "id": 2385,
+    "type": "text",
+    "page_idx": 65,
+    "text": "WORKED EXAMPLE 9"
+  },
+  {
+    "id": 2386,
+    "type": "text",
+    "page_idx": 65,
+    "text": "Expand the following expressions."
+  },
+  {
+    "id": 2387,
+    "type": "text",
+    "page_idx": 65,
+    "text": "a 2(2x+6)"
+  },
+  {
+    "id": 2388,
+    "type": "text",
+    "page_idx": 65,
+    "text": "b 4(7-2x)"
+  },
+  {
+    "id": 2389,
+    "type": "text",
+    "page_idx": 65,
+    "text": "c  $2x(x + 3y)$"
+  },
+  {
+    "id": 2390,
+    "type": "text",
+    "page_idx": 65,
+    "text": "d  $xy(2 - 3x)$"
+  },
+  {
+    "id": 2391,
+    "type": "text",
+    "page_idx": 65,
+    "text": "Answers"
+  },
+  {
+    "id": 2392,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/9b68af9887d3e433d83e4d22e7a481afb5aa95120d594e4ba6241d23b5dbf517.jpg"
+  },
+  {
+    "id": 2393,
+    "type": "text",
+    "page_idx": 65,
+    "text": "For parts (a) to (d) write out the expression, or do the multiplication mentally."
+  },
+  {
+    "id": 2394,
+    "type": "image",
+    "page_idx": 65,
+    "img_path": "images/c54cf5acf80ba9edc0ff90ba8a95704cde7be9bb53365ada99d6722f31e0eaf9.jpg"
+  },
+  {
+    "id": 2395,
+    "type": "text",
+    "page_idx": 65,
+    "text": "Follow these steps when multiplying by a term outside a bracket:"
+  },
+  {
+    "id": 2396,
+    "type": "text",
+    "text": "- Multiply the term on the left-hand inside of the bracket first - shown by the red arrow labelled i.",
+    "page_idx": 65
+  },
+  {
+    "id": 2397,
+    "type": "text",
+    "text": "- Then multiply the term on the right-hand side - shown by the blue arrow labelled ii.",
+    "page_idx": 65
+  },
+  {
+    "id": 2398,
+    "type": "text",
+    "text": "Then add the answers together.",
+    "page_idx": 65
+  },
+  {
+    "id": 2399,
+    "type": "text",
+    "page_idx": 65,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 2400,
+    "type": "text",
+    "page_idx": 65,
+    "text": "You will learn more about expanding expressions to remove brackets in Chapter 10."
+  },
+  {
+    "id": 2401,
+    "type": "text",
+    "page_idx": 66,
+    "text": "WORKED EXAMPLE 9 CONTINUED"
+  },
+  {
+    "id": 2402,
+    "type": "text",
+    "page_idx": 66,
+    "text": "c"
+  },
+  {
+    "id": 2403,
+    "type": "equation",
+    "page_idx": 66,
+    "text": "$$\n\\begin{array}{r l} \\underset {\\text {i}} {\\text {i}} & = 2 x \\times x + 2 x \\times 3 y \\\\ \\underset {\\text {i}} {\\text {i}} & = 2 x ^ {2} + 6 x y \\end{array}\n$$"
+  },
+  {
+    "id": 2404,
+    "type": "text",
+    "page_idx": 66,
+    "text": "d"
+  },
+  {
+    "id": 2405,
+    "type": "equation",
+    "page_idx": 66,
+    "text": "$$\n\\begin{array}{r l} \\underset {\\mathrm {i}} {\\mathrm {i}} & = x y \\times 2 - x y \\times 3 x \\\\ \\underset {\\mathrm {i i}} {\\mathrm {i}} & = 2 x y - 3 x ^ {2} y \\end{array}\n$$"
+  },
+  {
+    "id": 2406,
+    "type": "text",
+    "page_idx": 66,
+    "text": "Exercise 2.5"
+  },
+  {
+    "id": 2407,
+    "type": "text",
+    "page_idx": 66,
+    "text": "1 Expand:"
+  },
+  {
+    "id": 2408,
+    "type": "text",
+    "page_idx": 66,
+    "text": "a  $2(x + 6)$"
+  },
+  {
+    "id": 2409,
+    "type": "text",
+    "page_idx": 66,
+    "text": "b  $3(x + 2)$"
+  },
+  {
+    "id": 2410,
+    "type": "text",
+    "page_idx": 66,
+    "text": "c 4(2x+3)"
+  },
+  {
+    "id": 2411,
+    "type": "text",
+    "page_idx": 66,
+    "text": "d 10(x-6)"
+  },
+  {
+    "id": 2412,
+    "type": "text",
+    "page_idx": 66,
+    "text": "e· 4(x-2)"
+  },
+  {
+    "id": 2413,
+    "type": "text",
+    "page_idx": 66,
+    "text": "f 3(2x-3)"
+  },
+  {
+    "id": 2414,
+    "type": "text",
+    "page_idx": 66,
+    "text": "g 5(a+4)"
+  },
+  {
+    "id": 2415,
+    "type": "text",
+    "page_idx": 66,
+    "text": "h  $6(4 + a)$"
+  },
+  {
+    "id": 2416,
+    "type": "text",
+    "page_idx": 66,
+    "text": "i 9(a+2)"
+  },
+  {
+    "id": 2417,
+    "type": "text",
+    "page_idx": 66,
+    "text": "j 7(2c-2d)"
+  },
+  {
+    "id": 2418,
+    "type": "text",
+    "page_idx": 66,
+    "text": "k 2(3c-2d)"
+  },
+  {
+    "id": 2419,
+    "type": "text",
+    "page_idx": 66,
+    "text": "4(c+4d)"
+  },
+  {
+    "id": 2420,
+    "type": "text",
+    "page_idx": 66,
+    "text": "m 5(2x-2y)"
+  },
+  {
+    "id": 2421,
+    "type": "text",
+    "page_idx": 66,
+    "text": "n 6(3x-2y)"
+  },
+  {
+    "id": 2422,
+    "type": "text",
+    "page_idx": 66,
+    "text": "3(4y-2x)"
+  },
+  {
+    "id": 2423,
+    "type": "text",
+    "page_idx": 66,
+    "text": "4(s-4t²)"
+  },
+  {
+    "id": 2424,
+    "type": "text",
+    "page_idx": 66,
+    "text": "q 9(t²-s)"
+  },
+  {
+    "id": 2425,
+    "type": "text",
+    "page_idx": 66,
+    "text": "7(4t+t²)"
+  },
+  {
+    "id": 2426,
+    "type": "text",
+    "page_idx": 66,
+    "text": "2 Remove the brackets to expand these expressions."
+  },
+  {
+    "id": 2427,
+    "type": "text",
+    "page_idx": 66,
+    "text": "a  $2x(x + y)$"
+  },
+  {
+    "id": 2428,
+    "type": "text",
+    "page_idx": 66,
+    "text": "b  $3y(x - y)$"
+  },
+  {
+    "id": 2429,
+    "type": "text",
+    "page_idx": 66,
+    "text": "c  $2x(x + 2y)$"
+  },
+  {
+    "id": 2430,
+    "type": "text",
+    "page_idx": 66,
+    "text": "d  $4x(3x - 2y)$"
+  },
+  {
+    "id": 2431,
+    "type": "text",
+    "page_idx": 66,
+    "text": "e  $xy(x - y)$"
+  },
+  {
+    "id": 2432,
+    "type": "text",
+    "page_idx": 66,
+    "text": "f  $3y(4x + 2)$"
+  },
+  {
+    "id": 2433,
+    "type": "text",
+    "page_idx": 66,
+    "text": "g 2ab(9-4b)"
+  },
+  {
+    "id": 2434,
+    "type": "text",
+    "page_idx": 66,
+    "text": "h  $2a^{2}(3 - 2b)$"
+  },
+  {
+    "id": 2435,
+    "type": "text",
+    "page_idx": 66,
+    "text": "i  $3a^{2}(4 - 4b)$"
+  },
+  {
+    "id": 2436,
+    "type": "text",
+    "page_idx": 66,
+    "text": "j 4a(9-2b)"
+  },
+  {
+    "id": 2437,
+    "type": "text",
+    "page_idx": 66,
+    "text": "k 5b(2-a)"
+  },
+  {
+    "id": 2438,
+    "type": "text",
+    "page_idx": 66,
+    "text": "1  $3a(4 - b)$"
+  },
+  {
+    "id": 2439,
+    "type": "text",
+    "page_idx": 66,
+    "text": "m  $2x^{2}y(y - 2x)$"
+  },
+  {
+    "id": 2440,
+    "type": "text",
+    "page_idx": 66,
+    "text": "n 4xy²(3-2x)"
+  },
+  {
+    "id": 2441,
+    "type": "text",
+    "page_idx": 66,
+    "text": "3xy²(x+y)"
+  },
+  {
+    "id": 2442,
+    "type": "text",
+    "page_idx": 66,
+    "text": "P  $x^{2}y(2x + y)$"
+  },
+  {
+    "id": 2443,
+    "type": "text",
+    "page_idx": 66,
+    "text": "q  $9x^{2}(9 - 2x)$"
+  },
+  {
+    "id": 2444,
+    "type": "text",
+    "page_idx": 66,
+    "text": "r  $4xy^{2}(3 - x)$"
+  },
+  {
+    "id": 2445,
+    "type": "text",
+    "page_idx": 66,
+    "text": "3 Given the formula for area,  $A =$  length  $\\times$  width, write an expression for  $A$  in terms of  $x$  for each of the following rectangles. Expand the expression to give  $A$  in simplest terms."
+  },
+  {
+    "id": 2446,
+    "type": "text",
+    "page_idx": 66,
+    "text": "a"
+  },
+  {
+    "id": 2447,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/d0e5300b04b0ac9e95e1149508a179193d4fe3f73e95a0b88a46dc6c16f0d39c.jpg"
+  },
+  {
+    "id": 2448,
+    "type": "text",
+    "page_idx": 66,
+    "text": "b"
+  },
+  {
+    "id": 2449,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/6a439b97b1023736ede2b373da81ff9a21b378be0fd84b1c0547753373e66665.jpg"
+  },
+  {
+    "id": 2450,
+    "type": "text",
+    "page_idx": 66,
+    "text": "C"
+  },
+  {
+    "id": 2451,
+    "type": "image",
+    "page_idx": 66,
+    "img_path": "images/0b4dd837d21a4310f108076b1ba1ffd6cdb032643d8dc8e8af3e67576ca122f5.jpg"
+  },
+  {
+    "id": 2452,
+    "type": "text",
+    "page_idx": 67,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 2453,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Maths jokes"
+  },
+  {
+    "id": 2454,
+    "type": "text",
+    "page_idx": 67,
+    "text": "If you do an internet search for 'maths jokes' you get about 12 million entries."
+  },
+  {
+    "id": 2455,
+    "type": "text",
+    "page_idx": 67,
+    "text": "What makes maths so funny?"
+  },
+  {
+    "id": 2456,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Look at these examples of maths jokes."
+  },
+  {
+    "id": 2457,
+    "type": "text",
+    "page_idx": 67,
+    "text": "If I had ten dollars for every time algebra helped me, I'd have 10x dollars."
+  },
+  {
+    "id": 2458,
+    "type": "equation",
+    "page_idx": 67,
+    "text": "$$\n\\begin{array}{r l} & {\\bullet \\mathrm {E x p a n d} 2 (x + 3 y)} \\\\ & {2 (x + 3 y)} \\\\ & {= 2 (x + 3 y)} \\\\ & {= 2 (x + 3 y)} \\end{array}\n$$"
+  },
+  {
+    "id": 2459,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Algebra wasn't very challenging in Ancient Rome because x was always equal to 10."
+  },
+  {
+    "id": 2460,
+    "type": "text",
+    "text": "What is the premise of each joke? In other words, what makes it funny?",
+    "page_idx": 67
+  },
+  {
+    "id": 2461,
+    "type": "text",
+    "text": "Find at least two more maths jokes that you think are funny.",
+    "page_idx": 67
+  },
+  {
+    "id": 2462,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Tell your group why each one is amusing to you."
+  },
+  {
+    "id": 2463,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Expanding and collecting like terms"
+  },
+  {
+    "id": 2464,
+    "type": "text",
+    "page_idx": 67,
+    "text": "When you remove brackets and expand an expression you may end up with some like terms. When this happens, you collect the like terms together (add or subtract them) to write the expression in its simplest terms."
+  },
+  {
+    "id": 2465,
+    "type": "text",
+    "page_idx": 67,
+    "text": "WORKED EXAMPLE 10"
+  },
+  {
+    "id": 2466,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Expand and simplify where possible."
+  },
+  {
+    "id": 2467,
+    "type": "text",
+    "page_idx": 67,
+    "text": "a  $6(x + 3) + 4$"
+  },
+  {
+    "id": 2468,
+    "type": "text",
+    "page_idx": 67,
+    "text": "b 2(6a+1)-2a+4"
+  },
+  {
+    "id": 2469,
+    "type": "text",
+    "page_idx": 67,
+    "text": "c  $2x(x + 3) + x(x - 4)$"
+  },
+  {
+    "id": 2470,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Answers"
+  },
+  {
+    "id": 2471,
+    "type": "text",
+    "page_idx": 67,
+    "text": "a  $6(x + 3) + 4 = 6x + 18 + 4$"
+  },
+  {
+    "id": 2472,
+    "type": "equation",
+    "page_idx": 67,
+    "text": "$$\n= 6 x + 2 2\n$$"
+  },
+  {
+    "id": 2473,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Remove the brackets."
+  },
+  {
+    "id": 2474,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Add like terms."
+  },
+  {
+    "id": 2475,
+    "type": "text",
+    "page_idx": 67,
+    "text": "b  $2(6a + 1) - 2a + 4 = 12a + 2 - 2a + 4$"
+  },
+  {
+    "id": 2476,
+    "type": "equation",
+    "page_idx": 67,
+    "text": "$$\n= 1 0 a + 6\n$$"
+  },
+  {
+    "id": 2477,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Remove the brackets."
+  },
+  {
+    "id": 2478,
+    "type": "text",
+    "page_idx": 67,
+    "text": "Add or subtract like terms."
+  },
+  {
+    "id": 2479,
+    "type": "text",
+    "page_idx": 67,
+    "text": "$2x(x + 3) + x(x - 4) = 2x^{2} + 6x + x^{2} - 4x$"
+  }
+]
+```

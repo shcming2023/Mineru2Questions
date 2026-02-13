@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1610,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Estimate the value of:"
+  },
+  {
+    "id": 1611,
+    "type": "text",
+    "page_idx": 45,
+    "text": "4.6+3.9 a 398"
+  },
+  {
+    "id": 1612,
+    "type": "text",
+    "page_idx": 45,
+    "text": "b 42.2-5.1"
+  },
+  {
+    "id": 1613,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Answers"
+  },
+  {
+    "id": 1614,
+    "type": "text",
+    "page_idx": 45,
+    "text": "4.6+3.9 is approximately equal to 5+4 398 400"
+  },
+  {
+    "id": 1615,
+    "type": "equation",
+    "page_idx": 45,
+    "text": "$$\n= \\frac {9}{2 0} = \\frac {4 . 5}{1 0} = 0. 4 5\n$$"
+  },
+  {
+    "id": 1616,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Check the estimate:"
+  },
+  {
+    "id": 1617,
+    "type": "equation",
+    "page_idx": 45,
+    "text": "$$\n\\frac {4 . 6 + 3 . 9}{3 9 8} = 0. 4 2 6 (3 \\mathrm {s . f .})\n$$"
+  },
+  {
+    "id": 1618,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Round the numbers to 1 significant figure."
+  },
+  {
+    "id": 1619,
+    "type": "text",
+    "page_idx": 45,
+    "text": "If you use a calculator you will find the exact value and see that the estimate was good."
+  },
+  {
+    "id": 1620,
+    "type": "text",
+    "page_idx": 45,
+    "text": "b  $\\sqrt{42.2 - 5.1}$  is approximately equal to  $\\sqrt{40 - 5}$"
+  },
+  {
+    "id": 1621,
+    "type": "equation",
+    "page_idx": 45,
+    "text": "$$\n= \\sqrt {3 5}\n$$"
+  },
+  {
+    "id": 1622,
+    "type": "equation",
+    "page_idx": 45,
+    "text": "$$\ni s \\text {a p p r o x i m a t e l y e q u a l t o} \\sqrt {3 6}\n$$"
+  },
+  {
+    "id": 1623,
+    "type": "equation",
+    "page_idx": 45,
+    "text": "$$\n= 6\n$$"
+  },
+  {
+    "id": 1624,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Begin by rounding each value to 1 significant figure."
+  },
+  {
+    "id": 1625,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Notice that if you round 35 up to 36 you get a square number and you can easily take the square root."
+  },
+  {
+    "id": 1626,
+    "type": "text",
+    "page_idx": 45,
+    "text": "A good starting point for the questions in the Exercise 1.19 is to round the numbers to 1 significant figure. Remember that you can sometimes make your calculation even simpler by modifying your numbers again."
+  },
+  {
+    "id": 1627,
+    "type": "text",
+    "page_idx": 45,
+    "text": "Exercise 1.19"
+  },
+  {
+    "id": 1628,
+    "type": "text",
+    "page_idx": 45,
+    "text": "1 The calculator displays show the answers that a student got for each calculation. Write an estimate for each calculation and say whether the calculator answer is sensible or not."
+  },
+  {
+    "id": 1629,
+    "type": "text",
+    "page_idx": 45,
+    "text": "a  $(7.1)^{2}\\div 9.9$"
+  },
+  {
+    "id": 1630,
+    "type": "text",
+    "page_idx": 45,
+    "text": "0.5091919192"
+  },
+  {
+    "id": 1631,
+    "type": "text",
+    "page_idx": 45,
+    "text": "b  $4\\times \\pi \\times 3^{2}$"
+  },
+  {
+    "id": 1632,
+    "type": "text",
+    "page_idx": 45,
+    "text": "75.39822369"
+  },
+  {
+    "id": 1633,
+    "type": "text",
+    "page_idx": 45,
+    "text": "c  $5\\times 7.9$"
+  },
+  {
+    "id": 1634,
+    "type": "text",
+    "page_idx": 45,
+    "text": "395"
+  },
+  {
+    "id": 1635,
+    "type": "text",
+    "page_idx": 45,
+    "text": "d  $50 \\times 7.9$"
+  },
+  {
+    "id": 1636,
+    "type": "text",
+    "page_idx": 45,
+    "text": "395"
+  },
+  {
+    "id": 1637,
+    "type": "text",
+    "page_idx": 45,
+    "text": "$3 \\times 292.5$"
+  },
+  {
+    "id": 1638,
+    "type": "text",
+    "page_idx": 45,
+    "text": "87.75"
+  },
+  {
+    "id": 1639,
+    "type": "text",
+    "page_idx": 45,
+    "text": "9.78 f 6.28 0.53"
+  },
+  {
+    "id": 1640,
+    "type": "text",
+    "page_idx": 45,
+    "text": "26.97884374"
+  },
+  {
+    "id": 1641,
+    "type": "text",
+    "page_idx": 46,
+    "text": "2 Estimate the value of each of the following. Show the rounded values that you use."
+  },
+  {
+    "id": 1642,
+    "type": "text",
+    "page_idx": 46,
+    "text": "23.6 a 6.3"
+  },
+  {
+    "id": 1643,
+    "type": "text",
+    "page_idx": 46,
+    "text": "4.3 b 0.087x3.89"
+  },
+  {
+    "id": 1644,
+    "type": "text",
+    "page_idx": 46,
+    "text": "7.21×0.46 c 9.09"
+  },
+  {
+    "id": 1645,
+    "type": "text",
+    "page_idx": 46,
+    "text": "4.82×6.01 d 2.54+1.09"
+  },
+  {
+    "id": 1646,
+    "type": "text",
+    "page_idx": 46,
+    "text": "48 e 2.54+4.09"
+  },
+  {
+    "id": 1647,
+    "type": "text",
+    "page_idx": 46,
+    "text": "f  $(0.45 + 1.89)(6.5 - 1.9)$"
+  },
+  {
+    "id": 1648,
+    "type": "text",
+    "page_idx": 46,
+    "text": "23.8+20.2 g 4.7+5.7"
+  },
+  {
+    "id": 1649,
+    "type": "text",
+    "page_idx": 46,
+    "text": "109.6-45.1 h 19.4-13.9"
+  },
+  {
+    "id": 1650,
+    "type": "text",
+    "page_idx": 46,
+    "text": "(2.52)²×√48.99"
+  },
+  {
+    "id": 1651,
+    "type": "text",
+    "page_idx": 46,
+    "text": "223.8×45.1"
+  },
+  {
+    "id": 1652,
+    "type": "text",
+    "page_idx": 46,
+    "text": "k √9.26 × √99.87"
+  },
+  {
+    "id": 1653,
+    "type": "text",
+    "page_idx": 46,
+    "text": "${\\left( 4.1\\right) }^{3} \\times  {\\left( {1.9}\\right) }^{4}$"
+  },
+  {
+    "id": 1654,
+    "type": "text",
+    "page_idx": 46,
+    "text": "3 Work out the actual answer for each part of question 2, using a calculator."
+  },
+  {
+    "id": 1655,
+    "type": "text",
+    "page_idx": 46,
+    "text": "How good were your estimates? How could you improve them?"
+  },
+  {
+    "id": 1656,
+    "type": "text",
+    "page_idx": 46,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 1657,
+    "type": "text",
+    "page_idx": 46,
+    "text": "Making decisions about accuracy"
+  },
+  {
+    "id": 1658,
+    "type": "text",
+    "page_idx": 46,
+    "text": "There will be times when you have to decide how to round values to estimate. The place that you round to depends on the level of accuracy needed to solve each problem."
+  },
+  {
+    "id": 1659,
+    "type": "text",
+    "page_idx": 46,
+    "text": "1 What would you round to in the following situations? Give reasons for your answers."
+  },
+  {
+    "id": 1660,
+    "type": "text",
+    "text": "a A real-life problem involving whole numbers, for example bricks or numbers of people.",
+    "page_idx": 46
+  },
+  {
+    "id": 1661,
+    "type": "text",
+    "text": "b Problems involving money amounts.",
+    "page_idx": 46
+  },
+  {
+    "id": 1662,
+    "type": "text",
+    "text": "c Calculations using numbers in the millions.",
+    "page_idx": 46
+  },
+  {
+    "id": 1663,
+    "type": "text",
+    "text": "d Scientific calculations with original values to four places.",
+    "page_idx": 46
+  },
+  {
+    "id": 1664,
+    "type": "text",
+    "text": "e Problems involving irrational numbers (such as  $\\pi$ ).",
+    "page_idx": 46
+  },
+  {
+    "id": 1665,
+    "type": "text",
+    "page_idx": 46,
+    "text": "2 What have these students done to estimate?"
+  },
+  {
+    "id": 1666,
+    "type": "text",
+    "page_idx": 46,
+    "text": "[{7.6} \\times  {0.518}]"
+  },
+  {
+    "id": 1667,
+    "type": "text",
+    "page_idx": 46,
+    "text": "Marwan  $\\frac{{17} - {75} \\times  {5.7}}{8.7}$  is approximately equal to  $\\frac{2 \\times  6}{1} = {12}$"
+  },
+  {
+    "id": 1668,
+    "type": "text",
+    "text": "a Why is each strategy useful?",
+    "page_idx": 46
+  },
+  {
+    "id": 1669,
+    "type": "text",
+    "text": "b Why do you use the  $=$  symbol in some parts of the estimation but state 'is approximately equal to' in others?",
+    "page_idx": 46
+  },
+  {
+    "id": 1670,
+    "type": "text",
+    "page_idx": 46,
+    "text": "3 What situations can you think of where it is helpful to make sure your estimate is:"
+  },
+  {
+    "id": 1671,
+    "type": "text",
+    "text": "a an overestimate",
+    "page_idx": 46
+  },
+  {
+    "id": 1672,
+    "type": "text",
+    "text": "b an underestimate?",
+    "page_idx": 46
+  },
+  {
+    "id": 1673,
+    "type": "text",
+    "page_idx": 46,
+    "text": "TIP"
+  },
+  {
+    "id": 1674,
+    "type": "text",
+    "page_idx": 46,
+    "text": "When you are asked to estimate values, always show the rounded values that you use so anyone looking at your work knows what you have done."
+  },
+  {
+    "id": 1675,
+    "type": "text",
+    "page_idx": 47,
+    "text": "PEER ASSESSMENT"
+  },
+  {
+    "id": 1676,
+    "type": "text",
+    "page_idx": 47,
+    "text": "Tell ... Ask ... Give ... (TAG) feedback is a way of assessing each other's work.  \nTo use this method, read through your partner's answers to Exercise 1.19.  \nUse the guidelines in the table to help you give a TAG feedback on their work."
+  },
+  {
+    "id": 1677,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Tell your partner something they did well</td><td>Ask a constructive or thoughtful question</td><td>Give them a positive suggestion for improvement</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1678,
+    "type": "text",
+    "text": "[Table Row] <tr><td>I liked the way you ...I could easily understand because you ...The strongest part of your work was ...You did ... really well.</td><td>Why did you ...Did you consider ...Would it help if you ...When does ...Have you thought about ...</td><td>One suggestion would be ...Remember to ...Think about ...I&#x27;m confused by ...If you ... it might ...</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1679,
+    "type": "text",
+    "page_idx": 47,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 1680,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Do you know ...?</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1681,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Numbers can be classified as natural numbers, integers, prime numbers and square numbers.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1682,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A multiple is obtained by multiplying a number by a natural number. The LCM of two or more numbers is the lowest multiple found in all the sets of multiples.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1683,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A factor of a number divides into it exactly. The HCF of two or more numbers is the highest factor found in all the sets of factors.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1684,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Prime numbers have only two factors, 1 and the number itself. The number 1 is not a prime number.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1685,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A prime factor is a number that is both a factor and a prime number.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1686,
+    "type": "text",
+    "text": "[Table Row] <tr><td>All natural numbers that are not prime can be expressed as a product of prime factors.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1687,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Integers are also called directed numbers. The sign of an integer (- or +) indicates whether its value is above or below 0.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1688,
+    "type": "text",
+    "text": "[Table Row] <tr><td>When you multiply an integer (a) by itself you get a square number (a2). If you multiply it by itself again you get a cube number (a3).</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1689,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The number you multiply to get a square is called the square root and the number you multiply to get a cube is called the cube root. The symbol for square root is √. The symbol for cube root is √.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1690,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You can express numbers as powers of their factors using index notation. For example, 23 means 2 × 2 × 2. The base is 2 and the index is 3.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1691,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Any number to the power of 0 is equal to 1: a0 = 1.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1692,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A negative index can be written as a reciprocal fraction with a positive index: a-m = 1/a-m.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1693,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Fractional indices can be rewritten as roots: a1/2 = a/2.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1694,
+    "type": "text",
+    "text": "[Table Row] <tr><td>For non-unit fractional indices: a1/2 = (a/2)1/2 = a1/m.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1695,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The laws of indices are: a1/m × a1 = a1/m+n; a1/m = a1/m-n and (a1/m)1 = a1/m.</td></tr>",
+    "page_idx": 47
+  },
+  {
+    "id": 1696,
+    "type": "text",
+    "page_idx": 48,
+    "text": "SUMMARY CONTINUED"
+  },
+  {
+    "id": 1697,
+    "type": "text",
+    "page_idx": 48,
+    "text": "Mathematicians apply a standard set of rules to decide the order in which operations must be carried out. Operations in grouping symbols are worked out first, then powers, then division and multiplication, then addition and subtraction."
+  },
+  {
+    "id": 1698,
+    "type": "text",
+    "page_idx": 48,
+    "text": "Are you able to ...?"
+  },
+  {
+    "id": 1699,
+    "type": "text",
+    "text": "[Table Row] <tr><td>identify rational numbers, irrational numbers, integers, square numbers and prime numbers</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1700,
+    "type": "text",
+    "text": "[Table Row] <tr><td>find multiples and factors of numbers and identify the LCM and HCF</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1701,
+    "type": "text",
+    "text": "[Table Row] <tr><td>write numbers as products of their prime factors using division and factor trees</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1702,
+    "type": "text",
+    "text": "[Table Row] <tr><td>work with integers used in real-life situations</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1703,
+    "type": "text",
+    "text": "[Table Row] <tr><td>apply the basic rules for operating with positive and negative numbers</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1704,
+    "type": "text",
+    "text": "[Table Row] <tr><td>perform basic calculations using mental methods and with a calculator</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1705,
+    "type": "text",
+    "text": "[Table Row] <tr><td>calculate squares, square roots, cubes and cube roots of numbers</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1706,
+    "type": "text",
+    "text": "[Table Row] <tr><td>apply the laws of indices to find the values of numbers written in index notation</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1707,
+    "type": "text",
+    "text": "[Table Row] <tr><td>round numbers to specified place to estimate and approximate answers.</td></tr>",
+    "page_idx": 48
+  },
+  {
+    "id": 1708,
+    "type": "text",
+    "page_idx": 48,
+    "text": "Practice questions"
+  },
+  {
+    "id": 1709,
+    "type": "image",
+    "page_idx": 48,
+    "img_path": "images/21161175fa32daa1c637fcdcf953fb4953be6eaef92c16bca2ce113fae1c69ed.jpg"
+  }
+]
+```

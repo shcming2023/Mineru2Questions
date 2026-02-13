@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 0,
+    "type": "image",
+    "page_idx": 0,
+    "img_path": "images/c61461b8d9f1831ed602d770b18e3e6c58d06fc11515e9758f201f1ca5cbc47f.jpg"
+  },
+  {
+    "id": 1,
+    "type": "text",
+    "page_idx": 0,
+    "text": "CAMBRIDGE"
+  },
+  {
+    "id": 2,
+    "type": "text",
+    "page_idx": 0,
+    "text": "UNIVERSITY PRESS"
+  },
+  {
+    "id": 3,
+    "type": "text",
+    "page_idx": 0,
+    "text": "Success groups  $\\left( {S\\left\\{  N\\right\\}  }\\right)$"
+  },
+  {
+    "id": 4,
+    "type": "text",
+    "page_idx": 0,
+    "text": "Cambridge IGCSE™"
+  },
+  {
+    "id": 5,
+    "type": "text",
+    "page_idx": 0,
+    "text": "Mathematics Core and Extended"
+  },
+  {
+    "id": 6,
+    "type": "text",
+    "page_idx": 0,
+    "text": "COURSEBOOK"
+  },
+  {
+    "id": 7,
+    "type": "text",
+    "page_idx": 0,
+    "text": "Karen Morrison & Nick Hamshaw"
+  },
+  {
+    "id": 8,
+    "type": "image",
+    "page_idx": 0,
+    "img_path": "images/9d5ba5e5c60b3e47b7da16d9011be2f5dc8daccdec72db6fc4c88438c55d0093.jpg"
+  },
+  {
+    "id": 9,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Core & Extended Mathematics"
+  },
+  {
+    "id": 10,
+    "type": "text",
+    "page_idx": 1,
+    "text": "for Cambridge IGCSE™"
+  },
+  {
+    "id": 11,
+    "type": "text",
+    "page_idx": 1,
+    "text": "COURSEBOOK"
+  },
+  {
+    "id": 12,
+    "type": "text",
+    "page_idx": 1,
+    "text": "Karen Morrison & Nick Hamshaw"
+  },
+  {
+    "id": 13,
+    "type": "text",
+    "page_idx": 2,
+    "text": "CAMBRIDGE UNIVERSITY PRESS"
+  },
+  {
+    "id": 14,
+    "type": "text",
+    "page_idx": 2,
+    "text": "University Printing House, Cambridge CB2 8BS, United Kingdom"
+  },
+  {
+    "id": 15,
+    "type": "text",
+    "page_idx": 2,
+    "text": "One Liberty Plaza, 20th Floor, New York, NY 10006, USA"
+  },
+  {
+    "id": 16,
+    "type": "text",
+    "page_idx": 2,
+    "text": "477 Williamstown Road, Port Melbourne, VIC 3207, Australia"
+  },
+  {
+    "id": 17,
+    "type": "text",
+    "page_idx": 2,
+    "text": "314-321, 3rd Floor, Plot 3, Splendor Forum, Jasola District Centre, New Delhi - 110025, India"
+  },
+  {
+    "id": 18,
+    "type": "text",
+    "page_idx": 2,
+    "text": "103 Penang Road, #05-06/07, Visioncrest Commercial, Singapore 238467"
+  },
+  {
+    "id": 19,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Cambridge University Press is part of the University of Cambridge."
+  },
+  {
+    "id": 20,
+    "type": "text",
+    "page_idx": 2,
+    "text": "It furthers the University's mission by disseminating knowledge in the pursuit of education, learning and research at the highest international levels of excellence."
+  },
+  {
+    "id": 21,
+    "type": "text",
+    "page_idx": 2,
+    "text": "www.cambridge.org"
+  },
+  {
+    "id": 22,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Information on this title: www.cambridge.org/9781009150101"
+  },
+  {
+    "id": 23,
+    "type": "text",
+    "page_idx": 2,
+    "text": "$\\odot$  Cambridge University Press & Assessment 2022"
+  },
+  {
+    "id": 24,
+    "type": "text",
+    "page_idx": 2,
+    "text": "This publication is in copyright. Subject to statutory exception and to the provisions of relevant collective licensing agreements, no reproduction of any part may take place without the written permission of Cambridge University Press."
+  },
+  {
+    "id": 25,
+    "type": "text",
+    "page_idx": 2,
+    "text": "First published 2008"
+  },
+  {
+    "id": 26,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Second edition 2016"
+  },
+  {
+    "id": 27,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Third edition 2022"
+  },
+  {
+    "id": 28,
+    "type": "text",
+    "page_idx": 2,
+    "text": "20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1"
+  },
+  {
+    "id": 29,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Printed in Poland by Opolgraf"
+  },
+  {
+    "id": 30,
+    "type": "text",
+    "page_idx": 2,
+    "text": "A catalogue record for this publication is available from the British Library"
+  },
+  {
+    "id": 31,
+    "type": "text",
+    "page_idx": 2,
+    "text": "ISBN 978-1-009-15010-1 Paperback with Digital Access"
+  },
+  {
+    "id": 32,
+    "type": "text",
+    "page_idx": 2,
+    "text": "ISBN 978-1-009-15011-8 Digital Learner's Book (2 years)"
+  },
+  {
+    "id": 33,
+    "type": "text",
+    "page_idx": 2,
+    "text": "ISBN 978-1-009-15009-5 eBook"
+  },
+  {
+    "id": 34,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Cambridge University Press has no responsibility for the persistence or accuracy of URLs for external or third-party internet websites referred to in this publication, and does not guarantee that any content on such websites is, or will remain, accurate or appropriate. Information regarding prices, travel timetables, and other factual information given in this work is correct at the time of first printing but Cambridge University Press does not guarantee the accuracy of such information thereafter."
+  },
+  {
+    "id": 35,
+    "type": "text",
+    "page_idx": 2,
+    "text": "NOTICE TO TEACHERS IN THE UK"
+  },
+  {
+    "id": 36,
+    "type": "text",
+    "page_idx": 2,
+    "text": "It is illegal to reproduce any part of this work in material form (including photocopying and electronic storage) except under the following circumstances:"
+  },
+  {
+    "id": 37,
+    "type": "text",
+    "text": "(i) where you are abiding by a licence granted to your school or institution by the Copyright Licensing Agency;",
+    "page_idx": 2
+  },
+  {
+    "id": 38,
+    "type": "text",
+    "text": "(ii) where no such licence exists, or where you wish to exceed the terms of a licence, and you have gained the written permission of Cambridge University Press;",
+    "page_idx": 2
+  },
+  {
+    "id": 39,
+    "type": "text",
+    "text": "(iii) where you are allowed to reproduce without permission under the provisions of Chapter 3 of the Copyright, Designs and Patents Act 1988, which covers, for example, the reproduction of short passages within certain types of educational anthology and reproduction for the purposes of setting examination questions.",
+    "page_idx": 2
+  },
+  {
+    "id": 40,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Cambridge International copyright material in this publication is reproduced under licence and remains the intellectual property of Cambridge Assessment International Education."
+  },
+  {
+    "id": 41,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Third-party websites, publications and resources referred to in this publication have not been endorsed by Cambridge Assessment International Education."
+  },
+  {
+    "id": 42,
+    "type": "text",
+    "page_idx": 2,
+    "text": "Exam-style questions and sample answers have been written by the authors. In examinations, the way marks are awarded may be different. References to assessment and/or assessment preparation are the publisher's interpretation of the syllabus requirements and may not fully reflect the approach of Cambridge Assessment International Education."
+  },
+  {
+    "id": 43,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Teachers play an important part in shaping futures. Our Dedicated Teacher Awards recognise the hard work that teachers put in every day."
+  },
+  {
+    "id": 44,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Thank you to everyone who nominated this year; we have been inspired and moved by all of your stories. Well done to all of our nominees for your dedication to learning and for inspiring the next generation of thinkers, leaders and innovators."
+  },
+  {
+    "id": 45,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Congratulations to our incredible winners!"
+  },
+  {
+    "id": 46,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/63fbe19749152654894e9c039c6a108757acfaa6ba34a1f85a0c94f342ceea2d.jpg"
+  },
+  {
+    "id": 47,
+    "type": "text",
+    "page_idx": 3,
+    "text": "WINNER"
+  },
+  {
+    "id": 48,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Regional Winner"
+  },
+  {
+    "id": 49,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Australia, New Zealand"
+  },
+  {
+    "id": 50,
+    "type": "text",
+    "page_idx": 3,
+    "text": "& South-East Asia"
+  },
+  {
+    "id": 51,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/563e23ac92609635a065dbb26cbd362b665e1dd7d365025698a48db2007f99bb.jpg"
+  },
+  {
+    "id": 52,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Regional Winner"
+  },
+  {
+    "id": 53,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Europe"
+  },
+  {
+    "id": 54,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/38984d9419551fb61eb9ed3edc36ef80d7e2b5f5f551e4fdbee4faa17f20b6d0.jpg"
+  },
+  {
+    "id": 55,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Regional Winner"
+  },
+  {
+    "id": 56,
+    "type": "text",
+    "page_idx": 3,
+    "text": "North & South America"
+  },
+  {
+    "id": 57,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/ab31e64ffc79bf91784532076f09e71ea15bbafde5372ff03290cffc662d3544.jpg"
+  },
+  {
+    "id": 58,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Regional Winner"
+  },
+  {
+    "id": 59,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Central & Southern Africa"
+  },
+  {
+    "id": 60,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/9fd79e031e8f0dd6c8d2c534029fbab24b0e32bb1832ef0e5b7eff7bf20f55bd.jpg"
+  },
+  {
+    "id": 61,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Regional Winner"
+  },
+  {
+    "id": 62,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Middle East & North Africa"
+  },
+  {
+    "id": 63,
+    "type": "image",
+    "page_idx": 3,
+    "img_path": "images/4ab1195042d00d3187a367fc73a0b98f7d9652434eaf829c691c0c648dda16db.jpg"
+  },
+  {
+    "id": 64,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Regional Winner"
+  },
+  {
+    "id": 65,
+    "type": "text",
+    "page_idx": 3,
+    "text": "East & South Asia"
+  },
+  {
+    "id": 66,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Mohd Al Khalifa Bin Mohd Affnan"
+  },
+  {
+    "id": 67,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Keningau Vocational College, Malaysia"
+  },
+  {
+    "id": 68,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Dr. Mary Shiny Ponparambil Paul"
+  },
+  {
+    "id": 69,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Little Flower English School, Italy"
+  },
+  {
+    "id": 70,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Noemi Falcon"
+  },
+  {
+    "id": 71,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Zora Neale Hurston Elementary School, United States"
+  },
+  {
+    "id": 72,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Temitope Adewuyi"
+  },
+  {
+    "id": 73,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Fountain Heights Secondary School, Nigeria"
+  },
+  {
+    "id": 74,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Uroosa Imran"
+  },
+  {
+    "id": 75,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Beaconhouse School System KG-1 branch, Pakistan"
+  },
+  {
+    "id": 76,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Jeenath Akther"
+  },
+  {
+    "id": 77,
+    "type": "text",
+    "page_idx": 3,
+    "text": "Chittagong Grammar School, Bangladesh"
+  },
+  {
+    "id": 78,
+    "type": "text",
+    "page_idx": 3,
+    "text": "For more information about our dedicated teachers and their stories, go to dedicatedteacher.cambridge.org"
+  },
+  {
+    "id": 79,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Endorsement statement"
+  },
+  {
+    "id": 80,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Endorsement indicates that a resource has passed Cambridge International's rigorous quality-assurance process and is suitable to support the delivery of a Cambridge International syllabus. However, endorsed resources are not the only suitable materials available to support teaching and learning, and are not essential to be used to achieve the qualification. Resource lists found on the Cambridge International website will include this resource and other endorsed resources."
+  },
+  {
+    "id": 81,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Any example answers to questions taken from past question papers, practice questions, accompanying marks and mark schemes included in this resource have been written by the authors and are for guidance only. They do not replicate examination papers. In examinations the way marks are awarded may be different. Any references to assessment and/or assessment preparation are the publisher's interpretation of the syllabus requirements. Examiners will not use endorsed resources as a source of material for any assessment set by Cambridge International."
+  },
+  {
+    "id": 82,
+    "type": "text",
+    "page_idx": 4,
+    "text": "While the publishers have made every attempt to ensure that advice on the qualification and its assessment is accurate, the official syllabus, specimen assessment materials and any associated assessment guidance materials produced by the awarding body are the only authoritative source of information and should always be referred to for definitive guidance. Cambridge International recommends that teachers consider using a range of teaching and learning resources based on their own professional judgement of their students' needs."
+  },
+  {
+    "id": 83,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Cambridge International has not paid for the production of this resource, nor does Cambridge International receive any royalties from its sale. For more information about the endorsement process, please visit www.cambridgeinternational.org/endorse-resources"
+  },
+  {
+    "id": 84,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Cambridge International copyright material in this publication is reproduced under licence and remains the intellectual property of Cambridge Assessment International Education."
+  },
+  {
+    "id": 85,
+    "type": "text",
+    "page_idx": 4,
+    "text": "Third party websites and resources referred to in this publication have not been endorsed by Cambridge Assessment International Education."
+  },
+  {
+    "id": 86,
+    "type": "text",
+    "page_idx": 5,
+    "text": "> Contents"
+  },
+  {
+    "id": 87,
+    "type": "text",
+    "text": "Introduction viii",
+    "page_idx": 5
+  },
+  {
+    "id": 88,
+    "type": "text",
+    "text": "How to use this book ix",
+    "page_idx": 5
+  },
+  {
+    "id": 89,
+    "type": "text",
+    "text": "How to use this series xi",
+    "page_idx": 5
+  },
+  {
+    "id": 90,
+    "type": "text",
+    "text": "Acknowledgements xii",
+    "page_idx": 5
+  },
+  {
+    "id": 91,
+    "type": "text",
+    "page_idx": 5,
+    "text": "Unit 1"
+  },
+  {
+    "id": 92,
+    "type": "text",
+    "page_idx": 5,
+    "text": "1 Review of number concepts 1"
+  },
+  {
+    "id": 93,
+    "type": "text",
+    "text": "1.1 Different types of numbers 3",
+    "page_idx": 5
+  },
+  {
+    "id": 94,
+    "type": "text",
+    "text": "1.2 Multiples and factors 6",
+    "page_idx": 5
+  },
+  {
+    "id": 95,
+    "type": "text",
+    "text": "1.3 Prime numbers 9",
+    "page_idx": 5
+  },
+  {
+    "id": 96,
+    "type": "text",
+    "text": "1.4 Working with directed numbers 14",
+    "page_idx": 5
+  },
+  {
+    "id": 97,
+    "type": "text",
+    "text": "1.5 Powers, roots and laws of indices 17",
+    "page_idx": 5
+  },
+  {
+    "id": 98,
+    "type": "text",
+    "text": "1.6 Order of operations 26",
+    "page_idx": 5
+  },
+  {
+    "id": 99,
+    "type": "text",
+    "text": "1.7 Rounding and estimating 31",
+    "page_idx": 5
+  }
+]
+```

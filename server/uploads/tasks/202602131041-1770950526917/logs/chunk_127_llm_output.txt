@@ -1,0 +1,10 @@
+<chapter><title>8930</title>
+<qa_pair><label>1</label><type>exercise</type><question>8944,8945,8946,8947,8948</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>8949,8950,8951,8952</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>8953,8954,8955,8956,8957,8958,8959,8960</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>8961</question>
+<solution></solution></qa_pair>
+</chapter>

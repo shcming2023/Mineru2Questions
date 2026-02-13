@@ -1,0 +1,34 @@
+<chapter><title>20194</title>
+<qa_pair><label>1</label><type>exercise</type><question>20196,20197,20198,20199,20200,20201,20202</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>20203,20204,20205</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>20206,20207,20208</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>20209</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>20210</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>20211,20212,20213</question>
+<solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>20214,20215,20216</question>
+<solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>20217,20218,20219,20220,20221,20222</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>20223</question>
+<solution></solution></qa_pair>
+<qa_pair><label>10</label><type>exercise</type><question>20224</question>
+<solution></solution></qa_pair>
+<qa_pair><label>11</label><type>exercise</type><question>20225,20226,20227,20228</question>
+<solution></solution></qa_pair>
+</chapter>
+<chapter><title>20229</title>
+<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>20166,20167</question>
+<solution>20168,20169,20170,20171,20172,20173</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>20178,20179</question>
+<solution>20180,20181,20182,20183,20184,20185</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>20186,20187</question>
+<solution>20188,20189,20190,20191,20192,20193</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>20244,20245,20246</question>
+<solution>20247,20248,20249,20250,20251,20252,20253,20254,20255,20256,20257</solution></qa_pair>
+</chapter>

@@ -1,0 +1,828 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 6510,
+    "type": "equation",
+    "page_idx": 219,
+    "text": "$$\nA r e a = \\frac {1}{2} b h + \\frac {1}{2} \\pi r ^ {2} = \\frac {1}{2} \\times 8 \\times 6 + \\frac {1}{2} \\pi \\times 4 ^ {2} = 4 9. 1 3 2 \\dots\n$$"
+  },
+  {
+    "id": 6511,
+    "type": "text",
+    "page_idx": 219,
+    "text": "is approximately equal to  $49.1\\mathrm{cm}^2$  (3 s.f.)"
+  },
+  {
+    "id": 6512,
+    "type": "equation",
+    "page_idx": 219,
+    "text": "$$\n\\text {P e r i m e t e r} = \\sqrt {5 2} + \\sqrt {5 2} + \\frac {1}{2} \\times 2 \\pi \\times 4 = 2 7. 0 \\mathrm {c m} (3 \\mathrm {s}. \\mathrm {f}.)\n$$"
+  },
+  {
+    "id": 6513,
+    "type": "text",
+    "page_idx": 219,
+    "text": "TIP"
+  },
+  {
+    "id": 6514,
+    "type": "text",
+    "page_idx": 219,
+    "text": "Note that for the perimeter you need to add 5m twice because you need to include the two straight edges."
+  },
+  {
+    "id": 6515,
+    "type": "text",
+    "page_idx": 219,
+    "text": "TIP"
+  },
+  {
+    "id": 6516,
+    "type": "text",
+    "page_idx": 219,
+    "text": "Note that the base of the triangle is the diameter of the circle. Remember to divide the circle area by two to find the area of the semicircle."
+  },
+  {
+    "id": 6517,
+    "type": "text",
+    "page_idx": 220,
+    "text": "WORKED EXAMPLE 5 CONTINUED"
+  },
+  {
+    "id": 6518,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/c8a46f4d2e564286fa1cbd6bbaace2d1153e4ecbcc68dcb31f84378785c674ca.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 6519,
+    "type": "text",
+    "page_idx": 220,
+    "text": "Answer"
+  },
+  {
+    "id": 6520,
+    "type": "equation",
+    "page_idx": 220,
+    "text": "$$\nA r e a = \\frac {\\theta}{3 6 0} \\times \\pi r ^ {2} = \\frac {3 6 0 - 6 5}{3 6 0} \\times \\pi \\times 4 ^ {2} = \\frac {2 9 5}{3 6 0} \\times \\pi \\times 1 6 = 4 1. 1 8 9 \\dots\n$$"
+  },
+  {
+    "id": 6521,
+    "type": "text",
+    "page_idx": 220,
+    "text": "is approximately equal to  $41.2\\mathrm{cm}^2$"
+  },
+  {
+    "id": 6522,
+    "type": "equation",
+    "page_idx": 220,
+    "text": "$$\n\\text {P e r i m e t e r} = \\frac {\\theta}{3 6 0} \\times 2 \\pi r + 2 r = \\frac {2 9 5}{3 6 0} \\times 2 \\times \\pi \\times 4 + 2 \\times 4 = 2 8. 5 9 4 \\dots\n$$"
+  },
+  {
+    "id": 6523,
+    "type": "text",
+    "page_idx": 220,
+    "text": "is approximately equal to  $28.6\\mathrm{cm}$"
+  },
+  {
+    "id": 6524,
+    "type": "text",
+    "page_idx": 220,
+    "text": "Exercise 7.4"
+  },
+  {
+    "id": 6525,
+    "type": "text",
+    "page_idx": 220,
+    "text": "1 For each of the following shapes find both the area and the perimeter. Give your answers to 3 significant figures."
+  },
+  {
+    "id": 6526,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/f79f4ea5db4cfbc0af8e410ea78f9e29e6e452663525a6f917885184bdb2dc65.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 6527,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/bf2a790fddb4da611f1bd2f197d82ebfa452827538648bb51c8a771c17bd6623.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 6528,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/e1a3afd9ddf27cc839a2fc037ba88e1e71ee6a7d0b4f8e3d7755475ac3f04453.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 6529,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/9b2a58a06ea6e1fb17de64d98e669645d45b383b14494d6f5b8fffc3a5ab3f72.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 6530,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/1d50c21b394724f1107bcebce1394577343eda1b52617cae79e3ea6b76cecf1b.jpg",
+    "image_caption": "e"
+  },
+  {
+    "id": 6531,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/e117331344593c489621dbd176acdd565646b45aa8a056bd273882a84d9eaad0.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 6532,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/c5cd7262964b90b04a953ed1cf4ac1a53ba6efd81e4534fed9d387574b6cb3ca.jpg",
+    "image_caption": "9"
+  },
+  {
+    "id": 6533,
+    "type": "text",
+    "page_idx": 220,
+    "text": "2 Find the area of the coloured region and find the arc length / in each of the following. Give your answers to 3 significant figures."
+  },
+  {
+    "id": 6534,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/129011efbdc66a484efbf1f59e818cd83b8e90c23ab762275e9c3d5b490739d4.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 6535,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/7490116e9b1c04d342b168a4addb6efef6cd4e00aab26918e71d2e9b51fa121d.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 6536,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/78baf49d35a34dbd8b18e120c0b69d39eafde4cee38bc85572613b84a5bd020d.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 6537,
+    "type": "text",
+    "page_idx": 220,
+    "text": "TIP"
+  },
+  {
+    "id": 6538,
+    "type": "text",
+    "page_idx": 220,
+    "text": "Notice that you have not been told the size of  $\\theta$ . You need to calculate it  $(\\theta = 360 - 65)$ ."
+  },
+  {
+    "id": 6539,
+    "type": "text",
+    "page_idx": 220,
+    "text": "TIP"
+  },
+  {
+    "id": 6540,
+    "type": "text",
+    "page_idx": 220,
+    "text": "To find the perimeter you need the arc length, so calculate that separately."
+  },
+  {
+    "id": 6541,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/22a13658ae27ea5439a63e5eed76509b3e04656c159f34c79f244eebd22edad3.jpg",
+    "image_caption": "h"
+  },
+  {
+    "id": 6542,
+    "type": "image",
+    "page_idx": 220,
+    "img_path": "images/7a37375562eb4ae006d044366ac87daf26e5c0d2f6fa38a179c215cc632c84c6.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 6543,
+    "type": "text",
+    "page_idx": 221,
+    "text": "3 Find the area and perimeter of the following. Give your answers to 3 significant figures."
+  },
+  {
+    "id": 6544,
+    "type": "image",
+    "page_idx": 221,
+    "img_path": "images/9c80f14d416a79c138c90220d9fafdb5f1bbecda4060db51ff46b2d140f044f0.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 6545,
+    "type": "image",
+    "page_idx": 221,
+    "img_path": "images/b7693f56dfdfe37ca9c4582f84600da9f4c621657bc37ad2e713a5bd00e4a08e.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 6546,
+    "type": "text",
+    "page_idx": 221,
+    "text": "4 The diagram shows a circular sector, drawn from the centre of the Earth with an arc along the equator."
+  },
+  {
+    "id": 6547,
+    "type": "image",
+    "page_idx": 221,
+    "img_path": "images/a93a7c6dae5d4fa8c51d0868690a6e353aff1de728841d47dfede129e3cb9930.jpg"
+  },
+  {
+    "id": 6548,
+    "type": "text",
+    "page_idx": 221,
+    "text": "When the angle at the centre of the Earth is  $\\frac{1}{60}$  of a degree, the arc length along the equator is known as 1 nautical mile. Given that the Earth's diameter is approximately  $12760\\mathrm{km}$ , find the length of 1 nautical mile in metres. Give your answer to the nearest metre."
+  },
+  {
+    "id": 6549,
+    "type": "image",
+    "page_idx": 221,
+    "img_path": "images/23c40f014acacf34c67c8ee98c2bc417d65995aedc1782b5516f60b3b7976758.jpg",
+    "image_caption": "5"
+  },
+  {
+    "id": 6550,
+    "type": "text",
+    "page_idx": 221,
+    "text": "The diagram shows a running track of length  $400\\mathrm{m}$ . The two straight edges are both  $90\\mathrm{m}$  in length. Find the diameter,  $d$ , of the two semicircular sections. Give your answer to 1 decimal place."
+  },
+  {
+    "id": 6551,
+    "type": "text",
+    "page_idx": 221,
+    "text": "6 Goro rolls pizza dough into a single circular pizza base of diameter  $28\\mathrm{cm}$ , but Huan asks for four identical, smaller pizza bases with the same thickness instead. Work out the diameter of each of the smaller pizza bases."
+  },
+  {
+    "id": 6552,
+    "type": "text",
+    "page_idx": 221,
+    "text": "7 The diagram shows a slice of circular cake, seen from above. The radius of the cake is equal to the arc length and the area of the top of the slice is  $40.5\\mathrm{cm}^2$ . Find the radius of the cake."
+  },
+  {
+    "id": 6553,
+    "type": "image",
+    "page_idx": 221,
+    "img_path": "images/dc60ce36fa72d0c6f2419ca5c723f264aff3fd05f4c1f1d98a79193768e1910c.jpg"
+  },
+  {
+    "id": 6554,
+    "type": "text",
+    "page_idx": 222,
+    "text": "8 For each of the following find the area and perimeter of the coloured region. Give your answer in terms of  $\\pi$"
+  },
+  {
+    "id": 6555,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/96f0004c924e2c81c77c2412b02499d491bbedc40ad1464f1921f07e6f36d65a.jpg"
+  },
+  {
+    "id": 6556,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/663121fe0fbcffcc304d37e29c56fee1b57f986cc9bbc05cb9ed162f27396207.jpg"
+  },
+  {
+    "id": 6557,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/91462eb478617538e6131c02bddaf35c7e4ce20ecd1f6961df37a7941cc75a46.jpg"
+  },
+  {
+    "id": 6558,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/07fb8462548f08959aefc5ee4875d58eca6833f3334f1592f4e7df3896c8890a.jpg"
+  },
+  {
+    "id": 6559,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/b932bf0c6a882fa1e840d824cd3649e813f0239a49a84aaa77fb63e47eeebcb7.jpg"
+  },
+  {
+    "id": 6560,
+    "type": "text",
+    "page_idx": 222,
+    "text": "9 Find the perimeter and area of each shape. Give your answer to 3 significant figures."
+  },
+  {
+    "id": 6561,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/2961a0ef128e10cb2b5617ffbc902d651b4c9eb6f9596be8ed2b3733ff2456b7.jpg"
+  },
+  {
+    "id": 6562,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/c4d66e10cb20b0ed1d64a3dab0ceb9571c7e54aa422950587cc9792bf9707c1a.jpg"
+  },
+  {
+    "id": 6563,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/55893fedc33da7ad2ee696c443e4fdbb2f4c187ddb260994e181d065617ce473.jpg"
+  },
+  {
+    "id": 6564,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/3af97eb6427eb1a78ab949d664514030fc8c4154af5a95d27a0ad9a3389d3780.jpg"
+  },
+  {
+    "id": 6565,
+    "type": "image",
+    "page_idx": 222,
+    "img_path": "images/8e0740a21b4d418b02b15c292ef4c60f8aeda52d95059c1e87f3c89cc4f4cff2.jpg"
+  },
+  {
+    "id": 6566,
+    "type": "text",
+    "page_idx": 223,
+    "text": "10 Arjun has two designs for badges."
+  },
+  {
+    "id": 6567,
+    "type": "image",
+    "page_idx": 223,
+    "img_path": "images/3d9ce7dfc332f7fe1b507c35ede0620608dc21f510244fda53ba50b6277919cb.jpg"
+  },
+  {
+    "id": 6568,
+    "type": "image",
+    "page_idx": 223,
+    "img_path": "images/5629a84dc49fe10ac6f5c6f3294e91d3a1a98b2492354bb75052438b4e3edf28.jpg"
+  },
+  {
+    "id": 6569,
+    "type": "text",
+    "page_idx": 223,
+    "text": "Badge A is a parallelogram. It is to be painted gold except for a semicircular section. The diameter of the semicircle is the same as the height of the parallelogram,  $h\\mathrm{cm}$ ."
+  },
+  {
+    "id": 6570,
+    "type": "text",
+    "page_idx": 223,
+    "text": "Badge B is a triangle with base  $16\\mathrm{cm}$  and height  $h\\mathrm{cm}$ . All of the triangle is to be painted gold. The area to be painted is  $18\\mathrm{cm}^2$  more than the area to be painted on badge A."
+  },
+  {
+    "id": 6571,
+    "type": "text",
+    "page_idx": 223,
+    "text": "Calculate the value of  $h$ . Give your answer to 3 significant figures."
+  },
+  {
+    "id": 6572,
+    "type": "text",
+    "page_idx": 223,
+    "text": "7.2 Three-dimensional objects"
+  },
+  {
+    "id": 6573,
+    "type": "text",
+    "page_idx": 223,
+    "text": "The focus of the rest of this chapter is three-dimensional objects, but you will use many of the formulae for two-dimensional shapes in your calculations. A three-dimensional object is called a solid."
+  },
+  {
+    "id": 6574,
+    "type": "text",
+    "page_idx": 223,
+    "text": "Nets of solids"
+  },
+  {
+    "id": 6575,
+    "type": "text",
+    "page_idx": 223,
+    "text": "A net is a two-dimensional shape that can be drawn, cut out and folded to form a three-dimensional solid."
+  },
+  {
+    "id": 6576,
+    "type": "text",
+    "page_idx": 223,
+    "text": "This is the net of a solid that you should be quite familiar with."
+  },
+  {
+    "id": 6577,
+    "type": "image",
+    "page_idx": 223,
+    "img_path": "images/aa4707006e0041e903b6bb69daf723ad9df54e5ca9e0c77e0d2fae45392ba463.jpg"
+  },
+  {
+    "id": 6578,
+    "type": "text",
+    "page_idx": 223,
+    "text": "If you fold along the dotted lines and join the points with the same letters then you will form this cube."
+  },
+  {
+    "id": 6579,
+    "type": "text",
+    "page_idx": 223,
+    "text": "You should try this yourself and look carefully at which edges (sides) and which vertices (points or corners) join up."
+  },
+  {
+    "id": 6580,
+    "type": "image",
+    "page_idx": 223,
+    "img_path": "images/eaab3b9a1393632dda0b2fe1350206ae17ae76abe054341d13a4b64433b1f904.jpg"
+  },
+  {
+    "id": 6581,
+    "type": "text",
+    "page_idx": 223,
+    "text": "TIP"
+  },
+  {
+    "id": 6582,
+    "type": "text",
+    "page_idx": 223,
+    "text": "Cardboard boxes start out as a flat shape. The cardboard is then folded along carefully chosen lines, which become the edges of the box. Try unfolding a box to see how it was made."
+  },
+  {
+    "id": 6583,
+    "type": "text",
+    "page_idx": 224,
+    "text": "Exercise 7.5"
+  },
+  {
+    "id": 6584,
+    "type": "text",
+    "page_idx": 224,
+    "text": "1 The diagram shows a cuboid. Draw a net for the cuboid."
+  },
+  {
+    "id": 6585,
+    "type": "image",
+    "page_idx": 224,
+    "img_path": "images/633d43bdf03b9b14aef39da20f64aad1bc9608241e0af6597296ba8bfbd025f8.jpg"
+  },
+  {
+    "id": 6586,
+    "type": "text",
+    "page_idx": 224,
+    "text": "2 The diagram shows the net of a solid."
+  },
+  {
+    "id": 6587,
+    "type": "text",
+    "text": "a Describe the solid in as much detail as you can.",
+    "page_idx": 224
+  },
+  {
+    "id": 6588,
+    "type": "text",
+    "text": "b Which two points will join with point  $M$  when the net is folded?",
+    "page_idx": 224
+  },
+  {
+    "id": 6589,
+    "type": "text",
+    "text": "c Which edges are equal in length to  $PO?$",
+    "page_idx": 224
+  },
+  {
+    "id": 6590,
+    "type": "image",
+    "page_idx": 224,
+    "img_path": "images/276592815a28b3b5a6014c7954b5cf0e6abbe3312f8980df600b4783cfc2d066.jpg"
+  },
+  {
+    "id": 6591,
+    "type": "text",
+    "page_idx": 224,
+    "text": "3 A teacher asked her class to draw the net of a cuboid cereal box. These are the diagrams that three students drew. Which of them is correct?"
+  },
+  {
+    "id": 6592,
+    "type": "image",
+    "page_idx": 224,
+    "img_path": "images/793a3fb468afd092e15239d40b811550f86ee320a539ec3d111bc8031526a93b.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 6593,
+    "type": "image",
+    "page_idx": 224,
+    "img_path": "images/a0eb4103e4ea6d7228b49bfeef8af6d3a7bb0ed69ab78ecff7b05355db9599d7.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 6594,
+    "type": "image",
+    "page_idx": 224,
+    "img_path": "images/a0b1572f2352b35de431a38da9040087a30787f411e1db457e9ae6eb9cb038e4.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 6595,
+    "type": "text",
+    "page_idx": 224,
+    "text": "TIP"
+  },
+  {
+    "id": 6596,
+    "type": "text",
+    "page_idx": 224,
+    "text": "If you find it difficult to visualise the solution to problems like this, you can build models to help you."
+  },
+  {
+    "id": 6597,
+    "type": "text",
+    "page_idx": 224,
+    "text": "4 How could you make a cardboard model of this numbered octahedron? Draw labelled sketches to show your solution."
+  },
+  {
+    "id": 6598,
+    "type": "image",
+    "page_idx": 224,
+    "img_path": "images/df241d7f0b45280fb5e33170d83a62bf681bdd32588b22f0b8c866bda4a38c8a.jpg"
+  },
+  {
+    "id": 6599,
+    "type": "text",
+    "page_idx": 225,
+    "text": "5 The diagram shows the net of a cuboid."
+  },
+  {
+    "id": 6600,
+    "type": "image",
+    "page_idx": 225,
+    "img_path": "images/17f77ef3669af10438304e49d8576b793745449e6f8a5c09bc3692b883028c2c.jpg"
+  },
+  {
+    "id": 6601,
+    "type": "text",
+    "text": "a Find the surface area of the cuboid in  $\\mathrm{cm}^2$",
+    "page_idx": 225
+  },
+  {
+    "id": 6602,
+    "type": "text",
+    "text": "b Find the volume of the cuboid in  $\\mathfrak{m}^3$",
+    "page_idx": 225
+  },
+  {
+    "id": 6603,
+    "type": "text",
+    "page_idx": 225,
+    "text": "7.3 Surface areas and volumes of solids"
+  },
+  {
+    "id": 6604,
+    "type": "text",
+    "page_idx": 225,
+    "text": "The flat, two-dimensional surfaces on the outside of a solid are called faces. You can find the area of each face using the techniques from earlier in this chapter. The total area of all the faces is the surface area of the solid."
+  },
+  {
+    "id": 6605,
+    "type": "text",
+    "page_idx": 225,
+    "text": "The volume is the amount of space contained inside the solid. If the lengths are given in centimetres, then the volume is measured in cubic centimetres  $(\\mathrm{cm}^3)$  and so on."
+  },
+  {
+    "id": 6606,
+    "type": "text",
+    "page_idx": 225,
+    "text": "TIP"
+  },
+  {
+    "id": 6607,
+    "type": "text",
+    "page_idx": 225,
+    "text": "We measure the amount of water flowing over a waterfall in cubic metres per second. The maximum flow of water over the Iguazu Falls in South America was 45700 cubic metres per second, on 9 June 2014. This is the equivalent to more than 18 standard Olympic swimming pools being emptied over the waterfall every second!"
+  },
+  {
+    "id": 6608,
+    "type": "text",
+    "page_idx": 225,
+    "text": "TIP"
+  },
+  {
+    "id": 6609,
+    "type": "text",
+    "page_idx": 225,
+    "text": "It can be helpful to draw the net of a solid when trying to find its surface area."
+  }
+]
+```

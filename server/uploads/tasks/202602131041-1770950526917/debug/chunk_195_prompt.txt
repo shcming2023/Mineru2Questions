@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 13650,
+    "type": "text",
+    "page_idx": 442,
+    "text": "b How can you check whether a solution you obtained graphically is correct or not?"
+  },
+  {
+    "id": 13651,
+    "type": "text",
+    "page_idx": 442,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 13652,
+    "type": "text",
+    "page_idx": 442,
+    "text": "When is there a solution?"
+  },
+  {
+    "id": 13653,
+    "type": "equation",
+    "page_idx": 442,
+    "text": "$$\n3 x + 2 y = 7\n$$"
+  },
+  {
+    "id": 13654,
+    "type": "equation",
+    "page_idx": 442,
+    "text": "$$\n6 x + 4 y = - 2\n$$"
+  },
+  {
+    "id": 13655,
+    "type": "text",
+    "text": "1 Plot the following lines on the same pair of axes:",
+    "page_idx": 442
+  },
+  {
+    "id": 13656,
+    "type": "text",
+    "text": "2 Why is it not possible to solve these equations simultaneously?",
+    "page_idx": 442
+  },
+  {
+    "id": 13657,
+    "type": "text",
+    "text": "3 Is there any way that you can tell, from the equations, that there are no solutions?",
+    "page_idx": 442
+  },
+  {
+    "id": 13658,
+    "type": "text",
+    "text": "4 (Challenge!) If you have the following pair of equations, what needs to be true for there to be a solution?",
+    "page_idx": 442
+  },
+  {
+    "id": 13659,
+    "type": "equation",
+    "page_idx": 442,
+    "text": "$$\n\\begin{array}{l} a x + b y = 3 \\\\ c x + d y = 4 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13660,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Algebraic solution of simultaneous linear equations"
+  },
+  {
+    "id": 13661,
+    "type": "text",
+    "page_idx": 443,
+    "text": "The graphical method for solving simultaneous equations is suitable for whole number solutions but it can be slow and, for non-integer solutions, may not be as accurate as you need. You have already learnt how to solve linear equations with one unknown using algebraic methods. A pair of simultaneous equations gives information about two unknowns. You have to solve the equations together to find the solutions."
+  },
+  {
+    "id": 13662,
+    "type": "text",
+    "page_idx": 443,
+    "text": "You are going to learn two methods of solving simultaneous equations:"
+  },
+  {
+    "id": 13663,
+    "type": "text",
+    "text": "- solving by substitution",
+    "page_idx": 443
+  },
+  {
+    "id": 13664,
+    "type": "text",
+    "text": "- solving by elimination.",
+    "page_idx": 443
+  },
+  {
+    "id": 13665,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Solving by substitution"
+  },
+  {
+    "id": 13666,
+    "type": "text",
+    "page_idx": 443,
+    "text": "You can solve simultaneous equations by substitution by writing one of the equations in the form  $y = \\ldots$  or  $x = \\ldots$  and substituting into the other equation. The method is explained in the following worked example."
+  },
+  {
+    "id": 13667,
+    "type": "text",
+    "page_idx": 443,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 13668,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Solve simultaneously by substitution."
+  },
+  {
+    "id": 13669,
+    "type": "equation",
+    "page_idx": 443,
+    "text": "$$\n\\begin{array}{l} 3 x - 2 y = 2 9 (1) \\\\ 4 x + y = 2 4 (2) \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13670,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Answer"
+  },
+  {
+    "id": 13671,
+    "type": "equation",
+    "page_idx": 443,
+    "text": "$$\n\\begin{array}{l} 4 x + y = 2 4 \\\\ y = 2 4 - 4 x \\tag {3} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13672,
+    "type": "equation",
+    "page_idx": 443,
+    "text": "$$\n\\begin{array}{l} 3 x - 2 y = 2 9 \\tag {1} \\\\ 3 x - 2 (2 4 - 4 x) = 2 9 \\\\ 3 x - 4 8 + 8 x = 2 9 \\\\ 3 x + 8 x = 2 9 + 4 8 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13673,
+    "type": "equation",
+    "page_idx": 443,
+    "text": "$$\n\\begin{array}{l} 1 1 x = 7 7 \\\\ x = 7 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13674,
+    "type": "equation",
+    "page_idx": 443,
+    "text": "$$\n\\mathrm {S o}, x = 7\n$$"
+  },
+  {
+    "id": 13675,
+    "type": "equation",
+    "page_idx": 443,
+    "text": "$$\n\\begin{array}{l} y = 2 4 - 4 (7) \\\\ y = 2 4 - 2 8 \\\\ y = - 4 \\\\ x = 7 \\text {a n d} y = - 4 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13676,
+    "type": "text",
+    "text": "Solve equation [2] for  $y$ .",
+    "page_idx": 443
+  },
+  {
+    "id": 13677,
+    "type": "text",
+    "text": "Label the new equation [3].",
+    "page_idx": 443
+  },
+  {
+    "id": 13678,
+    "type": "text",
+    "page_idx": 443,
+    "text": "[1]"
+  },
+  {
+    "id": 13679,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Substitute [3] into [1] by replacing  $y$  with  $24 - 4x$"
+  },
+  {
+    "id": 13680,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Remove brackets."
+  },
+  {
+    "id": 13681,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Add 48 to both sides."
+  },
+  {
+    "id": 13682,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Add like terms."
+  },
+  {
+    "id": 13683,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Divide both sides by 11."
+  },
+  {
+    "id": 13684,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Now, substitute the value of  $x$  into any of the"
+  },
+  {
+    "id": 13685,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Equations to find  $y$ . Equation [3] will be easiest,"
+  },
+  {
+    "id": 13686,
+    "type": "text",
+    "page_idx": 443,
+    "text": "so use this one."
+  },
+  {
+    "id": 13687,
+    "type": "text",
+    "page_idx": 443,
+    "text": "Write out the solutions."
+  },
+  {
+    "id": 13688,
+    "type": "text",
+    "page_idx": 443,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 13689,
+    "type": "text",
+    "page_idx": 443,
+    "text": "The substitution method involves rearranging formulae to make one of the variables the subject. You learnt how to do this in Chapter 6."
+  },
+  {
+    "id": 13690,
+    "type": "text",
+    "page_idx": 443,
+    "text": "TIP"
+  },
+  {
+    "id": 13691,
+    "type": "text",
+    "page_idx": 443,
+    "text": "You should always number the"
+  },
+  {
+    "id": 13692,
+    "type": "text",
+    "page_idx": 443,
+    "text": "equations so you"
+  },
+  {
+    "id": 13693,
+    "type": "text",
+    "page_idx": 443,
+    "text": "can identify each"
+  },
+  {
+    "id": 13694,
+    "type": "text",
+    "page_idx": 443,
+    "text": "equation quickly"
+  },
+  {
+    "id": 13695,
+    "type": "text",
+    "page_idx": 443,
+    "text": "and easily."
+  },
+  {
+    "id": 13696,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Solving by elimination"
+  },
+  {
+    "id": 13697,
+    "type": "text",
+    "page_idx": 444,
+    "text": "You can also solve simultaneous equations by eliminating (getting rid of) one of the variables."
+  },
+  {
+    "id": 13698,
+    "type": "text",
+    "page_idx": 444,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 13699,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Solve the following pair of equations using elimination:"
+  },
+  {
+    "id": 13700,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\nx - y = 4 \\tag {1}\n$$"
+  },
+  {
+    "id": 13701,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\nx + y = 6 \\tag {2}\n$$"
+  },
+  {
+    "id": 13702,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Answer"
+  },
+  {
+    "id": 13703,
+    "type": "text",
+    "page_idx": 444,
+    "text": "$x - y = 4$  [1] You can add the two equations together by adding the  $x + y = 6$  [2] left-hand sides and adding the right-hand sides."
+  },
+  {
+    "id": 13704,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\n2 x = 1 0\n$$"
+  },
+  {
+    "id": 13705,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\n\\begin{array}{l} 2 x = 1 0 \\\\ \\Rightarrow x = \\frac {1 0}{2} \\\\ x = 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13706,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Notice that the equation that comes from this addition no longer contains a  $y$  term, so you can now solve to find the value of  $x$ ."
+  },
+  {
+    "id": 13707,
+    "type": "text",
+    "page_idx": 444,
+    "text": "$x + y = 6$  [2] You now need to find the  $y$  -value that goes with this  $5 + y = 6$  value of  $x$  .Substitute  $x$  into equation [2]."
+  },
+  {
+    "id": 13708,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\ny = 1\n$$"
+  },
+  {
+    "id": 13709,
+    "type": "text",
+    "page_idx": 444,
+    "text": "$x - y = 5 - 1 = 4$  Check that these values for  $x$  and  $y$  work in equation [1]."
+  },
+  {
+    "id": 13710,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Both equations are satisfied by the pair of values  $x = 5$  and  $y = 1$"
+  },
+  {
+    "id": 13711,
+    "type": "text",
+    "page_idx": 444,
+    "text": "The following worked examples look at different cases where you may need to subtract the equations, instead of adding, or where you need to multiply one or both equations before you add or subtract."
+  },
+  {
+    "id": 13712,
+    "type": "text",
+    "page_idx": 444,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 13713,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Solve the following pairs of simultaneous equations:"
+  },
+  {
+    "id": 13714,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\n\\begin{array}{l} 2 x - 3 y = - 8 \\quad [ 1 ] \\\\ 5 x + 3 y = 1 \\tag {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13715,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Answer"
+  },
+  {
+    "id": 13716,
+    "type": "equation",
+    "page_idx": 444,
+    "text": "$$\n\\begin{array}{l} 2 x - 3 y = - 8 \\\\ 5 x + 3 y = 1 \\\\ 7 x = - 7 [ 1 ] + [ 2 ] \\\\ \\Rightarrow x = - 1 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13717,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Notice that both equations have the same coefficient of  $y$  though the signs are different. If you add the equations together, you make use of the fact that  $-3y + 3y = 0$"
+  },
+  {
+    "id": 13718,
+    "type": "text",
+    "page_idx": 444,
+    "text": "TIP"
+  },
+  {
+    "id": 13719,
+    "type": "text",
+    "page_idx": 444,
+    "text": "Always line up' x's with 'x's, y's with 'y's and  $\\mathbf{\\Pi}^{\\prime} = \\mathbf{\\Pi}^{\\prime}$  with  $\\mathbf{\\Pi}^{\\prime} = \\mathbf{\\Pi}^{\\prime}$"
+  },
+  {
+    "id": 13720,
+    "type": "text",
+    "page_idx": 444,
+    "text": "It will make your method clearer."
+  },
+  {
+    "id": 13721,
+    "type": "text",
+    "page_idx": 445,
+    "text": "WORKED EXAMPLE 4 CONTINUED"
+  },
+  {
+    "id": 13722,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n\\begin{array}{l} 2 x - 3 y = - 8 \\\\ \\Rightarrow 2 (- 1) - 3 y = - 8 \\\\ 6 - 3 y = 0 \\\\ 3 y = 6 \\\\ y = 2 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13723,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Substitute in [1]"
+  },
+  {
+    "id": 13724,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Now you know the value of  $x$ , you can substitute this into either equation and solve for  $y$ ."
+  },
+  {
+    "id": 13725,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n\\begin{array}{l} 5 x + 3 y = 5 (- 1) + 3 (2) \\\\ = - 5 + 6 = 1 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13726,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Check your values in equation [2] to be sure."
+  },
+  {
+    "id": 13727,
+    "type": "text",
+    "page_idx": 445,
+    "text": "The second equation is also satisfied by these values, so  $x = -1$  and  $y = 2$ ."
+  },
+  {
+    "id": 13728,
+    "type": "text",
+    "page_idx": 445,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 13729,
+    "type": "text",
+    "page_idx": 445,
+    "text": "If you need to remind yourself about working with directed numbers, look back to Chapter 1. In particular, make sure you are confident subtracting negative numbers."
+  },
+  {
+    "id": 13730,
+    "type": "text",
+    "page_idx": 445,
+    "text": "WORKED EXAMPLE 5"
+  },
+  {
+    "id": 13731,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Solve simultaneously:"
+  },
+  {
+    "id": 13732,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n\\begin{array}{l} 4 x + y = - 1 \\tag {1} \\\\ 7 x + y = - 4 \\quad [ 2 ] \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13733,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Answer"
+  },
+  {
+    "id": 13734,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n\\begin{array}{l} 7 x + y = - 4 \\quad [ 2 ] - [ 1 ] \\\\ 4 x + y = - 1 \\\\ 3 x = - 3 \\\\ \\Rightarrow x = - 1 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13735,
+    "type": "text",
+    "page_idx": 445,
+    "text": "The  $y$ -values have the same coefficient again, but this time they have the same sign. Use the fact that  $y - y = 0$  and subtract one equation from the other. There are more 'x's in equation [2] so, consider [2] - [1]."
+  },
+  {
+    "id": 13736,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n4 x + y = - 1\n$$"
+  },
+  {
+    "id": 13737,
+    "type": "text",
+    "page_idx": 445,
+    "text": "[1]"
+  },
+  {
+    "id": 13738,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Substitute into equation [1]."
+  },
+  {
+    "id": 13739,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n\\begin{array}{l} \\Rightarrow 4 (- 1) + y = - 1 \\\\ y = 3 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13740,
+    "type": "equation",
+    "page_idx": 445,
+    "text": "$$\n7 x + y = 7 (- 1) + 3\n$$"
+  },
+  {
+    "id": 13741,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Check that the values  $x = -1$  and  $y = 3$  work in equation [2]."
+  },
+  {
+    "id": 13742,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Equation [2] is also satisfied by these values, so  $x = -1$  and  $y = 3$ ."
+  },
+  {
+    "id": 13743,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Manipulating equations before solving them"
+  },
+  {
+    "id": 13744,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Sometimes you need to manipulate or rearrange one or both of the equations before you can solve them simultaneously by elimination. Worked examples 6 to 8 show you how this is done."
+  },
+  {
+    "id": 13745,
+    "type": "text",
+    "page_idx": 445,
+    "text": "TIP"
+  },
+  {
+    "id": 13746,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Always make it clear which equation you have chosen to subtract from which."
+  },
+  {
+    "id": 13747,
+    "type": "text",
+    "page_idx": 445,
+    "text": "Here, you have used the fact that  $-4 - (-1) = -3$ ."
+  },
+  {
+    "id": 13748,
+    "type": "text",
+    "page_idx": 446,
+    "text": "WORKED EXAMPLE 6"
+  },
+  {
+    "id": 13749,
+    "type": "text",
+    "page_idx": 446,
+    "text": "Solve simultaneously:"
+  }
+]
+```

@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 14420,
+    "type": "text",
+    "page_idx": 469,
+    "text": "$7x^{2} - 3x - 6 = 3x - 7$"
+  },
+  {
+    "id": 14421,
+    "type": "text",
+    "page_idx": 469,
+    "text": "$x(6x - 3) - 2 = 0$"
+  },
+  {
+    "id": 14422,
+    "type": "text",
+    "page_idx": 469,
+    "text": "d  $0.5x^{2} + 0.8x - 2 = 0$"
+  },
+  {
+    "id": 14423,
+    "type": "text",
+    "page_idx": 469,
+    "text": "$(x + 7)(x + 5) = 9$"
+  },
+  {
+    "id": 14424,
+    "type": "text",
+    "page_idx": 469,
+    "text": "f  $\\frac{1}{x} +x = 7$"
+  },
+  {
+    "id": 14425,
+    "type": "text",
+    "page_idx": 469,
+    "text": "5 Find the exact solution of each equation using the quadratic formula."
+  },
+  {
+    "id": 14426,
+    "type": "text",
+    "page_idx": 469,
+    "text": "a  $x^{2} - 5x + 1 = 0$"
+  },
+  {
+    "id": 14427,
+    "type": "text",
+    "page_idx": 469,
+    "text": "$2x^{2} + 3x - 7 = 0$"
+  },
+  {
+    "id": 14428,
+    "type": "text",
+    "page_idx": 469,
+    "text": "$3x^{2} - 5x - 1 = 0$"
+  },
+  {
+    "id": 14429,
+    "type": "text",
+    "page_idx": 469,
+    "text": "d  $x^{2} + 4x = -1$"
+  },
+  {
+    "id": 14430,
+    "type": "text",
+    "page_idx": 469,
+    "text": "9+x²+8x=0"
+  },
+  {
+    "id": 14431,
+    "type": "text",
+    "page_idx": 469,
+    "text": "$2{x}^{2} + 5 = {10x}$"
+  },
+  {
+    "id": 14432,
+    "type": "text",
+    "page_idx": 469,
+    "text": "6 A rectangle has area  $12\\mathrm{cm}^2$ . If the length of the rectangle is  $(x + 1)\\mathrm{cm}$  and the width of the rectangle is  $(x + 3)\\mathrm{cm}$ , find the possible value(s) of  $x$ ."
+  },
+  {
+    "id": 14433,
+    "type": "text",
+    "page_idx": 469,
+    "text": "TIP"
+  },
+  {
+    "id": 14434,
+    "type": "text",
+    "page_idx": 469,
+    "text": "You must make sure that your equation takes the form of a quadratic expression equal to zero."
+  },
+  {
+    "id": 14435,
+    "type": "text",
+    "page_idx": 469,
+    "text": "If it does not, then you will need to collect all terms on to one side so that a zero appears on the other side!"
+  },
+  {
+    "id": 14436,
+    "type": "text",
+    "page_idx": 470,
+    "text": "7 A biologist claims that the average height,  $h$  metres, of trees of a certain species after  $t$  months is given by  $h = \\frac{1}{5} t^{\\frac{1}{2}} + \\frac{1}{3} t^{\\frac{1}{3}}$ ."
+  },
+  {
+    "id": 14437,
+    "type": "text",
+    "page_idx": 470,
+    "text": "For this model:"
+  },
+  {
+    "id": 14438,
+    "type": "text",
+    "text": "a find the average height of trees of this species after 64 months",
+    "page_idx": 470
+  },
+  {
+    "id": 14439,
+    "type": "text",
+    "text": "find the number of months that the trees have been growing when the model predicts an average height of 10 metres. Give your answer to 3 significant figures.",
+    "page_idx": 470
+  },
+  {
+    "id": 14440,
+    "type": "text",
+    "page_idx": 470,
+    "text": "TIP"
+  },
+  {
+    "id": 14441,
+    "type": "text",
+    "page_idx": 470,
+    "text": "Let  $x = t^{\\frac{1}{2}}$ ."
+  },
+  {
+    "id": 14442,
+    "type": "text",
+    "page_idx": 470,
+    "text": "Form and solve a quadratic in  $x$ ."
+  },
+  {
+    "id": 14443,
+    "type": "text",
+    "page_idx": 470,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 14444,
+    "type": "text",
+    "page_idx": 470,
+    "text": "Did you make any mistakes with negative coefficients of  $x$ ? How did you correct them and how will you avoid making the same mistake in the future?"
+  },
+  {
+    "id": 14445,
+    "type": "text",
+    "page_idx": 470,
+    "text": "14.6 Factorising quadratics where the coefficient of  $x^2$  is not 1"
+  },
+  {
+    "id": 14446,
+    "type": "text",
+    "page_idx": 470,
+    "text": "The quadratic equation in part (c) of Worked example 19 gave two solutions that could have been obtained by factorisation. It turns out that  $(x - 1)(3x + 1) = 3x^2 - 2x - 1$  (you can check this by expanding the brackets)."
+  },
+  {
+    "id": 14447,
+    "type": "text",
+    "page_idx": 470,
+    "text": "In general, if the coefficient of  $x^2$  in a quadratic is a number other than 1 you need to carry out more steps to factorise the expression."
+  },
+  {
+    "id": 14448,
+    "type": "text",
+    "page_idx": 470,
+    "text": "WORKED EXAMPLE 21"
+  },
+  {
+    "id": 14449,
+    "type": "text",
+    "page_idx": 470,
+    "text": "Factorise each of the following expressions:"
+  },
+  {
+    "id": 14450,
+    "type": "text",
+    "page_idx": 470,
+    "text": "a  $2x^{2} + 3x + 1$"
+  },
+  {
+    "id": 14451,
+    "type": "text",
+    "page_idx": 470,
+    "text": "b  $3x^{2} - 14x + 8$"
+  },
+  {
+    "id": 14452,
+    "type": "text",
+    "page_idx": 470,
+    "text": "6x²+14x-12"
+  },
+  {
+    "id": 14453,
+    "type": "text",
+    "page_idx": 470,
+    "text": "d  $10x^{2} + 11x - 8$"
+  },
+  {
+    "id": 14454,
+    "type": "text",
+    "page_idx": 470,
+    "text": "Answers"
+  },
+  {
+    "id": 14455,
+    "type": "text",
+    "page_idx": 470,
+    "text": "a  $2x^{2} + 3x + 1$"
+  },
+  {
+    "id": 14456,
+    "type": "equation",
+    "page_idx": 470,
+    "text": "$$\n2 x ^ {2} + 3 x + 1 = (2 x) (x)\n$$"
+  },
+  {
+    "id": 14457,
+    "type": "text",
+    "page_idx": 470,
+    "text": "The only way to produce the term  $2x^{2}$  is to multiply  $2x$  and  $x$ . Place these two terms at the front of each bracket. There are blank spaces in the brackets because you don't yet know what else needs to be included. The clue lies in the constant term at the end, which is obtained by multiplying these two unknown values together."
+  },
+  {
+    "id": 14458,
+    "type": "text",
+    "page_idx": 470,
+    "text": "The constant term is 1, so the only possible values are +1 or -1. Since the constant term is positive, the unknown values must be either both -1 or both +1."
+  },
+  {
+    "id": 14459,
+    "type": "text",
+    "page_idx": 470,
+    "text": "Try each of these combinations systematically:"
+  },
+  {
+    "id": 14460,
+    "type": "text",
+    "page_idx": 470,
+    "text": "$(2x - 1)(x - 1) = 2x^{2} - 3x + 1$"
+  },
+  {
+    "id": 14461,
+    "type": "text",
+    "page_idx": 470,
+    "text": "The coefficient of  $x$  is wrong."
+  },
+  {
+    "id": 14462,
+    "type": "text",
+    "page_idx": 470,
+    "text": "$(2x + 1)(x + 1) = 2x^{2} + 3x + 1$"
+  },
+  {
+    "id": 14463,
+    "type": "text",
+    "page_idx": 470,
+    "text": "This is correct."
+  },
+  {
+    "id": 14464,
+    "type": "text",
+    "page_idx": 470,
+    "text": "So,  $2x^{2} + 3x + 1 = (2x + 1)(x + 1)$"
+  },
+  {
+    "id": 14465,
+    "type": "image",
+    "page_idx": 470,
+    "img_path": "images/10b8a4dc765e29520dc525d99e8d1e2f1ba1e27ec1a45b9fd273b8280db077d3.jpg"
+  },
+  {
+    "id": 14466,
+    "type": "text",
+    "page_idx": 471,
+    "text": "WORKED EXAMPLE 21 CONTINUED"
+  },
+  {
+    "id": 14467,
+    "type": "text",
+    "page_idx": 471,
+    "text": "b  $3x^{2} - 14x + 8$"
+  },
+  {
+    "id": 14468,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Start by writing  $3x^{2} - 14x + 8 = (3x)(x)$"
+  },
+  {
+    "id": 14469,
+    "type": "text",
+    "page_idx": 471,
+    "text": "The two unknown terms must multiply to give 8. Since the constant term is positive, the unknowns must have the same sign. The possible pairs are:"
+  },
+  {
+    "id": 14470,
+    "type": "text",
+    "page_idx": 471,
+    "text": "8 and 1 2 and 4 -8 and -1 -2 and -4"
+  },
+  {
+    "id": 14471,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Try each pair in turn, remembering that you can reverse the order:"
+  },
+  {
+    "id": 14472,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n(3 x + 8) (x + 1) = 3 x ^ {2} + 3 x + 8 x + 8 = 3 x ^ {2} + 1 1 x + 8 \\quad \\text {I n c o r r e c t}\n$$"
+  },
+  {
+    "id": 14473,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n(3 x + 1) (x + 8) = 3 x ^ {2} + 2 4 x + x + 8 = 3 x ^ {2} + 2 5 x + 8 \\quad \\text {I n c o r r e c t}\n$$"
+  },
+  {
+    "id": 14474,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n(3 x + 2) (x + 4) = 3 x ^ {2} + 1 2 x + 2 x + 8 = 3 x ^ {2} + 1 4 x + 8 \\quad \\text {I n c o r r e c t}\n$$"
+  },
+  {
+    "id": 14475,
+    "type": "text",
+    "page_idx": 471,
+    "text": "This last one is very close. You just need to change the sign of the 'x' term. This can be done by jumping to the last pair: -2 and -4."
+  },
+  {
+    "id": 14476,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n(3 x - 2) (x - 4) = 3 x ^ {2} - 1 2 x - 2 x + 8 = 3 x ^ {2} - 1 4 x + 8 \\quad \\text {C o r r e c t}\n$$"
+  },
+  {
+    "id": 14477,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\nS _ {0}, 3 x ^ {2} - 1 4 x + 8 = (3 x - 2) (x - 4)\n$$"
+  },
+  {
+    "id": 14478,
+    "type": "text",
+    "page_idx": 471,
+    "text": "c  $6x^{2} + 14x - 12 = 2(3x^{2} + 7x - 6)$  Take out the common factor first."
+  },
+  {
+    "id": 14479,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Write the pair of brackets; the factors have to be  $3x$  and  $x$ :"
+  },
+  {
+    "id": 14480,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n6 x ^ {2} + 1 4 x - 1 2 = 2 (3 x) (x)\n$$"
+  },
+  {
+    "id": 14481,
+    "type": "text",
+    "page_idx": 471,
+    "text": "The two unknown terms must multiply to give  $-6$ , because you have taken out the common factor 2. The possible pairs are:"
+  },
+  {
+    "id": 14482,
+    "type": "text",
+    "page_idx": 471,
+    "text": "2 and -3 3 and -2 6 and -1 -6 and 1"
+  },
+  {
+    "id": 14483,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Test the pairs until you find the correct combination."
+  },
+  {
+    "id": 14484,
+    "type": "text",
+    "page_idx": 471,
+    "text": "You will find that:"
+  },
+  {
+    "id": 14485,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n6 x ^ {2} + 1 4 x - 1 2 = 2 (3 x - 2) (x + 3)\n$$"
+  },
+  {
+    "id": 14486,
+    "type": "text",
+    "page_idx": 471,
+    "text": "d  $10x^{2} + 11x - 8$"
+  },
+  {
+    "id": 14487,
+    "type": "text",
+    "page_idx": 471,
+    "text": "This question requires more thought because there is more than one way to multiply two expressions to get  $10x^{2}$ :"
+  },
+  {
+    "id": 14488,
+    "type": "text",
+    "page_idx": 471,
+    "text": "2x and 5x or 10x and x."
+  },
+  {
+    "id": 14489,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Each possibility needs to be tried."
+  },
+  {
+    "id": 14490,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Start with  $10x^{2} + 11x - 8 = (10x)(x)$"
+  },
+  {
+    "id": 14491,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Factor pairs that multiply to give -8 are:"
+  },
+  {
+    "id": 14492,
+    "type": "text",
+    "page_idx": 471,
+    "text": "-8 and 1 8 and -1 2 and -4 -2 and 4"
+  },
+  {
+    "id": 14493,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Remember that you will need to try each pair with the two values in either order."
+  },
+  {
+    "id": 14494,
+    "type": "text",
+    "page_idx": 471,
+    "text": "For this particular quadratic you will find that none of the eight possible combinations works!"
+  },
+  {
+    "id": 14495,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Instead, you must now try:  $10x^{2} + 11x - 8 = (5x)(2x)$ ."
+  },
+  {
+    "id": 14496,
+    "type": "text",
+    "page_idx": 471,
+    "text": "Trying the above set of pairs once again you will eventually find that:"
+  },
+  {
+    "id": 14497,
+    "type": "equation",
+    "page_idx": 471,
+    "text": "$$\n1 0 x ^ {2} + 1 1 x - 8 = (5 x + 8) (2 x - 1)\n$$"
+  },
+  {
+    "id": 14498,
+    "type": "text",
+    "page_idx": 472,
+    "text": "Exercise 14.10"
+  },
+  {
+    "id": 14499,
+    "type": "text",
+    "page_idx": 472,
+    "text": "Factorise each of the following expressions."
+  },
+  {
+    "id": 14500,
+    "type": "text",
+    "page_idx": 472,
+    "text": "a  $3{x}^{2} + {14x} + 8$"
+  },
+  {
+    "id": 14501,
+    "type": "text",
+    "page_idx": 472,
+    "text": "b  $2x^{2} + x - 3$"
+  },
+  {
+    "id": 14502,
+    "type": "text",
+    "page_idx": 472,
+    "text": "c  $6x^{2} + x - 2$"
+  },
+  {
+    "id": 14503,
+    "type": "text",
+    "page_idx": 472,
+    "text": "d  $3x^{2} + 14x + 16$"
+  },
+  {
+    "id": 14504,
+    "type": "text",
+    "page_idx": 472,
+    "text": "e  $2x^{2} - x - 10$"
+  },
+  {
+    "id": 14505,
+    "type": "text",
+    "page_idx": 472,
+    "text": "$16x^{2} + 32x - 9$"
+  },
+  {
+    "id": 14506,
+    "type": "text",
+    "page_idx": 472,
+    "text": "$3{x}^{2} + {16x} + 5$"
+  },
+  {
+    "id": 14507,
+    "type": "text",
+    "page_idx": 472,
+    "text": "h  $8x^{2} + 2x - 1$"
+  },
+  {
+    "id": 14508,
+    "type": "text",
+    "page_idx": 472,
+    "text": "2x²-x-6"
+  },
+  {
+    "id": 14509,
+    "type": "text",
+    "page_idx": 472,
+    "text": "$2x^{2} + 9x + 9$"
+  },
+  {
+    "id": 14510,
+    "type": "text",
+    "page_idx": 472,
+    "text": "k  $3x^{2} + 2x - 16$"
+  },
+  {
+    "id": 14511,
+    "type": "text",
+    "page_idx": 472,
+    "text": "10x²-x-3"
+  },
+  {
+    "id": 14512,
+    "type": "text",
+    "page_idx": 472,
+    "text": "m  $5x^{2} + 6x + 1$"
+  },
+  {
+    "id": 14513,
+    "type": "text",
+    "page_idx": 472,
+    "text": "n  $2x^{2} - 19x + 9$"
+  },
+  {
+    "id": 14514,
+    "type": "text",
+    "page_idx": 472,
+    "text": "12x²+8x-15"
+  },
+  {
+    "id": 14515,
+    "type": "text",
+    "page_idx": 472,
+    "text": "Here is another method for factorising a quadratic like those in the previous exercise."
+  },
+  {
+    "id": 14516,
+    "type": "text",
+    "page_idx": 472,
+    "text": "WORKED EXAMPLE 22"
+  },
+  {
+    "id": 14517,
+    "type": "text",
+    "page_idx": 472,
+    "text": "Factorise  $10x^{2} + 11x - 8$"
+  },
+  {
+    "id": 14518,
+    "type": "text",
+    "page_idx": 472,
+    "text": "Answer"
+  },
+  {
+    "id": 14519,
+    "type": "text",
+    "page_idx": 472,
+    "text": "$10 \\times -8 = -80$"
+  }
+]
+```

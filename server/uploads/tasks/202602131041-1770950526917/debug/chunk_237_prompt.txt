@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 16590,
+    "type": "text",
+    "page_idx": 569,
+    "text": "b $120000"
+  },
+  {
+    "id": 16591,
+    "type": "text",
+    "page_idx": 569,
+    "text": "c $129000"
+  },
+  {
+    "id": 16592,
+    "type": "text",
+    "page_idx": 569,
+    "text": "d $135000"
+  },
+  {
+    "id": 16593,
+    "type": "text",
+    "page_idx": 569,
+    "text": "e $178000"
+  },
+  {
+    "id": 16594,
+    "type": "text",
+    "page_idx": 569,
+    "text": "2 Use the following tax table to answer the questions that follow."
+  },
+  {
+    "id": 16595,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"2\">Single person (no dependants)</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16596,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Taxable income</td><td>Income tax payable</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16597,
+    "type": "text",
+    "text": "[Table Row] <tr><td>$0–$8375</td><td>10% of the amount over $0</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16598,
+    "type": "text",
+    "text": "[Table Row] <tr><td>$8375–$34 000</td><td>$837.50 plus 15% of the amount over $8375</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16599,
+    "type": "text",
+    "text": "[Table Row] <tr><td>$34 000–$82 400</td><td>$4681.25 plus 25% of the amount over $34 000</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16600,
+    "type": "text",
+    "text": "[Table Row] <tr><td>$82 400–$171 850</td><td>$16 781.25 plus 28% of the amount over $82 400</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16601,
+    "type": "text",
+    "text": "[Table Row] <tr><td>$171 850–$373 650</td><td>$41 827.25 plus 33% of the amount over $171 850</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16602,
+    "type": "text",
+    "text": "[Table Row] <tr><td>$373 650+</td><td>$108 421.25 plus 35% of the amount over $373 650</td></tr>",
+    "page_idx": 569
+  },
+  {
+    "id": 16603,
+    "type": "text",
+    "page_idx": 569,
+    "text": "a Li-Gon has a taxable income of \\(40000 for this tax year. He tells his friends that he is in the \\(25\\%\\) tax bracket."
+  },
+  {
+    "id": 16604,
+    "type": "text",
+    "text": "i Is this correct?",
+    "page_idx": 569
+  },
+  {
+    "id": 16605,
+    "type": "text",
+    "text": "ii Does it mean that he pays \\(10000 in income tax? Explain why or why not.",
+    "page_idx": 569
+  },
+  {
+    "id": 16606,
+    "type": "text",
+    "text": "iii When Li-Gon checks his tax return, he finds that he only has to pay $6181.25 income tax. Show how this amount is calculated by the revenue services.",
+    "page_idx": 569
+  },
+  {
+    "id": 16607,
+    "type": "text",
+    "text": "b How much tax would a person earning $250 000 pay in this tax year?",
+    "page_idx": 569
+  },
+  {
+    "id": 16608,
+    "type": "text",
+    "text": "Cecelia earned  $30000 in taxable income in this year. Her employer deducted$ 320.25 income tax per month from her salary.",
+    "page_idx": 569
+  },
+  {
+    "id": 16609,
+    "type": "text",
+    "page_idx": 569,
+    "text": "i Will Cecelia have to pay any additional tax at the end of the tax year or will she be due for a tax refund as a result of overpayment?"
+  },
+  {
+    "id": 16610,
+    "type": "text",
+    "page_idx": 569,
+    "text": "How much is the amount due in part (i)?"
+  },
+  {
+    "id": 16611,
+    "type": "text",
+    "page_idx": 569,
+    "text": "17.2 Borrowing and investing money"
+  },
+  {
+    "id": 16612,
+    "type": "text",
+    "page_idx": 569,
+    "text": "When you borrow money or you buy things on credit, you are normally charged interest for the use of the money. Similarly, when you save or invest money, you are paid interest by the bank or financial institution in return for allowing them to keep and use your money."
+  },
+  {
+    "id": 16613,
+    "type": "text",
+    "page_idx": 570,
+    "text": "Simple interest"
+  },
+  {
+    "id": 16614,
+    "type": "text",
+    "page_idx": 570,
+    "text": "Simple interest is a fixed percentage of the original amount borrowed or invested. In other words, if you borrow  $100 at an interest rate of \\(5\\%$  per year, you will be charged \\)5 interest for every year of the loan."
+  },
+  {
+    "id": 16615,
+    "type": "text",
+    "page_idx": 570,
+    "text": "Simple interest involves adding the interest amount to the original amount at regular intervals. The formula used to calculate simple interest is:"
+  },
+  {
+    "id": 16616,
+    "type": "equation",
+    "page_idx": 570,
+    "text": "$$\nI = \\frac {P R T}{1 0 0}, \\text {w h e r e :}\n$$"
+  },
+  {
+    "id": 16617,
+    "type": "text",
+    "page_idx": 570,
+    "text": "$P =$  the principal, which is the original amount borrowed or saved"
+  },
+  {
+    "id": 16618,
+    "type": "equation",
+    "page_idx": 570,
+    "text": "$$\nR = \\text {t h e i n t e r e s t r a t e}\n$$"
+  },
+  {
+    "id": 16619,
+    "type": "equation",
+    "page_idx": 570,
+    "text": "$$\nT = \\text {t h e t i m e (i n y e a r s)}.\n$$"
+  },
+  {
+    "id": 16620,
+    "type": "text",
+    "page_idx": 570,
+    "text": "LINK"
+  },
+  {
+    "id": 16621,
+    "type": "text",
+    "page_idx": 570,
+    "text": "In Islam, interest (riba) is forbidden so Islamic banks do not charge interest on loans or pay interest on investments. Instead, Islamic banks charge a fee for services which is fixed at the beginning of the transaction (murabaha). For investments, the bank and its clients share any profits or losses incurred over a given period in proportion to their investment (musharaka). Many banks in Islamic countries have the responsibility of collecting zakat on behalf of the government. Zakat is a religious tax which Muslims who earn above a threshold amount (nisab) are obliged to pay. It is usually calculated at about  $2.5\\%$  of yearly personal wealth. Zakat is intended to help the less prosperous and to uplift communities in need."
+  },
+  {
+    "id": 16622,
+    "type": "text",
+    "page_idx": 570,
+    "text": "WORKED EXAMPLE 5"
+  },
+  {
+    "id": 16623,
+    "type": "text",
+    "page_idx": 570,
+    "text": "$500 is invested at 10% per annum simple interest. How much interest is earned in three years?"
+  },
+  {
+    "id": 16624,
+    "type": "text",
+    "page_idx": 570,
+    "text": "Answer"
+  },
+  {
+    "id": 16625,
+    "type": "equation",
+    "page_idx": 570,
+    "text": "$$\n10 \\% \\text{of}\\$ 500 = \\frac {10}{100}\\times 500 = \\$ 50 \\quad \\text{The interest rate is} 10 \\% \\text{per annum.}\n$$"
+  },
+  {
+    "id": 16626,
+    "type": "text",
+    "page_idx": 570,
+    "text": "The interest every year is $50."
+  },
+  {
+    "id": 16627,
+    "type": "text",
+    "page_idx": 570,
+    "text": "So after three years, the interest is:"
+  },
+  {
+    "id": 16628,
+    "type": "equation",
+    "page_idx": 570,
+    "text": "$$\n3 \\times \\$ 50 = \\$ 150 \\quad \\text {M u l t i p l y b y t h e n u m b e r o f y e a r s}.\n$$"
+  },
+  {
+    "id": 16629,
+    "type": "text",
+    "page_idx": 571,
+    "text": "WORKED EXAMPLE 6"
+  },
+  {
+    "id": 16630,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Sam invested $400 at 15% per annum for three years. How much money would the investment be worth at the end of the period?"
+  },
+  {
+    "id": 16631,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Answer"
+  },
+  {
+    "id": 16632,
+    "type": "text",
+    "page_idx": 571,
+    "text": "At the end of the period he would have  $P + I$  (the principal plus the interest paid)."
+  },
+  {
+    "id": 16633,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\n\\begin{array}{l} I = \\frac {P R T}{1 0 0} \\text {a n d} P = 4 0 0, \\text {s o :} \\\\ P + I = 4 0 0 + \\frac {(4 0 0 \\times 1 5 \\times 3)}{1 0 0} \\\\ = 1 0 0 + 1 8 0 \\\\ = \\$ 580 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 16634,
+    "type": "text",
+    "page_idx": 571,
+    "text": "WORKED EXAMPLE 7"
+  },
+  {
+    "id": 16635,
+    "type": "text",
+    "page_idx": 571,
+    "text": "How long will it take for $250 invested at the rate of 8% per annum simple interest to grow to $310?"
+  },
+  {
+    "id": 16636,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Answer"
+  },
+  {
+    "id": 16637,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Amount = principal + interest"
+  },
+  {
+    "id": 16638,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Interest = amount - principal"
+  },
+  {
+    "id": 16639,
+    "type": "text",
+    "page_idx": 571,
+    "text": "∴Interest = $310 - $250 = $60"
+  },
+  {
+    "id": 16640,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Rate = 8% per annum =  $\\frac{8}{100} \\times 250 = \\$ 20$"
+  },
+  {
+    "id": 16641,
+    "type": "text",
+    "page_idx": 571,
+    "text": "So the interest per year is $20."
+  },
+  {
+    "id": 16642,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Total interest  $(60)\\div$  annual interest  $(20) = 3$"
+  },
+  {
+    "id": 16643,
+    "type": "text",
+    "page_idx": 571,
+    "text": "So it will take three years for  $250 to grow to$ 310 at the rate of 8% per annum simple interest."
+  },
+  {
+    "id": 16644,
+    "type": "text",
+    "page_idx": 571,
+    "text": "WORKED EXAMPLE 8"
+  },
+  {
+    "id": 16645,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Calculate the rate of simple interest if a principal of  $250 grows to$ 400 in three years."
+  },
+  {
+    "id": 16646,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Answer"
+  },
+  {
+    "id": 16647,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Interest paid = $400 - $250 = $150"
+  },
+  {
+    "id": 16648,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\nI = \\frac {P R T}{1 0 0}\n$$"
+  },
+  {
+    "id": 16649,
+    "type": "text",
+    "page_idx": 571,
+    "text": "Change the subject of the formula to  $R$  to find the rate."
+  },
+  {
+    "id": 16650,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\n1 0 0 I = P R T\n$$"
+  },
+  {
+    "id": 16651,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\nR = \\frac {1 0 0 I}{P T} = \\frac {1 0 0 \\times 1 5 0}{2 5 0 \\times 3} = 2 0\n$$"
+  },
+  {
+    "id": 16652,
+    "type": "text",
+    "page_idx": 571,
+    "text": "So, the interest rate = 20%"
+  },
+  {
+    "id": 16653,
+    "type": "text",
+    "page_idx": 571,
+    "text": "TIP"
+  },
+  {
+    "id": 16654,
+    "type": "text",
+    "page_idx": 571,
+    "text": "You can manipulate the formula to find any of the values:"
+  },
+  {
+    "id": 16655,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\nI = \\frac {P R T}{1 0 0}\n$$"
+  },
+  {
+    "id": 16656,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\nP = \\frac {1 0 0 J}{R T}\n$$"
+  },
+  {
+    "id": 16657,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\nR = \\frac {1 0 0 I}{P T}\n$$"
+  },
+  {
+    "id": 16658,
+    "type": "equation",
+    "page_idx": 571,
+    "text": "$$\nT = \\frac {1 0 0 I}{P R}\n$$"
+  },
+  {
+    "id": 16659,
+    "type": "text",
+    "page_idx": 572,
+    "text": "Exercise 17.4"
+  },
+  {
+    "id": 16660,
+    "type": "text",
+    "page_idx": 572,
+    "text": "1 Calculate the simple interest earned on each amount."
+  },
+  {
+    "id": 16661,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>Principal amount ($)</td><td>Interest rate (%)</td><td>Time invested</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16662,
+    "type": "text",
+    "text": "[Table Row] <tr><td>a</td><td>500</td><td>1</td><td>3 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16663,
+    "type": "text",
+    "text": "[Table Row] <tr><td>b</td><td>650</td><td>0.75</td><td>2 1/2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16664,
+    "type": "text",
+    "text": "[Table Row] <tr><td>c</td><td>1000</td><td>1.25</td><td>5 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16665,
+    "type": "text",
+    "text": "[Table Row] <tr><td>d</td><td>1200</td><td>4</td><td>6 1/2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16666,
+    "type": "text",
+    "text": "[Table Row] <tr><td>e</td><td>875</td><td>5.5</td><td>3 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16667,
+    "type": "text",
+    "text": "[Table Row] <tr><td>f</td><td>900</td><td>6</td><td>2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16668,
+    "type": "text",
+    "text": "[Table Row] <tr><td>g</td><td>699</td><td>7.25</td><td>3.75 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16669,
+    "type": "text",
+    "text": "[Table Row] <tr><td>h</td><td>1200</td><td>8</td><td>9 months</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16670,
+    "type": "text",
+    "text": "[Table Row] <tr><td>i</td><td>150 000</td><td>9 1/2</td><td>18 months</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16671,
+    "type": "text",
+    "page_idx": 572,
+    "text": "2 Calculate how much would have to be repaid in total for each of the following loans."
+  },
+  {
+    "id": 16672,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>Principal amount ($)</td><td>Interest rate (%)</td><td>Time invested</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16673,
+    "type": "text",
+    "text": "[Table Row] <tr><td>a</td><td>500</td><td>4.5</td><td>2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16674,
+    "type": "text",
+    "text": "[Table Row] <tr><td>b</td><td>650</td><td>5</td><td>2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16675,
+    "type": "text",
+    "text": "[Table Row] <tr><td>c</td><td>1000</td><td>6</td><td>2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16676,
+    "type": "text",
+    "text": "[Table Row] <tr><td>d</td><td>1200</td><td>12</td><td>18 months</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16677,
+    "type": "text",
+    "text": "[Table Row] <tr><td>e</td><td>875</td><td>15</td><td>18 months</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16678,
+    "type": "text",
+    "text": "[Table Row] <tr><td>f</td><td>900</td><td>15</td><td>3 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16679,
+    "type": "text",
+    "text": "[Table Row] <tr><td>g</td><td>699</td><td>20</td><td>9 months</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16680,
+    "type": "text",
+    "text": "[Table Row] <tr><td>h</td><td>1200</td><td>21.25</td><td>8 months</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16681,
+    "type": "text",
+    "text": "[Table Row] <tr><td>i</td><td>150 000</td><td>18</td><td>1 1/2 years</td></tr>",
+    "page_idx": 572
+  },
+  {
+    "id": 16682,
+    "type": "text",
+    "text": "3 $1400 is invested at 4% per annum simple interest. How long will it take for the amount to reach $1624?",
+    "page_idx": 572
+  },
+  {
+    "id": 16683,
+    "type": "text",
+    "text": "4 The simple interest on $600 invested for five years is $210. What is the rate percentage per annum?",
+    "page_idx": 572
+  },
+  {
+    "id": 16684,
+    "type": "text",
+    "page_idx": 573,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 16685,
+    "type": "text",
+    "text": "5 If you invest a sum of money at a simple interest rate of  $6\\%$ , how long will it take for your original amount to treble?",
+    "page_idx": 573
+  },
+  {
+    "id": 16686,
+    "type": "text",
+    "text": "6 Jessica spends  $\\frac{1}{4}$  of her income from odd jobs on books,  $\\frac{1}{3}$  on transport and  $\\frac{1}{6}$  on clothing. She saves the rest.",
+    "page_idx": 573
+  },
+  {
+    "id": 16687,
+    "type": "text",
+    "text": "a If she saves $8 per month, how much is her income each month?",
+    "page_idx": 573
+  },
+  {
+    "id": 16688,
+    "type": "text",
+    "text": "b How much does she save in a year at a rate of $8 per month?",
+    "page_idx": 573
+  },
+  {
+    "id": 16689,
+    "type": "text",
+    "text": "c She deposits one year's savings into an account that pays  $8.5\\%$  interest for five years.",
+    "page_idx": 573
+  }
+]
+```

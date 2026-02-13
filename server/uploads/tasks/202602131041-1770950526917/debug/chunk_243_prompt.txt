@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 17010,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Are you able to ...?"
+  },
+  {
+    "id": 17011,
+    "type": "text",
+    "page_idx": 587,
+    "text": "use given information to solve problems related to wages, salaries, commission and piece work"
+  },
+  {
+    "id": 17012,
+    "type": "text",
+    "page_idx": 587,
+    "text": "1 read information from tables and charts to work out deductions and tax rates."
+  },
+  {
+    "id": 17013,
+    "type": "text",
+    "page_idx": 587,
+    "text": "calculate gross and net earnings given the relevant information"
+  },
+  {
+    "id": 17014,
+    "type": "text",
+    "page_idx": 587,
+    "text": "I use the formula to calculate simple interest."
+  },
+  {
+    "id": 17015,
+    "type": "text",
+    "page_idx": 587,
+    "text": "(1) manipulate the simple interest formula to calculate the principal amount, rate of interest and time period of a debt or investment"
+  },
+  {
+    "id": 17016,
+    "type": "text",
+    "page_idx": 587,
+    "text": "- solve problems related to HP payments and amounts"
+  },
+  {
+    "id": 17017,
+    "type": "text",
+    "page_idx": 587,
+    "text": "To calculate compound interest over a given time period and solve problems related to compound interest"
+  },
+  {
+    "id": 17018,
+    "type": "text",
+    "page_idx": 587,
+    "text": "use exponential growth and decay in relation to finance and population changes"
+  },
+  {
+    "id": 17019,
+    "type": "text",
+    "page_idx": 587,
+    "text": "To calculate the selling price, percentage profit or loss and actual mark up using given rates and prices,"
+  },
+  {
+    "id": 17020,
+    "type": "text",
+    "page_idx": 587,
+    "text": "calculate the cost price using given rates and prices"
+  },
+  {
+    "id": 17021,
+    "type": "text",
+    "page_idx": 587,
+    "text": "work out the actual price of a discounted item and calculate the percentage discount given the original and the new price."
+  },
+  {
+    "id": 17022,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Practice questions"
+  },
+  {
+    "id": 17023,
+    "type": "text",
+    "page_idx": 587,
+    "text": "1 Kolo is paid $10.48 per hour for a standard 36-hour week. He is paid 'time-and-a-half' for all overtime worked. Calculate:"
+  },
+  {
+    "id": 17024,
+    "type": "text",
+    "text": "a his gross weekly earnings if he works  $4\\frac{3}{4}$  hours overtime [3]",
+    "page_idx": 587
+  },
+  {
+    "id": 17025,
+    "type": "text",
+    "text": "b the hours overtime worked if he earns $420.75 for the week. [3]",
+    "page_idx": 587
+  },
+  {
+    "id": 17026,
+    "type": "text",
+    "page_idx": 587,
+    "text": "2 Ahmed bought a book for $15. He sold it to Barbara, making a 20% loss."
+  },
+  {
+    "id": 17027,
+    "type": "text",
+    "text": "a Calculate how much Barbara paid for it. [3]",
+    "page_idx": 587
+  },
+  {
+    "id": 17028,
+    "type": "text",
+    "text": "b Barbara later sold the book to Luvuyo. She made a  $20\\%$  profit.",
+    "page_idx": 587
+  },
+  {
+    "id": 17029,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Calculate how much Luvuyo paid for it. [3]"
+  },
+  {
+    "id": 17030,
+    "type": "text",
+    "page_idx": 587,
+    "text": "3 Last year, Salma's wages were $94 per week. Her wages are now $102 per week."
+  },
+  {
+    "id": 17031,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Calculate the percentage increase. [3]"
+  },
+  {
+    "id": 17032,
+    "type": "text",
+    "page_idx": 587,
+    "text": "4 Yasmin is making iced lollies to sell outside her house on a hot day. She spends"
+  },
+  {
+    "id": 17033,
+    "type": "text",
+    "page_idx": 587,
+    "text": "$25.55 on the ingredients. Yasmin uses all of the ingredients to sell 35 lollies at"
+  },
+  {
+    "id": 17034,
+    "type": "text",
+    "page_idx": 587,
+    "text": "S1.25 each. Calculate:"
+  },
+  {
+    "id": 17035,
+    "type": "text",
+    "text": "a the total profit made [2]",
+    "page_idx": 587
+  },
+  {
+    "id": 17036,
+    "type": "text",
+    "text": "b the percentage profit. [2]",
+    "page_idx": 587
+  },
+  {
+    "id": 17037,
+    "type": "text",
+    "text": "5 Calculate the simple interest on $160 invested at 7% per year for three years. [2]",
+    "page_idx": 588
+  },
+  {
+    "id": 17038,
+    "type": "text",
+    "text": "6 Senor Vasquez invests $500 in a Government Bond, at 9% compound interest per year. Calculate the value of the Bond after three years. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17039,
+    "type": "text",
+    "text": "7 Simon's salary has increased by 6% p.a. over the past three years. It is now $35 730.40 p.a.",
+    "page_idx": 588
+  },
+  {
+    "id": 17040,
+    "type": "text",
+    "text": "a Calculate Simon's salary per year three years ago. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17041,
+    "type": "text",
+    "text": "Find Simon's gross monthly salary at the present rate. [2]",
+    "page_idx": 588
+  },
+  {
+    "id": 17042,
+    "type": "text",
+    "text": "c The deductions each month amount to  $22.5\\%$  of the gross salary. Calculate Simon's net pay per month. [2]",
+    "page_idx": 588
+  },
+  {
+    "id": 17043,
+    "type": "text",
+    "text": "8 A new car cost $14 875. Three years later, the insurance company valued it at $10 700. Calculate the percentage reduction in value over the three years. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17044,
+    "type": "text",
+    "text": "9 Exercise equipment advertised at  $2200 is reduced in a sale to$ 1950. Calculate the percentage discount. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17045,
+    "type": "text",
+    "text": "10 A motor dealer tries to sell a car at 35% above the $18000 which he paid to a supplier.",
+    "page_idx": 588
+  },
+  {
+    "id": 17046,
+    "type": "text",
+    "text": "a Calculate the dealer's selfing price. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17047,
+    "type": "text",
+    "text": "b Calculate the percentage reduction the dealer can now apply before making a loss. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17048,
+    "type": "text",
+    "page_idx": 588,
+    "text": "11 The value of an asset, currently priced at $100000, is expected to increase by 20% per year."
+  },
+  {
+    "id": 17049,
+    "type": "text",
+    "text": "a Find its value in ten years' time. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17050,
+    "type": "text",
+    "text": "b After how many years will it be worth more than $1 million? [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17051,
+    "type": "text",
+    "page_idx": 588,
+    "text": "12 The temperature of a cup of water is decreasing. The temperature,  $T^{\\circ}C$ , is recorded  $t$  minutes after the water is left to cool. The results are shown in the table."
+  },
+  {
+    "id": 17052,
+    "type": "text",
+    "text": "[Table Row] <tr><td>t (minutes)</td><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td><td>12</td><td>14</td></tr>",
+    "page_idx": 588
+  },
+  {
+    "id": 17053,
+    "type": "text",
+    "text": "[Table Row] <tr><td>T(°C)</td><td>96</td><td>80.6</td><td>67.7</td><td>56.9</td><td>47.8</td><td>40.1</td><td>33.7</td></tr>",
+    "page_idx": 588
+  },
+  {
+    "id": 17054,
+    "type": "text",
+    "text": "a By calculating the percentage change in temperature from one calculation to the next, show that this is exponential decay. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17055,
+    "type": "text",
+    "text": "b Plot a graph to show the data in the table. [4]",
+    "page_idx": 588
+  },
+  {
+    "id": 17056,
+    "type": "text",
+    "text": "Estimate the time in minutes after the water was left to cool that the temperature reached  $60^{\\circ}\\mathrm{C}$  [2]",
+    "page_idx": 588
+  },
+  {
+    "id": 17057,
+    "type": "text",
+    "page_idx": 589,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 17058,
+    "type": "text",
+    "page_idx": 589,
+    "text": "Find any errors in your work."
+  },
+  {
+    "id": 17059,
+    "type": "text",
+    "page_idx": 589,
+    "text": "For each one, decide what type of error you made:"
+  },
+  {
+    "id": 17060,
+    "type": "text",
+    "text": "- careless (writing the wrong number, not following instructions, forgetting to give reasons, not showing steps in calculation)",
+    "page_idx": 589
+  },
+  {
+    "id": 17061,
+    "type": "text",
+    "text": "computational (miscalculating a value using the basic operations)",
+    "page_idx": 589
+  },
+  {
+    "id": 17062,
+    "type": "text",
+    "text": "- precision (mistakes with signs, decimal places, forgetting brackets or order of operations, missing units, incorrect notation)",
+    "page_idx": 589
+  },
+  {
+    "id": 17063,
+    "type": "text",
+    "text": "- mathematical (not using properties or rules, not completing all the steps needed to solve the problem).",
+    "page_idx": 589
+  },
+  {
+    "id": 17064,
+    "type": "text",
+    "page_idx": 589,
+    "text": "Write down three suggestions to help yourself avoid these errors in the future."
+  },
+  {
+    "id": 17065,
+    "type": "text",
+    "page_idx": 590,
+    "text": "Chapter 18"
+  },
+  {
+    "id": 17066,
+    "type": "text",
+    "page_idx": 590,
+    "text": "Curved graphs"
+  },
+  {
+    "id": 17067,
+    "type": "text",
+    "page_idx": 590,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 17068,
+    "type": "text",
+    "text": "- construct a table of values to draw graphs called parabolas",
+    "page_idx": 590
+  },
+  {
+    "id": 17069,
+    "type": "text",
+    "text": "- sketch and interpret parabolas",
+    "page_idx": 590
+  },
+  {
+    "id": 17070,
+    "type": "text",
+    "text": "- construct a table of values to draw graphs called hyperbolas",
+    "page_idx": 590
+  },
+  {
+    "id": 17071,
+    "type": "text",
+    "text": "- interpret curved graphs",
+    "page_idx": 590
+  },
+  {
+    "id": 17072,
+    "type": "text",
+    "text": "- use graphs to find the approximate solutions to quadratic equations",
+    "page_idx": 590
+  },
+  {
+    "id": 17073,
+    "type": "text",
+    "text": "construct tables of values to draw graphs of the form  $ax^n,\\frac{a}{x},\\frac{a}{x^2}$  and  $ab^{x} + c$",
+    "page_idx": 590
+  },
+  {
+    "id": 17074,
+    "type": "text",
+    "text": "- recognise, sketch and interpret graphs of functions",
+    "page_idx": 590
+  },
+  {
+    "id": 17075,
+    "type": "text",
+    "text": "estimate the gradients of curves by drawing tangents",
+    "page_idx": 590
+  },
+  {
+    "id": 17076,
+    "type": "text",
+    "text": "use graphs to find the approximate solutions to associated equations",
+    "page_idx": 590
+  },
+  {
+    "id": 17077,
+    "type": "text",
+    "text": "- differentiate functions to find gradients and stationary (turning) points.",
+    "page_idx": 590
+  },
+  {
+    "id": 17078,
+    "type": "text",
+    "page_idx": 591,
+    "text": "The Adelie penguins in the photograph are diving off an iceberg into the water. Their height above and below the water can be graphed against time. What would you expect the shape of the graph to look like? Why?"
+  },
+  {
+    "id": 17079,
+    "type": "text",
+    "page_idx": 591,
+    "text": "In Chapter 10 you saw that many problems can be represented by linear equations and straight line graphs. Real-life problems, such as those involving area; the path of a moving object; the shape of a bridge or other structure; the growth of bacteria; and variation in speed, can only be solved using non-linear equations. Graphs of non-linear equations are curves."
+  },
+  {
+    "id": 17080,
+    "type": "text",
+    "page_idx": 591,
+    "text": "In this chapter you are going to use tables of values to plot a range of curved graphs. Once you understand the properties of the different graphs, you will use these to sketch the graphs (rather than plotting them). You will also learn how to interpret curved graphs and how to find the approximate solution of equations from graphs."
+  },
+  {
+    "id": 17081,
+    "type": "text",
+    "page_idx": 591,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 17082,
+    "type": "text",
+    "page_idx": 591,
+    "text": "1 The graph shows the first stages of a penguin's dive from an iceberg into the ocean."
+  },
+  {
+    "id": 17083,
+    "type": "image",
+    "page_idx": 591,
+    "img_path": "images/a373e9568efee31277a36127a7ff5065f1f35c04229266b1591b49937443834f.jpg"
+  },
+  {
+    "id": 17084,
+    "type": "text",
+    "text": "a Explain what is happening to the penguin from A to B, B to C and C to D.",
+    "page_idx": 591
+  },
+  {
+    "id": 17085,
+    "type": "text",
+    "text": "b From what height did the penguin dive?",
+    "page_idx": 591
+  },
+  {
+    "id": 17086,
+    "type": "text",
+    "text": "c How long did it take for the penguin to enter the water?",
+    "page_idx": 591
+  },
+  {
+    "id": 17087,
+    "type": "text",
+    "text": "d What is the greatest depth the penguin reaches during this dive?",
+    "page_idx": 591
+  },
+  {
+    "id": 17088,
+    "type": "text",
+    "text": "e How much time did the penguin spend under the surface of the water?",
+    "page_idx": 591
+  },
+  {
+    "id": 17089,
+    "type": "text",
+    "text": "f What do you think the graph would look like if you continued it to the right? Why?",
+    "page_idx": 591
+  },
+  {
+    "id": 17090,
+    "type": "image",
+    "page_idx": 591,
+    "img_path": "images/39796f44cfe28a9c63cea3be83b39cbdf9fbf853c82424aaf9b46e5c7784b798.jpg"
+  },
+  {
+    "id": 17091,
+    "type": "text",
+    "page_idx": 591,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 17092,
+    "type": "text",
+    "page_idx": 591,
+    "text": "asymptote"
+  },
+  {
+    "id": 17093,
+    "type": "text",
+    "page_idx": 591,
+    "text": "derivative of function"
+  },
+  {
+    "id": 17094,
+    "type": "text",
+    "page_idx": 591,
+    "text": "differentiation"
+  },
+  {
+    "id": 17095,
+    "type": "text",
+    "page_idx": 591,
+    "text": "exponential"
+  },
+  {
+    "id": 17096,
+    "type": "text",
+    "page_idx": 591,
+    "text": "hyperbola"
+  },
+  {
+    "id": 17097,
+    "type": "text",
+    "page_idx": 591,
+    "text": "maximum"
+  },
+  {
+    "id": 17098,
+    "type": "text",
+    "page_idx": 591,
+    "text": "minimum"
+  },
+  {
+    "id": 17099,
+    "type": "text",
+    "page_idx": 591,
+    "text": "parabola"
+  },
+  {
+    "id": 17100,
+    "type": "text",
+    "page_idx": 591,
+    "text": "stationary point"
+  },
+  {
+    "id": 17101,
+    "type": "text",
+    "page_idx": 591,
+    "text": "turning point"
+  },
+  {
+    "id": 17102,
+    "type": "text",
+    "page_idx": 592,
+    "text": "GETTING STARTED CONTINUED"
+  },
+  {
+    "id": 17103,
+    "type": "text",
+    "page_idx": 592,
+    "text": "2 Here are three sets of quadratic graphs."
+  },
+  {
+    "id": 17104,
+    "type": "image",
+    "page_idx": 592,
+    "img_path": "images/d0bae8b2cea312d3ad0578ac0b4877c2c4a57c0b07a25fb938868672fdd5fc6f.jpg"
+  },
+  {
+    "id": 17105,
+    "type": "image",
+    "page_idx": 592,
+    "img_path": "images/5bb7eb9381a6f92168397e4296579ab45c687b68ae6cb323ac7d665b42947d4a.jpg"
+  },
+  {
+    "id": 17106,
+    "type": "image",
+    "page_idx": 592,
+    "img_path": "images/e5f87f64ca28779786091925680ececc91f7a5d6fe4e881e0784eb2d7511f7d5.jpg"
+  },
+  {
+    "id": 17107,
+    "type": "text",
+    "text": "a How are the graphs in each set similar?",
+    "page_idx": 592
+  },
+  {
+    "id": 17108,
+    "type": "text",
+    "text": "b How are they different?",
+    "page_idx": 592
+  },
+  {
+    "id": 17109,
+    "type": "text",
+    "text": "c Describe in your own words the effect that the coefficient of the  $x^{2}$  term has on the shape of the graph.",
+    "page_idx": 592
+  }
+]
+```

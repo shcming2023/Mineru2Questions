@@ -1,0 +1,814 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 21630,
+    "type": "text",
+    "page_idx": 790,
+    "text": "2 You have learnt how to describe movement using a column vector  $\\begin{pmatrix} x \\\\ y \\end{pmatrix}$ . The top number  $(x)$  represents horizontal movement and the bottom number  $(y)$  represents vertical movement."
+  },
+  {
+    "id": 21631,
+    "type": "text",
+    "page_idx": 790,
+    "text": "a Copy this table. Use the words right, left, up and down to complete it."
+  },
+  {
+    "id": 21632,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td colspan=\"2\">Direction of movement</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21633,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>x</td><td>y</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21634,
+    "type": "text",
+    "text": "[Table Row] <tr><td>If number is positive</td><td></td><td></td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21635,
+    "type": "text",
+    "text": "[Table Row] <tr><td>If number is negative</td><td></td><td></td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21636,
+    "type": "text",
+    "page_idx": 790,
+    "text": "b Write a column vector to describe the translation from A to B."
+  },
+  {
+    "id": 21637,
+    "type": "image",
+    "page_idx": 790,
+    "img_path": "images/3f77fc75be5fc6543bc7e383c25e18b1b14201716ab77d73d99f84b303e051a8.jpg"
+  },
+  {
+    "id": 21638,
+    "type": "text",
+    "page_idx": 790,
+    "text": "c Draw your own sketch to show the vectors  $MN = \\begin{pmatrix} -3 \\\\ -2 \\end{pmatrix}$  and  $PQ = \\begin{pmatrix} -3 \\\\ 4 \\end{pmatrix}$ ."
+  },
+  {
+    "id": 21639,
+    "type": "text",
+    "text": "[Table Row] <tr><td>KEY WORDS</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21640,
+    "type": "text",
+    "text": "[Table Row] <tr><td>column vector</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21641,
+    "type": "text",
+    "text": "[Table Row] <tr><td>enlargement</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21642,
+    "type": "text",
+    "text": "[Table Row] <tr><td>magnitude</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21643,
+    "type": "text",
+    "text": "[Table Row] <tr><td>reflection</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21644,
+    "type": "text",
+    "text": "[Table Row] <tr><td>rotation</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21645,
+    "type": "text",
+    "text": "[Table Row] <tr><td>scalar</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21646,
+    "type": "text",
+    "text": "[Table Row] <tr><td>transformation</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21647,
+    "type": "text",
+    "text": "[Table Row] <tr><td>translation</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21648,
+    "type": "text",
+    "text": "[Table Row] <tr><td>vector</td></tr>",
+    "page_idx": 790
+  },
+  {
+    "id": 21649,
+    "type": "text",
+    "page_idx": 791,
+    "text": "23.1 Simple plane transformations"
+  },
+  {
+    "id": 21650,
+    "type": "text",
+    "page_idx": 791,
+    "text": "Transformation means change. In mathematics, a transformation is a change in the position or size of an object (or point). In this section you will deal with four types of transformations:"
+  },
+  {
+    "id": 21651,
+    "type": "text",
+    "text": "- reflection (a flip or mirror image)",
+    "page_idx": 791
+  },
+  {
+    "id": 21652,
+    "type": "text",
+    "text": "rotation (a turn)",
+    "page_idx": 791
+  },
+  {
+    "id": 21653,
+    "type": "text",
+    "text": "translation (a slide movement)",
+    "page_idx": 791
+  },
+  {
+    "id": 21654,
+    "type": "text",
+    "text": "enlargement (making the object larger or smaller).",
+    "page_idx": 791
+  },
+  {
+    "id": 21655,
+    "type": "text",
+    "page_idx": 791,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 21656,
+    "type": "text",
+    "page_idx": 791,
+    "text": "BEELECTION"
+  },
+  {
+    "id": 21657,
+    "type": "text",
+    "page_idx": 791,
+    "text": "B.  ${I}_{A}{I}_{L}{I}_{B}$"
+  },
+  {
+    "id": 21658,
+    "type": "text",
+    "page_idx": 791,
+    "text": "TnRnNnS LnATnRnN"
+  },
+  {
+    "id": 21659,
+    "type": "image",
+    "page_idx": 791,
+    "img_path": "images/e7ebe2a70be44e66e9e50512edd18785a67ee88b03cae49c9080e62c3e778713.jpg",
+    "image_caption": "Flip"
+  },
+  {
+    "id": 21660,
+    "type": "image",
+    "page_idx": 791,
+    "img_path": "images/0aaeb11b13f32c62b8006497a1ce235dbb56d8c5dce9a4be731423679e3f8577.jpg",
+    "image_caption": "Slide"
+  },
+  {
+    "id": 21661,
+    "type": "text",
+    "page_idx": 791,
+    "text": "A transformation produces an image of the original object in a new position or at a different size. A point,  $P$ , on the object is labelled as  $P'$  on the image."
+  },
+  {
+    "id": 21662,
+    "type": "text",
+    "page_idx": 791,
+    "text": "Reflections, rotations and translations change the position of an object, but they do not change its size. So, the object and its image are congruent. If you place the object and its image on top of each other, they coincide exactly."
+  },
+  {
+    "id": 21663,
+    "type": "text",
+    "page_idx": 791,
+    "text": "When you enlarge an object, you change its size. The object and its image are similar. In other words, the lengths of corresponding sides on the image are in the same proportion as on the object and the corresponding angles on the object and its image are equal."
+  },
+  {
+    "id": 21664,
+    "type": "text",
+    "page_idx": 791,
+    "text": "Reflection"
+  },
+  {
+    "id": 21665,
+    "type": "text",
+    "page_idx": 791,
+    "text": "A reflection is a mirror image of the shape. The line of reflection is called the mirror line. Corresponding points on the object and the image are the same distance from the mirror line. These distances are always measured perpendicular to the mirror line. (In other words, the mirror line is the perpendicular bisector of the distance between any point and its image.) You can see this on the following diagrams."
+  },
+  {
+    "id": 21666,
+    "type": "text",
+    "page_idx": 791,
+    "text": "LINK"
+  },
+  {
+    "id": 21667,
+    "type": "text",
+    "page_idx": 791,
+    "text": "Photographers need to think about reflections, rotations and enlargements when taking and processing photographs. The combination of symmetries in a photograph can often determine the quality of the work."
+  },
+  {
+    "id": 21668,
+    "type": "image",
+    "page_idx": 791,
+    "img_path": "images/176c66cf07a707e75829b65a08f6f374ed351f3197feaf4d688350869207a8f9.jpg"
+  },
+  {
+    "id": 21669,
+    "type": "text",
+    "page_idx": 791,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 21670,
+    "type": "text",
+    "page_idx": 791,
+    "text": "You learnt about congruency and similarity in Chapter 11 and you dealt with lines of symmetry (mirror lines) in Chapter 19. You will use these concepts again in this chapter."
+  },
+  {
+    "id": 21671,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/ef005f1ff0c45847a34fe4def6b1cdfe1923c9c22673c449aa4fdf5263e51827.jpg"
+  },
+  {
+    "id": 21672,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/4d2ae48eb43e0ec17048e3214caf78209811dc9ffd0ffde5d44378c835d4fbad.jpg"
+  },
+  {
+    "id": 21673,
+    "type": "text",
+    "page_idx": 792,
+    "text": "To fully define a reflection, you need to give the equation of the mirror line."
+  },
+  {
+    "id": 21674,
+    "type": "text",
+    "page_idx": 792,
+    "text": "Properties of reflection"
+  },
+  {
+    "id": 21675,
+    "type": "text",
+    "text": "A point and its image are equidistant from the mirror line  $(m)$  after reflection about the line  $m$",
+    "page_idx": 792
+  },
+  {
+    "id": 21676,
+    "type": "text",
+    "text": "The mirror line bisects the line joining a point and its image at right angles.",
+    "page_idx": 792
+  },
+  {
+    "id": 21677,
+    "type": "text",
+    "text": "A line segment and its image are equal in length.  $AB = A'B'$",
+    "page_idx": 792
+  },
+  {
+    "id": 21678,
+    "type": "text",
+    "text": "A line and its image are equally inclined to the mirror line. angle  $AOM =$  angle  $A^{\\prime}OM$",
+    "page_idx": 792
+  },
+  {
+    "id": 21679,
+    "type": "text",
+    "text": "- Points on the mirror line are their own images and are invariant.",
+    "page_idx": 792
+  },
+  {
+    "id": 21680,
+    "type": "text",
+    "text": "Under reflection, a figure and its image are congruent.",
+    "page_idx": 792
+  },
+  {
+    "id": 21681,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/d8566346bc52dddf29c8208e5744a30a80f3e2be73fc535f87f259133d5f8262.jpg"
+  },
+  {
+    "id": 21682,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/8016a2c22cde39a98791c4181beb8d10e492fdf1a8a61cec0c4eab14004afea3.jpg"
+  },
+  {
+    "id": 21683,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/ec7843460add57812d2bc8c661b82c6ef9f0694faf5ed0d2a6f969f8cf60dff8.jpg"
+  },
+  {
+    "id": 21684,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/b47e08d0454ed03fd47f01a38e0de4018c5e8bd5ed2f96fcdedd9aa40be66317.jpg"
+  },
+  {
+    "id": 21685,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/eb64352d036aae776274419cfbd657e2435a0b3ed9405d5056420a5061cb8c07.jpg"
+  },
+  {
+    "id": 21686,
+    "type": "image",
+    "page_idx": 792,
+    "img_path": "images/6b8a1acde5fd3bc51c377813a0116fed240c509e75483653a51b231fb4051198.jpg"
+  },
+  {
+    "id": 21687,
+    "type": "text",
+    "page_idx": 792,
+    "text": "TIP"
+  },
+  {
+    "id": 21688,
+    "type": "text",
+    "page_idx": 792,
+    "text": "Note that we usually draw the mirror line as a dashed line."
+  },
+  {
+    "id": 21689,
+    "type": "text",
+    "page_idx": 792,
+    "text": "TIP"
+  },
+  {
+    "id": 21690,
+    "type": "text",
+    "page_idx": 792,
+    "text": "You need  $^ \\text{加}$  o be able to work with reflections in horizontal and vertical lines only."
+  },
+  {
+    "id": 21691,
+    "type": "text",
+    "page_idx": 792,
+    "text": "TIP"
+  },
+  {
+    "id": 21692,
+    "type": "text",
+    "page_idx": 792,
+    "text": "Invariant means a point, or a line, remains unchanged in its position and size."
+  },
+  {
+    "id": 21693,
+    "type": "text",
+    "page_idx": 793,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 21694,
+    "type": "text",
+    "page_idx": 793,
+    "text": "Reflect triangle ABC about the mirror line."
+  },
+  {
+    "id": 21695,
+    "type": "image",
+    "page_idx": 793,
+    "img_path": "images/ef0baf3ba961c8c7daa5eddc5eb33366e583e892a5b93c2d1d6771ef189f7b20.jpg"
+  },
+  {
+    "id": 21696,
+    "type": "text",
+    "page_idx": 793,
+    "text": "Answer"
+  },
+  {
+    "id": 21697,
+    "type": "image",
+    "page_idx": 793,
+    "img_path": "images/692cfa1c805aa3848b61c2a4816ca2d8d25689ffae655df2a788a6962d59fa73.jpg"
+  },
+  {
+    "id": 21698,
+    "type": "text",
+    "page_idx": 793,
+    "text": "In the diagram,  $A$  is 1 unit from the mirror line, so its image  $A^{\\prime}$  is also 1 unit from the mirror line. Point  $B$  is 2 units from the mirror line, so its image  $B^{\\prime}$  is also 2 units from the mirror line. This is also true for  $C$  and its image  $C^{\\prime}$ ."
+  },
+  {
+    "id": 21699,
+    "type": "text",
+    "page_idx": 793,
+    "text": "The reflection of a straight line is a straight line. So, to obtain the reflection of triangle ABC, join  $A^\\prime$  to  $B^{\\prime}$ $B^{\\prime}$  to  $C^\\prime$  and  $C^\\prime$  to  $A^\\prime$"
+  },
+  {
+    "id": 21700,
+    "type": "text",
+    "page_idx": 793,
+    "text": "TIP"
+  },
+  {
+    "id": 21701,
+    "type": "text",
+    "page_idx": 793,
+    "text": "When the mirror line is one of the grid lines it is simple to reflect any point. You count the squares from the point to the mirror line and the reflection is the same distance the other side of the mirror line."
+  },
+  {
+    "id": 21702,
+    "type": "text",
+    "page_idx": 793,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 21703,
+    "type": "text",
+    "page_idx": 793,
+    "text": "A shape and its reflection are shown on the grid."
+  },
+  {
+    "id": 21704,
+    "type": "text",
+    "text": "a Draw the mirror line.",
+    "page_idx": 793
+  },
+  {
+    "id": 21705,
+    "type": "text",
+    "text": "b What is the equation of the mirror line?",
+    "page_idx": 793
+  },
+  {
+    "id": 21706,
+    "type": "image",
+    "page_idx": 793,
+    "img_path": "images/09d3f7e384a4dfd3b3ba04d132b7852500670a026aaefb73fb745a87f2c818c6.jpg"
+  },
+  {
+    "id": 21707,
+    "type": "text",
+    "page_idx": 793,
+    "text": "Answers"
+  },
+  {
+    "id": 21708,
+    "type": "image",
+    "page_idx": 793,
+    "img_path": "images/6bd3ffebcb82a64beb9d8f81e7259e5c920f774b9ac21f85176e895bfb691793.jpg"
+  },
+  {
+    "id": 21709,
+    "type": "text",
+    "text": "a The mirror line must be the same distance from corresponding points on A and A'.",
+    "page_idx": 793
+  },
+  {
+    "id": 21710,
+    "type": "text",
+    "text": "b The mirror line is parallel to the y-axis. The  $x$ -value of any point on it is 4, so the equation of the line is  $x = 4$ .",
+    "page_idx": 793
+  },
+  {
+    "id": 21711,
+    "type": "text",
+    "page_idx": 793,
+    "text": "TIP"
+  },
+  {
+    "id": 21712,
+    "type": "text",
+    "page_idx": 793,
+    "text": "The mirror line is the perpendicular bisector of the line joining any point and its image."
+  },
+  {
+    "id": 21713,
+    "type": "text",
+    "page_idx": 794,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 21714,
+    "type": "text",
+    "page_idx": 794,
+    "text": "Shape A is the object."
+  },
+  {
+    "id": 21715,
+    "type": "text",
+    "text": "Reflect shape A in the y-axis. Label the image B.",
+    "page_idx": 794
+  },
+  {
+    "id": 21716,
+    "type": "text",
+    "text": "b Reflect shape A and shape B in the x-axis. Label the images A' and B' respectively.",
+    "page_idx": 794
+  },
+  {
+    "id": 21717,
+    "type": "image",
+    "page_idx": 794,
+    "img_path": "images/cd21b27632e10a46a15e7ac3aa5b56887bcd194451c89ef705b8b2a032a2f2d9.jpg"
+  },
+  {
+    "id": 21718,
+    "type": "text",
+    "page_idx": 794,
+    "text": "Answers"
+  },
+  {
+    "id": 21719,
+    "type": "image",
+    "page_idx": 794,
+    "img_path": "images/b54f84dfa74602aa64aa4f861a00c10ea3bc3cc9312f78d55d08d04db9b4b8f3.jpg"
+  },
+  {
+    "id": 21720,
+    "type": "text",
+    "text": "a The  $y$  -axis  $(x = 0)$  is the mirror line.",
+    "page_idx": 794
+  },
+  {
+    "id": 21721,
+    "type": "text",
+    "text": "b The  $x$  -axis  $(y = 0)$  is the mirror line.",
+    "page_idx": 794
+  },
+  {
+    "id": 21722,
+    "type": "text",
+    "page_idx": 794,
+    "text": "Exercise 23.1"
+  },
+  {
+    "id": 21723,
+    "type": "text",
+    "page_idx": 794,
+    "text": "1 Copy the shapes and the mirror lines onto squared paper. Draw the image of each object."
+  },
+  {
+    "id": 21724,
+    "type": "image",
+    "page_idx": 794,
+    "img_path": "images/8c8c676cad4a9cec7862c0801b34d55939e2e8acdc7001a1e415ad61607f55f8.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 21725,
+    "type": "image",
+    "page_idx": 794,
+    "img_path": "images/9cdfff936a8c23ec9bc73b56fd032bb0271449a77718458ad035abf3104485b7.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 21726,
+    "type": "image",
+    "page_idx": 794,
+    "img_path": "images/7f1601e14c627c53ede6d2dc145785626b7134b2ddcc669360528f4ddb2f4b4e.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 21727,
+    "type": "text",
+    "page_idx": 794,
+    "text": "2 Copy the axes and shapes onto squared paper."
+  },
+  {
+    "id": 21728,
+    "type": "text",
+    "page_idx": 794,
+    "text": "For each diagram:"
+  },
+  {
+    "id": 21729,
+    "type": "text",
+    "text": "draw the mirror line.",
+    "page_idx": 794
+  }
+]
+```

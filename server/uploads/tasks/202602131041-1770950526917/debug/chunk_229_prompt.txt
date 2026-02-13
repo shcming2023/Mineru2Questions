@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 16030,
+    "type": "text",
+    "page_idx": 539,
+    "text": "Calculate the bearing of the second lion from the game warden, correct to the nearest degree. [3]"
+  },
+  {
+    "id": 16031,
+    "type": "text",
+    "page_idx": 540,
+    "text": "7 In the triangle OAB, angle  $AOB = 15^{\\circ}$ $OA = 3\\mathrm{m}$  and  $OB = 8\\mathrm{m}$"
+  },
+  {
+    "id": 16032,
+    "type": "text",
+    "page_idx": 540,
+    "text": "Calculate, correct to 2 decimal places:"
+  },
+  {
+    "id": 16033,
+    "type": "text",
+    "page_idx": 540,
+    "text": "the length of  ${AB}$"
+  },
+  {
+    "id": 16034,
+    "type": "text",
+    "page_idx": 540,
+    "text": "[3]"
+  },
+  {
+    "id": 16035,
+    "type": "text",
+    "page_idx": 540,
+    "text": "b the area of triangle OAB."
+  },
+  {
+    "id": 16036,
+    "type": "text",
+    "page_idx": 540,
+    "text": "[3]"
+  },
+  {
+    "id": 16037,
+    "type": "image",
+    "page_idx": 540,
+    "img_path": "images/b5296789e12088fd3af765d3a24bb64ec2a2650cf81cea67566e97ce0b410308.jpg"
+  },
+  {
+    "id": 16038,
+    "type": "text",
+    "page_idx": 540,
+    "text": "A pyramid,  $VPQRS$ , has a square base,  $PQRS$ , with sides of length  $8\\mathrm{cm}$ ."
+  },
+  {
+    "id": 16039,
+    "type": "text",
+    "page_idx": 540,
+    "text": "Each sloping edge is  $9\\mathrm{cm}$  long."
+  },
+  {
+    "id": 16040,
+    "type": "image",
+    "page_idx": 540,
+    "img_path": "images/1d7594102d045ad50ce821ebdef7dcf6ac3f2542c8cb5a9f3461492d16276b3b.jpg"
+  },
+  {
+    "id": 16041,
+    "type": "text",
+    "text": "Calculate the perpendicular height of the pyramid. [4]",
+    "page_idx": 540
+  },
+  {
+    "id": 16042,
+    "type": "text",
+    "text": "b Calculate the angle the sloping edge  $VP$  makes with the base. [3]",
+    "page_idx": 540
+  },
+  {
+    "id": 16043,
+    "type": "text",
+    "page_idx": 540,
+    "text": "The diagram shows the graph of  $y = \\sin x$  for  $0 \\leq x \\leq 360$ ."
+  },
+  {
+    "id": 16044,
+    "type": "image",
+    "page_idx": 540,
+    "img_path": "images/775bb1343827d53605fa1a4b860c22e357ac882fc57a58be31bdcd05dd4388c9.jpg"
+  },
+  {
+    "id": 16045,
+    "type": "text",
+    "text": "Write down the coordinates of  $A$ , the point on the graph where  $x = 90^\\circ$ . [2]",
+    "page_idx": 540
+  },
+  {
+    "id": 16046,
+    "type": "text",
+    "text": "Find the value of sin 270°. [1]",
+    "page_idx": 540
+  },
+  {
+    "id": 16047,
+    "type": "text",
+    "text": "By considering the line  $y = -\\frac{1}{2}$  for  $0 \\leq x \\leq 360$ , find the number of solutions there are for the equation  $\\sin x = -\\frac{1}{2}$  for  $0 \\leq x \\leq 360$ . [2]",
+    "page_idx": 540
+  },
+  {
+    "id": 16048,
+    "type": "text",
+    "page_idx": 540,
+    "text": "10 Solve the equation  $\\sin x^{\\circ} = \\cos 300^{\\circ}$  for  $0\\leqslant x\\leqslant 360$  [3]"
+  },
+  {
+    "id": 16049,
+    "type": "image",
+    "page_idx": 540,
+    "img_path": "images/0fabf6c376954b6af2e310dd461b7a4efc4e9668f369864c6fe46c4334beecb1.jpg"
+  },
+  {
+    "id": 16050,
+    "type": "text",
+    "page_idx": 541,
+    "text": "11 Two ships leave port  $P$  at the same time. One ship sails  $60\\mathrm{km}$  on a bearing of  $030^{\\circ}$  to position  $A$ . The other ship sails  $100\\mathrm{km}$  on a bearing of  $110^{\\circ}$  to position  $B$ ."
+  },
+  {
+    "id": 16051,
+    "type": "image",
+    "page_idx": 541,
+    "img_path": "images/7349895ed3058cd0f25ca53173ab588f40f6719568e046294fc98163cb04469f.jpg"
+  },
+  {
+    "id": 16052,
+    "type": "text",
+    "page_idx": 541,
+    "text": "a Calculate:"
+  },
+  {
+    "id": 16053,
+    "type": "text",
+    "text": "the distance  $AB$  [3]",
+    "page_idx": 541
+  },
+  {
+    "id": 16054,
+    "type": "text",
+    "text": "ii angle PAB [3]",
+    "page_idx": 541
+  },
+  {
+    "id": 16055,
+    "type": "text",
+    "text": "iii the bearing of  $B$  from  $A$  [3]",
+    "page_idx": 541
+  },
+  {
+    "id": 16056,
+    "type": "text",
+    "page_idx": 541,
+    "text": "Both ships took the same time,  $t$  hours, to reach their positions. The speed of the faster ship was  $20\\mathrm{km / h}$ . For an object travelling at a constant speed,"
+  },
+  {
+    "id": 16057,
+    "type": "equation",
+    "page_idx": 541,
+    "text": "$$\n\\text {s p e e d} = \\frac {\\text {d i s t a n c e}}{\\text {t i m e}}\n$$"
+  },
+  {
+    "id": 16058,
+    "type": "text",
+    "page_idx": 541,
+    "text": "Write down:"
+  },
+  {
+    "id": 16059,
+    "type": "text",
+    "text": "the value of t [2]",
+    "page_idx": 541
+  },
+  {
+    "id": 16060,
+    "type": "text",
+    "text": "ii the speed of the slower ship. [2]",
+    "page_idx": 541
+  },
+  {
+    "id": 16061,
+    "type": "text",
+    "text": "12 Simplify  $\\frac{\\sin(30^{\\circ})}{\\tan(60^{\\circ})} \\times \\frac{(\\cos(45^{\\circ}))^{2}}{\\tan(45^{\\circ})}$ . You must show all of your working and use exact values only.",
+    "page_idx": 541
+  },
+  {
+    "id": 16062,
+    "type": "text",
+    "text": "13 Solve these equations for  $0^{\\circ} \\leqslant x \\leqslant 180^{\\circ}$ .",
+    "page_idx": 541
+  },
+  {
+    "id": 16063,
+    "type": "text",
+    "page_idx": 541,
+    "text": "a 2cosx-√3=0"
+  },
+  {
+    "id": 16064,
+    "type": "text",
+    "page_idx": 541,
+    "text": "[3]"
+  },
+  {
+    "id": 16065,
+    "type": "text",
+    "page_idx": 541,
+    "text": "b tanx=3tanx-72"
+  },
+  {
+    "id": 16066,
+    "type": "text",
+    "page_idx": 541,
+    "text": "[3]"
+  },
+  {
+    "id": 16067,
+    "type": "text",
+    "page_idx": 541,
+    "text": "4+2(tanx+2)=7"
+  },
+  {
+    "id": 16068,
+    "type": "text",
+    "page_idx": 541,
+    "text": "[3]"
+  },
+  {
+    "id": 16069,
+    "type": "text",
+    "page_idx": 541,
+    "text": "d  $3\\cos x + 3 = 4\\cos x + 4$"
+  },
+  {
+    "id": 16070,
+    "type": "text",
+    "page_idx": 541,
+    "text": "[3]"
+  },
+  {
+    "id": 16071,
+    "type": "text",
+    "page_idx": 541,
+    "text": "$\\left(\\tan x\\right)^{2} = \\frac{1}{3}$"
+  },
+  {
+    "id": 16072,
+    "type": "text",
+    "page_idx": 541,
+    "text": "[3]"
+  },
+  {
+    "id": 16073,
+    "type": "text",
+    "page_idx": 541,
+    "text": "f  $6(\\sin x)^2 -7\\sin x + 2 = 0$"
+  },
+  {
+    "id": 16074,
+    "type": "text",
+    "page_idx": 541,
+    "text": "[4]"
+  },
+  {
+    "id": 16075,
+    "type": "text",
+    "page_idx": 541,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 16076,
+    "type": "text",
+    "page_idx": 541,
+    "text": "You can get good marks in mathematics by clearly showing your working and methods even if you get the final answer incorrect."
+  },
+  {
+    "id": 16077,
+    "type": "text",
+    "page_idx": 541,
+    "text": "Evaluate your answers to the practice questions."
+  },
+  {
+    "id": 16078,
+    "type": "text",
+    "text": "Did you show your working?",
+    "page_idx": 541
+  },
+  {
+    "id": 16079,
+    "type": "text",
+    "text": "Is your working clearly laid out and systematic?",
+    "page_idx": 541
+  },
+  {
+    "id": 16080,
+    "type": "text",
+    "text": "- Does your working show that you understood the question and give evidence that you know how to answer it?",
+    "page_idx": 541
+  },
+  {
+    "id": 16081,
+    "type": "text",
+    "text": "- Do you think you would get part marks for any questions where you got the incorrect answer? Support your opinion.",
+    "page_idx": 541
+  },
+  {
+    "id": 16082,
+    "type": "text",
+    "page_idx": 542,
+    "text": ">Chapter 16"
+  },
+  {
+    "id": 16083,
+    "type": "text",
+    "page_idx": 542,
+    "text": "Scatter diagrams and correlation"
+  },
+  {
+    "id": 16084,
+    "type": "text",
+    "page_idx": 542,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 16085,
+    "type": "text",
+    "text": "- draw scatter diagrams for bivariate data",
+    "page_idx": 542
+  },
+  {
+    "id": 16086,
+    "type": "text",
+    "text": "- identify whether or not there is a positive or negative correlation between the two variables",
+    "page_idx": 542
+  },
+  {
+    "id": 16087,
+    "type": "text",
+    "text": "decide whether a correlation is strong or weak",
+    "page_idx": 542
+  },
+  {
+    "id": 16088,
+    "type": "text",
+    "text": "draw a line of best fit",
+    "page_idx": 542
+  },
+  {
+    "id": 16089,
+    "type": "text",
+    "text": "use a line of best fit to make predictions",
+    "page_idx": 542
+  },
+  {
+    "id": 16090,
+    "type": "text",
+    "text": "- decide how reliable your predictions are",
+    "page_idx": 542
+  },
+  {
+    "id": 16091,
+    "type": "text",
+    "text": "- recognise the common errors that are often made with scatter diagrams.",
+    "page_idx": 542
+  },
+  {
+    "id": 16092,
+    "type": "text",
+    "page_idx": 543,
+    "text": "Mount Everest, the highest mountain on Earth, stands 8849 metres above mean sea level. Even close to the mountain there are big changes in the height of the land, but other things change too. How does the depth of snow at the top of the mountain compare to the snow cover much further down? Why do you think this happens? How can scientists display data, so that they can predict the depths of snow at different heights?"
+  },
+  {
+    "id": 16093,
+    "type": "text",
+    "page_idx": 543,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 16094,
+    "type": "text",
+    "page_idx": 543,
+    "text": "You should already be familiar with scatter diagrams and correlation."
+  },
+  {
+    "id": 16095,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Positive correlation</td><td>Negative correlation</td><td>Zero correlation</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16096,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Points clustered around a &#x27;line&#x27; sloping up to the right.</td><td>Points clustered around a &#x27;line&#x27; sloping down to the right.</td><td>Points are not in a line.</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16097,
+    "type": "text",
+    "text": "1 If you plot the depth of snow against the height above sea level at several places on the slopes of Mount Everest, which of these diagrams is likely to be closest to the graph you draw? Why is the real data not likely to be exactly the same as the diagram you choose?",
+    "page_idx": 543
+  },
+  {
+    "id": 16098,
+    "type": "text",
+    "text": "2 Think of some other situations where you can compare pairs of measurements using a scatter diagram. Which situations do you think will show positive, negative or zero correlation? Try to find at least three examples of each.",
+    "page_idx": 543
+  },
+  {
+    "id": 16099,
+    "type": "text",
+    "text": "3 A scientist plots the number of shark attacks on Australian beaches against the profit reported by the top three Australian ice cream manufacturers during each month in 2016, 2017, 2018 and 2019. She finds that there is a strong positive correlation, showing that as ice cream sales increase, so do shark attacks. The scientist concludes that those people who eat ice cream are more likely to be attached by a shark. Explain what might be wrong with this conclusion.",
+    "page_idx": 543
+  },
+  {
+    "id": 16100,
+    "type": "text",
+    "page_idx": 543,
+    "text": "16.1 Introduction to bivariate data"
+  },
+  {
+    "id": 16101,
+    "type": "text",
+    "page_idx": 543,
+    "text": "In earlier chapters you have seen how to summarise data and draw conclusions based on your calculations. So far the data has been a collection of single measurements, but sometimes you can make more than one calculation in the same situation."
+  },
+  {
+    "id": 16102,
+    "type": "text",
+    "page_idx": 543,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 16103,
+    "type": "text",
+    "page_idx": 543,
+    "text": "You learnt how to summarise data and draw conclusions from it in Chapters 4 and 12."
+  },
+  {
+    "id": 16104,
+    "type": "text",
+    "text": "[Table Row] <tr><td>KEY WORDS</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16105,
+    "type": "text",
+    "text": "[Table Row] <tr><td>bivariate data</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16106,
+    "type": "text",
+    "text": "[Table Row] <tr><td>correlation</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16107,
+    "type": "text",
+    "text": "[Table Row] <tr><td>dependent variable</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16108,
+    "type": "text",
+    "text": "[Table Row] <tr><td>extrapolation</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16109,
+    "type": "text",
+    "text": "[Table Row] <tr><td>line of best fit</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16110,
+    "type": "text",
+    "text": "[Table Row] <tr><td>negative correlation</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16111,
+    "type": "text",
+    "text": "[Table Row] <tr><td>positive correlation</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16112,
+    "type": "text",
+    "text": "[Table Row] <tr><td>scatter diagram</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16113,
+    "type": "text",
+    "text": "[Table Row] <tr><td>zero correlation</td></tr>",
+    "page_idx": 543
+  },
+  {
+    "id": 16114,
+    "type": "text",
+    "page_idx": 544,
+    "text": "Read through this example. A shop sells ice creams throughout the year and the manager wants to look into how sales change as the daily temperature rises or falls. The manager chooses 10 days at random and records both the temperature and the total sales from ice cream for each day. The results are shown in the table:"
+  },
+  {
+    "id": 16115,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Day</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td><td>I</td><td>J</td></tr>",
+    "page_idx": 544
+  },
+  {
+    "id": 16116,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Temperature (°C)</td><td>4</td><td>18</td><td>12</td><td>32</td><td>21</td><td>-3</td><td>0</td><td>10</td><td>22</td><td>31</td></tr>",
+    "page_idx": 544
+  },
+  {
+    "id": 16117,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Total sales ($)</td><td>123</td><td>556</td><td>212</td><td>657</td><td>401</td><td>23</td><td>45</td><td>171</td><td>467</td><td>659</td></tr>",
+    "page_idx": 544
+  },
+  {
+    "id": 16118,
+    "type": "text",
+    "page_idx": 544,
+    "text": "Notice that two measurements are taken on each day and are recorded as pairs. This type of data is known as bivariate data. You can see this data much more clearly and explore any correlation if you plot the values on a scatter diagram"
+  },
+  {
+    "id": 16119,
+    "type": "text",
+    "page_idx": 544,
+    "text": "Drawing a scatter diagram"
+  },
+  {
+    "id": 16120,
+    "type": "text",
+    "page_idx": 544,
+    "text": "When you plot a scatter diagram, the variable you plot on the vertical axis is called the dependent variable. If one variable clearly depends on the other, then use this as your dependent variable. Otherwise, unless you are told what to do, you can choose which way round you plot the variables."
+  },
+  {
+    "id": 16121,
+    "type": "text",
+    "page_idx": 544,
+    "text": "DISCUSSION"
+  },
+  {
+    "id": 16122,
+    "type": "text",
+    "page_idx": 544,
+    "text": "Think about your answers to question 2 in the Getting started activity, where you thought about pairs of variables you could plot on a scatter diagram. For which pairs is there no obvious dependent variable and for which pairs is the dependent variable clear?"
+  },
+  {
+    "id": 16123,
+    "type": "text",
+    "page_idx": 544,
+    "text": "LINK"
+  },
+  {
+    "id": 16124,
+    "type": "text",
+    "page_idx": 544,
+    "text": "Correlations are used to investigate possible relationships between variables in many subjects where measurements are taken. For example, a biologist might think about the relationship between the length of a particular bone and the height of a person. Economists may need to consider the relationship between profit and working hours for employees. Geographers can use graphs to investigate any relationship between the heights of cliffs and the maximum gradients of the cliff faces."
+  },
+  {
+    "id": 16125,
+    "type": "text",
+    "page_idx": 544,
+    "text": "In the example of the ice cream shop, it seems sensible that the total sales will depend on the temperature, so plot the sales on the vertical axis."
+  },
+  {
+    "id": 16126,
+    "type": "text",
+    "page_idx": 544,
+    "text": "TIP"
+  },
+  {
+    "id": 16127,
+    "type": "text",
+    "page_idx": 544,
+    "text": "If you are told to plot A against B, then you should plot A on the vertical axis and B on the horizontal axis."
+  },
+  {
+    "id": 16128,
+    "type": "image",
+    "page_idx": 545,
+    "img_path": "images/eddc7df47f19de75ebf5ff9a494e06137c3cfe67cfad2551aaa047f73f5b9af3.jpg"
+  },
+  {
+    "id": 16129,
+    "type": "text",
+    "page_idx": 545,
+    "text": "Notice that there seems to be a relationship between the ice cream sales and the temperature. In fact, the sales rise as the temperature rises. This is called a positive correlation. The trend seems to be that the points roughly run from the bottom left of the diagram to the top right."
+  }
+]
+```

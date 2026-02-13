@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 16450,
+    "type": "image",
+    "page_idx": 563,
+    "img_path": "images/5e334e93f20c91775e49f9e759770b130cd995ac25a92b1131a37b93660c50fe.jpg"
+  },
+  {
+    "id": 16451,
+    "type": "text",
+    "page_idx": 563,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 16452,
+    "type": "text",
+    "page_idx": 563,
+    "text": "compound interest"
+  },
+  {
+    "id": 16453,
+    "type": "text",
+    "page_idx": 563,
+    "text": "cost price"
+  },
+  {
+    "id": 16454,
+    "type": "text",
+    "page_idx": 563,
+    "text": "discount"
+  },
+  {
+    "id": 16455,
+    "type": "text",
+    "page_idx": 563,
+    "text": "interest"
+  },
+  {
+    "id": 16456,
+    "type": "text",
+    "page_idx": 563,
+    "text": "interest rate"
+  },
+  {
+    "id": 16457,
+    "type": "text",
+    "page_idx": 563,
+    "text": "loss"
+  },
+  {
+    "id": 16458,
+    "type": "text",
+    "page_idx": 563,
+    "text": "principal"
+  },
+  {
+    "id": 16459,
+    "type": "text",
+    "page_idx": 563,
+    "text": "profit"
+  },
+  {
+    "id": 16460,
+    "type": "text",
+    "page_idx": 563,
+    "text": "selling price"
+  },
+  {
+    "id": 16461,
+    "type": "text",
+    "page_idx": 563,
+    "text": "simple interest"
+  },
+  {
+    "id": 16462,
+    "type": "text",
+    "page_idx": 564,
+    "text": "17.1 Earning money"
+  },
+  {
+    "id": 16463,
+    "type": "text",
+    "page_idx": 564,
+    "text": "When people are employed they are paid for their work. Earnings can be worked out in different ways:"
+  },
+  {
+    "id": 16464,
+    "type": "text",
+    "text": "- Wages - pay based on a fixed number of hours worked, usually paid weekly. Extra hours of work are called overtime and these are usually paid at a higher rate.",
+    "page_idx": 564
+  },
+  {
+    "id": 16465,
+    "type": "text",
+    "text": "Salary - pay based on a fixed yearly amount, usually paid monthly. Overtime may be paid, or workers may be given time off in exchange for extra time spent at work.",
+    "page_idx": 564
+  },
+  {
+    "id": 16466,
+    "type": "text",
+    "text": "- Piece work - pay based on the number of items produced.",
+    "page_idx": 564
+  },
+  {
+    "id": 16467,
+    "type": "text",
+    "text": "- Commission - pay is based on a percentage of sales made; sometimes a low wage, called a retainer, is paid as well as commission.",
+    "page_idx": 564
+  },
+  {
+    "id": 16468,
+    "type": "text",
+    "page_idx": 564,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 16469,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Emmanuel makes beaded necklaces. He is paid in South African rand at a rate of R24.50 per completed necklace. He is able to make 55 necklaces per week. Calculate his weekly earnings from the sale of necklaces."
+  },
+  {
+    "id": 16470,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Answer"
+  },
+  {
+    "id": 16471,
+    "type": "text",
+    "text": "Earnings  $= 55 \\times 24.50$  Multiply items produced by the rate paid.",
+    "page_idx": 564
+  },
+  {
+    "id": 16472,
+    "type": "text",
+    "text": "$= \\mathbb{R}1347.50$",
+    "page_idx": 564
+  },
+  {
+    "id": 16473,
+    "type": "text",
+    "page_idx": 564,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 16474,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Sanjay works as a sales representative for a company that sells mobile phones in the United Arab Emirates. He is paid a retainer of 800 Dhs (dirhams) per week plus a commission of  $4.5\\%$  of all sales."
+  },
+  {
+    "id": 16475,
+    "type": "text",
+    "text": "a How much would he earn in a week if he made no sales?",
+    "page_idx": 564
+  },
+  {
+    "id": 16476,
+    "type": "text",
+    "text": "b How much would he earn if he sold four phones at 3299 Dhs each in a week?",
+    "page_idx": 564
+  },
+  {
+    "id": 16477,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Answers"
+  },
+  {
+    "id": 16478,
+    "type": "text",
+    "page_idx": 564,
+    "text": "a 800 Dhs"
+  },
+  {
+    "id": 16479,
+    "type": "text",
+    "page_idx": 564,
+    "text": "If he made no sales, he would earn no commission, only his retainer."
+  },
+  {
+    "id": 16480,
+    "type": "text",
+    "page_idx": 564,
+    "text": "b Commission  $= 4.5\\%$  of  $(3299\\times 4)$"
+  },
+  {
+    "id": 16481,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Calculate  $4.5\\%$  of the total sales Sanjay made."
+  },
+  {
+    "id": 16482,
+    "type": "text",
+    "text": "$= 0.045\\times 13196$",
+    "page_idx": 564
+  },
+  {
+    "id": 16483,
+    "type": "text",
+    "text": "$= 593.82$  Dhs",
+    "page_idx": 564
+  },
+  {
+    "id": 16484,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Earnings  $=$  retainer  $^+$  commission"
+  },
+  {
+    "id": 16485,
+    "type": "text",
+    "text": "$= 800\\mathrm{Dhs} + 593.82\\mathrm{Dhs}$",
+    "page_idx": 564
+  },
+  {
+    "id": 16486,
+    "type": "text",
+    "text": "$= 1393.82\\mathrm{Dhs}$",
+    "page_idx": 564
+  },
+  {
+    "id": 16487,
+    "type": "text",
+    "page_idx": 564,
+    "text": "Add this to the retainer of 800 Dhs."
+  },
+  {
+    "id": 16488,
+    "type": "text",
+    "page_idx": 564,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 16489,
+    "type": "text",
+    "page_idx": 564,
+    "text": "You learnt about the decimal equivalents of percentages in Chapter 5."
+  },
+  {
+    "id": 16490,
+    "type": "text",
+    "page_idx": 565,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 16491,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Josh's hourly rate of pay is \\(12.50. He is paid 'time-and-a-half' for work after hours and on Saturdays and 'double-time' for Sundays and Public Holidays."
+  },
+  {
+    "id": 16492,
+    "type": "text",
+    "page_idx": 565,
+    "text": "One week he worked 5.5 hours on Saturday and 3 hours on Sunday. How much overtime pay would he earn?"
+  },
+  {
+    "id": 16493,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Answer"
+  },
+  {
+    "id": 16494,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Saturday overtime = 1.5 × $12.50 × 5.5 (time-and-a-half = 1.5 × normal\n= $103.13 time)"
+  },
+  {
+    "id": 16495,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Saturday overtime  $= 2 \\times \\$ 12.50 \\times 3\\) (double-time  $= 2 \\times$  normal time)  \n $= \\\\(75$"
+  },
+  {
+    "id": 16496,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Total overtime = $103.13 + $75.00\n= $178.13"
+  },
+  {
+    "id": 16497,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Exercise 17.1"
+  },
+  {
+    "id": 16498,
+    "type": "text",
+    "page_idx": 565,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 16499,
+    "type": "text",
+    "text": "1 A waiter earns $8.25 per hour. How much would she earn for a six-hour shift?",
+    "page_idx": 565
+  },
+  {
+    "id": 16500,
+    "type": "text",
+    "text": "2 How much would a receptionist earn for working a 35-hour week if the rate of pay is $12.25 per hour?",
+    "page_idx": 565
+  },
+  {
+    "id": 16501,
+    "type": "text",
+    "text": "3 Calculate the hourly rate for each of the following payments:",
+    "page_idx": 565
+  },
+  {
+    "id": 16502,
+    "type": "text",
+    "text": "a $67.50 for five hours",
+    "page_idx": 565
+  },
+  {
+    "id": 16503,
+    "type": "text",
+    "text": "b $245.10 for a 38-hour week",
+    "page_idx": 565
+  },
+  {
+    "id": 16504,
+    "type": "text",
+    "text": "c $126.23 for 13.5 hours",
+    "page_idx": 565
+  },
+  {
+    "id": 16505,
+    "type": "text",
+    "text": "d $394.88 for five 6½ hour shifts",
+    "page_idx": 565
+  },
+  {
+    "id": 16506,
+    "type": "text",
+    "text": "e $71.82 for working five hours and 15 minutes.",
+    "page_idx": 565
+  },
+  {
+    "id": 16507,
+    "type": "text",
+    "text": "4 Truck drivers are paid \\(15.45 per tonne of wood pulp delivered to a factory in Malaysia. If the drivers deliver 135 tonnes to the factory, how much will they earn?",
+    "page_idx": 565
+  },
+  {
+    "id": 16508,
+    "type": "text",
+    "text": "5 A team of workers in a factory is paid $23.25 per pallet of goods produced. If a team of five workers produces 102 pallets in a shift, how much will each person in the team have earned that shift?",
+    "page_idx": 565
+  },
+  {
+    "id": 16509,
+    "type": "text",
+    "text": "6 An estate agent is paid a retainer of $150 per week plus a commission on sales. The rate of commission is 2.5% on sales up to $150 000 and 1.75% on amounts above that. How much would she earn in a week if she sold a house for $220 000 and an apartment for $125 000?",
+    "page_idx": 565
+  },
+  {
+    "id": 16510,
+    "type": "text",
+    "page_idx": 565,
+    "text": "TIP"
+  },
+  {
+    "id": 16511,
+    "type": "text",
+    "page_idx": 565,
+    "text": "Commissions like these are on a sliding scale. So if the agent had sales of  $160000, she would be paid 2.5% of$ 150000 and 1.75% of the $10000 that is above this threshold."
+  },
+  {
+    "id": 16512,
+    "type": "text",
+    "page_idx": 566,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 16513,
+    "type": "text",
+    "page_idx": 566,
+    "text": "7 Here is the time sheet for five workers in a factory. Calculate each person's income for the week if their standard rate of pay is $8.40 per hour."
+  },
+  {
+    "id": 16514,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Worker</td><td>Normal hours worked</td><td>Hours overtime at time-and-a-half</td><td>Hours overtime at double-time</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16515,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Annie</td><td>35</td><td>2</td><td>0</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16516,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Bonnie</td><td>25</td><td>3</td><td>4</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16517,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Connie</td><td>30</td><td>1.5</td><td>1.75</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16518,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Donny</td><td>40</td><td>0</td><td>4</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16519,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Elizabeth</td><td>20</td><td>3.75</td><td>2</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16520,
+    "type": "text",
+    "page_idx": 566,
+    "text": "Deductions from earnings"
+  },
+  {
+    "id": 16521,
+    "type": "text",
+    "page_idx": 566,
+    "text": "Gross income (earnings) is the total amount a person earns."
+  },
+  {
+    "id": 16522,
+    "type": "text",
+    "page_idx": 566,
+    "text": "Deductions, such as income tax, pension contributions, unemployment and health insurance, and union dues are often taken from the gross earnings before the person is paid. The amount that is left over after deductions is called the net income."
+  },
+  {
+    "id": 16523,
+    "type": "text",
+    "page_idx": 566,
+    "text": "Net income  $=$  gross income - deductions"
+  },
+  {
+    "id": 16524,
+    "type": "text",
+    "page_idx": 566,
+    "text": "Exercise 17.2"
+  },
+  {
+    "id": 16525,
+    "type": "text",
+    "page_idx": 566,
+    "text": "1 For each person shown in the table:"
+  },
+  {
+    "id": 16526,
+    "type": "text",
+    "text": "a calculate their net income",
+    "page_idx": 566
+  },
+  {
+    "id": 16527,
+    "type": "text",
+    "text": "b calculate their net income as a percentage of their gross income. Give your answers to the nearest whole percent.",
+    "page_idx": 566
+  },
+  {
+    "id": 16528,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Employee</td><td>Gross weekly earnings ($)</td><td>Tax ($)</td><td>Other deductions ($)</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16529,
+    "type": "text",
+    "text": "[Table Row] <tr><td>B Willis</td><td>675.90</td><td>235.45</td><td>123.45</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16530,
+    "type": "text",
+    "text": "[Table Row] <tr><td>M Freeman</td><td>456.50</td><td>245.20</td><td>52.41</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16531,
+    "type": "text",
+    "text": "[Table Row] <tr><td>J Malkovich</td><td>1289.00</td><td>527.45</td><td>204.35</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16532,
+    "type": "text",
+    "text": "[Table Row] <tr><td>H Mirren</td><td>908.45</td><td>402.12</td><td>123.20</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16533,
+    "type": "text",
+    "text": "[Table Row] <tr><td>M Parker</td><td>853.30</td><td>399.10</td><td>90.56</td></tr>",
+    "page_idx": 566
+  },
+  {
+    "id": 16534,
+    "type": "text",
+    "page_idx": 566,
+    "text": "TIP"
+  },
+  {
+    "id": 16535,
+    "type": "text",
+    "page_idx": 566,
+    "text": "Gross earnings, deductions and net income are normally shown on a payment advice (slip) which is given to each worker when they get paid."
+  },
+  {
+    "id": 16536,
+    "type": "text",
+    "page_idx": 566,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 16537,
+    "type": "text",
+    "page_idx": 566,
+    "text": "In Chapter 5 you learnt how to write one number as a percentage of another number - look back if you need to remind yourself."
+  },
+  {
+    "id": 16538,
+    "type": "text",
+    "page_idx": 566,
+    "text": "2 Use the gross weekly earnings of the employees in question 1 to work out:"
+  },
+  {
+    "id": 16539,
+    "type": "text",
+    "text": "a the mean weekly earnings",
+    "page_idx": 566
+  },
+  {
+    "id": 16540,
+    "type": "text",
+    "text": "b the median weekly earnings",
+    "page_idx": 566
+  },
+  {
+    "id": 16541,
+    "type": "text",
+    "text": "the range of earnings.",
+    "page_idx": 566
+  },
+  {
+    "id": 16542,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"5\">3 Study the following two pay advice slips. For each worker, calculate:\na the difference between gross (excluding medical and car allowances) and net income\nb the percentage of gross income that each takes home as net income.</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16543,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"5\">Poovan&#x27;s Plastics Pty Ltd PAYMENT ADVICE</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16544,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"3\">EMPLOYEE DETAILS</td><td colspan=\"2\">SEPTEMBER</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16545,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"3\">M Badru\nEmployee no: MBN 0987</td><td colspan=\"2\">Income tax no 0987654321A\nBank details Big Bucks Bank\nAccount no. 9876598</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16546,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"3\">EARNINGS</td><td colspan=\"2\">DEDUCTIONS</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16547,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Details</td><td>Taxable amount</td><td>Payable amount</td><td>Description</td><td>Amount</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16548,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Salary\nMedical\nCar allowance</td><td>12876.98\n650.50\n1234.99</td><td>12876.98\n0.00\n0.00</td><td>Unemployment Insurance Fund (UIF)\nFirst aid course fees\nGroup life insurance\nUnion membership\nPAYE</td><td>89.35\n9.65\n132.90\n32.00\n3690.62</td></tr>",
+    "page_idx": 567
+  },
+  {
+    "id": 16549,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>14762.47</td><td>12876.98</td><td></td><td>3954.52</td></tr>",
+    "page_idx": 567
+  }
+]
+```

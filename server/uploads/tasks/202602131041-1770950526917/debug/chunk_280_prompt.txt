@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 19600,
+    "type": "text",
+    "page_idx": 711,
+    "text": "[2]"
+  },
+  {
+    "id": 19601,
+    "type": "text",
+    "page_idx": 711,
+    "text": "ii Describe fully the symmetry of the graph of  $y = \\sin x$  for  $0^{\\circ}\\leqslant x\\leqslant 360^{\\circ}$"
+  },
+  {
+    "id": 19602,
+    "type": "text",
+    "page_idx": 711,
+    "text": "[2]"
+  },
+  {
+    "id": 19603,
+    "type": "text",
+    "page_idx": 712,
+    "text": "b Solve  $4\\sin x - 1 = 2$  for  $0^{\\circ}\\leqslant x\\leqslant 360^{\\circ}$"
+  },
+  {
+    "id": 19604,
+    "type": "text",
+    "page_idx": 712,
+    "text": "[3]"
+  },
+  {
+    "id": 19605,
+    "type": "text",
+    "page_idx": 712,
+    "text": "Write  $x^{2} + 10x + 14$  in the form  $(x + a)^2 + b$ ."
+  },
+  {
+    "id": 19606,
+    "type": "text",
+    "page_idx": 712,
+    "text": "[2]"
+  },
+  {
+    "id": 19607,
+    "type": "text",
+    "page_idx": 712,
+    "text": "ii On a copy of the axes, sketch the graph of  $y = x^{2} + 10x + 14$ , indicating the coordinates turning point. [Using Figure 11 in the Unit 5 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 19608,
+    "type": "image",
+    "page_idx": 712,
+    "img_path": "images/156d835aaa661d781b6fd71dc465a77226938a6ee63c65f5bd364eee92de0417.jpg"
+  },
+  {
+    "id": 19609,
+    "type": "text",
+    "page_idx": 712,
+    "text": "[3]"
+  },
+  {
+    "id": 19610,
+    "type": "text",
+    "page_idx": 712,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q8, June 2020"
+  },
+  {
+    "id": 19611,
+    "type": "text",
+    "page_idx": 712,
+    "text": "14 The table shows some values for  $y = x^3 + 3x^2 + 2$ ."
+  },
+  {
+    "id": 19612,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>-3.5</td><td>-3</td><td>-2.5</td><td>-2</td><td>-1.5</td><td>-1</td><td>-0.5</td><td>0</td><td>0.5</td><td>1</td><td>1.5</td></tr>",
+    "page_idx": 712
+  },
+  {
+    "id": 19613,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td>-4.1</td><td></td><td>5.1</td><td>6</td><td>5.4</td><td>4</td><td>2.6</td><td></td><td>2.9</td><td></td><td>12.1</td></tr>",
+    "page_idx": 712
+  },
+  {
+    "id": 19614,
+    "type": "text",
+    "page_idx": 712,
+    "text": "a Complete the table. [Using Figure 12 in the Unit 5 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 19615,
+    "type": "text",
+    "page_idx": 712,
+    "text": "[3]"
+  },
+  {
+    "id": 19616,
+    "type": "text",
+    "page_idx": 712,
+    "text": "b On a copy of the grid, draw the graph of  $y = x^3 + 3x^2 + 2$  for  $-3.5 \\leq x \\leq 1.5$ . [Using Figure 13 in the Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 19617,
+    "type": "image",
+    "page_idx": 712,
+    "img_path": "images/101c50cbd83d18c7659b41f950ab0512dc95f68e00f73400f0e8bcf4baea5376.jpg"
+  },
+  {
+    "id": 19618,
+    "type": "text",
+    "page_idx": 712,
+    "text": "[4]"
+  },
+  {
+    "id": 19619,
+    "type": "text",
+    "page_idx": 713,
+    "text": "c Use your graph to solve the equation  $x^{3} + 3x^{2} + 2 = 0$  for  $-3.5\\leq x\\leq 1.5$"
+  },
+  {
+    "id": 19620,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[1]"
+  },
+  {
+    "id": 19621,
+    "type": "text",
+    "page_idx": 713,
+    "text": "d By drawing a suitable straight line, solve the equation  $x^{3} + 3x^{2} + 2x + 2 = 0$  for  $-3.5\\leqslant x\\leqslant 1.5$"
+  },
+  {
+    "id": 19622,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[2]"
+  },
+  {
+    "id": 19623,
+    "type": "text",
+    "page_idx": 713,
+    "text": "e For  $-3.5\\leqslant x\\leqslant 1.5$  the equation  $x^{3} + 3x^{2} + 2 = k$  has three solutions and  $k$  is an integer."
+  },
+  {
+    "id": 19624,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Write down a possible value of  $k$ ."
+  },
+  {
+    "id": 19625,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[1]"
+  },
+  {
+    "id": 19626,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q2, June 2019"
+  },
+  {
+    "id": 19627,
+    "type": "text",
+    "page_idx": 713,
+    "text": "15 a The price of a book increases from $2.50 to $2.65."
+  },
+  {
+    "id": 19628,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Calculate the percentage increase."
+  },
+  {
+    "id": 19629,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[3]"
+  },
+  {
+    "id": 19630,
+    "type": "text",
+    "page_idx": 713,
+    "text": "b Scott invests $500 for 7 years at a rate of 1.5% per year simple interest."
+  },
+  {
+    "id": 19631,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Calculate the value of his investment at the end of the 7 years."
+  },
+  {
+    "id": 19632,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[3]"
+  },
+  {
+    "id": 19633,
+    "type": "text",
+    "page_idx": 713,
+    "text": "c In a city the population is increasing exponentially at a rate of  $1.6\\%$  per year."
+  },
+  {
+    "id": 19634,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Find the overall percentage increase at the end of 20 years."
+  },
+  {
+    "id": 19635,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[2]"
+  },
+  {
+    "id": 19636,
+    "type": "text",
+    "page_idx": 713,
+    "text": "d The population of a village is 6400."
+  },
+  {
+    "id": 19637,
+    "type": "text",
+    "page_idx": 713,
+    "text": "The population is decreasing exponentially at a rate of  $r\\%$  per year."
+  },
+  {
+    "id": 19638,
+    "type": "text",
+    "page_idx": 713,
+    "text": "After 22 years, the population will be 2607."
+  },
+  {
+    "id": 19639,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Find the value of  $r$ ."
+  },
+  {
+    "id": 19640,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[3]"
+  },
+  {
+    "id": 19641,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q8, June 2019"
+  },
+  {
+    "id": 19642,
+    "type": "text",
+    "page_idx": 713,
+    "text": "16 a The test scores of 14 students are shown."
+  },
+  {
+    "id": 19643,
+    "type": "text",
+    "page_idx": 713,
+    "text": "21 21 23 26 25 21 22 20 21 23 23 27 24 21"
+  },
+  {
+    "id": 19644,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Find the range, mode, median and mean of the test scores."
+  },
+  {
+    "id": 19645,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[6]"
+  },
+  {
+    "id": 19646,
+    "type": "text",
+    "page_idx": 713,
+    "text": "ii A student is chosen at random."
+  },
+  {
+    "id": 19647,
+    "type": "text",
+    "page_idx": 713,
+    "text": "Find the probability that this student has a test score of more than 24."
+  },
+  {
+    "id": 19648,
+    "type": "text",
+    "page_idx": 713,
+    "text": "[1]"
+  },
+  {
+    "id": 19649,
+    "type": "text",
+    "page_idx": 714,
+    "text": "Petra records the score in each test she takes."
+  },
+  {
+    "id": 19650,
+    "type": "text",
+    "page_idx": 714,
+    "text": "The mean of the first  $n$  scores is  $x$ ."
+  },
+  {
+    "id": 19651,
+    "type": "text",
+    "page_idx": 714,
+    "text": "The mean of the first  $(n - 1)$  scores is  $(x + 1)$ ."
+  },
+  {
+    "id": 19652,
+    "type": "text",
+    "page_idx": 714,
+    "text": "Find the  $n$ th score in terms of  $n$  and  $x$ ."
+  },
+  {
+    "id": 19653,
+    "type": "text",
+    "page_idx": 714,
+    "text": "Give your answer in its simplest form."
+  },
+  {
+    "id": 19654,
+    "type": "text",
+    "page_idx": 714,
+    "text": "[3]"
+  },
+  {
+    "id": 19655,
+    "type": "text",
+    "page_idx": 714,
+    "text": "During one year the midday temperatures,  $t^{\\circ}\\mathrm{C}$  in Zedford were recorded."
+  },
+  {
+    "id": 19656,
+    "type": "text",
+    "page_idx": 714,
+    "text": "The table shows the results."
+  },
+  {
+    "id": 19657,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Temperature (t°C)</td><td>0 &lt; t ≤ 10</td><td>10 &lt; t ≤ 15</td><td>15 &lt; t ≤ 20</td><td>20 &lt; t ≤ 25</td><td>25 &lt; t ≤ 30</td></tr>",
+    "page_idx": 714
+  },
+  {
+    "id": 19658,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of days</td><td>50</td><td>85</td><td>100</td><td>120</td><td>10</td></tr>",
+    "page_idx": 714
+  },
+  {
+    "id": 19659,
+    "type": "text",
+    "text": "Calculate an estimate of the mean.",
+    "page_idx": 714
+  },
+  {
+    "id": 19660,
+    "type": "text",
+    "text": "ii Complete the histogram to show the information in the table. [Using Figure 14 in the Unit 5 Past Paper Questions Resource Sheet.]",
+    "page_idx": 714
+  },
+  {
+    "id": 19661,
+    "type": "image",
+    "page_idx": 714,
+    "img_path": "images/2e5b2bab3662f4ab4fe40809927a87c35c38a3cd3033a439b7219b94cd1e1a9d.jpg"
+  },
+  {
+    "id": 19662,
+    "type": "text",
+    "page_idx": 714,
+    "text": "[4]"
+  },
+  {
+    "id": 19663,
+    "type": "text",
+    "page_idx": 714,
+    "text": "[4]"
+  },
+  {
+    "id": 19664,
+    "type": "text",
+    "page_idx": 714,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q4, June 2019"
+  },
+  {
+    "id": 19665,
+    "type": "text",
+    "page_idx": 714,
+    "text": "17 a Simplify  $\\frac{x^2 - 25}{x^2 - x - 20}$"
+  },
+  {
+    "id": 19666,
+    "type": "text",
+    "page_idx": 714,
+    "text": "[3]"
+  },
+  {
+    "id": 19667,
+    "type": "text",
+    "page_idx": 714,
+    "text": "b Write as a single fraction in its simplest form."
+  },
+  {
+    "id": 19668,
+    "type": "equation",
+    "page_idx": 714,
+    "text": "$$\n\\frac {x + 5}{x} + \\frac {x + 8}{x - 1}\n$$"
+  },
+  {
+    "id": 19669,
+    "type": "text",
+    "page_idx": 714,
+    "text": "[3]"
+  },
+  {
+    "id": 19670,
+    "type": "text",
+    "page_idx": 715,
+    "text": "A curve has equation  $y = 2x^{3} - 4x^{2} + 6$ ."
+  },
+  {
+    "id": 19671,
+    "type": "text",
+    "page_idx": 715,
+    "text": "i Find  $\\frac{\\mathrm{dy}}{\\mathrm{dx}}$  the derived function of  $y$"
+  },
+  {
+    "id": 19672,
+    "type": "text",
+    "page_idx": 715,
+    "text": "[2]"
+  },
+  {
+    "id": 19673,
+    "type": "text",
+    "page_idx": 715,
+    "text": "ii Calculate the gradient of the curve  $y = 2x^{3} - 4x^{2} + 6$  at  $x = 4$"
+  },
+  {
+    "id": 19674,
+    "type": "text",
+    "page_idx": 715,
+    "text": "[2]"
+  },
+  {
+    "id": 19675,
+    "type": "text",
+    "page_idx": 715,
+    "text": "iii Find the coordinates of the two stationary points on the curve."
+  },
+  {
+    "id": 19676,
+    "type": "text",
+    "page_idx": 715,
+    "text": "[4]"
+  },
+  {
+    "id": 19677,
+    "type": "text",
+    "page_idx": 715,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q7, June 2021"
+  },
+  {
+    "id": 19678,
+    "type": "image",
+    "page_idx": 716,
+    "img_path": "images/1d32a47c44d5900bacbbf93a0fac68746681b46fac51bae6120d4a2eddbff6fe.jpg"
+  },
+  {
+    "id": 19679,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Unit 5 Project"
+  },
+  {
+    "id": 19680,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Attractive tablecloths"
+  },
+  {
+    "id": 19681,
+    "type": "text",
+    "page_idx": 716,
+    "text": "A café owner has designed tablecloths for Monday to Friday. Each cloth has as many colours as possible but they must have some symmetry."
+  },
+  {
+    "id": 19682,
+    "type": "text",
+    "page_idx": 716,
+    "text": "The 5 by 5 tablecloths below each satisfy a different symmetry rule."
+  },
+  {
+    "id": 19683,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Monday's 5 by 5 tablecloth has just 1 vertical line of symmetry."
+  },
+  {
+    "id": 19684,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Design some tablecloths of other odd by odd sizes with just 1 line of symmetry."
+  },
+  {
+    "id": 19685,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Check you agree that a 7 by 7 tablecloth can have at most 28 colours."
+  },
+  {
+    "id": 19686,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Monday's rule?"
+  },
+  {
+    "id": 19687,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Tuesday's 5 by 5 tablecloth has rotational symmetry of order 4, and no lines of symmetry."
+  },
+  {
+    "id": 19688,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Design some tablecloths of other odd by odd sizes with rotational symmetry of order 4, and no lines of symmetry."
+  },
+  {
+    "id": 19689,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Check you agree that a 7 by 7 tablecloth can have at most 13 colours."
+  },
+  {
+    "id": 19690,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Tuesday's rule?"
+  },
+  {
+    "id": 19691,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Wednesday's 5 by 5 tablecloth has 2 lines of symmetry (horizontal and vertical), and rotational symmetry of order 2."
+  },
+  {
+    "id": 19692,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Design some tablecloths of other odd by odd sizes with 2 lines of symmetry, and rotational symmetry of order 2."
+  },
+  {
+    "id": 19693,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Check you agree that a 7 by 7 tablecloth can have at most 16 colours."
+  },
+  {
+    "id": 19694,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Wednesday's rule?"
+  },
+  {
+    "id": 19695,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Thursday's 5 by 5 tablecloth has 2 (diagonal) lines of symmetry and rotational symmetry of order 2."
+  },
+  {
+    "id": 19696,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Design some tablecloths of other odd by odd sizes with 2 (diagonal) lines of symmetry and rotational symmetry of order 2."
+  },
+  {
+    "id": 19697,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Check you agree that a 7 by 7 tablecloth can have at most 16 colours."
+  },
+  {
+    "id": 19698,
+    "type": "text",
+    "page_idx": 716,
+    "text": "Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Thursday's rule?"
+  },
+  {
+    "id": 19699,
+    "type": "image",
+    "page_idx": 716,
+    "img_path": "images/89d79feaa5adb7c4aa8d648444be69fe87386a6db5d4e06ec909d6b14bdf8030.jpg"
+  }
+]
+```

@@ -1,0 +1,812 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 3430,
+    "type": "text",
+    "text": "d If  $x = y$  and  $y = z$  , what can you say about  $x$  and  $z?$",
+    "page_idx": 97
+  },
+  {
+    "id": 3431,
+    "type": "text",
+    "page_idx": 97,
+    "text": "2 How can you show in general terms that  $x = y$  in each of these diagrams? Share your reasoning and proof with your group."
+  },
+  {
+    "id": 3432,
+    "type": "image",
+    "page_idx": 97,
+    "img_path": "images/630e32c5daf4f2b2e8b63270bf8c9e3187b30cabf973a8c3e5babf505471758d.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 3433,
+    "type": "image",
+    "page_idx": 97,
+    "img_path": "images/03458b1d3bd1f02e583755908cc291f681a47b77707b34832cf285528a9e6a7b.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 3434,
+    "type": "text",
+    "page_idx": 98,
+    "text": "3.2 Triangles"
+  },
+  {
+    "id": 3435,
+    "type": "text",
+    "page_idx": 98,
+    "text": "A triangle is a plane shape with three sides and three angles."
+  },
+  {
+    "id": 3436,
+    "type": "text",
+    "page_idx": 98,
+    "text": "Triangles are classified according to the lengths of their sides and the sizes of their angles (or both)."
+  },
+  {
+    "id": 3437,
+    "type": "text",
+    "page_idx": 98,
+    "text": "LINK"
+  },
+  {
+    "id": 3438,
+    "type": "text",
+    "page_idx": 98,
+    "text": "If you fix three straight sticks or rods together in a triangle it is not possible for the triangle to change its shape without breaking. This is why so many engineering structures use triangles for rigidity and strength."
+  },
+  {
+    "id": 3439,
+    "type": "image",
+    "page_idx": 98,
+    "img_path": "images/3b9d9fc8435202bf85f44e73ec96a5fe5480010ec44d62848fa991d3eb4f2a84.jpg"
+  },
+  {
+    "id": 3440,
+    "type": "text",
+    "page_idx": 98,
+    "text": "TIP"
+  },
+  {
+    "id": 3441,
+    "type": "text",
+    "page_idx": 98,
+    "text": "Plane means flat. Plane shapes are flat or two-dimensional shapes."
+  },
+  {
+    "id": 3442,
+    "type": "text",
+    "page_idx": 98,
+    "text": "Scalene triangle"
+  },
+  {
+    "id": 3443,
+    "type": "image",
+    "page_idx": 98,
+    "img_path": "images/95deb8378d77b00da4d15d7b14a395d41b2a94ddf060bf6729c34c10f219ba65.jpg"
+  },
+  {
+    "id": 3444,
+    "type": "text",
+    "page_idx": 98,
+    "text": "Scalene triangles have no sides of equal length and no angles that are of equal sizes."
+  },
+  {
+    "id": 3445,
+    "type": "text",
+    "page_idx": 98,
+    "text": "Isosceles triangle"
+  },
+  {
+    "id": 3446,
+    "type": "image",
+    "page_idx": 98,
+    "img_path": "images/f475fd4db8683866fe0490a34b0a3bd76e66a207ec67cfc12f1b61c8d29722f5.jpg"
+  },
+  {
+    "id": 3447,
+    "type": "text",
+    "page_idx": 98,
+    "text": "Isosceles triangles have two sides of equal length. The angles at the base of the equal sides are equal in size."
+  },
+  {
+    "id": 3448,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Equilateral triangle"
+  },
+  {
+    "id": 3449,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/73419bcd9fcaf0d259a1e49b1927bb58124a1014f7446470e30e8dee7453d4f8.jpg"
+  },
+  {
+    "id": 3450,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Equilateral triangles have three equal sides and three equal angles (each is  $60^{\\circ}$"
+  },
+  {
+    "id": 3451,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Other triangles"
+  },
+  {
+    "id": 3452,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/6cec49ce85986c361392ddb3bfd0c6426a450c2e32c6136a550846841b1451a1.jpg"
+  },
+  {
+    "id": 3453,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/4b330c6284573dff98e3c4d877d86a0909e116e41272c6f671fd8e34cf68c08b.jpg"
+  },
+  {
+    "id": 3454,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/9732f034c1fc823a24008c984e1a851b9a305550c3c39a10c926e709a16b4d72.jpg"
+  },
+  {
+    "id": 3455,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Acute-angled triangles have all angles  $<  90^{\\circ}$"
+  },
+  {
+    "id": 3456,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Right-angled triangles have one angle  $= 90^{\\circ}$"
+  },
+  {
+    "id": 3457,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Obtuse-angled triangles have one angle  $>90^{\\circ}$"
+  },
+  {
+    "id": 3458,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Angle properties of triangles"
+  },
+  {
+    "id": 3459,
+    "type": "text",
+    "page_idx": 99,
+    "text": "The three angles inside a triangle are called interior angles."
+  },
+  {
+    "id": 3460,
+    "type": "text",
+    "page_idx": 99,
+    "text": "If you extend a side of a triangle you make another angle outside the triangle. Angles outside the triangle are called exterior angles."
+  },
+  {
+    "id": 3461,
+    "type": "text",
+    "page_idx": 99,
+    "text": "Look at the following diagram carefully to see two important angle properties of triangles."
+  },
+  {
+    "id": 3462,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/e7a91e55caef2de59b07b5ceb17a6498da130e6b39c685d49bee1eabedb0f115.jpg"
+  },
+  {
+    "id": 3463,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/b2ea3366083ffda11b1ff0fff452178d6b4bc9a70a7ab78cfb429a482282c49d.jpg"
+  },
+  {
+    "id": 3464,
+    "type": "image",
+    "page_idx": 99,
+    "img_path": "images/86da1e87d8824b8ca24f2da04d552a0d600c5fa753f92c8d9ac09c6420233396.jpg"
+  },
+  {
+    "id": 3465,
+    "type": "text",
+    "page_idx": 99,
+    "text": "The diagram shows two things:"
+  },
+  {
+    "id": 3466,
+    "type": "text",
+    "text": "the three interior angles of a triangle add up to  $180^{\\circ}$",
+    "page_idx": 99
+  },
+  {
+    "id": 3467,
+    "type": "text",
+    "text": "- two interior angles of a triangle are equal to the opposite exterior angle.",
+    "page_idx": 99
+  },
+  {
+    "id": 3468,
+    "type": "text",
+    "page_idx": 99,
+    "text": "If you try this yourself with any triangle you will get the same results. But why is this so? Mathematicians cannot just show things to be true, they have to prove them using mathematical principles. Read through the following two simple proofs that use the properties of angles you already know, to show that angles in a triangle will always add up to  $180^{\\circ}$  and that the exterior angle will always equal the sum of the opposite interior angles."
+  },
+  {
+    "id": 3469,
+    "type": "text",
+    "page_idx": 100,
+    "text": "Angles in a triangle add up to  $180^{\\circ}$"
+  },
+  {
+    "id": 3470,
+    "type": "text",
+    "page_idx": 100,
+    "text": "To prove this you can draw a line parallel to one side of the triangle."
+  },
+  {
+    "id": 3471,
+    "type": "image",
+    "page_idx": 100,
+    "img_path": "images/b91b5c8f00db8df3638e297c279bf3d5b25dd07ae9c6db138ec78aea49e17866.jpg"
+  },
+  {
+    "id": 3472,
+    "type": "image",
+    "page_idx": 100,
+    "img_path": "images/3a2a38249dc59dc685be4f6cd98e8f2067d662164e059daf651151ba6dc0a335.jpg"
+  },
+  {
+    "id": 3473,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\nx + a + y = 1 8 0 ^ {\\circ} (\\text {a n g l e s o n a l i n e})\n$$"
+  },
+  {
+    "id": 3474,
+    "type": "text",
+    "page_idx": 100,
+    "text": "but:"
+  },
+  {
+    "id": 3475,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\nb = x \\text {a n d} c = y \\text {(a l t e r n a t e a n g l e s a r e e q u a l)}\n$$"
+  },
+  {
+    "id": 3476,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\n\\text {s o} a + b + c = 1 8 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 3477,
+    "type": "text",
+    "page_idx": 100,
+    "text": "The exterior angle is equal to the sum of the opposite interior angles"
+  },
+  {
+    "id": 3478,
+    "type": "image",
+    "page_idx": 100,
+    "img_path": "images/ad3c31dd3403b954ba67d96bbc33c201b09ff56176433613ada792947ca0a29e.jpg",
+    "image_caption": "Answers"
+  },
+  {
+    "id": 3479,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\nc + x = 1 8 0 ^ {\\circ} (\\text {a n g l e s o n a l i n e})\n$$"
+  },
+  {
+    "id": 3480,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\n\\mathrm {s o}, c = 1 8 0 ^ {\\circ} - x\n$$"
+  },
+  {
+    "id": 3481,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\na + b + c = 1 8 0 ^ {\\circ} (\\text {a n g l e s u m o f t r i a n g l e})\n$$"
+  },
+  {
+    "id": 3482,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\nc = 1 8 0 ^ {\\circ} - (a + b)\n$$"
+  },
+  {
+    "id": 3483,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\n\\text {s o}, 1 8 0 ^ {\\circ} - (a + b) = 1 8 0 ^ {\\circ} - x\n$$"
+  },
+  {
+    "id": 3484,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\n\\text {h e n c e}, a + b = x\n$$"
+  },
+  {
+    "id": 3485,
+    "type": "text",
+    "page_idx": 100,
+    "text": "These two properties allow you to find the missing angles in triangles and other diagrams involving triangles."
+  },
+  {
+    "id": 3486,
+    "type": "text",
+    "page_idx": 100,
+    "text": "TIP"
+  },
+  {
+    "id": 3487,
+    "type": "text",
+    "page_idx": 100,
+    "text": "You don't need to know these proofs, but you do need to remember the rules associated with them."
+  },
+  {
+    "id": 3488,
+    "type": "text",
+    "page_idx": 100,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 3489,
+    "type": "text",
+    "page_idx": 100,
+    "text": "Some of the algebraic processes used here are examples of the solutions to linear equations. You've done this before, but it is covered in more detail in Chapter 14."
+  },
+  {
+    "id": 3490,
+    "type": "text",
+    "page_idx": 100,
+    "text": "WORKED EXAMPLE 5"
+  },
+  {
+    "id": 3491,
+    "type": "text",
+    "page_idx": 100,
+    "text": "Find the value of the unknown angles in each triangle. Give reasons for your answers."
+  },
+  {
+    "id": 3492,
+    "type": "text",
+    "page_idx": 100,
+    "text": "a  $82^{\\circ} + 30^{\\circ} + x = 180^{\\circ}$  (angle sum of triangle)"
+  },
+  {
+    "id": 3493,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\n\\begin{array}{l} x = 1 8 0 ^ {\\circ} - 8 2 ^ {\\circ} - 3 0 ^ {\\circ} \\\\ x = 6 8 ^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3494,
+    "type": "image",
+    "page_idx": 100,
+    "img_path": "images/22d27628fbb5912a955e4e0632add1a65e5b4c7176c4fa2e348c49bad6b834c1.jpg"
+  },
+  {
+    "id": 3495,
+    "type": "text",
+    "page_idx": 100,
+    "text": "b  $2x + 90^{\\circ} = 180^{\\circ}$  （angle sum of triangle）"
+  },
+  {
+    "id": 3496,
+    "type": "image",
+    "page_idx": 100,
+    "img_path": "images/618e3ccc0117fb75b09f342168802a1fc97116a571613ab23592db694825e014.jpg"
+  },
+  {
+    "id": 3497,
+    "type": "equation",
+    "page_idx": 100,
+    "text": "$$\n\\begin{array}{l} 2 x = 1 8 0 ^ {\\circ} - 9 0 ^ {\\circ} \\\\ 2 x = 9 0 ^ {\\circ} \\\\ x = 4 5 ^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3498,
+    "type": "text",
+    "page_idx": 101,
+    "text": "WORKED EXAMPLE 5 CONTINUED"
+  },
+  {
+    "id": 3499,
+    "type": "text",
+    "page_idx": 101,
+    "text": "C"
+  },
+  {
+    "id": 3500,
+    "type": "image",
+    "page_idx": 101,
+    "img_path": "images/8fb0bb334f64b1b950bb8d9de3ff4fe5c013c3170f84d9e94ea726951924742c.jpg"
+  },
+  {
+    "id": 3501,
+    "type": "text",
+    "page_idx": 101,
+    "text": "c"
+  },
+  {
+    "id": 3502,
+    "type": "equation",
+    "page_idx": 101,
+    "text": "$$\n\\begin{array}{l} 7 0 ^ {\\circ} + 3 5 ^ {\\circ} + x = 1 8 0 ^ {\\circ} \\\\ x = 1 8 0 ^ {\\circ} - 1 0 5 ^ {\\circ} \\\\ x = 7 5 ^ {\\circ} \\\\ y = 7 5 ^ {\\circ} \\\\ 7 0 ^ {\\circ} + y + z = 1 8 0 ^ {\\circ} \\\\ 7 0 ^ {\\circ} + 7 5 ^ {\\circ} + z = 1 8 0 ^ {\\circ} \\\\ x = 1 8 0 ^ {\\circ} - 7 5 ^ {\\circ} - 7 0 ^ {\\circ} \\\\ z = 3 5 ^ {\\circ} \\\\ \\text {o r} z = 3 5 ^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3503,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(anglesumof triangle)"
+  },
+  {
+    "id": 3504,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(corresponding angles)"
+  },
+  {
+    "id": 3505,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(anglesumof triangle)"
+  },
+  {
+    "id": 3506,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(corresponding angles)"
+  },
+  {
+    "id": 3507,
+    "type": "text",
+    "page_idx": 101,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 3508,
+    "type": "text",
+    "page_idx": 101,
+    "text": "Many questions on trigonometry require you to make calculations like the ones in Worked example 5 before you can move on to solve the problem."
+  },
+  {
+    "id": 3509,
+    "type": "text",
+    "page_idx": 101,
+    "text": "WORKED EXAMPLE 6"
+  },
+  {
+    "id": 3510,
+    "type": "text",
+    "page_idx": 101,
+    "text": "Find the size of angle  $x, y$  and  $z$ ."
+  },
+  {
+    "id": 3511,
+    "type": "text",
+    "page_idx": 101,
+    "text": "Answers"
+  },
+  {
+    "id": 3512,
+    "type": "text",
+    "page_idx": 101,
+    "text": "a"
+  },
+  {
+    "id": 3513,
+    "type": "image",
+    "page_idx": 101,
+    "img_path": "images/7439d12edffb759990c4324dbff8fbcb739426918045d16bbb174df92b72ef93.jpg"
+  },
+  {
+    "id": 3514,
+    "type": "text",
+    "page_idx": 101,
+    "text": "a  $x = 60^{\\circ} + 80^{\\circ}$"
+  },
+  {
+    "id": 3515,
+    "type": "equation",
+    "page_idx": 101,
+    "text": "$$\nx = 1 4 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 3516,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(exterior angle of triangle)"
+  },
+  {
+    "id": 3517,
+    "type": "text",
+    "page_idx": 101,
+    "text": "b"
+  },
+  {
+    "id": 3518,
+    "type": "image",
+    "page_idx": 101,
+    "img_path": "images/f3db4185eec647da724e8b6060e4ff3f8b774008e685d9db272a55ef40078f87.jpg"
+  },
+  {
+    "id": 3519,
+    "type": "text",
+    "page_idx": 101,
+    "text": "b  $y + 70^{\\circ} = 125^{\\circ}$"
+  },
+  {
+    "id": 3520,
+    "type": "equation",
+    "page_idx": 101,
+    "text": "$$\ny = 1 2 5 ^ {\\circ} - 7 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 3521,
+    "type": "equation",
+    "page_idx": 101,
+    "text": "$$\ny = 5 5 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 3522,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(exterior angle of triangle)"
+  },
+  {
+    "id": 3523,
+    "type": "text",
+    "page_idx": 101,
+    "text": "c"
+  },
+  {
+    "id": 3524,
+    "type": "image",
+    "page_idx": 101,
+    "img_path": "images/177a9abdbab4a7dd398966714528e13b50dc9f9a872de5c65007a2f290a1011d.jpg"
+  },
+  {
+    "id": 3525,
+    "type": "text",
+    "page_idx": 101,
+    "text": "40°+z=110°"
+  },
+  {
+    "id": 3526,
+    "type": "equation",
+    "page_idx": 101,
+    "text": "$$\nz = 1 1 0 ^ {\\circ} - 4 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 3527,
+    "type": "equation",
+    "page_idx": 101,
+    "text": "$$\nz = 7 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 3528,
+    "type": "text",
+    "page_idx": 101,
+    "text": "(exterior angle of triangle ABC)"
+  },
+  {
+    "id": 3529,
+    "type": "text",
+    "page_idx": 101,
+    "text": "TIP"
+  }
+]
+```

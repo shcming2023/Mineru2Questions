@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 8750,
+    "type": "text",
+    "page_idx": 255,
+    "text": "3 A four-sided dice has faces numbered 1, 2, 3 and 4. The dice is thrown on the table. The probabilities of each of the four faces landing flat on the table are as shown."
+  },
+  {
+    "id": 8751,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Face</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>",
+    "page_idx": 255
+  },
+  {
+    "id": 8752,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Probability</td><td>2/9</td><td>1/3</td><td>5/18</td><td>1/6</td></tr>",
+    "page_idx": 255
+  },
+  {
+    "id": 8753,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td></td><td></td><td></td><td></td></tr>",
+    "page_idx": 255
+  },
+  {
+    "id": 8754,
+    "type": "text",
+    "text": "a Copy the table and fill in the four empty boxes with the probabilities changed to fractions with a common denominator.",
+    "page_idx": 255
+  },
+  {
+    "id": 8755,
+    "type": "text",
+    "text": "b Which face is most likely to finish flat on the table? [2]",
+    "page_idx": 255
+  },
+  {
+    "id": 8756,
+    "type": "text",
+    "text": "c What is the probability that face 3 does not finish flat on the table? [2]",
+    "page_idx": 255
+  },
+  {
+    "id": 8757,
+    "type": "image",
+    "page_idx": 255,
+    "img_path": "images/6467942d86934a97c161829009388d8035fb817dc5da276c76f157c391ca7669.jpg"
+  },
+  {
+    "id": 8758,
+    "type": "text",
+    "page_idx": 255,
+    "text": "4 Josh and Soumik each take a coin at random out of their pockets and add them together to get an amount. Josh has two $1 coins, a 50c coin, a $5 coin and three 20c coins in his pocket. Soumik has three $5 coins, a $2 coin and three 50c pieces."
+  },
+  {
+    "id": 8759,
+    "type": "text",
+    "text": "a Draw a probability space diagram to show all the possible outcomes for the sum of the two coins. [4]",
+    "page_idx": 255
+  },
+  {
+    "id": 8760,
+    "type": "text",
+    "text": "b Find the probability that the coins will add up to $6. [2]",
+    "page_idx": 255
+  },
+  {
+    "id": 8761,
+    "type": "text",
+    "text": "c Find the probability that the coins add up to less than $2. [2]",
+    "page_idx": 255
+  },
+  {
+    "id": 8762,
+    "type": "text",
+    "text": "d Find the probability that the coins will add up to $5 or more. [3]",
+    "page_idx": 255
+  },
+  {
+    "id": 8763,
+    "type": "image",
+    "page_idx": 255,
+    "img_path": "images/e4c93b987e3eb28d794494cab1a0dcc92336761c5bb5f492f83ffd357f41b563.jpg"
+  },
+  {
+    "id": 8764,
+    "type": "text",
+    "page_idx": 255,
+    "text": "5 A six-sided dice is biased so that the probability of rolling a 5 is  $\\frac{1}{6}$ , the probability of rolling a 6 is  $\\frac{1}{3}$  and the probabilities of rolling a 1, 2, 3 or 4 are all equal."
+  },
+  {
+    "id": 8765,
+    "type": "text",
+    "page_idx": 255,
+    "text": "The dice is rolled twice and the result recorded each time."
+  },
+  {
+    "id": 8766,
+    "type": "text",
+    "text": "a Calculate the probability of rolling a 3 on the first roll. [2]",
+    "page_idx": 255
+  },
+  {
+    "id": 8767,
+    "type": "text",
+    "text": "b Calculate the probability that the total of both rolls is 12. [3]",
+    "page_idx": 255
+  },
+  {
+    "id": 8768,
+    "type": "text",
+    "text": "c Calculate the probability that the product of both rolls is 12. [3]",
+    "page_idx": 255
+  },
+  {
+    "id": 8769,
+    "type": "image",
+    "page_idx": 255,
+    "img_path": "images/7ca2f3a09dd003ff13a7d3853134aeea65a9b72dea2eee0e1a9c341038ca8c11.jpg"
+  },
+  {
+    "id": 8770,
+    "type": "text",
+    "page_idx": 255,
+    "text": "6 Two fair spinners, one in the shape of a square with sides numbered 1, 2, 3, 4, and one in the shape of a regular pentagon with sides numbered 1, 2, 3, 4, 5 are spun at the same time."
+  },
+  {
+    "id": 8771,
+    "type": "text",
+    "page_idx": 255,
+    "text": "a Draw a sample space diagram to show all possible outcomes. Use a comma to separate the numbers on each spinner. For example, record the outcome 'a 3 on the square spinner and a 4 on the pentagon spinner' as 3, 4. [3]"
+  },
+  {
+    "id": 8772,
+    "type": "text",
+    "page_idx": 256,
+    "text": "Event  $A$  is 'the total of the scores is 5'."
+  },
+  {
+    "id": 8773,
+    "type": "text",
+    "page_idx": 256,
+    "text": "Event  $B$  is 'the scores have a difference of 1'."
+  },
+  {
+    "id": 8774,
+    "type": "text",
+    "page_idx": 256,
+    "text": "Find the probability of the events:"
+  },
+  {
+    "id": 8775,
+    "type": "text",
+    "text": "i A [2]",
+    "page_idx": 256
+  },
+  {
+    "id": 8776,
+    "type": "text",
+    "text": "ii B [2]",
+    "page_idx": 256
+  },
+  {
+    "id": 8777,
+    "type": "text",
+    "text": "iii  $A$  and  $B$  [3]",
+    "page_idx": 256
+  },
+  {
+    "id": 8778,
+    "type": "text",
+    "text": "iv A or B or both. [3]",
+    "page_idx": 256
+  },
+  {
+    "id": 8779,
+    "type": "text",
+    "page_idx": 256,
+    "text": "c i Use your answer to part (b) to show that the result,  $P(A$  or  $B) = P(A) + P(B)$  , is.not true for these events. [3]"
+  },
+  {
+    "id": 8780,
+    "type": "text",
+    "page_idx": 256,
+    "text": "ii Why is the result not true for these events? [2]"
+  },
+  {
+    "id": 8781,
+    "type": "text",
+    "page_idx": 256,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 8782,
+    "type": "text",
+    "page_idx": 256,
+    "text": "How well do you understand the work on probability?"
+  },
+  {
+    "id": 8783,
+    "type": "text",
+    "page_idx": 256,
+    "text": "Copy the headings. Write short points under each one."
+  },
+  {
+    "id": 8784,
+    "type": "text",
+    "text": "My strengths",
+    "page_idx": 256
+  },
+  {
+    "id": 8785,
+    "type": "text",
+    "text": "Evidence of my strengths",
+    "page_idx": 256
+  },
+  {
+    "id": 8786,
+    "type": "text",
+    "text": "My goals for the next set of practice questions",
+    "page_idx": 256
+  },
+  {
+    "id": 8787,
+    "type": "text",
+    "text": "My plan to reach the goals",
+    "page_idx": 256
+  },
+  {
+    "id": 8788,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Past paper questions"
+  },
+  {
+    "id": 8789,
+    "type": "text",
+    "page_idx": 257,
+    "text": "1 Write these numbers in order, starting with the smallest."
+  },
+  {
+    "id": 8790,
+    "type": "equation",
+    "page_idx": 257,
+    "text": "$$\n\\frac {1 3}{2 0 1}\n$$"
+  },
+  {
+    "id": 8791,
+    "type": "equation",
+    "page_idx": 257,
+    "text": "$$\n5.6 \\%\n$$"
+  },
+  {
+    "id": 8792,
+    "type": "equation",
+    "page_idx": 257,
+    "text": "$$\n0. 0 6 5\n$$"
+  },
+  {
+    "id": 8793,
+    "type": "equation",
+    "page_idx": 257,
+    "text": "$$\n\\frac {5}{8 9}\n$$"
+  },
+  {
+    "id": 8794,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[2]"
+  },
+  {
+    "id": 8795,
+    "type": "text",
+    "page_idx": 257,
+    "text": "TIP"
+  },
+  {
+    "id": 8796,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Unit 2 Past Paper Questions Resource Sheet is available on Cambridge GO."
+  },
+  {
+    "id": 8797,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q3, June 2020"
+  },
+  {
+    "id": 8798,
+    "type": "image",
+    "page_idx": 257,
+    "img_path": "images/eee3ad0d52f458784e72f2fc4aa4be8c6f824bca318a6e0d9329f046ee1427b5.jpg"
+  },
+  {
+    "id": 8799,
+    "type": "text",
+    "page_idx": 257,
+    "text": "2 The probability that a train is late is 0.15."
+  },
+  {
+    "id": 8800,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Write down the probability that the train is not late."
+  },
+  {
+    "id": 8801,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[1]"
+  },
+  {
+    "id": 8802,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q7, June 2021"
+  },
+  {
+    "id": 8803,
+    "type": "text",
+    "page_idx": 257,
+    "text": "3 A cone has radius  $4.5\\mathrm{cm}$  and height  $10.4\\mathrm{cm}$"
+  },
+  {
+    "id": 8804,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Calculate, in terms of  $\\pi$ , the volume of the cone."
+  },
+  {
+    "id": 8805,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[The volume,  $V$ , of a cone with radius  $r$  and height  $h$  is  $V = \\frac{1}{3}\\pi r^2 h$ .]"
+  },
+  {
+    "id": 8806,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[2]"
+  },
+  {
+    "id": 8807,
+    "type": "image",
+    "page_idx": 257,
+    "img_path": "images/732712efff05afdcfc77bbadc9847d4722e9920df63413fa6525dd6e7133b054.jpg"
+  },
+  {
+    "id": 8808,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Factorise completely."
+  },
+  {
+    "id": 8809,
+    "type": "equation",
+    "page_idx": 257,
+    "text": "$$\n2 1 a ^ {2} + 2 8 a b\n$$"
+  },
+  {
+    "id": 8810,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q11, June 2020"
+  },
+  {
+    "id": 8811,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[2]"
+  },
+  {
+    "id": 8812,
+    "type": "image",
+    "page_idx": 257,
+    "img_path": "images/5964b3250424b17452ace39f5a3508327b943248aefe944338aaf3fe7596cfb1.jpg"
+  },
+  {
+    "id": 8813,
+    "type": "text",
+    "page_idx": 257,
+    "text": "5 A bag contains green balls and red balls only."
+  },
+  {
+    "id": 8814,
+    "type": "text",
+    "page_idx": 257,
+    "text": "A ball is taken at random from the bag."
+  },
+  {
+    "id": 8815,
+    "type": "text",
+    "page_idx": 257,
+    "text": "The probability of taking a green ball is 0.38."
+  },
+  {
+    "id": 8816,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Write down the probability of taking"
+  },
+  {
+    "id": 8817,
+    "type": "text",
+    "page_idx": 257,
+    "text": "a a red ball,"
+  },
+  {
+    "id": 8818,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q13, June 2020"
+  },
+  {
+    "id": 8819,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[1]"
+  },
+  {
+    "id": 8820,
+    "type": "text",
+    "page_idx": 257,
+    "text": "b a blue ball."
+  },
+  {
+    "id": 8821,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[1]"
+  },
+  {
+    "id": 8822,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q4, June 2019"
+  },
+  {
+    "id": 8823,
+    "type": "image",
+    "page_idx": 258,
+    "img_path": "images/c27f74550537949aa3ff1cf2a3802c90f4e500b2e73adb312070ab75e49f44ca.jpg"
+  },
+  {
+    "id": 8824,
+    "type": "text",
+    "page_idx": 258,
+    "text": "6 Write down the following numbers in standard form."
+  },
+  {
+    "id": 8825,
+    "type": "text",
+    "page_idx": 258,
+    "text": "a 640000"
+  },
+  {
+    "id": 8826,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8827,
+    "type": "text",
+    "page_idx": 258,
+    "text": "b 0.0006"
+  },
+  {
+    "id": 8828,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8829,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q7, June 2019"
+  },
+  {
+    "id": 8830,
+    "type": "text",
+    "page_idx": 258,
+    "text": "7 A bag contains blue, red, yellow and green balls only."
+  },
+  {
+    "id": 8831,
+    "type": "text",
+    "page_idx": 258,
+    "text": "A ball is taken from the bag at random."
+  },
+  {
+    "id": 8832,
+    "type": "text",
+    "page_idx": 258,
+    "text": "The table shows some information about the probabilities."
+  },
+  {
+    "id": 8833,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Colour</td><td>Blue</td><td>Red</td><td>Yellow</td><td>Green</td></tr>",
+    "page_idx": 258
+  },
+  {
+    "id": 8834,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Probability</td><td>0.15</td><td>0.2</td><td></td><td>0.43</td></tr>",
+    "page_idx": 258
+  },
+  {
+    "id": 8835,
+    "type": "text",
+    "page_idx": 258,
+    "text": "a Complete the table. [Using Figure 1 in the Unit 2 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 8836,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[2]"
+  },
+  {
+    "id": 8837,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Abdul takes a ball at random and replaces it in the bag."
+  },
+  {
+    "id": 8838,
+    "type": "text",
+    "page_idx": 258,
+    "text": "He does this 200 times."
+  },
+  {
+    "id": 8839,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Find how many times he expects to take a red ball."
+  },
+  {
+    "id": 8840,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8841,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q4, June 2020"
+  },
+  {
+    "id": 8842,
+    "type": "text",
+    "page_idx": 258,
+    "text": "8 Work out $1.20 as a percentage of $16."
+  },
+  {
+    "id": 8843,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8844,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q2, June 2019"
+  },
+  {
+    "id": 8845,
+    "type": "text",
+    "page_idx": 258,
+    "text": "9 a Write the number 0.0605 in standard form."
+  },
+  {
+    "id": 8846,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8847,
+    "type": "text",
+    "page_idx": 258,
+    "text": "b Calculate  $(1.63 \\times 10^{12}) \\times (2.47 \\times 10^{-1})$ ."
+  },
+  {
+    "id": 8848,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Give your answer in standard form."
+  },
+  {
+    "id": 8849,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  }
+]
+```

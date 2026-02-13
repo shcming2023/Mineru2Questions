@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 4620,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Do you know ...?</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4621,
+    "type": "text",
+    "text": "[Table Row] <tr><td>In statistics, data is a set of information collected to answer a particular question.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4622,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Categorical (qualitative) data is non-numerical. Colours, names, places and other descriptive terms are all categorical.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4623,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Numerical (quantitative) data is collected in the form of numbers. Numerical data can be discrete or continuous. Discrete data takes certain values; continuous data can take any value in a given range.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4624,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Primary data is data you collect yourself from a primary source. Secondary data is data you collect from other sources (previously collected by someone else).</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4625,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Unsorted data is called raw data. Raw data can be organised using tally tables, frequency tables, stem-and-leaf diagrams and two-way tables to make it easier to work with.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4626,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Data in tables can be displayed as graphs to show patterns and trends at a glance.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4627,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Pictograms are simple graphs that use symbols to represent quantities.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4628,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Bar charts have rows of horizontal bars or columns of vertical bars of different lengths. The bar length (or height) represents an amount. The actual amount can be read from a scale.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4629,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Dual bar charts display two or more sets of data side by side on the same set of axes.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4630,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Composite bar charts display groups within a set of data stacked on a single bar.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4631,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Pie charts are circular charts divided into sectors to show categories of data.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4632,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Line graphs use lines to plot changes in the data over time.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4633,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The type of graph you draw depends on the data and what you wish to show.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4634,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Are you able to ...?</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4635,
+    "type": "text",
+    "text": "[Table Row] <tr><td>collect data to answer a statistical question</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4636,
+    "type": "text",
+    "text": "[Table Row] <tr><td>classify different types of data</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4637,
+    "type": "text",
+    "text": "[Table Row] <tr><td>use tallies to count and record data</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4638,
+    "type": "text",
+    "text": "[Table Row] <tr><td>draw a frequency table to organise data</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4639,
+    "type": "text",
+    "text": "[Table Row] <tr><td>use class intervals to group data and draw a grouped frequency table</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4640,
+    "type": "text",
+    "text": "[Table Row] <tr><td>construct single and back-to-back stem-and-leaf diagrams to organise and display sets of data</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4641,
+    "type": "text",
+    "text": "[Table Row] <tr><td>draw and use two-way tables to organise two or more sets of data</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4642,
+    "type": "text",
+    "text": "[Table Row] <tr><td>construct and interpret pictograms</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4643,
+    "type": "text",
+    "text": "[Table Row] <tr><td>construct and interpret bar charts, dual bar charts and composite bar charts</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4644,
+    "type": "text",
+    "text": "[Table Row] <tr><td>construct and interpret pie charts.</td></tr>",
+    "page_idx": 152
+  },
+  {
+    "id": 4645,
+    "type": "text",
+    "page_idx": 153,
+    "text": "Practice questions"
+  },
+  {
+    "id": 4646,
+    "type": "text",
+    "page_idx": 153,
+    "text": "1 Salma is a quality control inspector. She randomly selects 40 packets of biscuits at a large factory. She opens each packet and counts the number of broken biscuits it contains. Her results are as follows:"
+  },
+  {
+    "id": 4647,
+    "type": "text",
+    "text": "[Table Row] <tr><td>0</td><td>0</td><td>2</td><td>1</td><td>3</td><td>0</td><td>0</td><td>2</td><td>3</td><td>1</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4648,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td>1</td><td>2</td><td>3</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>2</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4649,
+    "type": "text",
+    "text": "[Table Row] <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>2</td><td>3</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4650,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td>2</td><td>2</td><td>2</td><td>1</td><td>0</td><td>1</td><td>2</td><td>1</td><td>2</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4651,
+    "type": "text",
+    "text": "a Explain whether this is primary or secondary data to Salma. [2]",
+    "page_idx": 153
+  },
+  {
+    "id": 4652,
+    "type": "text",
+    "text": "b Determine whether the data is discrete or continuous and explain your answer. [2]",
+    "page_idx": 153
+  },
+  {
+    "id": 4653,
+    "type": "text",
+    "text": "c Copy and complete this frequency table to organise the data.",
+    "page_idx": 153
+  },
+  {
+    "id": 4654,
+    "type": "text",
+    "text": "[Table Row] <tr><td>No. of broken biscuits</td><td>Tally</td><td>Frequency</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4655,
+    "type": "text",
+    "text": "[Table Row] <tr><td>0</td><td></td><td></td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4656,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1</td><td></td><td></td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4657,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2</td><td></td><td></td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4658,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td></td><td></td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4659,
+    "type": "text",
+    "text": "[Table Row] <tr><td>4</td><td></td><td></td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4660,
+    "type": "text",
+    "page_idx": 153,
+    "text": "d Draw a bar chart to represent this data. [5]"
+  },
+  {
+    "id": 4661,
+    "type": "text",
+    "page_idx": 153,
+    "text": "2 The number of aircraft movements in and out of five main London airports in one month is summarised in the table."
+  },
+  {
+    "id": 4662,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Airport</td><td>Gatwick</td><td>Heathrow</td><td>London City</td><td>Luton</td><td>Stansted</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4663,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Total flights</td><td>23696</td><td>39660</td><td>6380</td><td>10697</td><td>15397</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4664,
+    "type": "text",
+    "text": "a State which airport handled most aircraft movement. [1]",
+    "page_idx": 153
+  },
+  {
+    "id": 4665,
+    "type": "text",
+    "text": "b State how many aircraft moved in and out of Stansted Airport. [1]",
+    "page_idx": 153
+  },
+  {
+    "id": 4666,
+    "type": "text",
+    "text": "c Round each figure to the nearest thousand. [2]",
+    "page_idx": 153
+  },
+  {
+    "id": 4667,
+    "type": "text",
+    "text": "d Use the rounded numbers for all of the airports to draw a pictogram to show this data. [4]",
+    "page_idx": 153
+  },
+  {
+    "id": 4668,
+    "type": "text",
+    "page_idx": 153,
+    "text": "3 This table shows the percentage of people who own a laptop and a mobile phone in four different districts in a large city."
+  },
+  {
+    "id": 4669,
+    "type": "text",
+    "text": "[Table Row] <tr><td>District</td><td>Own a laptop (%)</td><td>Own a mobile phone (%)</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4670,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A</td><td>45</td><td>83</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4671,
+    "type": "text",
+    "text": "[Table Row] <tr><td>B</td><td>32</td><td>72</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4672,
+    "type": "text",
+    "text": "[Table Row] <tr><td>C</td><td>61</td><td>85</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4673,
+    "type": "text",
+    "text": "[Table Row] <tr><td>D</td><td>22</td><td>68</td></tr>",
+    "page_idx": 153
+  },
+  {
+    "id": 4674,
+    "type": "text",
+    "page_idx": 154,
+    "text": "a There are 6000 people in District A. Work out how many of them own a mobile phone."
+  },
+  {
+    "id": 4675,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4676,
+    "type": "text",
+    "page_idx": 154,
+    "text": "b One district is home to a University of Technology and several computer software manufacturers. Explain which district you think this is."
+  },
+  {
+    "id": 4677,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4678,
+    "type": "text",
+    "page_idx": 154,
+    "text": "c Draw a dual bar chart to display this data."
+  },
+  {
+    "id": 4679,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[5]"
+  },
+  {
+    "id": 4680,
+    "type": "text",
+    "page_idx": 154,
+    "text": "4 Study this pie chart and answer the questions that follow."
+  },
+  {
+    "id": 4681,
+    "type": "text",
+    "page_idx": 154,
+    "text": "Sport played by students"
+  },
+  {
+    "id": 4682,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/8e4bdd1c9b0691596ca03b75ab3965b047e95955dc43ca3d25effc47e1dedfae.jpg"
+  },
+  {
+    "id": 4683,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/e38a6121e4474290a33903ac2733bdce1fb42119b469a7be7b5d45cbbd16117f.jpg"
+  },
+  {
+    "id": 4684,
+    "type": "text",
+    "page_idx": 154,
+    "text": "Baseball"
+  },
+  {
+    "id": 4685,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/50cbd95c36cd338c9d981d5ff07fd74b8b47dade917e17b52d67c2662960a00b.jpg"
+  },
+  {
+    "id": 4686,
+    "type": "text",
+    "page_idx": 154,
+    "text": "Cricket"
+  },
+  {
+    "id": 4687,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/59853efc688a43b33ad2715463ea71030b67837eb0364986113f32e1b65087c8.jpg"
+  },
+  {
+    "id": 4688,
+    "type": "text",
+    "page_idx": 154,
+    "text": "Football"
+  },
+  {
+    "id": 4689,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/2c05a2772700e8eff4271c3bd50b74910e2f048dbe6622b7b4c62cc9245a76fa.jpg"
+  },
+  {
+    "id": 4690,
+    "type": "text",
+    "page_idx": 154,
+    "text": "Netball"
+  },
+  {
+    "id": 4691,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/c02696a5536d316592e5a2c8bf1a6ba1c1423767d577bdf210b2dcff9c85366e.jpg"
+  },
+  {
+    "id": 4692,
+    "type": "text",
+    "page_idx": 154,
+    "text": "Hockey"
+  },
+  {
+    "id": 4693,
+    "type": "text",
+    "page_idx": 154,
+    "text": "The data was collected from a sample of 200 students."
+  },
+  {
+    "id": 4694,
+    "type": "text",
+    "page_idx": 154,
+    "text": "a Explain the type of data the chart shows."
+  },
+  {
+    "id": 4695,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4696,
+    "type": "text",
+    "page_idx": 154,
+    "text": "b Write down out many different categories of data there are."
+  },
+  {
+    "id": 4697,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4698,
+    "type": "text",
+    "page_idx": 154,
+    "text": "c Work out which is the most popular sport."
+  },
+  {
+    "id": 4699,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4700,
+    "type": "text",
+    "page_idx": 154,
+    "text": "d Work out the fraction of the students who play cricket."
+  },
+  {
+    "id": 4701,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4702,
+    "type": "text",
+    "page_idx": 154,
+    "text": "e Work out how many students play netball."
+  },
+  {
+    "id": 4703,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4704,
+    "type": "text",
+    "page_idx": 154,
+    "text": "f Work out how many students play baseball or hockey."
+  },
+  {
+    "id": 4705,
+    "type": "text",
+    "page_idx": 154,
+    "text": "[2]"
+  },
+  {
+    "id": 4706,
+    "type": "text",
+    "page_idx": 154,
+    "text": "5 Study this graph carefully."
+  },
+  {
+    "id": 4707,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/a3ebcdea031650e0d3988dbd8c38f14d7622c601e1a4b0387573cebbbcb3818e.jpg"
+  },
+  {
+    "id": 4708,
+    "type": "image",
+    "page_idx": 154,
+    "img_path": "images/c992ae97e73bcd51641f3c6a136b11f0b0de90e9f7fe012ceefe29d48f0a350d.jpg"
+  },
+  {
+    "id": 4709,
+    "type": "text",
+    "page_idx": 154,
+    "text": "represents 1 billion people."
+  },
+  {
+    "id": 4710,
+    "type": "text",
+    "page_idx": 154,
+    "text": "a What type of graph is this? [1]"
+  },
+  {
+    "id": 4711,
+    "type": "text",
+    "page_idx": 154,
+    "text": "b What does each symbol represent? [1]"
+  },
+  {
+    "id": 4712,
+    "type": "text",
+    "page_idx": 154,
+    "text": "c What was the population of the world in 1650? [2]"
+  },
+  {
+    "id": 4713,
+    "type": "text",
+    "page_idx": 154,
+    "text": "d How long did it take the population to double after 1650? [2]"
+  },
+  {
+    "id": 4714,
+    "type": "text",
+    "text": "e When did the world's population reach 7 billion? [2]",
+    "page_idx": 155
+  },
+  {
+    "id": 4715,
+    "type": "text",
+    "text": "The United Nations predicts that the world's population will reach 9.2 billion in 2050. How would you show this on the graph? [2]",
+    "page_idx": 155
+  },
+  {
+    "id": 4716,
+    "type": "text",
+    "page_idx": 155,
+    "text": "6 Two neighbouring villages, Packthorpe and Rainbridge, decide to join together to form Football, Tennis and Bowling clubs. The table shows some information about 80 people who have joined the teams."
+  },
+  {
+    "id": 4717,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>Football</td><td>Tennis</td><td>Bowling</td><td>Total</td></tr>",
+    "page_idx": 155
+  },
+  {
+    "id": 4718,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Packthorpe</td><td></td><td>5</td><td></td><td>35</td></tr>",
+    "page_idx": 155
+  },
+  {
+    "id": 4719,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Rainbridge</td><td>21</td><td></td><td></td><td>45</td></tr>",
+    "page_idx": 155
+  }
+]
+```

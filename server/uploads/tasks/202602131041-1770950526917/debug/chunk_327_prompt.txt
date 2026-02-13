@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 22890,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Grade 11</td><td>250</td><td>320</td><td>80</td><td>650</td></tr>",
+    "page_idx": 854
+  },
+  {
+    "id": 22891,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Total</td><td>450</td><td>650</td><td>200</td><td></td></tr>",
+    "page_idx": 854
+  },
+  {
+    "id": 22892,
+    "type": "text",
+    "page_idx": 854,
+    "text": "Add totals to the table so that you can use them to calculate probabilities."
+  },
+  {
+    "id": 22893,
+    "type": "text",
+    "page_idx": 854,
+    "text": "a"
+  },
+  {
+    "id": 22894,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td>Phone</td><td>Tablet</td><td>PC</td><td>Total</td></tr>",
+    "page_idx": 854
+  },
+  {
+    "id": 22895,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Grade 10</td><td>200</td><td>330</td><td>120</td><td>650</td></tr>",
+    "page_idx": 854
+  },
+  {
+    "id": 22896,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Grade 11</td><td>250</td><td>320</td><td>80</td><td>650</td></tr>",
+    "page_idx": 854
+  },
+  {
+    "id": 22897,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Total</td><td>450</td><td>650</td><td>200</td><td></td></tr>",
+    "page_idx": 854
+  },
+  {
+    "id": 22898,
+    "type": "text",
+    "page_idx": 854,
+    "text": "You know the student is in Grade 11, so you only need to look at the values for Grade 11."
+  },
+  {
+    "id": 22899,
+    "type": "text",
+    "page_idx": 854,
+    "text": "P(Phone user given Grade 11) =  $\\frac{250}{650} = \\frac{5}{13}$"
+  },
+  {
+    "id": 22900,
+    "type": "text",
+    "page_idx": 854,
+    "text": "250 out of the 650 students in Grade 11 use a phone to access the internet."
+  },
+  {
+    "id": 22901,
+    "type": "text",
+    "page_idx": 854,
+    "text": "b P(PC user given Grade 10) =  $\\frac{120}{650} = \\frac{12}{65}$"
+  },
+  {
+    "id": 22902,
+    "type": "text",
+    "page_idx": 854,
+    "text": "This time you need to look at the Grade 10 values."
+  },
+  {
+    "id": 22903,
+    "type": "text",
+    "page_idx": 854,
+    "text": "c P(Grade 11 given they use a tablet) =  $\\frac{320}{650} = \\frac{32}{65}$"
+  },
+  {
+    "id": 22904,
+    "type": "text",
+    "page_idx": 854,
+    "text": "You know the student uses a tablet so use the values in the tablet column."
+  },
+  {
+    "id": 22905,
+    "type": "text",
+    "page_idx": 854,
+    "text": "650 students use a tablet and 320 are in Grade 11."
+  },
+  {
+    "id": 22906,
+    "type": "text",
+    "page_idx": 854,
+    "text": "TIP"
+  },
+  {
+    "id": 22907,
+    "type": "text",
+    "page_idx": 854,
+    "text": "Conditional probability involves finding something using something that you know already. So for  $P(A$  given that  $B$  has happened),  $A$  is the event of interest, and  $B$  is the event that we assume has occurred."
+  },
+  {
+    "id": 22908,
+    "type": "text",
+    "page_idx": 854,
+    "text": "Exercise 24.4"
+  },
+  {
+    "id": 22909,
+    "type": "text",
+    "page_idx": 854,
+    "text": "1 A card is randomly selected from a pack of 52 playing cards, and its suit is recorded. The card is not replaced. Then a second card is chosen and the suit recorded."
+  },
+  {
+    "id": 22910,
+    "type": "text",
+    "text": "a Draw a tree diagram to represent this situation.",
+    "page_idx": 854
+  },
+  {
+    "id": 22911,
+    "type": "text",
+    "text": "b Use the tree diagram to find the probability that:",
+    "page_idx": 854
+  },
+  {
+    "id": 22912,
+    "type": "text",
+    "text": "both cards are hearts",
+    "page_idx": 854
+  },
+  {
+    "id": 22913,
+    "type": "text",
+    "text": "ii both cards are clubs",
+    "page_idx": 854
+  },
+  {
+    "id": 22914,
+    "type": "text",
+    "text": "iii the first card is red and the second card is black.",
+    "page_idx": 854
+  },
+  {
+    "id": 22915,
+    "type": "text",
+    "text": "iv both cards are hearts given that the first card is a heart.",
+    "page_idx": 854
+  },
+  {
+    "id": 22916,
+    "type": "text",
+    "page_idx": 855,
+    "text": "2 Mohammed has four scrabble tiles with the letters A, B, C and D on them. He draws a letter at random and places it on the table, then he draws a second letter and a third, placing them down next to the previously drawn letter."
+  },
+  {
+    "id": 22917,
+    "type": "text",
+    "text": "a Draw a tree diagram to show the possible outcomes.",
+    "page_idx": 855
+  },
+  {
+    "id": 22918,
+    "type": "text",
+    "text": "b What is the probability that the letters he has drawn spell the following words?",
+    "page_idx": 855
+  },
+  {
+    "id": 22919,
+    "type": "text",
+    "page_idx": 855,
+    "text": "i CAD ii BAD iii DAD"
+  },
+  {
+    "id": 22920,
+    "type": "text",
+    "text": "c What is the probability that he will not draw the letter B?",
+    "page_idx": 855
+  },
+  {
+    "id": 22921,
+    "type": "text",
+    "text": "d What is Mohammed's chance of drawing the letters in alphabetical order?",
+    "page_idx": 855
+  },
+  {
+    "id": 22922,
+    "type": "text",
+    "page_idx": 855,
+    "text": "3 In a group of 25 people, 15 like coffee (C), 17 like tea (T) and 2 people like neither. Using an appropriate diagram, calculate the probability that a person will:"
+  },
+  {
+    "id": 22923,
+    "type": "text",
+    "text": "a like coffee",
+    "page_idx": 855
+  },
+  {
+    "id": 22924,
+    "type": "text",
+    "text": "like coffee given that they like tea.",
+    "page_idx": 855
+  },
+  {
+    "id": 22925,
+    "type": "text",
+    "page_idx": 855,
+    "text": "4 100 teenagers went on a computer camp. 80 of them learned coding and 42 learned animation techniques. Each student did at least one of these activities."
+  },
+  {
+    "id": 22926,
+    "type": "text",
+    "text": "a Draw a Venn diagram to show how many teenagers did both activities.",
+    "page_idx": 855
+  },
+  {
+    "id": 22927,
+    "type": "text",
+    "text": "A teenager is randomly selected. Find the probability that he or she:",
+    "page_idx": 855
+  },
+  {
+    "id": 22928,
+    "type": "text",
+    "text": "i learned coding but not animation techniques",
+    "page_idx": 855
+  },
+  {
+    "id": 22929,
+    "type": "text",
+    "text": "ii learned animation techniques given that he or she learned coding.",
+    "page_idx": 855
+  },
+  {
+    "id": 22930,
+    "type": "text",
+    "page_idx": 855,
+    "text": "5 At computer camp, students from two different schools (A and B) were asked which device they preferred to use to play computer games. The data is given in the table."
+  },
+  {
+    "id": 22931,
+    "type": "text",
+    "text": "[Table Row] <tr><td>School Device preferred</td><td>School A</td><td>School B</td></tr>",
+    "page_idx": 855
+  },
+  {
+    "id": 22932,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Smartphone</td><td>52</td><td>48</td></tr>",
+    "page_idx": 855
+  },
+  {
+    "id": 22933,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Gaming console</td><td>37</td><td>23</td></tr>",
+    "page_idx": 855
+  },
+  {
+    "id": 22934,
+    "type": "text",
+    "text": "[Table Row] <tr><td>PC</td><td>48</td><td>35</td></tr>",
+    "page_idx": 855
+  },
+  {
+    "id": 22935,
+    "type": "text",
+    "page_idx": 855,
+    "text": "Give your answers as decimals correct to 3 decimal places if necessary."
+  },
+  {
+    "id": 22936,
+    "type": "text",
+    "text": "a What is the probability that any student chosen at random prefers to use a gaming console?",
+    "page_idx": 855
+  },
+  {
+    "id": 22937,
+    "type": "text",
+    "text": "b Given that the student prefers using a gaming console, what is the probability they are from school A?",
+    "page_idx": 855
+  },
+  {
+    "id": 22938,
+    "type": "text",
+    "text": "c What is the probability that a student from school A prefers using a PC to play games?",
+    "page_idx": 855
+  },
+  {
+    "id": 22939,
+    "type": "text",
+    "text": "d What is the probability that a student who either prefers a smartphone or a console attends school B?",
+    "page_idx": 855
+  },
+  {
+    "id": 22940,
+    "type": "text",
+    "page_idx": 855,
+    "text": "6 There are  $2n$  black counters and  $2n + 1$  green counters in a bag. If two counters are randomly drawn, one after the other, show that the probability of getting two counters the same colour is  $\\frac{2n}{n + 1}$ ."
+  },
+  {
+    "id": 22941,
+    "type": "text",
+    "page_idx": 856,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 22942,
+    "type": "text",
+    "page_idx": 856,
+    "text": "7 Clarissa is having a baby. She wants the baby to have a first and a second name. The names she is considering are Onyx, Shae, Kai and Avery."
+  },
+  {
+    "id": 22943,
+    "type": "text",
+    "text": "a Draw a tree diagram to show all possible combinations of names for the baby.",
+    "page_idx": 856
+  },
+  {
+    "id": 22944,
+    "type": "text",
+    "text": "b If Clarissa chooses two names at random, what are the chances that the baby will be called Kai Avery?",
+    "page_idx": 856
+  },
+  {
+    "id": 22945,
+    "type": "text",
+    "text": "What is the chance of the baby being named Avery Shae?",
+    "page_idx": 856
+  },
+  {
+    "id": 22946,
+    "type": "text",
+    "page_idx": 856,
+    "text": "8 Sindi, Lee, Marita, Roger, Bongile and Simone are the six members of a school committee. The committee needs to choose a chairperson and a treasurer. One person cannot fill both positions."
+  },
+  {
+    "id": 22947,
+    "type": "text",
+    "text": "a Draw a tree diagram to show how many ways there are of choosing a chairperson and a treasurer.",
+    "page_idx": 856
+  },
+  {
+    "id": 22948,
+    "type": "text",
+    "text": "b If the chairperson and treasurer are chosen at random, what is the probability of choosing Sindi as chairperson and Lee as treasurer?",
+    "page_idx": 856
+  },
+  {
+    "id": 22949,
+    "type": "text",
+    "page_idx": 856,
+    "text": "9 A cleaner accidentally knocked the name labels off three students' lockers. The name labels are Raju, Sam and Kerry. The tree diagram shows the possible ways of replacing the name labels."
+  },
+  {
+    "id": 22950,
+    "type": "image",
+    "page_idx": 856,
+    "img_path": "images/c666bd940d2d10d801ef602d72f7ec84634faca2a43320e49f9fd3360a5a5740.jpg"
+  },
+  {
+    "id": 22951,
+    "type": "text",
+    "text": "a Draw a tree diagram to show the possible ways of replacing the name labels. Write the probabilities next to each branch.",
+    "page_idx": 856
+  },
+  {
+    "id": 22952,
+    "type": "text",
+    "text": "b Are these events conditional or independent? Why?",
+    "page_idx": 856
+  },
+  {
+    "id": 22953,
+    "type": "text",
+    "text": "c How many correct ways are there to match the name labels to the lockers?",
+    "page_idx": 856
+  },
+  {
+    "id": 22954,
+    "type": "text",
+    "text": "d How many possible ways are there for the cleaner to label the lockers?",
+    "page_idx": 856
+  },
+  {
+    "id": 22955,
+    "type": "text",
+    "text": "e If the cleaner randomly stuck the names back onto the lockers, what are the chances of getting the names correct?",
+    "page_idx": 856
+  },
+  {
+    "id": 22956,
+    "type": "text",
+    "page_idx": 856,
+    "text": "10 In a group of 120 students, 25 are in the sixth form and 15 attend maths tutorials."
+  },
+  {
+    "id": 22957,
+    "type": "text",
+    "page_idx": 856,
+    "text": "Four of the students are sixth formers who attend maths tutorials. What is the probability that a randomly chosen student who attends maths tutorials will be in the sixth form?"
+  },
+  {
+    "id": 22958,
+    "type": "text",
+    "page_idx": 857,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 22959,
+    "type": "text",
+    "page_idx": 857,
+    "text": "11 A climatologist reports that the probability of rain on Friday is 0.21. If it rains on Friday, there is a 0.83 chance of rain on Saturday, if it doesn't rain on Friday, the chance of rain on Saturday is only 0.3."
+  },
+  {
+    "id": 22960,
+    "type": "text",
+    "text": "a Draw a tree diagram to represent this situation.",
+    "page_idx": 857
+  },
+  {
+    "id": 22961,
+    "type": "text",
+    "text": "b Use your diagram to work out the probability of rain on:",
+    "page_idx": 857
+  },
+  {
+    "id": 22962,
+    "type": "text",
+    "text": "i Friday and Saturday",
+    "page_idx": 857
+  },
+  {
+    "id": 22963,
+    "type": "text",
+    "text": "ii Saturday.",
+    "page_idx": 857
+  },
+  {
+    "id": 22964,
+    "type": "text",
+    "page_idx": 857,
+    "text": "12 Look at this tree diagram drawn by a weather forecaster."
+  },
+  {
+    "id": 22965,
+    "type": "text",
+    "page_idx": 857,
+    "text": "What does it tell you about the weather for the next two days in this place? (Make sure you include probabilities as part of your answer)."
+  },
+  {
+    "id": 22966,
+    "type": "image",
+    "page_idx": 857,
+    "img_path": "images/192722907f9cc602534ab66235eee292c9b1f59e02e9893a7efb6dce0f0af252.jpg"
+  },
+  {
+    "id": 22967,
+    "type": "image",
+    "page_idx": 857,
+    "img_path": "images/1ae0d55162ce6098bb82c87f51eb7943222c4e7ece2991c0052aa0bcf0bb8003.jpg"
+  },
+  {
+    "id": 22968,
+    "type": "image",
+    "page_idx": 857,
+    "img_path": "images/069e156880d25ee4ef43d8d5e4a7224ce0fdd1681f8fe83b1b324cb468eb0585.jpg"
+  },
+  {
+    "id": 22969,
+    "type": "text",
+    "page_idx": 857,
+    "text": "13 Mahmoud enjoys windsurfing. On any given day, the probability that there is a good wind is  $\\frac{3}{4}$ . If there is a good wind, the probability that he will go windsurfing is  $\\frac{5}{8}$ . If there is not a good wind, the probability that he will go windsurfing is  $\\frac{1}{16}$ ."
+  },
+  {
+    "id": 22970,
+    "type": "text",
+    "page_idx": 857,
+    "text": "a Copy this tree diagram. Write the probabilities next to each branch."
+  },
+  {
+    "id": 22971,
+    "type": "image",
+    "page_idx": 857,
+    "img_path": "images/bf902993191de879acc1c78dc06727aed3117c062f7915fb8682902217b360a7.jpg"
+  },
+  {
+    "id": 22972,
+    "type": "text",
+    "text": "b What is the probability that there is good wind and Mahmoud goes windsurfing?",
+    "page_idx": 857
+  },
+  {
+    "id": 22973,
+    "type": "text",
+    "text": "c Find the probability that, whatever the wind, Mahmoud does not go windsurfing.",
+    "page_idx": 857
+  },
+  {
+    "id": 22974,
+    "type": "text",
+    "text": "d If Mahmoud goes windsurfing, the probability that he has to wait for a strong enough wind so he can move is  $\\frac{1}{2}$ . Calculate the probability that, whatever the wind, Mahmoud spends some time waiting for a strong enough wind to move.",
+    "page_idx": 857
+  },
+  {
+    "id": 22975,
+    "type": "text",
+    "page_idx": 858,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 22976,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Do you know ...?</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22977,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The sample space is all the possible outcomes of a statistical experiment.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22978,
+    "type": "text",
+    "text": "[Table Row] <tr><td>When an event has two or more stages it is called a combined event.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22979,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Tree diagrams and Venn diagrams are useful for organising the outcomes of different stages in an event.\nThey are particularly useful when there are more than two stages because a sample space diagram can only show\noutcomes for two events.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22980,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The outcomes are written at the ends of branches on a tree diagram. The probability of each outcome is written\nnext to the branches as a fraction or decimal.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22981,
+    "type": "text",
+    "text": "[Table Row] <tr><td>For independent events you find the probability by multiplying the probabilities on each branch of the tree.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22982,
+    "type": "text",
+    "text": "[Table Row] <tr><td>When events are mutually exclusive, you need to add the probabilities obtained by multiplication.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22983,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The probability that an event happens, given that another event has already happened, is called conditional\nprobability.</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22984,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Are you able to ...?</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22985,
+    "type": "text",
+    "text": "[Table Row] <tr><td>draw a tree diagram to organise the outcomes for simple combined events</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22986,
+    "type": "text",
+    "text": "[Table Row] <tr><td>find the probability of each branch of a tree diagram</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22987,
+    "type": "text",
+    "text": "[Table Row] <tr><td>calculate the probability of events using tree diagrams</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22988,
+    "type": "text",
+    "text": "[Table Row] <tr><td>draw a Venn diagram to represent sets of information and use it to calculate probabilities</td></tr>",
+    "page_idx": 858
+  },
+  {
+    "id": 22989,
+    "type": "text",
+    "text": "[Table Row] <tr><td>use tree diagrams and Venn diagrams to determine conditional probability.</td></tr>",
+    "page_idx": 858
+  }
+]
+```

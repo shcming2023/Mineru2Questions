@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 10290,
+    "type": "text",
+    "page_idx": 309,
+    "text": "Draw a Venn diagram to illustrate this and hence find how many had:"
+  },
+  {
+    "id": 10291,
+    "type": "text",
+    "text": "a not travelled by car [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10292,
+    "type": "text",
+    "text": "b travelled by car only [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10293,
+    "type": "text",
+    "text": "c used neither bus nor car. [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10294,
+    "type": "text",
+    "page_idx": 309,
+    "text": "15  $\\mathcal{E} = \\{\\mathrm{integers}\\}$ $A = \\{x:x$  is an integer and  $-4 <   x <   7\\}$  and  $B = \\{x:x$  is a positive multiple of three}."
+  },
+  {
+    "id": 10295,
+    "type": "text",
+    "text": "a List the elements of set  $A$  [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10296,
+    "type": "text",
+    "text": "b Find  $\\mathfrak{n}(A\\cap B)$  [3]",
+    "page_idx": 309
+  },
+  {
+    "id": 10297,
+    "type": "text",
+    "text": "c Describe in words the set  $(A\\cap B)^{\\prime}$  [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10298,
+    "type": "text",
+    "page_idx": 309,
+    "text": "16 Copy the diagram shown below twice and shade the sets indicated."
+  },
+  {
+    "id": 10299,
+    "type": "image",
+    "page_idx": 309,
+    "img_path": "images/3cf0b4870261b935cd2c9db2dcf1a174a65078c6468c8ce30d4d596a7b879a42.jpg"
+  },
+  {
+    "id": 10300,
+    "type": "text",
+    "text": "a  $(A\\cap B)^{\\prime}$  [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10301,
+    "type": "text",
+    "text": "$(A\\cup B^{\\prime})^{\\prime}\\cup (A\\cap B)$  [3]",
+    "page_idx": 309
+  },
+  {
+    "id": 10302,
+    "type": "text",
+    "page_idx": 309,
+    "text": "17 The rule for a sequence is given as  $u_{n + 2} = u_{n + 1} + u_n$ ."
+  },
+  {
+    "id": 10303,
+    "type": "text",
+    "text": "a Given that  $u_{1} = u_{2} = 1$  , list the first eight terms of this sequence. [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10304,
+    "type": "text",
+    "text": "b What is the sequence called? [1]",
+    "page_idx": 309
+  },
+  {
+    "id": 10305,
+    "type": "text",
+    "text": "In which position is the number 233 in this sequence? [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10306,
+    "type": "text",
+    "page_idx": 309,
+    "text": "18 For the sequence  $u_{n} = \\frac{1}{2} n(n + 1)$ :"
+  },
+  {
+    "id": 10307,
+    "type": "text",
+    "text": "a list the first five terms [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10308,
+    "type": "text",
+    "text": "b identify the special sequence of numbers [1]",
+    "page_idx": 309
+  },
+  {
+    "id": 10309,
+    "type": "text",
+    "text": "find the value of  $n$  for  $u_{n} = 210$  [3]",
+    "page_idx": 309
+  },
+  {
+    "id": 10310,
+    "type": "text",
+    "text": "d write an expression for  $u_{n - 1}$  [2]",
+    "page_idx": 309
+  },
+  {
+    "id": 10311,
+    "type": "text",
+    "page_idx": 310,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 10312,
+    "type": "text",
+    "page_idx": 310,
+    "text": "Use the table to rate your understanding of the mathematical concepts needed in this section."
+  },
+  {
+    "id": 10313,
+    "type": "text",
+    "text": "[Table Row] <tr><td>My work shows that I ...</td><td>Rating</td></tr>",
+    "page_idx": 310
+  },
+  {
+    "id": 10314,
+    "type": "text",
+    "text": "[Table Row] <tr><td>understand all of the mathematical concepts needed to answer the questions</td><td>4</td></tr>",
+    "page_idx": 310
+  },
+  {
+    "id": 10315,
+    "type": "text",
+    "text": "[Table Row] <tr><td>understand most of the mathematical concepts needed to answer the questions</td><td>3</td></tr>",
+    "page_idx": 310
+  },
+  {
+    "id": 10316,
+    "type": "text",
+    "text": "[Table Row] <tr><td>understand some of the mathematical concepts needed to answer the questions</td><td>2</td></tr>",
+    "page_idx": 310
+  },
+  {
+    "id": 10317,
+    "type": "text",
+    "text": "[Table Row] <tr><td>have limited understanding of the mathematical concepts needed to answer the questions</td><td>1</td></tr>",
+    "page_idx": 310
+  },
+  {
+    "id": 10318,
+    "type": "image",
+    "page_idx": 311,
+    "img_path": "images/c3ba746b76e56a83f54738c6881ab1b4ad2b6088c6ee9a79fa1ba6890d6ca75e.jpg"
+  },
+  {
+    "id": 10319,
+    "type": "text",
+    "page_idx": 311,
+    "text": "Chapter 10"
+  },
+  {
+    "id": 10320,
+    "type": "text",
+    "page_idx": 311,
+    "text": "Straight lines and quadratic equations"
+  },
+  {
+    "id": 10321,
+    "type": "text",
+    "page_idx": 311,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 10322,
+    "type": "text",
+    "text": "- construct a table of values and plot points to draw graphs",
+    "page_idx": 311
+  },
+  {
+    "id": 10323,
+    "type": "text",
+    "text": "find the gradient of a straight line graph",
+    "page_idx": 311
+  },
+  {
+    "id": 10324,
+    "type": "text",
+    "text": "- recognise and determine the equation of a line",
+    "page_idx": 311
+  },
+  {
+    "id": 10325,
+    "type": "text",
+    "text": "determine the equation of a line parallel to a given line",
+    "page_idx": 311
+  },
+  {
+    "id": 10326,
+    "type": "text",
+    "text": "calculate the gradient of a line using coordinates of points on the line",
+    "page_idx": 311
+  },
+  {
+    "id": 10327,
+    "type": "text",
+    "text": "find the gradient of parallel and perpendicular lines",
+    "page_idx": 311
+  },
+  {
+    "id": 10328,
+    "type": "text",
+    "text": "find the length of a line segment and the coordinates of its midpoint.",
+    "page_idx": 311
+  },
+  {
+    "id": 10329,
+    "type": "text",
+    "text": "expand products of algebraic expressions",
+    "page_idx": 311
+  },
+  {
+    "id": 10330,
+    "type": "text",
+    "text": "factorise quadratic expressions",
+    "page_idx": 311
+  },
+  {
+    "id": 10331,
+    "type": "text",
+    "text": "- solve quadratic equations by factorisation.",
+    "page_idx": 311
+  },
+  {
+    "id": 10332,
+    "type": "text",
+    "page_idx": 312,
+    "text": "On 4 October 1957, the first artificial satellite, Sputnik, was launched. This particular satellite orbited the Earth, but many satellites that do experiments to study the upper atmosphere fly on short flights within the Earth's atmosphere. We can describe the flight path using the types of mathematical equations you will see in this chapter. This means scientists know where the rocket will be when it uses its parachute and where to recover the instruments. Similar equations can be used to describe any thrown projectile, including a ball!"
+  },
+  {
+    "id": 10333,
+    "type": "text",
+    "page_idx": 312,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 10334,
+    "type": "text",
+    "page_idx": 312,
+    "text": "1 A table of values gives a set of ordered pairs  $(x, y)$  that you can use to plot graphs on a coordinate grid."
+  },
+  {
+    "id": 10335,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>-1</td><td>0</td><td>1</td><td>2</td></tr>",
+    "page_idx": 312
+  },
+  {
+    "id": 10336,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>",
+    "page_idx": 312
+  },
+  {
+    "id": 10337,
+    "type": "text",
+    "page_idx": 312,
+    "text": "Plot these points and draw a line through them."
+  },
+  {
+    "id": 10338,
+    "type": "text",
+    "page_idx": 312,
+    "text": "2 The standard equation of a straight line graph is  $y = mx + c$ ."
+  },
+  {
+    "id": 10339,
+    "type": "text",
+    "text": "-  $m$  is the gradient (or steepness) of the graph.",
+    "page_idx": 312
+  },
+  {
+    "id": 10340,
+    "type": "text",
+    "text": "- c is the point where the graph crosses the y-axis (the y-intercept).",
+    "page_idx": 312
+  },
+  {
+    "id": 10341,
+    "type": "text",
+    "text": "a What is the relationship between the x- and y-values in the table in question 1?",
+    "page_idx": 312
+  },
+  {
+    "id": 10342,
+    "type": "text",
+    "text": "b What equation could you use to describe the line you get when you plot the points?",
+    "page_idx": 312
+  },
+  {
+    "id": 10343,
+    "type": "text",
+    "page_idx": 312,
+    "text": "3 Look at the graph. Calculate the gradient, find the  $y$ -intercept and use these to write the equation of the straight line."
+  },
+  {
+    "id": 10344,
+    "type": "image",
+    "page_idx": 312,
+    "img_path": "images/68f1be7b4d159374c2d7eb1789485deb528657a5dc093aa756734c50c1095df7.jpg"
+  },
+  {
+    "id": 10345,
+    "type": "image",
+    "page_idx": 312,
+    "img_path": "images/4a1d74dc00d832efa7928c66ff618934fb26d4fa10b0f46f9e3e00defd275537.jpg"
+  },
+  {
+    "id": 10346,
+    "type": "text",
+    "page_idx": 312,
+    "text": "KEYWORDS"
+  },
+  {
+    "id": 10347,
+    "type": "text",
+    "page_idx": 312,
+    "text": "constant term"
+  },
+  {
+    "id": 10348,
+    "type": "text",
+    "page_idx": 312,
+    "text": "difference between two squares"
+  },
+  {
+    "id": 10349,
+    "type": "text",
+    "page_idx": 312,
+    "text": "equation of a line"
+  },
+  {
+    "id": 10350,
+    "type": "text",
+    "page_idx": 312,
+    "text": "expand"
+  },
+  {
+    "id": 10351,
+    "type": "text",
+    "page_idx": 312,
+    "text": "gradient"
+  },
+  {
+    "id": 10352,
+    "type": "text",
+    "page_idx": 312,
+    "text": "midpoint"
+  },
+  {
+    "id": 10353,
+    "type": "text",
+    "page_idx": 312,
+    "text": "quadratic equation"
+  },
+  {
+    "id": 10354,
+    "type": "text",
+    "page_idx": 312,
+    "text": "quadratic expression"
+  },
+  {
+    "id": 10355,
+    "type": "text",
+    "page_idx": 312,
+    "text": "10.1 Straight line graphs"
+  },
+  {
+    "id": 10356,
+    "type": "text",
+    "page_idx": 312,
+    "text": "We use straight line graphs in many situations, for example: to solve equations; to convert between different measures; to show the distance travelled by an object moving at a constant speed; and so on."
+  },
+  {
+    "id": 10357,
+    "type": "text",
+    "page_idx": 312,
+    "text": "Using equations to plot lines"
+  },
+  {
+    "id": 10358,
+    "type": "text",
+    "page_idx": 312,
+    "text": "Keely owns a boat hire company. If Keely charges an initial fee of $40 to hire a boat and then $15 per hour, you can find a formula for the total cost $y after a hire time of x hours."
+  },
+  {
+    "id": 10359,
+    "type": "text",
+    "page_idx": 312,
+    "text": "Total cost  $=$  initial fee  $^+$  total charge for all hours"
+  },
+  {
+    "id": 10360,
+    "type": "equation",
+    "page_idx": 312,
+    "text": "$$\ny = 4 0 + 1 5 \\times x\n$$"
+  },
+  {
+    "id": 10361,
+    "type": "text",
+    "page_idx": 312,
+    "text": "or (rearranging)"
+  },
+  {
+    "id": 10362,
+    "type": "equation",
+    "page_idx": 312,
+    "text": "$$\ny = 1 5 x + 4 0\n$$"
+  },
+  {
+    "id": 10363,
+    "type": "text",
+    "page_idx": 313,
+    "text": "Now think about the total cost for a range of different hire times:"
+  },
+  {
+    "id": 10364,
+    "type": "text",
+    "page_idx": 313,
+    "text": "one hour: cost = 15 × 1 + 40 = $55"
+  },
+  {
+    "id": 10365,
+    "type": "text",
+    "page_idx": 313,
+    "text": "two hours: cost = 15 × 2 + 40 = $70"
+  },
+  {
+    "id": 10366,
+    "type": "text",
+    "page_idx": 313,
+    "text": "three hours: cost = 15 × 3 + 40 = $85"
+  },
+  {
+    "id": 10367,
+    "type": "text",
+    "page_idx": 313,
+    "text": "and so on."
+  },
+  {
+    "id": 10368,
+    "type": "text",
+    "page_idx": 313,
+    "text": "If you put these values (and some more) into a table you can then plot a graph of the total cost against the number of hire hours:"
+  },
+  {
+    "id": 10369,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of hours (x)</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>",
+    "page_idx": 313
+  },
+  {
+    "id": 10370,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Total cost (y)</td><td>55</td><td>70</td><td>85</td><td>100</td><td>115</td><td>130</td><td>145</td><td>160</td><td>175</td></tr>",
+    "page_idx": 313
+  },
+  {
+    "id": 10371,
+    "type": "image",
+    "page_idx": 313,
+    "img_path": "images/f8cc35cf2dd7a156c1d49295e83c9c3355805f0bdae6ad077ada80b313b03028.jpg"
+  },
+  {
+    "id": 10372,
+    "type": "text",
+    "page_idx": 313,
+    "text": "The graph shows the total cost of the boat hire (plotted on the vertical axis) against the number of hire hours (on the horizontal axis). Notice that the points all lie on a straight line."
+  },
+  {
+    "id": 10373,
+    "type": "text",
+    "page_idx": 313,
+    "text": "The formula  $y = 15x + 40$  tells you how the  $y$ -coordinates of all points on the line are related to the  $x$ -coordinates. This formula is called an equation of the line."
+  },
+  {
+    "id": 10374,
+    "type": "text",
+    "page_idx": 313,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 10375,
+    "type": "text",
+    "page_idx": 313,
+    "text": "You will recognise that some of the formulae used to describe nth terms in Chapter 9 are very similar to the equations used in this chapter."
+  },
+  {
+    "id": 10376,
+    "type": "text",
+    "page_idx": 313,
+    "text": "The following worked examples show you how some more lines can be drawn from given equations."
+  },
+  {
+    "id": 10377,
+    "type": "text",
+    "page_idx": 314,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 10378,
+    "type": "text",
+    "page_idx": 314,
+    "text": "A straight line has equation  $y = 2x + 3$ . Construct a table of values for  $x$  and  $y$  and draw the line on a labelled pair of axes. Use integer values of  $x$  from -3 to 2."
+  },
+  {
+    "id": 10379,
+    "type": "text",
+    "page_idx": 314,
+    "text": "Answer"
+  },
+  {
+    "id": 10380,
+    "type": "text",
+    "page_idx": 314,
+    "text": "Substituting the values  $-3, -2, -1, 0, 1$  and 2 into the equation gives the values in the following table:"
+  },
+  {
+    "id": 10381,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>-3</td><td>-2</td><td>-1</td><td>0</td><td>1</td><td>2</td></tr>",
+    "page_idx": 314
+  },
+  {
+    "id": 10382,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td>-3</td><td>-1</td><td>1</td><td>3</td><td>5</td><td>7</td></tr>",
+    "page_idx": 314
+  },
+  {
+    "id": 10383,
+    "type": "text",
+    "page_idx": 314,
+    "text": "Notice that the  $y$ -values range from  $-3$  to  $7$ , so your  $y$ -axis should allow for this."
+  },
+  {
+    "id": 10384,
+    "type": "image",
+    "page_idx": 314,
+    "img_path": "images/221bb6fa145c0c47944712b720bb9b41aa36d4ea8d1aed30fd1fc1e15f71a976.jpg"
+  },
+  {
+    "id": 10385,
+    "type": "text",
+    "page_idx": 314,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 10386,
+    "type": "text",
+    "page_idx": 314,
+    "text": "Draw the line with equation  $y = -x + 3$  for  $x$ -values from -2 to 5."
+  },
+  {
+    "id": 10387,
+    "type": "text",
+    "page_idx": 314,
+    "text": "Answer"
+  },
+  {
+    "id": 10388,
+    "type": "text",
+    "page_idx": 314,
+    "text": "The table for this line is:"
+  },
+  {
+    "id": 10389,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>-2</td><td>-1</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>",
+    "page_idx": 314
+  }
+]
+```

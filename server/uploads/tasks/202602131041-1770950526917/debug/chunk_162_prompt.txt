@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 11340,
+    "type": "text",
+    "page_idx": 344,
+    "text": "b Write 9991 as the difference between two square numbers. [2]"
+  },
+  {
+    "id": 11341,
+    "type": "text",
+    "page_idx": 344,
+    "text": "c Use your answer to b to write 9991 as a product of prime factors. [2]"
+  },
+  {
+    "id": 11342,
+    "type": "text",
+    "page_idx": 344,
+    "text": "9 Factorise."
+  },
+  {
+    "id": 11343,
+    "type": "text",
+    "page_idx": 344,
+    "text": "a  $x^{2} - 15x - 34$  [2] b  $16x^{2} - 49y^{2}$  [2]"
+  },
+  {
+    "id": 11344,
+    "type": "text",
+    "page_idx": 344,
+    "text": "10 Solve  $x^{2} + 12x = 28$  [4]"
+  },
+  {
+    "id": 11345,
+    "type": "text",
+    "page_idx": 344,
+    "text": "11 Expand and simplify  $(3x + 2)^{3}$  [4]"
+  },
+  {
+    "id": 11346,
+    "type": "text",
+    "page_idx": 344,
+    "text": "12 a Factorise each of the following."
+  },
+  {
+    "id": 11347,
+    "type": "text",
+    "page_idx": 344,
+    "text": "i  $12x^{2} - 6x$  [3] ii  $y^{2} - 13y + 42$  [2] iii  $d^{2} - 196$  [2]"
+  },
+  {
+    "id": 11348,
+    "type": "text",
+    "page_idx": 344,
+    "text": "b Solve the following equations."
+  },
+  {
+    "id": 11349,
+    "type": "text",
+    "page_idx": 344,
+    "text": "i  $12x^{2} - 6x = 0$  [3] ii  $y^{2} - 13y + 30 = -12$  [3] iii  $d^{2} - 196 = 0$  [3]"
+  },
+  {
+    "id": 11350,
+    "type": "text",
+    "page_idx": 344,
+    "text": "13 The diagram shows a square. Given that the sides are measured in centimetres, find the possible perimeters of the square."
+  },
+  {
+    "id": 11351,
+    "type": "image",
+    "page_idx": 344,
+    "img_path": "images/7832269e41b0ce150a4a89a572e259551b86b84292e915b1704051ee2a9812cc.jpg"
+  },
+  {
+    "id": 11352,
+    "type": "text",
+    "page_idx": 344,
+    "text": "14 The points  $A$  and  $B$  have coordinates  $(3,4)$  and  $(a,3)$  respectively. The length of the line segment  $AB$  is  $\\sqrt{2}$ . Find the possible values of  $a$ . [4]"
+  },
+  {
+    "id": 11353,
+    "type": "text",
+    "page_idx": 344,
+    "text": "15 Solve  $5^{x(x + 3)} = 25^{x^2 -x - 7}$  [4]"
+  },
+  {
+    "id": 11354,
+    "type": "text",
+    "page_idx": 344,
+    "text": "16 a Factorise the expression  $x^{2} - 50x + 609$  [2]"
+  },
+  {
+    "id": 11355,
+    "type": "text",
+    "page_idx": 344,
+    "text": "b Hence or otherwise solve the equation  $2x^{2} - 100x + 1218 = 0$  A farmer wants to use  $100\\mathrm{m}$  of fencing to build three sides of the rectangular pen shown in the diagram:"
+  },
+  {
+    "id": 11356,
+    "type": "image",
+    "page_idx": 344,
+    "img_path": "images/5d046deb89d8a3862595287ef434e0bbd32ede4d76dd680494522f79b6e34658.jpg"
+  },
+  {
+    "id": 11357,
+    "type": "text",
+    "page_idx": 344,
+    "text": "c Find an expression for the length  $AD$  in terms of  $x$  [2]"
+  },
+  {
+    "id": 11358,
+    "type": "text",
+    "page_idx": 344,
+    "text": "d Find an expression for the area of the pen in terms of  $x$  [1]"
+  },
+  {
+    "id": 11359,
+    "type": "text",
+    "page_idx": 344,
+    "text": "e The farmer wants the area of the pen to be exactly 609 square metres. Using your answer to (d), find and solve an equation for  $x$  and determine all possible dimensions of the pen. [3]"
+  },
+  {
+    "id": 11360,
+    "type": "text",
+    "page_idx": 345,
+    "text": "17 The gradient of the line joining the points  $A(3,2)$  and  $B(11,b)$  has gradient  $\\frac{1}{2}$ ."
+  },
+  {
+    "id": 11361,
+    "type": "text",
+    "page_idx": 345,
+    "text": "a Find the value of  $b$"
+  },
+  {
+    "id": 11362,
+    "type": "text",
+    "page_idx": 345,
+    "text": "[3]"
+  },
+  {
+    "id": 11363,
+    "type": "text",
+    "page_idx": 345,
+    "text": "b Find the midpoint of  $A$  and  $B$"
+  },
+  {
+    "id": 11364,
+    "type": "text",
+    "page_idx": 345,
+    "text": "[2]"
+  },
+  {
+    "id": 11365,
+    "type": "text",
+    "page_idx": 345,
+    "text": "c Find the equation of a line that passes through the point  $A$  , but is perpendicular to the line passing through  $A$  and  $B$"
+  },
+  {
+    "id": 11366,
+    "type": "text",
+    "page_idx": 345,
+    "text": "[3]"
+  },
+  {
+    "id": 11367,
+    "type": "text",
+    "page_idx": 345,
+    "text": "The line joining  $A$  to  $B$  passes through the  $x$ -axis at the point  $C$  and the line perpendicular to  $AB$ , through  $A$ , passes through the  $x$ -axis at the point  $D$ ."
+  },
+  {
+    "id": 11368,
+    "type": "text",
+    "page_idx": 345,
+    "text": "Find the area of triangle ACD."
+  },
+  {
+    "id": 11369,
+    "type": "text",
+    "page_idx": 345,
+    "text": "[3]"
+  },
+  {
+    "id": 11370,
+    "type": "text",
+    "page_idx": 345,
+    "text": "PEER ASSESSMENT"
+  },
+  {
+    "id": 11371,
+    "type": "text",
+    "page_idx": 345,
+    "text": "After you have marked your work, consider what you wanted to achieve in this section."
+  },
+  {
+    "id": 11372,
+    "type": "text",
+    "text": "What were you aiming for?",
+    "page_idx": 345
+  },
+  {
+    "id": 11373,
+    "type": "text",
+    "text": "Where are you in relation to what you wanted to achieve?",
+    "page_idx": 345
+  },
+  {
+    "id": 11374,
+    "type": "text",
+    "text": "If you did not meet achieve what you wanted, what do you need to do?",
+    "page_idx": 345
+  },
+  {
+    "id": 11375,
+    "type": "text",
+    "page_idx": 346,
+    "text": ">Chapter 11"
+  },
+  {
+    "id": 11376,
+    "type": "text",
+    "page_idx": 346,
+    "text": "Pythagoras' theorem and similar shapes"
+  },
+  {
+    "id": 11377,
+    "type": "text",
+    "page_idx": 346,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 11378,
+    "type": "text",
+    "text": "use Pythagoras' theorem to find unknown sides of right-angled triangles",
+    "page_idx": 346
+  },
+  {
+    "id": 11379,
+    "type": "text",
+    "text": "use Pythagoras' theorem to solve problems",
+    "page_idx": 346
+  },
+  {
+    "id": 11380,
+    "type": "text",
+    "text": "decide whether or not triangles are mathematically similar",
+    "page_idx": 346
+  },
+  {
+    "id": 11381,
+    "type": "text",
+    "text": "use properties of similar triangles to solve problems",
+    "page_idx": 346
+  },
+  {
+    "id": 11382,
+    "type": "text",
+    "text": "find unknown lengths in similar figures",
+    "page_idx": 346
+  },
+  {
+    "id": 11383,
+    "type": "text",
+    "text": "- use the relationship between sides and areas of similar figures to find missing values",
+    "page_idx": 346
+  },
+  {
+    "id": 11384,
+    "type": "text",
+    "text": "- recognise similar solids",
+    "page_idx": 346
+  },
+  {
+    "id": 11385,
+    "type": "text",
+    "text": "calculate the volume and surface area of similar solids",
+    "page_idx": 346
+  },
+  {
+    "id": 11386,
+    "type": "text",
+    "text": "- recognise whether shapes are congruent or not.",
+    "page_idx": 346
+  },
+  {
+    "id": 11387,
+    "type": "text",
+    "page_idx": 347,
+    "text": "Pythagoras' theorem is very important in navigation. A pilot will need to use Pythagoras' theorem to calculate the distance to a landing place  $300\\mathrm{km}$  west and  $200\\mathrm{km}$  north. Similarly, a delivery driver looking for the most efficient route to make deliveries will often use software to work out the shortest possible distances. Pythagoras' theorem will be vital to that software."
+  },
+  {
+    "id": 11388,
+    "type": "text",
+    "page_idx": 347,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 11389,
+    "type": "text",
+    "page_idx": 347,
+    "text": "1 Calculations for Pythagoras' theorem involve lots of squares and square roots. Check you know how to use the  $\\sqrt{}$  button on your calculator by confirming the answers to these calculations."
+  },
+  {
+    "id": 11390,
+    "type": "text",
+    "page_idx": 347,
+    "text": "a  $\\sqrt{9} = 3$"
+  },
+  {
+    "id": 11391,
+    "type": "text",
+    "page_idx": 347,
+    "text": "b  $\\sqrt{1.96} = 1.4$"
+  },
+  {
+    "id": 11392,
+    "type": "text",
+    "page_idx": 347,
+    "text": "c  $\\sqrt{2.34} = 1.53$  (to 2 d.p.)"
+  },
+  {
+    "id": 11393,
+    "type": "text",
+    "page_idx": 347,
+    "text": "d  $\\sqrt{9 + 16} = 5$"
+  },
+  {
+    "id": 11394,
+    "type": "text",
+    "page_idx": 347,
+    "text": "e  $\\sqrt{25 + 144} = 13$"
+  },
+  {
+    "id": 11395,
+    "type": "text",
+    "page_idx": 347,
+    "text": "f  $\\sqrt{6^2 + 8^2} = 10$"
+  },
+  {
+    "id": 11396,
+    "type": "text",
+    "page_idx": 347,
+    "text": "g  $\\sqrt{15 - 6} = 3$"
+  },
+  {
+    "id": 11397,
+    "type": "text",
+    "page_idx": 347,
+    "text": "h  $\\sqrt{10.3^3 - 8.6^2} = 5.67$  (to 2 d.p.)"
+  },
+  {
+    "id": 11398,
+    "type": "text",
+    "page_idx": 347,
+    "text": "i  $\\sqrt{1.44} + 3.5 = 4.7$"
+  },
+  {
+    "id": 11399,
+    "type": "text",
+    "page_idx": 347,
+    "text": "2 Calculate the following, giving your answers to 2 decimal places unless the answer is exact."
+  },
+  {
+    "id": 11400,
+    "type": "text",
+    "page_idx": 347,
+    "text": "a 121"
+  },
+  {
+    "id": 11401,
+    "type": "text",
+    "page_idx": 347,
+    "text": "b 6.25"
+  },
+  {
+    "id": 11402,
+    "type": "text",
+    "page_idx": 347,
+    "text": "c  $\\sqrt{5.67}$"
+  },
+  {
+    "id": 11403,
+    "type": "text",
+    "page_idx": 347,
+    "text": "d  $\\sqrt{32 + 17}$"
+  },
+  {
+    "id": 11404,
+    "type": "text",
+    "page_idx": 347,
+    "text": "e  $\\sqrt{10^{2} + 24^{2}}$"
+  },
+  {
+    "id": 11405,
+    "type": "text",
+    "page_idx": 347,
+    "text": "f 28.1²-4.2²"
+  },
+  {
+    "id": 11406,
+    "type": "text",
+    "page_idx": 347,
+    "text": "3 The answers to parts (d), (e) and (f) in question 1 are all positive integers. When three positive integers  $a$ ,  $b$  and  $c$  satisfy  $a^2 + b^2 = c^2$  they are called a Pythagorean triple. Do some research to find some others and try to learn to recognise some."
+  },
+  {
+    "id": 11407,
+    "type": "text",
+    "page_idx": 347,
+    "text": "4 a Copy and complete this table by substituting different values of  $a$  into the expressions."
+  },
+  {
+    "id": 11408,
+    "type": "text",
+    "text": "[Table Row] <tr><td>a</td><td>b=a2-1/2</td><td>c=a2+1/2</td></tr>",
+    "page_idx": 347
+  },
+  {
+    "id": 11409,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3</td><td></td><td></td></tr>",
+    "page_idx": 347
+  },
+  {
+    "id": 11410,
+    "type": "text",
+    "text": "[Table Row] <tr><td>5</td><td></td><td></td></tr>",
+    "page_idx": 347
+  },
+  {
+    "id": 11411,
+    "type": "text",
+    "text": "[Table Row] <tr><td>7</td><td></td><td></td></tr>",
+    "page_idx": 347
+  },
+  {
+    "id": 11412,
+    "type": "text",
+    "text": "[Table Row] <tr><td>9</td><td></td><td></td></tr>",
+    "page_idx": 347
+  },
+  {
+    "id": 11413,
+    "type": "text",
+    "text": "b Test whether the sets of numbers are Pythagorean triples.",
+    "page_idx": 347
+  },
+  {
+    "id": 11414,
+    "type": "text",
+    "text": "c What happens for other odd values of a? What happens if  $a = 1$ ?",
+    "page_idx": 347
+  },
+  {
+    "id": 11415,
+    "type": "image",
+    "page_idx": 347,
+    "img_path": "images/c0ceb6400c286ae20eeb2e53521847ae5294179b113b2cc4d9ed0adb5949da1f.jpg"
+  },
+  {
+    "id": 11416,
+    "type": "text",
+    "page_idx": 347,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 11417,
+    "type": "text",
+    "page_idx": 347,
+    "text": "congruent"
+  },
+  {
+    "id": 11418,
+    "type": "text",
+    "page_idx": 347,
+    "text": "hypotenuse"
+  },
+  {
+    "id": 11419,
+    "type": "text",
+    "page_idx": 347,
+    "text": "scale factor"
+  },
+  {
+    "id": 11420,
+    "type": "text",
+    "page_idx": 347,
+    "text": "similar"
+  },
+  {
+    "id": 11421,
+    "type": "image",
+    "page_idx": 347,
+    "img_path": "images/6666e5085cd0a39d58a1f8ec4f76ddf19dcc803bf5135f3d670825340899f5ee.jpg"
+  },
+  {
+    "id": 11422,
+    "type": "text",
+    "page_idx": 348,
+    "text": "11.1 Pythagoras' theorem"
+  },
+  {
+    "id": 11423,
+    "type": "text",
+    "page_idx": 348,
+    "text": "Centuries before Pythagoras was alive, the Egyptians knew that if they tied knots in a rope at regular intervals, as in the diagram, they would produce a perfect right angle."
+  },
+  {
+    "id": 11424,
+    "type": "text",
+    "page_idx": 348,
+    "text": "If you are given a right-angled triangle and asked to calculate the length of an unknown side, you can do this using Pythagoras' theorem if you know the lengths of the other two sides."
+  },
+  {
+    "id": 11425,
+    "type": "text",
+    "page_idx": 348,
+    "text": "Learning the rules"
+  },
+  {
+    "id": 11426,
+    "type": "text",
+    "page_idx": 348,
+    "text": "Pythagoras' theorem describes the relationship between the sides of a right-angled triangle."
+  },
+  {
+    "id": 11427,
+    "type": "text",
+    "page_idx": 348,
+    "text": "The longest side – the side that does not touch the right angle – is known as the hypotenuse."
+  },
+  {
+    "id": 11428,
+    "type": "text",
+    "page_idx": 348,
+    "text": "For this triangle, Pythagoras' theorem states that  $a^2 + b^2 = c^2$ ."
+  },
+  {
+    "id": 11429,
+    "type": "text",
+    "page_idx": 348,
+    "text": "In words this means that the square on the hypotenuse is equal to the sum of the squares on the other two sides. Notice that the square of the hypotenuse is the subject of the equation. This should help you to remember where to place each number."
+  },
+  {
+    "id": 11430,
+    "type": "image",
+    "page_idx": 348,
+    "img_path": "images/c2648f712cdb52b8536bc3f76ec15472f13f84a85b4a125730822dbbac88a766.jpg"
+  },
+  {
+    "id": 11431,
+    "type": "image",
+    "page_idx": 348,
+    "img_path": "images/170395312ee5a3ce41d939ab873190f6781877d3c3ffed9e7582435705fbf518.jpg"
+  },
+  {
+    "id": 11432,
+    "type": "text",
+    "page_idx": 348,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 11433,
+    "type": "text",
+    "page_idx": 348,
+    "text": "Find the value of  $x$  in each of these triangles. Give your answers to 1 decimal place where appropriate."
+  },
+  {
+    "id": 11434,
+    "type": "text",
+    "page_idx": 348,
+    "text": "a"
+  },
+  {
+    "id": 11435,
+    "type": "image",
+    "page_idx": 348,
+    "img_path": "images/5e9695d73e4dc7258b0c1537348c105859d87de974a00c7818c4b501aebf810d.jpg"
+  },
+  {
+    "id": 11436,
+    "type": "text",
+    "page_idx": 348,
+    "text": "b"
+  },
+  {
+    "id": 11437,
+    "type": "image",
+    "page_idx": 348,
+    "img_path": "images/b4fa4f5528c165641eda60a8daa2e11c21adf828242ca8a6b8f09caba2fffa8f.jpg"
+  },
+  {
+    "id": 11438,
+    "type": "text",
+    "page_idx": 348,
+    "text": "Answers"
+  },
+  {
+    "id": 11439,
+    "type": "text",
+    "page_idx": 348,
+    "text": "a a² + b² = c²"
+  }
+]
+```

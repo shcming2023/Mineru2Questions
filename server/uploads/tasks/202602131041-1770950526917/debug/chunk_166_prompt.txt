@@ -1,0 +1,831 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 11620,
+    "type": "text",
+    "page_idx": 357,
+    "text": "a"
+  },
+  {
+    "id": 11621,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/e5fa171efa4c726176dfcf5ed5bb01fd90d9b825524a9953de3b5d9e74a1b52e.jpg"
+  },
+  {
+    "id": 11622,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/d3b21e1013775d6b1d2795c4f2d4d078f7d268eaf2b825681570077778bc5f7a.jpg"
+  },
+  {
+    "id": 11623,
+    "type": "text",
+    "page_idx": 357,
+    "text": "b"
+  },
+  {
+    "id": 11624,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/df89d8c47d8c3c8a3992659e5ffb6b2c2420c7360d78ff2395801a0e9e83a384.jpg"
+  },
+  {
+    "id": 11625,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/29f74a55052eb65e6d20c620ca79ca5c8b753f831b1527dd02d14f603e83696f.jpg"
+  },
+  {
+    "id": 11626,
+    "type": "text",
+    "page_idx": 357,
+    "text": "C"
+  },
+  {
+    "id": 11627,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/5d5a71fb3498f25dc0f91cfdaeaafc6ebac7f8c511043a9e0a062cb0e3c450f8.jpg"
+  },
+  {
+    "id": 11628,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/f28b26b3731a92d24a8d330f4d99ae2080627d782d6e10359d7c5bae4fb69473.jpg"
+  },
+  {
+    "id": 11629,
+    "type": "text",
+    "page_idx": 357,
+    "text": "d"
+  },
+  {
+    "id": 11630,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/1f60e32fb650a054e12d12f9a6a6960054e173eb3377870b06453a8d6843dbce.jpg"
+  },
+  {
+    "id": 11631,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/e55b718ab4b4f1092f516f4807e2c93b5e536673ad892c26b46b5ef270c4863d.jpg"
+  },
+  {
+    "id": 11632,
+    "type": "text",
+    "page_idx": 357,
+    "text": "#"
+  },
+  {
+    "id": 11633,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/f3c62932b7bb02d218e899066fc0bd35d031449fcf05e7a113799b0d17406e7d.jpg"
+  },
+  {
+    "id": 11634,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/633b1908c5c48abba6ec4aa89ced3ea8e21d19b9be1e5679a545f3908ade096e.jpg"
+  },
+  {
+    "id": 11635,
+    "type": "text",
+    "page_idx": 357,
+    "text": "f"
+  },
+  {
+    "id": 11636,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/11420e2a29bfeb36fd5264fcdf584090cf122989e75d562013e9eab94cff584c.jpg"
+  },
+  {
+    "id": 11637,
+    "type": "image",
+    "page_idx": 357,
+    "img_path": "images/b71edfaece32d6e34c5ccbdadbccadb16a53fff654318fd817214a1c22249662.jpg"
+  },
+  {
+    "id": 11638,
+    "type": "text",
+    "page_idx": 357,
+    "text": "TIP"
+  },
+  {
+    "id": 11639,
+    "type": "text",
+    "page_idx": 357,
+    "text": "Always look for corresponding sides (sides that join the same angles)."
+  },
+  {
+    "id": 11640,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/30741a0d9a15f6b383ae289754a93283e6db626320ec593bfd602790562ea8cd.jpg",
+    "image_caption": "9"
+  },
+  {
+    "id": 11641,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/507165fbbc2e5baf4218d82c8cb7a188fdfa8aea38c51e1767ddb08bec33d6e1.jpg",
+    "image_caption": "h j"
+  },
+  {
+    "id": 11642,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/c7ce878bc20ea94c444f35bd94974d74e9d9bbb238d18494dc26c666ac1c1388.jpg",
+    "image_caption": "9.6cm"
+  },
+  {
+    "id": 11643,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/3f90ad5431b06088f088006b709eead95c954481ef07dc104e59845e235200dc.jpg"
+  },
+  {
+    "id": 11644,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/3aa2177b40436ceaf7e5118844d9834e8a9b4a90dc4834eaf5d54f2ef1063274.jpg",
+    "image_caption": "i"
+  },
+  {
+    "id": 11645,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/bc1b15c38832d8b8f86b3313896f520bb0e61f25e2c0165fd76a9dc69a6cede5.jpg"
+  },
+  {
+    "id": 11646,
+    "type": "text",
+    "page_idx": 358,
+    "text": "2 The two triangles in each pair in this question are similar. Calculate the unknown (lettered) length in each case."
+  },
+  {
+    "id": 11647,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/9db091d518fbe5ca0a3778aaa81496d88e0b4b3e32389c2292fe112d7cd8a63e.jpg",
+    "image_caption": "a b"
+  },
+  {
+    "id": 11648,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/e17dccac987f56dc355db82fd83f12ae7bbce816bf3710b9d6ebf417d582e106.jpg"
+  },
+  {
+    "id": 11649,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/e92dfe5da3357e6ad75c2ebd7091dcda0a8e94c18cc2a452eac971df6c463c3b.jpg"
+  },
+  {
+    "id": 11650,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/05ebaf13331ad3c2a69dfe19cb6dc9f8218a689b395dd1a5065bdef4b17501c2.jpg",
+    "image_caption": "c e"
+  },
+  {
+    "id": 11651,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/071e5d3428457cc00a20b2e8780266878b84488049dac3026704e785b46911e0.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 11652,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/03d41395244e799bb40da77373e3c3a53cf387e56fa8f1ce69ee92f932bb0b8e.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 11653,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/3ea074f11835eb23bbffef3d3af50122d232e018714627ebb9df42c65d8211d0.jpg"
+  },
+  {
+    "id": 11654,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/607486f6726f9af11353e90b3d5393549d84c56f50a2d8bb8208114c88dae562.jpg"
+  },
+  {
+    "id": 11655,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/53180b1974776370d8fafb1575c98790c140d3740860df41d1ccbc788f35bcc4.jpg"
+  },
+  {
+    "id": 11656,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/bc4ded156d6c1c291dc2a14056b9aaaae10881bf5c562bb3801901dc572ccb0e.jpg"
+  },
+  {
+    "id": 11657,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/4d864dfa265b7428e7877b02445761ec4f3f988a19c1e0b53ecd32ecc43d94a2.jpg"
+  },
+  {
+    "id": 11658,
+    "type": "text",
+    "page_idx": 358,
+    "text": "3 The diagram shows triangle ABC. If AC is parallel to EF, find the length of AC."
+  },
+  {
+    "id": 11659,
+    "type": "image",
+    "page_idx": 358,
+    "img_path": "images/bd52b999a597739dd7b643bc29f965d2da75466fe5f597bcfd90bc67d4815697.jpg"
+  },
+  {
+    "id": 11660,
+    "type": "text",
+    "page_idx": 359,
+    "text": "4 In the diagram  $AB$  is parallel to  $DE$ . Explain why triangle  $ABC$  is mathematically similar to triangle  $DEC$  and find the length of  $CE$ ."
+  },
+  {
+    "id": 11661,
+    "type": "image",
+    "page_idx": 359,
+    "img_path": "images/ea29c81c718c11ddd5ff9cf57e91871dfe7e09fa09d542815531f7cfd48a1333.jpg"
+  },
+  {
+    "id": 11662,
+    "type": "text",
+    "page_idx": 359,
+    "text": "5 The diagram shows a part of a children's climbing frame. Find the length of  $BC$ ."
+  },
+  {
+    "id": 11663,
+    "type": "image",
+    "page_idx": 359,
+    "img_path": "images/667e7b746be8521d468c9b80f5efb44167d9466f12fc3eee7f1ce7d4d3e1f7f7.jpg"
+  },
+  {
+    "id": 11664,
+    "type": "text",
+    "page_idx": 359,
+    "text": "6 Swimmer  $A$  and boat  $B$ , shown in the diagram, are  $80\\mathrm{m}$  apart, and boat  $B$  is  $1200\\mathrm{m}$  from the lighthouse  $C$ . The height of the boat is  $12\\mathrm{m}$  and the swimmer can just see the top of the lighthouse at the top of the boat's mast when his head is at sea level. What is the height of the lighthouse?"
+  },
+  {
+    "id": 11665,
+    "type": "image",
+    "page_idx": 359,
+    "img_path": "images/2ca3c75a61efa2fdbcf939692abfeb42a36b6c95e17c0069dc31624017095bee.jpg"
+  },
+  {
+    "id": 11666,
+    "type": "text",
+    "page_idx": 359,
+    "text": "7 The diagram shows a circular cone that has been filled to a depth of  $18\\mathrm{cm}$ . Find the radius  $r$  of the top of the cone."
+  },
+  {
+    "id": 11667,
+    "type": "image",
+    "page_idx": 359,
+    "img_path": "images/49cbcddf64ae0b551c757064a541b97a1dff90671c7b7c2fd56b0a1f9920be19.jpg"
+  },
+  {
+    "id": 11668,
+    "type": "text",
+    "page_idx": 359,
+    "text": "8 The diagram shows a step ladder that is held in place by an  $80\\mathrm{cm}$  piece of wire. Find  $x$ ."
+  },
+  {
+    "id": 11669,
+    "type": "image",
+    "page_idx": 359,
+    "img_path": "images/726642007a86d71e789bf87788e5a41a2222b8c2d8ce6f020f15434bc3697887.jpg"
+  },
+  {
+    "id": 11670,
+    "type": "aside_text",
+    "page_idx": 359,
+    "text": "国"
+  },
+  {
+    "id": 11671,
+    "type": "aside_text",
+    "page_idx": 359,
+    "text": "国"
+  },
+  {
+    "id": 11672,
+    "type": "text",
+    "page_idx": 360,
+    "text": "11.3 Understanding similar shapes"
+  },
+  {
+    "id": 11673,
+    "type": "text",
+    "page_idx": 360,
+    "text": "In the previous section you worked with similar triangles, but any shapes can be similar. A shape is similar if the ratio of corresponding sides is equal and the corresponding angles are equal. Similar shapes are therefore identical in shape, but can be different sizes."
+  },
+  {
+    "id": 11674,
+    "type": "text",
+    "page_idx": 360,
+    "text": "You can use the ratio of corresponding sides to find unknown sides of similar shapes just as you did with similar triangles."
+  },
+  {
+    "id": 11675,
+    "type": "text",
+    "page_idx": 360,
+    "text": "WORKED EXAMPLE 7"
+  },
+  {
+    "id": 11676,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Ahmed has two rectangular flags. One measures  $1000\\mathrm{mm}$  by  $500\\mathrm{mm}$ , the other measures  $500\\mathrm{mm}$  by  $350\\mathrm{mm}$ . Are the flags similar in shape?"
+  },
+  {
+    "id": 11677,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Answer"
+  },
+  {
+    "id": 11678,
+    "type": "equation",
+    "page_idx": 360,
+    "text": "$$\n\\frac {1 0 0 0}{5 0 0} = 2 \\text {a n d} \\frac {5 0 0}{3 5 0} = 1. 4 3\n$$"
+  },
+  {
+    "id": 11679,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Work out the ratio of corresponding sides."
+  },
+  {
+    "id": 11680,
+    "type": "equation",
+    "page_idx": 360,
+    "text": "$$\n\\frac {1 0 0 0}{5 0 0} \\neq \\frac {5 0 0}{3 5 0}\n$$"
+  },
+  {
+    "id": 11681,
+    "type": "text",
+    "page_idx": 360,
+    "text": "The ratio of corresponding sides is not equal, therefore the shapes are not similar."
+  },
+  {
+    "id": 11682,
+    "type": "text",
+    "page_idx": 360,
+    "text": "WORKED EXAMPLE 8"
+  },
+  {
+    "id": 11683,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Given that the two shapes in the diagram are mathematically similar, find the unknown length  $x$ ."
+  },
+  {
+    "id": 11684,
+    "type": "image",
+    "page_idx": 360,
+    "img_path": "images/7dd563985044f907fecb7925bd890737dfbb67863499af345a3f82b99ed9a49f.jpg"
+  },
+  {
+    "id": 11685,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Answer"
+  },
+  {
+    "id": 11686,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Using the ratios of corresponding sides:  $\\frac{x}{12} = \\frac{20}{8} = 2.5$"
+  },
+  {
+    "id": 11687,
+    "type": "equation",
+    "page_idx": 360,
+    "text": "$$\n\\Rightarrow x = 1 2 \\times 2. 5 = 3 0 m\n$$"
+  },
+  {
+    "id": 11688,
+    "type": "text",
+    "page_idx": 360,
+    "text": "Exercise 11.4"
+  },
+  {
+    "id": 11689,
+    "type": "text",
+    "page_idx": 360,
+    "text": "1 Determine whether the shapes in each pair of shapes are similar or not. Show your working."
+  },
+  {
+    "id": 11690,
+    "type": "image",
+    "page_idx": 360,
+    "img_path": "images/f0b77c8eadb0ef0bbb2bff0c7f1bd0c41df222e92bd9dab71e99d002e1cb4647.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 11691,
+    "type": "image",
+    "page_idx": 360,
+    "img_path": "images/929e89f80f3743f8d839b15bf6c5e3b65025c2d5d133a110940a3338fe50ea0a.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 11692,
+    "type": "image",
+    "page_idx": 360,
+    "img_path": "images/a7235d0a6c15acbc823320cf2007f47fdbaa357ff123492eb85059b8a10f6fa7.jpg"
+  },
+  {
+    "id": 11693,
+    "type": "image",
+    "page_idx": 360,
+    "img_path": "images/619658f4c4e611b1f1195deecc9dd4666492b04b8af96909d0b5d0dca53d2bce.jpg"
+  },
+  {
+    "id": 11694,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/89a9095edcab036bd39facc20202af4cf235598db150be8fa269cc8acb1063c8.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 11695,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/f914cae59b490d11fbe5c2953fe74afacbb156059419117aa2217f9b237f794b.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 11696,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/b7bfd7d45f67ac44e7a10845c0e0df266d250f570fd2d009d690b0970ab0f6d1.jpg"
+  },
+  {
+    "id": 11697,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/dd0a6b208f4fa91193911e1dce945b0a03c0602c191d4d517b59638f04966ea6.jpg"
+  },
+  {
+    "id": 11698,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/67aea0d1ec28ad39f3ea9300be910bc9e3070629b818e3a1be1aeac0d40a1044.jpg",
+    "image_caption": "e"
+  },
+  {
+    "id": 11699,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/22ed52a5955ea255b4ae15b1b1e2eccde52c12d8cb35c37b69e01fc2713c82c5.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 11700,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/3f937232af00a008b835c937b09b971ce10d4f3806abec5515c7df84f57ed098.jpg"
+  },
+  {
+    "id": 11701,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/59b0e685ae288432ec63b5bcaa7c19bb1a6fc0c2ee3abf75170035ee1bf25ef0.jpg"
+  },
+  {
+    "id": 11702,
+    "type": "text",
+    "page_idx": 361,
+    "text": "2 The shapes in each pair are mathematically similar to one another. Calculate the unknown lengths in each case."
+  },
+  {
+    "id": 11703,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/67d2ecf900cfd133944bd3184d7383608a499dd193b2876bf41f25c1d5de617d.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 11704,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/48068d3dfed1f41ea462dc7e3487f0a02bacef7cb936898ca578f9dd07d059f8.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 11705,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/b49ee37a873c956bcd94b2d52a0a3239ef5d1a4b4e0841ca281d09060647481f.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 11706,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/5b22f2640b99149ddae784d741cdb9b94775e5fbb7119b58207704b813412890.jpg"
+  },
+  {
+    "id": 11707,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/525800aa34607c2d32151f1d5f02398f385b4ea94ede2cf38d613e21998f00ca.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 11708,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/fdbd1eb48a7140acc7eece94b1a4b3c242b89000850d9c258920478d99eb2a4b.jpg"
+  },
+  {
+    "id": 11709,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/0d283f4fb969bcb92976d5846697e1155ed0d52ce0c164fcae707d9068578545.jpg"
+  },
+  {
+    "id": 11710,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/4ee04191b6b1ef19839d79b67f3cad28e83211e154c48c9ab18af204fde2988d.jpg",
+    "image_caption": "e"
+  },
+  {
+    "id": 11711,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/7836b3e9272f383fb8af096d7277adbe16276b0a0f2a5573bb16b0a411b20e8c.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 11712,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/c79501ec1092fa4ca167f9530621f6490025d87e5ab73af1446cb5a172b70ce5.jpg"
+  },
+  {
+    "id": 11713,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/58538847da36775ec8d7bdc0060ec86289af63f52449e1c7d67486321f918c9a.jpg"
+  },
+  {
+    "id": 11714,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/6549433fef2bf60c9c4501b28bb1ce79a2e9668725e38c7775991e721113dfc5.jpg",
+    "image_caption": "9"
+  },
+  {
+    "id": 11715,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/c4a44f3a71d47211987037e714fb15611529aacf2e065ef72d99984265b39644.jpg"
+  },
+  {
+    "id": 11716,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/ac4aaeebd6b1dd050d07a9047eeca9133343ca393980b733b17ce84751d06460.jpg",
+    "image_caption": "h"
+  },
+  {
+    "id": 11717,
+    "type": "image",
+    "page_idx": 361,
+    "img_path": "images/4174b426d71afa130f6010cd32340582c4be0bd95f53e9daa6df79b1532f9c59.jpg"
+  },
+  {
+    "id": 11718,
+    "type": "text",
+    "page_idx": 362,
+    "text": "3 Determine the length of  ${ED}$  ."
+  },
+  {
+    "id": 11719,
+    "type": "image",
+    "page_idx": 362,
+    "img_path": "images/155455f4e825dede86ed1f7d6b41db78f794a57fd4e5e587ed3e62bf64dff04f.jpg"
+  }
+]
+```

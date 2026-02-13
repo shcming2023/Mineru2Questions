@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 13510,
+    "type": "text",
+    "page_idx": 437,
+    "text": "7 The diagram shows a conversion graph for gallons to litres."
+  },
+  {
+    "id": 13511,
+    "type": "text",
+    "text": "a Use the graph to convert 4 gallons into litres.",
+    "page_idx": 437
+  },
+  {
+    "id": 13512,
+    "type": "text",
+    "text": "b Use the graph to convert 27 litres into gallons.",
+    "page_idx": 437
+  },
+  {
+    "id": 13513,
+    "type": "text",
+    "text": "c If  $L$  is the number of litres and  $G$  is the number of gallons, find an approximate formula for  $L$  in terms of  $G$ . Explain why the formula is not necessarily exact.",
+    "page_idx": 437
+  },
+  {
+    "id": 13514,
+    "type": "image",
+    "page_idx": 437,
+    "img_path": "images/13c54dc12f6217f1b0877ca112e77fe6212660fcb33b5d0f4090d7fccd62f6ba.jpg"
+  },
+  {
+    "id": 13515,
+    "type": "text",
+    "page_idx": 437,
+    "text": "8 Given that  $a = 2.5$ ,  $b = 4.3$  and  $c = 8.5$ , all given to 1 decimal place, calculate the upper bounds of each expression, giving your answer to 2 decimal places."
+  },
+  {
+    "id": 13516,
+    "type": "text",
+    "page_idx": 437,
+    "text": "a a+b-c"
+  },
+  {
+    "id": 13517,
+    "type": "text",
+    "page_idx": 437,
+    "text": "[4]"
+  },
+  {
+    "id": 13518,
+    "type": "text",
+    "page_idx": 437,
+    "text": "b"
+  },
+  {
+    "id": 13519,
+    "type": "text",
+    "page_idx": 437,
+    "text": "[4]"
+  },
+  {
+    "id": 13520,
+    "type": "text",
+    "page_idx": 437,
+    "text": "a (c-b)"
+  },
+  {
+    "id": 13521,
+    "type": "text",
+    "page_idx": 437,
+    "text": "[4]"
+  },
+  {
+    "id": 13522,
+    "type": "text",
+    "page_idx": 437,
+    "text": "9 A cuboid has dimensions  $14.5\\mathrm{cm}$ ,  $13.2\\mathrm{cm}$  and  $21.3\\mathrm{cm}$ . These dimensions are all given to 1 decimal place."
+  },
+  {
+    "id": 13523,
+    "type": "text",
+    "page_idx": 437,
+    "text": "Calculate the upper and lower bounds for the volume of the cuboid in:"
+  },
+  {
+    "id": 13524,
+    "type": "text",
+    "page_idx": 437,
+    "text": "a cm3"
+  },
+  {
+    "id": 13525,
+    "type": "text",
+    "page_idx": 437,
+    "text": "[2]"
+  },
+  {
+    "id": 13526,
+    "type": "text",
+    "page_idx": 437,
+    "text": "b mm"
+  },
+  {
+    "id": 13527,
+    "type": "text",
+    "page_idx": 437,
+    "text": "[2]"
+  },
+  {
+    "id": 13528,
+    "type": "text",
+    "page_idx": 437,
+    "text": "Give your answers in standard form."
+  },
+  {
+    "id": 13529,
+    "type": "text",
+    "page_idx": 437,
+    "text": "10 The lengths in the diagram are given to 1 decimal place."
+  },
+  {
+    "id": 13530,
+    "type": "text",
+    "page_idx": 437,
+    "text": "Giving your answers to 2 decimal places:"
+  },
+  {
+    "id": 13531,
+    "type": "text",
+    "text": "a find the lower bound for the area of the triangle",
+    "page_idx": 437
+  },
+  {
+    "id": 13532,
+    "type": "text",
+    "text": "b find the upper bound for the length AB",
+    "page_idx": 437
+  },
+  {
+    "id": 13533,
+    "type": "text",
+    "text": "find the maximum possible gradient of the line  $AB$",
+    "page_idx": 437
+  },
+  {
+    "id": 13534,
+    "type": "text",
+    "text": "[3]",
+    "page_idx": 437
+  },
+  {
+    "id": 13535,
+    "type": "text",
+    "text": "[3]",
+    "page_idx": 437
+  },
+  {
+    "id": 13536,
+    "type": "text",
+    "text": "[3]",
+    "page_idx": 437
+  },
+  {
+    "id": 13537,
+    "type": "image",
+    "page_idx": 437,
+    "img_path": "images/4c4873d8f442d09b947aae9b58ca5c5cf801d3d258723910e656d27047059f43.jpg"
+  },
+  {
+    "id": 13538,
+    "type": "text",
+    "page_idx": 437,
+    "text": "11 A cuboid of height,  $h$ , has a square base of side length,  $a$ ."
+  },
+  {
+    "id": 13539,
+    "type": "text",
+    "text": "a In an experiment,  $a$  and  $h$  are measured as  $7\\mathrm{cm}$  and  $13\\mathrm{cm}$ , to the nearest cm, respectively. Calculate the maximum possible value of the volume in  $\\mathrm{cm}^3$ . [3]",
+    "page_idx": 437
+  },
+  {
+    "id": 13540,
+    "type": "text",
+    "text": "b In another experiment, the volume of the block is found to be  $300\\mathrm{cm}^3$ , measured to the nearest  $50\\mathrm{cm}^3$ , and its height is measured as  $13.5\\mathrm{cm}$ , to the nearest  $0.5\\mathrm{cm}$ . Calculate the maximum and minimum possible values of the length  $a$ , in centimetres. [4]",
+    "page_idx": 437
+  },
+  {
+    "id": 13541,
+    "type": "text",
+    "page_idx": 437,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 13542,
+    "type": "text",
+    "page_idx": 437,
+    "text": "Use your answers to the practice questions to assess of your own understanding of measurement."
+  },
+  {
+    "id": 13543,
+    "type": "text",
+    "page_idx": 437,
+    "text": "List the question numbers."
+  },
+  {
+    "id": 13544,
+    "type": "text",
+    "page_idx": 437,
+    "text": "Rate your work on each question using this scale:"
+  },
+  {
+    "id": 13545,
+    "type": "text",
+    "text": "Circle the question number if you understand the concept well.",
+    "page_idx": 437
+  },
+  {
+    "id": 13546,
+    "type": "text",
+    "text": "- Underline the question number if you need to revise the concept.",
+    "page_idx": 437
+  },
+  {
+    "id": 13547,
+    "type": "image",
+    "page_idx": 438,
+    "img_path": "images/66baf06e5e84d837dee52064a0ad1003058256acfbabeae2892a7486daa3fbe5.jpg"
+  },
+  {
+    "id": 13548,
+    "type": "text",
+    "page_idx": 438,
+    "text": "Chapter 14"
+  },
+  {
+    "id": 13549,
+    "type": "text",
+    "page_idx": 438,
+    "text": "Further solving of equations and inequalities"
+  },
+  {
+    "id": 13550,
+    "type": "text",
+    "page_idx": 438,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 13551,
+    "type": "text",
+    "text": "- derive and solve simultaneous linear equations graphically and algebraically",
+    "page_idx": 438
+  },
+  {
+    "id": 13552,
+    "type": "text",
+    "text": "use number lines to represent and interpret inequalities",
+    "page_idx": 438
+  },
+  {
+    "id": 13553,
+    "type": "text",
+    "text": "- solve linear inequalities algebraically",
+    "page_idx": 438
+  },
+  {
+    "id": 13554,
+    "type": "text",
+    "text": "- derive linear inequalities and find regions in a plane",
+    "page_idx": 438
+  },
+  {
+    "id": 13555,
+    "type": "text",
+    "text": "- solve quadratic equations by completing the square",
+    "page_idx": 438
+  },
+  {
+    "id": 13556,
+    "type": "text",
+    "text": "- solve quadratic equations by using the quadratic formula",
+    "page_idx": 438
+  },
+  {
+    "id": 13557,
+    "type": "text",
+    "text": "factorise quadratics where the coefficient of  $x^{2}$  is not 1",
+    "page_idx": 438
+  },
+  {
+    "id": 13558,
+    "type": "text",
+    "text": "- simplify algebraic fractions.",
+    "page_idx": 438
+  },
+  {
+    "id": 13559,
+    "type": "text",
+    "page_idx": 439,
+    "text": "Think about a number of boats leaving and entering a port. They are all on separate paths and there are no markings in the ocean to guide them. Understanding how to find the meeting points of different paths can help port controllers guide vessels and avoid collisions."
+  },
+  {
+    "id": 13560,
+    "type": "text",
+    "page_idx": 439,
+    "text": "Think about how to work out where a ship is at any given time. What do you need to know? Why is this more complicated than a problem with two cars moving along a road?"
+  },
+  {
+    "id": 13561,
+    "type": "text",
+    "page_idx": 439,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 13562,
+    "type": "text",
+    "page_idx": 439,
+    "text": "1 In this chapter you need to be good at plotting straight lines from their equations. Draw a pair of axes, with  $x$ -values from -2 to 6 and  $y$ -values from -6 to 5, as shown in the diagram."
+  },
+  {
+    "id": 13563,
+    "type": "image",
+    "page_idx": 439,
+    "img_path": "images/6a0730e2dce4f45ba6c822296c5c8e9c1dc7349f500da2d98bc419d4b2ac3508.jpg"
+  },
+  {
+    "id": 13564,
+    "type": "text",
+    "page_idx": 439,
+    "text": "2 On the same pair of axes, plot the lines with the following equations:"
+  },
+  {
+    "id": 13565,
+    "type": "equation",
+    "page_idx": 439,
+    "text": "$$\n\\begin{array}{l} y = 1 \\\\ x = 4 \\\\ 3 x + 2 y = 8 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13566,
+    "type": "text",
+    "text": "3 Find the area of triangle 1 formed by these lines.",
+    "page_idx": 439
+  },
+  {
+    "id": 13567,
+    "type": "text",
+    "text": "4 Now plot the line with the equation  $3x + 2y = 2$",
+    "page_idx": 439
+  },
+  {
+    "id": 13568,
+    "type": "text",
+    "text": "5 Find the area of triangle 2 formed by this new line and the lines  $y = 1$  and  $x = 4$ .",
+    "page_idx": 439
+  },
+  {
+    "id": 13569,
+    "type": "text",
+    "text": "6 Another triangle is drawn with an area, A, that is greater or equal to the area of triangle 1 but smaller than the area of triangle 2. Write an inequality to show the possible values of A.",
+    "page_idx": 439
+  },
+  {
+    "id": 13570,
+    "type": "text",
+    "page_idx": 439,
+    "text": "14.1 Simultaneous linear equations"
+  },
+  {
+    "id": 13571,
+    "type": "text",
+    "page_idx": 439,
+    "text": "Graphical solution of simultaneous linear equations"
+  },
+  {
+    "id": 13572,
+    "type": "text",
+    "page_idx": 439,
+    "text": "Miguel enjoys walking and has two favourite walks. One is into the hills and is  $4\\mathrm{km}$  long. The other is along the river and is  $2\\mathrm{km}$  long. Miguel takes one of the walks each day for eight days and walks a total of  $26\\mathrm{km}$ . How many of each walk did Miguel take?"
+  },
+  {
+    "id": 13573,
+    "type": "text",
+    "page_idx": 439,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 13574,
+    "type": "text",
+    "page_idx": 439,
+    "text": "completing the square"
+  },
+  {
+    "id": 13575,
+    "type": "text",
+    "page_idx": 439,
+    "text": "linear inequalities"
+  },
+  {
+    "id": 13576,
+    "type": "text",
+    "page_idx": 439,
+    "text": "region"
+  },
+  {
+    "id": 13577,
+    "type": "text",
+    "page_idx": 439,
+    "text": "simultaneous"
+  },
+  {
+    "id": 13578,
+    "type": "text",
+    "page_idx": 439,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 13579,
+    "type": "text",
+    "page_idx": 439,
+    "text": "You studied equations of straight lines in Chapter 10 and you already know how to solve equations with one unknown."
+  },
+  {
+    "id": 13580,
+    "type": "text",
+    "page_idx": 440,
+    "text": "If you let  $x$  be the number of walks into the hills and  $y$  be the number of walks along the river, you can use the total number of walks to see that  $x + y = 8$ ."
+  },
+  {
+    "id": 13581,
+    "type": "text",
+    "page_idx": 440,
+    "text": "The total distance walking in the hills will be  $x \\times 4 = 4x$  and the total distance walking along the river will be  $y \\times 2 = 2y$ . So the total distance walked is  $4x + 2y$ , which must equal 26."
+  },
+  {
+    "id": 13582,
+    "type": "text",
+    "page_idx": 440,
+    "text": "This gives two equations:"
+  },
+  {
+    "id": 13583,
+    "type": "equation",
+    "page_idx": 440,
+    "text": "$$\nx + y = 8\n$$"
+  },
+  {
+    "id": 13584,
+    "type": "equation",
+    "page_idx": 440,
+    "text": "$$\n4 x + 2 y = 2 6\n$$"
+  },
+  {
+    "id": 13585,
+    "type": "text",
+    "page_idx": 440,
+    "text": "The information has two unknown values and you can use it to form two different equations. The equations are both linear equations and you can plot them on the same pair of axes. There is only one point where the values of  $x$  and  $y$  are the same for both equations – this is where the lines cross (the intersection). This is the simultaneous solution."
+  },
+  {
+    "id": 13586,
+    "type": "image",
+    "page_idx": 440,
+    "img_path": "images/fddf2629a7e3f6b0ca0edce33579c23b0b4e28bc786fc6f1da0048b8aa79a4b4.jpg"
+  },
+  {
+    "id": 13587,
+    "type": "text",
+    "page_idx": 440,
+    "text": "Notice that the point with coordinates (5, 3) lies on both lines so,  $x = 5$  and  $y = 3$  satisfy both equations. You can check this by substituting the values into the equations:"
+  },
+  {
+    "id": 13588,
+    "type": "equation",
+    "page_idx": 440,
+    "text": "$$\nx + y = 5 + 3 = 8\n$$"
+  },
+  {
+    "id": 13589,
+    "type": "text",
+    "page_idx": 440,
+    "text": "and"
+  },
+  {
+    "id": 13590,
+    "type": "equation",
+    "page_idx": 440,
+    "text": "$$\n4 x + 2 y = 4 (5) + 2 (3) = 2 0 + 6 = 2 6\n$$"
+  },
+  {
+    "id": 13591,
+    "type": "text",
+    "page_idx": 440,
+    "text": "This means that there were five walks into the hills and three walks by the river."
+  },
+  {
+    "id": 13592,
+    "type": "text",
+    "page_idx": 440,
+    "text": "TIP"
+  },
+  {
+    "id": 13593,
+    "type": "text",
+    "page_idx": 440,
+    "text": "It is important that you remember to work out both unknowns. Every pair of simultaneous linear equations will have a pair of solutions."
+  },
+  {
+    "id": 13594,
+    "type": "text",
+    "page_idx": 440,
+    "text": "TIP"
+  },
+  {
+    "id": 13595,
+    "type": "text",
+    "page_idx": 440,
+    "text": "Simultaneous means, 'at the same time'. When you draw graphs of simultaneous linear equations you are looking for the point where two lines cross. The coordinates of this point give the  $x$  and  $y$  values which are solutions for both equations."
+  },
+  {
+    "id": 13596,
+    "type": "text",
+    "page_idx": 441,
+    "text": "LINK"
+  },
+  {
+    "id": 13597,
+    "type": "text",
+    "page_idx": 441,
+    "text": "Many problems in economics involve formulae containing several variables. When we try to answer financial questions – for example finding when a business venture breaks even or an investment gives the maximum return – we end up with several equations and several unknown values. This gives a set of simultaneous equations to solve."
+  },
+  {
+    "id": 13598,
+    "type": "text",
+    "page_idx": 441,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 13599,
+    "type": "text",
+    "page_idx": 441,
+    "text": "By drawing the graphs of each of the following equations on the same pair of axes, find the simultaneous solutions to the equations."
+  },
+  {
+    "id": 13600,
+    "type": "equation",
+    "page_idx": 441,
+    "text": "$$\n\\begin{array}{l} x - 3 y = 6 \\\\ 2 x + y = 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13601,
+    "type": "text",
+    "page_idx": 441,
+    "text": "Answer"
+  },
+  {
+    "id": 13602,
+    "type": "image",
+    "page_idx": 441,
+    "img_path": "images/93190c418fe1d799e7dea3cfd420309c1bfd58add16dd0e1fac5765a944198fc.jpg"
+  },
+  {
+    "id": 13603,
+    "type": "text",
+    "page_idx": 441,
+    "text": "For the first equation:"
+  },
+  {
+    "id": 13604,
+    "type": "equation",
+    "page_idx": 441,
+    "text": "$$\n\\begin{array}{l} i f x = 0, - 3 y = 6 \\Rightarrow y = - 2 \\\\ a n d, i f y = 0, x = 6 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13605,
+    "type": "text",
+    "page_idx": 441,
+    "text": "So this line passes through the points  $(0, -2)$  and  $(6, 0)$ ."
+  },
+  {
+    "id": 13606,
+    "type": "text",
+    "page_idx": 441,
+    "text": "For the second equation:"
+  },
+  {
+    "id": 13607,
+    "type": "equation",
+    "page_idx": 441,
+    "text": "$$\ni f x = 0, y = 5\n$$"
+  },
+  {
+    "id": 13608,
+    "type": "equation",
+    "page_idx": 441,
+    "text": "$$\n\\text {a n d , i f} y = 0, 2 x = 5 \\Rightarrow x = \\frac {5}{2}\n$$"
+  },
+  {
+    "id": 13609,
+    "type": "text",
+    "page_idx": 441,
+    "text": "So this line passes through the points (0, 5) and  $\\left(\\frac{5}{2}, 0\\right)$ ."
+  }
+]
+```

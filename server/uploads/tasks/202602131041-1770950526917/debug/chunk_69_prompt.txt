@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 4830,
+    "type": "text",
+    "text": "increase and decrease by a given percentage",
+    "page_idx": 160
+  },
+  {
+    "id": 4831,
+    "type": "text",
+    "text": "calculate reverse percentages (undoing increases and decreases)",
+    "page_idx": 160
+  },
+  {
+    "id": 4832,
+    "type": "text",
+    "text": "use standard form",
+    "page_idx": 160
+  },
+  {
+    "id": 4833,
+    "type": "text",
+    "text": "calculate with values in standard form.",
+    "page_idx": 160
+  },
+  {
+    "id": 4834,
+    "type": "text",
+    "page_idx": 161,
+    "text": "Sea nettle jellyfish bodies on the previous page are  $\\frac{1}{20}$  protein, muscles and nerve cells - the rest is water. Work out what percentage of a jellyfish's body is water."
+  },
+  {
+    "id": 4835,
+    "type": "text",
+    "page_idx": 161,
+    "text": "We use fractions and percentages on an almost daily basis, often without realising it. For example, we use fractions to answer questions like these:"
+  },
+  {
+    "id": 4836,
+    "type": "text",
+    "text": "How far can you travel on half a tank of petrol?",
+    "page_idx": 161
+  },
+  {
+    "id": 4837,
+    "type": "text",
+    "text": "If you share  $\\frac{3}{4}$  of a cake between two people, how much will they each get?",
+    "page_idx": 161
+  },
+  {
+    "id": 4838,
+    "type": "text",
+    "text": "If three-fifths of a  $100\\mathrm{km}$  journey is complete, how far do you still have to travel?",
+    "page_idx": 161
+  },
+  {
+    "id": 4839,
+    "type": "text",
+    "text": "If a shop is offering a 25% discount, what will you pay for an item costing $120?",
+    "page_idx": 161
+  },
+  {
+    "id": 4840,
+    "type": "text",
+    "page_idx": 161,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 4841,
+    "type": "text",
+    "page_idx": 161,
+    "text": "1 Match pairs of bubbles with the same value to find the one that has no matching value."
+  },
+  {
+    "id": 4842,
+    "type": "image",
+    "page_idx": 161,
+    "img_path": "images/9958ef09461ece457cbdcefa653a6a02e1d0448a73e0781b0c617fcc3b24b5a1.jpg"
+  },
+  {
+    "id": 4843,
+    "type": "image",
+    "page_idx": 161,
+    "img_path": "images/db7f5669c4169a6c54394c65a85feceaedc5d50e2981340efc4b41269b75c4da.jpg"
+  },
+  {
+    "id": 4844,
+    "type": "text",
+    "page_idx": 161,
+    "text": "2 Draw diagrams with labels or short notes to show why:"
+  },
+  {
+    "id": 4845,
+    "type": "text",
+    "text": "a a  $50\\%$  increase followed by a  $50\\%$  decrease does not get you back to where you started",
+    "page_idx": 161
+  },
+  {
+    "id": 4846,
+    "type": "text",
+    "text": "b an increase of  $40\\%$  followed by an increase of  $50\\%$  is not equal to an increase of  $90\\%$ .",
+    "page_idx": 161
+  },
+  {
+    "id": 4847,
+    "type": "text",
+    "page_idx": 161,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 4848,
+    "type": "text",
+    "page_idx": 161,
+    "text": "common"
+  },
+  {
+    "id": 4849,
+    "type": "text",
+    "page_idx": 161,
+    "text": "denominator"
+  },
+  {
+    "id": 4850,
+    "type": "text",
+    "page_idx": 161,
+    "text": "denominator"
+  },
+  {
+    "id": 4851,
+    "type": "text",
+    "page_idx": 161,
+    "text": "equivalent fraction"
+  },
+  {
+    "id": 4852,
+    "type": "text",
+    "page_idx": 161,
+    "text": "fraction"
+  },
+  {
+    "id": 4853,
+    "type": "text",
+    "page_idx": 161,
+    "text": "lowest terms"
+  },
+  {
+    "id": 4854,
+    "type": "text",
+    "page_idx": 161,
+    "text": "mixed number"
+  },
+  {
+    "id": 4855,
+    "type": "text",
+    "page_idx": 161,
+    "text": "numerator"
+  },
+  {
+    "id": 4856,
+    "type": "text",
+    "page_idx": 161,
+    "text": "simplest form"
+  },
+  {
+    "id": 4857,
+    "type": "text",
+    "page_idx": 161,
+    "text": "standard form"
+  },
+  {
+    "id": 4858,
+    "type": "text",
+    "page_idx": 162,
+    "text": "5.1 Revisiting fractions"
+  },
+  {
+    "id": 4859,
+    "type": "text",
+    "page_idx": 162,
+    "text": "A fraction tells you what share or part of a whole amount you are working with. For example,  $\\frac{1}{2}$  of a pie means 1 of 2 equal parts of the pie and  $\\frac{7}{8}$  of the students means 7 out of every 8 students. The mixed number  $\\frac{2\\frac{3}{4}}{4}$  means you are working with 2 wholes and 3 of 4 parts of another whole."
+  },
+  {
+    "id": 4860,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Proper fractions are written in the form  $\\frac{a}{b}$  where  $a > b$ . The number on the top,  $a$ , can be any number and is called the numerator. The number on the bottom,  $b$ , can be any number except 0 and is called the denominator."
+  },
+  {
+    "id": 4861,
+    "type": "text",
+    "page_idx": 162,
+    "text": "When you multiply or divide both the numerator and the denominator by the same number you get a new fraction that has the same value as the original fraction. The new fraction is called an equivalent fraction."
+  },
+  {
+    "id": 4862,
+    "type": "text",
+    "page_idx": 162,
+    "text": "For example,  $\\frac{2}{3} = \\frac{2 \\times 4}{3 \\times 4} = \\frac{8}{12}$  and  $\\frac{25}{35} = \\frac{25 \\div 5}{35 \\div 5} = \\frac{5}{7}$ ."
+  },
+  {
+    "id": 4863,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Notice in the second example that the original fraction  $\\left(\\frac{25}{35}\\right)$  was divided rather than multiplied to get  $\\frac{5}{7}$ . The numbers 5 and 7 have no common factor other than 1 so the fraction cannot be divided any further. This means that  $\\frac{25}{35}$  is now in its simplest form as  $\\frac{5}{7}$ . This is sometimes called the lowest terms."
+  },
+  {
+    "id": 4864,
+    "type": "text",
+    "page_idx": 162,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 4865,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Before you work through this section remind yourself about highest common factors (HCFs) in Chapter 1, but remember you can multiply or divide by any factor to make equivalent fractions, it does not have to be the HCF."
+  },
+  {
+    "id": 4866,
+    "type": "text",
+    "page_idx": 162,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 4867,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Express each fraction in its simplest form."
+  },
+  {
+    "id": 4868,
+    "type": "text",
+    "page_idx": 162,
+    "text": "a 3 15"
+  },
+  {
+    "id": 4869,
+    "type": "text",
+    "page_idx": 162,
+    "text": "b 16 24"
+  },
+  {
+    "id": 4870,
+    "type": "text",
+    "page_idx": 162,
+    "text": "21 28"
+  },
+  {
+    "id": 4871,
+    "type": "text",
+    "page_idx": 162,
+    "text": "5 d 8"
+  },
+  {
+    "id": 4872,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Answers"
+  },
+  {
+    "id": 4873,
+    "type": "text",
+    "page_idx": 162,
+    "text": "3 3÷3 15 15+3 5"
+  },
+  {
+    "id": 4874,
+    "type": "text",
+    "page_idx": 162,
+    "text": "16 16+8 2 b 24 24+8 3"
+  },
+  {
+    "id": 4875,
+    "type": "text",
+    "page_idx": 162,
+    "text": "21+7 3 28+7 4"
+  },
+  {
+    "id": 4876,
+    "type": "text",
+    "page_idx": 162,
+    "text": "d  $\\frac{5}{8}$  is already in its simplest form"
+  },
+  {
+    "id": 4877,
+    "type": "text",
+    "page_idx": 162,
+    "text": "(5 and 8 have no common factors other than 1)."
+  },
+  {
+    "id": 4878,
+    "type": "text",
+    "page_idx": 162,
+    "text": "TIP"
+  },
+  {
+    "id": 4879,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Notice that in each case you divide the numerator and the denominator by their HCF."
+  },
+  {
+    "id": 4880,
+    "type": "text",
+    "page_idx": 162,
+    "text": "TIP"
+  },
+  {
+    "id": 4881,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Fractions were originally written with a slant line like this: 2/5. You will often find fractions written like this and when you enter fractions online you type them like that."
+  },
+  {
+    "id": 4882,
+    "type": "text",
+    "page_idx": 162,
+    "text": "TIP"
+  },
+  {
+    "id": 4883,
+    "type": "text",
+    "page_idx": 162,
+    "text": "Remember, dividing the numerator and denominator by the same number simplifies the fraction."
+  },
+  {
+    "id": 4884,
+    "type": "text",
+    "page_idx": 163,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 4885,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Which two of  $\\frac{5}{6}, \\frac{20}{25}$  and  $\\frac{15}{18}$  are equivalent fractions?"
+  },
+  {
+    "id": 4886,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Answer"
+  },
+  {
+    "id": 4887,
+    "type": "text",
+    "page_idx": 163,
+    "text": "5 is already in its simplest form."
+  },
+  {
+    "id": 4888,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Alternative method"
+  },
+  {
+    "id": 4889,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Simplify each of the other fractions:"
+  },
+  {
+    "id": 4890,
+    "type": "text",
+    "page_idx": 163,
+    "text": "You could have written:"
+  },
+  {
+    "id": 4891,
+    "type": "equation",
+    "page_idx": 163,
+    "text": "$$\n\\frac {2 0}{2 5} = \\frac {2 0 + 5}{2 5 + 5} = \\frac {4}{5}\n$$"
+  },
+  {
+    "id": 4892,
+    "type": "equation",
+    "page_idx": 163,
+    "text": "$$\n\\frac {5 1 8}{1 8} = \\frac {5}{6}\n$$"
+  },
+  {
+    "id": 4893,
+    "type": "equation",
+    "page_idx": 163,
+    "text": "$$\n\\frac {1 5}{1 8} = \\frac {1 5 \\div 3}{1 8 \\div 3} = \\frac {5}{6}\n$$"
+  },
+  {
+    "id": 4894,
+    "type": "text",
+    "page_idx": 163,
+    "text": "This is called cancelling and is a shorter way of showing what you have done."
+  },
+  {
+    "id": 4895,
+    "type": "text",
+    "page_idx": 163,
+    "text": "So  $\\frac{5}{6}$  and  $\\frac{15}{18}$  are equivalent."
+  },
+  {
+    "id": 4896,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Exercise 5.1"
+  },
+  {
+    "id": 4897,
+    "type": "text",
+    "page_idx": 163,
+    "text": "1 By multiplying or dividing both the numerator and denominator by the same number, find three equivalent fractions for each of the following."
+  },
+  {
+    "id": 4898,
+    "type": "text",
+    "page_idx": 163,
+    "text": "$\\frac{5}{9}$"
+  },
+  {
+    "id": 4899,
+    "type": "text",
+    "page_idx": 163,
+    "text": "b  $\\frac{3}{7}$"
+  },
+  {
+    "id": 4900,
+    "type": "text",
+    "page_idx": 163,
+    "text": "12 18"
+  },
+  {
+    "id": 4901,
+    "type": "text",
+    "page_idx": 163,
+    "text": "d 18 36"
+  },
+  {
+    "id": 4902,
+    "type": "text",
+    "page_idx": 163,
+    "text": "110 110 128"
+  },
+  {
+    "id": 4903,
+    "type": "text",
+    "page_idx": 163,
+    "text": "2 Express each of the following fractions in its simplest form."
+  },
+  {
+    "id": 4904,
+    "type": "text",
+    "page_idx": 163,
+    "text": "7 21"
+  },
+  {
+    "id": 4905,
+    "type": "text",
+    "page_idx": 163,
+    "text": "b"
+  },
+  {
+    "id": 4906,
+    "type": "text",
+    "page_idx": 163,
+    "text": "9 12"
+  },
+  {
+    "id": 4907,
+    "type": "text",
+    "page_idx": 163,
+    "text": "d  $\\frac{15}{25}$"
+  },
+  {
+    "id": 4908,
+    "type": "text",
+    "page_idx": 163,
+    "text": "500 2500"
+  },
+  {
+    "id": 4909,
+    "type": "text",
+    "page_idx": 163,
+    "text": "f"
+  },
+  {
+    "id": 4910,
+    "type": "text",
+    "page_idx": 163,
+    "text": "108 9 360"
+  },
+  {
+    "id": 4911,
+    "type": "text",
+    "page_idx": 163,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 4912,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Fraction diagrams"
+  },
+  {
+    "id": 4913,
+    "type": "text",
+    "page_idx": 163,
+    "text": "1 Read this activity and look at the solutions from three students."
+  },
+  {
+    "id": 4914,
+    "type": "image",
+    "page_idx": 163,
+    "img_path": "images/efcbc66f04a1be1058ef7cf09aa85df6d413e5f113a3d5a17d3baeaaa4a0cf0f.jpg"
+  },
+  {
+    "id": 4915,
+    "type": "text",
+    "text": "a What fractions did each student produce?",
+    "page_idx": 163
+  },
+  {
+    "id": 4916,
+    "type": "text",
+    "text": "b Is it possible to do this and only produce two fractional parts? If so, how?",
+    "page_idx": 163
+  },
+  {
+    "id": 4917,
+    "type": "text",
+    "text": "c What is the smallest fraction you can make in this task?",
+    "page_idx": 163
+  },
+  {
+    "id": 4918,
+    "type": "text",
+    "page_idx": 163,
+    "text": "TIP"
+  },
+  {
+    "id": 4919,
+    "type": "text",
+    "page_idx": 163,
+    "text": "Work on squared or dotted paper to make it easier to draw the rectangles you need."
+  },
+  {
+    "id": 4920,
+    "type": "image",
+    "page_idx": 163,
+    "img_path": "images/24f076c95ff694deda2f465419b7e4de60215b37a7a7d4365d2cb859fafd6f27.jpg"
+  },
+  {
+    "id": 4921,
+    "type": "text",
+    "page_idx": 164,
+    "text": "INVESTIGATION CONTINUED"
+  },
+  {
+    "id": 4922,
+    "type": "text",
+    "page_idx": 164,
+    "text": "2 The second part of the task had the same instructions but used this rectangle with more dots on the sides."
+  },
+  {
+    "id": 4923,
+    "type": "image",
+    "page_idx": 164,
+    "img_path": "images/e8e652e820b0591b4216cc59f319b974a537702c0aa568d896fa5a87425452b4.jpg"
+  },
+  {
+    "id": 4924,
+    "type": "text",
+    "page_idx": 164,
+    "text": "Work in pairs or small groups to investigate how many fractions you can make. Label your fractions."
+  },
+  {
+    "id": 4925,
+    "type": "text",
+    "page_idx": 164,
+    "text": "5.2 Operations on fractions"
+  },
+  {
+    "id": 4926,
+    "type": "text",
+    "page_idx": 164,
+    "text": "Multiplying fractions"
+  },
+  {
+    "id": 4927,
+    "type": "text",
+    "page_idx": 164,
+    "text": "To multiply two or more fractions, multiply the numerators and then multiply the denominators. Sometimes you will need to simplify your answer."
+  },
+  {
+    "id": 4928,
+    "type": "text",
+    "page_idx": 164,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 4929,
+    "type": "text",
+    "page_idx": 164,
+    "text": "Calculate."
+  }
+]
+```

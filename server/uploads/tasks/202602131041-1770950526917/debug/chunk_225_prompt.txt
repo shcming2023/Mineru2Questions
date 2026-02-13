@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 15750,
+    "type": "text",
+    "text": "a Explain why  $Y$  must be less than  $40^{\\circ}$",
+    "page_idx": 525
+  },
+  {
+    "id": 15751,
+    "type": "text",
+    "text": "b Calculate, correct to 1 decimal place,  $Y$  and  $Z$",
+    "page_idx": 525
+  },
+  {
+    "id": 15752,
+    "type": "text",
+    "text": "c. Calculate the length of the side  $XY$ .",
+    "page_idx": 525
+  },
+  {
+    "id": 15753,
+    "type": "image",
+    "page_idx": 525,
+    "img_path": "images/d5e26bb5db99788308d5d870cc290c310ad11096b5287bf7e6940563207138f6.jpg"
+  },
+  {
+    "id": 15754,
+    "type": "text",
+    "page_idx": 525,
+    "text": "8  $ABCD$  is a parallelogram with  $AB = 32\\mathrm{mm}$  and  $AD = 40\\mathrm{mm}$  and angle  $BAC = 77^{\\circ}$"
+  },
+  {
+    "id": 15755,
+    "type": "image",
+    "page_idx": 525,
+    "img_path": "images/a745c93c0f586181bda933ed595e3c9fb20a3690c90b1d55c50fe1d8cab4f2dc.jpg"
+  },
+  {
+    "id": 15756,
+    "type": "text",
+    "text": "a Find the size of angle  $BCA$  (to the nearest degree).",
+    "page_idx": 525
+  },
+  {
+    "id": 15757,
+    "type": "text",
+    "text": "b Find the size of angle  $ABC$  (to the nearest degree).",
+    "page_idx": 525
+  },
+  {
+    "id": 15758,
+    "type": "text",
+    "text": "c Find the length of diagonal  $AC$  correct to 2 decimal places.",
+    "page_idx": 525
+  },
+  {
+    "id": 15759,
+    "type": "text",
+    "page_idx": 525,
+    "text": "Cosine rule"
+  },
+  {
+    "id": 15760,
+    "type": "text",
+    "page_idx": 525,
+    "text": "For the cosine rule, consider a triangle labelled in exactly the same way as that used for the sine rule."
+  },
+  {
+    "id": 15761,
+    "type": "image",
+    "page_idx": 525,
+    "img_path": "images/afcabec114d9ae736bf7300eb1b7def596cba15b3b2bb1cacce22e5f0e21b9ad.jpg"
+  },
+  {
+    "id": 15762,
+    "type": "text",
+    "page_idx": 525,
+    "text": "The cosine rule is stated as a single formula:"
+  },
+  {
+    "id": 15763,
+    "type": "equation",
+    "page_idx": 525,
+    "text": "$$\na ^ {2} = b ^ {2} + c ^ {2} - 2 b c \\cos A\n$$"
+  },
+  {
+    "id": 15764,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Notice that all three sides are used in the formula, and just one angle. The side whose square is the subject of the formula is opposite the angle used (here  $a$  and  $A$ ). This form of the cosine rule is used to find unknown sides. You can use equivalent versions of the rule to find sides labelled  $b$  or  $c$ :"
+  },
+  {
+    "id": 15765,
+    "type": "equation",
+    "page_idx": 526,
+    "text": "$$\nb ^ {2} = a ^ {2} + c ^ {2} - 2 a c \\cos B \\quad \\text {o r} \\quad c ^ {2} = a ^ {2} + b ^ {2} - 2 a b \\cos C\n$$"
+  },
+  {
+    "id": 15766,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Notice, also, that you can rearrange any version of the formula to make the cosine ratio the subject."
+  },
+  {
+    "id": 15767,
+    "type": "text",
+    "page_idx": 526,
+    "text": "This version can be used to calculate angles:"
+  },
+  {
+    "id": 15768,
+    "type": "equation",
+    "page_idx": 526,
+    "text": "$$\n\\begin{array}{l} a ^ {2} = b ^ {2} + c ^ {2} - 2 b c \\cos A \\\\ \\Rightarrow a ^ {2} + 2 b c \\cos A = b ^ {2} + c ^ {2} \\\\ \\Rightarrow 2 b c \\cos A = b ^ {2} + c ^ {2} - a ^ {2} \\\\ \\Rightarrow \\cos A = \\frac {b ^ {2} + c ^ {2} - a ^ {2}}{2 b c} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15769,
+    "type": "text",
+    "page_idx": 526,
+    "text": "TIP"
+  },
+  {
+    "id": 15770,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Remember, if you know all three sides of a triangle, you can use the cosine rule to find any angle. If you know two sides, and the unknown side is opposite a known angle, then you can use the cosine rule to calculate the unknown side."
+  },
+  {
+    "id": 15771,
+    "type": "text",
+    "page_idx": 526,
+    "text": "WORKED EXAMPLE 19"
+  },
+  {
+    "id": 15772,
+    "type": "text",
+    "page_idx": 526,
+    "text": "In triangle  $ABC, B = 50^{\\circ}$ , side  $AB = 9\\mathrm{cm}$  and side  $BC = 18\\mathrm{cm}$ ."
+  },
+  {
+    "id": 15773,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Calculate the length of AC."
+  },
+  {
+    "id": 15774,
+    "type": "image",
+    "page_idx": 526,
+    "img_path": "images/7c5a7f181b0c19739faf7aef8001cf6052fa5b1aab9462fbf838645bbe21a351.jpg"
+  },
+  {
+    "id": 15775,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Answer"
+  },
+  {
+    "id": 15776,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Notice that  $AC = b$  and you know that  $B = 50^\\circ$ ."
+  },
+  {
+    "id": 15777,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Use the cosine rule in the form,  $b^{2} = a^{2} + c^{2} - 2ac\\cos B$ ."
+  },
+  {
+    "id": 15778,
+    "type": "equation",
+    "page_idx": 526,
+    "text": "$$\n\\begin{array}{l} b ^ {2} = 9 ^ {2} + 1 8 ^ {2} - (2 \\times 9 \\times 1 8 \\times \\cos 5 0 ^ {\\circ}) \\\\ = 8 1 + 3 2 4 - (2 0 8. 2 6 3 1 \\dots) \\\\ = 1 9 6. 7 3 6 8 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15779,
+    "type": "equation",
+    "page_idx": 526,
+    "text": "$$\n\\begin{array}{l} \\therefore b = \\sqrt {1 9 6 . 7 3 6 8 \\dots} \\\\ = 1 4. 0 2 6 2 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15780,
+    "type": "text",
+    "page_idx": 526,
+    "text": "Length of AC = 14.0cm (to 3 s.f.)"
+  },
+  {
+    "id": 15781,
+    "type": "image",
+    "page_idx": 526,
+    "img_path": "images/ca8550141aa24538e8a4f819e149cc4203d20df0ba80fbe6c11b5981d6774898.jpg"
+  },
+  {
+    "id": 15782,
+    "type": "text",
+    "page_idx": 526,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15783,
+    "type": "text",
+    "page_idx": 526,
+    "text": "You learned how to rearrange a formula in Chapter 6."
+  },
+  {
+    "id": 15784,
+    "type": "text",
+    "page_idx": 527,
+    "text": "WORKED EXAMPLE 20"
+  },
+  {
+    "id": 15785,
+    "type": "text",
+    "page_idx": 527,
+    "text": "In triangle DEF,  $F = 120^{\\circ}$ , side  $EF = 25$  m and side  $FD = 34$  m. Calculate the length of side  $DE$ ."
+  },
+  {
+    "id": 15786,
+    "type": "image",
+    "page_idx": 527,
+    "img_path": "images/531fe896bca61a2696f475a21b0b548b793fb135cbc20ab88eaeecb657b825f9.jpg"
+  },
+  {
+    "id": 15787,
+    "type": "text",
+    "page_idx": 527,
+    "text": "Answer"
+  },
+  {
+    "id": 15788,
+    "type": "text",
+    "page_idx": 527,
+    "text": "$DE = f,$  so use the cosine rule in the form,  $f^2 = d^2 +e^2 -2de\\cos F.$"
+  },
+  {
+    "id": 15789,
+    "type": "equation",
+    "page_idx": 527,
+    "text": "$$\n\\begin{array}{l} f ^ {2} = 2 5 ^ {2} + 3 4 ^ {2} - (2 \\times 2 5 \\times 3 4 \\times \\cos 1 2 0 ^ {\\circ}) \\\\ = 6 2 5 + 1 1 5 6 - (- 8 5 0) \\quad \\text {(n o i c e t h a t c o s 1 2 0 ^ {\\circ} i s n e g a t i v e)} \\\\ = 6 2 5 + 1 1 5 6 + 8 5 0 \\\\ = 2 6 3 1 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15790,
+    "type": "equation",
+    "page_idx": 527,
+    "text": "$$\n\\begin{array}{l} \\therefore f = \\sqrt {2 6 3 1} \\\\ = 5 1. 2 9 3 2 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15791,
+    "type": "text",
+    "page_idx": 527,
+    "text": "Length of  $DE = 51.3\\mathrm{m}$  (to 3 s.f.)"
+  },
+  {
+    "id": 15792,
+    "type": "text",
+    "page_idx": 527,
+    "text": "Combining the sine and cosine rules"
+  },
+  {
+    "id": 15793,
+    "type": "text",
+    "page_idx": 527,
+    "text": "The following worked examples show how you can combine the sine and cosine rules to solve problems."
+  },
+  {
+    "id": 15794,
+    "type": "text",
+    "page_idx": 527,
+    "text": "WORKED EXAMPLE 21"
+  },
+  {
+    "id": 15795,
+    "type": "text",
+    "page_idx": 527,
+    "text": "In triangle  $PQR,R = 100^{\\circ}$  ,side  $PR = 8cm$  and side  $RQ = 5cm$"
+  },
+  {
+    "id": 15796,
+    "type": "text",
+    "text": "a Calculate the length of side PQ.",
+    "page_idx": 527
+  },
+  {
+    "id": 15797,
+    "type": "text",
+    "text": "b Calculate, correct to the nearest degree,  $P$  and  $Q$",
+    "page_idx": 527
+  },
+  {
+    "id": 15798,
+    "type": "image",
+    "page_idx": 527,
+    "img_path": "images/1524e2a37084945f826d3193f61d00de4173d5323222daf0c8b1fce7fa1dfe87.jpg"
+  },
+  {
+    "id": 15799,
+    "type": "text",
+    "page_idx": 527,
+    "text": "Answers"
+  },
+  {
+    "id": 15800,
+    "type": "text",
+    "page_idx": 527,
+    "text": "a  $PQ = r$  , so use the cosine rule in the form,  $r^2 = p^2 +q^2 -2pq\\cos R.$"
+  },
+  {
+    "id": 15801,
+    "type": "equation",
+    "page_idx": 527,
+    "text": "$$\n\\begin{array}{l} r ^ {2} = 5 ^ {2} + 8 ^ {2} - (2 \\times 5 \\times 8 \\times \\cos 1 0 0 ^ {\\circ}) \\\\ = 2 5 + 6 4 - (- 1 3. 8 9 1 8 \\dots) \\quad \\text {(n o i t e t h a t} \\cos 1 0 0 ^ {\\circ} \\text {i s n e g a t e}) \\\\ = 1 0 2. 8 9 1 8 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15802,
+    "type": "equation",
+    "page_idx": 527,
+    "text": "$$\n\\begin{array}{l} \\therefore r = \\sqrt {1 0 2 . 8 9 1 8 \\dots} \\\\ = 1 0. 1 4 3 5 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15803,
+    "type": "text",
+    "page_idx": 527,
+    "text": "Length of  $PQ = 10.1 \\, \\text{cm}$  (to 3 s.f.)"
+  },
+  {
+    "id": 15804,
+    "type": "text",
+    "page_idx": 528,
+    "text": "WORKED EXAMPLE 21 CONTINUED"
+  },
+  {
+    "id": 15805,
+    "type": "text",
+    "page_idx": 528,
+    "text": "b Now you know the value of  $r$  as well as the value of  $R$ , you can use the sine rule:"
+  },
+  {
+    "id": 15806,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\n\\begin{array}{l} \\frac {\\sin P}{P} = \\frac {\\sin Q}{q} = \\frac {\\sin R}{r} \\\\ \\frac {\\sin P}{5} = \\frac {\\sin Q}{8} = \\frac {\\sin 1 0 0 ^ {\\circ}}{1 0 . 1 4 3 5 \\dots} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15807,
+    "type": "text",
+    "page_idx": 528,
+    "text": "Using the first and third fractions, sin  $P = \\frac{5 \\times \\sin 100^{\\circ}}{10.1435 \\dots} = 0.4853 \\dots$"
+  },
+  {
+    "id": 15808,
+    "type": "text",
+    "page_idx": 528,
+    "text": "$R$  is obtuse so  $P$  is acute, and  $P = 29.0409\\dots$"
+  },
+  {
+    "id": 15809,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\nP = 2 9 ^ {\\circ} (\\text {t o t h e n e a r e s t d e g r e e})\n$$"
+  },
+  {
+    "id": 15810,
+    "type": "text",
+    "page_idx": 528,
+    "text": "To find  $Q$  you can use the angle sum of a triangle  $= 180^{\\circ}$"
+  },
+  {
+    "id": 15811,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\nQ = 1 8 0 ^ {\\circ} - (1 0 0 ^ {\\circ} + 2 9 ^ {\\circ})\n$$"
+  },
+  {
+    "id": 15812,
+    "type": "text",
+    "page_idx": 528,
+    "text": ":Q=51°(to the nearest degree)"
+  },
+  {
+    "id": 15813,
+    "type": "text",
+    "page_idx": 528,
+    "text": "WORKED EXAMPLE 22"
+  },
+  {
+    "id": 15814,
+    "type": "text",
+    "text": "a Change the subject of the formula  $c^2 = a^2 +b^2 -2ab\\cos C$  to cos C.",
+    "page_idx": 528
+  },
+  {
+    "id": 15815,
+    "type": "text",
+    "text": "b Use your answer to part (a) to find the smallest angle in the triangle which has sides of length  $7\\mathrm{m},8\\mathrm{m}$  and  $13\\mathrm{m}$",
+    "page_idx": 528
+  },
+  {
+    "id": 15816,
+    "type": "text",
+    "page_idx": 528,
+    "text": "Answers"
+  },
+  {
+    "id": 15817,
+    "type": "text",
+    "page_idx": 528,
+    "text": "a  $c^2 = a^2 +b^2 -2ab\\cos C$"
+  },
+  {
+    "id": 15818,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\n2 a b \\cos C = a ^ {2} + b ^ {2} - c ^ {2}\n$$"
+  },
+  {
+    "id": 15819,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\n\\cos C = \\frac {a ^ {2} + b ^ {2} - c ^ {2}}{2 a b}\n$$"
+  },
+  {
+    "id": 15820,
+    "type": "text",
+    "page_idx": 528,
+    "text": "b The smallest angle in a triangle is opposite the shortest side. In the given triangle, the smallest angle is opposite the  $7\\mathrm{m}$  side. Let this angle be  $C$ ."
+  },
+  {
+    "id": 15821,
+    "type": "text",
+    "page_idx": 528,
+    "text": "Then  $c = 7$  and take  $a = 8$  and  $b = 13$ ."
+  },
+  {
+    "id": 15822,
+    "type": "text",
+    "page_idx": 528,
+    "text": "Using the result of part (a):"
+  },
+  {
+    "id": 15823,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\n\\begin{array}{l} \\cos C = \\frac {8 ^ {2} + 1 3 ^ {2} - 7 ^ {2}}{2 \\times 8 \\times 1 3} \\\\ = \\frac {6 4 + 1 6 9 - 4 9}{2 0 8} \\\\ = \\frac {1 8 4}{2 0 8} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15824,
+    "type": "equation",
+    "page_idx": 528,
+    "text": "$$\n\\begin{array}{l} C = \\cos^ {- 1} \\frac {1 8 4}{2 0 8} \\\\ = 2 7. 7 9 5 7 \\dots^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15825,
+    "type": "text",
+    "page_idx": 528,
+    "text": "The smallest angle of the triangle  $= 27.8^{\\circ}$  (to 1 d.p.)"
+  },
+  {
+    "id": 15826,
+    "type": "text",
+    "page_idx": 528,
+    "text": "TIP"
+  },
+  {
+    "id": 15827,
+    "type": "text",
+    "page_idx": 528,
+    "text": "If you need to use a previously calculated value for a new problem, leave unrounded answers in your calculator to avoid introducing rounding errors."
+  },
+  {
+    "id": 15828,
+    "type": "text",
+    "page_idx": 529,
+    "text": "Exercise 15.12"
+  },
+  {
+    "id": 15829,
+    "type": "text",
+    "page_idx": 529,
+    "text": "1 In triangle  $ABC, B = 45^\\circ$ , side  $AB = 10\\mathrm{cm}$  and side  $BC = 12\\mathrm{cm}$ . Calculate the length of side  $AC$ ."
+  },
+  {
+    "id": 15830,
+    "type": "image",
+    "page_idx": 529,
+    "img_path": "images/b0f2f10de24b2a0c93302399dac5da427b07e1fef052323ec168f18eed38628e.jpg"
+  },
+  {
+    "id": 15831,
+    "type": "text",
+    "page_idx": 529,
+    "text": "2 In triangle  $DEF,F = 150^{\\circ}$  ,side  $EF = 9\\mathrm{m}$  and side  $FD = 14\\mathrm{m}$  Calculate the length of side  $DE$"
+  },
+  {
+    "id": 15832,
+    "type": "image",
+    "page_idx": 529,
+    "img_path": "images/a5dd175fd384cd66c2b85c3e340dcf9f2adafae33692cf07759fc2e07203c745.jpg"
+  },
+  {
+    "id": 15833,
+    "type": "text",
+    "page_idx": 529,
+    "text": "3 In triangle  $PQR$ , side  $PQ = 11\\mathrm{cm}$ , side  $QR = 9\\mathrm{cm}$  and side  $RP = 8\\mathrm{cm}$ . Calculate the size of  $p$  correct to 1 decimal place."
+  },
+  {
+    "id": 15834,
+    "type": "image",
+    "page_idx": 529,
+    "img_path": "images/3c78ed2c1b8eb4a3dd45c1621f217219c840831de9a9e106135c2dc33a804aae.jpg"
+  },
+  {
+    "id": 15835,
+    "type": "text",
+    "page_idx": 529,
+    "text": "4 In triangle  $STU, S = 95^{\\circ}$ , side  $ST = 10\\mathrm{m}$  and side  $SU = 15\\mathrm{m}$ ."
+  },
+  {
+    "id": 15836,
+    "type": "text",
+    "text": "a Calculate the length of side TU.",
+    "page_idx": 529
+  },
+  {
+    "id": 15837,
+    "type": "text",
+    "text": "b Calculate  $U$",
+    "page_idx": 529
+  },
+  {
+    "id": 15838,
+    "type": "text",
+    "text": "c Calculate  $T$",
+    "page_idx": 529
+  },
+  {
+    "id": 15839,
+    "type": "image",
+    "page_idx": 529,
+    "img_path": "images/a4c7cfecf11c1b242134a1d83fd7c651566e44687516481ddd4bb33ec9248fe7.jpg"
+  },
+  {
+    "id": 15840,
+    "type": "text",
+    "page_idx": 530,
+    "text": "5 In triangle  $XYZ$ , side  $XY = 15\\mathrm{cm}$ , side  $YZ = 13\\mathrm{cm}$  and side  $ZX = 8\\mathrm{cm}$ . Calculate the size of:"
+  },
+  {
+    "id": 15841,
+    "type": "text",
+    "page_idx": 530,
+    "text": "a X"
+  },
+  {
+    "id": 15842,
+    "type": "image",
+    "page_idx": 530,
+    "img_path": "images/bb68a7e12ca209525b7413894696acb0dc0f4add923c9fc7ff2ace5fc3e7c3ab.jpg"
+  },
+  {
+    "id": 15843,
+    "type": "text",
+    "page_idx": 530,
+    "text": "6 A boat sails in a straight line from Aardvark Island on a bearing of  $060^{\\circ}$ . When the boat has sailed  $8\\mathrm{km}$  it reaches Beaver Island and then turns to sail on a bearing of  $150^{\\circ}$ . The boat remains on this bearing until it reaches Crow Island,  $12\\mathrm{km}$  from Beaver Island. On reaching Crow Island the boat's pilot decides to return directly to Aardvark Island."
+  },
+  {
+    "id": 15844,
+    "type": "text",
+    "page_idx": 530,
+    "text": "Calculate:"
+  },
+  {
+    "id": 15845,
+    "type": "text",
+    "text": "a the length of the return journey",
+    "page_idx": 530
+  },
+  {
+    "id": 15846,
+    "type": "text",
+    "text": "b the bearing on which the pilot must steer the boat to return to Aardvark Island.",
+    "page_idx": 530
+  },
+  {
+    "id": 15847,
+    "type": "text",
+    "page_idx": 530,
+    "text": "7 Jason stands in the corner of a very large field. He walks a distance of  $d$  metres on a bearing of  $030^{\\circ}$ . Jason then changes direction and walks twice as far on a new bearing of  $120^{\\circ}$ . At the end of the walk Jason calculates both the distance he must walk and the bearing required to return to his original position. Given that the total distance walked is 120 metres, what answers will Jason get if he is correct?"
+  },
+  {
+    "id": 15848,
+    "type": "text",
+    "page_idx": 530,
+    "text": "PEER ASSESSMENT"
+  },
+  {
+    "id": 15849,
+    "type": "text",
+    "page_idx": 530,
+    "text": "Work with a partner. Check each other's answers for Exercise 15.12."
+  }
+]
+```

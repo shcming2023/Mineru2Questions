@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 20440,
+    "type": "text",
+    "text": "c Calculate the average speed of the car for this 10 second period.",
+    "page_idx": 747
+  },
+  {
+    "id": 20441,
+    "type": "text",
+    "page_idx": 747,
+    "text": "3 The diagram below is the speed-time graph for a car journey."
+  },
+  {
+    "id": 20442,
+    "type": "image",
+    "page_idx": 747,
+    "img_path": "images/a2e06c7a58e7c5a3763563da87db6ef7610cf1fd3a9d2c67005b05050ac0b0f8.jpg"
+  },
+  {
+    "id": 20443,
+    "type": "text",
+    "text": "a Calculate the acceleration during the first 20 seconds of the journey.",
+    "page_idx": 747
+  },
+  {
+    "id": 20444,
+    "type": "text",
+    "text": "b Calculate the distance travelled in the last 10 seconds of the journey.",
+    "page_idx": 747
+  },
+  {
+    "id": 20445,
+    "type": "text",
+    "text": "c Calculate the average speed for the whole journey.",
+    "page_idx": 747
+  },
+  {
+    "id": 20446,
+    "type": "text",
+    "page_idx": 747,
+    "text": "21.5 Proportion"
+  },
+  {
+    "id": 20447,
+    "type": "text",
+    "page_idx": 747,
+    "text": "Quantities increase or decrease in proportion if multiplying (or dividing) one quantity by a value results in multiplying (or dividing) the other quantity by the same value. In other words, there is a constant ratio between the corresponding elements of two sets."
+  },
+  {
+    "id": 20448,
+    "type": "text",
+    "page_idx": 747,
+    "text": "Direct proportion"
+  },
+  {
+    "id": 20449,
+    "type": "text",
+    "page_idx": 747,
+    "text": "When two quantities are in direct proportion they increase or decrease at the same rate. In other words, the ratio of the quantities is equivalent (in general terms,  $a:b = c:d$ ). If there is an increase or decrease in one quantity, the other will increase or decrease in the same proportion."
+  },
+  {
+    "id": 20450,
+    "type": "text",
+    "page_idx": 747,
+    "text": "LINK"
+  },
+  {
+    "id": 20451,
+    "type": "text",
+    "page_idx": 747,
+    "text": "Home economists, chefs and food technologists use proportional reasoning to mix ingredients, convert between units or work out the cost of a dish."
+  },
+  {
+    "id": 20452,
+    "type": "text",
+    "page_idx": 748,
+    "text": "Here are some examples of quantities that are in direct proportion:"
+  },
+  {
+    "id": 20453,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Speed (km/h)</td><td>0</td><td>45</td><td>60</td><td>75</td><td>90</td><td>120</td></tr>",
+    "page_idx": 748
+  },
+  {
+    "id": 20454,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Distance covered in an hour (km)</td><td>0</td><td>45</td><td>60</td><td>75</td><td>90</td><td>120</td></tr>",
+    "page_idx": 748
+  },
+  {
+    "id": 20455,
+    "type": "text",
+    "page_idx": 748,
+    "text": "Distance = speed × time, so the faster you drive in a set time, the further you will travel in that time."
+  },
+  {
+    "id": 20456,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of items</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>",
+    "page_idx": 748
+  },
+  {
+    "id": 20457,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Mass (kg)</td><td>0</td><td>2</td><td>4</td><td>6</td><td>8</td></tr>",
+    "page_idx": 748
+  },
+  {
+    "id": 20458,
+    "type": "text",
+    "page_idx": 748,
+    "text": "If one item has a mass of  $2\\mathrm{kg}$ , then two of the same item will have a mass of  $4\\mathrm{kg}$  and so on. The more you have of the same item, the greater the mass will be."
+  },
+  {
+    "id": 20459,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of hours worked</td><td>0</td><td>1</td><td>2</td><td>3</td></tr>",
+    "page_idx": 748
+  },
+  {
+    "id": 20460,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Amount earned ($)</td><td>0</td><td>12</td><td>24</td><td>36</td></tr>",
+    "page_idx": 748
+  },
+  {
+    "id": 20461,
+    "type": "text",
+    "page_idx": 748,
+    "text": "The more hours you work, the more you earn."
+  },
+  {
+    "id": 20462,
+    "type": "text",
+    "page_idx": 748,
+    "text": "Graphs of directly proportional relationships"
+  },
+  {
+    "id": 20463,
+    "type": "text",
+    "page_idx": 748,
+    "text": "If you draw the graph of a directly proportional relationship you will get a straight line that passes through the origin."
+  },
+  {
+    "id": 20464,
+    "type": "text",
+    "page_idx": 748,
+    "text": "Of course, the converse (opposite) of this is also true. When a graph is a straight line that passes through the origin, one quantity is directly proportional to the other."
+  },
+  {
+    "id": 20465,
+    "type": "image",
+    "page_idx": 748,
+    "img_path": "images/54b85bb1d1e59ce40d93bdead0dc6381bfcdebbb545373cefc17d40fe0230a80.jpg"
+  },
+  {
+    "id": 20466,
+    "type": "text",
+    "page_idx": 748,
+    "text": "This graph shows the amount of Indian rupees you would get for different amounts of US dollars at an exchange rate of US$1: Rs 75. Exchange rates are a good example of quantities that are in direct proportion."
+  },
+  {
+    "id": 20467,
+    "type": "text",
+    "page_idx": 748,
+    "text": "LINK"
+  },
+  {
+    "id": 20468,
+    "type": "text",
+    "page_idx": 748,
+    "text": "When a liquid cools, the rate at which the temperature decreases is directly proportional to the difference between the temperature of the liquid and the temperature of the surroundings."
+  },
+  {
+    "id": 20469,
+    "type": "text",
+    "page_idx": 749,
+    "text": "Exercise 21.9"
+  },
+  {
+    "id": 20470,
+    "type": "text",
+    "page_idx": 749,
+    "text": "1 Which of these could be examples of direct proportion?"
+  },
+  {
+    "id": 20471,
+    "type": "text",
+    "text": "a The length of the side of a square and its area.",
+    "page_idx": 749
+  },
+  {
+    "id": 20472,
+    "type": "text",
+    "text": "b The ages and heights of students.",
+    "page_idx": 749
+  },
+  {
+    "id": 20473,
+    "type": "text",
+    "text": "The amount of money collected in a sponsored walk if you are paid 5c per kilometre.",
+    "page_idx": 749
+  },
+  {
+    "id": 20474,
+    "type": "text",
+    "text": "d The time it takes to cover different distances at the same speed.",
+    "page_idx": 749
+  },
+  {
+    "id": 20475,
+    "type": "text",
+    "text": "e The heights of objects and the lengths of their shadows.",
+    "page_idx": 749
+  },
+  {
+    "id": 20476,
+    "type": "text",
+    "text": "The amount of petrol used to travel different distances.",
+    "page_idx": 749
+  },
+  {
+    "id": 20477,
+    "type": "text",
+    "text": "g The number of chickens you could feed with  $20\\mathrm{kg}$  of feed.",
+    "page_idx": 749
+  },
+  {
+    "id": 20478,
+    "type": "text",
+    "text": "The height of the tree and the number of years since it was planted.",
+    "page_idx": 749
+  },
+  {
+    "id": 20479,
+    "type": "text",
+    "text": "i The area of the sector of a circle and the angle at the centre.",
+    "page_idx": 749
+  },
+  {
+    "id": 20480,
+    "type": "text",
+    "page_idx": 749,
+    "text": "2 This graph shows two variables that are directly proportional to each other."
+  },
+  {
+    "id": 20481,
+    "type": "image",
+    "page_idx": 749,
+    "img_path": "images/27e9e114fd4c64bec1b7342c758a8899bda0b0ed3fc4496efa8840be149064f0.jpg"
+  },
+  {
+    "id": 20482,
+    "type": "text",
+    "text": "a Find the values of  $a$  and  $b$",
+    "page_idx": 749
+  },
+  {
+    "id": 20483,
+    "type": "text",
+    "text": "b What equation describes this relationship?",
+    "page_idx": 749
+  },
+  {
+    "id": 20484,
+    "type": "text",
+    "page_idx": 749,
+    "text": "Calculating with direct proportion"
+  },
+  {
+    "id": 20485,
+    "type": "text",
+    "page_idx": 749,
+    "text": "The unitary method is useful for solving a range of problems involving proportion. Using this method, you start by finding the value of one unit of the quantity, for example the price of one cupcake or the amount of rupees you would get for one dollar."
+  },
+  {
+    "id": 20486,
+    "type": "text",
+    "page_idx": 749,
+    "text": "WORKED EXAMPLE 18"
+  },
+  {
+    "id": 20487,
+    "type": "text",
+    "page_idx": 749,
+    "text": "Five bottles of perfume cost $200. What would 11 bottles cost?"
+  },
+  {
+    "id": 20488,
+    "type": "text",
+    "page_idx": 749,
+    "text": "Answer"
+  },
+  {
+    "id": 20489,
+    "type": "text",
+    "page_idx": 749,
+    "text": "Unitary method"
+  },
+  {
+    "id": 20490,
+    "type": "text",
+    "page_idx": 749,
+    "text": "5 bottles cost $200"
+  },
+  {
+    "id": 20491,
+    "type": "text",
+    "page_idx": 749,
+    "text": "1 bottle costs  $200 + 5 =$ 40"
+  },
+  {
+    "id": 20492,
+    "type": "text",
+    "page_idx": 749,
+    "text": "11 bottles cost \\(11 \\times \\\\)40 = \\\\(440$"
+  },
+  {
+    "id": 20493,
+    "type": "text",
+    "page_idx": 750,
+    "text": "WORKED EXAMPLE 18 CONTINUED"
+  },
+  {
+    "id": 20494,
+    "type": "text",
+    "page_idx": 750,
+    "text": "You can also solve this problem using the ratio method."
+  },
+  {
+    "id": 20495,
+    "type": "equation",
+    "page_idx": 750,
+    "text": "$$\n\\frac {5}{2 0 0} = \\frac {1 1}{x}\n$$"
+  },
+  {
+    "id": 20496,
+    "type": "text",
+    "page_idx": 750,
+    "text": "Write out each part as a fraction."
+  },
+  {
+    "id": 20497,
+    "type": "equation",
+    "page_idx": 750,
+    "text": "$$\n\\frac {2 0 0}{5} = \\frac {x}{1 1}\n$$"
+  },
+  {
+    "id": 20498,
+    "type": "text",
+    "page_idx": 750,
+    "text": "Take the reciprocal of both ratios (tum them upside down) to make it easier to solve the equation."
+  },
+  {
+    "id": 20499,
+    "type": "equation",
+    "page_idx": 750,
+    "text": "$$\n\\frac {2 0 0 \\times 1 1}{5} = x\n$$"
+  },
+  {
+    "id": 20500,
+    "type": "equation",
+    "page_idx": 750,
+    "text": "$$\nx = \\$ 440\n$$"
+  },
+  {
+    "id": 20501,
+    "type": "text",
+    "page_idx": 750,
+    "text": "Exercise 21.10"
+  },
+  {
+    "id": 20502,
+    "type": "text",
+    "text": "1 Four soft drinks cost $9. How much would you pay for three?",
+    "page_idx": 750
+  },
+  {
+    "id": 20503,
+    "type": "text",
+    "text": "2 A car travels  $30\\mathrm{km}$  in 40 minutes. How long will it take to travel  $45\\mathrm{km}$  at the same speed?",
+    "page_idx": 750
+  },
+  {
+    "id": 20504,
+    "type": "text",
+    "text": "3 If a clock gains 20 seconds in four days, how much time does it gain in two weeks?",
+    "page_idx": 750
+  },
+  {
+    "id": 20505,
+    "type": "text",
+    "text": "4 Six identical drums of oil weigh  $90\\mathrm{kg}$  in total. How much will 11.5 identical drums weigh?",
+    "page_idx": 750
+  },
+  {
+    "id": 20506,
+    "type": "text",
+    "text": "5 An athlete runs 4.5 kilometres in 15 minutes. How far can they run in 35 minutes at the same speed?",
+    "page_idx": 750
+  },
+  {
+    "id": 20507,
+    "type": "text",
+    "page_idx": 750,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 20508,
+    "type": "text",
+    "page_idx": 750,
+    "text": "6 To make 12 muffins, you need:"
+  },
+  {
+    "id": 20509,
+    "type": "text",
+    "page_idx": 750,
+    "text": "240g flour"
+  },
+  {
+    "id": 20510,
+    "type": "text",
+    "page_idx": 750,
+    "text": "48g sultanas"
+  },
+  {
+    "id": 20511,
+    "type": "text",
+    "page_idx": 750,
+    "text": "60g margarine"
+  },
+  {
+    "id": 20512,
+    "type": "text",
+    "page_idx": 750,
+    "text": "74ml milk"
+  },
+  {
+    "id": 20513,
+    "type": "text",
+    "page_idx": 750,
+    "text": "24g sugar"
+  },
+  {
+    "id": 20514,
+    "type": "text",
+    "page_idx": 750,
+    "text": "12g salt"
+  },
+  {
+    "id": 20515,
+    "type": "text",
+    "text": "a How much of each ingredient will you need to make 16 muffins?",
+    "page_idx": 750
+  },
+  {
+    "id": 20516,
+    "type": "text",
+    "text": "b Express the amount of flour to margarine in this recipe as a ratio.",
+    "page_idx": 750
+  },
+  {
+    "id": 20517,
+    "type": "text",
+    "text": "7 A vendor sells frozen yoghurt in 250 g and 100 g tubs. It costs $1.75 for 250 g and 80 cents for 100 g. Which is the better buy?",
+    "page_idx": 750
+  },
+  {
+    "id": 20518,
+    "type": "text",
+    "text": "8 A car uses 45 litres of fuel to travel  $495\\mathrm{km}$",
+    "page_idx": 750
+  },
+  {
+    "id": 20519,
+    "type": "text",
+    "text": "a How far can the car travel on  $50\\ell$  of fuel at the same rate?",
+    "page_idx": 750
+  },
+  {
+    "id": 20520,
+    "type": "text",
+    "text": "b How much fuel will the car use to travel  $190\\mathrm{km}$  at the same rate?",
+    "page_idx": 750
+  },
+  {
+    "id": 20521,
+    "type": "text",
+    "page_idx": 750,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 20522,
+    "type": "text",
+    "page_idx": 750,
+    "text": "You used the unitary method and the ratio method to solve ratio problems earlier in this chapter."
+  },
+  {
+    "id": 20523,
+    "type": "text",
+    "page_idx": 750,
+    "text": "TIP"
+  },
+  {
+    "id": 20524,
+    "type": "text",
+    "page_idx": 750,
+    "text": "Familiarise yourself with the language used in word problems involving proportion. This will help you recognise proportion problems in other contexts."
+  },
+  {
+    "id": 20525,
+    "type": "text",
+    "page_idx": 751,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 20526,
+    "type": "text",
+    "page_idx": 751,
+    "text": "This graph shows the directly proportional relationship between lengths in metres (metric) and lengths in feet (imperial)."
+  },
+  {
+    "id": 20527,
+    "type": "image",
+    "page_idx": 751,
+    "img_path": "images/89b2e2e09be5bc55b37756898574bcea5ffdb99e8d839e5852a404cdb7a8c590.jpg"
+  },
+  {
+    "id": 20528,
+    "type": "text",
+    "text": "a Use the graph to estimate how many feet there are in four metres.",
+    "page_idx": 751
+  },
+  {
+    "id": 20529,
+    "type": "text",
+    "text": "b Which is longer:",
+    "page_idx": 751
+  },
+  {
+    "id": 20530,
+    "type": "text",
+    "text": "i four metres or 12 feet?",
+    "page_idx": 751
+  },
+  {
+    "id": 20531,
+    "type": "text",
+    "text": "ii 20 feet or 6.5 metres?",
+    "page_idx": 751
+  },
+  {
+    "id": 20532,
+    "type": "text",
+    "page_idx": 751,
+    "text": "c Mr Bokomo has a length of fabric 9m long."
+  },
+  {
+    "id": 20533,
+    "type": "text",
+    "text": "What is its length to the nearest foot?",
+    "page_idx": 751
+  },
+  {
+    "id": 20534,
+    "type": "text",
+    "text": "ii He cuts and sells  $1.5\\mathrm{m}$  to Ms Johannes and 3 ft to Mr Moosa. How much is left in metres?",
+    "page_idx": 751
+  },
+  {
+    "id": 20535,
+    "type": "text",
+    "page_idx": 751,
+    "text": "d A driveway was originally 18 feet long. It was resurfaced and extended to be one metre longer than previously. How long is the newly resurfaced driveway in metres?"
+  },
+  {
+    "id": 20536,
+    "type": "text",
+    "page_idx": 751,
+    "text": "Inverse proportion"
+  },
+  {
+    "id": 20537,
+    "type": "text",
+    "page_idx": 751,
+    "text": "In inverse proportion, one quantity decreases in the same proportion as the other quantity increases. Think about this in terms of money. If you have $20 to spend on pens, the number of pens you can buy depends on the price."
+  },
+  {
+    "id": 20538,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Price $</td><td>1</td><td>2</td><td>4</td><td>10</td></tr>",
+    "page_idx": 751
+  },
+  {
+    "id": 20539,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number you can buy</td><td>20</td><td>10</td><td>5</td><td>2</td></tr>",
+    "page_idx": 751
+  }
+]
+```

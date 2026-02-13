@@ -1,0 +1,813 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 3850,
+    "type": "text",
+    "page_idx": 115,
+    "text": "3 Once you have your list, check your work against the success criteria."
+  },
+  {
+    "id": 3851,
+    "type": "text",
+    "text": "- Place a tick (✓) in the second column if you can find evidence that you have met each one. (You are looking for how your work shows you have achieved the criteria.)",
+    "page_idx": 115
+  },
+  {
+    "id": 3852,
+    "type": "text",
+    "text": "If you cannot find evidence, write down what you can do to improve in that particular area.",
+    "page_idx": 115
+  },
+  {
+    "id": 3853,
+    "type": "text",
+    "page_idx": 115,
+    "text": "4 Make any improvements that you need to over the next few days and then reassess your work using the same criteria."
+  },
+  {
+    "id": 3854,
+    "type": "text",
+    "page_idx": 115,
+    "text": "TIP"
+  },
+  {
+    "id": 3855,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Success criteria are sometimes called 'what I'm looking for'."
+  },
+  {
+    "id": 3856,
+    "type": "text",
+    "page_idx": 115,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 3857,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Do you know ...?"
+  },
+  {
+    "id": 3858,
+    "type": "text",
+    "page_idx": 115,
+    "text": "A point is position and a line is the shortest distance between two points."
+  },
+  {
+    "id": 3859,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Parallel lines are the same distance apart along their length."
+  },
+  {
+    "id": 3860,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Perpendicular lines meet at right angles."
+  },
+  {
+    "id": 3861,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Acute angles are  $< {90}^{ \\circ  }$  ,right angles are exactly  ${90}^{ \\circ  }$  ,obtuse angles are  $> {90}^{ \\circ  }$  but  $< {180}^{ \\circ  }$  . Straight angles are exactly  ${180}^{ \\circ  }$  . Reflex angles are  $> {180}^{ \\circ  }$  but  $< {360}^{ \\circ  }$  . A complete revolution is  ${360}^{ \\circ  }$  ."
+  },
+  {
+    "id": 3862,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Scalene triangles have no equal sides, isosceles triangles have two equal sides and a pair of equal angles, and equilateral triangles have three equal sides and three equal angles."
+  },
+  {
+    "id": 3863,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Complementary angles have a sum of  $90^{\\circ}$ . Supplementary angles have a sum of  $180^{\\circ}$ ."
+  },
+  {
+    "id": 3864,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Angles on a line have a sum of  $180^{\\circ}$"
+  },
+  {
+    "id": 3865,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Angles round a point have a sum of  $360^{\\circ}$"
+  },
+  {
+    "id": 3866,
+    "type": "text",
+    "page_idx": 115,
+    "text": "Vertically opposite angles are formed when two lines intersect. Vertically opposite angles are equal."
+  },
+  {
+    "id": 3867,
+    "type": "text",
+    "page_idx": 116,
+    "text": "SUMMARY CONTINUED"
+  },
+  {
+    "id": 3868,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Do you know ...?"
+  },
+  {
+    "id": 3869,
+    "type": "text",
+    "page_idx": 116,
+    "text": "When a transversal cuts two parallel lines various angle pairs are formed. Corresponding angles are equal. Alternate angles are equal. Co-interior angles are supplementary."
+  },
+  {
+    "id": 3870,
+    "type": "text",
+    "page_idx": 116,
+    "text": "The angle sum of a triangle is  $180^{\\circ}$"
+  },
+  {
+    "id": 3871,
+    "type": "text",
+    "page_idx": 116,
+    "text": "The exterior angle of a triangle is equal to the sum of the two opposite interior angles."
+  },
+  {
+    "id": 3872,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Quadrilaterals can be classified as parallelograms, rectangles, squares, rhombuses, trapeziums or kites according to their properties."
+  },
+  {
+    "id": 3873,
+    "type": "text",
+    "page_idx": 116,
+    "text": "The angle sum of a quadrilateral is  $360^{\\circ}$ ."
+  },
+  {
+    "id": 3874,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Polygons are many-sided plane shapes. Polygons are named according to the number of sides they have, e.g. pentagon (5), hexagon (6), octagon (8) and decagon (10)."
+  },
+  {
+    "id": 3875,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Regular polygons have equal sides and equal angles."
+  },
+  {
+    "id": 3876,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Irregular polygons have unequal sides and unequal angles."
+  },
+  {
+    "id": 3877,
+    "type": "text",
+    "page_idx": 116,
+    "text": "The angle sum of a polygon is  $(n - 2)\\times 180^{\\circ}$  , where  $n$  is the number of sides."
+  },
+  {
+    "id": 3878,
+    "type": "text",
+    "page_idx": 116,
+    "text": "The angle sum of exterior angles of any convex polygon is  $360^{\\circ}$"
+  },
+  {
+    "id": 3879,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Are you able to ...?"
+  },
+  {
+    "id": 3880,
+    "type": "text",
+    "page_idx": 116,
+    "text": "calculate unknown angles on a line and round a point."
+  },
+  {
+    "id": 3881,
+    "type": "text",
+    "page_idx": 116,
+    "text": "calculate unknown angles using vertically opposite angles and the angle relationships associated with parallel lines"
+  },
+  {
+    "id": 3882,
+    "type": "text",
+    "page_idx": 116,
+    "text": "To calculate unknown angles using the angle properties of triangles, quadrilaterals and polygons,"
+  },
+  {
+    "id": 3883,
+    "type": "text",
+    "page_idx": 116,
+    "text": "accurately measure and construct lines and angles"
+  },
+  {
+    "id": 3884,
+    "type": "text",
+    "page_idx": 116,
+    "text": "construct a triangle using given measurements."
+  },
+  {
+    "id": 3885,
+    "type": "text",
+    "page_idx": 116,
+    "text": "Practice questions"
+  },
+  {
+    "id": 3886,
+    "type": "text",
+    "page_idx": 116,
+    "text": "1 a Measure this line and construct  $AB$  the same length in your book using a ruler and compasses."
+  },
+  {
+    "id": 3887,
+    "type": "text",
+    "page_idx": 116,
+    "text": "A B"
+  },
+  {
+    "id": 3888,
+    "type": "text",
+    "text": "b At point A, measure and draw angle BAC, a  $75^{\\circ}$  angle. [2]",
+    "page_idx": 116
+  },
+  {
+    "id": 3889,
+    "type": "text",
+    "text": "c At point  $B$  measure and draw angle  $ABD$  , an angle of  $125^{\\circ}$  [2]",
+    "page_idx": 116
+  },
+  {
+    "id": 3890,
+    "type": "text",
+    "page_idx": 116,
+    "text": "2 Determine  $x$  in each figure. Give reasons."
+  },
+  {
+    "id": 3891,
+    "type": "text",
+    "page_idx": 116,
+    "text": "a"
+  },
+  {
+    "id": 3892,
+    "type": "image",
+    "page_idx": 116,
+    "img_path": "images/dae9951db14226db3a47bd60b46a966a34159340f5c2eafe9927830fca684454.jpg",
+    "image_caption": "[3]"
+  },
+  {
+    "id": 3893,
+    "type": "text",
+    "page_idx": 116,
+    "text": "b"
+  },
+  {
+    "id": 3894,
+    "type": "image",
+    "page_idx": 116,
+    "img_path": "images/f722cc6bd8b8b5206ea8154437c449b734cf11767420512b26fd02668a55b283.jpg",
+    "image_caption": "[2]"
+  },
+  {
+    "id": 3895,
+    "type": "text",
+    "page_idx": 116,
+    "text": "C"
+  },
+  {
+    "id": 3896,
+    "type": "image",
+    "page_idx": 116,
+    "img_path": "images/706d82b660a3142369d2e3a58095170391ea078e65a1b933c3776154f6a9d99b.jpg",
+    "image_caption": "[2]"
+  },
+  {
+    "id": 3897,
+    "type": "text",
+    "page_idx": 117,
+    "text": "9 Construct triangle  $PQR$  with sides  $PQ = 4.5\\mathrm{cm}$ $QR = 5\\mathrm{cm}$  and  $PR = 7\\mathrm{cm}$  [3]"
+  },
+  {
+    "id": 3898,
+    "type": "text",
+    "text": "10 a Construct a triangle with sizes of length  $5\\mathrm{cm}$ $7\\mathrm{cm}$  and  $9\\mathrm{cm}$  [3]",
+    "page_idx": 117
+  },
+  {
+    "id": 3899,
+    "type": "text",
+    "text": "b Construct the perpendicular bisector of each of the three sides. What do you notice? [3]",
+    "page_idx": 117
+  },
+  {
+    "id": 3900,
+    "type": "text",
+    "text": "c Draw a circle with its centre at the point where the lines intersect and passing through each vertex of the triangle. [3]",
+    "page_idx": 117
+  },
+  {
+    "id": 3901,
+    "type": "text",
+    "text": "Construct a different triangle and repeat b and c above. What do you notice? [3]",
+    "page_idx": 117
+  },
+  {
+    "id": 3902,
+    "type": "text",
+    "text": "11 The sum of the interior angles of a convex polygon is  $5400^{\\circ}$ . Work out how many sides the polygon has. [3]",
+    "page_idx": 117
+  },
+  {
+    "id": 3903,
+    "type": "text",
+    "text": "12 The diagram shows a regular pentagon  $ABCDE$ .",
+    "page_idx": 117
+  },
+  {
+    "id": 3904,
+    "type": "text",
+    "page_idx": 117,
+    "text": "a Find x. [3] b Find y. [3]"
+  },
+  {
+    "id": 3905,
+    "type": "image",
+    "page_idx": 117,
+    "img_path": "images/2a32654b21855cee2f54e3f0029a30450f15c11048a5eb7ce241192099e1dcec.jpg"
+  },
+  {
+    "id": 3906,
+    "type": "text",
+    "page_idx": 117,
+    "text": "13 Regular polygon A has 10 sides and exterior angle  $3x$ . Regular polygon B has exterior angle  $\\frac{5}{3}x$ ."
+  },
+  {
+    "id": 3907,
+    "type": "text",
+    "page_idx": 117,
+    "text": "Work out the number of sides polygon B has. [5]"
+  },
+  {
+    "id": 3908,
+    "type": "text",
+    "page_idx": 117,
+    "text": "14 The diagram shows a triangle and two parallel lines."
+  },
+  {
+    "id": 3909,
+    "type": "text",
+    "text": "a Write down angles UVP and WVQ in terms of  $a$  and  $c$ . Give reasons for your answers.",
+    "page_idx": 117
+  },
+  {
+    "id": 3910,
+    "type": "text",
+    "text": "b Use your answer to a to prove that the sum of the interior angles of a triangle is 180 degrees.",
+    "page_idx": 117
+  },
+  {
+    "id": 3911,
+    "type": "text",
+    "text": "c Write down the exterior angle  $RQV$  in terms of  $c$  [1]",
+    "page_idx": 117
+  },
+  {
+    "id": 3912,
+    "type": "text",
+    "text": "d Use your answers to b and c to show that the exterior angle of a triangle is equal to the sum of the two opposite interior angles. [2]",
+    "page_idx": 117
+  },
+  {
+    "id": 3913,
+    "type": "text",
+    "text": "[3] terms of c. [1]",
+    "page_idx": 117
+  },
+  {
+    "id": 3914,
+    "type": "text",
+    "text": "that the exterior angle of a triangle is interior angles. [2]",
+    "page_idx": 117
+  },
+  {
+    "id": 3915,
+    "type": "image",
+    "page_idx": 117,
+    "img_path": "images/cac2223168bf1aad58fd4011e2ff3c466583a86fc71e520dba39dae427c467e6.jpg"
+  },
+  {
+    "id": 3916,
+    "type": "text",
+    "page_idx": 117,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 3917,
+    "type": "text",
+    "page_idx": 117,
+    "text": "Answer these questions about your work."
+  },
+  {
+    "id": 3918,
+    "type": "text",
+    "page_idx": 117,
+    "text": "Did you..."
+  },
+  {
+    "id": 3919,
+    "type": "text",
+    "text": "choose the right methods and strategies?",
+    "page_idx": 117
+  },
+  {
+    "id": 3920,
+    "type": "text",
+    "text": "show how you arrived at your solutions?",
+    "page_idx": 117
+  },
+  {
+    "id": 3921,
+    "type": "text",
+    "text": "give reasons for any statements you made?",
+    "page_idx": 117
+  },
+  {
+    "id": 3922,
+    "type": "image",
+    "page_idx": 118,
+    "img_path": "images/fcf33436765aab1042fe802f8d22a94bf4695d2dbc451b868cbe013f6f804452.jpg"
+  },
+  {
+    "id": 3923,
+    "type": "text",
+    "page_idx": 118,
+    "text": "Chapter 4"
+  },
+  {
+    "id": 3924,
+    "type": "text",
+    "page_idx": 118,
+    "text": "Collecting,  \norganising and  \ndisplaying data"
+  },
+  {
+    "id": 3925,
+    "type": "text",
+    "page_idx": 118,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 3926,
+    "type": "text",
+    "text": "collect data and classify different types of data",
+    "page_idx": 118
+  },
+  {
+    "id": 3927,
+    "type": "text",
+    "text": "- organise data using tally tables, frequency tables, stem-and-leaf diagrams and two-way tables",
+    "page_idx": 118
+  },
+  {
+    "id": 3928,
+    "type": "text",
+    "text": "- draw pictograms, bar charts and pie charts to display data and answer questions about it.",
+    "page_idx": 118
+  },
+  {
+    "id": 3929,
+    "type": "text",
+    "page_idx": 119,
+    "text": "People collect information for many different reasons. With the right information we can answer questions, make decisions, predict what will happen in the future, compare ourselves with others and understand how things affect our lives. A scientist might collect information from experiments or tests to find out how well a new vaccine is working. A business owner might collect data from surveys to find out how well the business is performing. A teacher might collect test scores to see how well the students perform in an examination and an individual might collect data from magazines or the internet to decide which brand of shoes, jeans, phone or car to buy. The branch of mathematics that deals with collecting data is called statistics. In this chapter, you will focus on asking questions and then collecting information and organising or displaying it so that you can answer questions."
+  },
+  {
+    "id": 3930,
+    "type": "text",
+    "page_idx": 119,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 3931,
+    "type": "text",
+    "page_idx": 119,
+    "text": "1 The person in the photo is doing a survey to find out whether people in a village know what health services are available to them. What other methods can you think of to collect data?"
+  },
+  {
+    "id": 3932,
+    "type": "image",
+    "page_idx": 119,
+    "img_path": "images/b7851c3c8d4b27e096a4e944d8931d3fb9211e5924c017754b65ff938d65e603.jpg"
+  },
+  {
+    "id": 3933,
+    "type": "text",
+    "page_idx": 119,
+    "text": "2 Look at these four graphs carefully. For each one, discuss:"
+  },
+  {
+    "id": 3934,
+    "type": "text",
+    "text": "a what the graph shows",
+    "page_idx": 119
+  },
+  {
+    "id": 3935,
+    "type": "text",
+    "text": "b how you interpret and make sense of the data shown.",
+    "page_idx": 119
+  },
+  {
+    "id": 3936,
+    "type": "text",
+    "text": "c when each type of graph is useful and what type of data is suited to each graph",
+    "page_idx": 119
+  },
+  {
+    "id": 3937,
+    "type": "text",
+    "text": "d how each type of graph can give a misleading or wrong impression of the data.",
+    "page_idx": 119
+  },
+  {
+    "id": 3938,
+    "type": "text",
+    "text": "[Table Row] <tr><td>United States</td><td></td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3939,
+    "type": "text",
+    "text": "[Table Row] <tr><td>China</td><td></td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3940,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Russia</td><td></td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3941,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Great Britain</td><td></td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3942,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Germany</td><td></td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3943,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Key</td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3944,
+    "type": "text",
+    "text": "[Table Row] <tr><td>=4 Medals</td></tr>",
+    "page_idx": 119
+  },
+  {
+    "id": 3945,
+    "type": "text",
+    "page_idx": 119,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 3946,
+    "type": "text",
+    "page_idx": 119,
+    "text": "categorical data class interval continuous data discrete data numerical data qualitative data quantitative data stem-and-leaf diagram two-way table"
+  },
+  {
+    "id": 3947,
+    "type": "image",
+    "page_idx": 120,
+    "img_path": "images/63a1d187772521bf0eacf476a68fb2f938e3bfe64052f5f15903fad4137fe678.jpg",
+    "image_caption": "GETTING STARTED CONTINUED"
+  },
+  {
+    "id": 3948,
+    "type": "image",
+    "page_idx": 120,
+    "img_path": "images/3f8e0c3f6939e43a4c9447a5eacbcd75b4601085806dca312ed3fd1e7414871e.jpg"
+  },
+  {
+    "id": 3949,
+    "type": "image",
+    "page_idx": 120,
+    "img_path": "images/1408f01ae16415b44e24ea1514b52684b073e133557b3387a859d22f3046e91c.jpg"
+  }
+]
+```

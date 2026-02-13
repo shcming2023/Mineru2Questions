@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 5040,
+    "type": "text",
+    "page_idx": 167,
+    "text": "To divide one fraction by another, you multiply the first fraction by the reciprocal of the second fraction."
+  },
+  {
+    "id": 5041,
+    "type": "text",
+    "page_idx": 167,
+    "text": "To find the reciprocal of a fraction you invert it. So, the reciprocal of  $\\frac{3}{4}$  is  $\\frac{4}{3}$  and the reciprocal of  $\\frac{7}{2}$  is  $\\frac{2}{7}$ ."
+  },
+  {
+    "id": 5042,
+    "type": "text",
+    "page_idx": 167,
+    "text": "The reciprocal of  $\\frac{1}{2}$  is  $\\frac{2}{1}$  or just 2 and the reciprocal of 5 is  $\\frac{1}{5}$ ."
+  },
+  {
+    "id": 5043,
+    "type": "text",
+    "page_idx": 167,
+    "text": "When you multiply a fraction by its reciprocal the result is always 1. For example:"
+  },
+  {
+    "id": 5044,
+    "type": "equation",
+    "page_idx": 167,
+    "text": "$$\n\\frac {1}{3} \\times \\frac {3}{1} = 1, \\quad \\frac {3}{8} \\times \\frac {8}{3} = 1 \\quad \\text {a n d} \\quad \\frac {a}{b} \\times \\frac {b}{a} = 1.\n$$"
+  },
+  {
+    "id": 5045,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Look at the example below to understand why this method works."
+  },
+  {
+    "id": 5046,
+    "type": "equation",
+    "page_idx": 167,
+    "text": "$$\n\\frac {5}{1 1} \\div \\frac {1}{2} = \\frac {\\frac {5}{1 1}}{\\frac {1}{2}}\n$$"
+  },
+  {
+    "id": 5047,
+    "type": "text",
+    "page_idx": 167,
+    "text": "To get rid of the fraction  $\\left(\\frac{1}{2}\\right)$  in the denominator, multiply both the numerator and denominator by 2."
+  },
+  {
+    "id": 5048,
+    "type": "equation",
+    "page_idx": 167,
+    "text": "$$\n\\frac {5}{1 1} \\div \\frac {1}{2} = \\frac {\\frac {5}{1 1} \\times \\frac {2}{1}}{\\frac {1}{2} \\times \\frac {2}{1}} = \\frac {\\frac {1 0}{1 1}}{1} = \\frac {1 0}{1 1}\n$$"
+  },
+  {
+    "id": 5049,
+    "type": "text",
+    "page_idx": 167,
+    "text": "If you invert the fraction you are dividing by and multiply, you will give the same answer with fewer steps:"
+  },
+  {
+    "id": 5050,
+    "type": "equation",
+    "page_idx": 167,
+    "text": "$$\n\\frac {5}{1 1} \\div \\frac {1}{2} = \\frac {5}{1 1} \\times \\frac {2}{1} = \\frac {1 0}{1 1}\n$$"
+  },
+  {
+    "id": 5051,
+    "type": "text",
+    "page_idx": 167,
+    "text": "WORKED EXAMPLE 5"
+  },
+  {
+    "id": 5052,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Evaluate each of the following."
+  },
+  {
+    "id": 5053,
+    "type": "text",
+    "page_idx": 167,
+    "text": "a 3 1 4 2"
+  },
+  {
+    "id": 5054,
+    "type": "text",
+    "page_idx": 167,
+    "text": "b 13 2 1 3 4 3 2 3"
+  },
+  {
+    "id": 5055,
+    "type": "text",
+    "page_idx": 167,
+    "text": "5 8 2"
+  },
+  {
+    "id": 5056,
+    "type": "text",
+    "page_idx": 167,
+    "text": "d  $\\frac{6}{7} +3$"
+  },
+  {
+    "id": 5057,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Answers"
+  },
+  {
+    "id": 5058,
+    "type": "text",
+    "page_idx": 167,
+    "text": "a 3 3 2 1"
+  },
+  {
+    "id": 5059,
+    "type": "equation",
+    "page_idx": 167,
+    "text": "$$\n\\begin{array}{l} = \\frac {3}{2} \\\\ = 1 \\frac {1}{2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5060,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Multiply by the reciprocal of  $\\frac{1}{2}$ ."
+  },
+  {
+    "id": 5061,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Use the rules you have learned about multiplying fractions."
+  },
+  {
+    "id": 5062,
+    "type": "text",
+    "page_idx": 167,
+    "text": "b  $1\\frac{3}{4} +2\\frac{1}{3} = \\frac{7}{4} +\\frac{7}{3}$"
+  },
+  {
+    "id": 5063,
+    "type": "equation",
+    "page_idx": 167,
+    "text": "$$\n\\begin{array}{l} = \\frac {1}{4} \\times \\frac {3}{7} \\\\ = \\frac {3}{4} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5064,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Convert the mixed fractions to improper fractions."
+  },
+  {
+    "id": 5065,
+    "type": "text",
+    "page_idx": 167,
+    "text": "Multiply by the reciprocal of  $\\frac{7}{3}$ ."
+  },
+  {
+    "id": 5066,
+    "type": "text",
+    "page_idx": 168,
+    "text": "WORKED EXAMPLE 5 CONTINUED"
+  },
+  {
+    "id": 5067,
+    "type": "text",
+    "page_idx": 168,
+    "text": "c  $\\frac{5}{8} \\div 2 = \\frac{5}{8} \\div \\frac{2}{1}$"
+  },
+  {
+    "id": 5068,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Write 2 as an improper fraction."
+  },
+  {
+    "id": 5069,
+    "type": "equation",
+    "page_idx": 168,
+    "text": "$$\n= \\frac {5}{8} \\times \\frac {1}{2}\n$$"
+  },
+  {
+    "id": 5070,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Multiply by the reciprocal of  $\\frac{2}{1}$ ."
+  },
+  {
+    "id": 5071,
+    "type": "equation",
+    "page_idx": 168,
+    "text": "$$\n= \\frac {5}{1 6}\n$$"
+  },
+  {
+    "id": 5072,
+    "type": "text",
+    "page_idx": 168,
+    "text": "d 6 6 1 7 7 7"
+  },
+  {
+    "id": 5073,
+    "type": "equation",
+    "page_idx": 168,
+    "text": "$$\n= \\frac {2}{7}\n$$"
+  },
+  {
+    "id": 5074,
+    "type": "image",
+    "page_idx": 168,
+    "img_path": "images/a8137e81af4677bfeab90c5742c444cb7ece74c0f06d48f172a03bd299a6e5e8.jpg"
+  },
+  {
+    "id": 5075,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Exercise 5.4"
+  },
+  {
+    "id": 5076,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Evaluate each of the following."
+  },
+  {
+    "id": 5077,
+    "type": "text",
+    "page_idx": 168,
+    "text": "1 1 1 3"
+  },
+  {
+    "id": 5078,
+    "type": "text",
+    "page_idx": 168,
+    "text": "2 2 3 7"
+  },
+  {
+    "id": 5079,
+    "type": "text",
+    "page_idx": 168,
+    "text": "4 7 9"
+  },
+  {
+    "id": 5080,
+    "type": "text",
+    "page_idx": 168,
+    "text": "4 10 11 5"
+  },
+  {
+    "id": 5081,
+    "type": "text",
+    "page_idx": 168,
+    "text": "5 41 1 7"
+  },
+  {
+    "id": 5082,
+    "type": "text",
+    "page_idx": 168,
+    "text": "6  $3\\frac{1}{5}\\div 5\\frac{2}{3}$"
+  },
+  {
+    "id": 5083,
+    "type": "text",
+    "page_idx": 168,
+    "text": "7 7 5 1 12"
+  },
+  {
+    "id": 5084,
+    "type": "text",
+    "page_idx": 168,
+    "text": "8  $3\\frac{1}{4}\\div 3\\frac{1}{2}$"
+  },
+  {
+    "id": 5085,
+    "type": "text",
+    "page_idx": 168,
+    "text": "9 a  $\\left(2\\frac{1}{3} -1\\frac{2}{5}\\right)\\div 1\\frac{1}{3}$"
+  },
+  {
+    "id": 5086,
+    "type": "text",
+    "page_idx": 168,
+    "text": "b 2 1-1 2 1 3"
+  },
+  {
+    "id": 5087,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Fractions with decimals"
+  },
+  {
+    "id": 5088,
+    "type": "text",
+    "page_idx": 168,
+    "text": "In some calculations either the numerator or the denominator, or both, might not be whole numbers. To express these fractions in their simplest forms:"
+  },
+  {
+    "id": 5089,
+    "type": "text",
+    "text": "- find an equivalent fraction where both the numerator and denominator are integers",
+    "page_idx": 168
+  },
+  {
+    "id": 5090,
+    "type": "text",
+    "text": "- check that the equivalent fraction is in its simplest form.",
+    "page_idx": 168
+  },
+  {
+    "id": 5091,
+    "type": "text",
+    "page_idx": 168,
+    "text": "WORKED EXAMPLE 6"
+  },
+  {
+    "id": 5092,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Simplify each of the following fractions."
+  },
+  {
+    "id": 5093,
+    "type": "text",
+    "page_idx": 168,
+    "text": "a 0.1 3"
+  },
+  {
+    "id": 5094,
+    "type": "text",
+    "page_idx": 168,
+    "text": "b  $\\frac{1.3}{2.4}$"
+  },
+  {
+    "id": 5095,
+    "type": "text",
+    "page_idx": 168,
+    "text": "36 0.12"
+  },
+  {
+    "id": 5096,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Answers"
+  },
+  {
+    "id": 5097,
+    "type": "text",
+    "page_idx": 168,
+    "text": "a 0.1 0.1×10 3 3×10"
+  },
+  {
+    "id": 5098,
+    "type": "equation",
+    "page_idx": 168,
+    "text": "$$\n= \\frac {1}{3 0}\n$$"
+  },
+  {
+    "id": 5099,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Multiply 0.1 by 10 to convert 0.1 to an integer."
+  },
+  {
+    "id": 5100,
+    "type": "text",
+    "page_idx": 168,
+    "text": "Make sure the fraction is equivalent by also multiplying the denominator (3) by 10."
+  },
+  {
+    "id": 5101,
+    "type": "text",
+    "page_idx": 168,
+    "text": "TIP"
+  },
+  {
+    "id": 5102,
+    "type": "text",
+    "page_idx": 168,
+    "text": "To divide a fraction by an integer you can either multiply the denominator by the integer, or divide the numerator by the same integer."
+  },
+  {
+    "id": 5103,
+    "type": "text",
+    "page_idx": 169,
+    "text": "WORKED EXAMPLE 6 CONTINUED"
+  },
+  {
+    "id": 5104,
+    "type": "text",
+    "page_idx": 169,
+    "text": "b  $\\frac{1.3}{2.4} = \\frac{1.3 \\times 10}{2.4 \\times 10}$"
+  },
+  {
+    "id": 5105,
+    "type": "equation",
+    "page_idx": 169,
+    "text": "$$\n= \\frac {1 3}{2 4}\n$$"
+  },
+  {
+    "id": 5106,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Multiply both the numerator and denominator by 10 to get integers."
+  },
+  {
+    "id": 5107,
+    "type": "text",
+    "page_idx": 169,
+    "text": "13 and 24 do not have a HCF other than 1, so you cannot simplify the fraction."
+  },
+  {
+    "id": 5108,
+    "type": "text",
+    "page_idx": 169,
+    "text": "36 36×100 0.12 0.12×100"
+  },
+  {
+    "id": 5109,
+    "type": "equation",
+    "page_idx": 169,
+    "text": "$$\n\\begin{array}{l} = \\frac {3 6 0 0}{1 2} \\\\ = 3 0 0 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5110,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Multiply 0.12 by 100 to produce an integer."
+  },
+  {
+    "id": 5111,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Remember to multiply the numerator by 100, so the fraction is equivalent."
+  },
+  {
+    "id": 5112,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Simplify the final fraction by cancelling."
+  },
+  {
+    "id": 5113,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Exercise 5.5"
+  },
+  {
+    "id": 5114,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Simplify each of the following fractions."
+  },
+  {
+    "id": 5115,
+    "type": "text",
+    "page_idx": 169,
+    "text": "0.3 1 12"
+  },
+  {
+    "id": 5116,
+    "type": "text",
+    "page_idx": 169,
+    "text": "0.4 2 0.5"
+  },
+  {
+    "id": 5117,
+    "type": "text",
+    "page_idx": 169,
+    "text": "6 0.7"
+  },
+  {
+    "id": 5118,
+    "type": "text",
+    "page_idx": 169,
+    "text": "0.7 4 0.14"
+  },
+  {
+    "id": 5119,
+    "type": "text",
+    "page_idx": 169,
+    "text": "36 1.5"
+  },
+  {
+    "id": 5120,
+    "type": "text",
+    "page_idx": 169,
+    "text": "6  ${0.3} \\times  \\frac{5}{12}$"
+  },
+  {
+    "id": 5121,
+    "type": "text",
+    "page_idx": 169,
+    "text": "7  $0.4 \\times \\frac{1.5}{1.6}$"
+  },
+  {
+    "id": 5122,
+    "type": "text",
+    "page_idx": 169,
+    "text": "8  $\\frac{2.8}{0.7} \\times \\frac{1.44}{0.6}$"
+  },
+  {
+    "id": 5123,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Further calculations with fractions"
+  },
+  {
+    "id": 5124,
+    "type": "text",
+    "page_idx": 169,
+    "text": "You can use fractions to help you solve problems."
+  },
+  {
+    "id": 5125,
+    "type": "text",
+    "page_idx": 169,
+    "text": "WORKED EXAMPLE 7"
+  },
+  {
+    "id": 5126,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Suppose that  $\\frac{2}{5}$  of the students in a school wear glasses. If the school has 600 students, how many students wear glasses?"
+  },
+  {
+    "id": 5127,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Answer"
+  },
+  {
+    "id": 5128,
+    "type": "equation",
+    "page_idx": 169,
+    "text": "$$\n\\begin{array}{l} \\frac {2}{5} \\text {o f} 6 0 0 = \\frac {2}{5} \\times 6 0 0 \\\\ = \\frac {2}{1 8} \\times \\frac {6 0 0}{1} ^ {1 2 0} \\\\ = 2 \\times 1 2 0 = 2 4 0 \\text {s t d e n t s} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5129,
+    "type": "text",
+    "page_idx": 169,
+    "text": "WORKED EXAMPLE 8"
+  },
+  {
+    "id": 5130,
+    "type": "text",
+    "page_idx": 169,
+    "text": "of the students in a school do not wear glasses. If 360 students do not wear glasses, how many students are there in the whole school?"
+  },
+  {
+    "id": 5131,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Answer"
+  },
+  {
+    "id": 5132,
+    "type": "text",
+    "page_idx": 169,
+    "text": "$\\frac{2}{5}$  of the total is 360, so  $\\frac{1}{5}$  of the total must be half of this, 180."
+  },
+  {
+    "id": 5133,
+    "type": "text",
+    "page_idx": 169,
+    "text": "This means that the total  $\\left(\\frac{5}{5}\\right)$  is  $5 \\times 180 = 900$  students altogether."
+  },
+  {
+    "id": 5134,
+    "type": "text",
+    "page_idx": 169,
+    "text": "TIP"
+  },
+  {
+    "id": 5135,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Remember: a fraction that contains a decimal is not its simplest form."
+  },
+  {
+    "id": 5136,
+    "type": "text",
+    "page_idx": 169,
+    "text": "TIP"
+  },
+  {
+    "id": 5137,
+    "type": "text",
+    "page_idx": 169,
+    "text": "Remember: in Worked example 3, you saw that 'of' is replaced by  $\\times$ ."
+  },
+  {
+    "id": 5138,
+    "type": "text",
+    "page_idx": 170,
+    "text": "Exercise 5.6"
+  },
+  {
+    "id": 5139,
+    "type": "text",
+    "text": "[Table Row] <tr><td>APPLY YOUR SKILLS</td></tr>",
+    "page_idx": 170
+  }
+]
+```

@@ -1,0 +1,10 @@
+<chapter><title>2792</title>
+<qa_pair><label>1</label><type>exercise</type><question>2793,2794,2795,2796,2797</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>2798,2799,2800,2801,2802,2803,2804,2805,2806</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>2807,2808,2809,2810,2811,2812,2813,2814,2815,2816,2817,2818,2819,2820,2821,2822,2823,2824,2825</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>2826,2827,2828,2829</question>
+<solution></solution></qa_pair>
+</chapter>

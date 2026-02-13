@@ -1,0 +1,812 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 20160,
+    "type": "text",
+    "page_idx": 734,
+    "text": "If you cover the letter of the quantity you need to find, then the remaining letters in the triangle give you the calculation you need to do (a multiplication or a division). For example:"
+  },
+  {
+    "id": 20161,
+    "type": "image",
+    "page_idx": 734,
+    "img_path": "images/52508adccffafa8cb5094e4077aab46889d1166d8ac26ba5f90b4c80ae6f9a0e.jpg",
+    "image_caption": "$\\mathbf{D} = \\mathbf{S}\\times \\mathbf{T}$"
+  },
+  {
+    "id": 20162,
+    "type": "image",
+    "page_idx": 734,
+    "img_path": "images/da8c4b5cc7d00a95da3b6454d796d035651ac0903f92472ea69d05a07386a2de.jpg",
+    "image_caption": "$\\mathbf{S} = \\frac{\\mathbf{D}}{\\mathbf{T}}$"
+  },
+  {
+    "id": 20163,
+    "type": "image",
+    "page_idx": 734,
+    "img_path": "images/231b01139d5daa0e0b15ad74ffa5c1246c744e7e60b7068c4a0b84840ba72b36.jpg",
+    "image_caption": "S = D/S"
+  },
+  {
+    "id": 20164,
+    "type": "text",
+    "page_idx": 734,
+    "text": "TIP"
+  },
+  {
+    "id": 20165,
+    "type": "text",
+    "page_idx": 734,
+    "text": "A rate like km/h may sometimes be written kph (the 'p' stands for 'per')."
+  },
+  {
+    "id": 20166,
+    "type": "text",
+    "page_idx": 735,
+    "text": "WORKED EXAMPLE 12"
+  },
+  {
+    "id": 20167,
+    "type": "text",
+    "page_idx": 735,
+    "text": "A bus travels  $210\\mathrm{km}$  in three hours, what is its average speed in  $\\mathrm{km / h}$ ?"
+  },
+  {
+    "id": 20168,
+    "type": "text",
+    "page_idx": 735,
+    "text": "Answer"
+  },
+  {
+    "id": 20169,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\text {S p e e d} = \\frac {D}{T}\n$$"
+  },
+  {
+    "id": 20170,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\text {D i s t a n c e} = 2 1 0 \\mathrm {k m}, \\text {t i m e} = 3 \\mathrm {h}\n$$"
+  },
+  {
+    "id": 20171,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\begin{array}{l} \\therefore \\text {s p e e d} = \\frac {2 1 0}{3} \\\\ = 7 0 \\mathrm {k m} / \\mathrm {h} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20172,
+    "type": "text",
+    "page_idx": 735,
+    "text": "Its average speed is  $70\\mathrm{km / h}$"
+  },
+  {
+    "id": 20173,
+    "type": "image",
+    "page_idx": 735,
+    "img_path": "images/a31f5cc661a9c4022487dca85e6d53fc75802871503a4433b4d37cbe4fb712cf.jpg"
+  },
+  {
+    "id": 20174,
+    "type": "text",
+    "page_idx": 735,
+    "text": "TIP"
+  },
+  {
+    "id": 20175,
+    "type": "text",
+    "page_idx": 735,
+    "text": "When you see the phrases 'how fast', 'how far' or 'for how long' you know you are dealing with a speed, distance or time problem."
+  },
+  {
+    "id": 20176,
+    "type": "text",
+    "page_idx": 735,
+    "text": "LINK"
+  },
+  {
+    "id": 20177,
+    "type": "text",
+    "page_idx": 735,
+    "text": "Nurses and other medical support staff work with ratio and rates when they calculate medicine doses, convert between units of measurement and set the patients' drips to supply the correct amount of fluid per hour."
+  },
+  {
+    "id": 20178,
+    "type": "text",
+    "page_idx": 735,
+    "text": "WORKED EXAMPLE 13"
+  },
+  {
+    "id": 20179,
+    "type": "text",
+    "page_idx": 735,
+    "text": "I walk at  $4.5\\mathrm{km / h}$ . How far can I walk in  $2\\frac{1}{2}$  hours at the same speed?"
+  },
+  {
+    "id": 20180,
+    "type": "text",
+    "page_idx": 735,
+    "text": "Answer"
+  },
+  {
+    "id": 20181,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\text {D i s t a n c e} = S \\times T\n$$"
+  },
+  {
+    "id": 20182,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\text {S p e e d} = 4. 5 \\mathrm {k m} / \\mathrm {h}, \\text {t i m e} = 2. 5 \\mathrm {h}\n$$"
+  },
+  {
+    "id": 20183,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\therefore \\text {d i s t a n c e} = 4. 5 \\times 2. 5 = 1 1. 2 5 \\mathrm {k m}\n$$"
+  },
+  {
+    "id": 20184,
+    "type": "text",
+    "page_idx": 735,
+    "text": "I can walk  $11.25\\mathrm{km}$"
+  },
+  {
+    "id": 20185,
+    "type": "image",
+    "page_idx": 735,
+    "img_path": "images/3828c28e5b83029e008f9939a6508e5573064b0eb18bd19fd09f86b5146185d7.jpg"
+  },
+  {
+    "id": 20186,
+    "type": "text",
+    "page_idx": 735,
+    "text": "WORKED EXAMPLE 14"
+  },
+  {
+    "id": 20187,
+    "type": "text",
+    "page_idx": 735,
+    "text": "How long will it take to cover  $200\\mathrm{km}$  at a speed of  $80\\mathrm{km / h}$ ?"
+  },
+  {
+    "id": 20188,
+    "type": "text",
+    "page_idx": 735,
+    "text": "Answer"
+  },
+  {
+    "id": 20189,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\text {T i m e} = \\frac {D}{S}\n$$"
+  },
+  {
+    "id": 20190,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\text {D i s t a n c e} = 2 0 0 \\mathrm {k m}, \\text {s p e e d} = 8 0 \\mathrm {k m} / \\mathrm {h}\n$$"
+  },
+  {
+    "id": 20191,
+    "type": "equation",
+    "page_idx": 735,
+    "text": "$$\n\\therefore \\text {t i m e} = \\frac {2 0 0}{8 0} = 2. 5\n$$"
+  },
+  {
+    "id": 20192,
+    "type": "text",
+    "page_idx": 735,
+    "text": "It would take  $2\\frac{1}{2}$  hours."
+  },
+  {
+    "id": 20193,
+    "type": "image",
+    "page_idx": 735,
+    "img_path": "images/7c7f7c50cb4f888eec4c990d3be95428147708aa3e4fbad33c00b22d0a9c446e.jpg"
+  },
+  {
+    "id": 20194,
+    "type": "text",
+    "page_idx": 736,
+    "text": "Exercise 21.5"
+  },
+  {
+    "id": 20195,
+    "type": "text",
+    "page_idx": 736,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 20196,
+    "type": "text",
+    "page_idx": 736,
+    "text": "1 Express each of these relationships as a rate in simplest form."
+  },
+  {
+    "id": 20197,
+    "type": "text",
+    "page_idx": 736,
+    "text": "a 12 kg for $5"
+  },
+  {
+    "id": 20198,
+    "type": "text",
+    "page_idx": 736,
+    "text": "b 120 litres for  $1000\\mathrm{km}$"
+  },
+  {
+    "id": 20199,
+    "type": "text",
+    "page_idx": 736,
+    "text": "c $315 for 3 nights"
+  },
+  {
+    "id": 20200,
+    "type": "text",
+    "page_idx": 736,
+    "text": "d 5 km in 20 min"
+  },
+  {
+    "id": 20201,
+    "type": "text",
+    "page_idx": 736,
+    "text": "e 135 students for 5 teachers"
+  },
+  {
+    "id": 20202,
+    "type": "text",
+    "page_idx": 736,
+    "text": "f 15 hours spent per 5 holes dug"
+  },
+  {
+    "id": 20203,
+    "type": "text",
+    "page_idx": 736,
+    "text": "2 A quarry produces 1200 t of crushed stone per hour. How much stone could it supply in:"
+  },
+  {
+    "id": 20204,
+    "type": "text",
+    "page_idx": 736,
+    "text": "a an eight-hour shift?"
+  },
+  {
+    "id": 20205,
+    "type": "text",
+    "page_idx": 736,
+    "text": "b five eight-hour shifts?"
+  },
+  {
+    "id": 20206,
+    "type": "text",
+    "page_idx": 736,
+    "text": "3 Water leaks from a pipe at a rate of  $5\\ell /\\mathrm{h}$  How much water will leak from the pipe in:"
+  },
+  {
+    "id": 20207,
+    "type": "text",
+    "page_idx": 736,
+    "text": "a a day?"
+  },
+  {
+    "id": 20208,
+    "type": "text",
+    "page_idx": 736,
+    "text": "b a week?"
+  },
+  {
+    "id": 20209,
+    "type": "text",
+    "text": "4 A machine fills containers at a rate of 135 containers per minute. How long will it take to fill 1000 containers at the same rate?",
+    "page_idx": 736
+  },
+  {
+    "id": 20210,
+    "type": "text",
+    "text": "5 Two friends walk at  $4.25\\mathrm{km / h}$  How far will they walk in three hours?",
+    "page_idx": 736
+  },
+  {
+    "id": 20211,
+    "type": "text",
+    "text": "6 How far will a train travelling at  $230\\mathrm{km / h}$  travel in:",
+    "page_idx": 736
+  },
+  {
+    "id": 20212,
+    "type": "text",
+    "page_idx": 736,
+    "text": "a 31/2 hours?"
+  },
+  {
+    "id": 20213,
+    "type": "text",
+    "page_idx": 736,
+    "text": "b 20 minutes?"
+  },
+  {
+    "id": 20214,
+    "type": "text",
+    "page_idx": 736,
+    "text": "7 A plane flies at an average speed of  $750\\mathrm{km / h}$  How far will it fly in:"
+  },
+  {
+    "id": 20215,
+    "type": "text",
+    "page_idx": 736,
+    "text": "a four hours?"
+  },
+  {
+    "id": 20216,
+    "type": "text",
+    "page_idx": 736,
+    "text": "b 25 minutes?"
+  },
+  {
+    "id": 20217,
+    "type": "text",
+    "page_idx": 736,
+    "text": "8 How long will it take to travel  $200km$  at:"
+  },
+  {
+    "id": 20218,
+    "type": "text",
+    "page_idx": 736,
+    "text": "a 75 km/h?"
+  },
+  {
+    "id": 20219,
+    "type": "text",
+    "page_idx": 736,
+    "text": "b  $80\\mathrm{km / h?}$"
+  },
+  {
+    "id": 20220,
+    "type": "text",
+    "page_idx": 736,
+    "text": "c  $45\\mathrm{km / h?}$"
+  },
+  {
+    "id": 20221,
+    "type": "text",
+    "page_idx": 736,
+    "text": "d 120km/h?"
+  },
+  {
+    "id": 20222,
+    "type": "text",
+    "page_idx": 736,
+    "text": "e 4m/min?"
+  },
+  {
+    "id": 20223,
+    "type": "text",
+    "text": "9 A train left Cairo at 9p.m. and travelled 880 km to Aswan, arriving at 5 a.m. What was its average speed?",
+    "page_idx": 736
+  },
+  {
+    "id": 20224,
+    "type": "text",
+    "text": "10 A runner completed a  $42\\mathrm{km}$  marathon in two hours 15 minutes. What was their average speed?",
+    "page_idx": 736
+  },
+  {
+    "id": 20225,
+    "type": "text",
+    "text": "11 In August 2009, Usain Bolt of Jamaica set a world record by running 100 m in 9.58 seconds.",
+    "page_idx": 736
+  },
+  {
+    "id": 20226,
+    "type": "text",
+    "text": "a Translate this speed into km/h.",
+    "page_idx": 736
+  },
+  {
+    "id": 20227,
+    "type": "text",
+    "text": "b How long would it take him to run  $420\\mathrm{m}$  if he could run it at this speed?",
+    "page_idx": 736
+  },
+  {
+    "id": 20228,
+    "type": "image",
+    "page_idx": 736,
+    "img_path": "images/2190b2c92b40e8d1e15dce02f6e099f1d6d173ff20da688593c0fa290c8bea37.jpg"
+  },
+  {
+    "id": 20229,
+    "type": "text",
+    "page_idx": 737,
+    "text": "21.4 Kinematic graphs"
+  },
+  {
+    "id": 20230,
+    "type": "text",
+    "page_idx": 737,
+    "text": "Kinematics is the study of how objects move. A kinematic graph may show how far an object moves over time or how its speed changes with time."
+  },
+  {
+    "id": 20231,
+    "type": "text",
+    "page_idx": 737,
+    "text": "Distance-time graphs"
+  },
+  {
+    "id": 20232,
+    "type": "text",
+    "page_idx": 737,
+    "text": "Graphs that show the connection between the distance an object has travelled and the time taken to travel that distance are called distance-time graphs or travel graphs."
+  },
+  {
+    "id": 20233,
+    "type": "text",
+    "page_idx": 737,
+    "text": "On such graphs, time is normally shown along the horizontal axis and distance on the vertical axis."
+  },
+  {
+    "id": 20234,
+    "type": "image",
+    "page_idx": 737,
+    "img_path": "images/e0c6123bfffa82a2403300dfed75e2265886010e6cf036d776732fd07f8b1856.jpg"
+  },
+  {
+    "id": 20235,
+    "type": "text",
+    "page_idx": 737,
+    "text": "TIP"
+  },
+  {
+    "id": 20236,
+    "type": "text",
+    "page_idx": 737,
+    "text": "In travel graphs time is an independent variable and it is always shown on the  $x$ -axis."
+  },
+  {
+    "id": 20237,
+    "type": "text",
+    "page_idx": 737,
+    "text": "Look at the graph. Can you see that it shows the following journey:"
+  },
+  {
+    "id": 20238,
+    "type": "text",
+    "text": "a cycle ride for 4 minutes from home to a bus stop 1 km away",
+    "page_idx": 737
+  },
+  {
+    "id": 20239,
+    "type": "text",
+    "text": "a 2 minute wait for the bus",
+    "page_idx": 737
+  },
+  {
+    "id": 20240,
+    "type": "text",
+    "text": "a 7 km journey on the bus that takes 10 minutes.",
+    "page_idx": 737
+  },
+  {
+    "id": 20241,
+    "type": "text",
+    "page_idx": 737,
+    "text": "The line of the graph remains horizontal while the person is waiting for the bus because they don't get any further from the starting point. The steeper the line, the faster the person is travelling."
+  },
+  {
+    "id": 20242,
+    "type": "text",
+    "page_idx": 737,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 20243,
+    "type": "text",
+    "page_idx": 737,
+    "text": "You learned how to read and draw line graphs in Chapter 4."
+  },
+  {
+    "id": 20244,
+    "type": "text",
+    "page_idx": 737,
+    "text": "WORKED EXAMPLE 15"
+  },
+  {
+    "id": 20245,
+    "type": "text",
+    "page_idx": 737,
+    "text": "Ashraf's school is  $4\\mathrm{km}$  from home and it takes 40 minutes to walk to school. One morning he leaves at 7 a.m. After 15 minutes, he realises he has left his boots at home, so he runs back in 10 minutes. It takes him three minutes to find the boots. He then runs to school at a constant speed. The graph shows his journey."
+  },
+  {
+    "id": 20246,
+    "type": "image",
+    "page_idx": 737,
+    "img_path": "images/aa9bbd7e7504738df49097cf20e4cf0857bd0531843a9b750692e01799896114.jpg"
+  },
+  {
+    "id": 20247,
+    "type": "text",
+    "page_idx": 738,
+    "text": "WORKED EXAMPLE 15 CONTINUED"
+  },
+  {
+    "id": 20248,
+    "type": "text",
+    "text": "a How far had he walked before he remembered his boots?",
+    "page_idx": 738
+  },
+  {
+    "id": 20249,
+    "type": "text",
+    "text": "b What happens to the graph as he returns home?",
+    "page_idx": 738
+  },
+  {
+    "id": 20250,
+    "type": "text",
+    "text": "c What does the horizontal line on the graph represent?",
+    "page_idx": 738
+  },
+  {
+    "id": 20251,
+    "type": "text",
+    "text": "d How fast did he run in m/min to get back home?",
+    "page_idx": 738
+  },
+  {
+    "id": 20252,
+    "type": "image",
+    "page_idx": 738,
+    "img_path": "images/92a455eb390cf6e233e5f0cc42a611480d360e647d32355640499a4bf44c04b1.jpg"
+  },
+  {
+    "id": 20253,
+    "type": "text",
+    "page_idx": 738,
+    "text": "Answers"
+  },
+  {
+    "id": 20254,
+    "type": "text",
+    "text": "a Ashraf walked 1.5 km before he remembered his boots.",
+    "page_idx": 738
+  },
+  {
+    "id": 20255,
+    "type": "text",
+    "text": "b The graph slopes downwards (back towards  $0\\mathrm{km}$ ) as he goes home.",
+    "page_idx": 738
+  },
+  {
+    "id": 20256,
+    "type": "text",
+    "text": "c The horizontal part of the graph corresponds with the three minutes at home.",
+    "page_idx": 738
+  },
+  {
+    "id": 20257,
+    "type": "text",
+    "text": "d He runs  $1.5\\mathrm{km}$  in 10 minutes, an average speed  $150\\mathrm{m / min}$",
+    "page_idx": 738
+  },
+  {
+    "id": 20258,
+    "type": "text",
+    "page_idx": 738,
+    "text": "Exercise 21.6"
+  },
+  {
+    "id": 20259,
+    "type": "text",
+    "page_idx": 738,
+    "text": "APPLY YOUR SKILLS"
+  }
+]
+```

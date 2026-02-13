@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 16940,
+    "type": "text",
+    "page_idx": 584,
+    "text": "Divide by 130 to find  $1\\%$  and then multiply by 100 to find  $100\\%$  (which is the cost price)."
+  },
+  {
+    "id": 16941,
+    "type": "text",
+    "page_idx": 584,
+    "text": "Exercise 17.9"
+  },
+  {
+    "id": 16942,
+    "type": "text",
+    "page_idx": 584,
+    "text": "1 Find the price that each of each of the following items sold for:"
+  },
+  {
+    "id": 16943,
+    "type": "text",
+    "text": "a cost price $130, profit 20%",
+    "page_idx": 584
+  },
+  {
+    "id": 16944,
+    "type": "text",
+    "text": "b cost price $320, profit 25%",
+    "page_idx": 584
+  },
+  {
+    "id": 16945,
+    "type": "text",
+    "text": "cost price $399, loss 15%",
+    "page_idx": 584
+  },
+  {
+    "id": 16946,
+    "type": "text",
+    "text": "d cost price $750, loss 33 3%.",
+    "page_idx": 584
+  },
+  {
+    "id": 16947,
+    "type": "text",
+    "text": "2 Find the selling price of an article that was bought for $750 and sold at a profit of 12%.",
+    "page_idx": 584
+  },
+  {
+    "id": 16948,
+    "type": "text",
+    "text": "3 Calculate the selling price of a car bought for $3000 and sold at a profit of 7.5%.",
+    "page_idx": 584
+  },
+  {
+    "id": 16949,
+    "type": "text",
+    "text": "4 Hakim bought a computer for $500. Two years later he sold it at a loss of 28%. What was his selling price?",
+    "page_idx": 584
+  },
+  {
+    "id": 16950,
+    "type": "text",
+    "text": "5 An article costing $240 is sold at a loss of 8%. Find the selling price.",
+    "page_idx": 584
+  },
+  {
+    "id": 16951,
+    "type": "text",
+    "text": "Kwame makes jewellery and sells it to her friends. Her costs to make ten rings are $377. She wants to sell them and make a 15% profit. What should she charge?",
+    "page_idx": 584
+  },
+  {
+    "id": 16952,
+    "type": "text",
+    "text": "7 Tim sells burgers for $6.50 and makes a profit of $1.43 on each one. What is his percentage profit on cost price?",
+    "page_idx": 584
+  },
+  {
+    "id": 16953,
+    "type": "text",
+    "page_idx": 584,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 16954,
+    "type": "text",
+    "page_idx": 584,
+    "text": "8 VAT at a rate of  $17\\%$  is added each time an item is sold on. The original cost of an item is  $\\$ 112.00$ . The item is sold to a wholesaler, who sells it on to a retailer. The retailer sells it to the public."
+  },
+  {
+    "id": 16955,
+    "type": "text",
+    "text": "a How much tax will the item have incurred?",
+    "page_idx": 584
+  },
+  {
+    "id": 16956,
+    "type": "text",
+    "text": "b Express the tax as a percentage of the original price.",
+    "page_idx": 584
+  },
+  {
+    "id": 16957,
+    "type": "text",
+    "page_idx": 585,
+    "text": "Discount"
+  },
+  {
+    "id": 16958,
+    "type": "text",
+    "page_idx": 585,
+    "text": "If items are not being sold as quickly as a shop would like or if they want to clear a stock as new fashions come out, then goods may be sold at a discount"
+  },
+  {
+    "id": 16959,
+    "type": "text",
+    "page_idx": 585,
+    "text": "Discount can be treated in the same way as percentage change (loss) as long as you remember that the percentage change is always calculated as a percentage of the original amount."
+  },
+  {
+    "id": 16960,
+    "type": "text",
+    "page_idx": 585,
+    "text": "WORKED EXAMPLE 21"
+  },
+  {
+    "id": 16961,
+    "type": "text",
+    "page_idx": 585,
+    "text": "During a sale, a shop offers a discount of  $15\\%$  on a pair of jeans originally priced at $75. What is the sale price?"
+  },
+  {
+    "id": 16962,
+    "type": "text",
+    "page_idx": 585,
+    "text": "Answer"
+  },
+  {
+    "id": 16963,
+    "type": "text",
+    "page_idx": 585,
+    "text": "Discount = 15% of $75"
+  },
+  {
+    "id": 16964,
+    "type": "equation",
+    "page_idx": 585,
+    "text": "$$\n\\begin{array}{l} = \\frac {1 5}{1 0 0} \\times 7 5 \\\\ = \\$ 11.25 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 16965,
+    "type": "text",
+    "page_idx": 585,
+    "text": "Sale price = original price - discount"
+  },
+  {
+    "id": 16966,
+    "type": "equation",
+    "page_idx": 585,
+    "text": "$$\n\\begin{array}{l} = \\$ 75 - 1 1. 2 5 \\\\ = \\$ 63.75 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 16967,
+    "type": "text",
+    "page_idx": 585,
+    "text": "You can also work out the price by considering the sale price as a percentage of  $100\\%$ ."
+  },
+  {
+    "id": 16968,
+    "type": "text",
+    "page_idx": 585,
+    "text": "100 - 15 = 85, so the sale price is 85% of $75:"
+  },
+  {
+    "id": 16969,
+    "type": "equation",
+    "page_idx": 585,
+    "text": "$$\n\\frac {8 5}{1 0 0} \\times 7 5 = \\$ 6 3. 7 5\n$$"
+  },
+  {
+    "id": 16970,
+    "type": "text",
+    "page_idx": 585,
+    "text": "Exercise 17.10"
+  },
+  {
+    "id": 16971,
+    "type": "text",
+    "page_idx": 585,
+    "text": "1 Copy and complete the following table."
+  },
+  {
+    "id": 16972,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Original price ($)</td><td>% discount</td><td>Savings ($)</td><td>Sale price ($)</td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16973,
+    "type": "text",
+    "text": "[Table Row] <tr><td>89.99</td><td>5</td><td></td><td></td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16974,
+    "type": "text",
+    "text": "[Table Row] <tr><td>125.99</td><td>10</td><td></td><td></td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16975,
+    "type": "text",
+    "text": "[Table Row] <tr><td>599.00</td><td>12</td><td></td><td></td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16976,
+    "type": "text",
+    "text": "[Table Row] <tr><td>22.50</td><td>7.5</td><td></td><td></td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16977,
+    "type": "text",
+    "text": "[Table Row] <tr><td>65.80</td><td>2.5</td><td></td><td></td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16978,
+    "type": "text",
+    "text": "[Table Row] <tr><td>10000.00</td><td>23</td><td></td><td></td></tr>",
+    "page_idx": 585
+  },
+  {
+    "id": 16979,
+    "type": "image",
+    "page_idx": 585,
+    "img_path": "images/291ae73c8df32744790f439cd8da3aea4960347bb3a6f8fb7cac52a5146b6ca0.jpg"
+  },
+  {
+    "id": 16980,
+    "type": "text",
+    "page_idx": 586,
+    "text": "2 Calculate the percentage discount given on the following sales. Round your answer to the nearest whole per cent."
+  },
+  {
+    "id": 16981,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Original price ($)</td><td>Sale price ($)</td><td>% discount</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16982,
+    "type": "text",
+    "text": "[Table Row] <tr><td>89.99</td><td>79.99</td><td></td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16983,
+    "type": "text",
+    "text": "[Table Row] <tr><td>125.99</td><td>120.00</td><td></td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16984,
+    "type": "text",
+    "text": "[Table Row] <tr><td>599.00</td><td>450.00</td><td></td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16985,
+    "type": "text",
+    "text": "[Table Row] <tr><td>22.50</td><td>18.50</td><td></td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16986,
+    "type": "text",
+    "text": "[Table Row] <tr><td>65.80</td><td>58.99</td><td></td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16987,
+    "type": "text",
+    "text": "[Table Row] <tr><td>10000.00</td><td>9500.00</td><td></td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 16988,
+    "type": "text",
+    "page_idx": 586,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 16989,
+    "type": "text",
+    "page_idx": 586,
+    "text": "Choose emojis to reflect your thinking at the start of this chapter and your progress as you worked through the topics in this chapter."
+  },
+  {
+    "id": 16990,
+    "type": "text",
+    "page_idx": 586,
+    "text": "Explain why you chose each emoji."
+  },
+  {
+    "id": 16991,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/2d7787af1d12f8e1e8df1ea0049687b0c26880d433065cc50faca26e5d6e3d97.jpg"
+  },
+  {
+    "id": 16992,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/3c653436a7776c0c01a4ab3f1a950206b6c61c99fe3cf06d23fa229a71405fc5.jpg"
+  },
+  {
+    "id": 16993,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/ea2905636f6ddb61ea2acd6e082d87860b41813ca49bbb373459ec82502958c8.jpg"
+  },
+  {
+    "id": 16994,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/ec2d9f9fa48a78b201ef92be4cb3be9dfdb62183a63b4e2df273da9c5ef8da72.jpg"
+  },
+  {
+    "id": 16995,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/50d41419c5f2fde69ae64a75dcf6702e6dc600d0962d2f68c1d7473c7ea11c8a.jpg"
+  },
+  {
+    "id": 16996,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/c43975a876b92cc9ec536aef0791daa1c6640f40f87362b07298e645dd7ddd55.jpg"
+  },
+  {
+    "id": 16997,
+    "type": "image",
+    "page_idx": 586,
+    "img_path": "images/8758dc12beca3d7587f6cb486c3d8d6a4d8abb481388d2c4dae19b3fc706ba01.jpg"
+  },
+  {
+    "id": 16998,
+    "type": "text",
+    "page_idx": 586,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 16999,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Do you know ...?</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17000,
+    "type": "text",
+    "text": "[Table Row] <tr><td>People in employment earn money for the work they do. This money can be paid as wages, salaries, commission or as a fee per item produced (piece work).</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17001,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Gross earnings refers to how much you earn before deductions. Gross earnings - deductions = net earnings. Net earnings are what you actually receive as payment.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17002,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Companies are obliged by law to deduct tax and certain other amounts from earnings.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17003,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Simple interest is calculated per time period as a fixed percentage of the original amount (the principal). The formula for finding simple interest is I = PRT/100.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17004,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Compound interest is interest added to the original amount at set intervals. This increases the principal and further interest is compounded. Most interest in real life situations is compounded.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17005,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The formula for calculating compound interest is V = P(1 + r/100)^n.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17006,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Hire purchase (HP) is a method of buying goods on credit and paying for them in instalments which include a flat rate of interest added to the original price.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17007,
+    "type": "text",
+    "text": "[Table Row] <tr><td>When goods are sold at a profit they are sold for more than they cost. When they are sold at a loss they are sold for less than they cost. The original price is called the cost price. The price they are sold for is called the selling price. If goods are sold at a profit, selling price - cost price = profit. If they are sold at a loss, cost price - selling price = loss.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17008,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A discount is a reduction in the usual price of an item. A discount of 15% means you pay 15% less than the usual price.</td></tr>",
+    "page_idx": 586
+  },
+  {
+    "id": 17009,
+    "type": "text",
+    "page_idx": 587,
+    "text": "SUMMARY CONTINUED"
+  },
+  {
+    "id": 17010,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Are you able to ...?"
+  },
+  {
+    "id": 17011,
+    "type": "text",
+    "page_idx": 587,
+    "text": "use given information to solve problems related to wages, salaries, commission and piece work"
+  },
+  {
+    "id": 17012,
+    "type": "text",
+    "page_idx": 587,
+    "text": "1 read information from tables and charts to work out deductions and tax rates."
+  },
+  {
+    "id": 17013,
+    "type": "text",
+    "page_idx": 587,
+    "text": "calculate gross and net earnings given the relevant information"
+  },
+  {
+    "id": 17014,
+    "type": "text",
+    "page_idx": 587,
+    "text": "I use the formula to calculate simple interest."
+  },
+  {
+    "id": 17015,
+    "type": "text",
+    "page_idx": 587,
+    "text": "(1) manipulate the simple interest formula to calculate the principal amount, rate of interest and time period of a debt or investment"
+  },
+  {
+    "id": 17016,
+    "type": "text",
+    "page_idx": 587,
+    "text": "- solve problems related to HP payments and amounts"
+  },
+  {
+    "id": 17017,
+    "type": "text",
+    "page_idx": 587,
+    "text": "To calculate compound interest over a given time period and solve problems related to compound interest"
+  },
+  {
+    "id": 17018,
+    "type": "text",
+    "page_idx": 587,
+    "text": "use exponential growth and decay in relation to finance and population changes"
+  },
+  {
+    "id": 17019,
+    "type": "text",
+    "page_idx": 587,
+    "text": "To calculate the selling price, percentage profit or loss and actual mark up using given rates and prices,"
+  },
+  {
+    "id": 17020,
+    "type": "text",
+    "page_idx": 587,
+    "text": "calculate the cost price using given rates and prices"
+  },
+  {
+    "id": 17021,
+    "type": "text",
+    "page_idx": 587,
+    "text": "work out the actual price of a discounted item and calculate the percentage discount given the original and the new price."
+  },
+  {
+    "id": 17022,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Practice questions"
+  },
+  {
+    "id": 17023,
+    "type": "text",
+    "page_idx": 587,
+    "text": "1 Kolo is paid $10.48 per hour for a standard 36-hour week. He is paid 'time-and-a-half' for all overtime worked. Calculate:"
+  },
+  {
+    "id": 17024,
+    "type": "text",
+    "text": "a his gross weekly earnings if he works  $4\\frac{3}{4}$  hours overtime [3]",
+    "page_idx": 587
+  },
+  {
+    "id": 17025,
+    "type": "text",
+    "text": "b the hours overtime worked if he earns $420.75 for the week. [3]",
+    "page_idx": 587
+  },
+  {
+    "id": 17026,
+    "type": "text",
+    "page_idx": 587,
+    "text": "2 Ahmed bought a book for $15. He sold it to Barbara, making a 20% loss."
+  },
+  {
+    "id": 17027,
+    "type": "text",
+    "text": "a Calculate how much Barbara paid for it. [3]",
+    "page_idx": 587
+  },
+  {
+    "id": 17028,
+    "type": "text",
+    "text": "b Barbara later sold the book to Luvuyo. She made a  $20\\%$  profit.",
+    "page_idx": 587
+  },
+  {
+    "id": 17029,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Calculate how much Luvuyo paid for it. [3]"
+  },
+  {
+    "id": 17030,
+    "type": "text",
+    "page_idx": 587,
+    "text": "3 Last year, Salma's wages were $94 per week. Her wages are now $102 per week."
+  },
+  {
+    "id": 17031,
+    "type": "text",
+    "page_idx": 587,
+    "text": "Calculate the percentage increase. [3]"
+  },
+  {
+    "id": 17032,
+    "type": "text",
+    "page_idx": 587,
+    "text": "4 Yasmin is making iced lollies to sell outside her house on a hot day. She spends"
+  },
+  {
+    "id": 17033,
+    "type": "text",
+    "page_idx": 587,
+    "text": "$25.55 on the ingredients. Yasmin uses all of the ingredients to sell 35 lollies at"
+  },
+  {
+    "id": 17034,
+    "type": "text",
+    "page_idx": 587,
+    "text": "S1.25 each. Calculate:"
+  },
+  {
+    "id": 17035,
+    "type": "text",
+    "text": "a the total profit made [2]",
+    "page_idx": 587
+  },
+  {
+    "id": 17036,
+    "type": "text",
+    "text": "b the percentage profit. [2]",
+    "page_idx": 587
+  },
+  {
+    "id": 17037,
+    "type": "text",
+    "text": "5 Calculate the simple interest on $160 invested at 7% per year for three years. [2]",
+    "page_idx": 588
+  },
+  {
+    "id": 17038,
+    "type": "text",
+    "text": "6 Senor Vasquez invests $500 in a Government Bond, at 9% compound interest per year. Calculate the value of the Bond after three years. [3]",
+    "page_idx": 588
+  },
+  {
+    "id": 17039,
+    "type": "text",
+    "text": "7 Simon's salary has increased by 6% p.a. over the past three years. It is now $35 730.40 p.a.",
+    "page_idx": 588
+  }
+]
+```

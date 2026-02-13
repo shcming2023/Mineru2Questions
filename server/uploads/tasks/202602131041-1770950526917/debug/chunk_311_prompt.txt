@@ -1,0 +1,815 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 21770,
+    "type": "text",
+    "text": "the direction of the turn (clockwise or anti-clockwise).",
+    "page_idx": 797
+  },
+  {
+    "id": 21771,
+    "type": "text",
+    "page_idx": 797,
+    "text": "You can use thin paper or tracing paper to help you with rotations:"
+  },
+  {
+    "id": 21772,
+    "type": "text",
+    "text": "1 Trace the shape and label the vertices.",
+    "page_idx": 797
+  },
+  {
+    "id": 21773,
+    "type": "text",
+    "text": "2 Place the tracing over the object.",
+    "page_idx": 797
+  },
+  {
+    "id": 21774,
+    "type": "text",
+    "text": "3 Use the point of a pair of compasses or pen to hold the paper at the point (centre) of rotation.",
+    "page_idx": 797
+  },
+  {
+    "id": 21775,
+    "type": "text",
+    "text": "4 Turn the paper through the given turn.",
+    "page_idx": 797
+  },
+  {
+    "id": 21776,
+    "type": "text",
+    "text": "5 The new position of the shape is the image.",
+    "page_idx": 797
+  },
+  {
+    "id": 21777,
+    "type": "text",
+    "page_idx": 797,
+    "text": "TIP"
+  },
+  {
+    "id": 21778,
+    "type": "text",
+    "page_idx": 797,
+    "text": "The centre of rotation will normally be the origin (0, 0), a vertex of the shape or the midpoint of a side of the shape. The amount of turn will normally be a multiple of  $90^{\\circ}$ ."
+  },
+  {
+    "id": 21779,
+    "type": "text",
+    "page_idx": 797,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 21780,
+    "type": "text",
+    "page_idx": 797,
+    "text": "Rotate this shape  $90^{\\circ}$  clockwise about:"
+  },
+  {
+    "id": 21781,
+    "type": "text",
+    "text": "a the origin (label the image  $A'^{'}B'^{'}C'^{'}D'^{'}$",
+    "page_idx": 797
+  },
+  {
+    "id": 21782,
+    "type": "text",
+    "text": "b point  $A$  (label the image  $A^{\\prime \\prime}B^{\\prime \\prime}C^{\\prime \\prime}D^{\\prime \\prime}$",
+    "page_idx": 797
+  },
+  {
+    "id": 21783,
+    "type": "image",
+    "page_idx": 797,
+    "img_path": "images/e75ae821c6c430471ae4af05be1cf8ae921a1b712175e86f6819801f18eadc2a.jpg"
+  },
+  {
+    "id": 21784,
+    "type": "text",
+    "page_idx": 797,
+    "text": "Answers"
+  },
+  {
+    "id": 21785,
+    "type": "image",
+    "page_idx": 797,
+    "img_path": "images/ce662220de0023dc90989a993b582e3b3a87157607b7ce96941df81ab2f66d73.jpg"
+  },
+  {
+    "id": 21786,
+    "type": "text",
+    "page_idx": 798,
+    "text": "Exercise 23.2"
+  },
+  {
+    "id": 21787,
+    "type": "text",
+    "page_idx": 798,
+    "text": "1 Copy the diagrams in parts (a) to (c)."
+  },
+  {
+    "id": 21788,
+    "type": "text",
+    "page_idx": 798,
+    "text": "Draw the images of the given triangle under the rotations described."
+  },
+  {
+    "id": 21789,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/05ea8998824a9c10c8fd8cdc03df8fcdba14969aac010f7c1a0b1c5a1a8fba2b.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 21790,
+    "type": "text",
+    "page_idx": 798,
+    "text": "Centre of rotation (0, 0); angle of rotation  $90^{\\circ}$  anti-clockwise."
+  },
+  {
+    "id": 21791,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/ef811dd6ae38e7d7d4dbee7e1976aa428c2a0dfdb388e7be59f3d039c623ea06.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 21792,
+    "type": "text",
+    "page_idx": 798,
+    "text": "Centre of rotation (3, 1); angle of rotation  $180^{\\circ}$ . (Note that (3, 1) is the midpoint of  $AB$ .)"
+  },
+  {
+    "id": 21793,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/83048cc667cf927d53b8d692f072b5c6096c16b07b244a8319b82ad8f38a637b.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 21794,
+    "type": "text",
+    "page_idx": 798,
+    "text": "Centre of rotation  $(-1,0)$ ; angle of rotation  $180^{\\circ}$ ."
+  },
+  {
+    "id": 21795,
+    "type": "text",
+    "page_idx": 798,
+    "text": "2 Shapes A to E and their images are shown on the grid. For each shape, fully describe each rotation."
+  },
+  {
+    "id": 21796,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/8df84eb84494c89153d127d7311481da08b69900cebe52d80c2ea154854ab2a8.jpg"
+  },
+  {
+    "id": 21797,
+    "type": "text",
+    "page_idx": 798,
+    "text": "3 Fully describe the rotation that maps triangle  $ABC$  onto triangle  $A'B'C'$  in each case."
+  },
+  {
+    "id": 21798,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/8f1673dd2b3fb392d7db4df8263da3dc7825aef3966661631c0b65f1ada7d149.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 21799,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/15c44380b1cb367b2731fb852a0e3be5f0fc3b9f469a0c25096eb67256683fb1.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 21800,
+    "type": "image",
+    "page_idx": 798,
+    "img_path": "images/09a2acdc30605b0f174bfffad584147b74a8b13a4d549d5237cd0c4a24786443.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 21801,
+    "type": "text",
+    "page_idx": 798,
+    "text": "TIP"
+  },
+  {
+    "id": 21802,
+    "type": "text",
+    "page_idx": 798,
+    "text": "To fully describe a rotation, you must give the centre of rotation as well as the angle and direction of the rotation."
+  },
+  {
+    "id": 21803,
+    "type": "text",
+    "page_idx": 799,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 21804,
+    "type": "text",
+    "page_idx": 799,
+    "text": "4 Kofi wants to rearrange the furniture in a room. This scale diagram shows the original layout of the room."
+  },
+  {
+    "id": 21805,
+    "type": "image",
+    "page_idx": 799,
+    "img_path": "images/efce28b47717e7bfadada9a83eca4f6b22c2a3dbabd16cb38caf01f9f25c787f.jpg"
+  },
+  {
+    "id": 21806,
+    "type": "text",
+    "page_idx": 799,
+    "text": "Is it possible for Kofi to rotate all the furniture through point  $(0,0)$  by the following amounts and for the furniture still to fit into the room?"
+  },
+  {
+    "id": 21807,
+    "type": "text",
+    "text": "a  $90^{\\circ}$  clockwise",
+    "page_idx": 799
+  },
+  {
+    "id": 21808,
+    "type": "text",
+    "text": "b  $90^{\\circ}$  anti-clockwise",
+    "page_idx": 799
+  },
+  {
+    "id": 21809,
+    "type": "text",
+    "text": "c  $180^{\\circ}$  clockwise",
+    "page_idx": 799
+  },
+  {
+    "id": 21810,
+    "type": "text",
+    "page_idx": 799,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 21811,
+    "type": "text",
+    "page_idx": 799,
+    "text": "Identifying the reasons for mistakes"
+  },
+  {
+    "id": 21812,
+    "type": "text",
+    "page_idx": 799,
+    "text": "Research shows that mistakes are often related to misconceptions or misunderstanding and that simply finding and correcting mistakes does not help to prevent similar mistakes in the future."
+  },
+  {
+    "id": 21813,
+    "type": "text",
+    "text": "Identify any mistakes you made in this exercise.",
+    "page_idx": 799
+  },
+  {
+    "id": 21814,
+    "type": "text",
+    "text": "- Analyse why you made these mistakes. Decide if you were careless or whether you misunderstood any of the concepts.",
+    "page_idx": 799
+  },
+  {
+    "id": 21815,
+    "type": "text",
+    "text": "- Suggest one thing you will do so that you don't make similar mistakes in the future.",
+    "page_idx": 799
+  },
+  {
+    "id": 21816,
+    "type": "text",
+    "page_idx": 799,
+    "text": "Translation"
+  },
+  {
+    "id": 21817,
+    "type": "text",
+    "page_idx": 799,
+    "text": "A translation, or slide, is the movement of an object over a specified distance along a line. The object is not twisted or turned. The movement is indicated by positive or negative signs according to the direction of movement along the axes of a plane. For example, movements to the left or down are negative and movements to the right or up are positive."
+  },
+  {
+    "id": 21818,
+    "type": "text",
+    "page_idx": 800,
+    "text": "You can describe a translation using a column vector:  $\\binom{x}{y}$ . This means a movement of  $x$  units in the  $x$ -direction (left or right) and a movement of  $y$  units in the  $y$ -direction (up or down). So, for example, a translation of  $\\binom{2}{-3}$  means the object moves two units to the right and three units down."
+  },
+  {
+    "id": 21819,
+    "type": "text",
+    "page_idx": 800,
+    "text": "In this diagram, the triangle T is translated to five positions. Each translation is described below the diagram:"
+  },
+  {
+    "id": 21820,
+    "type": "image",
+    "page_idx": 800,
+    "img_path": "images/e2ca989687abafeb54ebbaf9456f9e2ac3e6df5d9983fe6ca17d1c3a73c684d0.jpg"
+  },
+  {
+    "id": 21821,
+    "type": "text",
+    "page_idx": 800,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 21822,
+    "type": "text",
+    "page_idx": 800,
+    "text": "You will deal with vectors in more detail later in this chapter."
+  },
+  {
+    "id": 21823,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Position 1  $\\left( \\begin{array}{l}7\\\\ 0 \\end{array} \\right)$"
+  },
+  {
+    "id": 21824,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Position 2  $\\begin{array}{r}\\left( \\begin{array}{l}0\\\\ 4 \\end{array} \\right) \\end{array}$"
+  },
+  {
+    "id": 21825,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Position 3  $\\left( \\begin{array}{l} - 7\\\\ 0 \\end{array} \\right)$"
+  },
+  {
+    "id": 21826,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Position 4  $\\left( \\begin{array}{l}0\\\\ -8 \\end{array} \\right)$"
+  },
+  {
+    "id": 21827,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Position 5  $\\binom{7}{-8}$"
+  },
+  {
+    "id": 21828,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Properties of translation"
+  },
+  {
+    "id": 21829,
+    "type": "text",
+    "text": "A translation moves every point in an object the same distance in the same direction, so you can describe the translation of the whole object by describing the translation of any one point.",
+    "page_idx": 800
+  },
+  {
+    "id": 21830,
+    "type": "text",
+    "text": "To specify the translation, give both the distance and direction of the translation using a column vector  $\\binom{x}{y}$ .",
+    "page_idx": 800
+  },
+  {
+    "id": 21831,
+    "type": "text",
+    "text": "No part of the object is invariant.",
+    "page_idx": 800
+  },
+  {
+    "id": 21832,
+    "type": "text",
+    "text": "The object and the image are congruent.",
+    "page_idx": 800
+  },
+  {
+    "id": 21833,
+    "type": "text",
+    "page_idx": 800,
+    "text": "TIP"
+  },
+  {
+    "id": 21834,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Be careful when writing column vectors. There is no dividing line, so they should not look like fractions."
+  },
+  {
+    "id": 21835,
+    "type": "text",
+    "page_idx": 800,
+    "text": "Write  $\\binom{3}{8}$  rather"
+  },
+  {
+    "id": 21836,
+    "type": "text",
+    "page_idx": 800,
+    "text": "than  $\\left(\\frac{3}{8}\\right)$  they mean different things."
+  },
+  {
+    "id": 21837,
+    "type": "text",
+    "page_idx": 801,
+    "text": "Exercise 23.3"
+  },
+  {
+    "id": 21838,
+    "type": "text",
+    "page_idx": 801,
+    "text": "1 Draw sketches to illustrate the following translations:"
+  },
+  {
+    "id": 21839,
+    "type": "text",
+    "text": "a square translated 6cm to the left",
+    "page_idx": 801
+  },
+  {
+    "id": 21840,
+    "type": "text",
+    "text": "b a triangle translated 5cm to the right.",
+    "page_idx": 801
+  },
+  {
+    "id": 21841,
+    "type": "text",
+    "page_idx": 801,
+    "text": "2 Write column vectors to describe the translations from A to B and from A to C in each of the following diagrams."
+  },
+  {
+    "id": 21842,
+    "type": "text",
+    "page_idx": 801,
+    "text": "a"
+  },
+  {
+    "id": 21843,
+    "type": "image",
+    "page_idx": 801,
+    "img_path": "images/4f8af933e524bd2f19ae1a08530f37bc2e7df6437bede192cc74862955a84ba4.jpg"
+  },
+  {
+    "id": 21844,
+    "type": "text",
+    "page_idx": 801,
+    "text": "b"
+  },
+  {
+    "id": 21845,
+    "type": "image",
+    "page_idx": 801,
+    "img_path": "images/0dd23df0ef728069d4db45377c4560316eb82009a76adce15ee675f6895456e6.jpg"
+  },
+  {
+    "id": 21846,
+    "type": "text",
+    "page_idx": 801,
+    "text": "C"
+  },
+  {
+    "id": 21847,
+    "type": "image",
+    "page_idx": 801,
+    "img_path": "images/76e1d10343a96bff766252b8695bfc66429940bfdd24dab223171b2f52413cb1.jpg"
+  },
+  {
+    "id": 21848,
+    "type": "text",
+    "page_idx": 801,
+    "text": "3 Copy the diagram onto squared paper. Translate the triangle ABC:"
+  },
+  {
+    "id": 21849,
+    "type": "text",
+    "text": "a three units to the right and two units down",
+    "page_idx": 801
+  },
+  {
+    "id": 21850,
+    "type": "text",
+    "text": "b three units to the left and two units down",
+    "page_idx": 801
+  },
+  {
+    "id": 21851,
+    "type": "text",
+    "text": "c three units up and one unit to the left",
+    "page_idx": 801
+  },
+  {
+    "id": 21852,
+    "type": "text",
+    "text": "d three units down and four units right.",
+    "page_idx": 801
+  },
+  {
+    "id": 21853,
+    "type": "image",
+    "page_idx": 801,
+    "img_path": "images/e087847bdba6179058c8b82889feb94ff0efa179edff45343ebd7fc6cf7b19db.jpg"
+  },
+  {
+    "id": 21854,
+    "type": "text",
+    "page_idx": 801,
+    "text": "TIP"
+  },
+  {
+    "id": 21855,
+    "type": "text",
+    "page_idx": 801,
+    "text": "The phrase 'under the translation  $\\binom{2}{-3}$"
+  },
+  {
+    "id": 21856,
+    "type": "text",
+    "page_idx": 801,
+    "text": "means the same as after translating"
+  },
+  {
+    "id": 21857,
+    "type": "text",
+    "page_idx": 801,
+    "text": "using the vector  $\\binom{2}{-3}$"
+  },
+  {
+    "id": 21858,
+    "type": "text",
+    "page_idx": 801,
+    "text": "4 On squared paper, draw  $x$ - and  $y$ -axes and mark the points  $A(3,5)$ ,  $B(2,1)$  and  $C(-1,4)$ ."
+  },
+  {
+    "id": 21859,
+    "type": "text",
+    "text": "a Draw triangle  $A'B'C'$ , the image of triangle  $ABC$  under the translation  $\\left(-\\frac{2}{3}\\right)$ .",
+    "page_idx": 801
+  },
+  {
+    "id": 21860,
+    "type": "text",
+    "text": "b Draw triangle  $A^{\\prime \\prime}B^{\\prime \\prime}C^{\\prime \\prime}$  , the image of ABC under the translation  $\\binom{4}{1}$",
+    "page_idx": 801
+  },
+  {
+    "id": 21861,
+    "type": "text",
+    "page_idx": 801,
+    "text": "5 Triangle  $XYZ$  with  $X(3,1)$ ,  $Y(2,6)$  and  $Z(-1, -5)$  is transformed onto triangle  $X'Y'Z'$  by a translation of  $\\left( \\begin{array}{c}4\\\\ -2 \\end{array} \\right)$ . Determine the coordinates of  $X', Y'$  and  $Z'$ ."
+  },
+  {
+    "id": 21862,
+    "type": "text",
+    "page_idx": 802,
+    "text": "6 A rectangle  $MNOP$  with vertices  $M(1,6),N(6,6),O(6,3)$  and  $P(1,3)$  is transformed by the translation  $\\binom{-3}{2}$  to produce rectangle  $M^{\\prime}N^{\\prime}O^{\\prime}P^{\\prime}$"
+  },
+  {
+    "id": 21863,
+    "type": "text",
+    "text": "a Represent this translation accurately on a set of axes.",
+    "page_idx": 802
+  },
+  {
+    "id": 21864,
+    "type": "text",
+    "text": "b Give the coordinates of the vertices of the image.",
+    "page_idx": 802
+  },
+  {
+    "id": 21865,
+    "type": "text",
+    "page_idx": 802,
+    "text": "Enlargement"
+  },
+  {
+    "id": 21866,
+    "type": "text",
+    "page_idx": 802,
+    "text": "When you enlarge a shape, you make it bigger (or smaller). In an enlargement the lengths of sides on the object are multiplied by a constant scale factor  $(k)$  to form the image. The sizes of angles do not change during an enlargement, so the object and its image are similar. To find the scale factor, you use the ratio of corresponding sides on the object and the image:"
+  },
+  {
+    "id": 21867,
+    "type": "equation",
+    "page_idx": 802,
+    "text": "$$\n\\text {S c a l e} = \\frac {\\text {i m a g e} \\text {l e n g t h}}{\\text {o r i g i n a l} \\text {l e n g t h}}\n$$"
+  },
+  {
+    "id": 21868,
+    "type": "text",
+    "page_idx": 802,
+    "text": "If the scale factor is given, you can find the lengths of corresponding sides by multiplication."
+  },
+  {
+    "id": 21869,
+    "type": "text",
+    "page_idx": 802,
+    "text": "This diagram shows a square which has been enlarged by a scale factor of 1.5."
+  }
+]
+```

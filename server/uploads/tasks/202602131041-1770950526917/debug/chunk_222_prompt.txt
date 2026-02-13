@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 15540,
+    "type": "text",
+    "page_idx": 516,
+    "text": "sin5° and sin175°"
+  },
+  {
+    "id": 15541,
+    "type": "text",
+    "page_idx": 516,
+    "text": "What did you notice? What is the relationship between the two angles in each pair?"
+  },
+  {
+    "id": 15542,
+    "type": "text",
+    "page_idx": 516,
+    "text": "Now do the same for these pairs:"
+  },
+  {
+    "id": 15543,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos30°and cos330°</td><td>tan30°and tan210°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15544,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos60°and cos300°</td><td>tan60°and tan240°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15545,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos50°and cos310°</td><td>tan15°and tan195°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15546,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos15°and cos345°</td><td>tan100and tan280°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15547,
+    "type": "text",
+    "page_idx": 516,
+    "text": "The pattern is different for each of sine, cosine and tangent."
+  },
+  {
+    "id": 15548,
+    "type": "text",
+    "page_idx": 516,
+    "text": "Try plotting the value of  $\\sin \\theta$ ,  $\\cos \\theta$  and  $\\tan \\theta$  against  $\\theta$  for several values of  $\\theta$ . You can find a graph plotting website on the internet, using a search."
+  },
+  {
+    "id": 15549,
+    "type": "text",
+    "page_idx": 516,
+    "text": "In the rest of this section you will explore the graphs of  $y = \\sin \\theta$ ,  $y = \\cos \\theta$  and  $y = \\tan \\theta$  in more detail."
+  },
+  {
+    "id": 15550,
+    "type": "text",
+    "page_idx": 516,
+    "text": "The graph of  $y = \\sin \\theta$"
+  },
+  {
+    "id": 15551,
+    "type": "text",
+    "page_idx": 516,
+    "text": "If you plot several values of  $\\sin \\theta$  against  $\\theta$  you will get the following:"
+  },
+  {
+    "id": 15552,
+    "type": "image",
+    "page_idx": 516,
+    "img_path": "images/1351543302a9f2bde0745177ce640f47c87cd58082f74ed69d0c9cab813178c5.jpg"
+  },
+  {
+    "id": 15553,
+    "type": "text",
+    "page_idx": 517,
+    "text": "The graph repeats itself every  $360^{\\circ}$  in both the positive and negative directions."
+  },
+  {
+    "id": 15554,
+    "type": "text",
+    "page_idx": 517,
+    "text": "Notice that the section of the graph between 0 and  $180^{\\circ}$  has reflection symmetry, with the line of reflection being  $\\theta = 90^{\\circ}$ . This means that  $\\sin \\theta = \\sin (180^{\\circ} - \\theta)$ , exactly as you should have seen in the investigation."
+  },
+  {
+    "id": 15555,
+    "type": "text",
+    "page_idx": 517,
+    "text": "It is also very important to notice that the value of  $\\sin \\theta$  is never larger than 1 nor smaller than  $-1$ ."
+  },
+  {
+    "id": 15556,
+    "type": "text",
+    "page_idx": 517,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15557,
+    "type": "text",
+    "page_idx": 517,
+    "text": "sinθ, cosθ and tanθ are actually functions. Functions take input values and give you a numerical output. For example, if you use your calculator to find sin 30° you will get the answer  $\\frac{1}{2}$ . Your calculator takes the input 30°, finds the sine of this angle and gives you the output  $\\frac{1}{2}$ . You will learn more about functions in Chapter 22."
+  },
+  {
+    "id": 15558,
+    "type": "text",
+    "page_idx": 517,
+    "text": "The graph of  $y = \\cos \\theta$"
+  },
+  {
+    "id": 15559,
+    "type": "text",
+    "page_idx": 517,
+    "text": "If you plot several values of  $\\cos \\theta$  against  $\\theta$  you will get a similar shape, but the line of symmetry is in a different place:"
+  },
+  {
+    "id": 15560,
+    "type": "image",
+    "page_idx": 517,
+    "img_path": "images/b4ffb9e3075a19757d4bf31114115bf72de6d0be91e79cf9e75ebf5f727fd146.jpg"
+  },
+  {
+    "id": 15561,
+    "type": "text",
+    "page_idx": 517,
+    "text": "The graph repeats itself every  $360^{\\circ}$  in both the positive and negative directions."
+  },
+  {
+    "id": 15562,
+    "type": "text",
+    "page_idx": 517,
+    "text": "Here the graph is symmetrical from 0 to  $360^{\\circ}$ , with the reflection line at  $\\theta = 180^{\\circ}$ . This means that  $\\cos \\theta = \\cos (360^{\\circ} - \\theta)$ , again you should have seen this in the investigation. By experimenting with some angles you will also see that  $\\cos \\theta = -\\cos (180^{\\circ} - \\theta)$"
+  },
+  {
+    "id": 15563,
+    "type": "text",
+    "page_idx": 517,
+    "text": "It is also very important to notice that the value of  $\\cos \\theta$  is never larger than 1 normally smaller than  $-1$ ."
+  },
+  {
+    "id": 15564,
+    "type": "text",
+    "page_idx": 518,
+    "text": "The graph of  $y = \\tan \\theta$"
+  },
+  {
+    "id": 15565,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Finally, if you plot values of  $\\tan \\theta$  against  $\\theta$  you get this graph:"
+  },
+  {
+    "id": 15566,
+    "type": "image",
+    "page_idx": 518,
+    "img_path": "images/b08b12ad49132a15eccd888bf16faede9b13344d0f4fd2f8be0c6b1de94219d4.jpg"
+  },
+  {
+    "id": 15567,
+    "type": "text",
+    "page_idx": 518,
+    "text": "The graph approaches the vertical dotted lines, but it never touches nor crosses them."
+  },
+  {
+    "id": 15568,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Notice that this graph has no reflection symmetry, but it does repeat every  $180^{\\circ}$ . This means that  $\\tan \\theta = \\tan (180^{\\circ} + \\theta)$ ."
+  },
+  {
+    "id": 15569,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Note that, unlike  $\\sin \\theta$  and  $\\cos \\theta$ ,  $\\tan \\theta$  is not restricted to being less than 1 or greater than -1."
+  },
+  {
+    "id": 15570,
+    "type": "text",
+    "page_idx": 518,
+    "text": "The shapes of these three graphs means that equations involving sine, cosine or tangent will have multiple solutions. The following examples show you how you can find these."
+  },
+  {
+    "id": 15571,
+    "type": "text",
+    "page_idx": 518,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15572,
+    "type": "text",
+    "page_idx": 518,
+    "text": "A line that is approached by a graph in this way is known as an asymptote. You will learn more about asymptotes in Chapter 18."
+  },
+  {
+    "id": 15573,
+    "type": "text",
+    "page_idx": 518,
+    "text": "WORKED EXAMPLE 14"
+  },
+  {
+    "id": 15574,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Which acute angle has the same sine as  $120^{\\circ}$ ?"
+  },
+  {
+    "id": 15575,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Answer"
+  },
+  {
+    "id": 15576,
+    "type": "equation",
+    "page_idx": 518,
+    "text": "$$\n\\sin (1 8 0 ^ {\\circ} - \\theta) = \\sin \\theta\n$$"
+  },
+  {
+    "id": 15577,
+    "type": "text",
+    "page_idx": 518,
+    "text": "The graph of  $\\sin \\theta$  gives this relationship."
+  },
+  {
+    "id": 15578,
+    "type": "equation",
+    "page_idx": 518,
+    "text": "$$\n\\sin (1 8 0 ^ {\\circ} - 1 2 0 ^ {\\circ}) = \\sin 1 2 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 15579,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Let  $\\theta = 120^{\\circ}$  and subtract to find another angle with the same sine value."
+  },
+  {
+    "id": 15580,
+    "type": "equation",
+    "page_idx": 518,
+    "text": "$$\n\\sin 6 0 ^ {\\circ} = \\sin 1 2 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 15581,
+    "type": "text",
+    "page_idx": 519,
+    "text": "WORKED EXAMPLE 15"
+  },
+  {
+    "id": 15582,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Express each of the following in terms of another angle between  $0^{\\circ}$  and  $180^{\\circ}$"
+  },
+  {
+    "id": 15583,
+    "type": "text",
+    "page_idx": 519,
+    "text": "a cos100°"
+  },
+  {
+    "id": 15584,
+    "type": "text",
+    "page_idx": 519,
+    "text": "b -cos  $35^{\\circ}$"
+  },
+  {
+    "id": 15585,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Answers"
+  },
+  {
+    "id": 15586,
+    "type": "text",
+    "page_idx": 519,
+    "text": "a cos(180°-0）=-cos0"
+  },
+  {
+    "id": 15587,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Start with the general relationship."
+  },
+  {
+    "id": 15588,
+    "type": "equation",
+    "page_idx": 519,
+    "text": "$$\n\\cos (1 8 0 ^ {\\circ} - 1 0 0 ^ {\\circ}) = - \\cos 1 0 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 15589,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Let  $\\theta = 100^{\\circ}$  and subtract."
+  },
+  {
+    "id": 15590,
+    "type": "equation",
+    "page_idx": 519,
+    "text": "$$\n\\cos 8 0 ^ {\\circ} = - \\cos 1 0 0 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 15591,
+    "type": "text",
+    "page_idx": 519,
+    "text": "So, cos  $100^{\\circ} = -\\cos 80^{\\circ}$"
+  },
+  {
+    "id": 15592,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Rearrange to find another value equal to  $\\cos 100^{\\circ}$"
+  },
+  {
+    "id": 15593,
+    "type": "text",
+    "page_idx": 519,
+    "text": "b -cosθ=cos(180°-θ)"
+  },
+  {
+    "id": 15594,
+    "type": "equation",
+    "page_idx": 519,
+    "text": "$$\n- \\cos 3 5 ^ {\\circ} = \\cos 1 4 5 ^ {\\circ}\n$$"
+  },
+  {
+    "id": 15595,
+    "type": "text",
+    "page_idx": 519,
+    "text": "WORKED EXAMPLE 16"
+  },
+  {
+    "id": 15596,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Solve the following equations, giving all possible solutions in the range 0 to 360 degrees."
+  },
+  {
+    "id": 15597,
+    "type": "text",
+    "page_idx": 519,
+    "text": "a sinθ=√2"
+  },
+  {
+    "id": 15598,
+    "type": "text",
+    "page_idx": 519,
+    "text": ".b tanθ=3"
+  },
+  {
+    "id": 15599,
+    "type": "text",
+    "page_idx": 519,
+    "text": "c cosx=-"
+  },
+  {
+    "id": 15600,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Answers"
+  },
+  {
+    "id": 15601,
+    "type": "text",
+    "page_idx": 519,
+    "text": "a Use your calculator to find one solution:  $\\sin^{-1}\\left(\\frac{1}{\\sqrt{2}}\\right) = 45^{\\circ}.$"
+  },
+  {
+    "id": 15602,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Now mark  $\\theta = 45$  degrees on a sketch of the graph  $y = \\sin \\theta$  and draw the line  $y = \\frac{1}{\\sqrt{2}}$  like this:"
+  },
+  {
+    "id": 15603,
+    "type": "image",
+    "page_idx": 519,
+    "img_path": "images/298df332f5ff678efc5e4b54ec8730623990ff16e628b3a1f1c304963cae5fa8.jpg"
+  },
+  {
+    "id": 15604,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Using the symmetry of the graph, you can see that there is another solution at  $\\theta = 135^{\\circ}$ ."
+  },
+  {
+    "id": 15605,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Use your calculator to check that sin  $135^{\\circ} = \\frac{1}{\\sqrt{2}}$ ."
+  },
+  {
+    "id": 15606,
+    "type": "text",
+    "page_idx": 519,
+    "text": "Notice that  $135^{\\circ} = 180^{\\circ} - 45^{\\circ}$ . You can use this rule, but drawing a sketch graph always makes it easier to understand why there is a second solution."
+  },
+  {
+    "id": 15607,
+    "type": "text",
+    "page_idx": 519,
+    "text": "TIP"
+  },
+  {
+    "id": 15608,
+    "type": "text",
+    "page_idx": 519,
+    "text": "As well as  $\\theta$  other variables can be used to represent the angle. In part (c) of the example,  $x$  is used. You work in exactly the same way whatever variable is used."
+  },
+  {
+    "id": 15609,
+    "type": "text",
+    "page_idx": 519,
+    "text": "TIP"
+  },
+  {
+    "id": 15610,
+    "type": "text",
+    "page_idx": 519,
+    "text": "This only needs to be a sketch and doesn't need to be accurate. It should be just enough for you to see how the symmetry can help."
+  },
+  {
+    "id": 15611,
+    "type": "text",
+    "page_idx": 520,
+    "text": "WORKED EXAMPLE 16 CONTINUED"
+  },
+  {
+    "id": 15612,
+    "type": "text",
+    "page_idx": 520,
+    "text": "b Use your calculator to find one solution:  $\\tan^{-1}(3) = 71.6^{\\circ}$ . As before, mark this on a sketch of the graph  $y = \\tan \\theta$  and draw the line  $y = 3$ ."
+  },
+  {
+    "id": 15613,
+    "type": "image",
+    "page_idx": 520,
+    "img_path": "images/9910d2ef73831776588efe0b6544e0a64c48e102672b183e6fa95780ddfa66f4.jpg"
+  },
+  {
+    "id": 15614,
+    "type": "text",
+    "page_idx": 520,
+    "text": "You can see that the second solution is  $180^{\\circ} + 71.6^{\\circ} = 251.6^{\\circ}$ . More solutions can be found by adding 180 degrees over and over, but these will all be larger than 360 degrees, so they are not in the range that you want."
+  },
+  {
+    "id": 15615,
+    "type": "text",
+    "page_idx": 520,
+    "text": "c Use your calculator to find one solution:  $\\cos^{-1}\\left(-\\frac{1}{2}\\right) = 120^{\\circ}$  Draw a sketch and mark the values:"
+  },
+  {
+    "id": 15616,
+    "type": "image",
+    "page_idx": 520,
+    "img_path": "images/d745b24b2c6e08cb9fb3e215234dfd809d9fea5c95eb05b79950d802a866690a.jpg"
+  },
+  {
+    "id": 15617,
+    "type": "text",
+    "page_idx": 520,
+    "text": "You can now see that the second solution will be at  $360^{\\circ} - 120^{\\circ} = 240^{\\circ}$ ."
+  },
+  {
+    "id": 15618,
+    "type": "text",
+    "page_idx": 520,
+    "text": "TIP"
+  },
+  {
+    "id": 15619,
+    "type": "text",
+    "page_idx": 520,
+    "text": "Note that you only need to sketch the part of the graph for 0 to  $360^{\\circ}$  because you are only looking for solutions between these two values of  $\\theta$ ."
+  },
+  {
+    "id": 15620,
+    "type": "text",
+    "page_idx": 520,
+    "text": "There are more solutions, but in the range 0 to  $360^{\\circ}$  the line  $y = \\frac{1}{\\sqrt{2}}$  only meets the graph  $y = \\sin \\theta$  twice."
+  },
+  {
+    "id": 15621,
+    "type": "image",
+    "page_idx": 520,
+    "img_path": "images/9a825fe817c2aa3a618aaca7caa992bf8e85891fd56dcc4487e9fcd72dde34e1.jpg"
+  },
+  {
+    "id": 15622,
+    "type": "text",
+    "page_idx": 520,
+    "text": "Exercise 15.10"
+  },
+  {
+    "id": 15623,
+    "type": "text",
+    "page_idx": 520,
+    "text": "1 Express each of the following in terms of the same trigonometric ratio of another angle between  $0^{\\circ}$  and  $180^{\\circ}$ ."
+  },
+  {
+    "id": 15624,
+    "type": "text",
+    "page_idx": 520,
+    "text": "a cos 120°"
+  },
+  {
+    "id": 15625,
+    "type": "text",
+    "page_idx": 520,
+    "text": "b sin 35°"
+  },
+  {
+    "id": 15626,
+    "type": "text",
+    "page_idx": 520,
+    "text": "cos136°"
+  },
+  {
+    "id": 15627,
+    "type": "text",
+    "page_idx": 520,
+    "text": "d sin 170°"
+  },
+  {
+    "id": 15628,
+    "type": "text",
+    "page_idx": 520,
+    "text": "e cos 88°"
+  },
+  {
+    "id": 15629,
+    "type": "text",
+    "page_idx": 520,
+    "text": "f -cos140°"
+  },
+  {
+    "id": 15630,
+    "type": "text",
+    "page_idx": 520,
+    "text": "sin 121°"
+  },
+  {
+    "id": 15631,
+    "type": "text",
+    "page_idx": 520,
+    "text": "h sin 99°"
+  },
+  {
+    "id": 15632,
+    "type": "text",
+    "page_idx": 520,
+    "text": "-0cos45°"
+  },
+  {
+    "id": 15633,
+    "type": "text",
+    "page_idx": 520,
+    "text": "cos150°"
+  },
+  {
+    "id": 15634,
+    "type": "text",
+    "page_idx": 520,
+    "text": "2 Solve each of the following equations, giving all solutions between 0 and 360 degrees."
+  },
+  {
+    "id": 15635,
+    "type": "text",
+    "page_idx": 520,
+    "text": "a sinθ=1"
+  },
+  {
+    "id": 15636,
+    "type": "text",
+    "page_idx": 520,
+    "text": "b sinθ=1"
+  },
+  {
+    "id": 15637,
+    "type": "text",
+    "page_idx": 520,
+    "text": "2 c cosθ=2"
+  },
+  {
+    "id": 15638,
+    "type": "text",
+    "page_idx": 520,
+    "text": "d tan  $\\theta = 5$"
+  },
+  {
+    "id": 15639,
+    "type": "text",
+    "page_idx": 520,
+    "text": "$\\cos \\theta = -\\frac{\\sqrt{3}}{2}$"
+  }
+]
+```

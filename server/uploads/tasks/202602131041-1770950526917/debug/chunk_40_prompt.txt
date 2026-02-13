@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 2800,
+    "type": "text",
+    "page_idx": 74,
+    "text": "b y-3"
+  },
+  {
+    "id": 2801,
+    "type": "text",
+    "page_idx": 74,
+    "text": "c  $(xy)^{-2}$"
+  },
+  {
+    "id": 2802,
+    "type": "text",
+    "page_idx": 74,
+    "text": "d  $2x^{-2}$"
+  },
+  {
+    "id": 2803,
+    "type": "text",
+    "page_idx": 74,
+    "text": "e  $12x^{-3}$"
+  },
+  {
+    "id": 2804,
+    "type": "text",
+    "page_idx": 74,
+    "text": "f 7y-3"
+  },
+  {
+    "id": 2805,
+    "type": "text",
+    "page_idx": 74,
+    "text": "g 8xy-3"
+  },
+  {
+    "id": 2806,
+    "type": "text",
+    "page_idx": 74,
+    "text": "h  $12x^{-3}y^{-4}$"
+  },
+  {
+    "id": 2807,
+    "type": "text",
+    "page_idx": 75,
+    "text": "3 Simplify. Write your answer using only positive indices."
+  },
+  {
+    "id": 2808,
+    "type": "text",
+    "page_idx": 75,
+    "text": "a  ${b}^{-3} \\times  {b}^{4}$"
+  },
+  {
+    "id": 2809,
+    "type": "text",
+    "page_idx": 75,
+    "text": "b  $2x^{-3}\\times 3x^{-3}$"
+  },
+  {
+    "id": 2810,
+    "type": "text",
+    "page_idx": 75,
+    "text": "4s³÷12s7"
+  },
+  {
+    "id": 2811,
+    "type": "text",
+    "page_idx": 75,
+    "text": "d"
+  },
+  {
+    "id": 2812,
+    "type": "text",
+    "page_idx": 75,
+    "text": "e  ${\\left( 2{x}^{2}\\right) }^{-3}$"
+  },
+  {
+    "id": 2813,
+    "type": "text",
+    "page_idx": 75,
+    "text": "f  $(c^{-2})^3$"
+  },
+  {
+    "id": 2814,
+    "type": "text",
+    "page_idx": 75,
+    "text": "g  $x^{-3}\\div x^{-4}$"
+  },
+  {
+    "id": 2815,
+    "type": "text",
+    "page_idx": 75,
+    "text": "[h\\frac{{x}^{-2}}{{x}^{3}}]"
+  },
+  {
+    "id": 2816,
+    "type": "text",
+    "page_idx": 75,
+    "text": "i  $a^4 b^{-3}\\times a^3 b^{-2}$"
+  },
+  {
+    "id": 2817,
+    "type": "text",
+    "page_idx": 75,
+    "text": "j"
+  },
+  {
+    "id": 2818,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$(x^{4}y^{-2})^{3}\\times (xy^{3})^{-2}$"
+  },
+  {
+    "id": 2819,
+    "type": "text",
+    "page_idx": 75,
+    "text": "k"
+  },
+  {
+    "id": 2820,
+    "type": "text",
+    "page_idx": 75,
+    "text": "2x5y3 4 2x²y-4 x7"
+  },
+  {
+    "id": 2821,
+    "type": "text",
+    "page_idx": 75,
+    "text": "1"
+  },
+  {
+    "id": 2822,
+    "type": "text",
+    "page_idx": 75,
+    "text": "m³n-6 m5n-9 m-4n7 m-2n4"
+  },
+  {
+    "id": 2823,
+    "type": "text",
+    "page_idx": 75,
+    "text": "m"
+  },
+  {
+    "id": 2824,
+    "type": "text",
+    "page_idx": 75,
+    "text": "3mn 2mn"
+  },
+  {
+    "id": 2825,
+    "type": "image",
+    "page_idx": 75,
+    "img_path": "images/8d5db25d163dc0d29eaae58cdbcf11079e227f830a4851db0914d87b7d04a053.jpg"
+  },
+  {
+    "id": 2826,
+    "type": "text",
+    "page_idx": 75,
+    "text": "4 Find the value of  $x$  in each equation."
+  },
+  {
+    "id": 2827,
+    "type": "text",
+    "page_idx": 75,
+    "text": "a  $3^{x} = 81$"
+  },
+  {
+    "id": 2828,
+    "type": "text",
+    "page_idx": 75,
+    "text": "b  $2^{x} = 32$"
+  },
+  {
+    "id": 2829,
+    "type": "text",
+    "page_idx": 75,
+    "text": "4-2=1"
+  },
+  {
+    "id": 2830,
+    "type": "text",
+    "page_idx": 75,
+    "text": "d 5x=1 125"
+  },
+  {
+    "id": 2831,
+    "type": "text",
+    "page_idx": 75,
+    "text": "e  $10^{1 - x} = \\frac{1}{100}$"
+  },
+  {
+    "id": 2832,
+    "type": "text",
+    "page_idx": 75,
+    "text": "f"
+  },
+  {
+    "id": 2833,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$2^{x} + 1 = 9$"
+  },
+  {
+    "id": 2834,
+    "type": "text",
+    "page_idx": 75,
+    "text": "9"
+  },
+  {
+    "id": 2835,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$4\\times 3^{x} = 36$"
+  },
+  {
+    "id": 2836,
+    "type": "text",
+    "page_idx": 75,
+    "text": "h"
+  },
+  {
+    "id": 2837,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$3 \\times 3^{x} = 243$"
+  },
+  {
+    "id": 2838,
+    "type": "text",
+    "page_idx": 75,
+    "text": "Summary of index laws"
+  },
+  {
+    "id": 2839,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$x^{m}\\times x^{n} = x^{m + n}$"
+  },
+  {
+    "id": 2840,
+    "type": "text",
+    "page_idx": 75,
+    "text": "When multiplying terms, add the indices."
+  },
+  {
+    "id": 2841,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$x^{m}\\div x^{n} = x^{m - n}$"
+  },
+  {
+    "id": 2842,
+    "type": "text",
+    "page_idx": 75,
+    "text": "When dividing, subtract the indices."
+  },
+  {
+    "id": 2843,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$(x^{m})^{n} = x^{mn}$"
+  },
+  {
+    "id": 2844,
+    "type": "text",
+    "page_idx": 75,
+    "text": "When finding the power of a power, multiply the indices."
+  },
+  {
+    "id": 2845,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$x^0 = 1$"
+  },
+  {
+    "id": 2846,
+    "type": "text",
+    "page_idx": 75,
+    "text": "Any value to the power 0 is equal to 1."
+  },
+  {
+    "id": 2847,
+    "type": "text",
+    "page_idx": 75,
+    "text": "x-m=1x"
+  },
+  {
+    "id": 2848,
+    "type": "text",
+    "page_idx": 75,
+    "text": "(when  $x\\neq 0$"
+  },
+  {
+    "id": 2849,
+    "type": "text",
+    "page_idx": 75,
+    "text": "Fractional indices"
+  },
+  {
+    "id": 2850,
+    "type": "text",
+    "page_idx": 75,
+    "text": "The laws of indices also apply when the index is a fraction. Look at these examples carefully to remind yourself what fractional indices mean in algebra:"
+  },
+  {
+    "id": 2851,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$= x^{\\frac{1}{2} +\\frac{1}{2}}$  Use the law of indices and add the powers."
+  },
+  {
+    "id": 2852,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\begin{array}{l} x ^ {\\frac {1}{2}} \\times x ^ {\\frac {1}{2}} \\\\ = x ^ {1} \\\\ = x \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2853,
+    "type": "text",
+    "page_idx": 75,
+    "text": "In order to understand what  $x^{\\frac{1}{2}}$  means, ask yourself: what number multiplied by itself will give  $x$ ?"
+  },
+  {
+    "id": 2854,
+    "type": "text",
+    "page_idx": 75,
+    "text": "$= y^{\\frac{1}{2} +\\frac{1}{3} +\\frac{1}{4}}$  Use the law of indices and add the powers."
+  },
+  {
+    "id": 2855,
+    "type": "equation",
+    "page_idx": 75,
+    "text": "$$\n\\begin{array}{l} \\sqrt {x} \\times \\sqrt {x} = x \\\\ \\mathrm {S o}, x ^ {\\frac {1}{2}} = \\sqrt {x} \\\\ y ^ {\\frac {1}{2}} \\times y ^ {\\frac {1}{2}} \\times y ^ {\\frac {1}{2}} \\\\ = y ^ {1} \\\\ = y \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2856,
+    "type": "text",
+    "page_idx": 76,
+    "text": "What number multiplied by itself and then by itself again will give  $y$ ?"
+  },
+  {
+    "id": 2857,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\sqrt [ 3 ]{y} \\times \\sqrt [ 3 ]{y} \\times \\sqrt [ 3 ]{y} = y\n$$"
+  },
+  {
+    "id": 2858,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\mathrm {S o} y ^ {\\frac {1}{4}} = \\sqrt [ 3 ]{y}\n$$"
+  },
+  {
+    "id": 2859,
+    "type": "text",
+    "page_idx": 76,
+    "text": "This shows that any root of a number can be written using rational indices."
+  },
+  {
+    "id": 2860,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\mathrm {S o}, x ^ {\\frac {1}{\\mathrm {s}}} = \\sqrt [ m ]{x}.\n$$"
+  },
+  {
+    "id": 2861,
+    "type": "text",
+    "page_idx": 76,
+    "text": "WORKED EXAMPLE 18"
+  },
+  {
+    "id": 2862,
+    "type": "text",
+    "page_idx": 76,
+    "text": "1 Rewrite using root signs."
+  },
+  {
+    "id": 2863,
+    "type": "text",
+    "page_idx": 76,
+    "text": "a y"
+  },
+  {
+    "id": 2864,
+    "type": "text",
+    "page_idx": 76,
+    "text": "b x"
+  },
+  {
+    "id": 2865,
+    "type": "text",
+    "page_idx": 76,
+    "text": "C X"
+  },
+  {
+    "id": 2866,
+    "type": "text",
+    "page_idx": 76,
+    "text": "Answers"
+  },
+  {
+    "id": 2867,
+    "type": "text",
+    "page_idx": 76,
+    "text": "a  $y^{\\frac{1}{2}} = \\sqrt{y}$"
+  },
+  {
+    "id": 2868,
+    "type": "text",
+    "page_idx": 76,
+    "text": "b x="
+  },
+  {
+    "id": 2869,
+    "type": "text",
+    "page_idx": 76,
+    "text": "x=√x"
+  },
+  {
+    "id": 2870,
+    "type": "text",
+    "page_idx": 76,
+    "text": "2 Write in index notation."
+  },
+  {
+    "id": 2871,
+    "type": "text",
+    "page_idx": 76,
+    "text": "a  $\\sqrt{90}$"
+  },
+  {
+    "id": 2872,
+    "type": "text",
+    "page_idx": 76,
+    "text": "b 64"
+  },
+  {
+    "id": 2873,
+    "type": "text",
+    "page_idx": 76,
+    "text": "4X"
+  },
+  {
+    "id": 2874,
+    "type": "text",
+    "page_idx": 76,
+    "text": "d  $\\sqrt[5]{(x - 2)}$"
+  },
+  {
+    "id": 2875,
+    "type": "text",
+    "page_idx": 76,
+    "text": "Answers"
+  },
+  {
+    "id": 2876,
+    "type": "text",
+    "page_idx": 76,
+    "text": "a 90=90"
+  },
+  {
+    "id": 2877,
+    "type": "text",
+    "page_idx": 76,
+    "text": "b 64"
+  },
+  {
+    "id": 2878,
+    "type": "text",
+    "page_idx": 76,
+    "text": "C 4x=x"
+  },
+  {
+    "id": 2879,
+    "type": "text",
+    "page_idx": 76,
+    "text": "d  $\\sqrt[5]{(x - 2)} = (x - 2)^{\\frac{1}{5}}$"
+  },
+  {
+    "id": 2880,
+    "type": "text",
+    "page_idx": 76,
+    "text": "Dealing with non-unit fractions"
+  },
+  {
+    "id": 2881,
+    "type": "text",
+    "page_idx": 76,
+    "text": "Indices may contain non-unit fractions, for example  $x^{\\frac{1}{3}}$  or  $y^{\\frac{1}{3}}$ . To find the rule for working with these, you have to think back to the law of indices for raising a power to another power. Look at these examples carefully to see how this works:"
+  },
+  {
+    "id": 2882,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\begin{array}{l} x ^ {\\frac {1}{3}} = \\left(x ^ {\\frac {1}{3}}\\right) ^ {2} \\quad \\frac {1}{3} \\times 2 = \\frac {2}{3} \\\\ y ^ {\\frac {1}{4}} = \\left(y ^ {\\frac {1}{4}}\\right) ^ {3} \\quad \\frac {1}{4} \\times 3 = \\frac {3}{4} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2883,
+    "type": "text",
+    "page_idx": 76,
+    "text": "You already know that a unit fraction gives a root. So you can rewrite these expressions using root signs like this:"
+  },
+  {
+    "id": 2884,
+    "type": "equation",
+    "page_idx": 76,
+    "text": "$$\n\\begin{array}{l} (x) ^ {2} = (\\sqrt {x}) ^ {2} \\text {a n d} (y) ^ {3} = (\\sqrt {y}) ^ {3} \\\\ \\mathbf {S o}, x ^ {1} = (\\sqrt {x}) ^ {2} \\text {a n d} y ^ {2} = (\\sqrt {y}) ^ {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 2885,
+    "type": "text",
+    "page_idx": 76,
+    "text": "TIP"
+  },
+  {
+    "id": 2886,
+    "type": "text",
+    "page_idx": 76,
+    "text": "You can reverse the order of calculations here and the result will be the same."
+  },
+  {
+    "id": 2887,
+    "type": "text",
+    "page_idx": 76,
+    "text": "In general terms:  $x^{*} = x^{m + 1} - (x^{1})^{m} = (\\sqrt[m]{x})^{m}$"
+  },
+  {
+    "id": 2888,
+    "type": "text",
+    "page_idx": 76,
+    "text": "TIP"
+  },
+  {
+    "id": 2889,
+    "type": "text",
+    "page_idx": 76,
+    "text": "A non-unit fraction"
+  },
+  {
+    "id": 2890,
+    "type": "text",
+    "page_idx": 76,
+    "text": "has a numerator"
+  },
+  {
+    "id": 2891,
+    "type": "text",
+    "page_idx": 76,
+    "text": "that is not 1. For"
+  },
+  {
+    "id": 2892,
+    "type": "text",
+    "page_idx": 76,
+    "text": "example, 2 and 5 are"
+  },
+  {
+    "id": 2893,
+    "type": "text",
+    "page_idx": 76,
+    "text": "non-unit fractions."
+  },
+  {
+    "id": 2894,
+    "type": "text",
+    "page_idx": 77,
+    "text": "WORKED EXAMPLE 19"
+  },
+  {
+    "id": 2895,
+    "type": "equation",
+    "page_idx": 77,
+    "text": "$$\n\\sin \\Delta \\text {p l i f y} \\left(\\sqrt [ 5 ]{a ^ {2}}\\right) ^ {\\frac {3}{2}} \\times \\left(\\sqrt [ 3 ]{a ^ {5}}\\right) ^ {\\frac {1}{3}}\n$$"
+  },
+  {
+    "id": 2896,
+    "type": "text",
+    "page_idx": 77,
+    "text": "Answer"
+  },
+  {
+    "id": 2897,
+    "type": "equation",
+    "page_idx": 77,
+    "text": "$$\n\\left(\\frac {1}{3}\\right) ^ {\\frac {1}{3}} \\times \\left(\\sqrt [ 3 ]{a ^ {5}}\\right) ^ {\\frac {1}{3}} = \\left(\\frac {1}{3}\\right) ^ {\\frac {1}{3}} \\times \\left(a \\frac {1}{3}\\right) ^ {\\frac {1}{3}}\n$$"
+  },
+  {
+    "id": 2898,
+    "type": "text",
+    "page_idx": 77,
+    "text": "Apply the rule  $\\sqrt{a^m} = a^m$"
+  },
+  {
+    "id": 2899,
+    "type": "equation",
+    "page_idx": 77,
+    "text": "$$\n= a ^ {\\frac {3}{5}} \\times a ^ {\\frac {1}{3}}\n$$"
+  }
+]
+```

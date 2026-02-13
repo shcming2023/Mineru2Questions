@@ -1,0 +1,811 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 15400,
+    "type": "text",
+    "text": "[Table Row] <tr><td>0°</td><td>0</td><td>1</td><td>0</td></tr>",
+    "page_idx": 508
+  },
+  {
+    "id": 15401,
+    "type": "text",
+    "text": "[Table Row] <tr><td>30°</td><td>1/2</td><td>√3/2</td><td>1/√3 or √3/3</td></tr>",
+    "page_idx": 508
+  },
+  {
+    "id": 15402,
+    "type": "text",
+    "text": "[Table Row] <tr><td>45°</td><td>1/√2 or √2/2</td><td>1/√2 or √2/2</td><td>1</td></tr>",
+    "page_idx": 508
+  },
+  {
+    "id": 15403,
+    "type": "text",
+    "text": "[Table Row] <tr><td>60°</td><td>√3/2</td><td>1/2</td><td>√3</td></tr>",
+    "page_idx": 508
+  },
+  {
+    "id": 15404,
+    "type": "text",
+    "text": "[Table Row] <tr><td>90°</td><td>1</td><td>0</td><td>Doesn’t exist</td></tr>",
+    "page_idx": 508
+  },
+  {
+    "id": 15405,
+    "type": "text",
+    "page_idx": 508,
+    "text": "WORKED EXAMPLE 11"
+  },
+  {
+    "id": 15406,
+    "type": "text",
+    "page_idx": 508,
+    "text": "Find the exact area of the triangle shown in the diagram."
+  },
+  {
+    "id": 15407,
+    "type": "image",
+    "page_idx": 508,
+    "img_path": "images/7dc93b45e6381c08e5f2340a79dbb9cedac7d606cf07ba4239e8d279f24df3c6.jpg"
+  },
+  {
+    "id": 15408,
+    "type": "text",
+    "page_idx": 508,
+    "text": "Answer"
+  },
+  {
+    "id": 15409,
+    "type": "text",
+    "page_idx": 508,
+    "text": "First, find the height of the triangle,  $h$"
+  },
+  {
+    "id": 15410,
+    "type": "equation",
+    "page_idx": 508,
+    "text": "$$\n\\begin{array}{l} \\tan 6 0 ^ {\\circ} = \\frac {h}{5} \\\\ \\Rightarrow h = 5 \\tan 6 0 ^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15411,
+    "type": "text",
+    "page_idx": 508,
+    "text": "$h = 5\\sqrt{3}\\mathrm{cm}$  using the exact value of tan  $60^{\\circ}$"
+  },
+  {
+    "id": 15412,
+    "type": "equation",
+    "page_idx": 508,
+    "text": "$$\n\\begin{array}{l} \\text {A r e a} = \\frac {1}{2} \\times \\text {b a s e} \\times \\text {h e i g h t} \\\\ = \\frac {1}{2} \\times 5 \\times 5 \\sqrt {3} \\\\ = \\frac {2 5 \\sqrt {3}}{2} c m ^ {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15413,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/b6bbbd0ec8d70601f3c93fa0fc30a1d89d0e0316c1094371d4da896a5091a74f.jpg"
+  },
+  {
+    "id": 15414,
+    "type": "text",
+    "page_idx": 509,
+    "text": "Exercise 15.8"
+  },
+  {
+    "id": 15415,
+    "type": "text",
+    "page_idx": 509,
+    "text": "1 Calculate the exact length of the unknown side in each triangle."
+  },
+  {
+    "id": 15416,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/d719a09fce3769208e946fbf590fb9b6a30d77c0575f6be3c624049ab7c6af70.jpg"
+  },
+  {
+    "id": 15417,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/dc56e5fada77c54a9467a48e75e4dee5bd700641ed2cd505666eadee14dcdd7e.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 15418,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/79537378917f2167051b32ed96b1ae59eb227dc6b0fc2a58f414d43fba41deac.jpg"
+  },
+  {
+    "id": 15419,
+    "type": "text",
+    "page_idx": 509,
+    "text": "2 Calculate the exact length of the unknown side in each triangle."
+  },
+  {
+    "id": 15420,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/7f7efc719293eb0e57110c660b5c756fbaab30411c7286f7ba1e9c8d0d48bf6b.jpg"
+  },
+  {
+    "id": 15421,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/5cb7751df1d11014beba3110933c3788f4fd0d811ef74884889fadd86a329851.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 15422,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/32600b81cb8c702f3731a31b6674afa8719cad2f6c52dd3491d11fe7a5d9f7c5.jpg"
+  },
+  {
+    "id": 15423,
+    "type": "text",
+    "page_idx": 509,
+    "text": "3 Find the exact area of triangle ACD."
+  },
+  {
+    "id": 15424,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/2ca1c533c85d00ad5d9ee806ba067d578c77646c018c2bdc6cc98d67116aed1d.jpg"
+  },
+  {
+    "id": 15425,
+    "type": "text",
+    "page_idx": 509,
+    "text": "4 The angle of elevation of the top of a flagpole,  $(C)$  seen from point  $A$  is  $30^{\\circ}$  The angle of elevation of the top of the same flagpole, seen from point B is  $60^{\\circ}$  The flagpole is  $18\\mathrm{m}$  high. Work out the exact distance between the points  $A$  and  $B$"
+  },
+  {
+    "id": 15426,
+    "type": "image",
+    "page_idx": 509,
+    "img_path": "images/c72bd6e5ebac8dc7e9957a432dce412ac0e88ae180614286c7f34656c048a208.jpg"
+  },
+  {
+    "id": 15427,
+    "type": "text",
+    "page_idx": 510,
+    "text": "15.5 Solving problems using trigonometry"
+  },
+  {
+    "id": 15428,
+    "type": "text",
+    "page_idx": 510,
+    "text": "You may need to use more than one trigonometric ratio when you solve problems that involve right-angled triangles. To make it clear which ratio to use and when, you should follow these guidelines."
+  },
+  {
+    "id": 15429,
+    "type": "text",
+    "text": "- If the question does not include a diagram, draw one. Make it clear and large.",
+    "page_idx": 510
+  },
+  {
+    "id": 15430,
+    "type": "text",
+    "text": "- Identify any right-angled triangles that may be useful to you.",
+    "page_idx": 510
+  },
+  {
+    "id": 15431,
+    "type": "text",
+    "text": "- Draw each triangle separately and clearly label any sides and angles that you already know.",
+    "page_idx": 510
+  },
+  {
+    "id": 15432,
+    "type": "text",
+    "text": "- Write down which of the opposite, adjacent and hypotenuse you are going to use, and then use SOHCAHTOA to help you decide which ratio to use.",
+    "page_idx": 510
+  },
+  {
+    "id": 15433,
+    "type": "text",
+    "text": "Write down the ratio and solve, either for an angle or a side.",
+    "page_idx": 510
+  },
+  {
+    "id": 15434,
+    "type": "text",
+    "text": "- If you need to use a side or angle that you have calculated for another part of a question, try to use the unrounded value that you have in your calculator memory. This will help to avoid rounding errors later on.",
+    "page_idx": 510
+  },
+  {
+    "id": 15435,
+    "type": "text",
+    "page_idx": 510,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15436,
+    "type": "text",
+    "page_idx": 510,
+    "text": "It will be useful to remind yourself about general angle properties of triangles from Chapter 3."
+  },
+  {
+    "id": 15437,
+    "type": "text",
+    "page_idx": 510,
+    "text": "Calculating distances"
+  },
+  {
+    "id": 15438,
+    "type": "text",
+    "page_idx": 510,
+    "text": "In mathematics, when you are asked to calculate the distance from a point to a line you are expected to find the shortest distance between the point and the line. This distance is equal to the length of a perpendicular from the point to the line."
+  },
+  {
+    "id": 15439,
+    "type": "text",
+    "page_idx": 510,
+    "text": "In this diagram, the distance from  $P$  to the line  $AB$  is 5 units."
+  },
+  {
+    "id": 15440,
+    "type": "image",
+    "page_idx": 510,
+    "img_path": "images/d0ddbc073c580bee42b53247f17b935493e67e844b207858fc4b87bc31298176.jpg"
+  },
+  {
+    "id": 15441,
+    "type": "text",
+    "page_idx": 510,
+    "text": "Any other line from the point to the line creates a right-angled triangle and the line itself becomes the hypotenuse of that triangle. Any hypotenuse must be longer than the perpendicular line, so, all the other distances from  $P$  to the line are longer than 5 units."
+  },
+  {
+    "id": 15442,
+    "type": "text",
+    "page_idx": 510,
+    "text": "There are different ways of working out the distance between a point and a line. The method you choose will depend on the information you are given. For example, if you are asked to find the distance between point  $A$  and line  $BD$  given the information on the diagram on the right, you could draw in the perpendicular and use trigonometry to find the lengths of the other sides of the triangle."
+  },
+  {
+    "id": 15443,
+    "type": "image",
+    "page_idx": 510,
+    "img_path": "images/02b0bba36dc0a24789449323a11bcac7a870e67b6d51fad59d64cdbf1a8e084f.jpg"
+  },
+  {
+    "id": 15444,
+    "type": "text",
+    "page_idx": 511,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15445,
+    "type": "text",
+    "page_idx": 511,
+    "text": "You will use the distance between a point and a line again when you deal with circles in Chapter 19."
+  },
+  {
+    "id": 15446,
+    "type": "text",
+    "page_idx": 511,
+    "text": "Worked example 12 shows you how to use trigonometry to find the distance between point  $A$  and the line  $BD$  and then how to use it to solve the problem given. It also shows you how you can set out the solution to a trigonometry problem."
+  },
+  {
+    "id": 15447,
+    "type": "text",
+    "page_idx": 511,
+    "text": "WORKED EXAMPLE 12"
+  },
+  {
+    "id": 15448,
+    "type": "text",
+    "page_idx": 511,
+    "text": "The diagram shows an isosceles trapezium ABDC. Calculate the area of the trapezium."
+  },
+  {
+    "id": 15449,
+    "type": "image",
+    "page_idx": 511,
+    "img_path": "images/6d97a0203cb561d591845dbce0b9eea2667eb54ea22a26397674b45115fa6678.jpg"
+  },
+  {
+    "id": 15450,
+    "type": "text",
+    "page_idx": 511,
+    "text": "Answer"
+  },
+  {
+    "id": 15451,
+    "type": "text",
+    "page_idx": 511,
+    "text": "The area of a trapezium  $=$  (mean of the parallel sides)  $\\times$  (perpendicular distance between them)."
+  },
+  {
+    "id": 15452,
+    "type": "text",
+    "page_idx": 511,
+    "text": "In this diagram, perpendiculars have been added to form right-angled triangles so that trigonometry can be used."
+  },
+  {
+    "id": 15453,
+    "type": "image",
+    "page_idx": 511,
+    "img_path": "images/63197ce0899a10e6cefc2e888ed25830739169183f7b06050214e59d0e69a0f7.jpg"
+  },
+  {
+    "id": 15454,
+    "type": "text",
+    "page_idx": 511,
+    "text": "$AC = MN$  and you can find the length of MN if you calculate the lengths of BM and ND."
+  },
+  {
+    "id": 15455,
+    "type": "text",
+    "page_idx": 511,
+    "text": "In triangle  ${ABM}$  ,  $\\sin {60}^{ \\circ  } = \\frac{\\operatorname{opp}\\left( {60}^{ \\circ  }\\right) }{\\operatorname{hyp}} = \\frac{AM}{4.6}$  and  $\\cos {60}^{ \\circ  } = \\frac{\\operatorname{adj}\\left( {60}^{ \\circ  }\\right) }{\\operatorname{hyp}} = \\frac{BM}{4.6}$"
+  },
+  {
+    "id": 15456,
+    "type": "text",
+    "page_idx": 511,
+    "text": "Hence,  $AM = 4.6 \\times \\sin 60^\\circ$  and  $BM = 4.6 \\times \\cos 60^\\circ$"
+  },
+  {
+    "id": 15457,
+    "type": "text",
+    "page_idx": 511,
+    "text": "$AM = 3.983716\\ldots cm$  and  $BM = 2.3cm$"
+  },
+  {
+    "id": 15458,
+    "type": "text",
+    "page_idx": 511,
+    "text": "By symmetry,  $ND = BM = 2.3\\mathrm{cm}$"
+  },
+  {
+    "id": 15459,
+    "type": "text",
+    "page_idx": 511,
+    "text": "and  $\\therefore MN = 8.2 - (2.3 + 2.3) = 3.6\\mathrm{cm}$"
+  },
+  {
+    "id": 15460,
+    "type": "text",
+    "page_idx": 511,
+    "text": "Hence,  $AC = 3.6$  cm and  $AM = CN = 3.983716 \\dots$  cm"
+  },
+  {
+    "id": 15461,
+    "type": "text",
+    "page_idx": 511,
+    "text": "The area of  $ABDC = \\left(\\frac{AC + BD}{2}\\right)\\times AM$"
+  },
+  {
+    "id": 15462,
+    "type": "equation",
+    "page_idx": 511,
+    "text": "$$\n\\begin{array}{l} = \\left(\\frac {3 . 6 + 8 . 2}{2}\\right) \\times 3. 9 8 3 7 1 6 \\dots \\mathrm {c m} ^ {2} \\\\ = 2 3. 5 0 3 9 2 9 \\dots \\mathrm {c m} ^ {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15463,
+    "type": "text",
+    "page_idx": 511,
+    "text": "Area of ABDC  $= 23.5\\mathrm{cm}^2$  (to 3 s.f.)"
+  },
+  {
+    "id": 15464,
+    "type": "text",
+    "page_idx": 511,
+    "text": "TIP"
+  },
+  {
+    "id": 15465,
+    "type": "text",
+    "page_idx": 511,
+    "text": "Give your answer to 3 significant figures if no degree of accuracy is specified."
+  },
+  {
+    "id": 15466,
+    "type": "text",
+    "page_idx": 512,
+    "text": "LINK"
+  },
+  {
+    "id": 15467,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Trigonometry is used to work out lengths and angles when they can't really be measured. For example in navigation, surveying, engineering, construction and even the placement of satellites and receivers."
+  },
+  {
+    "id": 15468,
+    "type": "text",
+    "page_idx": 512,
+    "text": "WORKED EXAMPLE 13"
+  },
+  {
+    "id": 15469,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The span between the towers of Tower Bridge in London is  $76\\mathrm{m}$ . When the arms of the bridge are raised to an angle of  $35^{\\circ}$ , how wide is the gap between their ends?"
+  },
+  {
+    "id": 15470,
+    "type": "image",
+    "page_idx": 512,
+    "img_path": "images/51be1d6858cc0f6ae6353c4032dc1961efaa83fc4c81189e5874d796ac9e3545.jpg"
+  },
+  {
+    "id": 15471,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Answer"
+  },
+  {
+    "id": 15472,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Here is a simplified labelled drawing of the bridge, showing the two halves raised to  $35^{\\circ}$ ."
+  },
+  {
+    "id": 15473,
+    "type": "image",
+    "page_idx": 512,
+    "img_path": "images/52f5bef079f57fd76fe87cb5e63e5a13da9b07245496a16a4a75c7f1fe2fa40f.jpg"
+  },
+  {
+    "id": 15474,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The gap  $= BD = MN$  and  $MN = AC - (AM + NC)$"
+  },
+  {
+    "id": 15475,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The right-angled triangles  $ABM$  and  $CDN$  are congruent, so  $AM = NC$ ."
+  },
+  {
+    "id": 15476,
+    "type": "text",
+    "page_idx": 512,
+    "text": "When the two halves are lowered, they must meet in the middle."
+  },
+  {
+    "id": 15477,
+    "type": "equation",
+    "page_idx": 512,
+    "text": "$$\n\\therefore A B = C D = \\frac {7 6}{2} = 3 8 m\n$$"
+  },
+  {
+    "id": 15478,
+    "type": "text",
+    "page_idx": 512,
+    "text": "In triangle ABM, cos  $35^{\\circ} = \\frac{\\text{adj}(35^{\\circ})}{\\text{hyp}} = \\frac{\\text{AM}}{38}$"
+  },
+  {
+    "id": 15479,
+    "type": "equation",
+    "page_idx": 512,
+    "text": "$$\n\\begin{array}{l} A M = 3 8 \\times \\cos 3 5 ^ {\\circ} \\\\ = 3 1. 1 2 7 7 \\dots m \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15480,
+    "type": "equation",
+    "page_idx": 512,
+    "text": "$$\n\\begin{array}{l} \\therefore M N = 7 6 - (3 1. 1 2 7 7 \\dots + 3 1. 1 2 7 7 \\dots) \\\\ = 1 3. 7 4 4 \\dots m \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15481,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The gap  $BD = 13.7\\mathrm{m}$  (to 3 s.f.)"
+  },
+  {
+    "id": 15482,
+    "type": "text",
+    "page_idx": 512,
+    "text": "TIP"
+  },
+  {
+    "id": 15483,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Drawing a clear, labelled sketch can help you work out what mathematics you need to do to solve the problem."
+  },
+  {
+    "id": 15484,
+    "type": "text",
+    "page_idx": 513,
+    "text": "Exercise 15.9"
+  },
+  {
+    "id": 15485,
+    "type": "text",
+    "page_idx": 513,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 15486,
+    "type": "text",
+    "page_idx": 513,
+    "text": "1 The diagram represents a ramp  $AB$  for a lifeboat. AC is vertical and CB is horizontal."
+  },
+  {
+    "id": 15487,
+    "type": "text",
+    "text": "a Calculate the size of angle ABC correct to 1 decimal place.",
+    "page_idx": 513
+  },
+  {
+    "id": 15488,
+    "type": "text",
+    "text": "b Calculate the length of BC correct to 3 significant figures.",
+    "page_idx": 513
+  },
+  {
+    "id": 15489,
+    "type": "image",
+    "page_idx": 513,
+    "img_path": "images/cc6280fa000ba0b1566728067644686e1b46b67d515691c8c4982198ceb1c5e9.jpg"
+  },
+  {
+    "id": 15490,
+    "type": "text",
+    "page_idx": 513,
+    "text": "2 AB is a chord of a circle, centre O, radius 8cm. Angle AOB = 120°. Calculate the length of AB."
+  },
+  {
+    "id": 15491,
+    "type": "image",
+    "page_idx": 513,
+    "img_path": "images/59d1db58520bfbf7db1a7318eec293fd0a96dcc04fd5dc67648c9d185640ec43.jpg"
+  },
+  {
+    "id": 15492,
+    "type": "text",
+    "page_idx": 513,
+    "text": "3 The diagram represents a tent in the shape of a triangular prism. The front of the tent,  $ABD$  is an isosceles triangle with  $AB = AD$ . The width,  $BD$  is  $1.8\\mathrm{m}$  and the supporting pole  $AC$  is perpendicular to  $BD$  and  $1.5\\mathrm{m}$  high. The tent is  $3\\mathrm{m}$  long. Calculate:"
+  },
+  {
+    "id": 15493,
+    "type": "text",
+    "text": "a the angle between AB and BD",
+    "page_idx": 513
+  },
+  {
+    "id": 15494,
+    "type": "text",
+    "text": "b the length of AB",
+    "page_idx": 513
+  },
+  {
+    "id": 15495,
+    "type": "text",
+    "text": "c the capacity inside the tent (i.e. the volume).",
+    "page_idx": 513
+  },
+  {
+    "id": 15496,
+    "type": "image",
+    "page_idx": 513,
+    "img_path": "images/1ff7bc937e22275faff400f58c6624be963097cc2292d6f75d9a6bafbcc00d2f.jpg"
+  },
+  {
+    "id": 15497,
+    "type": "text",
+    "page_idx": 513,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15498,
+    "type": "text",
+    "page_idx": 513,
+    "text": "Look at Chapter 7 and remind yourself about the formula for the volume of a prism."
+  },
+  {
+    "id": 15499,
+    "type": "text",
+    "page_idx": 514,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  }
+]
+```

@@ -1,0 +1,6 @@
+<chapter><title>3923</title>
+<qa_pair><label>1</label><type>exercise</type><question>3931,3932</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>3933,3934,3935,3936,3937</question>
+<solution></solution></qa_pair>
+</chapter>

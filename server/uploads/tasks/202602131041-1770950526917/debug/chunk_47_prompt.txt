@@ -1,0 +1,814 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 3290,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/4148c24af0aee30b2d8449d9d4dad160ed3f74f81f4a6d54f20721b0b8609474.jpg",
+    "image_caption": "$a + b + c = 360^{\\circ}$"
+  },
+  {
+    "id": 3291,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/a81f5bc95d25cb3a6056f553bbff4df17a26d943d5776e9989e49f4e10bf1cfb.jpg",
+    "image_caption": "$a + b + c + d + e = 360^{\\circ}$"
+  },
+  {
+    "id": 3292,
+    "type": "text",
+    "page_idx": 92,
+    "text": "Vertically opposite angles"
+  },
+  {
+    "id": 3293,
+    "type": "text",
+    "page_idx": 92,
+    "text": "When two lines intersect, two pairs of vertically opposite angles are formed."
+  },
+  {
+    "id": 3294,
+    "type": "text",
+    "page_idx": 92,
+    "text": "Vertically opposite angles are equal in size."
+  },
+  {
+    "id": 3295,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/65c9137920b9ff46a3c534e6477922a670717b5dee525204e66c08631ae9974f.jpg",
+    "image_caption": "Two pairs of vertically opposite angles."
+  },
+  {
+    "id": 3296,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/67f9ed52185b40c9d9b87bf76e6f3adcd7464b313220726954dad0e3b89d0b3e.jpg",
+    "image_caption": "The angles marked  $x$  are equal to each other. The angles marked  $y$  are also equal to each other."
+  },
+  {
+    "id": 3297,
+    "type": "image",
+    "page_idx": 92,
+    "img_path": "images/fd568a32da8c7e3a0081b0b14e959f5ec111e8cfd1e22945f669520fbf2154f3.jpg",
+    "image_caption": "$x + y = 180^{\\circ}$"
+  },
+  {
+    "id": 3298,
+    "type": "text",
+    "page_idx": 92,
+    "text": "TIP"
+  },
+  {
+    "id": 3299,
+    "type": "text",
+    "page_idx": 92,
+    "text": "In general terms:"
+  },
+  {
+    "id": 3300,
+    "type": "text",
+    "page_idx": 92,
+    "text": "For complementary angles, if one angle is  $x^{\\circ}$ , the other must be  $90 - x^{\\circ}$  and vice versa."
+  },
+  {
+    "id": 3301,
+    "type": "text",
+    "page_idx": 92,
+    "text": "For supplementary angles, if one angle is  $x^{\\circ}$ , the other must be  $180 - x^{\\circ}$  and vice versa."
+  },
+  {
+    "id": 3302,
+    "type": "text",
+    "page_idx": 92,
+    "text": "TIP"
+  },
+  {
+    "id": 3303,
+    "type": "text",
+    "page_idx": 92,
+    "text": "The adjacent angle pairs in vertically opposite angles form pairs of supplementary angles because they are also angles on a straight line."
+  },
+  {
+    "id": 3304,
+    "type": "text",
+    "page_idx": 93,
+    "text": "Using angle relationships to find unknown angles"
+  },
+  {
+    "id": 3305,
+    "type": "text",
+    "page_idx": 93,
+    "text": "You can use the relationships between angles to work out the size of unknown angles."
+  },
+  {
+    "id": 3306,
+    "type": "text",
+    "page_idx": 93,
+    "text": "To do this:"
+  },
+  {
+    "id": 3307,
+    "type": "text",
+    "text": "identify the relationship",
+    "page_idx": 93
+  },
+  {
+    "id": 3308,
+    "type": "text",
+    "text": "make an equation",
+    "page_idx": 93
+  },
+  {
+    "id": 3309,
+    "type": "text",
+    "text": "- give reasons for statements",
+    "page_idx": 93
+  },
+  {
+    "id": 3310,
+    "type": "text",
+    "text": "- solve the equation to find the unknown value.",
+    "page_idx": 93
+  },
+  {
+    "id": 3311,
+    "type": "text",
+    "page_idx": 93,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 3312,
+    "type": "text",
+    "page_idx": 93,
+    "text": "Find the size of the angle marked  $x$  in each of these figures. Give reasons."
+  },
+  {
+    "id": 3313,
+    "type": "text",
+    "page_idx": 93,
+    "text": "Answers"
+  },
+  {
+    "id": 3314,
+    "type": "image",
+    "page_idx": 93,
+    "img_path": "images/2175285ab5e295fa85d0319226323163fa4c4bf6562d1c9eff9675b9ec0d1bbb.jpg"
+  },
+  {
+    "id": 3315,
+    "type": "text",
+    "page_idx": 93,
+    "text": "a  $72^{\\circ} + x = 90^{\\circ}$  angle ABC  $= 90^{\\circ}$  comp angles)"
+  },
+  {
+    "id": 3316,
+    "type": "equation",
+    "page_idx": 93,
+    "text": "$$\n\\begin{array}{l} x = 9 0 ^ {\\circ} - 7 2 ^ {\\circ} \\\\ x = 1 8 ^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3317,
+    "type": "text",
+    "page_idx": 93,
+    "text": "You are told that angle ABC is a right angle, so you know that  $72^{\\circ}$  and  $x$  are complementary angles. This means that  $72^{\\circ} + x = 90^{\\circ}$ , so you can solve to find the value of  $x$ ."
+  },
+  {
+    "id": 3318,
+    "type": "image",
+    "page_idx": 93,
+    "img_path": "images/8021efb0fb66e606e53c25ab82c2a01ff911d174b1461b8a2a95b1a71db7e27f.jpg"
+  },
+  {
+    "id": 3319,
+    "type": "text",
+    "page_idx": 93,
+    "text": "b  $48^{\\circ} + 90^{\\circ} + x = 180^{\\circ}$  (angles on line)"
+  },
+  {
+    "id": 3320,
+    "type": "equation",
+    "page_idx": 93,
+    "text": "$$\n\\begin{array}{l} x = 1 8 0 ^ {\\circ} - 9 0 ^ {\\circ} - 4 8 ^ {\\circ} \\\\ x = 4 2 ^ {\\circ} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 3321,
+    "type": "text",
+    "page_idx": 93,
+    "text": "You can see that  $48^{\\circ}$  the right angle and  $x$  are angles on a straight line. Angles on a straight line add up to  $180^{\\circ}$ . So you can rearrange to make  $x$  the subject."
+  },
+  {
+    "id": 3322,
+    "type": "image",
+    "page_idx": 93,
+    "img_path": "images/253c1fd50fe41c61cc4715cd052fbab25445cffd2fdee9c6b76287b1fe4a0d25.jpg"
+  },
+  {
+    "id": 3323,
+    "type": "text",
+    "page_idx": 93,
+    "text": "c  $x = 30^{\\circ}$  (vertically opposite angles)"
+  },
+  {
+    "id": 3324,
+    "type": "text",
+    "page_idx": 93,
+    "text": "You know that when two lines intersect, the resulting vertically opposite angles are equal.  $x$  and  $30^{\\circ}$  are vertically opposite, so  $x = 30^{\\circ}$"
+  },
+  {
+    "id": 3325,
+    "type": "text",
+    "page_idx": 93,
+    "text": "TIP"
+  },
+  {
+    "id": 3326,
+    "type": "text",
+    "page_idx": 93,
+    "text": "In geometry problems you need to present your reasoning in a logical and structured way."
+  },
+  {
+    "id": 3327,
+    "type": "text",
+    "page_idx": 93,
+    "text": "You will usually be expected to give reasons when you are finding the size of an unknown angle. To do this, state the relationship that you used to find the unknown angle after your statements. You can use these abbreviations to give reasons:"
+  },
+  {
+    "id": 3328,
+    "type": "text",
+    "page_idx": 93,
+    "text": "comp angles"
+  },
+  {
+    "id": 3329,
+    "type": "text",
+    "page_idx": 93,
+    "text": "- supp angles"
+  },
+  {
+    "id": 3330,
+    "type": "text",
+    "page_idx": 93,
+    "text": "angles on line"
+  },
+  {
+    "id": 3331,
+    "type": "text",
+    "page_idx": 93,
+    "text": "angles round point"
+  },
+  {
+    "id": 3332,
+    "type": "text",
+    "page_idx": 94,
+    "text": "Exercise 3.3"
+  },
+  {
+    "id": 3333,
+    "type": "text",
+    "page_idx": 94,
+    "text": "1 In the following diagram, name:"
+  },
+  {
+    "id": 3334,
+    "type": "text",
+    "page_idx": 94,
+    "text": "a a pair of complementary angles"
+  },
+  {
+    "id": 3335,
+    "type": "text",
+    "page_idx": 94,
+    "text": "b a pair of equal angles"
+  },
+  {
+    "id": 3336,
+    "type": "text",
+    "page_idx": 94,
+    "text": "a pair of supplementary angles"
+  },
+  {
+    "id": 3337,
+    "type": "text",
+    "page_idx": 94,
+    "text": "d the angles on line DG"
+  },
+  {
+    "id": 3338,
+    "type": "text",
+    "page_idx": 94,
+    "text": "e the complement of angle EBF"
+  },
+  {
+    "id": 3339,
+    "type": "text",
+    "page_idx": 94,
+    "text": "f the supplement of angle EBC."
+  },
+  {
+    "id": 3340,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/0abcad30e96314f66be7ba0a8ff3b06ffd78cdef733bfc0aab5d5c566bd16e6e.jpg"
+  },
+  {
+    "id": 3341,
+    "type": "text",
+    "page_idx": 94,
+    "text": "2 In each diagram, find the value of each angle marked with a letter."
+  },
+  {
+    "id": 3342,
+    "type": "text",
+    "page_idx": 94,
+    "text": "a"
+  },
+  {
+    "id": 3343,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/792cf17328a110cef09463d529861b9323c1e9098d55ed6e898004c795af4569.jpg"
+  },
+  {
+    "id": 3344,
+    "type": "text",
+    "page_idx": 94,
+    "text": "b"
+  },
+  {
+    "id": 3345,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/5023d9340399d19eaf32fb65f2355d30f588216c4a43f773d1fee851df9666a7.jpg"
+  },
+  {
+    "id": 3346,
+    "type": "text",
+    "page_idx": 94,
+    "text": "C"
+  },
+  {
+    "id": 3347,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/da2ddf142e56814967d0bf8b270fa1c217f38d9958d886c9ec5924e25ceb288a.jpg"
+  },
+  {
+    "id": 3348,
+    "type": "text",
+    "page_idx": 94,
+    "text": "d"
+  },
+  {
+    "id": 3349,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/9501f00c78aee501277598cd893d7c02920d4cc750956f0e4a56485263b0b846.jpg"
+  },
+  {
+    "id": 3350,
+    "type": "text",
+    "page_idx": 94,
+    "text": "e"
+  },
+  {
+    "id": 3351,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/07be178e7cdfae3361544838f92aa309bd97520591f793d153b6ebb9bb727950.jpg"
+  },
+  {
+    "id": 3352,
+    "type": "text",
+    "page_idx": 94,
+    "text": "f"
+  },
+  {
+    "id": 3353,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/328a8eed789e18d500873473f75a3fbab25df906dc775156388bf41eaf6fafdd.jpg"
+  },
+  {
+    "id": 3354,
+    "type": "text",
+    "page_idx": 94,
+    "text": "9"
+  },
+  {
+    "id": 3355,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/85c8318169d5bd8dd1ae86e00ffcdaa184e2012522c7bd60d8cb45d7c1bd3db4.jpg"
+  },
+  {
+    "id": 3356,
+    "type": "text",
+    "page_idx": 94,
+    "text": "h"
+  },
+  {
+    "id": 3357,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/f4cf7e3a5c46fcabf1d749485c41817e5309cf7cb2df9cd0d50e93d0d399fb9a.jpg"
+  },
+  {
+    "id": 3358,
+    "type": "text",
+    "page_idx": 94,
+    "text": "i"
+  },
+  {
+    "id": 3359,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/cfb9194a38fe6501ef38daec9c96306407fce635809aede9238cb6aebab355b2.jpg"
+  },
+  {
+    "id": 3360,
+    "type": "text",
+    "page_idx": 94,
+    "text": "3 Find the value of  $x$  in each of the following diagrams."
+  },
+  {
+    "id": 3361,
+    "type": "text",
+    "page_idx": 94,
+    "text": "a"
+  },
+  {
+    "id": 3362,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/7aaed4029b933b47cff7d24526f2b56e560b57cde2223455e2015f82667b8a2d.jpg"
+  },
+  {
+    "id": 3363,
+    "type": "text",
+    "page_idx": 94,
+    "text": "b"
+  },
+  {
+    "id": 3364,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/ad95312da053a064f39c2847737022a6ff4a2d1b8e548e7deb0fad932e679846.jpg"
+  },
+  {
+    "id": 3365,
+    "type": "text",
+    "page_idx": 94,
+    "text": "C"
+  },
+  {
+    "id": 3366,
+    "type": "image",
+    "page_idx": 94,
+    "img_path": "images/01f9f25af645a60bbd7d5f86f5f23487fac4db75975bc56f3f32fd03837db5ff.jpg"
+  },
+  {
+    "id": 3367,
+    "type": "text",
+    "text": "4 Two angles are supplementary. The first angle is twice the size of the second. What are their sizes?",
+    "page_idx": 95
+  },
+  {
+    "id": 3368,
+    "type": "text",
+    "text": "5 One of the angles formed when two lines intersect is  $127^{\\circ}$ . What are the sizes of the other three angles?",
+    "page_idx": 95
+  },
+  {
+    "id": 3369,
+    "type": "text",
+    "page_idx": 95,
+    "text": "Angles and parallel lines"
+  },
+  {
+    "id": 3370,
+    "type": "text",
+    "page_idx": 95,
+    "text": "When two parallel lines are cut by a third line (the transversal) eight angles are formed. These angles form pairs which are related to each other in specific ways."
+  },
+  {
+    "id": 3371,
+    "type": "text",
+    "page_idx": 95,
+    "text": "Corresponding angles ( $F$ -shape)"
+  },
+  {
+    "id": 3372,
+    "type": "text",
+    "page_idx": 95,
+    "text": "When two parallel lines are cut by a transversal four pairs of corresponding angles are formed. Corresponding angles are equal to each other."
+  },
+  {
+    "id": 3373,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/711d114740adf4f6be7de2c6d3225969f78b58468613156682b1d7d63ae6c4e0.jpg"
+  },
+  {
+    "id": 3374,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/466e0aaa140f4998b51c7423fa9f6b337c63fdd999f136ceab577979f881f811.jpg"
+  },
+  {
+    "id": 3375,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/eb7bb70cb95be1e2b461fc50adc4e458f63e6c0b1da792101ff9342cfa04c000.jpg"
+  },
+  {
+    "id": 3376,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/2653e6abc94a94674353bb186d0a49a753e4363d3b64055bc7b796ef4be9fa5d.jpg"
+  },
+  {
+    "id": 3377,
+    "type": "text",
+    "page_idx": 95,
+    "text": "Alternate angles (‘Z’-shape)"
+  },
+  {
+    "id": 3378,
+    "type": "text",
+    "page_idx": 95,
+    "text": "When two parallel lines are cut by a transversal two pairs of alternate angles are formed. Alternate angles are equal to each other."
+  },
+  {
+    "id": 3379,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/7aa9b63a8e9f65d49feaae4bbf1c86045c7899e0921f1644c986e0d6c19c78ae.jpg"
+  },
+  {
+    "id": 3380,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/ca27d9c3d27f87f3f51c6ae69127c3d01e1467b9ec2827d928ce8fae08c9cae2.jpg"
+  },
+  {
+    "id": 3381,
+    "type": "text",
+    "page_idx": 95,
+    "text": "Co-interior angles ('C'-shape)"
+  },
+  {
+    "id": 3382,
+    "type": "text",
+    "page_idx": 95,
+    "text": "When two parallel lines are cut by a transversal two pairs of co-interior angles are formed. Co-interior angles are supplementary (together they add up to  $180^{\\circ}$ )."
+  },
+  {
+    "id": 3383,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/a1024e1357913e6f11e3fc15b7063ab1e9b4b6125ade30b061b0c7c01bf3b35d.jpg"
+  },
+  {
+    "id": 3384,
+    "type": "image",
+    "page_idx": 95,
+    "img_path": "images/72fd8515699defc57f3833a250246c3f4d17f7706d6061713d64bd53e7184dd8.jpg"
+  },
+  {
+    "id": 3385,
+    "type": "text",
+    "page_idx": 95,
+    "text": "TIP"
+  },
+  {
+    "id": 3386,
+    "type": "text",
+    "page_idx": 95,
+    "text": "Although  $F^{\\prime},Z^{\\prime}$  and  $C^\\prime$  shapes help you to remember these properties, you must use the terms corresponding, 'alternate' and cointerior' to describe them when you answer a question."
+  },
+  {
+    "id": 3387,
+    "type": "text",
+    "page_idx": 95,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 3388,
+    "type": "text",
+    "page_idx": 95,
+    "text": "You will use the angle relationships in this section again when you deal with triangles, quadrilaterals, polygons and circles later in this chapter."
+  },
+  {
+    "id": 3389,
+    "type": "text",
+    "page_idx": 95,
+    "text": "TIP"
+  }
+]
+```

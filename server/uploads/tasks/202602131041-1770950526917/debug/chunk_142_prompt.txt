@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 9940,
+    "type": "text",
+    "text": "-  $\\mathfrak{n}(A)$  is the number of elements in set  $A$ .",
+    "page_idx": 296
+  },
+  {
+    "id": 9941,
+    "type": "text",
+    "page_idx": 296,
+    "text": "LINK"
+  },
+  {
+    "id": 9942,
+    "type": "text",
+    "page_idx": 296,
+    "text": "Sets are often used in advanced probability theory."
+  },
+  {
+    "id": 9943,
+    "type": "text",
+    "page_idx": 296,
+    "text": "TIP"
+  },
+  {
+    "id": 9944,
+    "type": "text",
+    "page_idx": 296,
+    "text": "Remember the curly brackets on either side when you list a set."
+  },
+  {
+    "id": 9945,
+    "type": "text",
+    "page_idx": 296,
+    "text": "TIP"
+  },
+  {
+    "id": 9946,
+    "type": "text",
+    "page_idx": 296,
+    "text": "Notice, for set  $B$ , that elements of a set are not repeated."
+  },
+  {
+    "id": 9947,
+    "type": "text",
+    "page_idx": 297,
+    "text": "Exercise 9.10"
+  },
+  {
+    "id": 9948,
+    "type": "text",
+    "page_idx": 297,
+    "text": "1 List all of the elements of each set."
+  },
+  {
+    "id": 9949,
+    "type": "text",
+    "page_idx": 297,
+    "text": "a {days of the week}"
+  },
+  {
+    "id": 9950,
+    "type": "text",
+    "page_idx": 297,
+    "text": "b {months of the year}"
+  },
+  {
+    "id": 9951,
+    "type": "text",
+    "page_idx": 297,
+    "text": "c {factors of 36}"
+  },
+  {
+    "id": 9952,
+    "type": "text",
+    "page_idx": 297,
+    "text": "d {colours of the rainbow}"
+  },
+  {
+    "id": 9953,
+    "type": "text",
+    "page_idx": 297,
+    "text": "$\\mathbf{e}$  {multiples of seven less than 50}"
+  },
+  {
+    "id": 9954,
+    "type": "text",
+    "page_idx": 297,
+    "text": "f {primes less than 30}"
+  },
+  {
+    "id": 9955,
+    "type": "text",
+    "page_idx": 297,
+    "text": "9 ways of arranging the letters in the word TOY"
+  },
+  {
+    "id": 9956,
+    "type": "text",
+    "page_idx": 297,
+    "text": "2 List two more members of each set,"
+  },
+  {
+    "id": 9957,
+    "type": "text",
+    "page_idx": 297,
+    "text": "a {rabbit, cat, parrot, ...}"
+  },
+  {
+    "id": 9958,
+    "type": "text",
+    "page_idx": 297,
+    "text": "b {carrot, potato, cabbage,...}"
+  },
+  {
+    "id": 9959,
+    "type": "text",
+    "page_idx": 297,
+    "text": "London,Paris,Stockholm,..."
+  },
+  {
+    "id": 9960,
+    "type": "text",
+    "page_idx": 297,
+    "text": "d {Nile, Amazon, Loire, ...}"
+  },
+  {
+    "id": 9961,
+    "type": "text",
+    "page_idx": 297,
+    "text": "{elm, pine, oak,...}"
+  },
+  {
+    "id": 9962,
+    "type": "text",
+    "page_idx": 297,
+    "text": "f {tennis, cricket, football, ...}"
+  },
+  {
+    "id": 9963,
+    "type": "text",
+    "page_idx": 297,
+    "text": "9 {France, Germany, Belgium, ...}"
+  },
+  {
+    "id": 9964,
+    "type": "text",
+    "page_idx": 297,
+    "text": "h {Everest, Denali, Elbrus, ...}"
+  },
+  {
+    "id": 9965,
+    "type": "text",
+    "page_idx": 297,
+    "text": "i {Beethoven, Mozart, Sibelius,...}"
+  },
+  {
+    "id": 9966,
+    "type": "text",
+    "page_idx": 297,
+    "text": "{rose, hyacinth, poppy, ...}"
+  },
+  {
+    "id": 9967,
+    "type": "text",
+    "page_idx": 297,
+    "text": "k {3,6,9,...}"
+  },
+  {
+    "id": 9968,
+    "type": "text",
+    "page_idx": 297,
+    "text": "{Hawksbill, Leatherback, Loggerhead, ...}"
+  },
+  {
+    "id": 9969,
+    "type": "text",
+    "page_idx": 297,
+    "text": "m {Mercury, Venus, Saturn,...}"
+  },
+  {
+    "id": 9970,
+    "type": "text",
+    "page_idx": 297,
+    "text": "n {happy, sad, angry, ...}"
+  },
+  {
+    "id": 9971,
+    "type": "text",
+    "page_idx": 297,
+    "text": "$\\bullet$  {German, Czech, Australian,...}"
+  },
+  {
+    "id": 9972,
+    "type": "text",
+    "page_idx": 297,
+    "text": "P {hexagon, heptagon, triangle, ...}"
+  },
+  {
+    "id": 9973,
+    "type": "text",
+    "page_idx": 297,
+    "text": "3 Describe each set fully in words."
+  },
+  {
+    "id": 9974,
+    "type": "text",
+    "page_idx": 297,
+    "text": "a {1,4,9,16,25,...}"
+  },
+  {
+    "id": 9975,
+    "type": "text",
+    "page_idx": 297,
+    "text": "b {Asia, Europe, Africa,...}"
+  },
+  {
+    "id": 9976,
+    "type": "text",
+    "page_idx": 297,
+    "text": "2,4,6,8"
+  },
+  {
+    "id": 9977,
+    "type": "text",
+    "page_idx": 297,
+    "text": "d {2,4,6,8,...}"
+  },
+  {
+    "id": 9978,
+    "type": "text",
+    "page_idx": 297,
+    "text": "e {1,2,3,4,6,12}"
+  },
+  {
+    "id": 9979,
+    "type": "text",
+    "page_idx": 297,
+    "text": "4 True or false?"
+  },
+  {
+    "id": 9980,
+    "type": "text",
+    "text": "a If  $A = \\{1,2,3,4,5\\}$  then  $3\\notin A$",
+    "page_idx": 297
+  },
+  {
+    "id": 9981,
+    "type": "text",
+    "text": "b If  $B = \\{\\mathrm{primes}$  less than 10\\}, then  $n(B) = 4$",
+    "page_idx": 297
+  },
+  {
+    "id": 9982,
+    "type": "text",
+    "text": "c If  $C = \\{\\mathrm{regular~quadrilaterals}\\}$  , then square  $\\in C$",
+    "page_idx": 297
+  },
+  {
+    "id": 9983,
+    "type": "text",
+    "text": "d If  $D = \\{\\text{paint primary colours}\\}$ , then yellow  $\\notin D$ .",
+    "page_idx": 297
+  },
+  {
+    "id": 9984,
+    "type": "text",
+    "text": "e If  $E = \\{\\mathrm{square~numbers~less~than~}100\\}$  ,then  $64\\in E$",
+    "page_idx": 297
+  },
+  {
+    "id": 9985,
+    "type": "text",
+    "page_idx": 297,
+    "text": "Universal sets"
+  },
+  {
+    "id": 9986,
+    "type": "text",
+    "page_idx": 297,
+    "text": "The following sets all have a number of things in common:"
+  },
+  {
+    "id": 9987,
+    "type": "equation",
+    "page_idx": 297,
+    "text": "$$\nM = \\{1, 2, 3, 4, 5, 6, 7, 8 \\}\n$$"
+  },
+  {
+    "id": 9988,
+    "type": "equation",
+    "page_idx": 297,
+    "text": "$$\nN = \\{1, 5, 9 \\}\n$$"
+  },
+  {
+    "id": 9989,
+    "type": "equation",
+    "page_idx": 297,
+    "text": "$$\nO = \\{4, 8, 2 1 \\}\n$$"
+  },
+  {
+    "id": 9990,
+    "type": "text",
+    "page_idx": 297,
+    "text": "All three are contained within the set of whole numbers. They are also all contained in the set of integers less than 22."
+  },
+  {
+    "id": 9991,
+    "type": "text",
+    "page_idx": 297,
+    "text": "When you work with sets there is usually a 'largest' set which contains all of the sets that you are studying. This set can change according to the problem you are trying to solve."
+  },
+  {
+    "id": 9992,
+    "type": "text",
+    "page_idx": 297,
+    "text": "Here, the set of integers contains all elements from  $M, N$  or  $O$ . But then so does the set of all positive integers less than 22."
+  },
+  {
+    "id": 9993,
+    "type": "text",
+    "page_idx": 298,
+    "text": "Both these sets (and many more) can be used as a universal set. A universal set contains all possible elements that you would consider for a set in a particular problem. The symbol  $\\mathcal{E}$  is used to mean the universal set."
+  },
+  {
+    "id": 9994,
+    "type": "text",
+    "page_idx": 298,
+    "text": "Complements"
+  },
+  {
+    "id": 9995,
+    "type": "text",
+    "page_idx": 298,
+    "text": "The complement of the set  $A$  is the set of all things that are in  $\\mathcal{E}$  but NOT in the set  $A$ . The symbol  $A'$  is used to denote the complement of set  $A$ ."
+  },
+  {
+    "id": 9996,
+    "type": "text",
+    "page_idx": 298,
+    "text": "For example, if  $\\mathcal{E} = \\{1, 2, 3, 4, 5, 6, 7, 8, 9, 10\\}$  and  $F = \\{2, 4, 6\\}$"
+  },
+  {
+    "id": 9997,
+    "type": "text",
+    "page_idx": 298,
+    "text": "then the complement of  $F$  would be  $F' = \\{1, 3, 5, 7, 8, 9, 10\\}$ ."
+  },
+  {
+    "id": 9998,
+    "type": "text",
+    "page_idx": 298,
+    "text": "So, in summary:"
+  },
+  {
+    "id": 9999,
+    "type": "text",
+    "text": "$\\mathcal{E}$  represents a universal set",
+    "page_idx": 298
+  },
+  {
+    "id": 10000,
+    "type": "text",
+    "text": "$A^{\\prime}$  represents the complement of set  $A$",
+    "page_idx": 298
+  },
+  {
+    "id": 10001,
+    "type": "text",
+    "page_idx": 298,
+    "text": "Unions and intersections"
+  },
+  {
+    "id": 10002,
+    "type": "text",
+    "page_idx": 298,
+    "text": "The union of two sets,  $A$  and  $B$ , is the set of all elements that are members of  $A$  or members of  $B$  or members of both. The symbol  $\\cup$  is used to indicate union so, the union of sets  $A$  and  $B$  is written:"
+  },
+  {
+    "id": 10003,
+    "type": "text",
+    "page_idx": 298,
+    "text": "$A\\cup B$"
+  },
+  {
+    "id": 10004,
+    "type": "text",
+    "page_idx": 298,
+    "text": "The intersection of two sets,  $A$  and  $B$ , is the set of all elements that are members of both  $A$  and  $B$ . The symbol  $\\cap$  is used to indicate intersection so, the intersection of sets  $A$  and  $B$  is written:"
+  },
+  {
+    "id": 10005,
+    "type": "text",
+    "page_idx": 298,
+    "text": "A∩B"
+  },
+  {
+    "id": 10006,
+    "type": "text",
+    "page_idx": 298,
+    "text": "For example, if  $C = \\{4, 6, 8, 10\\}$  and  $D = \\{6, 10, 12, 14\\}$ , then:"
+  },
+  {
+    "id": 10007,
+    "type": "text",
+    "page_idx": 298,
+    "text": "$C\\cap D =$  the set of all elements common to both  $= \\{6,10\\}$"
+  },
+  {
+    "id": 10008,
+    "type": "text",
+    "page_idx": 298,
+    "text": "$C\\cup D =$  the set of all elements that are in  $C$  or  $D$  or both  $= \\{4,6,8,10,12,14\\}$"
+  },
+  {
+    "id": 10009,
+    "type": "text",
+    "page_idx": 298,
+    "text": "Subsets"
+  },
+  {
+    "id": 10010,
+    "type": "text",
+    "page_idx": 298,
+    "text": "You already know that a rectangle is a type of quadrilateral and that all rectangles are quadrilaterals. If set  $A$  is the set of all quadrilaterals and set  $B$  is the set of all rectangles, then every element of  $B$  is also a member of  $A$  and, therefore,  $B$  is completely contained within  $A$ . When this happens, you can say that  $B$  is a subset of  $A$ . You write this as  $B \\subseteq A$"
+  },
+  {
+    "id": 10011,
+    "type": "text",
+    "page_idx": 298,
+    "text": "You can reverse the  $\\subseteq$  symbol, but this does not change its meaning.  $B \\subseteq A$  means  $B$  is a subset of  $A$ , but so does  $A \\supseteq B$ . If  $B$  is not a subset of  $A$ , you write  $B \\nsubseteq A$ ."
+  },
+  {
+    "id": 10012,
+    "type": "text",
+    "page_idx": 298,
+    "text": "So in summary:"
+  },
+  {
+    "id": 10013,
+    "type": "text",
+    "text": "$\\cup$  is the symbol for union",
+    "page_idx": 298
+  },
+  {
+    "id": 10014,
+    "type": "text",
+    "text": "-  $\\cap$  is the symbol for intersection",
+    "page_idx": 298
+  },
+  {
+    "id": 10015,
+    "type": "text",
+    "text": "-  $B \\subseteq A$  indicates that  $B$  is a subset of  $A$ .",
+    "page_idx": 298
+  },
+  {
+    "id": 10016,
+    "type": "text",
+    "text": "-  $B \\notin A$  indicates that  $B$  is not a subset of  $A$ .",
+    "page_idx": 298
+  },
+  {
+    "id": 10017,
+    "type": "text",
+    "page_idx": 298,
+    "text": "TIP"
+  },
+  {
+    "id": 10018,
+    "type": "text",
+    "page_idx": 298,
+    "text": "Taking the union of two sets is like adding the sets together but remember you do not repeat elements within the set."
+  },
+  {
+    "id": 10019,
+    "type": "text",
+    "page_idx": 298,
+    "text": "TIP"
+  },
+  {
+    "id": 10020,
+    "type": "text",
+    "page_idx": 298,
+    "text": "The symbol,  $\\subseteq$  has a open end and a closed end. The subset goes at the closed end."
+  },
+  {
+    "id": 10021,
+    "type": "text",
+    "page_idx": 299,
+    "text": "WORKED EXAMPLE 19"
+  },
+  {
+    "id": 10022,
+    "type": "text",
+    "page_idx": 299,
+    "text": "If  $W = \\{4,8,12,16,20,24\\}$  and  $T = \\{5,8,20,24,28\\}$"
+  },
+  {
+    "id": 10023,
+    "type": "text",
+    "page_idx": 299,
+    "text": "a List the sets:"
+  },
+  {
+    "id": 10024,
+    "type": "text",
+    "page_idx": 299,
+    "text": "i WU T ii WnT"
+  },
+  {
+    "id": 10025,
+    "type": "text",
+    "page_idx": 299,
+    "text": "b Is it true that  $T\\subseteq W?$"
+  },
+  {
+    "id": 10026,
+    "type": "text",
+    "page_idx": 299,
+    "text": "Answers"
+  },
+  {
+    "id": 10027,
+    "type": "text",
+    "page_idx": 299,
+    "text": "a i  $W \\cup T = \\text{set of all members of } W \\text{ or of } T \\text{ or of both} = \\{4, 5, 8, 12, 16, 20, 24, 28\\}$ ."
+  },
+  {
+    "id": 10028,
+    "type": "text",
+    "page_idx": 299,
+    "text": "ii  $W\\cap T =$  set of all elements that appear in both  $W$  and  $T = \\{8,20,24\\}$"
+  },
+  {
+    "id": 10029,
+    "type": "text",
+    "page_idx": 299,
+    "text": "b  $5\\in T$  but  $5\\notin W$  . This means it is not true that every member of  $T$  is also a member of  $W$  so  $T$  is not a subset of  $W$"
+  },
+  {
+    "id": 10030,
+    "type": "text",
+    "page_idx": 299,
+    "text": "Exercise 9.11"
+  },
+  {
+    "id": 10031,
+    "type": "text",
+    "page_idx": 299,
+    "text": "1  $A = \\{2,4,6,8,10\\}$  and  $B = \\{1,3,5,6,8,10\\}$"
+  },
+  {
+    "id": 10032,
+    "type": "text",
+    "page_idx": 299,
+    "text": "a List the elements of:"
+  },
+  {
+    "id": 10033,
+    "type": "text",
+    "page_idx": 299,
+    "text": "i  $A\\cap B$  ii  $A\\cup B$"
+  },
+  {
+    "id": 10034,
+    "type": "text",
+    "page_idx": 299,
+    "text": "b Find:"
+  },
+  {
+    "id": 10035,
+    "type": "text",
+    "page_idx": 299,
+    "text": "i  $n(A\\cap B)$  ii  $n(A\\cup B)$"
+  },
+  {
+    "id": 10036,
+    "type": "text",
+    "page_idx": 299,
+    "text": "2  $C = \\{a,b,g,h,u,w,z\\}$  and  $D = \\{a,g,u,v,w,x,y,z\\}$"
+  },
+  {
+    "id": 10037,
+    "type": "text",
+    "page_idx": 299,
+    "text": "a List the elements of:"
+  },
+  {
+    "id": 10038,
+    "type": "text",
+    "page_idx": 299,
+    "text": "i CnD ii CUD"
+  },
+  {
+    "id": 10039,
+    "type": "text",
+    "page_idx": 299,
+    "text": "b Is it true that u is an element of  $C\\cap D?$  Explain your answer."
+  }
+]
+```

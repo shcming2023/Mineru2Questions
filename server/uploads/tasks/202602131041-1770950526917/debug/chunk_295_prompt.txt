@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 20650,
+    "type": "text",
+    "page_idx": 755,
+    "text": "a the value of  $k$"
+  },
+  {
+    "id": 20651,
+    "type": "text",
+    "page_idx": 755,
+    "text": "b  $y$  when  $x = 10$"
+  },
+  {
+    "id": 20652,
+    "type": "text",
+    "page_idx": 755,
+    "text": "$x$  when  $y = 12$"
+  },
+  {
+    "id": 20653,
+    "type": "text",
+    "page_idx": 756,
+    "text": "2 Some corresponding values of  $p$  and  $q$  are given in the table. Are  $p$  and  $q$  inversely proportional? Justify your answer."
+  },
+  {
+    "id": 20654,
+    "type": "text",
+    "text": "[Table Row] <tr><td>q</td><td>2</td><td>5</td><td>8</td><td>12</td></tr>",
+    "page_idx": 756
+  },
+  {
+    "id": 20655,
+    "type": "text",
+    "text": "[Table Row] <tr><td>p</td><td>75</td><td>30</td><td>20</td><td>15</td></tr>",
+    "page_idx": 756
+  },
+  {
+    "id": 20656,
+    "type": "text",
+    "page_idx": 756,
+    "text": "3 For each of the following,  $y$  is inversely proportional to  $x$ . Write an equation expressing  $y$  in terms of  $x$  if:"
+  },
+  {
+    "id": 20657,
+    "type": "text",
+    "page_idx": 756,
+    "text": "a  $y = 0.225$  when  $x = 20$"
+  },
+  {
+    "id": 20658,
+    "type": "text",
+    "page_idx": 756,
+    "text": "b  $y = 12.5$  when  $x = 5$"
+  },
+  {
+    "id": 20659,
+    "type": "text",
+    "page_idx": 756,
+    "text": "$y = 5$  when  $x = 0.4$"
+  },
+  {
+    "id": 20660,
+    "type": "text",
+    "page_idx": 756,
+    "text": "d  $y = 0.4$  when  $x = 0.7$"
+  },
+  {
+    "id": 20661,
+    "type": "text",
+    "page_idx": 756,
+    "text": "$y = 0.6$  when  $x = 8$"
+  },
+  {
+    "id": 20662,
+    "type": "text",
+    "page_idx": 756,
+    "text": "4  $y$  is inversely proportional to  $x^3$ . If  $y = 80$  when  $x = 4$ , find:"
+  },
+  {
+    "id": 20663,
+    "type": "text",
+    "page_idx": 756,
+    "text": "a the constant of proportionality"
+  },
+  {
+    "id": 20664,
+    "type": "text",
+    "page_idx": 756,
+    "text": "b the value of  $y$  when  $x = 8$"
+  },
+  {
+    "id": 20665,
+    "type": "text",
+    "page_idx": 756,
+    "text": "the value  $y$  when  $x = 6$"
+  },
+  {
+    "id": 20666,
+    "type": "text",
+    "page_idx": 756,
+    "text": "d the value of  $x$  when  $y = 24$"
+  },
+  {
+    "id": 20667,
+    "type": "text",
+    "page_idx": 756,
+    "text": "5 Given that  $y$  is inversely proportional to  $x^2$ , complete the table."
+  },
+  {
+    "id": 20668,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>0.1</td><td>0.25</td><td>0.5</td><td></td></tr>",
+    "page_idx": 756
+  },
+  {
+    "id": 20669,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td></td><td></td><td>1</td><td>64</td></tr>",
+    "page_idx": 756
+  },
+  {
+    "id": 20670,
+    "type": "text",
+    "page_idx": 756,
+    "text": "6 Given that  $y$  is inversely proportional to  $\\sqrt{x}$ , complete the table."
+  },
+  {
+    "id": 20671,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>25</td><td>100</td><td></td><td></td></tr>",
+    "page_idx": 756
+  },
+  {
+    "id": 20672,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td>10</td><td></td><td>26</td><td>50</td></tr>",
+    "page_idx": 756
+  },
+  {
+    "id": 20673,
+    "type": "text",
+    "page_idx": 756,
+    "text": "7  $x$  and  $y$  are known to be proportional to each other. When  $x = 20, y = 50$ . Find  $k$ , if:"
+  },
+  {
+    "id": 20674,
+    "type": "text",
+    "page_idx": 756,
+    "text": "a yx.x"
+  },
+  {
+    "id": 20675,
+    "type": "text",
+    "page_idx": 756,
+    "text": "b  $y\\propto \\frac{1}{x}$"
+  },
+  {
+    "id": 20676,
+    "type": "text",
+    "page_idx": 756,
+    "text": "yxx"
+  },
+  {
+    "id": 20677,
+    "type": "text",
+    "page_idx": 756,
+    "text": "8  $F$  is inversely proportion to  $p^3$ . When  $F = 108, p = 2$ ."
+  },
+  {
+    "id": 20678,
+    "type": "text",
+    "text": "a Find a formula for  $F$  in terms of  $p$",
+    "page_idx": 756
+  },
+  {
+    "id": 20679,
+    "type": "text",
+    "text": "b Calculate  $p$  when  $F$  is 13.5",
+    "page_idx": 756
+  },
+  {
+    "id": 20680,
+    "type": "text",
+    "text": "c Find  $F$  when  $p$  is 3.",
+    "page_idx": 756
+  },
+  {
+    "id": 20681,
+    "type": "text",
+    "text": "9  $A$  is directly proportional to  $r^2$  and when  $r = 3, A = 36$ . Find the value of  $A$  when  $r = 10$ .",
+    "page_idx": 756
+  },
+  {
+    "id": 20682,
+    "type": "text",
+    "text": "10  $l$  is inversely proportional to  $d^3$ . When  $d = 2$ ,  $l = 100$ . Find the value of  $l$  when  $d = 5$ .",
+    "page_idx": 756
+  },
+  {
+    "id": 20683,
+    "type": "text",
+    "text": "11 An electric current  $I$  flows through a resistance  $R$ .  $I$  is inversely proportional to  $R$  and when  $R = 3$ ,  $I = 5$ . Find the value of  $I$  when  $R = 0.25$ .",
+    "page_idx": 756
+  },
+  {
+    "id": 20684,
+    "type": "text",
+    "page_idx": 757,
+    "text": "12 Corresponding values of  $s$  and  $t$  are given in the table."
+  },
+  {
+    "id": 20685,
+    "type": "text",
+    "text": "[Table Row] <tr><td>s</td><td>2</td><td>6</td><td>10</td></tr>",
+    "page_idx": 757
+  },
+  {
+    "id": 20686,
+    "type": "text",
+    "text": "[Table Row] <tr><td>t</td><td>0.4</td><td>10.8</td><td>50</td></tr>",
+    "page_idx": 757
+  },
+  {
+    "id": 20687,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Which of the following statements is true?"
+  },
+  {
+    "id": 20688,
+    "type": "text",
+    "page_idx": 757,
+    "text": "a  $t\\times s$"
+  },
+  {
+    "id": 20689,
+    "type": "text",
+    "page_idx": 757,
+    "text": "b  $t\\propto s^2$"
+  },
+  {
+    "id": 20690,
+    "type": "text",
+    "page_idx": 757,
+    "text": "C  $t\\propto s^3$"
+  },
+  {
+    "id": 20691,
+    "type": "text",
+    "text": "13 It takes 4 people 10 hours to plaster a section of a building. How long will it take 8 people to do the same job working at the same rate?",
+    "page_idx": 757
+  },
+  {
+    "id": 20692,
+    "type": "text",
+    "text": "14 In an industrial experiment it is found that the force,  $f$ , needed to break a concrete beam varies inversely with the length,  $l$ , of the beam. If it takes 50 000 newtons to break a concrete beam 2 metres long, how many newtons will it take to break a beam that is 6 metres long?",
+    "page_idx": 757
+  },
+  {
+    "id": 20693,
+    "type": "text",
+    "text": "15 A submarine crew discovers that the water temperature  $(^{\\circ}\\mathrm{C})$  varies inversely with the depth to which they submerge (km). When they were at a depth of  $4\\mathrm{km}$  the water temperature was  $6^{\\circ}\\mathrm{C}$",
+    "page_idx": 757
+  },
+  {
+    "id": 20694,
+    "type": "text",
+    "text": "a What will the water temperature be at a depth of  $12\\mathrm{km}$",
+    "page_idx": 757
+  },
+  {
+    "id": 20695,
+    "type": "text",
+    "text": "b What depth do they need to reach for the water temperature to be  $-1^{\\circ}C?$",
+    "page_idx": 757
+  },
+  {
+    "id": 20696,
+    "type": "text",
+    "page_idx": 757,
+    "text": "16 Variable  $P$  varies directly with variable  $m$  and inversely with variable  $n$ . If  $P = 24$  when  $m = 3$  and  $n = 2$ , find  $P$  when:"
+  },
+  {
+    "id": 20697,
+    "type": "text",
+    "page_idx": 757,
+    "text": "a  $m = 5$"
+  },
+  {
+    "id": 20698,
+    "type": "text",
+    "page_idx": 757,
+    "text": "b  $n = 8$"
+  },
+  {
+    "id": 20699,
+    "type": "text",
+    "page_idx": 757,
+    "text": "17 A cyclist's speed over a fixed distance is inversely proportional to the time it takes to complete the ride. Due to poor weather on one ride, the cyclist's speed decreases by  $20\\%$ . By what percentage will their time increase on this ride?"
+  },
+  {
+    "id": 20700,
+    "type": "text",
+    "page_idx": 757,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 20701,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Do you know ...?"
+  },
+  {
+    "id": 20702,
+    "type": "text",
+    "page_idx": 757,
+    "text": "A ratio is a comparison of two or more quantities in a set order. Ratios can be expressed in the form  $a:b$  or  $\\frac{a}{b}$ . Ratios have no units."
+  },
+  {
+    "id": 20703,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Ratios can be simplified by multiplying or dividing both quantities by the same number. This method produces equivalent ratios."
+  },
+  {
+    "id": 20704,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Map scales are good examples of ratios in everyday life. The scale of a map is usually given in the form  $1:n$ . This allows you to convert map distances to real distances using the ratio scale."
+  },
+  {
+    "id": 20705,
+    "type": "text",
+    "page_idx": 757,
+    "text": "A rate is a comparison of two different quantities. Usually a rate gives an amount of one quantity per unit of the other. Rates must include the units of the quantities."
+  },
+  {
+    "id": 20706,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Speed is one of the most common rates of change. Speed = distance ÷ time."
+  },
+  {
+    "id": 20707,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Kinematic graphs are used to show relationships between:"
+  },
+  {
+    "id": 20708,
+    "type": "text",
+    "text": "distance and time (distance-time graph)",
+    "page_idx": 757
+  },
+  {
+    "id": 20709,
+    "type": "text",
+    "text": "speed and time (speed-time graph)",
+    "page_idx": 757
+  },
+  {
+    "id": 20710,
+    "type": "text",
+    "page_idx": 757,
+    "text": "and to solve problems in these areas."
+  },
+  {
+    "id": 20711,
+    "type": "text",
+    "page_idx": 757,
+    "text": "TIP"
+  },
+  {
+    "id": 20712,
+    "type": "text",
+    "page_idx": 757,
+    "text": "Sometimes you may see 'varies as' written instead of 'is directly proportional to'. Similarly, 'varies inversely with' means 'is inversely proportional to'."
+  },
+  {
+    "id": 20713,
+    "type": "text",
+    "page_idx": 758,
+    "text": "SUMMARY CONTINUED"
+  },
+  {
+    "id": 20714,
+    "type": "text",
+    "page_idx": 758,
+    "text": "The gradient of a distance-time graph shows how the speed changes over time."
+  },
+  {
+    "id": 20715,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Proportion is a constant ratio between two sets of numbers."
+  },
+  {
+    "id": 20716,
+    "type": "text",
+    "page_idx": 758,
+    "text": "When quantities are in direct proportion they increase or decrease at the same rate."
+  },
+  {
+    "id": 20717,
+    "type": "text",
+    "page_idx": 758,
+    "text": "When quantities are inversely proportional, one increases as the other decreases."
+  },
+  {
+    "id": 20718,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Algebraic expressions can be used to represent direct and indirect (inverse) proportion and to solve problems related to these concepts. The symbol for proportion is  $x$ ."
+  },
+  {
+    "id": 20719,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Are you able to ...?"
+  },
+  {
+    "id": 20720,
+    "type": "text",
+    "page_idx": 758,
+    "text": "To simplify ratios and find the missing values in equivalent ratios,"
+  },
+  {
+    "id": 20721,
+    "type": "text",
+    "page_idx": 758,
+    "text": "divide quantities in a given ratio"
+  },
+  {
+    "id": 20722,
+    "type": "text",
+    "page_idx": 758,
+    "text": "convert measurements on maps, plans and other scale diagrams to real measurements and vice versa"
+  },
+  {
+    "id": 20723,
+    "type": "text",
+    "page_idx": 758,
+    "text": "express relationships between different quantities as rates in their simplest form and solve problems relating to rates"
+  },
+  {
+    "id": 20724,
+    "type": "text",
+    "page_idx": 758,
+    "text": "read and interpret kinematic graphs"
+  },
+  {
+    "id": 20725,
+    "type": "text",
+    "text": "by calculating average speed",
+    "page_idx": 758
+  },
+  {
+    "id": 20726,
+    "type": "text",
+    "text": "by calculating acceleration and deceleration from a graph and finding the distance travelled using the area under a linear speed-time graph",
+    "page_idx": 758
+  },
+  {
+    "id": 20727,
+    "type": "text",
+    "page_idx": 758,
+    "text": "1. solve problems involving direct and indirect proportion"
+  },
+  {
+    "id": 20728,
+    "type": "text",
+    "page_idx": 758,
+    "text": "express direct and inverse proportion in algebraic terms"
+  },
+  {
+    "id": 20729,
+    "type": "text",
+    "page_idx": 758,
+    "text": "solve direct and inverse proportion problems using algebraic methods."
+  },
+  {
+    "id": 20730,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Practice questions"
+  },
+  {
+    "id": 20731,
+    "type": "image",
+    "page_idx": 758,
+    "img_path": "images/9a05cc5a4de41087496f190c95e8b03f740b2c9014519916be16b8174e79d4f4.jpg"
+  },
+  {
+    "id": 20732,
+    "type": "text",
+    "page_idx": 758,
+    "text": "1 Manos and Raja make $96 selling handcrafts. They share the income in the ratio 7:5. How much does Raja receive? [3]"
+  },
+  {
+    "id": 20733,
+    "type": "image",
+    "page_idx": 758,
+    "img_path": "images/42c08cd826d51638c3df49276cb40345b07d609906a0ef8459d42e2ddb737463.jpg"
+  },
+  {
+    "id": 20734,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Silvia makes a scale drawing of her bedroom using a scale of 1:25. If one wall on the diagram is 12 cm long, how long is the wall in her room? [3]"
+  },
+  {
+    "id": 20735,
+    "type": "image",
+    "page_idx": 758,
+    "img_path": "images/5ed81c01d30358dae781bc6f543a4fea608d7641544ddeadae1210aa0e1de6ee.jpg"
+  },
+  {
+    "id": 20736,
+    "type": "text",
+    "page_idx": 758,
+    "text": "3 Mrs James bakes a fruit cake using raisins, currants and dates in the ratio  $4:5:3$ . The total mass of the three ingredients is 4.8 kilograms. Calculate the mass of:"
+  },
+  {
+    "id": 20737,
+    "type": "text",
+    "text": "a the raisins [4]",
+    "page_idx": 758
+  },
+  {
+    "id": 20738,
+    "type": "text",
+    "text": "b the dates. [1]",
+    "page_idx": 758
+  },
+  {
+    "id": 20739,
+    "type": "text",
+    "page_idx": 758,
+    "text": "4 A recipe for dough uses three parts wholemeal flour for every four parts of plain flour. What volume of wholemeal flour do you need if you use 12 cups of plain flour? [3]"
+  },
+  {
+    "id": 20740,
+    "type": "text",
+    "page_idx": 759,
+    "text": "5 Three children play a card game. At the start of the game the cards are distributed amongst Amelia, Bahram and Celeste in the ratio  $4:6:5$ . At the end of the game the cards are distributed in the ratio  $6:10:9$ ."
+  },
+  {
+    "id": 20741,
+    "type": "text",
+    "page_idx": 759,
+    "text": "a Work out which player has the same number of cards at the start and end of the game. Explain your reasoning. [3]"
+  },
+  {
+    "id": 20742,
+    "type": "text",
+    "page_idx": 759,
+    "text": "b Calculate the percentage change in the number of cards Celeste has, between the start and end of the game. State whether this change is an increase or a decrease."
+  },
+  {
+    "id": 20743,
+    "type": "text",
+    "page_idx": 759,
+    "text": "c Work out the minimum number of cards used in the game. Show your reasoning carefully."
+  },
+  {
+    "id": 20744,
+    "type": "text",
+    "page_idx": 759,
+    "text": "6 A special microscope enlarges images to 90 000 times their actual size. The microscope is used to photograph a bacterium for a textbook and the new image is  $118\\mathrm{mm}$  long. Find the actual length of the bacterium, giving your answer:"
+  },
+  {
+    "id": 20745,
+    "type": "text",
+    "page_idx": 759,
+    "text": "a in metres, using standard form [3]"
+  },
+  {
+    "id": 20746,
+    "type": "text",
+    "page_idx": 759,
+    "text": "b in micrometres. [2]"
+  },
+  {
+    "id": 20747,
+    "type": "text",
+    "page_idx": 759,
+    "text": "7 The speed-time graph represents the journey of a train between two stations. The train slowed down and stopped after 15 minutes because of engineering work on the railway line."
+  },
+  {
+    "id": 20748,
+    "type": "image",
+    "page_idx": 759,
+    "img_path": "images/6fbdcb3e2812ad754a470c6f44c0dbe8fb5a39a52d2eba2aa294e90aab129587.jpg"
+  },
+  {
+    "id": 20749,
+    "type": "text",
+    "text": "a Calculate the greatest speed, in km/h, that the train reached. [1]",
+    "page_idx": 759
+  }
+]
+```

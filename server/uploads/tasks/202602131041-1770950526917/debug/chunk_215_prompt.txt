@@ -1,0 +1,819 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 15050,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/1a666297ae07b8772a2f5646ad0da6a4fe8023bf3c360523cd67d03149809906.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 15051,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/666b87d1add4944f6792ab27ad1d32d8ee22323d73b42c631e2f61eb5eb9f947.jpg",
+    "image_caption": "e f"
+  },
+  {
+    "id": 15052,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/4e134233bb0b96775ed163e1e148246ccf1c878cd9968edfef117f37897879b5.jpg"
+  },
+  {
+    "id": 15053,
+    "type": "text",
+    "page_idx": 494,
+    "text": "4 Calculate the lettered length in each triangle. Be careful when substituting lengths into the tangent ratio formula."
+  },
+  {
+    "id": 15054,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/2b11f200ed4d17c26fc680164f33cd886a34615e6eb3efaaafc03be98d13985a.jpg",
+    "image_caption": "a f"
+  },
+  {
+    "id": 15055,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/093c90098343f1be42ae0ab9aa7407718ffc062451ccc394a590c81f63fda7a6.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 15056,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/d115500c547d7108f0f3f16a3477322a968e8b12a6cce4e16f9ceb01d7b0dcd5.jpg",
+    "image_caption": "C h"
+  },
+  {
+    "id": 15057,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/97e89574554571ade8bb29f9ffde8f02cc0c34f7d55d7cb9ebee0d376e1d464f.jpg",
+    "image_caption": "d e"
+  },
+  {
+    "id": 15058,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/2277a201fb0ac83391048dcfd959a5e4d35b290676a18c1075fb53513c0e1708.jpg",
+    "image_caption": "1"
+  },
+  {
+    "id": 15059,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/f8ae83f8c03f99eec5aa3bfb66c3169dfcaf21dbb6e18d369e937c4ea829faa9.jpg"
+  },
+  {
+    "id": 15060,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/3267dabe0cdb835ef4cd116478728e94305eb7d50a59dbccf0587698e6002cb8.jpg",
+    "image_caption": "9"
+  },
+  {
+    "id": 15061,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/22cdf2c49ab2d34248c38d44c069ba9fe93543bc3a52698532ee63ef560e93d9.jpg"
+  },
+  {
+    "id": 15062,
+    "type": "image",
+    "page_idx": 494,
+    "img_path": "images/0aa49d923aabf26165012c26c8bca77725fc1c15ff87957630c91b48b1551ab2.jpg",
+    "image_caption": "i"
+  },
+  {
+    "id": 15063,
+    "type": "image",
+    "page_idx": 495,
+    "img_path": "images/b87bcb8217d134ffeddbaf53233a9f6851422a3dfa0aef0fda428207492cb6fb.jpg",
+    "image_caption": "5"
+  },
+  {
+    "id": 15064,
+    "type": "text",
+    "text": "a Use your calculator to find the value of tan  $47^{\\circ}$  correct to 4 decimal places.",
+    "page_idx": 495
+  },
+  {
+    "id": 15065,
+    "type": "text",
+    "text": "b The diagram shows a vertical tree,  $OT$ , whose base,  $O$ , is  $30\\mathrm{m}$  horizontally from point  $M$ . The angle of elevation of  $T$  from  $M$  is  $47^{\\circ}$ . Calculate the height of the tree.",
+    "page_idx": 495
+  },
+  {
+    "id": 15066,
+    "type": "text",
+    "page_idx": 495,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 15067,
+    "type": "text",
+    "page_idx": 495,
+    "text": "6 Melek wants to estimate the width of a river which has parallel banks. He starts at point A on one bank directly opposite a tree on the other bank. He walks  $80\\mathrm{m}$  along the bank to point B and then looks back at the tree. He finds that the line between B and the tree makes an angle of  $22^{\\circ}$  with the bank. Calculate the width of the river."
+  },
+  {
+    "id": 15068,
+    "type": "image",
+    "page_idx": 495,
+    "img_path": "images/83be329f80170e8f689d689fb852f47a24c8e0e09a545577338c5c7f2380e95b.jpg"
+  },
+  {
+    "id": 15069,
+    "type": "text",
+    "page_idx": 495,
+    "text": "7 The right-angled triangle ABC has angle  $BAC = 30^{\\circ}$ . Taking the length of BC to be one unit:"
+  },
+  {
+    "id": 15070,
+    "type": "text",
+    "text": "a work out the length of AC",
+    "page_idx": 495
+  },
+  {
+    "id": 15071,
+    "type": "text",
+    "text": "b use Pythagoras' theorem to obtain the length of AB.",
+    "page_idx": 495
+  },
+  {
+    "id": 15072,
+    "type": "image",
+    "page_idx": 495,
+    "img_path": "images/4c43f3a60c7b21fdea3224992d65e5cb6b7a34bd133f74f20b2730a85eb1094c.jpg"
+  },
+  {
+    "id": 15073,
+    "type": "text",
+    "page_idx": 496,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 15074,
+    "type": "text",
+    "page_idx": 496,
+    "text": "8 The diagram shows a ladder leaning against a brick wall. If the angle between the ladder and the floor is  $82^{\\circ}$ , and the ladder reaches  $3.2\\mathrm{m}$  up the wall, find the distance  $dm$  of the bottom of the ladder from the bottom of the wall. Give your answer to the nearest cm."
+  },
+  {
+    "id": 15075,
+    "type": "image",
+    "page_idx": 496,
+    "img_path": "images/c2533e83d24ff0773b872694da1662e7f8645425139c794281170d9a42368ab4.jpg"
+  },
+  {
+    "id": 15076,
+    "type": "text",
+    "page_idx": 496,
+    "text": "9 A person at the top of a building can see two bus stops (A and B) at ground level. The top of the building is  $60\\mathrm{m}$  vertically above ground level. The angle of depression from the top of the building to bus stop A is  $25^{\\circ}$  and the angle of depression to bus stop B is  $20^{\\circ}$ . Assuming ground level is perpendicular to the building, how far apart are the bus stops?"
+  },
+  {
+    "id": 15077,
+    "type": "text",
+    "page_idx": 496,
+    "text": "Calculating angles"
+  },
+  {
+    "id": 15078,
+    "type": "text",
+    "page_idx": 496,
+    "text": "Your calculator can also 'work backwards' to find the unknown angle associated with a particular tangent ratio. You use the inverse tangent function tan on the calculator. Generally this inverse function uses the same key as the tangent ratio, but is placed above. If this is the case you will need to use 2ndF or shift before you press the tan button."
+  },
+  {
+    "id": 15079,
+    "type": "text",
+    "page_idx": 496,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15080,
+    "type": "text",
+    "page_idx": 496,
+    "text": "'Functions' are dealt with more thoroughly in Chapter 22."
+  },
+  {
+    "id": 15081,
+    "type": "text",
+    "page_idx": 496,
+    "text": "WORKED EXAMPLE 6"
+  },
+  {
+    "id": 15082,
+    "type": "text",
+    "page_idx": 496,
+    "text": "Find the acute angle with the following tangents, correct to 1 decimal place:"
+  },
+  {
+    "id": 15083,
+    "type": "text",
+    "page_idx": 496,
+    "text": "a 0.1234"
+  },
+  {
+    "id": 15084,
+    "type": "text",
+    "page_idx": 496,
+    "text": "b5"
+  },
+  {
+    "id": 15085,
+    "type": "text",
+    "page_idx": 496,
+    "text": "c 2.765"
+  },
+  {
+    "id": 15086,
+    "type": "text",
+    "page_idx": 496,
+    "text": "TIP"
+  },
+  {
+    "id": 15087,
+    "type": "text",
+    "page_idx": 496,
+    "text": "You need to be able to work out whether you can solve a problem using trigonometry or whether you can use Pythagoras' theorem."
+  },
+  {
+    "id": 15088,
+    "type": "text",
+    "page_idx": 497,
+    "text": "WORKED EXAMPLE 6 CONTINUED"
+  },
+  {
+    "id": 15089,
+    "type": "text",
+    "page_idx": 497,
+    "text": "Answers"
+  },
+  {
+    "id": 15090,
+    "type": "text",
+    "page_idx": 497,
+    "text": "a"
+  },
+  {
+    "id": 15091,
+    "type": "image",
+    "page_idx": 497,
+    "img_path": "images/d4d6d9a43c7fb687985a0539fc3bd2d6c575b4e802aefffea7fe5683fc612e0b.jpg"
+  },
+  {
+    "id": 15092,
+    "type": "text",
+    "page_idx": 497,
+    "text": "So the angle is  $7.0^{\\circ}$"
+  },
+  {
+    "id": 15093,
+    "type": "text",
+    "page_idx": 497,
+    "text": "b"
+  },
+  {
+    "id": 15094,
+    "type": "image",
+    "page_idx": 497,
+    "img_path": "images/d4df9cc304e5f8dc2cef1dee4b5670a73686f838aecc1e4f6294286d145cdc1d.jpg"
+  },
+  {
+    "id": 15095,
+    "type": "text",
+    "page_idx": 497,
+    "text": "So the angle is  $78.7^{\\circ}$"
+  },
+  {
+    "id": 15096,
+    "type": "text",
+    "page_idx": 497,
+    "text": "C"
+  },
+  {
+    "id": 15097,
+    "type": "image",
+    "page_idx": 497,
+    "img_path": "images/d575faa2514ec059b0e04fa21af861ccf979740f476dc4db3816eaf7ea7386ae.jpg"
+  },
+  {
+    "id": 15098,
+    "type": "text",
+    "page_idx": 497,
+    "text": "So the angle is  $70.1^{\\circ}$"
+  },
+  {
+    "id": 15099,
+    "type": "text",
+    "page_idx": 497,
+    "text": "WORKED EXAMPLE 7"
+  },
+  {
+    "id": 15100,
+    "type": "text",
+    "page_idx": 497,
+    "text": "Calculate, correct to 1 decimal place, the lettered angles."
+  },
+  {
+    "id": 15101,
+    "type": "text",
+    "page_idx": 497,
+    "text": "a"
+  },
+  {
+    "id": 15102,
+    "type": "image",
+    "page_idx": 497,
+    "img_path": "images/68c6cada973680cd8378e752fff46008beabe2c91b6d11ada4f646fc1ea2151d.jpg"
+  },
+  {
+    "id": 15103,
+    "type": "text",
+    "page_idx": 497,
+    "text": "b"
+  },
+  {
+    "id": 15104,
+    "type": "image",
+    "page_idx": 497,
+    "img_path": "images/7a12a9507f4b8938755e0b4d1b29ceea863a35d12b718004c5b5c6a834a0842f.jpg"
+  },
+  {
+    "id": 15105,
+    "type": "text",
+    "page_idx": 497,
+    "text": "c"
+  },
+  {
+    "id": 15106,
+    "type": "image",
+    "page_idx": 497,
+    "img_path": "images/992ef573195dc5e92bf82d572c9b4ea7a8f3aeee74b08cc5eb5381b7cbcbdce7.jpg"
+  },
+  {
+    "id": 15107,
+    "type": "text",
+    "page_idx": 497,
+    "text": "Answers"
+  },
+  {
+    "id": 15108,
+    "type": "text",
+    "page_idx": 497,
+    "text": "opp(a) 3 0.75 tan a adj(a) 4"
+  },
+  {
+    "id": 15109,
+    "type": "equation",
+    "page_idx": 497,
+    "text": "$$\n\\begin{array}{l} a = \\tan^ {- 1} (0. 7 5) \\\\ = 3 6. 8 6 9 8 9 7 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15110,
+    "type": "equation",
+    "page_idx": 497,
+    "text": "$$\na = 3 6. 9 ^ {\\circ} (1 d. p.)\n$$"
+  },
+  {
+    "id": 15111,
+    "type": "text",
+    "page_idx": 497,
+    "text": "opp(b) 12 2.4"
+  },
+  {
+    "id": 15112,
+    "type": "equation",
+    "page_idx": 497,
+    "text": "$$\n\\begin{array}{l} b = \\tan^ {- 1} (2. 4) \\\\ = 6 7. 3 8 0 1 3 5 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15113,
+    "type": "equation",
+    "page_idx": 497,
+    "text": "$$\nb = 6 7. 4 ^ {\\circ} (1 d. p.)\n$$"
+  },
+  {
+    "id": 15114,
+    "type": "text",
+    "page_idx": 498,
+    "text": "WORKED EXAMPLE 7 CONTINUED"
+  },
+  {
+    "id": 15115,
+    "type": "equation",
+    "page_idx": 498,
+    "text": "$$\nc \\quad \\tan c = \\frac {\\operatorname {o p p} (c)}{\\operatorname {a d j} (c)} = \\frac {2 4}{7}\n$$"
+  },
+  {
+    "id": 15116,
+    "type": "equation",
+    "page_idx": 498,
+    "text": "$$\n\\begin{array}{l} c = \\tan^ {- 1} \\left(\\frac {2 4}{7}\\right) \\\\ = 7 3. 7 3 9 7 9 5 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15117,
+    "type": "equation",
+    "page_idx": 498,
+    "text": "$$\nc = 7 3. 7 ^ {\\circ} (1 d. p.)\n$$"
+  },
+  {
+    "id": 15118,
+    "type": "text",
+    "page_idx": 498,
+    "text": "To find the angle  $d$ , you could use the fact that the angle sum in a triangle is  $180^\\circ$ . This gives  $d = 180^\\circ - (90^\\circ + 73.7^\\circ) = 16.3^\\circ$ ."
+  },
+  {
+    "id": 15119,
+    "type": "text",
+    "page_idx": 498,
+    "text": "Alternatively, you could use the tangent ratio again but with the opp and adj reassigned to match this angle:"
+  },
+  {
+    "id": 15120,
+    "type": "equation",
+    "page_idx": 498,
+    "text": "$$\n\\tan d = \\frac {\\operatorname {o p p} (d)}{\\operatorname {a d j} (d)} = \\frac {7}{2 4}\n$$"
+  },
+  {
+    "id": 15121,
+    "type": "equation",
+    "page_idx": 498,
+    "text": "$$\n\\begin{array}{l} d = \\tan^ {- 1} \\left(\\frac {7}{2 4}\\right) \\\\ = 1 6. 2 6 0 2 0 4 \\dots \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15122,
+    "type": "equation",
+    "page_idx": 498,
+    "text": "$$\nd = 1 6. 3 ^ {\\circ} (1 d. p.)\n$$"
+  },
+  {
+    "id": 15123,
+    "type": "text",
+    "page_idx": 498,
+    "text": "Exercise 15.6"
+  },
+  {
+    "id": 15124,
+    "type": "text",
+    "page_idx": 498,
+    "text": "1 Find, correct to 1 decimal place, the acute angle that has the tangent ratio:"
+  },
+  {
+    "id": 15125,
+    "type": "text",
+    "page_idx": 498,
+    "text": "a 0.85"
+  },
+  {
+    "id": 15126,
+    "type": "text",
+    "page_idx": 498,
+    "text": "b 1.2345"
+  },
+  {
+    "id": 15127,
+    "type": "text",
+    "page_idx": 498,
+    "text": "c 3.56"
+  },
+  {
+    "id": 15128,
+    "type": "text",
+    "page_idx": 498,
+    "text": "d 10.0"
+  },
+  {
+    "id": 15129,
+    "type": "text",
+    "page_idx": 498,
+    "text": "2 Find, correct to the nearest degree, the acute angle that has the tangent ratio:"
+  },
+  {
+    "id": 15130,
+    "type": "text",
+    "page_idx": 498,
+    "text": "$\\frac{2}{5}$"
+  },
+  {
+    "id": 15131,
+    "type": "text",
+    "page_idx": 498,
+    "text": "b 7 9"
+  },
+  {
+    "id": 15132,
+    "type": "text",
+    "page_idx": 498,
+    "text": "25 32"
+  },
+  {
+    "id": 15133,
+    "type": "text",
+    "page_idx": 498,
+    "text": "d  $2\\frac{3}{4}$"
+  },
+  {
+    "id": 15134,
+    "type": "text",
+    "page_idx": 498,
+    "text": "3 Find, correct to 1 decimal place, the lettered angles in these diagrams."
+  },
+  {
+    "id": 15135,
+    "type": "text",
+    "page_idx": 498,
+    "text": "a"
+  },
+  {
+    "id": 15136,
+    "type": "image",
+    "page_idx": 498,
+    "img_path": "images/4ac8470838ad7a699a77c95532ed2497ad05a6535a760039b8246dc84215f896.jpg"
+  },
+  {
+    "id": 15137,
+    "type": "text",
+    "page_idx": 498,
+    "text": "b"
+  },
+  {
+    "id": 15138,
+    "type": "image",
+    "page_idx": 498,
+    "img_path": "images/c3cabb23c7ae5b2c9fb20bd8e7f0f517b873e296f1928f0c9f87689b99e39b39.jpg"
+  },
+  {
+    "id": 15139,
+    "type": "text",
+    "page_idx": 498,
+    "text": "C"
+  },
+  {
+    "id": 15140,
+    "type": "image",
+    "page_idx": 498,
+    "img_path": "images/302eafe9b95f26f485f9288e456fa244c6a1aacc6728c6be54feeecde6c918b9.jpg"
+  },
+  {
+    "id": 15141,
+    "type": "text",
+    "page_idx": 498,
+    "text": "d"
+  },
+  {
+    "id": 15142,
+    "type": "image",
+    "page_idx": 498,
+    "img_path": "images/a3da3b958085916b55301d94ef427f8b5fc8d764163d9f7a5c43c3d6ef474031.jpg"
+  },
+  {
+    "id": 15143,
+    "type": "text",
+    "page_idx": 498,
+    "text": "e"
+  },
+  {
+    "id": 15144,
+    "type": "image",
+    "page_idx": 498,
+    "img_path": "images/abc0408070e196881868b639ebe67da704f8793aa5d41ad42985e5ff0f11b377.jpg"
+  },
+  {
+    "id": 15145,
+    "type": "text",
+    "page_idx": 499,
+    "text": "4 A ladder stands on horizontal ground and leans against a vertical wall. The bottom of the ladder is  $2.8\\mathrm{m}$  from the base of the wall and the ladder reaches  $8.5\\mathrm{m}$  up the wall. Calculate the angle the ladder makes with the ground."
+  },
+  {
+    "id": 15146,
+    "type": "image",
+    "page_idx": 499,
+    "img_path": "images/e5c238cf2ae15609038ac3a2d9c470e87674fc38586f98154597ed82a78dd401.jpg"
+  },
+  {
+    "id": 15147,
+    "type": "text",
+    "page_idx": 499,
+    "text": "5 The top of a vertical cliff is  $68\\mathrm{m}$  above sea level. A ship is  $175\\mathrm{m}$  from the bottom of the cliff. Calculate the angle of elevation of the top of the cliff from the ship."
+  },
+  {
+    "id": 15148,
+    "type": "image",
+    "page_idx": 499,
+    "img_path": "images/284fb7d4a6c2d432812a7bf45ec619d49d777ff1d7669dc7766b111146cb05c2.jpg"
+  },
+  {
+    "id": 15149,
+    "type": "text",
+    "page_idx": 499,
+    "text": "6  $O$  is the centre of a circle with  $OM = 12\\mathrm{cm}$"
+  }
+]
+```

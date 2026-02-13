@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 13160,
+    "type": "text",
+    "page_idx": 422,
+    "text": "d 120, to the nearest 20"
+  },
+  {
+    "id": 13161,
+    "type": "text",
+    "page_idx": 422,
+    "text": "Answers"
+  },
+  {
+    "id": 13162,
+    "type": "text",
+    "text": "a Show  $10\\mathrm{cm}$  on a number line. The real value will be closest to  $10\\mathrm{cm}$  if it lies between the lower bound of  $9.5\\mathrm{cm}$  and the upper bound of  $10.5\\mathrm{cm}$ .",
+    "page_idx": 422
+  },
+  {
+    "id": 13163,
+    "type": "text",
+    "text": "b Look at 22.5 on a number line. The real value will be closest to 22.5 if it lies between the lower bound of 22.45 and the upper bound of 22.55.",
+    "page_idx": 422
+  },
+  {
+    "id": 13164,
+    "type": "text",
+    "text": "128000 is shown on a number line. 128000 lies between the lower bound of 127500 and the upper bound of 128500.",
+    "page_idx": 422
+  },
+  {
+    "id": 13165,
+    "type": "text",
+    "text": "120 is shown on a number line. 120 lies between the lower bound of 110 and the upper bound of 130.",
+    "page_idx": 422
+  },
+  {
+    "id": 13166,
+    "type": "image",
+    "page_idx": 422,
+    "img_path": "images/f9c91ed7933227af09673d87f4c9efff46d325cd85ab5ea32b68b469a5172ed8.jpg"
+  },
+  {
+    "id": 13167,
+    "type": "image",
+    "page_idx": 422,
+    "img_path": "images/f6aeba0bfe846790c9c16278ccb7eaf453218d6f1442c346a4245d35fe3911e2.jpg"
+  },
+  {
+    "id": 13168,
+    "type": "image",
+    "page_idx": 422,
+    "img_path": "images/a925f2c6525c6ec4d6dbe8f5fb0428b4fa3a99b2c5703ba59a06e45703620698.jpg"
+  },
+  {
+    "id": 13169,
+    "type": "image",
+    "page_idx": 422,
+    "img_path": "images/63c598991a166d114350ba7d652979930251cf5911d1f99641102e353d5e0a66.jpg"
+  },
+  {
+    "id": 13170,
+    "type": "text",
+    "page_idx": 423,
+    "text": "Exercise 13.4"
+  },
+  {
+    "id": 13171,
+    "type": "text",
+    "page_idx": 423,
+    "text": "Each of the following numbers is given to the nearest whole number. Find the lower and upper bounds of the numbers."
+  },
+  {
+    "id": 13172,
+    "type": "text",
+    "page_idx": 423,
+    "text": "a 12"
+  },
+  {
+    "id": 13173,
+    "type": "text",
+    "page_idx": 423,
+    "text": "b 8"
+  },
+  {
+    "id": 13174,
+    "type": "text",
+    "page_idx": 423,
+    "text": "c 100"
+  },
+  {
+    "id": 13175,
+    "type": "text",
+    "page_idx": 423,
+    "text": "d 9"
+  },
+  {
+    "id": 13176,
+    "type": "text",
+    "page_idx": 423,
+    "text": "e 72"
+  },
+  {
+    "id": 13177,
+    "type": "text",
+    "page_idx": 423,
+    "text": "f 127"
+  },
+  {
+    "id": 13178,
+    "type": "text",
+    "page_idx": 423,
+    "text": "2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers."
+  },
+  {
+    "id": 13179,
+    "type": "text",
+    "page_idx": 423,
+    "text": "a 2.7"
+  },
+  {
+    "id": 13180,
+    "type": "text",
+    "page_idx": 423,
+    "text": "b 34.4"
+  },
+  {
+    "id": 13181,
+    "type": "text",
+    "page_idx": 423,
+    "text": "c 5.0"
+  },
+  {
+    "id": 13182,
+    "type": "text",
+    "page_idx": 423,
+    "text": "d 1.1"
+  },
+  {
+    "id": 13183,
+    "type": "text",
+    "page_idx": 423,
+    "text": "e -2.3"
+  },
+  {
+    "id": 13184,
+    "type": "text",
+    "page_idx": 423,
+    "text": "f -7.2"
+  },
+  {
+    "id": 13185,
+    "type": "text",
+    "page_idx": 423,
+    "text": "3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case."
+  },
+  {
+    "id": 13186,
+    "type": "text",
+    "page_idx": 423,
+    "text": "a 132 (nearest whole number)"
+  },
+  {
+    "id": 13187,
+    "type": "text",
+    "page_idx": 423,
+    "text": "b 300 (nearest one hundred)"
+  },
+  {
+    "id": 13188,
+    "type": "text",
+    "page_idx": 423,
+    "text": "405 (nearest five)"
+  },
+  {
+    "id": 13189,
+    "type": "text",
+    "page_idx": 423,
+    "text": "d 15 million (nearest million)"
+  },
+  {
+    "id": 13190,
+    "type": "text",
+    "page_idx": 423,
+    "text": "e 32.3 (1 d.p.)"
+  },
+  {
+    "id": 13191,
+    "type": "text",
+    "page_idx": 423,
+    "text": "f 26.7 (1 d.p.)"
+  },
+  {
+    "id": 13192,
+    "type": "text",
+    "page_idx": 423,
+    "text": "g 0.5(1 d.p.)"
+  },
+  {
+    "id": 13193,
+    "type": "text",
+    "page_idx": 423,
+    "text": "h 12.34 (2 d.p.)"
+  },
+  {
+    "id": 13194,
+    "type": "text",
+    "page_idx": 423,
+    "text": "i 132 (3 s.f.)"
+  },
+  {
+    "id": 13195,
+    "type": "text",
+    "page_idx": 423,
+    "text": "j 0.134 (3 s.f.)"
+  },
+  {
+    "id": 13196,
+    "type": "text",
+    "page_idx": 423,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 13197,
+    "type": "text",
+    "page_idx": 423,
+    "text": "4 Anne estimates that the mass of a lion is  $300\\mathrm{kg}$  Her estimate is correct to the nearest  $100\\mathrm{kg}$  Between what limits does the actual mass of the lion lie?"
+  },
+  {
+    "id": 13198,
+    "type": "image",
+    "page_idx": 423,
+    "img_path": "images/f8ec8fd8044b5bc526d0d02f0d97933c9b6f99f72310757019c649957908c3a8.jpg"
+  },
+  {
+    "id": 13199,
+    "type": "text",
+    "page_idx": 423,
+    "text": "5 In a race, Nomatyala ran  $100\\mathrm{m}$  in 15.3 seconds. The distance is correct to the nearest metre and the time is correct to 1 decimal place. Write down the lower and upper bounds of:"
+  },
+  {
+    "id": 13200,
+    "type": "text",
+    "page_idx": 423,
+    "text": "a the actual distance Nomatyala ran"
+  },
+  {
+    "id": 13201,
+    "type": "text",
+    "page_idx": 423,
+    "text": "b the actual time taken."
+  },
+  {
+    "id": 13202,
+    "type": "text",
+    "page_idx": 423,
+    "text": "6 The length of a piece of thread is  $4.5\\mathrm{m}$  to the nearest  $10\\mathrm{cm}$ . The actual length of the thread is  $L\\mathrm{cm}$ . Find the range of possible values for  $L$ , giving your answer in the form  $\\ldots \\leq L < \\ldots$"
+  },
+  {
+    "id": 13203,
+    "type": "text",
+    "page_idx": 423,
+    "text": "Problem-solving with upper and lower bounds"
+  },
+  {
+    "id": 13204,
+    "type": "text",
+    "page_idx": 423,
+    "text": "Some calculations use more than one rounded value. You can use the upper and lower bounds of each value to find the upper and lower bounds for the calculated answer, but you need to work carefully."
+  },
+  {
+    "id": 13205,
+    "type": "text",
+    "page_idx": 423,
+    "text": "TIP"
+  },
+  {
+    "id": 13206,
+    "type": "text",
+    "page_idx": 423,
+    "text": "If you get confused when dealing with upper and lower bounds, draw a number line to help you."
+  },
+  {
+    "id": 13207,
+    "type": "text",
+    "page_idx": 424,
+    "text": "WORKED EXAMPLE 6"
+  },
+  {
+    "id": 13208,
+    "type": "text",
+    "page_idx": 424,
+    "text": "The dimensions of a rectangular rug are given as  $14\\mathrm{m}\\times 2\\mathrm{m}$  correct to the nearest metre."
+  },
+  {
+    "id": 13209,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Find the greatest and smallest values for the area of this rug."
+  },
+  {
+    "id": 13210,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Answer"
+  },
+  {
+    "id": 13211,
+    "type": "text",
+    "page_idx": 424,
+    "text": "$13.5\\leq L <   14.5$"
+  },
+  {
+    "id": 13212,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Find the upper and lower bounds of each measurement."
+  },
+  {
+    "id": 13213,
+    "type": "text",
+    "page_idx": 424,
+    "text": "$1.5 \\leqslant W < 2.5$"
+  },
+  {
+    "id": 13214,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Smallest possible area:"
+  },
+  {
+    "id": 13215,
+    "type": "text",
+    "page_idx": 424,
+    "text": "$13.5 \\times 1.5 = 20.25 \\mathrm{~m}^{2}$"
+  },
+  {
+    "id": 13216,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Multiply the lower bounds of the measurements to find the smallest possible area."
+  },
+  {
+    "id": 13217,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Greatest possible area:"
+  },
+  {
+    "id": 13218,
+    "type": "text",
+    "page_idx": 424,
+    "text": "$14.5 \\times 2.5 = 36.25 \\mathrm{~m}^{2}$"
+  },
+  {
+    "id": 13219,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Multiply the upper bounds of the measurements to find the greatest possible area."
+  },
+  {
+    "id": 13220,
+    "type": "text",
+    "page_idx": 424,
+    "text": "WORKED EXAMPLE 7"
+  },
+  {
+    "id": 13221,
+    "type": "text",
+    "page_idx": 424,
+    "text": "An antelope runs across a riverbed that is  $380\\mathrm{m}$  wide (to the nearest 10 metres) at a speed of 3.9 metres per second (to 1 decimal place). What is the least and greatest possible time it will take to run this distance?"
+  },
+  {
+    "id": 13222,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Answer"
+  },
+  {
+    "id": 13223,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Start by finding the upper and lower bounds of each measurement."
+  },
+  {
+    "id": 13224,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Draw a two-way table to relate the measurements."
+  },
+  {
+    "id": 13225,
+    "type": "text",
+    "page_idx": 424,
+    "text": "Divide the distance in each column by each speed."
+  },
+  {
+    "id": 13226,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Speed\\Distance</td><td>375</td><td>385</td></tr>",
+    "page_idx": 424
+  },
+  {
+    "id": 13227,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3.85</td><td>97.40</td><td>100</td></tr>",
+    "page_idx": 424
+  },
+  {
+    "id": 13228,
+    "type": "text",
+    "text": "[Table Row] <tr><td>3.95</td><td>94.94</td><td>97.47</td></tr>",
+    "page_idx": 424
+  },
+  {
+    "id": 13229,
+    "type": "text",
+    "text": "[Table Row] <tr><td></td><td></td><td></td></tr>",
+    "page_idx": 424
+  },
+  {
+    "id": 13230,
+    "type": "text",
+    "page_idx": 424,
+    "text": "The greatest possible time is 100 seconds. The least possible time is 94.94 seconds (correct to 2 decimal places)."
+  },
+  {
+    "id": 13231,
+    "type": "text",
+    "page_idx": 424,
+    "text": "TIP"
+  },
+  {
+    "id": 13232,
+    "type": "equation",
+    "page_idx": 424,
+    "text": "$$\n\\text {T i m e} = \\frac {\\text {d i s t a n c e}}{\\text {s p e e d}}\n$$"
+  },
+  {
+    "id": 13233,
+    "type": "text",
+    "page_idx": 425,
+    "text": "WORKED EXAMPLE 8"
+  },
+  {
+    "id": 13234,
+    "type": "text",
+    "page_idx": 425,
+    "text": "If  $a = 3.6$  (to 1 d.p.) and  $b = 14$  (to the nearest whole number), find the upper and lower bounds for each of the following:"
+  },
+  {
+    "id": 13235,
+    "type": "text",
+    "page_idx": 425,
+    "text": "a a+b"
+  },
+  {
+    "id": 13236,
+    "type": "text",
+    "page_idx": 425,
+    "text": "b ab"
+  },
+  {
+    "id": 13237,
+    "type": "text",
+    "page_idx": 425,
+    "text": "c b-a"
+  },
+  {
+    "id": 13238,
+    "type": "text",
+    "page_idx": 425,
+    "text": "d  $\\frac{a}{b}$"
+  },
+  {
+    "id": 13239,
+    "type": "text",
+    "page_idx": 425,
+    "text": "a+b"
+  },
+  {
+    "id": 13240,
+    "type": "text",
+    "page_idx": 425,
+    "text": "Answers"
+  },
+  {
+    "id": 13241,
+    "type": "text",
+    "page_idx": 425,
+    "text": "First, find the upper and lower bounds of  $a$  and  $b$ :"
+  },
+  {
+    "id": 13242,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n3. 5 5 \\leqslant a <   3. 6 5 \\text {a n d} 1 3. 5 \\leqslant b <   1 4. 5\n$$"
+  },
+  {
+    "id": 13243,
+    "type": "text",
+    "page_idx": 425,
+    "text": "a Upper bound for  $(a + b) =$  upper bound of  $a +$  upper bound of  $b$"
+  },
+  {
+    "id": 13244,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n\\begin{array}{l} = 3. 6 5 + 1 4. 5 \\\\ = 1 8. 1 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13245,
+    "type": "text",
+    "page_idx": 425,
+    "text": "Lower bound for  $(a + b) =$  lower bound for  $a +$  lower bound for  $b$"
+  },
+  {
+    "id": 13246,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n\\begin{array}{l} = 3. 5 5 + 1 3. 5 \\\\ = 1 7. 0 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13247,
+    "type": "text",
+    "page_idx": 425,
+    "text": "You can write this as:  $17.05 \\leqslant (a + b) < 18.15$"
+  },
+  {
+    "id": 13248,
+    "type": "text",
+    "page_idx": 425,
+    "text": "b Upper bound for ab = upper bound for a  $\\times$  upper bound for b"
+  },
+  {
+    "id": 13249,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n\\begin{array}{l} = 3. 6 5 \\times 1 4. 5 \\\\ = 5 2. 9 2 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13250,
+    "type": "text",
+    "page_idx": 425,
+    "text": "Lower bound for  $ab =$  lower bound of  $a \\times$  lower bound of  $b$"
+  },
+  {
+    "id": 13251,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n\\begin{array}{l} = 3. 5 5 \\times 1 3. 5 \\\\ = 4 7. 9 2 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13252,
+    "type": "text",
+    "page_idx": 425,
+    "text": "You can write this as:  $47.925 \\leqslant ab < 52.925$"
+  },
+  {
+    "id": 13253,
+    "type": "text",
+    "page_idx": 425,
+    "text": "c Think carefully about  $b - a$  .To find the upper bound you need to subtract the smallest possible number from the largest possible number. So:"
+  },
+  {
+    "id": 13254,
+    "type": "text",
+    "page_idx": 425,
+    "text": "Upper bound for  $(b - a) =$  upper bound for  $b -$  lower bound for a"
+  },
+  {
+    "id": 13255,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n\\begin{array}{l} = 1 4. 5 - 3. 5 5 \\\\ = 1 0. 9 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13256,
+    "type": "text",
+    "page_idx": 425,
+    "text": "For the lower bound, subtract the largest possible number from the smallest possible number:"
+  },
+  {
+    "id": 13257,
+    "type": "text",
+    "page_idx": 425,
+    "text": "Lower bound for  $(b - a) =$  lower bound for  $b$  - upper bound for a"
+  },
+  {
+    "id": 13258,
+    "type": "equation",
+    "page_idx": 425,
+    "text": "$$\n\\begin{array}{l} = 1 3. 5 - 3. 6 5 \\\\ = 9. 8 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 13259,
+    "type": "text",
+    "page_idx": 425,
+    "text": "You can write this as:  $9.85 \\leqslant (b - a) < 10.95$"
+  }
+]
+```

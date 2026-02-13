@@ -1,0 +1,10 @@
+<chapter><title>18511</title>
+<qa_pair><label>1</label><type>exercise</type><question>18526,18527,18528,18529</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>18533,18534,18535,18536,18537,18538,18539,18540,18541,18542</question>
+<solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>18548,18549</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>18550,18551,18552,18553,18554,18555,18556</question>
+<solution></solution></qa_pair>
+</chapter>

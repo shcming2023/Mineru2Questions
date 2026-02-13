@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 14770,
+    "type": "equation",
+    "page_idx": 480,
+    "text": "$$\n\\frac {3}{x ^ {2} - 4} + \\frac {1}{x - 2} \\tag {4}\n$$"
+  },
+  {
+    "id": 14771,
+    "type": "text",
+    "text": "14 Write  $5x^{2} - 30x + 51$  in the form  $a(x + p)^2 + q$  and explain why  $5x^{2} - 30x + 51$  is always positive. [4]",
+    "page_idx": 480
+  },
+  {
+    "id": 14772,
+    "type": "text",
+    "text": "15 Simplify.",
+    "page_idx": 480
+  },
+  {
+    "id": 14773,
+    "type": "equation",
+    "page_idx": 480,
+    "text": "$$\n\\frac {x ^ {2} - 7 x + 1 2}{x ^ {2} + 3 x - 2 8} \\times \\frac {x ^ {2} - 4 9}{x ^ {2} - 9} \\tag {5}\n$$"
+  },
+  {
+    "id": 14774,
+    "type": "text",
+    "page_idx": 480,
+    "text": "16 A coin is biased and for any flip,  $P(\\text{Heads}) = p$ ."
+  },
+  {
+    "id": 14775,
+    "type": "text",
+    "text": "a Write down  $P(\\mathrm{Tails})$  for this coin. [1]",
+    "page_idx": 480
+  },
+  {
+    "id": 14776,
+    "type": "text",
+    "text": "The coin is flipped twice.",
+    "page_idx": 480
+  },
+  {
+    "id": 14777,
+    "type": "text",
+    "text": "b Find, in terms of  $p$  the probability of flipping heads and then tails. The probability of flipping heads and then tails is now known to be  $\\frac{3}{16}$ . [2]",
+    "page_idx": 480
+  },
+  {
+    "id": 14778,
+    "type": "text",
+    "text": "c Find the possible values of  $p$  [3]",
+    "page_idx": 480
+  },
+  {
+    "id": 14779,
+    "type": "text",
+    "text": "d Using the larger value of  $p$  find the probability of at least one head in two flips of the coin. [3]",
+    "page_idx": 480
+  },
+  {
+    "id": 14780,
+    "type": "text",
+    "page_idx": 481,
+    "text": "17 The quadratic equation  $x^{2} - 5x - 3 = 0$  has solutions  $a$  and  $b$ . Find the value of:"
+  },
+  {
+    "id": 14781,
+    "type": "text",
+    "text": "i  $a - b$  [3]",
+    "page_idx": 481
+  },
+  {
+    "id": 14782,
+    "type": "text",
+    "text": "ii  $a + b$  [3]",
+    "page_idx": 481
+  },
+  {
+    "id": 14783,
+    "type": "text",
+    "page_idx": 481,
+    "text": "Leave your answers in exact form."
+  },
+  {
+    "id": 14784,
+    "type": "text",
+    "text": "18 a By shading the unwanted regions on a diagram, show the region that satisfies all the inequalities  $y \\geq \\frac{1}{2} x + 1$ ,  $5x + 6y \\leq 30$  and  $y \\leq x$ . [5]",
+    "page_idx": 481
+  },
+  {
+    "id": 14785,
+    "type": "text",
+    "text": "b Given that  $x$  and  $y$  satisfy these three inequalities, find the greatest possible value of  $x + 2y$ . [3]",
+    "page_idx": 481
+  },
+  {
+    "id": 14786,
+    "type": "text",
+    "page_idx": 482,
+    "text": ">Chapter 15 Scale drawings, bearings and trigonometry"
+  },
+  {
+    "id": 14787,
+    "type": "text",
+    "page_idx": 482,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 14788,
+    "type": "text",
+    "text": "- interpret scale drawings",
+    "page_idx": 482
+  },
+  {
+    "id": 14789,
+    "type": "text",
+    "text": "calculate bearings",
+    "page_idx": 482
+  },
+  {
+    "id": 14790,
+    "type": "text",
+    "text": "calculate sine, cosine and tangent ratios for right-angled triangles",
+    "page_idx": 482
+  },
+  {
+    "id": 14791,
+    "type": "text",
+    "text": "- use sine, cosine and tangent ratios to calculate the angles and lengths of sides of right-angled triangles",
+    "page_idx": 482
+  },
+  {
+    "id": 14792,
+    "type": "text",
+    "text": "- solve trigonometric equations, finding all the solutions between  $0^{\\circ}$  and  $360^{\\circ}$",
+    "page_idx": 482
+  },
+  {
+    "id": 14793,
+    "type": "text",
+    "text": "- apply the sine and cosine rules to calculate unknown sides and angles in triangles that are not right-angled",
+    "page_idx": 482
+  },
+  {
+    "id": 14794,
+    "type": "text",
+    "text": "calculate the area of a triangle that is not right-angled using the sine ratio",
+    "page_idx": 482
+  },
+  {
+    "id": 14795,
+    "type": "text",
+    "text": "- use the sine, cosine and tangent ratios, together with Pythagoras' theorem in three-dimensions",
+    "page_idx": 482
+  },
+  {
+    "id": 14796,
+    "type": "text",
+    "text": "- use exact sine, cosine and tangent ratios for certain angles.",
+    "page_idx": 482
+  },
+  {
+    "id": 14797,
+    "type": "text",
+    "page_idx": 483,
+    "text": "To 'get your bearings' means to find out where you are and the direction you need to move in. Satnavs and the Global Positioning System (GPS) can make it much easier to work out where you are going. Their software uses the mathematical principles of calculating angles that you will learn about in this chapter."
+  },
+  {
+    "id": 14798,
+    "type": "text",
+    "page_idx": 483,
+    "text": "The image on the previous page shows a 'radar' screen. If you imagine the centre of the screen represents your position, you can then start to work out how far away other objects are and in which direction. How do you think the diagram works?"
+  },
+  {
+    "id": 14799,
+    "type": "text",
+    "page_idx": 483,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 14800,
+    "type": "text",
+    "page_idx": 483,
+    "text": "1 The scale on a map is 1:50000. The measured distance between two points on the map is  $3.9\\mathrm{cm}$"
+  },
+  {
+    "id": 14801,
+    "type": "text",
+    "page_idx": 483,
+    "text": "A class is asked to work out the actual distance between the two points in kilometres. Here are three students' solutions:"
+  },
+  {
+    "id": 14802,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Student A</td><td>Student B</td><td>Student C</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14803,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1/50000 × 3.9/1=0.000058cm=0.58km</td><td>Map distance = 39mmScale = 1:50000Real distance=39 × 50000=1950000mm=19.5km</td><td>3.9 × 50000 = 195000The distance is:190000cm÷100 = 1950m÷1000 = 1.95km</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14804,
+    "type": "text",
+    "page_idx": 483,
+    "text": "a Which student has worked it out correctly?"
+  },
+  {
+    "id": 14805,
+    "type": "text",
+    "page_idx": 483,
+    "text": "b What mistakes did the other two make?"
+  },
+  {
+    "id": 14806,
+    "type": "text",
+    "text": "2 The City of Mahlerville is building a new concert hall with 3000 seats inside. The architects create a 1:500 scale model of the hall. How many seats will the model have?",
+    "page_idx": 483
+  },
+  {
+    "id": 14807,
+    "type": "text",
+    "text": "3 A tiny insect is  $0.32\\mathrm{mm}$  long and  $0.08\\mathrm{mm}$  wide. A biologist is making a scale model of the insect. If the model is  $14.4\\mathrm{cm}$  wide, how long will it be?",
+    "page_idx": 483
+  },
+  {
+    "id": 14808,
+    "type": "text",
+    "page_idx": 483,
+    "text": "15.1 Scale drawings"
+  },
+  {
+    "id": 14809,
+    "type": "text",
+    "page_idx": 483,
+    "text": "Later in this chapter you will learn how to use the trigonometric ratios to accurately calculate missing angles and sides. For this you will need to use a calculator. Missing lengths and angles can also be found using scale drawings; although this is less accurate, it is still valid. For scale drawings you will need a ruler, a protractor and a sharp pencil."
+  },
+  {
+    "id": 14810,
+    "type": "text",
+    "page_idx": 483,
+    "text": "Sometimes you have to draw a diagram to represent something that is much bigger than you can fit on the paper or so small that it would be very difficult to make out any detail. Examples include a plan of a building, a map of a country or the design of a microchip. These accurate diagrams are called scale drawings."
+  },
+  {
+    "id": 14811,
+    "type": "text",
+    "page_idx": 483,
+    "text": "The lines in the scale drawing are all the same fraction of the lines they represent in reality. This fraction is called the scale of the drawing. The scale of a diagram, or a map, may be given as a fraction or a ratio such as  $\\frac{1}{50000}$  or  $1:50000$ ."
+  },
+  {
+    "id": 14812,
+    "type": "text",
+    "text": "[Table Row] <tr><td>KEY WORDS</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14813,
+    "type": "text",
+    "text": "[Table Row] <tr><td>adjacent</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14814,
+    "type": "text",
+    "text": "[Table Row] <tr><td>bearing</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14815,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cosine ratio</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14816,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cosine rule</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14817,
+    "type": "text",
+    "text": "[Table Row] <tr><td>inverse function</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14818,
+    "type": "text",
+    "text": "[Table Row] <tr><td>opposite</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14819,
+    "type": "text",
+    "text": "[Table Row] <tr><td>projection</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14820,
+    "type": "text",
+    "text": "[Table Row] <tr><td>scale</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14821,
+    "type": "text",
+    "text": "[Table Row] <tr><td>sine ratio</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14822,
+    "type": "text",
+    "text": "[Table Row] <tr><td>sine rule</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14823,
+    "type": "text",
+    "text": "[Table Row] <tr><td>tangent ratio</td></tr>",
+    "page_idx": 483
+  },
+  {
+    "id": 14824,
+    "type": "text",
+    "page_idx": 484,
+    "text": "A scale of  $\\frac{1}{50000}$  means the length of every line in the diagram is  $\\frac{1}{50000}$  of the length of the line that it represents in real life. So,  $1\\mathrm{cm}$  in the diagram represents  $50000\\mathrm{cm}$  in real life. In other words,  $1\\mathrm{cm}$  represents  $500\\mathrm{m}$ , or  $2\\mathrm{cm}$  represents  $1\\mathrm{km}$ ."
+  },
+  {
+    "id": 14825,
+    "type": "text",
+    "page_idx": 484,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 14826,
+    "type": "text",
+    "page_idx": 484,
+    "text": "Some of the construction skills from Chapter 3 will be useful for scale drawings."
+  },
+  {
+    "id": 14827,
+    "type": "text",
+    "page_idx": 484,
+    "text": "LINK"
+  },
+  {
+    "id": 14828,
+    "type": "text",
+    "page_idx": 484,
+    "text": "Scale drawings are often used to plan the production of items in design technology subjects. Many problems that involve fitting together different shapes can be solved by using a good quality scale drawing. Maps in geography are also scale drawings and allow us to represent the real world in a conveniently sized diagram."
+  },
+  {
+    "id": 14829,
+    "type": "text",
+    "page_idx": 484,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 14830,
+    "type": "text",
+    "page_idx": 484,
+    "text": "A rectangular field is  $100\\mathrm{m}$  long and  $45\\mathrm{m}$  wide. A scale drawing of the field is made with a scale of  $1\\mathrm{cm}$  to  $10\\mathrm{m}$ . What are the length and width of the field in the drawing?"
+  },
+  {
+    "id": 14831,
+    "type": "text",
+    "page_idx": 484,
+    "text": "Answer"
+  },
+  {
+    "id": 14832,
+    "type": "text",
+    "page_idx": 484,
+    "text": "10m is represented by 1cm"
+  },
+  {
+    "id": 14833,
+    "type": "text",
+    "page_idx": 484,
+    "text": ":  $100\\mathrm{m}$  is represented by  $(100\\div 10)\\mathrm{cm} = 10\\mathrm{cm}$"
+  },
+  {
+    "id": 14834,
+    "type": "text",
+    "page_idx": 484,
+    "text": "and  $45\\mathrm{m}$  is represented by  $(45\\div 10)\\mathrm{cm} = 4.5\\mathrm{cm}$"
+  },
+  {
+    "id": 14835,
+    "type": "text",
+    "page_idx": 484,
+    "text": "So, the dimensions on the drawing are: length  $= 10\\mathrm{cm}$  and width  $= 4.5\\mathrm{cm}$"
+  },
+  {
+    "id": 14836,
+    "type": "text",
+    "page_idx": 484,
+    "text": "LINK"
+  },
+  {
+    "id": 14837,
+    "type": "text",
+    "page_idx": 484,
+    "text": "Today most draughtspeople, architects and designers use computers to generate accurate scale diagrams and plans, but most of these designs start with hand-drawn sketches using pencils, rulers and compasses. Often the changes to plans will be accurately drawn over the computer designs before a final design is reached."
+  },
+  {
+    "id": 14838,
+    "type": "text",
+    "page_idx": 484,
+    "text": "Exercise 15.1"
+  },
+  {
+    "id": 14839,
+    "type": "text",
+    "text": "1 On the plan of a house, the living room is  $3.4\\mathrm{cm}$  long and  $2.6\\mathrm{cm}$  wide. The scale of the plan is  $1\\mathrm{cm}$  to  $2\\mathrm{m}$ . Calculate the actual length and width of the room.",
+    "page_idx": 484
+  },
+  {
+    "id": 14840,
+    "type": "text",
+    "text": "2 The actual distance between two villages is  $12\\mathrm{km}$ . Calculate the distance between the villages on a map whose scale is:",
+    "page_idx": 484
+  },
+  {
+    "id": 14841,
+    "type": "text",
+    "page_idx": 484,
+    "text": "1cm to 4km"
+  },
+  {
+    "id": 14842,
+    "type": "text",
+    "page_idx": 484,
+    "text": "b 1cm to 5km."
+  },
+  {
+    "id": 14843,
+    "type": "text",
+    "page_idx": 485,
+    "text": "3 A car ramp is  $28\\mathrm{m}$  long and makes an angle of  $15^{\\circ}$  with the horizontal."
+  },
+  {
+    "id": 14844,
+    "type": "text",
+    "page_idx": 485,
+    "text": "A scale drawing is made of the ramp using a scale of  $1\\mathrm{cm}$  to  $5\\mathrm{m}$"
+  },
+  {
+    "id": 14845,
+    "type": "text",
+    "text": "a How long is the ramp on the drawing?",
+    "page_idx": 485
+  },
+  {
+    "id": 14846,
+    "type": "text",
+    "text": "b What angle does the ramp make with the horizontal on the drawing?",
+    "page_idx": 485
+  },
+  {
+    "id": 14847,
+    "type": "text",
+    "page_idx": 485,
+    "text": "Angle of elevation and angle of depression"
+  },
+  {
+    "id": 14848,
+    "type": "text",
+    "page_idx": 485,
+    "text": "Scale drawing questions often involve observations of objects that are higher than you or lower than you, for example, the top of a building, an aeroplane or a ship in a harbour. In these cases, the angle of elevation or depression is the angle between the horizontal and the line of sight of the object."
+  },
+  {
+    "id": 14849,
+    "type": "image",
+    "page_idx": 485,
+    "img_path": "images/1e1c9f29ce4c96b9e3c0961a72de62231e91447e96bf2f5da278f2bbd715e7ab.jpg"
+  },
+  {
+    "id": 14850,
+    "type": "image",
+    "page_idx": 485,
+    "img_path": "images/d40b86e96ff7a1c879bd82b72911aa458a880961ae28802d3fe02f3ed6fc2483.jpg"
+  },
+  {
+    "id": 14851,
+    "type": "text",
+    "page_idx": 485,
+    "text": "TIP"
+  },
+  {
+    "id": 14852,
+    "type": "text",
+    "page_idx": 485,
+    "text": "Angles of elevation are always measured from the horizontal."
+  },
+  {
+    "id": 14853,
+    "type": "text",
+    "page_idx": 485,
+    "text": "Drawing a scale diagram"
+  },
+  {
+    "id": 14854,
+    "type": "text",
+    "page_idx": 485,
+    "text": "Here are some steps for drawing diagrams to scale:"
+  },
+  {
+    "id": 14855,
+    "type": "text",
+    "text": "Draw a rough sketch, showing all details as given in the question.",
+    "page_idx": 485
+  },
+  {
+    "id": 14856,
+    "type": "text",
+    "text": "- If you are told to use a particular scale you must use it! If you are not given a scale, try to choose one that will make your diagram fit neatly onto a page.",
+    "page_idx": 485
+  },
+  {
+    "id": 14857,
+    "type": "text",
+    "text": "- Make a clean, tidy and accurate scale drawing using appropriate geometrical instruments. Show on it the given lengths and angles. Write the scale next to the drawing.",
+    "page_idx": 485
+  },
+  {
+    "id": 14858,
+    "type": "text",
+    "text": "Measure lengths and angles on the drawing to the answer the problem. Remember to change the lengths to full size using the scale. Remember that the full size angles are the same as the angles in the scale drawing.",
+    "page_idx": 485
+  },
+  {
+    "id": 14859,
+    "type": "text",
+    "page_idx": 485,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 14860,
+    "type": "text",
+    "page_idx": 485,
+    "text": "A scale drawing is similar to the real object, so the sides are in proportion and corresponding angles are equal. You learned about similar shapes in Chapter 11."
+  },
+  {
+    "id": 14861,
+    "type": "text",
+    "page_idx": 486,
+    "text": "Exercise 15.2"
+  },
+  {
+    "id": 14862,
+    "type": "text",
+    "page_idx": 486,
+    "text": "1 The diagram is a rough sketch of a field  $ABCD$ ."
+  },
+  {
+    "id": 14863,
+    "type": "text",
+    "text": "a Using a scale of  $1\\mathrm{cm}$  to  $20\\mathrm{m}$  make an accurate scale drawing of the field.",
+    "page_idx": 486
+  },
+  {
+    "id": 14864,
+    "type": "text",
+    "text": "b Find the sizes of angle BCD and angle ADC at the corners of the field.",
+    "page_idx": 486
+  },
+  {
+    "id": 14865,
+    "type": "text",
+    "text": "c Find the length of the side  $CD$  of the field.",
+    "page_idx": 486
+  },
+  {
+    "id": 14866,
+    "type": "image",
+    "page_idx": 486,
+    "img_path": "images/0d8d1dad83aa3e7860891dcc69f36d16b7481c33659a934c815d99dba2f1915e.jpg"
+  },
+  {
+    "id": 14867,
+    "type": "text",
+    "page_idx": 486,
+    "text": "2 A ladder of length  $3.6\\mathrm{m}$  stands on horizontal ground and leans against a vertical wall at an angle of  $70^{\\circ}$  to the horizontal (see diagram)."
+  },
+  {
+    "id": 14868,
+    "type": "text",
+    "text": "a What is the size of the angle that the ladder makes with the wall  $(a)$ ?",
+    "page_idx": 486
+  },
+  {
+    "id": 14869,
+    "type": "text",
+    "text": "b Draw a scale drawing using a scale of  $1\\mathrm{cm}$  to  $50\\mathrm{cm}$  to find how far the ladder reaches up the wall  $(b)$",
+    "page_idx": 486
+  }
+]
+```

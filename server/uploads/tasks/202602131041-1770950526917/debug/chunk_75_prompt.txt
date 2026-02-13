@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 5250,
+    "type": "text",
+    "page_idx": 174,
+    "text": "a Express 16 as a percentage of 48."
+  },
+  {
+    "id": 5251,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Answer"
+  },
+  {
+    "id": 5252,
+    "type": "equation",
+    "page_idx": 174,
+    "text": "$$\n\\frac{16}{48}\\times 100 = 33.3\\% (1d.p.)\n$$"
+  },
+  {
+    "id": 5253,
+    "type": "text",
+    "page_idx": 174,
+    "text": "First, write 16 as a fraction of 48, then multiply by 100."
+  },
+  {
+    "id": 5254,
+    "type": "equation",
+    "page_idx": 174,
+    "text": "$$\n\\frac {1 6}{4 8} = \\frac {1}{3}\n$$"
+  },
+  {
+    "id": 5255,
+    "type": "text",
+    "page_idx": 174,
+    "text": "If you are working without a calculator, you may find it easier to write the fraction in its simplest form first."
+  },
+  {
+    "id": 5256,
+    "type": "equation",
+    "page_idx": 174,
+    "text": "$$\n\\frac{1}{3}\\times 100 = 33.3\\% (1d.p.)\n$$"
+  },
+  {
+    "id": 5257,
+    "type": "text",
+    "page_idx": 174,
+    "text": "b Express 15 as a percentage of 75."
+  },
+  {
+    "id": 5258,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Answer"
+  },
+  {
+    "id": 5259,
+    "type": "equation",
+    "page_idx": 174,
+    "text": "$$\n\\begin{array}{l} \\frac {1 5}{7 5} \\times 1 0 0 = \\frac {1}{5} \\times 1 0 0 \\\\ = 20\\% \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5260,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Write 15 as a fraction of 75, then simplify and multiply by 100. You know that 100 divided by 5 is 20, so you don't need a calculator."
+  },
+  {
+    "id": 5261,
+    "type": "text",
+    "page_idx": 174,
+    "text": "c Express 18 as a percentage of 23."
+  },
+  {
+    "id": 5262,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Answer"
+  },
+  {
+    "id": 5263,
+    "type": "text",
+    "page_idx": 174,
+    "text": "To calculate  $\\frac{18}{23} \\times 100$  you can use your calculator. Enter:"
+  },
+  {
+    "id": 5264,
+    "type": "image",
+    "page_idx": 174,
+    "img_path": "images/a1ac2eb447130386668b52894ac3165b57f3495c0dcf9ffc8baba4823559a163.jpg"
+  },
+  {
+    "id": 5265,
+    "type": "text",
+    "page_idx": 174,
+    "text": "d Express 24 grams as a percentage of 15."
+  },
+  {
+    "id": 5266,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Answer"
+  },
+  {
+    "id": 5267,
+    "type": "equation",
+    "page_idx": 174,
+    "text": "$$\n\\frac{24}{15}\\times 100 = \\frac{2400}{15} = 160\\%\n$$"
+  },
+  {
+    "id": 5268,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Exercise 5.8"
+  },
+  {
+    "id": 5269,
+    "type": "text",
+    "page_idx": 174,
+    "text": "Where appropriate, give your answer to 3 significant figures."
+  },
+  {
+    "id": 5270,
+    "type": "text",
+    "page_idx": 174,
+    "text": "1 Calculate:"
+  },
+  {
+    "id": 5271,
+    "type": "text",
+    "page_idx": 174,
+    "text": "a 5% of 300"
+  },
+  {
+    "id": 5272,
+    "type": "text",
+    "page_idx": 174,
+    "text": "b 20% of 60"
+  },
+  {
+    "id": 5273,
+    "type": "text",
+    "page_idx": 174,
+    "text": "c 75% of 180"
+  },
+  {
+    "id": 5274,
+    "type": "text",
+    "page_idx": 174,
+    "text": "d 120% of 300"
+  },
+  {
+    "id": 5275,
+    "type": "text",
+    "page_idx": 174,
+    "text": "e  $7.5\\%$  of 1000"
+  },
+  {
+    "id": 5276,
+    "type": "text",
+    "page_idx": 174,
+    "text": "f 90% of 50kg"
+  },
+  {
+    "id": 5277,
+    "type": "text",
+    "page_idx": 174,
+    "text": "g 2.6% of 3 metres"
+  },
+  {
+    "id": 5278,
+    "type": "text",
+    "page_idx": 174,
+    "text": "h  $\\frac{1}{2}\\%$  of 55 litres."
+  },
+  {
+    "id": 5279,
+    "type": "text",
+    "page_idx": 174,
+    "text": "2 Express:"
+  },
+  {
+    "id": 5280,
+    "type": "text",
+    "page_idx": 174,
+    "text": "a 14 as a percentage of 35"
+  },
+  {
+    "id": 5281,
+    "type": "text",
+    "page_idx": 174,
+    "text": "b 3.5 as a percentage of 14"
+  },
+  {
+    "id": 5282,
+    "type": "text",
+    "page_idx": 174,
+    "text": "c 17 as a percentage of 63."
+  },
+  {
+    "id": 5283,
+    "type": "text",
+    "page_idx": 174,
+    "text": "3 A factory that makes mobile phone batteries estimates that  $2.4\\%$  of the batteries are not up to standard. If they produce 16 800 batteries, how many will be up to standard?"
+  },
+  {
+    "id": 5284,
+    "type": "text",
+    "page_idx": 174,
+    "text": "4 36 people live in a block of flats. 28 of these people jog around the park each morning. What percentage of the people living in the block of flats go jogging around the park?"
+  },
+  {
+    "id": 5285,
+    "type": "text",
+    "text": "5 Jaleel scores  $\\frac{19}{24}$  in a test. What percentage of the marks did Jaleel get?",
+    "page_idx": 175
+  },
+  {
+    "id": 5286,
+    "type": "text",
+    "text": "6 Express 1.3 as a percentage of 5.2.",
+    "page_idx": 175
+  },
+  {
+    "id": 5287,
+    "type": "text",
+    "text": "7 Express 0.13 as a percentage of 520.",
+    "page_idx": 175
+  },
+  {
+    "id": 5288,
+    "type": "text",
+    "text": "One orange contains  $53.2\\mathrm{mg}$  of Vitamin C. The daily recommended amount for adults is  $90\\mathrm{mg}$  per day. Express the amount of Vitamin C in three oranges as a percentage of the daily recommended amount.",
+    "page_idx": 175
+  },
+  {
+    "id": 5289,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Percentage increases and decreases"
+  },
+  {
+    "id": 5290,
+    "type": "text",
+    "page_idx": 175,
+    "text": "The cost of a book increases from  $12 to$ 15. The actual increase is  $3. As a fraction of the original value, the increase is \\frac{3}{12} = \\frac{1}{4}$ . This is the fractional change and you can write this fraction as  $25\\%$ . In this example, the value of the book increased by  $25\\%$  of the original value. This is called the percentage increase. If the value reduces (for example if something is on sale in a shop) then it is a percentage decrease."
+  },
+  {
+    "id": 5291,
+    "type": "text",
+    "page_idx": 175,
+    "text": "TIP"
+  },
+  {
+    "id": 5292,
+    "type": "text",
+    "page_idx": 175,
+    "text": "When increases or decreases are stated as percentages, they are always stated as percentages of the original value."
+  },
+  {
+    "id": 5293,
+    "type": "text",
+    "page_idx": 175,
+    "text": "WORKED EXAMPLE 13"
+  },
+  {
+    "id": 5294,
+    "type": "text",
+    "page_idx": 175,
+    "text": "The value of a house increased from  $120000 to$ 124800 between August and December. What percentage increase is this?"
+  },
+  {
+    "id": 5295,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Answer"
+  },
+  {
+    "id": 5296,
+    "type": "equation",
+    "page_idx": 175,
+    "text": "$$\n\\$ 124800 - \\$ 120000 = \\$ 4800\n$$"
+  },
+  {
+    "id": 5297,
+    "type": "text",
+    "page_idx": 175,
+    "text": "First calculate the increase."
+  },
+  {
+    "id": 5298,
+    "type": "equation",
+    "page_idx": 175,
+    "text": "$$\n\\% \\text {increase} = \\frac {\\text {increase}}{\\text {original}} \\times 100 \\%\n$$"
+  },
+  {
+    "id": 5299,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Write the increase as a fraction of the original and multiply by 100."
+  },
+  {
+    "id": 5300,
+    "type": "equation",
+    "page_idx": 175,
+    "text": "$$\n= \\frac{4800}{120000}\\times 100\\%\n$$"
+  },
+  {
+    "id": 5301,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Then do the calculation (either in your head or using a calculator)."
+  },
+  {
+    "id": 5302,
+    "type": "equation",
+    "page_idx": 175,
+    "text": "$$\n= 4 \\%\n$$"
+  },
+  {
+    "id": 5303,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Exercise 5.9"
+  },
+  {
+    "id": 5304,
+    "type": "text",
+    "page_idx": 175,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 5305,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Where appropriate, give your answer to the nearest whole percent."
+  },
+  {
+    "id": 5306,
+    "type": "text",
+    "text": "1 Over a five-year period, the population of the state of Louisiana in the United States of America decreased from 4468976 to 4287768. Find the percentage decrease in the population of Louisiana in this period.",
+    "page_idx": 175
+  },
+  {
+    "id": 5307,
+    "type": "text",
+    "text": "2 Sunil streamed 38 series one year and 46 the next year. Find the percentage increase.",
+    "page_idx": 175
+  },
+  {
+    "id": 5308,
+    "type": "text",
+    "page_idx": 175,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 5309,
+    "type": "text",
+    "page_idx": 175,
+    "text": "Percentages are used a lot in financial mathematics, where interest is added on a percentage basis to savings or debts. You will learn more about this in Chapter 17."
+  },
+  {
+    "id": 5310,
+    "type": "text",
+    "page_idx": 176,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 5311,
+    "type": "text",
+    "text": "3 A theatre has 450 seats. After renovation it will have 480 seats. Find the percentage increase in the number of seats.",
+    "page_idx": 176
+  },
+  {
+    "id": 5312,
+    "type": "text",
+    "text": "4 Sally works in an electrical component factory. On Monday she makes 363 components and on Tuesday she makes 432. Calculate the percentage increase.",
+    "page_idx": 176
+  },
+  {
+    "id": 5313,
+    "type": "text",
+    "text": "5 Inter-Polation Airlines carried a total of 383402 passengers in one year and 287431 in the following year. Calculate the percentage decrease in passengers carried by the airline.",
+    "page_idx": 176
+  },
+  {
+    "id": 5314,
+    "type": "text",
+    "text": "6 A liquid evaporates steadily. In one hour the mass of liquid in a container decreases from  $0.32\\mathrm{kg}$  to  $0.18\\mathrm{kg}$ . Calculate the percentage decrease.",
+    "page_idx": 176
+  },
+  {
+    "id": 5315,
+    "type": "text",
+    "page_idx": 176,
+    "text": "Increasing and decreasing by a given percentage"
+  },
+  {
+    "id": 5316,
+    "type": "text",
+    "page_idx": 176,
+    "text": "If you know what percentage you want to increase or decrease an amount by, you can find the actual increase or decrease by finding a percentage of the original. If you want to know the new value, you either add the increase to, or subtract the decrease from, the original value."
+  },
+  {
+    "id": 5317,
+    "type": "text",
+    "page_idx": 176,
+    "text": "You can also use a multiplier to increase or decrease amounts. An increase of  $5\\%$  means you will end up with  $105\\%$ . This is equivalent to  $\\frac{105}{100} = 1.05$ , so you can multiply by 1.05 to work out the increased amount. A decrease of  $5\\%$  will leave you with  $95\\%$ . This is equivalent to  $\\frac{95}{100} = 0.95$  and you can use this to calculate the decreased amount."
+  },
+  {
+    "id": 5318,
+    "type": "text",
+    "page_idx": 176,
+    "text": "WORKED EXAMPLE 14"
+  },
+  {
+    "id": 5319,
+    "type": "text",
+    "page_idx": 176,
+    "text": "Increase 56 by: a 10%"
+  },
+  {
+    "id": 5320,
+    "type": "text",
+    "page_idx": 176,
+    "text": "b 15%"
+  },
+  {
+    "id": 5321,
+    "type": "text",
+    "page_idx": 176,
+    "text": "c 4%"
+  },
+  {
+    "id": 5322,
+    "type": "text",
+    "page_idx": 176,
+    "text": "Answers"
+  },
+  {
+    "id": 5323,
+    "type": "text",
+    "page_idx": 176,
+    "text": "a 10% of 56 = 10/100 × 56"
+  },
+  {
+    "id": 5324,
+    "type": "equation",
+    "page_idx": 176,
+    "text": "$$\n\\begin{array}{l} = \\frac {1}{1 0} \\times 5 6 = 5. 6 \\\\ 5 6 + 5. 6 = 6 1. 6 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 5325,
+    "type": "text",
+    "page_idx": 176,
+    "text": "b  $1.15\\times 56 = 64.4$"
+  },
+  {
+    "id": 5326,
+    "type": "text",
+    "text": "Calculate  $10\\%$  of 56 to work out the size of the increase.",
+    "page_idx": 176
+  },
+  {
+    "id": 5327,
+    "type": "text",
+    "text": "To increase the original by  $10\\%$  add this to 56.",
+    "page_idx": 176
+  },
+  {
+    "id": 5328,
+    "type": "text",
+    "page_idx": 176,
+    "text": "c  $1.04\\times 56 = 58.24$"
+  },
+  {
+    "id": 5329,
+    "type": "text",
+    "page_idx": 176,
+    "text": "A  $15\\%$  increase means  $115\\%$  of the original."
+  },
+  {
+    "id": 5330,
+    "type": "equation",
+    "page_idx": 176,
+    "text": "$$\n115\\% = 1.15\n$$"
+  },
+  {
+    "id": 5331,
+    "type": "text",
+    "page_idx": 176,
+    "text": "A  $4\\%$  increase means  $104\\%$  of the original."
+  },
+  {
+    "id": 5332,
+    "type": "equation",
+    "page_idx": 176,
+    "text": "$$\n104 \\% = 1.04\n$$"
+  },
+  {
+    "id": 5333,
+    "type": "text",
+    "page_idx": 176,
+    "text": "TIP"
+  },
+  {
+    "id": 5334,
+    "type": "text",
+    "page_idx": 176,
+    "text": "Remember that you are always considering a percentage of the original value."
+  },
+  {
+    "id": 5335,
+    "type": "text",
+    "page_idx": 177,
+    "text": "WORKED EXAMPLE 15"
+  },
+  {
+    "id": 5336,
+    "type": "text",
+    "page_idx": 177,
+    "text": "In a sale all items are reduced by  $15\\%$ . If the normal price for a bicycle is $120, calculate the sale price."
+  },
+  {
+    "id": 5337,
+    "type": "text",
+    "page_idx": 177,
+    "text": "Answer"
+  },
+  {
+    "id": 5338,
+    "type": "equation",
+    "page_idx": 177,
+    "text": "$$\n100\\% -15\\% = 85\\%\n$$"
+  },
+  {
+    "id": 5339,
+    "type": "text",
+    "page_idx": 177,
+    "text": "Reducing a number by  $15\\%$  leaves you with  $85\\%$  of the original. So, find  $85\\%$  of the original value."
+  },
+  {
+    "id": 5340,
+    "type": "equation",
+    "page_idx": 177,
+    "text": "$$\n\\frac {8 5}{1 0 0} \\times \\$ 1 2 0 = \\$ 1 0 2\n$$"
+  },
+  {
+    "id": 5341,
+    "type": "text",
+    "page_idx": 177,
+    "text": "85% is equivalent to  $\\frac{85}{100} = 0.85$"
+  },
+  {
+    "id": 5342,
+    "type": "text",
+    "page_idx": 177,
+    "text": "Or use a multiplier:"
+  },
+  {
+    "id": 5343,
+    "type": "equation",
+    "page_idx": 177,
+    "text": "$$\n0. 8 5 \\times \\$ 1 2 0 = 1 0 2\n$$"
+  },
+  {
+    "id": 5344,
+    "type": "text",
+    "page_idx": 177,
+    "text": "You can draw a bar model to help you with percentage calculations."
+  },
+  {
+    "id": 5345,
+    "type": "text",
+    "page_idx": 177,
+    "text": "WORKED EXAMPLE 16"
+  },
+  {
+    "id": 5346,
+    "type": "text",
+    "page_idx": 177,
+    "text": "A licence for anti-virus software normally costs $70.00. What would you pay for the software if you got 25% discount?"
+  },
+  {
+    "id": 5347,
+    "type": "text",
+    "page_idx": 177,
+    "text": "Answer"
+  },
+  {
+    "id": 5348,
+    "type": "image",
+    "page_idx": 177,
+    "img_path": "images/3c48155ea6a427dd1c04556f7802d46f6feadf1afb7aa494b521369ee49b2ffd.jpg"
+  },
+  {
+    "id": 5349,
+    "type": "text",
+    "page_idx": 177,
+    "text": "Draw a bar model."
+  }
+]
+```

@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 4760,
+    "type": "text",
+    "page_idx": 157,
+    "text": "The table shows the results."
+  },
+  {
+    "id": 4761,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Netball</td><td>Football</td><td>Hockey</td><td>Tennis</td></tr>",
+    "page_idx": 157
+  },
+  {
+    "id": 4762,
+    "type": "text",
+    "text": "[Table Row] <tr><td>7</td><td>12</td><td>6</td><td>5</td></tr>",
+    "page_idx": 157
+  },
+  {
+    "id": 4763,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Complete the pictogram. [Using Figure 1 in the Unit 1 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 4764,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Netball</td><td></td></tr>",
+    "page_idx": 157
+  },
+  {
+    "id": 4765,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Football</td><td></td></tr>",
+    "page_idx": 157
+  },
+  {
+    "id": 4766,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Hockey</td><td></td></tr>",
+    "page_idx": 157
+  },
+  {
+    "id": 4767,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Tennis</td><td></td></tr>",
+    "page_idx": 157
+  },
+  {
+    "id": 4768,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Key:  $\\bigoplus$  represents 4 people"
+  },
+  {
+    "id": 4769,
+    "type": "text",
+    "page_idx": 157,
+    "text": "[2]"
+  },
+  {
+    "id": 4770,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q1, June 2021"
+  },
+  {
+    "id": 4771,
+    "type": "text",
+    "page_idx": 157,
+    "text": "7"
+  },
+  {
+    "id": 4772,
+    "type": "image",
+    "page_idx": 157,
+    "img_path": "images/46f2638521ddfc0af3509f0b1c2d9f0b0c49401751cbe9ae96043f05f731e7ca.jpg"
+  },
+  {
+    "id": 4773,
+    "type": "text",
+    "page_idx": 157,
+    "text": "In the triangle  $ABC, AB = AC$  and angle  $BAC = 38^\\circ$ ."
+  },
+  {
+    "id": 4774,
+    "type": "text",
+    "page_idx": 157,
+    "text": "$BCD$  is a straight line."
+  },
+  {
+    "id": 4775,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Work out angle  $ACD$ ."
+  },
+  {
+    "id": 4776,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Angle  $ACD =$  [3]"
+  },
+  {
+    "id": 4777,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q5. June 2020"
+  },
+  {
+    "id": 4778,
+    "type": "text",
+    "page_idx": 157,
+    "text": "8 Simplify."
+  },
+  {
+    "id": 4779,
+    "type": "equation",
+    "page_idx": 157,
+    "text": "$$\n4 p ^ {5} q ^ {3} \\times p ^ {2} q ^ {- 4}\n$$"
+  },
+  {
+    "id": 4780,
+    "type": "text",
+    "page_idx": 157,
+    "text": "[2]"
+  },
+  {
+    "id": 4781,
+    "type": "text",
+    "page_idx": 157,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q15, June 2020"
+  },
+  {
+    "id": 4782,
+    "type": "text",
+    "page_idx": 158,
+    "text": "9 a Using the integers from 60 to 75 only, find"
+  },
+  {
+    "id": 4783,
+    "type": "text",
+    "text": "a multiple of 17, [1]",
+    "page_idx": 158
+  },
+  {
+    "id": 4784,
+    "type": "text",
+    "text": "ii the prime numbers. [2]",
+    "page_idx": 158
+  },
+  {
+    "id": 4785,
+    "type": "text",
+    "page_idx": 158,
+    "text": "b Find"
+  },
+  {
+    "id": 4786,
+    "type": "text",
+    "text": "i the square root of 4489, [1]",
+    "page_idx": 158
+  },
+  {
+    "id": 4787,
+    "type": "text",
+    "text": "ii 43. [1]",
+    "page_idx": 158
+  },
+  {
+    "id": 4788,
+    "type": "text",
+    "text": "ii 274625. (1)",
+    "page_idx": 158
+  },
+  {
+    "id": 4789,
+    "type": "text",
+    "text": "iv  $2^{-3}\\times 24^{2}$  [1]",
+    "page_idx": 158
+  },
+  {
+    "id": 4790,
+    "type": "text",
+    "text": "c Write down the reciprocal of 7. [1]",
+    "page_idx": 158
+  },
+  {
+    "id": 4791,
+    "type": "text",
+    "text": "d Write 3.72194 correct to 3 decimal places. [1]",
+    "page_idx": 158
+  },
+  {
+    "id": 4792,
+    "type": "text",
+    "text": "e Find the lowest common multiple (LCM) of 8 and 14. [2]",
+    "page_idx": 158
+  },
+  {
+    "id": 4793,
+    "type": "text",
+    "page_idx": 158,
+    "text": "The average temperature at the North Pole is  $-23^{\\circ}C$  in January and  $-11^{\\circ}C$  in March."
+  },
+  {
+    "id": 4794,
+    "type": "text",
+    "text": "i Find the difference between these temperatures.",
+    "page_idx": 158
+  },
+  {
+    "id": 4795,
+    "type": "text",
+    "text": "ii The average temperature in July is  $28^{\\circ}C$  higher than the average temperature in March. Find the average temperature in July.",
+    "page_idx": 158
+  },
+  {
+    "id": 4796,
+    "type": "text",
+    "page_idx": 158,
+    "text": "C [1]"
+  },
+  {
+    "id": 4797,
+    "type": "text",
+    "page_idx": 158,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 31 Q5, June 2020"
+  },
+  {
+    "id": 4798,
+    "type": "image",
+    "page_idx": 158,
+    "img_path": "images/0ea38e75f6de7f001a9857caec2e3b6a1a25a230ce1e0c68c3f45ed140408d4b.jpg"
+  },
+  {
+    "id": 4799,
+    "type": "text",
+    "page_idx": 158,
+    "text": "10 a Simplify  $(81)^{-16})^{\\frac{1}{2}}$"
+  },
+  {
+    "id": 4800,
+    "type": "text",
+    "text": "b  $2^{3} = 4^{p}$",
+    "page_idx": 158
+  },
+  {
+    "id": 4801,
+    "type": "text",
+    "page_idx": 158,
+    "text": "Find the value of  $p$  1"
+  },
+  {
+    "id": 4802,
+    "type": "text",
+    "page_idx": 158,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q18, June 2019"
+  },
+  {
+    "id": 4803,
+    "type": "image",
+    "page_idx": 159,
+    "img_path": "images/36384915a139a9638ea3111309931cc1ee9a031d364700699e04ac31c24306a8.jpg"
+  },
+  {
+    "id": 4804,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Unit 1 Project"
+  },
+  {
+    "id": 4805,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Star polygons"
+  },
+  {
+    "id": 4806,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Here is a five-pointed star:"
+  },
+  {
+    "id": 4807,
+    "type": "image",
+    "page_idx": 159,
+    "img_path": "images/8f829f5da7b276270a4ef85c65e1ae36ce46f2bd39a648726aeeacc7f35c0e89.jpg"
+  },
+  {
+    "id": 4808,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Draw some five-pointed stars of your own. Make sure your lines are straight."
+  },
+  {
+    "id": 4809,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Measure the interior angles at the five points and add them together."
+  },
+  {
+    "id": 4810,
+    "type": "text",
+    "page_idx": 159,
+    "text": "What do you notice?"
+  },
+  {
+    "id": 4811,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Here is a seven-pointed star:"
+  },
+  {
+    "id": 4812,
+    "type": "image",
+    "page_idx": 159,
+    "img_path": "images/c5f778324a2f67b45df06c85c92a5d442e3c8b12c72ac943a59f57d8043b703c.jpg"
+  },
+  {
+    "id": 4813,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Draw some seven-pointed stars of your own."
+  },
+  {
+    "id": 4814,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Measure the interior angles at the seven points and add them together."
+  },
+  {
+    "id": 4815,
+    "type": "text",
+    "page_idx": 159,
+    "text": "What do you notice? How can you explain your findings?"
+  },
+  {
+    "id": 4816,
+    "type": "text",
+    "page_idx": 159,
+    "text": "Try to state and prove similar results for a star with any number of points."
+  },
+  {
+    "id": 4817,
+    "type": "text",
+    "page_idx": 159,
+    "text": "TIP"
+  },
+  {
+    "id": 4818,
+    "type": "text",
+    "page_idx": 159,
+    "text": "If you have access to the internet, you can find information to help you explain your findings on the NRICH website. Go to https://nrich.maths.org/11456 to do this."
+  },
+  {
+    "id": 4819,
+    "type": "image",
+    "page_idx": 160,
+    "img_path": "images/b4559301ff23ccb79f8a0e39c501bc8cb792fb38f0d1a97b644b1172cf466574.jpg"
+  },
+  {
+    "id": 4820,
+    "type": "text",
+    "page_idx": 160,
+    "text": "Chapter 5"
+  },
+  {
+    "id": 4821,
+    "type": "text",
+    "page_idx": 160,
+    "text": "Fractions, percentages and standard form"
+  },
+  {
+    "id": 4822,
+    "type": "text",
+    "page_idx": 160,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 4823,
+    "type": "text",
+    "text": "find equivalent fractions",
+    "page_idx": 160
+  },
+  {
+    "id": 4824,
+    "type": "text",
+    "text": "- simplify fractions",
+    "page_idx": 160
+  },
+  {
+    "id": 4825,
+    "type": "text",
+    "text": "- add, subtract, multiply and divide fractions and mixed numbers",
+    "page_idx": 160
+  },
+  {
+    "id": 4826,
+    "type": "text",
+    "text": "find fractions of numbers",
+    "page_idx": 160
+  },
+  {
+    "id": 4827,
+    "type": "text",
+    "text": "find a percentage of a number",
+    "page_idx": 160
+  },
+  {
+    "id": 4828,
+    "type": "text",
+    "text": "find one number as a percentage of another",
+    "page_idx": 160
+  },
+  {
+    "id": 4829,
+    "type": "text",
+    "text": "calculate percentage increases and decreases",
+    "page_idx": 160
+  },
+  {
+    "id": 4830,
+    "type": "text",
+    "text": "increase and decrease by a given percentage",
+    "page_idx": 160
+  },
+  {
+    "id": 4831,
+    "type": "text",
+    "text": "calculate reverse percentages (undoing increases and decreases)",
+    "page_idx": 160
+  },
+  {
+    "id": 4832,
+    "type": "text",
+    "text": "use standard form",
+    "page_idx": 160
+  },
+  {
+    "id": 4833,
+    "type": "text",
+    "text": "calculate with values in standard form.",
+    "page_idx": 160
+  },
+  {
+    "id": 4834,
+    "type": "text",
+    "page_idx": 161,
+    "text": "Sea nettle jellyfish bodies on the previous page are  $\\frac{1}{20}$  protein, muscles and nerve cells - the rest is water. Work out what percentage of a jellyfish's body is water."
+  },
+  {
+    "id": 4835,
+    "type": "text",
+    "page_idx": 161,
+    "text": "We use fractions and percentages on an almost daily basis, often without realising it. For example, we use fractions to answer questions like these:"
+  },
+  {
+    "id": 4836,
+    "type": "text",
+    "text": "How far can you travel on half a tank of petrol?",
+    "page_idx": 161
+  },
+  {
+    "id": 4837,
+    "type": "text",
+    "text": "If you share  $\\frac{3}{4}$  of a cake between two people, how much will they each get?",
+    "page_idx": 161
+  },
+  {
+    "id": 4838,
+    "type": "text",
+    "text": "If three-fifths of a  $100\\mathrm{km}$  journey is complete, how far do you still have to travel?",
+    "page_idx": 161
+  },
+  {
+    "id": 4839,
+    "type": "text",
+    "text": "If a shop is offering a 25% discount, what will you pay for an item costing $120?",
+    "page_idx": 161
+  },
+  {
+    "id": 4840,
+    "type": "text",
+    "page_idx": 161,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 4841,
+    "type": "text",
+    "page_idx": 161,
+    "text": "1 Match pairs of bubbles with the same value to find the one that has no matching value."
+  },
+  {
+    "id": 4842,
+    "type": "image",
+    "page_idx": 161,
+    "img_path": "images/9958ef09461ece457cbdcefa653a6a02e1d0448a73e0781b0c617fcc3b24b5a1.jpg"
+  },
+  {
+    "id": 4843,
+    "type": "image",
+    "page_idx": 161,
+    "img_path": "images/db7f5669c4169a6c54394c65a85feceaedc5d50e2981340efc4b41269b75c4da.jpg"
+  },
+  {
+    "id": 4844,
+    "type": "text",
+    "page_idx": 161,
+    "text": "2 Draw diagrams with labels or short notes to show why:"
+  },
+  {
+    "id": 4845,
+    "type": "text",
+    "text": "a a  $50\\%$  increase followed by a  $50\\%$  decrease does not get you back to where you started",
+    "page_idx": 161
+  },
+  {
+    "id": 4846,
+    "type": "text",
+    "text": "b an increase of  $40\\%$  followed by an increase of  $50\\%$  is not equal to an increase of  $90\\%$ .",
+    "page_idx": 161
+  },
+  {
+    "id": 4847,
+    "type": "text",
+    "page_idx": 161,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 4848,
+    "type": "text",
+    "page_idx": 161,
+    "text": "common"
+  },
+  {
+    "id": 4849,
+    "type": "text",
+    "page_idx": 161,
+    "text": "denominator"
+  },
+  {
+    "id": 4850,
+    "type": "text",
+    "page_idx": 161,
+    "text": "denominator"
+  },
+  {
+    "id": 4851,
+    "type": "text",
+    "page_idx": 161,
+    "text": "equivalent fraction"
+  },
+  {
+    "id": 4852,
+    "type": "text",
+    "page_idx": 161,
+    "text": "fraction"
+  },
+  {
+    "id": 4853,
+    "type": "text",
+    "page_idx": 161,
+    "text": "lowest terms"
+  },
+  {
+    "id": 4854,
+    "type": "text",
+    "page_idx": 161,
+    "text": "mixed number"
+  },
+  {
+    "id": 4855,
+    "type": "text",
+    "page_idx": 161,
+    "text": "numerator"
+  },
+  {
+    "id": 4856,
+    "type": "text",
+    "page_idx": 161,
+    "text": "simplest form"
+  },
+  {
+    "id": 4857,
+    "type": "text",
+    "page_idx": 161,
+    "text": "standard form"
+  },
+  {
+    "id": 4858,
+    "type": "text",
+    "page_idx": 162,
+    "text": "5.1 Revisiting fractions"
+  },
+  {
+    "id": 4859,
+    "type": "text",
+    "page_idx": 162,
+    "text": "A fraction tells you what share or part of a whole amount you are working with. For example,  $\\frac{1}{2}$  of a pie means 1 of 2 equal parts of the pie and  $\\frac{7}{8}$  of the students means 7 out of every 8 students. The mixed number  $\\frac{2\\frac{3}{4}}{4}$  means you are working with 2 wholes and 3 of 4 parts of another whole."
+  }
+]
+```

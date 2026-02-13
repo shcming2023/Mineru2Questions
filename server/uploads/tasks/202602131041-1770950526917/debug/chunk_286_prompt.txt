@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 20020,
+    "type": "text",
+    "page_idx": 729,
+    "text": "In both cases you will be told one of the lengths and the scale, expressed as 'length on the diagram: real length'."
+  },
+  {
+    "id": 20021,
+    "type": "text",
+    "page_idx": 729,
+    "text": "You can write the scale as fractions and cross-multiply to find the unknown length."
+  },
+  {
+    "id": 20022,
+    "type": "text",
+    "page_idx": 729,
+    "text": "WORKED EXAMPLE 8"
+  },
+  {
+    "id": 20023,
+    "type": "text",
+    "page_idx": 729,
+    "text": "The scale of a map is 1:25000."
+  },
+  {
+    "id": 20024,
+    "type": "text",
+    "text": "a What is real distance between two points that are  $5\\mathrm{cm}$  apart on the diagram?",
+    "page_idx": 729
+  },
+  {
+    "id": 20025,
+    "type": "text",
+    "text": "b Express the real distance in kilometres.",
+    "page_idx": 729
+  },
+  {
+    "id": 20026,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Answers"
+  },
+  {
+    "id": 20027,
+    "type": "text",
+    "page_idx": 729,
+    "text": "a Map distance: real distance  $= 1:25000$"
+  },
+  {
+    "id": 20028,
+    "type": "equation",
+    "page_idx": 729,
+    "text": "$$\n\\begin{array}{l} \\mathrm {S o}, 5 \\mathrm {c m}: \\times \\mathrm {c m} = 1: 2 5 0 0 0 \\\\ \\frac {5}{x} = \\frac {1}{2 5 0 0 0} \\\\ 5 \\times 2 5 0 0 0 = x \\\\ x = 1 2 5 0 0 0 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20029,
+    "type": "equation",
+    "page_idx": 729,
+    "text": "$$\n\\therefore \\text {R e a l} = 1 2 5 0 0 0 \\mathrm {c m}\n$$"
+  },
+  {
+    "id": 20030,
+    "type": "text",
+    "page_idx": 729,
+    "text": "b  $1\\mathrm{km} = 100000\\mathrm{cm}$"
+  },
+  {
+    "id": 20031,
+    "type": "equation",
+    "page_idx": 729,
+    "text": "$$\n\\begin{array}{l} 1 2 5 0 0 0 \\mathrm {c m} \\div 1 0 0 0 0 0 \\\\ = 1. 2 5 \\mathrm {k m} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20032,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Substitute the map distance and use  $x$  to represent the unknown real distance."
+  },
+  {
+    "id": 20033,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Write the ratios as fractions."
+  },
+  {
+    "id": 20034,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Cross multiply to find the real distance."
+  },
+  {
+    "id": 20035,
+    "type": "text",
+    "page_idx": 729,
+    "text": "The units in your answer will the same units as the map distance units."
+  },
+  {
+    "id": 20036,
+    "type": "text",
+    "page_idx": 729,
+    "text": "From part (a) you know the real distance is  $120000\\mathrm{cm}$"
+  },
+  {
+    "id": 20037,
+    "type": "text",
+    "page_idx": 729,
+    "text": "You know that  $1\\mathrm{km} = 100000\\mathrm{cm}$"
+  },
+  {
+    "id": 20038,
+    "type": "text",
+    "page_idx": 729,
+    "text": "So convert the real distance to km."
+  },
+  {
+    "id": 20039,
+    "type": "text",
+    "page_idx": 729,
+    "text": "WORKED EXAMPLE 9"
+  },
+  {
+    "id": 20040,
+    "type": "text",
+    "page_idx": 729,
+    "text": "A dam wall is  $480\\mathrm{m}$  long. How many centimetres long will it be on a map with a scale of 1:12000?"
+  },
+  {
+    "id": 20041,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Answers"
+  },
+  {
+    "id": 20042,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Map length: real length = 1:12000"
+  },
+  {
+    "id": 20043,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Substitute the real length and use  $x$  to represent the unknown map length."
+  },
+  {
+    "id": 20044,
+    "type": "text",
+    "page_idx": 729,
+    "text": "So,  $x_m:480m = 1:12000$"
+  },
+  {
+    "id": 20045,
+    "type": "equation",
+    "page_idx": 729,
+    "text": "$$\n\\frac {x}{4 8 0} = \\frac {1}{1 2 0 0 0}\n$$"
+  },
+  {
+    "id": 20046,
+    "type": "equation",
+    "page_idx": 729,
+    "text": "$$\n\\begin{array}{l} x = \\frac {4 8 0}{1 2 0 0 0} 1 \\\\ x = 0. 0 4 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20047,
+    "type": "text",
+    "page_idx": 729,
+    "text": "∴ map distance = 0.04 m"
+  },
+  {
+    "id": 20048,
+    "type": "equation",
+    "page_idx": 729,
+    "text": "$$\n= 4 \\mathrm {c m}\n$$"
+  },
+  {
+    "id": 20049,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Write the ratios as fractions."
+  },
+  {
+    "id": 20050,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Cross multiply to find the map length."
+  },
+  {
+    "id": 20051,
+    "type": "text",
+    "page_idx": 729,
+    "text": "$1\\mathrm{m} = 100\\mathrm{cm}$  so multiply by 100 to convert the answer to cm."
+  },
+  {
+    "id": 20052,
+    "type": "text",
+    "page_idx": 729,
+    "text": "LINK"
+  },
+  {
+    "id": 20053,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Architects use scale drawings to accurately represent plans for new buildings. A scale drawing means the architect is able to see how everything fits together."
+  },
+  {
+    "id": 20054,
+    "type": "text",
+    "page_idx": 729,
+    "text": "LINK"
+  },
+  {
+    "id": 20055,
+    "type": "text",
+    "page_idx": 729,
+    "text": "Many health statistics are expressed as rates, usually with a number per fixed unit of the population."
+  },
+  {
+    "id": 20056,
+    "type": "text",
+    "page_idx": 729,
+    "text": "For example, a news report on the spread of a virus may report 'an infection rate of 1084.2 per 100000 of the population', or 'a global incidence of ischemic heart disease of 1655 per 100000 population'."
+  },
+  {
+    "id": 20057,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"2\">WORKED EXAMPLE 10</td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20058,
+    "type": "text",
+    "text": "[Table Row] <tr><td colspan=\"2\">A biology book shows a diagram of a flea drawn to a scale of 12:1. If the flea in the diagram is 25 mm long, how long is the real flea? Give your answer correct to 2 decimal places.</td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20059,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Answer</td><td></td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20060,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Diagram length: real length = 12:1</td><td>Substitute the length on the diagram and use x to represent the real length.</td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20061,
+    "type": "text",
+    "text": "[Table Row] <tr><td>So, 25 mm: x mm = 12:1</td><td></td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20062,
+    "type": "text",
+    "text": "[Table Row] <tr><td>25/x = 12/1</td><td rowspan=\"2\">Write the ratios as fractions and solve for x.</td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20063,
+    "type": "text",
+    "text": "[Table Row] <tr><td>25 = 12x</td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20064,
+    "type": "text",
+    "text": "[Table Row] <tr><td>25/12 = x</td><td></td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20065,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2.08 = x</td><td></td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20066,
+    "type": "text",
+    "text": "[Table Row] <tr><td>.. real length = 2.08 mm (2 d.p.)</td><td>Round your answer to 2 decimal places.</td></tr>",
+    "page_idx": 730
+  },
+  {
+    "id": 20067,
+    "type": "text",
+    "page_idx": 730,
+    "text": "Exercise 21.4"
+  },
+  {
+    "id": 20068,
+    "type": "text",
+    "page_idx": 730,
+    "text": "1 Write each of the following scales as a ratio in the form:"
+  },
+  {
+    "id": 20069,
+    "type": "text",
+    "page_idx": 730,
+    "text": "i 1:n"
+  },
+  {
+    "id": 20070,
+    "type": "text",
+    "page_idx": 730,
+    "text": "ii  $n:1$"
+  },
+  {
+    "id": 20071,
+    "type": "text",
+    "page_idx": 730,
+    "text": "a 1cm to 2m"
+  },
+  {
+    "id": 20072,
+    "type": "text",
+    "page_idx": 730,
+    "text": "b 2cm to 5m"
+  },
+  {
+    "id": 20073,
+    "type": "text",
+    "page_idx": 730,
+    "text": "c 4cm to 1 km"
+  },
+  {
+    "id": 20074,
+    "type": "text",
+    "page_idx": 730,
+    "text": "d 5cm to 10 km"
+  },
+  {
+    "id": 20075,
+    "type": "text",
+    "page_idx": 730,
+    "text": "e  $3.5\\mathrm{cm}$  to  $1\\mathrm{m}$"
+  },
+  {
+    "id": 20076,
+    "type": "text",
+    "page_idx": 730,
+    "text": "f 9mm to 150km"
+  },
+  {
+    "id": 20077,
+    "type": "text",
+    "page_idx": 730,
+    "text": "2 A scale diagram of a shopping centre is drawn at a scale of 1:400. Find the real distance in metres of the following lengths measured on the diagram."
+  },
+  {
+    "id": 20078,
+    "type": "text",
+    "page_idx": 730,
+    "text": "a 1cm"
+  },
+  {
+    "id": 20079,
+    "type": "text",
+    "page_idx": 730,
+    "text": "b 15mm"
+  },
+  {
+    "id": 20080,
+    "type": "text",
+    "page_idx": 730,
+    "text": "c  $3.5\\mathrm{cm}$"
+  },
+  {
+    "id": 20081,
+    "type": "text",
+    "page_idx": 730,
+    "text": "d 12cm"
+  },
+  {
+    "id": 20082,
+    "type": "text",
+    "page_idx": 730,
+    "text": "3 A map has a scale of  $1:50000$ . How long will each of these real lengths be on the map?"
+  },
+  {
+    "id": 20083,
+    "type": "text",
+    "page_idx": 730,
+    "text": "a  $60\\mathrm{m}$"
+  },
+  {
+    "id": 20084,
+    "type": "text",
+    "page_idx": 730,
+    "text": "b 15km"
+  },
+  {
+    "id": 20085,
+    "type": "text",
+    "page_idx": 730,
+    "text": "c  $120\\mathrm{km}$"
+  },
+  {
+    "id": 20086,
+    "type": "text",
+    "page_idx": 730,
+    "text": "d 75.5km"
+  },
+  {
+    "id": 20087,
+    "type": "text",
+    "page_idx": 730,
+    "text": "4 A rectangular hall is  $20\\mathrm{m}$  long and  $50\\mathrm{m}$  wide. Draw scale diagrams of this hall using a scale of:"
+  },
+  {
+    "id": 20088,
+    "type": "text",
+    "page_idx": 730,
+    "text": "a 1:200"
+  },
+  {
+    "id": 20089,
+    "type": "text",
+    "page_idx": 730,
+    "text": "b 4mm to 1m."
+  },
+  {
+    "id": 20090,
+    "type": "text",
+    "page_idx": 730,
+    "text": "5 An insect drawn at a scale of 5:1 is  $2.75\\mathrm{cm}$  long. What is the actual length of the insect in millimetres?"
+  },
+  {
+    "id": 20091,
+    "type": "text",
+    "page_idx": 730,
+    "text": "6 A scale drawing of an  $8.2\\mathrm{mm}$  long electronic component shows the component as  $9.84\\mathrm{cm}$  long. What scale was used for the drawing?"
+  },
+  {
+    "id": 20092,
+    "type": "text",
+    "page_idx": 731,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 20093,
+    "type": "text",
+    "page_idx": 731,
+    "text": "This image shows a section through the stem of a pondweed plant. The image is magnified 80 times. What is the actual width of the stem from A to B?"
+  },
+  {
+    "id": 20094,
+    "type": "image",
+    "page_idx": 731,
+    "img_path": "images/836a0d3d9a9ed2421d30effdae945112c4dfa8b04f6c3ff4fb1522136bff4298.jpg"
+  },
+  {
+    "id": 20095,
+    "type": "text",
+    "page_idx": 731,
+    "text": "8 Use this map to find the straight-line distance between:"
+  },
+  {
+    "id": 20096,
+    "type": "text",
+    "text": "a New Delhi and Bengaluru",
+    "page_idx": 731
+  },
+  {
+    "id": 20097,
+    "type": "text",
+    "text": "b Mumbai and Kolkata",
+    "page_idx": 731
+  },
+  {
+    "id": 20098,
+    "type": "text",
+    "text": "c Srinagar and Nagpur.",
+    "page_idx": 731
+  },
+  {
+    "id": 20099,
+    "type": "image",
+    "page_idx": 731,
+    "img_path": "images/71a26c72edcccc1371250854b23ccc014355f69fc27f02a5e50b9c8b21c469e1.jpg"
+  },
+  {
+    "id": 20100,
+    "type": "text",
+    "page_idx": 732,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 20101,
+    "type": "text",
+    "page_idx": 732,
+    "text": "9 This floor plan of a house is drawn to a scale of 1:150."
+  },
+  {
+    "id": 20102,
+    "type": "image",
+    "page_idx": 732,
+    "img_path": "images/5ebb0d051afb58a3bdba2d77fd7a6e7fcdb83e3d5422931c43cc268e0d0b5727.jpg"
+  },
+  {
+    "id": 20103,
+    "type": "text",
+    "text": "a What is the real distance in metres represented by 1 cm on the plan?",
+    "page_idx": 732
+  },
+  {
+    "id": 20104,
+    "type": "text",
+    "text": "b Calculate the real length in metres of:",
+    "page_idx": 732
+  },
+  {
+    "id": 20105,
+    "type": "text",
+    "text": "i the length of living room",
+    "page_idx": 732
+  },
+  {
+    "id": 20106,
+    "type": "text",
+    "text": "ii the width of the living room",
+    "page_idx": 732
+  },
+  {
+    "id": 20107,
+    "type": "text",
+    "text": "iii the length of the bath",
+    "page_idx": 732
+  },
+  {
+    "id": 20108,
+    "type": "text",
+    "text": "iv the width of the terrace.",
+    "page_idx": 732
+  },
+  {
+    "id": 20109,
+    "type": "text",
+    "page_idx": 732,
+    "text": "c What is the real area of:"
+  },
+  {
+    "id": 20110,
+    "type": "text",
+    "text": "bedroom 1?",
+    "page_idx": 732
+  },
+  {
+    "id": 20111,
+    "type": "text",
+    "text": "ii bedroom 2?",
+    "page_idx": 732
+  },
+  {
+    "id": 20112,
+    "type": "text",
+    "text": "iii the terrace?",
+    "page_idx": 732
+  },
+  {
+    "id": 20113,
+    "type": "text",
+    "text": "d Calculate how much floor space there is in the bathroom (in  $\\mathfrak{m}^2$  (Include the toilet in the floor space.)",
+    "page_idx": 732
+  },
+  {
+    "id": 20114,
+    "type": "text",
+    "text": "e Calculate the cost of tiling the bathroom floor if the tiles cost  $25.99 per square metre and the tiler charges$ 15.25 per square metre for laying the tiles.",
+    "page_idx": 732
+  },
+  {
+    "id": 20115,
+    "type": "text",
+    "page_idx": 732,
+    "text": "TIP"
+  },
+  {
+    "id": 20116,
+    "type": "text",
+    "page_idx": 732,
+    "text": "Remember to measure from inside wall to inside wall."
+  },
+  {
+    "id": 20117,
+    "type": "text",
+    "page_idx": 732,
+    "text": "TIP"
+  },
+  {
+    "id": 20118,
+    "type": "text",
+    "page_idx": 732,
+    "text": "Work out the actual size of each length before you calculate the area."
+  },
+  {
+    "id": 20119,
+    "type": "text",
+    "page_idx": 733,
+    "text": "SELF ASSESSMENT"
+  }
+]
+```

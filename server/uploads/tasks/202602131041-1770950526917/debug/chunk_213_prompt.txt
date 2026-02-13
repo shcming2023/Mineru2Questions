@@ -1,0 +1,815 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 14910,
+    "type": "text",
+    "page_idx": 488,
+    "text": "a west"
+  },
+  {
+    "id": 14911,
+    "type": "text",
+    "page_idx": 488,
+    "text": "b south-east"
+  },
+  {
+    "id": 14912,
+    "type": "text",
+    "page_idx": 488,
+    "text": "c north-east."
+  },
+  {
+    "id": 14913,
+    "type": "text",
+    "page_idx": 488,
+    "text": "2 Write down the three figure bearings of  $A$  from  $B$  for each of the following:"
+  },
+  {
+    "id": 14914,
+    "type": "text",
+    "page_idx": 488,
+    "text": "a"
+  },
+  {
+    "id": 14915,
+    "type": "image",
+    "page_idx": 488,
+    "img_path": "images/a7327bc580d9efd90997d9b87b93db900c93a66c19a6d12e3380cc6ddba08716.jpg"
+  },
+  {
+    "id": 14916,
+    "type": "text",
+    "page_idx": 488,
+    "text": "b"
+  },
+  {
+    "id": 14917,
+    "type": "image",
+    "page_idx": 488,
+    "img_path": "images/f1c2bbf495a9d0815fd957a56c7936f1557195aa53b71256b9f07667a6098f71.jpg"
+  },
+  {
+    "id": 14918,
+    "type": "text",
+    "page_idx": 489,
+    "text": "3 Use the map of Southern Africa to find the three-figure bearing of:"
+  },
+  {
+    "id": 14919,
+    "type": "text",
+    "text": "a Johannesburg from Windhoek",
+    "page_idx": 489
+  },
+  {
+    "id": 14920,
+    "type": "text",
+    "text": "b Johannesburg from Cape Town",
+    "page_idx": 489
+  },
+  {
+    "id": 14921,
+    "type": "text",
+    "text": "Cape Town from Johannesburg",
+    "page_idx": 489
+  },
+  {
+    "id": 14922,
+    "type": "text",
+    "text": "d Lusaka from Cape Town",
+    "page_idx": 489
+  },
+  {
+    "id": 14923,
+    "type": "text",
+    "text": "e Kimberly from Durban.",
+    "page_idx": 489
+  },
+  {
+    "id": 14924,
+    "type": "text",
+    "page_idx": 489,
+    "text": "4 Townsville is  $140\\mathrm{km}$  west and  $45\\mathrm{km}$  north of Beeton. Using a scale drawing with a scale of  $1\\mathrm{cm}$  to  $20\\mathrm{km}$  find:"
+  },
+  {
+    "id": 14925,
+    "type": "text",
+    "text": "a the bearing of Beeton from Townsville",
+    "page_idx": 489
+  },
+  {
+    "id": 14926,
+    "type": "text",
+    "text": "b the bearing of Townsville from Beeton",
+    "page_idx": 489
+  },
+  {
+    "id": 14927,
+    "type": "text",
+    "text": "the direct distance from Becton to Townsville.",
+    "page_idx": 489
+  },
+  {
+    "id": 14928,
+    "type": "text",
+    "page_idx": 489,
+    "text": "5 Village  $Q$  is  $7\\mathrm{km}$  from village  $P$  on a bearing of  $060^{\\circ}$  Village  $R$  is  $5\\mathrm{km}$  from village  $P$  on a bearing of  $315^{\\circ}$  Using a scale drawing with a scale of  $1\\mathrm{cm}$  to  $1\\mathrm{km}$  find:"
+  },
+  {
+    "id": 14929,
+    "type": "text",
+    "text": "a the direct distance from village  $Q$  to village  $R$",
+    "page_idx": 489
+  },
+  {
+    "id": 14930,
+    "type": "text",
+    "text": "b the bearing of village  $Q$  from village  $R$",
+    "page_idx": 489
+  },
+  {
+    "id": 14931,
+    "type": "text",
+    "page_idx": 489,
+    "text": "6 A hiker walks  $400\\mathrm{m}$  east from a parking area and then turns south and walks  $250\\mathrm{m}$  to the starting point for the hike."
+  },
+  {
+    "id": 14932,
+    "type": "text",
+    "text": "a Use a scale diagram to work out on the bearing of the starting point from the parking area.",
+    "page_idx": 489
+  },
+  {
+    "id": 14933,
+    "type": "text",
+    "text": "b How far south-east is the start of the hike from the parking lot? Give your answer in metres, correct to one tenth of a metre.",
+    "page_idx": 489
+  },
+  {
+    "id": 14934,
+    "type": "text",
+    "page_idx": 489,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 14935,
+    "type": "text",
+    "page_idx": 489,
+    "text": "Write a short social media post about your own understanding of bearings and scale diagrams."
+  },
+  {
+    "id": 14936,
+    "type": "text",
+    "page_idx": 489,
+    "text": "There are some sentence stems at the side to get you started."
+  },
+  {
+    "id": 14937,
+    "type": "text",
+    "page_idx": 489,
+    "text": "Add a hashtag to describe what you learned or something memorable from this section of work."
+  },
+  {
+    "id": 14938,
+    "type": "text",
+    "page_idx": 489,
+    "text": "I found it easy to ..."
+  },
+  {
+    "id": 14939,
+    "type": "text",
+    "page_idx": 489,
+    "text": "I struggled most with ..."
+  },
+  {
+    "id": 14940,
+    "type": "text",
+    "page_idx": 489,
+    "text": "I improved my understanding by ..."
+  },
+  {
+    "id": 14941,
+    "type": "image",
+    "page_idx": 489,
+    "img_path": "images/3547ce89fff35ee7fac971f3491fb8ffad4ce4fce4f2c690017727a985b4503b.jpg"
+  },
+  {
+    "id": 14942,
+    "type": "text",
+    "text": "I found it easy to ...",
+    "page_idx": 489
+  },
+  {
+    "id": 14943,
+    "type": "text",
+    "text": "I struggled most with ...",
+    "page_idx": 489
+  },
+  {
+    "id": 14944,
+    "type": "text",
+    "text": "I improved my understanding by ...",
+    "page_idx": 489
+  },
+  {
+    "id": 14945,
+    "type": "image",
+    "page_idx": 489,
+    "img_path": "images/76c493ca667bb0e9a1626ab0e9169ae020812e89155fcc66fdefffb6b5015b6f.jpg"
+  },
+  {
+    "id": 14946,
+    "type": "text",
+    "page_idx": 490,
+    "text": "15.3 Understanding the tangent, cosine and sine ratios"
+  },
+  {
+    "id": 14947,
+    "type": "text",
+    "page_idx": 490,
+    "text": "In trigonometry you will use ratios of side lengths in a right-angled triangle to calculate angles or the lengths of other sides. The techniques covered in the following sections will help you to make much more precise calculations with bearings."
+  },
+  {
+    "id": 14948,
+    "type": "text",
+    "page_idx": 490,
+    "text": "Throughout the remainder of this chapter you must make sure that your calculator is set in degrees mode. A small letter  $D$  will usually be displayed. If this is not the case, or if your calculator displays a  $G$  or an  $R$ , then please consult your calculator manual."
+  },
+  {
+    "id": 14949,
+    "type": "text",
+    "page_idx": 490,
+    "text": "Labelling the sides of a right-angled triangle"
+  },
+  {
+    "id": 14950,
+    "type": "text",
+    "page_idx": 490,
+    "text": "You already know that the longest side of a right-angled triangle is called the hypotenuse. If you take one of the two non right-angles in the triangle for reference then you can also 'name' the two shorter sides:"
+  },
+  {
+    "id": 14951,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/d030d2ea9fe595dc3680a60b10959f84cf6e4cc4e16d2834949e805800e837b7.jpg"
+  },
+  {
+    "id": 14952,
+    "type": "text",
+    "page_idx": 490,
+    "text": "Notice that the adjacent is the side of the triangle that touches the angle  $A$ , but is not the hypotenuse. The third side does not meet with angle  $A$  at all and is known as the opposite. Throughout the remainder of the chapter, we will use  $\\mathrm{opp}(A)$  to mean the length of the opposite side, and  $\\mathrm{adj}(A)$  to mean the length of the adjacent. The hypotenuse does not depend upon the position of angle  $A$ , so is just written as 'hypotenuse' (or hyp)."
+  },
+  {
+    "id": 14953,
+    "type": "text",
+    "page_idx": 490,
+    "text": "Exercise 15.4"
+  },
+  {
+    "id": 14954,
+    "type": "text",
+    "page_idx": 490,
+    "text": "1 For each of the following triangles write down the letters that correspond to the length of the hypotenuse and the values of  $\\mathrm{opp}(A)$  and  $\\mathrm{adj}(A)$ ."
+  },
+  {
+    "id": 14955,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/5f281d13502e42b49cf76ada2cf0f6ec8dd2ced66119c11a1a14b8cc8eaf195c.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 14956,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/c3790de50cf20b50a80f2609dff06f7a0fa0152b8bdb65e5f8724c0a4b79d1a7.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 14957,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/cd19c56e9d438979876e5eb753dbb78104da08731e8b12f9029a1c0779dbaabb.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 14958,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/af6b2c4557a8ca8bf21eeb6ba63ab22df03e4a0e16a2088d389e92d6cbed9f14.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 14959,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/f19851b5d57657a825cb0de711d03f3653f0ec96d06465ea3e340a692981be4a.jpg",
+    "image_caption": "e"
+  },
+  {
+    "id": 14960,
+    "type": "image",
+    "page_idx": 490,
+    "img_path": "images/505262d0603f9bc94962c571b1e1b11508a2dc6681bba6dd8737b4de6762ba9a.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 14961,
+    "type": "text",
+    "page_idx": 490,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 14962,
+    "type": "text",
+    "page_idx": 490,
+    "text": "The hypotenuse was introduced with the work on Pythagoras' theorem in Chapter 11."
+  },
+  {
+    "id": 14963,
+    "type": "text",
+    "page_idx": 491,
+    "text": "2 For each of these, copy and complete the statements written underneath the triangle."
+  },
+  {
+    "id": 14964,
+    "type": "text",
+    "page_idx": 491,
+    "text": "a"
+  },
+  {
+    "id": 14965,
+    "type": "image",
+    "page_idx": 491,
+    "img_path": "images/784fb552af040c590360eef169f49880d6d3a6874aaa7248792001b14f334809.jpg"
+  },
+  {
+    "id": 14966,
+    "type": "text",
+    "page_idx": 491,
+    "text": "b"
+  },
+  {
+    "id": 14967,
+    "type": "image",
+    "page_idx": 491,
+    "img_path": "images/0a98bea72d2441538310957837c9c578ff735bc7a0fd37ab35702daaf757c283.jpg"
+  },
+  {
+    "id": 14968,
+    "type": "text",
+    "page_idx": 491,
+    "text": "C"
+  },
+  {
+    "id": 14969,
+    "type": "image",
+    "page_idx": 491,
+    "img_path": "images/8c7ad809dc3debfd8f1f53435133256516e5b3dd5f1bcd9b4f90bd75118d0df6.jpg"
+  },
+  {
+    "id": 14970,
+    "type": "text",
+    "page_idx": 491,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 14971,
+    "type": "text",
+    "page_idx": 491,
+    "text": "Lengths and angles in triangles"
+  },
+  {
+    "id": 14972,
+    "type": "text",
+    "page_idx": 491,
+    "text": "You will now explore the relationship between the opposite, adjacent and hypotenuse and the angles in a right-angled triangle."
+  },
+  {
+    "id": 14973,
+    "type": "text",
+    "page_idx": 491,
+    "text": "For this investigation, draw four different scale copies of this diagram. Draw the angles as accurately as possible, and all four triangles should be different sizes."
+  },
+  {
+    "id": 14974,
+    "type": "image",
+    "page_idx": 491,
+    "img_path": "images/fc9906d94185b5844ab3cb6c1e4cd4fd384fe8ea6d29ea5d6e728983f77dd48a.jpg"
+  },
+  {
+    "id": 14975,
+    "type": "text",
+    "text": "1 Label opp(30°), adj(30°) and hypotenuse clearly.",
+    "page_idx": 491
+  },
+  {
+    "id": 14976,
+    "type": "text",
+    "text": "2 Measure the length of opp(30°) and write it down.",
+    "page_idx": 491
+  },
+  {
+    "id": 14977,
+    "type": "text",
+    "text": "3 Measure the length of adj(30°) and write it down.",
+    "page_idx": 491
+  },
+  {
+    "id": 14978,
+    "type": "text",
+    "text": "4 Calculate  $\\frac{\\mathrm{opp}(30^{\\circ})}{\\mathrm{adj}(30^{\\circ})}$  in each case.",
+    "page_idx": 491
+  },
+  {
+    "id": 14979,
+    "type": "text",
+    "text": "5 What do you notice about your answers?",
+    "page_idx": 491
+  },
+  {
+    "id": 14980,
+    "type": "text",
+    "text": "6 Compare your answers with those of a partner. What do you notice?",
+    "page_idx": 491
+  },
+  {
+    "id": 14981,
+    "type": "text",
+    "text": "7 Now repeat the investigation using another right-angled triangle with different angles. Write down any observations that you make.",
+    "page_idx": 491
+  },
+  {
+    "id": 14982,
+    "type": "text",
+    "text": "8 Does the same happen if you divide another pair of sides for each triangle?",
+    "page_idx": 491
+  },
+  {
+    "id": 14983,
+    "type": "text",
+    "page_idx": 491,
+    "text": "Tangent ratio"
+  },
+  {
+    "id": 14984,
+    "type": "text",
+    "page_idx": 491,
+    "text": "It turns out that  $\\frac{\\mathrm{opp}(A)}{\\mathrm{adj}(A)}$  is constant for any given angle  $A$ .  $\\frac{\\mathrm{opp}(A)}{\\mathrm{adj}(A)}$  depends on the angle only, and not the actual size of the triangle. The ratio  $\\frac{\\mathrm{opp}(A)}{\\mathrm{adj}(A)}$  is called the tangent ratio and you write:"
+  },
+  {
+    "id": 14985,
+    "type": "equation",
+    "page_idx": 491,
+    "text": "$$\n\\tan A = \\frac {\\operatorname {o p p} (A)}{\\operatorname {a d j} (A)}\n$$"
+  },
+  {
+    "id": 14986,
+    "type": "text",
+    "page_idx": 491,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 14987,
+    "type": "text",
+    "page_idx": 491,
+    "text": "You will need to use the skills you learnt for constructing accurate drawings of triangles in Chapter 3."
+  },
+  {
+    "id": 14988,
+    "type": "text",
+    "page_idx": 491,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 14989,
+    "type": "text",
+    "page_idx": 491,
+    "text": "Look back at the work on calculating gradients in Chapter 10 and compare it with the tangent ratio. What connection do you notice?"
+  },
+  {
+    "id": 14990,
+    "type": "text",
+    "page_idx": 492,
+    "text": "Your calculator can work out the tangent ratio for any given angle and you can use this to help work out the lengths of unknown sides of a right-angled triangle."
+  },
+  {
+    "id": 14991,
+    "type": "text",
+    "page_idx": 492,
+    "text": "For example, if you wanted to find the tangent of the angle  $22^{\\circ}$  you enter:"
+  },
+  {
+    "id": 14992,
+    "type": "image",
+    "page_idx": 492,
+    "img_path": "images/a3d644e300db0af10110e16be6dbb453559a8f356c328cf680b3cf9c2f5bf0a1.jpg"
+  },
+  {
+    "id": 14993,
+    "type": "text",
+    "page_idx": 492,
+    "text": "Notice that the answer has many decimal places. When using this value you must make sure that you don't round your answers too soon."
+  },
+  {
+    "id": 14994,
+    "type": "text",
+    "page_idx": 492,
+    "text": "Now, consider the right-angled triangle shown."
+  },
+  {
+    "id": 14995,
+    "type": "text",
+    "page_idx": 492,
+    "text": "You can find the unknown side,  $x$  cm, by writing down what you know about the tangent ratio:"
+  },
+  {
+    "id": 14996,
+    "type": "equation",
+    "page_idx": 492,
+    "text": "$$\n\\begin{array}{l} \\tan 2 2 ^ {\\circ} = \\frac {\\operatorname {o p p} (2 2 ^ {\\circ})}{\\operatorname {a d j} (2 2 ^ {\\circ})} = \\frac {x}{1 2} \\\\ \\Rightarrow x = 1 2 \\tan (2 2 ^ {\\circ}) \\\\ \\therefore x = 4. 8 4 8 3 1 4 \\dots \\\\ x \\approx 4. 8 \\mathrm {c m} (1 \\mathrm {d}. \\mathrm {p}.) \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 14997,
+    "type": "image",
+    "page_idx": 492,
+    "img_path": "images/ac6fbb99479eb1368c7404b2ed793139e7372dbd9f068d2a6150933b6443fc07.jpg"
+  },
+  {
+    "id": 14998,
+    "type": "text",
+    "page_idx": 492,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 14999,
+    "type": "text",
+    "page_idx": 492,
+    "text": "Calculate the value of:"
+  },
+  {
+    "id": 15000,
+    "type": "text",
+    "page_idx": 492,
+    "text": "a tan40°"
+  },
+  {
+    "id": 15001,
+    "type": "text",
+    "page_idx": 492,
+    "text": "b tan15.4°"
+  },
+  {
+    "id": 15002,
+    "type": "text",
+    "page_idx": 492,
+    "text": "Answers"
+  },
+  {
+    "id": 15003,
+    "type": "text",
+    "page_idx": 492,
+    "text": "a"
+  },
+  {
+    "id": 15004,
+    "type": "image",
+    "page_idx": 492,
+    "img_path": "images/a1859a100dde0ada2d2cb02d2fa063d377fb41fcd27e7a8e64fe8352d970141e.jpg"
+  },
+  {
+    "id": 15005,
+    "type": "text",
+    "page_idx": 492,
+    "text": "b"
+  },
+  {
+    "id": 15006,
+    "type": "image",
+    "page_idx": 492,
+    "img_path": "images/8561e2f85d4e95e4ccddbbb90e7dc19e07da2b6bcceaf42db3e63b85f385e109.jpg"
+  },
+  {
+    "id": 15007,
+    "type": "text",
+    "page_idx": 492,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 15008,
+    "type": "text",
+    "page_idx": 492,
+    "text": "Find the value of  $x$  in the diagram. Give your answer to the nearest mm."
+  },
+  {
+    "id": 15009,
+    "type": "image",
+    "page_idx": 492,
+    "img_path": "images/fd676f5f38abe8ca56ac358878b11fa2aabcd177d076789e14203db9485edb29.jpg"
+  }
+]
+```

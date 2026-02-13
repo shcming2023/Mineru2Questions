@@ -1,0 +1,815 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 20720,
+    "type": "text",
+    "page_idx": 758,
+    "text": "To simplify ratios and find the missing values in equivalent ratios,"
+  },
+  {
+    "id": 20721,
+    "type": "text",
+    "page_idx": 758,
+    "text": "divide quantities in a given ratio"
+  },
+  {
+    "id": 20722,
+    "type": "text",
+    "page_idx": 758,
+    "text": "convert measurements on maps, plans and other scale diagrams to real measurements and vice versa"
+  },
+  {
+    "id": 20723,
+    "type": "text",
+    "page_idx": 758,
+    "text": "express relationships between different quantities as rates in their simplest form and solve problems relating to rates"
+  },
+  {
+    "id": 20724,
+    "type": "text",
+    "page_idx": 758,
+    "text": "read and interpret kinematic graphs"
+  },
+  {
+    "id": 20725,
+    "type": "text",
+    "text": "by calculating average speed",
+    "page_idx": 758
+  },
+  {
+    "id": 20726,
+    "type": "text",
+    "text": "by calculating acceleration and deceleration from a graph and finding the distance travelled using the area under a linear speed-time graph",
+    "page_idx": 758
+  },
+  {
+    "id": 20727,
+    "type": "text",
+    "page_idx": 758,
+    "text": "1. solve problems involving direct and indirect proportion"
+  },
+  {
+    "id": 20728,
+    "type": "text",
+    "page_idx": 758,
+    "text": "express direct and inverse proportion in algebraic terms"
+  },
+  {
+    "id": 20729,
+    "type": "text",
+    "page_idx": 758,
+    "text": "solve direct and inverse proportion problems using algebraic methods."
+  },
+  {
+    "id": 20730,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Practice questions"
+  },
+  {
+    "id": 20731,
+    "type": "image",
+    "page_idx": 758,
+    "img_path": "images/9a05cc5a4de41087496f190c95e8b03f740b2c9014519916be16b8174e79d4f4.jpg"
+  },
+  {
+    "id": 20732,
+    "type": "text",
+    "page_idx": 758,
+    "text": "1 Manos and Raja make $96 selling handcrafts. They share the income in the ratio 7:5. How much does Raja receive? [3]"
+  },
+  {
+    "id": 20733,
+    "type": "image",
+    "page_idx": 758,
+    "img_path": "images/42c08cd826d51638c3df49276cb40345b07d609906a0ef8459d42e2ddb737463.jpg"
+  },
+  {
+    "id": 20734,
+    "type": "text",
+    "page_idx": 758,
+    "text": "Silvia makes a scale drawing of her bedroom using a scale of 1:25. If one wall on the diagram is 12 cm long, how long is the wall in her room? [3]"
+  },
+  {
+    "id": 20735,
+    "type": "image",
+    "page_idx": 758,
+    "img_path": "images/5ed81c01d30358dae781bc6f543a4fea608d7641544ddeadae1210aa0e1de6ee.jpg"
+  },
+  {
+    "id": 20736,
+    "type": "text",
+    "page_idx": 758,
+    "text": "3 Mrs James bakes a fruit cake using raisins, currants and dates in the ratio  $4:5:3$ . The total mass of the three ingredients is 4.8 kilograms. Calculate the mass of:"
+  },
+  {
+    "id": 20737,
+    "type": "text",
+    "text": "a the raisins [4]",
+    "page_idx": 758
+  },
+  {
+    "id": 20738,
+    "type": "text",
+    "text": "b the dates. [1]",
+    "page_idx": 758
+  },
+  {
+    "id": 20739,
+    "type": "text",
+    "page_idx": 758,
+    "text": "4 A recipe for dough uses three parts wholemeal flour for every four parts of plain flour. What volume of wholemeal flour do you need if you use 12 cups of plain flour? [3]"
+  },
+  {
+    "id": 20740,
+    "type": "text",
+    "page_idx": 759,
+    "text": "5 Three children play a card game. At the start of the game the cards are distributed amongst Amelia, Bahram and Celeste in the ratio  $4:6:5$ . At the end of the game the cards are distributed in the ratio  $6:10:9$ ."
+  },
+  {
+    "id": 20741,
+    "type": "text",
+    "page_idx": 759,
+    "text": "a Work out which player has the same number of cards at the start and end of the game. Explain your reasoning. [3]"
+  },
+  {
+    "id": 20742,
+    "type": "text",
+    "page_idx": 759,
+    "text": "b Calculate the percentage change in the number of cards Celeste has, between the start and end of the game. State whether this change is an increase or a decrease."
+  },
+  {
+    "id": 20743,
+    "type": "text",
+    "page_idx": 759,
+    "text": "c Work out the minimum number of cards used in the game. Show your reasoning carefully."
+  },
+  {
+    "id": 20744,
+    "type": "text",
+    "page_idx": 759,
+    "text": "6 A special microscope enlarges images to 90 000 times their actual size. The microscope is used to photograph a bacterium for a textbook and the new image is  $118\\mathrm{mm}$  long. Find the actual length of the bacterium, giving your answer:"
+  },
+  {
+    "id": 20745,
+    "type": "text",
+    "page_idx": 759,
+    "text": "a in metres, using standard form [3]"
+  },
+  {
+    "id": 20746,
+    "type": "text",
+    "page_idx": 759,
+    "text": "b in micrometres. [2]"
+  },
+  {
+    "id": 20747,
+    "type": "text",
+    "page_idx": 759,
+    "text": "7 The speed-time graph represents the journey of a train between two stations. The train slowed down and stopped after 15 minutes because of engineering work on the railway line."
+  },
+  {
+    "id": 20748,
+    "type": "image",
+    "page_idx": 759,
+    "img_path": "images/6fbdcb3e2812ad754a470c6f44c0dbe8fb5a39a52d2eba2aa294e90aab129587.jpg"
+  },
+  {
+    "id": 20749,
+    "type": "text",
+    "text": "a Calculate the greatest speed, in km/h, that the train reached. [1]",
+    "page_idx": 759
+  },
+  {
+    "id": 20750,
+    "type": "text",
+    "text": "b Calculate the deceleration of the train as it approached the place where there was engineering work. [2]",
+    "page_idx": 759
+  },
+  {
+    "id": 20751,
+    "type": "text",
+    "text": "c Calculate the distance the train travelled in the first 15 minutes. [3]",
+    "page_idx": 759
+  },
+  {
+    "id": 20752,
+    "type": "text",
+    "text": "d For how long did the train stop at the place where there was engineering work? [1]",
+    "page_idx": 759
+  },
+  {
+    "id": 20753,
+    "type": "text",
+    "text": "e What was the speed of the train after 19 minutes? [2]",
+    "page_idx": 759
+  },
+  {
+    "id": 20754,
+    "type": "text",
+    "text": "f Calculate the distance between the two stations. [3]",
+    "page_idx": 759
+  },
+  {
+    "id": 20755,
+    "type": "text",
+    "page_idx": 760,
+    "text": "The distance,  $d$  metres, travelled by an acorn falling from a tree is directly proportional to the square of the time,  $t$  seconds, for which it falls."
+  },
+  {
+    "id": 20756,
+    "type": "text",
+    "page_idx": 760,
+    "text": "The acorn takes 3 seconds to fall 20 metres."
+  },
+  {
+    "id": 20757,
+    "type": "text",
+    "text": "a Find a formula connecting  $d$  and  $t$  [3]",
+    "page_idx": 760
+  },
+  {
+    "id": 20758,
+    "type": "text",
+    "text": "Find the distance fallen after 4 seconds. [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20759,
+    "type": "text",
+    "text": "Find the time taken to fall  $3.5\\mathrm{m}$  [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20760,
+    "type": "text",
+    "page_idx": 760,
+    "text": "9 The six graphs show six different relationships between variables  $x$  and  $y$ ."
+  },
+  {
+    "id": 20761,
+    "type": "image",
+    "page_idx": 760,
+    "img_path": "images/036a666d715712e96cc8a38812734274fc9db47dc49baef4137bd805f824155a.jpg",
+    "image_caption": "A"
+  },
+  {
+    "id": 20762,
+    "type": "image",
+    "page_idx": 760,
+    "img_path": "images/634eca6ff78e037e59647c2e71168824ef73400833c8f6db238621e5310f3822.jpg",
+    "image_caption": "B"
+  },
+  {
+    "id": 20763,
+    "type": "image",
+    "page_idx": 760,
+    "img_path": "images/239e5b66dff61ffa4f54983c1afacec394e3212d44b4510cc20b1e94ec3ee2ad.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 20764,
+    "type": "image",
+    "page_idx": 760,
+    "img_path": "images/fef85459eafad0577ce81fe6aad969e5c14aa4f72837dee39d3c80addd5401e5.jpg",
+    "image_caption": "D"
+  },
+  {
+    "id": 20765,
+    "type": "image",
+    "page_idx": 760,
+    "img_path": "images/ea95bb1fc50d157c841c7852d7554fbbc68220a1ba23ecd31d189abb50fa3173.jpg",
+    "image_caption": "E"
+  },
+  {
+    "id": 20766,
+    "type": "image",
+    "page_idx": 760,
+    "img_path": "images/0a325c0e3bc1ee7f6bafe39a1ac2b7262371d25e02b914dd011bcd24adfad9f5.jpg",
+    "image_caption": "F"
+  },
+  {
+    "id": 20767,
+    "type": "text",
+    "text": "State which graph shows  $y$  and  $x$  in direct proportion. Explain your answer. [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20768,
+    "type": "text",
+    "text": "State which graph shows that  $y$  is constant. Explain your answer. [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20769,
+    "type": "text",
+    "text": "State which graph could show that  $y$  is directly proportional to the square of  $x$  [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20770,
+    "type": "text",
+    "text": "State which graph could show that  $y$  is inversely proportional to  $x$  Explain your answer. [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20771,
+    "type": "text",
+    "text": "State which graph could show that  $y$  is inversely proportional to the cube of  $x$ . Explain your answer. [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20772,
+    "type": "text",
+    "text": "State possible equations for any graphs that were not answers in parts (a)-(e). [2]",
+    "page_idx": 760
+  },
+  {
+    "id": 20773,
+    "type": "text",
+    "page_idx": 761,
+    "text": "10 The extension of a spring,  $x$  (measured in metres), is directly proportional to the mass,  $m$  (measured in kilograms), attached to the end. The extension of the spring is  $30\\mathrm{cm}$  when the mass is  $5\\mathrm{kg}$ ."
+  },
+  {
+    "id": 20774,
+    "type": "text",
+    "text": "Find an equation connecting  $x$  with  $m$  [3]",
+    "page_idx": 761
+  },
+  {
+    "id": 20775,
+    "type": "text",
+    "text": "b Find  $x$  if  $m = 12\\mathrm{kg}$  [2]",
+    "page_idx": 761
+  },
+  {
+    "id": 20776,
+    "type": "text",
+    "text": "Find  $m$  if  $x = 0.54\\mathrm{m}$  [2]",
+    "page_idx": 761
+  },
+  {
+    "id": 20777,
+    "type": "text",
+    "page_idx": 761,
+    "text": "You are now given that the potential energy stored,  $E$  (measured in joules), in the spring is proportional to the square of the extension,  $x$ . When the extension is  $h$  metres, the energy stored is  $P$  joules."
+  },
+  {
+    "id": 20778,
+    "type": "text",
+    "text": "d Find an equation connecting  $E$  and  $x$  (your answer will contain terms in  $P$  and  $h$ ). [3]",
+    "page_idx": 761
+  },
+  {
+    "id": 20779,
+    "type": "text",
+    "text": "Find the mass attached to the spring if the potential energy is  $49P$  joules. [3]",
+    "page_idx": 761
+  },
+  {
+    "id": 20780,
+    "type": "text",
+    "page_idx": 761,
+    "text": "11 The resistance,  $R$ , of a fixed length of wire is inversely proportional to the square of the diameter,  $d$  mm, of the wire. When the diameter is  $4$  mm, the resistance is 0.096 ohms."
+  },
+  {
+    "id": 20781,
+    "type": "text",
+    "text": "a Find a formula for  $R$  in terms of  $d$  [3]",
+    "page_idx": 761
+  },
+  {
+    "id": 20782,
+    "type": "text",
+    "text": "Find the resistance when the diameter is  $6\\mathrm{mm}$  giving your answer to 3 significant figures. [2]",
+    "page_idx": 761
+  },
+  {
+    "id": 20783,
+    "type": "text",
+    "text": "Rearrange your answer to part (a) to find a formula for  $d$  in terms of  $R$ . [3]",
+    "page_idx": 761
+  },
+  {
+    "id": 20784,
+    "type": "text",
+    "text": "Find the diameter required for a resistance of  $3\\times 10^{-5}$  ohms. [2]",
+    "page_idx": 761
+  },
+  {
+    "id": 20785,
+    "type": "text",
+    "text": "Find the resistance when both the resistance and diameter have the same value. Give your answer to 3 significant figures. [2]",
+    "page_idx": 761
+  },
+  {
+    "id": 20786,
+    "type": "text",
+    "page_idx": 761,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 20787,
+    "type": "text",
+    "page_idx": 761,
+    "text": "You can get good marks in mathematics by clearly showing your working and methods even if you get the final answer incorrect."
+  },
+  {
+    "id": 20788,
+    "type": "text",
+    "page_idx": 761,
+    "text": "Evaluate your answers to the practice questions."
+  },
+  {
+    "id": 20789,
+    "type": "text",
+    "text": "Did you show your working?",
+    "page_idx": 761
+  },
+  {
+    "id": 20790,
+    "type": "text",
+    "text": "Is your working clearly laid out and systematic?",
+    "page_idx": 761
+  },
+  {
+    "id": 20791,
+    "type": "text",
+    "text": "- Does your working show that you understood the question and give evidence that you know how to answer it?",
+    "page_idx": 761
+  },
+  {
+    "id": 20792,
+    "type": "text",
+    "text": "- Do you think you would get part marks for any questions where you got the incorrect answer? Support your opinion.",
+    "page_idx": 761
+  },
+  {
+    "id": 20793,
+    "type": "image",
+    "page_idx": 762,
+    "img_path": "images/4a5d77bb7ed1cb9077ab0a4435dc3e4794af89cb1e8a351382da19f5a9af6a31.jpg"
+  },
+  {
+    "id": 20794,
+    "type": "text",
+    "page_idx": 762,
+    "text": "Chapter 22"
+  },
+  {
+    "id": 20795,
+    "type": "text",
+    "page_idx": 762,
+    "text": "More equations, formulae and functions"
+  },
+  {
+    "id": 20796,
+    "type": "text",
+    "page_idx": 762,
+    "text": "IN THIS CHAPTER YOU WILL:"
+  },
+  {
+    "id": 20797,
+    "type": "text",
+    "text": "make your own equations and use them to solve worded problems",
+    "page_idx": 762
+  },
+  {
+    "id": 20798,
+    "type": "text",
+    "text": "- construct and transform more complex formulae",
+    "page_idx": 762
+  },
+  {
+    "id": 20799,
+    "type": "text",
+    "text": "- use function notation to describe simple functions and their inverses",
+    "page_idx": 762
+  },
+  {
+    "id": 20800,
+    "type": "text",
+    "text": "form composite functions.",
+    "page_idx": 762
+  },
+  {
+    "id": 20801,
+    "type": "text",
+    "page_idx": 763,
+    "text": "Formulae can be used to describe very simple things as well as complicated situations. They can be used to calculate the area of a shape, to decide where best to strike a board to break it or how to launch a rocket into space."
+  },
+  {
+    "id": 20802,
+    "type": "text",
+    "page_idx": 763,
+    "text": "Many real-life calculations rely on formulae. For example, working out how much it will cost to tile rooms of different sizes, converting measurements from one system to another, calculating dosage of medicines for different ages and masses, and calculating how inflation rates will affect profit and loss. Knowing how to work with formulae and how to rearrange them to make the value you are interested in the subject can save you time and money."
+  },
+  {
+    "id": 20803,
+    "type": "text",
+    "page_idx": 763,
+    "text": "In this chapter you will work with more complicated formulae and equations. You will need to be able to rearrange formulae to solve related problems."
+  },
+  {
+    "id": 20804,
+    "type": "text",
+    "page_idx": 763,
+    "text": "You will also revise what you know about functions and learn how to use a more formal mathematical notation to describe functions and their inverses. You will also work with composite functions."
+  },
+  {
+    "id": 20805,
+    "type": "text",
+    "page_idx": 763,
+    "text": "KEY WORDS"
+  },
+  {
+    "id": 20806,
+    "type": "text",
+    "page_idx": 763,
+    "text": "composite function"
+  },
+  {
+    "id": 20807,
+    "type": "text",
+    "page_idx": 763,
+    "text": "function"
+  },
+  {
+    "id": 20808,
+    "type": "text",
+    "page_idx": 763,
+    "text": "function notation"
+  },
+  {
+    "id": 20809,
+    "type": "text",
+    "page_idx": 763,
+    "text": "GETTING STARTED"
+  },
+  {
+    "id": 20810,
+    "type": "text",
+    "page_idx": 763,
+    "text": "1 A driver's education manual says that you can work out a safe following distance  $(d)$  between vehicles that are travelling at  $s$  kilometres per hour using the formula  $d = \\frac{s}{10} + 2$ , where  $d$  is measured in vehicle lengths."
+  },
+  {
+    "id": 20811,
+    "type": "text",
+    "text": "a What does this mean in words?",
+    "page_idx": 763
+  },
+  {
+    "id": 20812,
+    "type": "text",
+    "text": "b How many vehicle lengths should a truck driver leave between the truck and the vehicle in front of it at a speed of  $90\\mathrm{km}$  per hour?",
+    "page_idx": 763
+  },
+  {
+    "id": 20813,
+    "type": "text",
+    "text": "c At what speed is 3 vehicle lengths a safe following distance?",
+    "page_idx": 763
+  },
+  {
+    "id": 20814,
+    "type": "text",
+    "text": "How does an increase in speed affect the safe following distance?",
+    "page_idx": 763
+  },
+  {
+    "id": 20815,
+    "type": "text",
+    "page_idx": 763,
+    "text": "2 The cost of adding a new USB port and cable to a system is $C when the length of the cable is y metres and C = 4.5 + 1.8y."
+  },
+  {
+    "id": 20816,
+    "type": "text",
+    "text": "a What do you think 4.5 represents in this formula?",
+    "page_idx": 763
+  },
+  {
+    "id": 20817,
+    "type": "text",
+    "text": "b What is the meaning of coefficient 1.8?",
+    "page_idx": 763
+  },
+  {
+    "id": 20818,
+    "type": "text",
+    "text": "c How long is the cable when the total cost is $26.55?",
+    "page_idx": 763
+  },
+  {
+    "id": 20819,
+    "type": "text",
+    "page_idx": 763,
+    "text": "3 The diagram shows the height  $(h)$  of a tower.  $QR$  is  $5\\mathrm{m}$  shorter than  $RS$  and  $PQ$  is  $2\\mathrm{m}$  shorter than  $QR$"
+  }
+]
+```

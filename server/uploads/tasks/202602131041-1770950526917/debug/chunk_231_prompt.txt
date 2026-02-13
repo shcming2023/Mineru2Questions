@@ -1,0 +1,811 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 16170,
+    "type": "text",
+    "text": "e A foot length of  $17\\mathrm{cm}$  corresponds to a height of approximately  $132\\mathrm{cm}$",
+    "page_idx": 548
+  },
+  {
+    "id": 16171,
+    "type": "text",
+    "text": "Most points are reasonably close to the line, so the correlation is fairly strong. This means that the line of best fit will allow a good level of accuracy when estimates are made.",
+    "page_idx": 548
+  },
+  {
+    "id": 16172,
+    "type": "text",
+    "page_idx": 548,
+    "text": "TIP"
+  },
+  {
+    "id": 16173,
+    "type": "text",
+    "page_idx": 548,
+    "text": "If you are asked to comment on a prediction that you have made, always keep in mind the strength of the correlation as shown in the diagram. If the correlation is weak you should say that your prediction may not be very reliable."
+  },
+  {
+    "id": 16174,
+    "type": "text",
+    "page_idx": 548,
+    "text": "Extrapolation"
+  },
+  {
+    "id": 16175,
+    "type": "text",
+    "page_idx": 548,
+    "text": "Before you draw and interpret some scatter diagrams for yourself you should be aware that there may be problems with making predictions outside the range of the collected data."
+  },
+  {
+    "id": 16176,
+    "type": "text",
+    "page_idx": 548,
+    "text": "In Worked example 1, the data does not include any heights above  $183.4\\mathrm{cm}$ . The trend may not continue or it may look different for greater heights. So, for example, you should not try to predict the foot length for a person of height  $195\\mathrm{cm}$  without collecting more data."
+  },
+  {
+    "id": 16177,
+    "type": "text",
+    "page_idx": 548,
+    "text": "The process of extending the line of best fit beyond the collected data is called extrapolation."
+  },
+  {
+    "id": 16178,
+    "type": "text",
+    "page_idx": 548,
+    "text": "Exercise 16.1"
+  },
+  {
+    "id": 16179,
+    "type": "text",
+    "page_idx": 548,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 16180,
+    "type": "text",
+    "page_idx": 548,
+    "text": "1 What is the correlation shown by each of the following scatter diagrams? In each case you should comment on the strength of correlation."
+  },
+  {
+    "id": 16181,
+    "type": "image",
+    "page_idx": 548,
+    "img_path": "images/580ff868c2fe144cbe105fa475b3173694545acaa579676e03cfdd03ac840dfd.jpg"
+  },
+  {
+    "id": 16182,
+    "type": "image",
+    "page_idx": 548,
+    "img_path": "images/188ad5a7fbfb610b9b05573eb05c96f8a5e153874e42251b84aebffbe697920b.jpg"
+  },
+  {
+    "id": 16183,
+    "type": "text",
+    "page_idx": 548,
+    "text": "TIP"
+  },
+  {
+    "id": 16184,
+    "type": "text",
+    "page_idx": 548,
+    "text": "If you do need to use the diagram to make predictions outside of the range of your data, you must explain how uncertain you are about the result. You should always comment on how unreliable the result is when you do this."
+  },
+  {
+    "id": 16185,
+    "type": "text",
+    "page_idx": 549,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 16186,
+    "type": "image",
+    "page_idx": 549,
+    "img_path": "images/16424ca3fd7017c6d7594a49d10ae0e71c8a49ac62b77716de5a6c09db937e15.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 16187,
+    "type": "image",
+    "page_idx": 549,
+    "img_path": "images/f5e9085b200ad0e68119ef2102e26a71737a3810e857ca4d1e098e1d8366f6fa.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 16188,
+    "type": "text",
+    "page_idx": 549,
+    "text": "2 The widths and lengths of leaves (measured in cm) on a particular tree are recorded in the table."
+  },
+  {
+    "id": 16189,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Width (cm)</td><td>14</td><td>25</td><td>67</td><td>56</td><td>26</td><td>78</td><td>33</td><td>35</td><td>14</td><td>36</td><td>13</td><td>36</td><td>25</td><td>62</td><td>25</td></tr>",
+    "page_idx": 549
+  },
+  {
+    "id": 16190,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Length (cm)</td><td>22</td><td>63</td><td>170</td><td>141</td><td>76</td><td>201</td><td>93</td><td>91</td><td>24</td><td>91</td><td>23</td><td>67</td><td>51</td><td>151</td><td>79</td></tr>",
+    "page_idx": 549
+  },
+  {
+    "id": 16191,
+    "type": "text",
+    "text": "a Draw a scatter diagram for this data with the lengths of the leaves shown on the vertical axis.",
+    "page_idx": 549
+  },
+  {
+    "id": 16192,
+    "type": "text",
+    "text": "b Comment on the strength of correlation.",
+    "page_idx": 549
+  },
+  {
+    "id": 16193,
+    "type": "text",
+    "text": "c Draw a line of best fit for this data.",
+    "page_idx": 549
+  },
+  {
+    "id": 16194,
+    "type": "text",
+    "text": "d Estimate the length of a leaf that has width  $20\\mathrm{cm}$",
+    "page_idx": 549
+  },
+  {
+    "id": 16195,
+    "type": "text",
+    "page_idx": 549,
+    "text": "Emma is conducting a survey into the masses of dogs and the duration of their morning walk in minutes. The results are shown in the table."
+  },
+  {
+    "id": 16196,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Duration of walk (min)</td><td>23</td><td>45</td><td>12</td><td>5</td><td>18</td><td>67</td><td>64</td><td>15</td><td>28</td><td>39</td></tr>",
+    "page_idx": 549
+  },
+  {
+    "id": 16197,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Mass (kg)</td><td>22</td><td>5</td><td>12</td><td>32</td><td>13</td><td>24</td><td>6</td><td>38</td><td>21</td><td>12</td></tr>",
+    "page_idx": 549
+  },
+  {
+    "id": 16198,
+    "type": "text",
+    "text": "a Draw a scatter diagram to show the mass of each dog against the duration of the morning walk in minutes. (Plot the mass of the dog on the vertical axis.)",
+    "page_idx": 549
+  },
+  {
+    "id": 16199,
+    "type": "text",
+    "text": "b How strong is the correlation between the masses of the dogs and the duration of their morning walks?",
+    "page_idx": 549
+  },
+  {
+    "id": 16200,
+    "type": "text",
+    "page_idx": 549,
+    "text": "TIP"
+  },
+  {
+    "id": 16201,
+    "type": "text",
+    "page_idx": 549,
+    "text": "When we say 'plot A against B' we mean 'plot A on the vertical axis and B on the horizontal axis'."
+  },
+  {
+    "id": 16202,
+    "type": "text",
+    "page_idx": 550,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 16203,
+    "type": "text",
+    "page_idx": 550,
+    "text": "4 A shopper is investigating the relationship between the number of sales assistants working in a department store and the length of time (in seconds) spent waiting in a queue to be served. The results are shown in the table."
+  },
+  {
+    "id": 16204,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Number of sales assistants</td><td>12</td><td>14</td><td>23</td><td>28</td><td>14</td><td>11</td><td>17</td><td>21</td><td>33</td><td>21</td><td>22</td><td>13</td><td>7</td></tr>",
+    "page_idx": 550
+  },
+  {
+    "id": 16205,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Waiting time (seconds)</td><td>183</td><td>179</td><td>154</td><td>150</td><td>224</td><td>236</td><td>221</td><td>198</td><td>28</td><td>87</td><td>77</td><td>244</td><td>266</td></tr>",
+    "page_idx": 550
+  },
+  {
+    "id": 16206,
+    "type": "text",
+    "text": "a Draw a scatter diagram to show the length of time spent waiting and the number of sales assistants working in the store.",
+    "page_idx": 550
+  },
+  {
+    "id": 16207,
+    "type": "text",
+    "text": "b Describe the correlation between the number of sales assistants and the time spent queuing.",
+    "page_idx": 550
+  },
+  {
+    "id": 16208,
+    "type": "text",
+    "text": "c Draw a line of best fit for this data.",
+    "page_idx": 550
+  },
+  {
+    "id": 16209,
+    "type": "text",
+    "text": "d In a very large department store there are 45 sales assistants. What happens when the shopper tries to extend and use the scatter diagram to predict the queuing time in this store?",
+    "page_idx": 550
+  },
+  {
+    "id": 16210,
+    "type": "text",
+    "page_idx": 550,
+    "text": "5 Eyal is investigating the relationship between the amount of time spent watching television during a week and the score on a maths test taken a week later. The results for 12 students are shown on the scatter diagram."
+  },
+  {
+    "id": 16211,
+    "type": "image",
+    "page_idx": 550,
+    "img_path": "images/0b5f69bc85ccd7a75efa3d1856f7e578c5d290bebb7bb773678a9624b8a59143.jpg"
+  },
+  {
+    "id": 16212,
+    "type": "text",
+    "page_idx": 551,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 16213,
+    "type": "text",
+    "page_idx": 551,
+    "text": "The table shows some of Eyal's results, but it is incomplete."
+  },
+  {
+    "id": 16214,
+    "type": "text",
+    "text": "[Table Row] <tr><td>TV watching (min)</td><td>A</td><td>34</td><td>215</td><td>54</td><td>C</td><td>78</td><td>224</td><td>236</td><td>121</td><td>74</td><td>63</td><td>E</td></tr>",
+    "page_idx": 551
+  },
+  {
+    "id": 16215,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Maths score (%)</td><td>64</td><td>B</td><td>30</td><td>83</td><td>76</td><td>78</td><td>41</td><td>D</td><td>55</td><td>91</td><td>83</td><td>27</td></tr>",
+    "page_idx": 551
+  },
+  {
+    "id": 16216,
+    "type": "text",
+    "text": "a Use the scatter diagram to find the missing values A to E.",
+    "page_idx": 551
+  },
+  {
+    "id": 16217,
+    "type": "text",
+    "text": "b Comment on the correlation between the length of time spent watching television and the maths score.",
+    "page_idx": 551
+  },
+  {
+    "id": 16218,
+    "type": "text",
+    "text": "c Copy the diagram and draw a line of best fit.",
+    "page_idx": 551
+  },
+  {
+    "id": 16219,
+    "type": "text",
+    "text": "d Aneesh scores  $67\\%$  on the maths test. Estimate the amount of time that Aneesh spent watching television.",
+    "page_idx": 551
+  },
+  {
+    "id": 16220,
+    "type": "text",
+    "text": "e Comment on the likely accuracy of your estimate in part (d).",
+    "page_idx": 551
+  },
+  {
+    "id": 16221,
+    "type": "text",
+    "page_idx": 551,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 16222,
+    "type": "text",
+    "page_idx": 551,
+    "text": "How has the work in this chapter improved your understanding of correlation? Are there any ideas that you are still not sure about? What will you do about those?"
+  },
+  {
+    "id": 16223,
+    "type": "text",
+    "page_idx": 551,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 16224,
+    "type": "text",
+    "page_idx": 551,
+    "text": "Copy and complete this outline to assess your own learning in this chapter. Look back to the guidelines in Chapter 4 if you have forgotten how to complete a form like this one."
+  },
+  {
+    "id": 16225,
+    "type": "image",
+    "page_idx": 551,
+    "img_path": "images/ab653f0544ed0c8c8e1ab2fcfa27b8ed8ff2ed321f5af51ea91f067052115056.jpg"
+  },
+  {
+    "id": 16226,
+    "type": "text",
+    "page_idx": 552,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 16227,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Do you know ...?</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16228,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You can use a scatter diagram to investigate the strength of any relationship between two variables.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16229,
+    "type": "text",
+    "text": "[Table Row] <tr><td>If one of the variables generally increases as the other variable increases, then you say that there is a positive correlation.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16230,
+    "type": "text",
+    "text": "[Table Row] <tr><td>If one of the variables generally decreases as the other variable increases, then you say that there is a negative correlation.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16231,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The clearer the relationship, the stronger the correlation.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16232,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You can draw a line of best fit if the points seem to lie close to a straight line.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16233,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You can use the line of best fit to predict values of one variable from values of the other.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16234,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You should only make predictions using a line of best fit that has been drawn within the range of the data.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16235,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Are you able to ...?</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16236,
+    "type": "text",
+    "text": "[Table Row] <tr><td>draw a scatter diagram</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16237,
+    "type": "text",
+    "text": "[Table Row] <tr><td>describe the relationship between the variables shown</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16238,
+    "type": "text",
+    "text": "[Table Row] <tr><td>use a scatter diagram to make predictions.</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16239,
+    "type": "text",
+    "page_idx": 552,
+    "text": "Practice questions"
+  },
+  {
+    "id": 16240,
+    "type": "text",
+    "page_idx": 552,
+    "text": "1 The table shows the sizes (in square metres) and prices (in US dollars) of 15 paintings on display in a gallery."
+  },
+  {
+    "id": 16241,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Painting</td><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td><td>F</td><td>G</td><td>H</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16242,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Painting area (m2)</td><td>1.4</td><td>2.3</td><td>0.8</td><td>0.1</td><td>0.7</td><td>2.2</td><td>3.4</td><td>2.6</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16243,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Price ($)</td><td>2400</td><td>6565</td><td>1800</td><td>45</td><td>8670</td><td>4560</td><td>10150</td><td>8950</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16244,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Painting</td><td>I</td><td>J</td><td>K</td><td>L</td><td>M</td><td>N</td><td>O</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16245,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Painting area (m2)</td><td>1.1</td><td>1.3</td><td>3.7</td><td>1.5</td><td>0.4</td><td>1.9</td><td>0.6</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16246,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Price ($)</td><td>3025</td><td>4560</td><td>11230</td><td>4050</td><td>1450</td><td>5420</td><td>1475</td></tr>",
+    "page_idx": 552
+  },
+  {
+    "id": 16247,
+    "type": "text",
+    "text": "a Draw a scatter diagram for this data. The price should be represented by the vertical axis. [4]",
+    "page_idx": 552
+  },
+  {
+    "id": 16248,
+    "type": "text",
+    "text": "b Identify the painting that is unusually expensive. Explain your answer clearly. [2]",
+    "page_idx": 552
+  },
+  {
+    "id": 16249,
+    "type": "text",
+    "text": "c Assuming that the unusually expensive painting is not to be included, draw a line of best fit for this data. [2]",
+    "page_idx": 552
+  },
+  {
+    "id": 16250,
+    "type": "text",
+    "text": "d A new painting is introduced to the collection. The painting measures  $1.5\\mathrm{m}$  by  $1.5\\mathrm{m}$ . Use your graph to estimate the price of the painting. [2]",
+    "page_idx": 552
+  },
+  {
+    "id": 16251,
+    "type": "text",
+    "text": "e Another painting is introduced to the collection. This painting measures  $2.1\\mathrm{m}$  by  $2.1\\mathrm{m}$ . Explain why you should not try to use your scatter diagram to estimate the price of this painting. [2]",
+    "page_idx": 552
+  },
+  {
+    "id": 16252,
+    "type": "text",
+    "page_idx": 553,
+    "text": "2 A particular type of printing machine has been sold with a strong recommendation that regular maintenance takes place even when the machine appears to be working properly."
+  },
+  {
+    "id": 16253,
+    "type": "text",
+    "page_idx": 553,
+    "text": "Several companies are asked to provide the machine manufacturer with two pieces of information: the number of hours spent maintaining the machine in the first year and the number of minutes required for repair in the second year. The results are shown in the table."
+  },
+  {
+    "id": 16254,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Maintenance hours</td><td>42</td><td>71</td><td>22</td><td>2</td><td>60</td><td>66</td><td>102</td></tr>",
+    "page_idx": 553
+  },
+  {
+    "id": 16255,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Repairs in second year (minutes)</td><td>4040</td><td>2370</td><td>4280</td><td>4980</td><td>4000</td><td>3170</td><td>940</td></tr>",
+    "page_idx": 553
+  },
+  {
+    "id": 16256,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Maintenance hours</td><td>78</td><td>33</td><td>39</td><td>111</td><td>45</td><td>12</td></tr>",
+    "page_idx": 553
+  },
+  {
+    "id": 16257,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Repairs in second year (minutes)</td><td>1420</td><td>3790</td><td>3270</td><td>500</td><td>3380</td><td>4420</td></tr>",
+    "page_idx": 553
+  },
+  {
+    "id": 16258,
+    "type": "text",
+    "text": "a Draw a scatter diagram to show this information. You should plot the second year repair times on the vertical axis. [4]",
+    "page_idx": 553
+  },
+  {
+    "id": 16259,
+    "type": "text",
+    "text": "b Describe the correlation between maintenance time in the first year and repair time needed in the second year. [2]",
+    "page_idx": 553
+  },
+  {
+    "id": 16260,
+    "type": "text",
+    "text": "c Draw a line of best fit on your scatter diagram. [2]",
+    "page_idx": 553
+  },
+  {
+    "id": 16261,
+    "type": "text",
+    "text": "d Another company schedules 90 hours of maintenance for the first year of using their machine. Use your graph to estimate the repair time that will be needed in the second year. [2]",
+    "page_idx": 553
+  },
+  {
+    "id": 16262,
+    "type": "text",
+    "text": "Another company claims that they will schedule 160 hours of maintenance for the first year. Describe what happens when you try to predict the repair time for the second year of machine use. [2]",
+    "page_idx": 553
+  },
+  {
+    "id": 16263,
+    "type": "text",
+    "text": "f You are asked by a manager to work out the maintenance time that will reduce the repair time to zero. Use your graph to suggest a maintenance time and comment on the reliability of your answer. [2]",
+    "page_idx": 553
+  },
+  {
+    "id": 16264,
+    "type": "text",
+    "page_idx": 553,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 16265,
+    "type": "text",
+    "page_idx": 553,
+    "text": "Mark your answers to the practice questions. Complete these statements in your book."
+  },
+  {
+    "id": 16266,
+    "type": "text",
+    "text": "I now know ...",
+    "page_idx": 553
+  },
+  {
+    "id": 16267,
+    "type": "text",
+    "text": "I need to know more about ...",
+    "page_idx": 553
+  },
+  {
+    "id": 16268,
+    "type": "text",
+    "text": "These things went well ...",
+    "page_idx": 553
+  },
+  {
+    "id": 16269,
+    "type": "text",
+    "text": "I could do better if I ...",
+    "page_idx": 553
+  }
+]
+```

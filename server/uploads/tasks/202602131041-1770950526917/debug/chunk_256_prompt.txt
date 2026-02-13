@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 17920,
+    "type": "text",
+    "page_idx": 633,
+    "text": "WORKED EXAMPLE 23"
+  },
+  {
+    "id": 17921,
+    "type": "text",
+    "page_idx": 633,
+    "text": "Find  $\\frac{dy}{dx}$  for curves with the following equations."
+  },
+  {
+    "id": 17922,
+    "type": "text",
+    "page_idx": 633,
+    "text": "a  $y = x^{7}$"
+  },
+  {
+    "id": 17923,
+    "type": "text",
+    "page_idx": 633,
+    "text": "b  $y = x^{8}$"
+  },
+  {
+    "id": 17924,
+    "type": "text",
+    "page_idx": 633,
+    "text": "c  $y = 4x^{5}$"
+  },
+  {
+    "id": 17925,
+    "type": "text",
+    "page_idx": 633,
+    "text": "d  $y = -6x^{3}$"
+  },
+  {
+    "id": 17926,
+    "type": "text",
+    "page_idx": 633,
+    "text": "Answers"
+  },
+  {
+    "id": 17927,
+    "type": "text",
+    "page_idx": 633,
+    "text": "a  $\\frac{\\mathrm{dy}}{\\mathrm{dx}} = 7x^6$"
+  },
+  {
+    "id": 17928,
+    "type": "text",
+    "page_idx": 633,
+    "text": "Multiply the expression by the power. Then reduce the power by 1."
+  },
+  {
+    "id": 17929,
+    "type": "text",
+    "page_idx": 633,
+    "text": "dy 8x7 dx"
+  },
+  {
+    "id": 17930,
+    "type": "text",
+    "page_idx": 633,
+    "text": "Multiply by 8 and then subtract 1 from the power, 8."
+  },
+  {
+    "id": 17931,
+    "type": "text",
+    "page_idx": 633,
+    "text": "dy 4x(5x4) dx"
+  },
+  {
+    "id": 17932,
+    "type": "text",
+    "page_idx": 633,
+    "text": "You need to multiply the whole expression by 5. Then subtract 1 from the power."
+  },
+  {
+    "id": 17933,
+    "type": "equation",
+    "page_idx": 633,
+    "text": "$$\n= 2 0 x ^ {4}\n$$"
+  },
+  {
+    "id": 17934,
+    "type": "text",
+    "page_idx": 633,
+    "text": "d  $\\frac{\\mathrm{dy}}{\\mathrm{dx}} = 3\\times (-6x^2)$"
+  },
+  {
+    "id": 17935,
+    "type": "equation",
+    "page_idx": 633,
+    "text": "$$\n= - 1 8 x ^ {2}\n$$"
+  },
+  {
+    "id": 17936,
+    "type": "text",
+    "page_idx": 633,
+    "text": "The rule is the same for positive and negative terms."
+  },
+  {
+    "id": 17937,
+    "type": "text",
+    "page_idx": 633,
+    "text": "TIP"
+  },
+  {
+    "id": 17938,
+    "type": "text",
+    "page_idx": 633,
+    "text": "It was useful to write the power of 1 in the case  $y = x^2$  of to make it easy to see that the power of 2 had been reduced by 1 as the rule suggests."
+  },
+  {
+    "id": 17939,
+    "type": "text",
+    "page_idx": 633,
+    "text": "TIP"
+  },
+  {
+    "id": 17940,
+    "type": "text",
+    "page_idx": 633,
+    "text": "This rule always works for any power of  $x$ , even if it is negative or a fraction."
+  },
+  {
+    "id": 17941,
+    "type": "text",
+    "page_idx": 634,
+    "text": "WORKED EXAMPLE 24"
+  },
+  {
+    "id": 17942,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Find the gradient of the curve with equation  $y = 4x^3$  at the point (2, 32)."
+  },
+  {
+    "id": 17943,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Answer"
+  },
+  {
+    "id": 17944,
+    "type": "text",
+    "page_idx": 634,
+    "text": "The derivative of function tells you the gradient at the point where the  $x$ -coordinate is  $x$ . To find the gradient at a particular point, substitute the value of  $x$  into the derivative of function."
+  },
+  {
+    "id": 17945,
+    "type": "equation",
+    "page_idx": 634,
+    "text": "$$\n\\frac {d y}{d x} = 1 2 x ^ {2}\n$$"
+  },
+  {
+    "id": 17946,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Multiply by the power and subtract 1 from the power."
+  },
+  {
+    "id": 17947,
+    "type": "equation",
+    "page_idx": 634,
+    "text": "$$\n\\frac {d y}{d x} \\text {a t} x = 2 \\text {i s} 1 2 \\times 2 ^ {2} = 4 8\n$$"
+  },
+  {
+    "id": 17948,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Substitute  $x = 2$  to find the gradient at the point where the  $x$ -coordinate is 2."
+  },
+  {
+    "id": 17949,
+    "type": "text",
+    "page_idx": 634,
+    "text": "The gradient of the curve at the point (2, 32) is 48."
+  },
+  {
+    "id": 17950,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Exercise 18.11"
+  },
+  {
+    "id": 17951,
+    "type": "text",
+    "page_idx": 634,
+    "text": "1 For each of the following, find  $\\frac{\\mathrm{dy}}{\\mathrm{dx}}$ ."
+  },
+  {
+    "id": 17952,
+    "type": "text",
+    "page_idx": 634,
+    "text": "a  $y = x^4$"
+  },
+  {
+    "id": 17953,
+    "type": "text",
+    "page_idx": 634,
+    "text": "b  $y = x^{6}$"
+  },
+  {
+    "id": 17954,
+    "type": "text",
+    "page_idx": 634,
+    "text": "c  $y = x^{9}$"
+  },
+  {
+    "id": 17955,
+    "type": "text",
+    "page_idx": 634,
+    "text": "d  $y = 4x^{3}$"
+  },
+  {
+    "id": 17956,
+    "type": "text",
+    "page_idx": 634,
+    "text": "e  $y = 12x^{2}$"
+  },
+  {
+    "id": 17957,
+    "type": "text",
+    "page_idx": 634,
+    "text": "f  $y = 7x^{7}$"
+  },
+  {
+    "id": 17958,
+    "type": "text",
+    "page_idx": 634,
+    "text": "g  $y = -4x^4$"
+  },
+  {
+    "id": 17959,
+    "type": "text",
+    "page_idx": 634,
+    "text": "h  $y = 7x^{12}$"
+  },
+  {
+    "id": 17960,
+    "type": "text",
+    "page_idx": 634,
+    "text": "i  $y = -16x^{5}$"
+  },
+  {
+    "id": 17961,
+    "type": "text",
+    "page_idx": 634,
+    "text": "2 Find the gradient of each of the following curves at the given point."
+  },
+  {
+    "id": 17962,
+    "type": "text",
+    "page_idx": 634,
+    "text": "a  $y = x^{2}$  at the point (3, 9)"
+  },
+  {
+    "id": 17963,
+    "type": "text",
+    "page_idx": 634,
+    "text": "b  $y = x^{3}$  at the point (1, 1)"
+  },
+  {
+    "id": 17964,
+    "type": "text",
+    "page_idx": 634,
+    "text": "$y = x^4$  at the point (2, 16)"
+  },
+  {
+    "id": 17965,
+    "type": "text",
+    "page_idx": 634,
+    "text": "d  $y = 4x^{2}$  at the point  $(-1,4)$"
+  },
+  {
+    "id": 17966,
+    "type": "text",
+    "page_idx": 634,
+    "text": "e  $y = -3x^{3}$  at the point (2, -24)"
+  },
+  {
+    "id": 17967,
+    "type": "text",
+    "page_idx": 634,
+    "text": "f  $y = -5x^{6}$  at the point  $(-2, - 320)$"
+  },
+  {
+    "id": 17968,
+    "type": "text",
+    "page_idx": 634,
+    "text": "3 Find the coordinates of the point at which the curve with equation  $y = 3x^2$  has gradient 18."
+  },
+  {
+    "id": 17969,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Differentiating sums and differences"
+  },
+  {
+    "id": 17970,
+    "type": "text",
+    "page_idx": 634,
+    "text": "The equation of a curve may involve more than one term and you may be asked to differentiate expressions like  $y = x^2 + x^4$  or  $y = 3x^2 - 4x$ ."
+  },
+  {
+    "id": 17971,
+    "type": "text",
+    "page_idx": 634,
+    "text": "To do this, you differentiate each term independently."
+  },
+  {
+    "id": 17972,
+    "type": "text",
+    "page_idx": 634,
+    "text": "You can see this by differentiating  $y = 4x^3$  and then rewriting the answer as a sum of separate terms:"
+  },
+  {
+    "id": 17973,
+    "type": "equation",
+    "page_idx": 634,
+    "text": "$$\n\\begin{array}{l} y = 4 x ^ {3} \\\\ \\Rightarrow \\frac {\\mathrm {d} y}{\\mathrm {d} x} = 1 2 x ^ {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 17974,
+    "type": "text",
+    "page_idx": 634,
+    "text": "You can rewrite  $12x^{2}$  as the sum:"
+  },
+  {
+    "id": 17975,
+    "type": "equation",
+    "page_idx": 634,
+    "text": "$$\n\\frac {d y}{d x} = 3 x ^ {2} + 3 x ^ {2} + 3 x ^ {2} + 3 x ^ {2}\n$$"
+  },
+  {
+    "id": 17976,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Compare this to the original equation, also written as a sum of separate terms:"
+  },
+  {
+    "id": 17977,
+    "type": "equation",
+    "page_idx": 634,
+    "text": "$$\ny = x ^ {3} + x ^ {3} + x ^ {3} + x ^ {3}.\n$$"
+  },
+  {
+    "id": 17978,
+    "type": "text",
+    "page_idx": 634,
+    "text": "TIP"
+  },
+  {
+    "id": 17979,
+    "type": "text",
+    "page_idx": 634,
+    "text": "Remember that you will need to use the x-coordinate in each case. Look back at Worked example 24 if you need help."
+  },
+  {
+    "id": 17980,
+    "type": "text",
+    "page_idx": 635,
+    "text": "You can see that each term has been differentiated independently."
+  },
+  {
+    "id": 17981,
+    "type": "text",
+    "page_idx": 635,
+    "text": "So we have the rule:"
+  },
+  {
+    "id": 17982,
+    "type": "equation",
+    "page_idx": 635,
+    "text": "$$\n\\text {I f} y = a x ^ {m} + b x ^ {n} \\text {t h e n} \\frac {\\mathrm {d} y}{\\mathrm {d} x} = a m n ^ {m - 1} + b n x ^ {n - 1}.\n$$"
+  },
+  {
+    "id": 17983,
+    "type": "text",
+    "page_idx": 635,
+    "text": "You can extend this rule to adding any number of terms together and it also works for subtraction."
+  },
+  {
+    "id": 17984,
+    "type": "text",
+    "page_idx": 635,
+    "text": "WORKED EXAMPLE 25"
+  },
+  {
+    "id": 17985,
+    "type": "text",
+    "page_idx": 635,
+    "text": "Find  $\\frac{dy}{dx}$  for each of the following."
+  },
+  {
+    "id": 17986,
+    "type": "text",
+    "page_idx": 635,
+    "text": "a  $y = 4x^{7} + 3x^{6}$"
+  },
+  {
+    "id": 17987,
+    "type": "text",
+    "page_idx": 635,
+    "text": "$y = \\frac{8}{3}x^2 - 4x^5$"
+  },
+  {
+    "id": 17988,
+    "type": "text",
+    "page_idx": 635,
+    "text": "Answers"
+  },
+  {
+    "id": 17989,
+    "type": "text",
+    "page_idx": 635,
+    "text": "a  $\\frac{dy}{dx} = 28x^6 + 18x^5$"
+  },
+  {
+    "id": 17990,
+    "type": "text",
+    "page_idx": 635,
+    "text": "Differentiate each term separately then add them together."
+  },
+  {
+    "id": 17991,
+    "type": "text",
+    "page_idx": 635,
+    "text": "dy 16 3 x-20x4 dx"
+  },
+  {
+    "id": 17992,
+    "type": "text",
+    "page_idx": 635,
+    "text": "Differentiate each term separately and then subtract."
+  },
+  {
+    "id": 17993,
+    "type": "text",
+    "page_idx": 635,
+    "text": "Exercise 18.12"
+  },
+  {
+    "id": 17994,
+    "type": "text",
+    "page_idx": 635,
+    "text": "1 Find  $\\frac{\\mathrm{dy}}{\\mathrm{dx}}$  for each of the following."
+  },
+  {
+    "id": 17995,
+    "type": "text",
+    "page_idx": 635,
+    "text": "a  $y = x^4 +x^5$"
+  },
+  {
+    "id": 17996,
+    "type": "text",
+    "page_idx": 635,
+    "text": "b  $y = 3x^{3} - 5x^{4}$"
+  },
+  {
+    "id": 17997,
+    "type": "text",
+    "page_idx": 635,
+    "text": "$y = {7x}^{6} + 9{x}^{2}$"
+  },
+  {
+    "id": 17998,
+    "type": "text",
+    "page_idx": 635,
+    "text": "d  $y = \\frac{1}{3} x^3 -4x^7$"
+  },
+  {
+    "id": 17999,
+    "type": "text",
+    "page_idx": 635,
+    "text": "$y = 6x^{5} - \\frac{8}{11} x^{4}$"
+  },
+  {
+    "id": 18000,
+    "type": "text",
+    "page_idx": 635,
+    "text": "f  $y = -7x^{2} + 3x^{6}$"
+  },
+  {
+    "id": 18001,
+    "type": "text",
+    "page_idx": 635,
+    "text": "g  $y = 12x^{3} + \\frac{2}{3} x^{8}$"
+  },
+  {
+    "id": 18002,
+    "type": "text",
+    "page_idx": 635,
+    "text": "h  $y = -10x^{12} - 8x^{10}$"
+  },
+  {
+    "id": 18003,
+    "type": "text",
+    "page_idx": 635,
+    "text": "i  $y = 4x^{2} - 12x^{3} + 5x^{4}$"
+  },
+  {
+    "id": 18004,
+    "type": "text",
+    "page_idx": 635,
+    "text": "j  $y = -\\frac{8}{11} x^4 +\\frac{2}{7} x^3 -\\frac{3}{4} x^2$"
+  },
+  {
+    "id": 18005,
+    "type": "text",
+    "page_idx": 635,
+    "text": "2 Find the gradient of each curve at the point with the given  $x$ -coordinate."
+  },
+  {
+    "id": 18006,
+    "type": "text",
+    "page_idx": 635,
+    "text": "a  $y = 3x^{3} + 2x^{2}$"
+  },
+  {
+    "id": 18007,
+    "type": "text",
+    "page_idx": 635,
+    "text": "at  $x = 3$"
+  },
+  {
+    "id": 18008,
+    "type": "text",
+    "page_idx": 635,
+    "text": "b  $y =  - 2{x}^{4} + 3{x}^{2}$"
+  },
+  {
+    "id": 18009,
+    "type": "text",
+    "page_idx": 635,
+    "text": "at  $x = -2$"
+  },
+  {
+    "id": 18010,
+    "type": "text",
+    "page_idx": 635,
+    "text": "$y = 3x^4 +6x^3 -3x^2$"
+  },
+  {
+    "id": 18011,
+    "type": "text",
+    "page_idx": 635,
+    "text": "at  $x = -1$"
+  },
+  {
+    "id": 18012,
+    "type": "text",
+    "page_idx": 635,
+    "text": "3 Find the coordinates of the point where the curve with equation  $y = 2x^3 + 3x^2$  has gradient 12."
+  },
+  {
+    "id": 18013,
+    "type": "text",
+    "page_idx": 635,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 18014,
+    "type": "text",
+    "page_idx": 635,
+    "text": "You may need to revise the different methods for solving quadratic equations that you learnt in Chapter 14."
+  },
+  {
+    "id": 18015,
+    "type": "text",
+    "page_idx": 635,
+    "text": "4 Find the coordinates of the points where the curve with equation  $y = \\frac{1}{4} x^4 - \\frac{3}{2} x^2$  has gradient zero."
+  },
+  {
+    "id": 18016,
+    "type": "text",
+    "page_idx": 636,
+    "text": "Special cases"
+  },
+  {
+    "id": 18017,
+    "type": "text",
+    "page_idx": 636,
+    "text": "Sometimes the equation of a curve will contain a multiple of  $x$  or a constant term. In the case of a multiple of  $x$  the rule still applies, for example:"
+  },
+  {
+    "id": 18018,
+    "type": "equation",
+    "page_idx": 636,
+    "text": "$$\ny = 5 x = 5 x ^ {1} \\Rightarrow \\frac {\\mathrm {d} y}{\\mathrm {d} x} = 5 x ^ {0} = 5\n$$"
+  },
+  {
+    "id": 18019,
+    "type": "text",
+    "page_idx": 636,
+    "text": "So, if  $y = kx$ , then  $\\frac{\\mathrm{d}y}{\\mathrm{d}x} = k$ ."
+  }
+]
+```

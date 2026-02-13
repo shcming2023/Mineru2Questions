@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 15470,
+    "type": "image",
+    "page_idx": 512,
+    "img_path": "images/51be1d6858cc0f6ae6353c4032dc1961efaa83fc4c81189e5874d796ac9e3545.jpg"
+  },
+  {
+    "id": 15471,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Answer"
+  },
+  {
+    "id": 15472,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Here is a simplified labelled drawing of the bridge, showing the two halves raised to  $35^{\\circ}$ ."
+  },
+  {
+    "id": 15473,
+    "type": "image",
+    "page_idx": 512,
+    "img_path": "images/52f5bef079f57fd76fe87cb5e63e5a13da9b07245496a16a4a75c7f1fe2fa40f.jpg"
+  },
+  {
+    "id": 15474,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The gap  $= BD = MN$  and  $MN = AC - (AM + NC)$"
+  },
+  {
+    "id": 15475,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The right-angled triangles  $ABM$  and  $CDN$  are congruent, so  $AM = NC$ ."
+  },
+  {
+    "id": 15476,
+    "type": "text",
+    "page_idx": 512,
+    "text": "When the two halves are lowered, they must meet in the middle."
+  },
+  {
+    "id": 15477,
+    "type": "equation",
+    "page_idx": 512,
+    "text": "$$\n\\therefore A B = C D = \\frac {7 6}{2} = 3 8 m\n$$"
+  },
+  {
+    "id": 15478,
+    "type": "text",
+    "page_idx": 512,
+    "text": "In triangle ABM, cos  $35^{\\circ} = \\frac{\\text{adj}(35^{\\circ})}{\\text{hyp}} = \\frac{\\text{AM}}{38}$"
+  },
+  {
+    "id": 15479,
+    "type": "equation",
+    "page_idx": 512,
+    "text": "$$\n\\begin{array}{l} A M = 3 8 \\times \\cos 3 5 ^ {\\circ} \\\\ = 3 1. 1 2 7 7 \\dots m \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15480,
+    "type": "equation",
+    "page_idx": 512,
+    "text": "$$\n\\begin{array}{l} \\therefore M N = 7 6 - (3 1. 1 2 7 7 \\dots + 3 1. 1 2 7 7 \\dots) \\\\ = 1 3. 7 4 4 \\dots m \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 15481,
+    "type": "text",
+    "page_idx": 512,
+    "text": "The gap  $BD = 13.7\\mathrm{m}$  (to 3 s.f.)"
+  },
+  {
+    "id": 15482,
+    "type": "text",
+    "page_idx": 512,
+    "text": "TIP"
+  },
+  {
+    "id": 15483,
+    "type": "text",
+    "page_idx": 512,
+    "text": "Drawing a clear, labelled sketch can help you work out what mathematics you need to do to solve the problem."
+  },
+  {
+    "id": 15484,
+    "type": "text",
+    "page_idx": 513,
+    "text": "Exercise 15.9"
+  },
+  {
+    "id": 15485,
+    "type": "text",
+    "page_idx": 513,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 15486,
+    "type": "text",
+    "page_idx": 513,
+    "text": "1 The diagram represents a ramp  $AB$  for a lifeboat. AC is vertical and CB is horizontal."
+  },
+  {
+    "id": 15487,
+    "type": "text",
+    "text": "a Calculate the size of angle ABC correct to 1 decimal place.",
+    "page_idx": 513
+  },
+  {
+    "id": 15488,
+    "type": "text",
+    "text": "b Calculate the length of BC correct to 3 significant figures.",
+    "page_idx": 513
+  },
+  {
+    "id": 15489,
+    "type": "image",
+    "page_idx": 513,
+    "img_path": "images/cc6280fa000ba0b1566728067644686e1b46b67d515691c8c4982198ceb1c5e9.jpg"
+  },
+  {
+    "id": 15490,
+    "type": "text",
+    "page_idx": 513,
+    "text": "2 AB is a chord of a circle, centre O, radius 8cm. Angle AOB = 120°. Calculate the length of AB."
+  },
+  {
+    "id": 15491,
+    "type": "image",
+    "page_idx": 513,
+    "img_path": "images/59d1db58520bfbf7db1a7318eec293fd0a96dcc04fd5dc67648c9d185640ec43.jpg"
+  },
+  {
+    "id": 15492,
+    "type": "text",
+    "page_idx": 513,
+    "text": "3 The diagram represents a tent in the shape of a triangular prism. The front of the tent,  $ABD$  is an isosceles triangle with  $AB = AD$ . The width,  $BD$  is  $1.8\\mathrm{m}$  and the supporting pole  $AC$  is perpendicular to  $BD$  and  $1.5\\mathrm{m}$  high. The tent is  $3\\mathrm{m}$  long. Calculate:"
+  },
+  {
+    "id": 15493,
+    "type": "text",
+    "text": "a the angle between AB and BD",
+    "page_idx": 513
+  },
+  {
+    "id": 15494,
+    "type": "text",
+    "text": "b the length of AB",
+    "page_idx": 513
+  },
+  {
+    "id": 15495,
+    "type": "text",
+    "text": "c the capacity inside the tent (i.e. the volume).",
+    "page_idx": 513
+  },
+  {
+    "id": 15496,
+    "type": "image",
+    "page_idx": 513,
+    "img_path": "images/1ff7bc937e22275faff400f58c6624be963097cc2292d6f75d9a6bafbcc00d2f.jpg"
+  },
+  {
+    "id": 15497,
+    "type": "text",
+    "page_idx": 513,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15498,
+    "type": "text",
+    "page_idx": 513,
+    "text": "Look at Chapter 7 and remind yourself about the formula for the volume of a prism."
+  },
+  {
+    "id": 15499,
+    "type": "text",
+    "page_idx": 514,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 15500,
+    "type": "text",
+    "page_idx": 514,
+    "text": "4 Calculate the angles of an isosceles triangle that has sides of length  $9\\mathrm{cm}$ ,  $9\\mathrm{cm}$  and  $14\\mathrm{cm}$ ."
+  },
+  {
+    "id": 15501,
+    "type": "image",
+    "page_idx": 514,
+    "img_path": "images/570625f82e9450f26a60c8e793aa85221b9ffc1debe67cb1b6e4329a819b6613.jpg"
+  },
+  {
+    "id": 15502,
+    "type": "text",
+    "page_idx": 514,
+    "text": "5 The sketch represents a field PQRS on level ground. The sides PQ and SR run due east."
+  },
+  {
+    "id": 15503,
+    "type": "text",
+    "text": "a Write down the bearing of  $S$  from  $P$",
+    "page_idx": 514
+  },
+  {
+    "id": 15504,
+    "type": "text",
+    "text": "b Calculate the perpendicular (shortest) distance between SR and PQ.",
+    "page_idx": 514
+  },
+  {
+    "id": 15505,
+    "type": "text",
+    "text": "c. Calculate, in square metres, the area of the field PQRS.",
+    "page_idx": 514
+  },
+  {
+    "id": 15506,
+    "type": "image",
+    "page_idx": 514,
+    "img_path": "images/080676f6ea8470dcc1c55758f4bcd80f84060a2f60bc729fb2b57cc5fca632a0.jpg"
+  },
+  {
+    "id": 15507,
+    "type": "text",
+    "page_idx": 514,
+    "text": "6 In the isosceles triangle DEF, angle  $E =$  angle  $F = 35^{\\circ}$  and side  $EF = 10m$"
+  },
+  {
+    "id": 15508,
+    "type": "text",
+    "text": "a Calculate the perpendicular (shortest) distance from angle D to EF.",
+    "page_idx": 514
+  },
+  {
+    "id": 15509,
+    "type": "text",
+    "text": "b Calculate the length of the side DE.",
+    "page_idx": 514
+  },
+  {
+    "id": 15510,
+    "type": "image",
+    "page_idx": 514,
+    "img_path": "images/514f996fa039525f7e35c43125a8f4c744d9d1ff16277dd54079448295942504.jpg"
+  },
+  {
+    "id": 15511,
+    "type": "text",
+    "page_idx": 514,
+    "text": "7 Find the length of a diagonal (QT) of a regular pentagon that has sides of length  $10\\mathrm{cm}$ . Give your answer to the nearest whole number."
+  },
+  {
+    "id": 15512,
+    "type": "image",
+    "page_idx": 514,
+    "img_path": "images/50d087e46318cd3f56675c6b8392efeac9dd4306c0a71b170b7090c4d95ee889.jpg"
+  },
+  {
+    "id": 15513,
+    "type": "text",
+    "page_idx": 515,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 15514,
+    "type": "text",
+    "page_idx": 515,
+    "text": "8 The diagram shows a regular pentagon with sides of  $2\\mathrm{cm}$ .  $O$  is the centre of the pentagon."
+  },
+  {
+    "id": 15515,
+    "type": "text",
+    "text": "a Find angle AOE.",
+    "page_idx": 515
+  },
+  {
+    "id": 15516,
+    "type": "text",
+    "text": "b Find angle AOM.",
+    "page_idx": 515
+  },
+  {
+    "id": 15517,
+    "type": "text",
+    "text": "c Use trigonometry on triangle AOM to find the length OM.",
+    "page_idx": 515
+  },
+  {
+    "id": 15518,
+    "type": "text",
+    "text": "Find the area of triangle AOM.",
+    "page_idx": 515
+  },
+  {
+    "id": 15519,
+    "type": "text",
+    "text": "e Find the area of the pentagon.",
+    "page_idx": 515
+  },
+  {
+    "id": 15520,
+    "type": "image",
+    "page_idx": 515,
+    "img_path": "images/9178bb3160b1f4735278baa8359479c703bb55670d131428242ff445d2e197a7.jpg"
+  },
+  {
+    "id": 15521,
+    "type": "text",
+    "text": "9 Using a similar method to that described in question 8 find the area of a regular octagon with sides of  $4\\mathrm{cm}$",
+    "page_idx": 515
+  },
+  {
+    "id": 15522,
+    "type": "text",
+    "text": "10 Find the area of a regular pentagon with sides of 2a metres.",
+    "page_idx": 515
+  },
+  {
+    "id": 15523,
+    "type": "text",
+    "text": "11 Find the area of a regular polygon with  $n$  sides, each of length 2a metres.",
+    "page_idx": 515
+  },
+  {
+    "id": 15524,
+    "type": "text",
+    "page_idx": 515,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15525,
+    "type": "text",
+    "page_idx": 515,
+    "text": "Areas of two-dimensional shapes were covered in Chapter 7."
+  },
+  {
+    "id": 15526,
+    "type": "text",
+    "page_idx": 515,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 15527,
+    "type": "text",
+    "page_idx": 515,
+    "text": "Some students find applications of trigonometry confusing and difficult to understand."
+  },
+  {
+    "id": 15528,
+    "type": "text",
+    "page_idx": 515,
+    "text": "Did you find anything in this exercise confusing or difficult? If so, which parts?"
+  },
+  {
+    "id": 15529,
+    "type": "text",
+    "page_idx": 515,
+    "text": "Do you draw diagrams to understand the angles and trigonometric ratios? How can this help?"
+  },
+  {
+    "id": 15530,
+    "type": "text",
+    "page_idx": 515,
+    "text": "Choose at least one idea in trigonometry that you would you like to understand better. Describe three things you could do to achieve better understanding of this idea."
+  },
+  {
+    "id": 15531,
+    "type": "text",
+    "page_idx": 516,
+    "text": "15.6 Sines, cosines and tangents of angles greater than  $90^{\\circ}$"
+  },
+  {
+    "id": 15532,
+    "type": "text",
+    "page_idx": 516,
+    "text": "You have now seen that we can find the sine, cosine or tangent of an angle in a triangle by using your calculator."
+  },
+  {
+    "id": 15533,
+    "type": "text",
+    "page_idx": 516,
+    "text": "It is possible to find sines, cosines and tangents of angles of any size."
+  },
+  {
+    "id": 15534,
+    "type": "text",
+    "page_idx": 516,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 15535,
+    "type": "text",
+    "page_idx": 516,
+    "text": "Relationships between sines, cosines and tangents"
+  },
+  {
+    "id": 15536,
+    "type": "text",
+    "page_idx": 516,
+    "text": "Use a calculator to find each of the following:"
+  },
+  {
+    "id": 15537,
+    "type": "text",
+    "page_idx": 516,
+    "text": "sin 30° and sin 150°"
+  },
+  {
+    "id": 15538,
+    "type": "text",
+    "page_idx": 516,
+    "text": "sin 10° and sin 170°"
+  },
+  {
+    "id": 15539,
+    "type": "text",
+    "page_idx": 516,
+    "text": "sin 60° and sin 120°"
+  },
+  {
+    "id": 15540,
+    "type": "text",
+    "page_idx": 516,
+    "text": "sin5° and sin175°"
+  },
+  {
+    "id": 15541,
+    "type": "text",
+    "page_idx": 516,
+    "text": "What did you notice? What is the relationship between the two angles in each pair?"
+  },
+  {
+    "id": 15542,
+    "type": "text",
+    "page_idx": 516,
+    "text": "Now do the same for these pairs:"
+  },
+  {
+    "id": 15543,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos30°and cos330°</td><td>tan30°and tan210°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15544,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos60°and cos300°</td><td>tan60°and tan240°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15545,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos50°and cos310°</td><td>tan15°and tan195°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15546,
+    "type": "text",
+    "text": "[Table Row] <tr><td>cos15°and cos345°</td><td>tan100and tan280°</td></tr>",
+    "page_idx": 516
+  },
+  {
+    "id": 15547,
+    "type": "text",
+    "page_idx": 516,
+    "text": "The pattern is different for each of sine, cosine and tangent."
+  },
+  {
+    "id": 15548,
+    "type": "text",
+    "page_idx": 516,
+    "text": "Try plotting the value of  $\\sin \\theta$ ,  $\\cos \\theta$  and  $\\tan \\theta$  against  $\\theta$  for several values of  $\\theta$ . You can find a graph plotting website on the internet, using a search."
+  },
+  {
+    "id": 15549,
+    "type": "text",
+    "page_idx": 516,
+    "text": "In the rest of this section you will explore the graphs of  $y = \\sin \\theta$ ,  $y = \\cos \\theta$  and  $y = \\tan \\theta$  in more detail."
+  },
+  {
+    "id": 15550,
+    "type": "text",
+    "page_idx": 516,
+    "text": "The graph of  $y = \\sin \\theta$"
+  },
+  {
+    "id": 15551,
+    "type": "text",
+    "page_idx": 516,
+    "text": "If you plot several values of  $\\sin \\theta$  against  $\\theta$  you will get the following:"
+  },
+  {
+    "id": 15552,
+    "type": "image",
+    "page_idx": 516,
+    "img_path": "images/1351543302a9f2bde0745177ce640f47c87cd58082f74ed69d0c9cab813178c5.jpg"
+  },
+  {
+    "id": 15553,
+    "type": "text",
+    "page_idx": 517,
+    "text": "The graph repeats itself every  $360^{\\circ}$  in both the positive and negative directions."
+  },
+  {
+    "id": 15554,
+    "type": "text",
+    "page_idx": 517,
+    "text": "Notice that the section of the graph between 0 and  $180^{\\circ}$  has reflection symmetry, with the line of reflection being  $\\theta = 90^{\\circ}$ . This means that  $\\sin \\theta = \\sin (180^{\\circ} - \\theta)$ , exactly as you should have seen in the investigation."
+  },
+  {
+    "id": 15555,
+    "type": "text",
+    "page_idx": 517,
+    "text": "It is also very important to notice that the value of  $\\sin \\theta$  is never larger than 1 nor smaller than  $-1$ ."
+  },
+  {
+    "id": 15556,
+    "type": "text",
+    "page_idx": 517,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 15557,
+    "type": "text",
+    "page_idx": 517,
+    "text": "sinθ, cosθ and tanθ are actually functions. Functions take input values and give you a numerical output. For example, if you use your calculator to find sin 30° you will get the answer  $\\frac{1}{2}$ . Your calculator takes the input 30°, finds the sine of this angle and gives you the output  $\\frac{1}{2}$ . You will learn more about functions in Chapter 22."
+  },
+  {
+    "id": 15558,
+    "type": "text",
+    "page_idx": 517,
+    "text": "The graph of  $y = \\cos \\theta$"
+  },
+  {
+    "id": 15559,
+    "type": "text",
+    "page_idx": 517,
+    "text": "If you plot several values of  $\\cos \\theta$  against  $\\theta$  you will get a similar shape, but the line of symmetry is in a different place:"
+  },
+  {
+    "id": 15560,
+    "type": "image",
+    "page_idx": 517,
+    "img_path": "images/b4ffb9e3075a19757d4bf31114115bf72de6d0be91e79cf9e75ebf5f727fd146.jpg"
+  },
+  {
+    "id": 15561,
+    "type": "text",
+    "page_idx": 517,
+    "text": "The graph repeats itself every  $360^{\\circ}$  in both the positive and negative directions."
+  },
+  {
+    "id": 15562,
+    "type": "text",
+    "page_idx": 517,
+    "text": "Here the graph is symmetrical from 0 to  $360^{\\circ}$ , with the reflection line at  $\\theta = 180^{\\circ}$ . This means that  $\\cos \\theta = \\cos (360^{\\circ} - \\theta)$ , again you should have seen this in the investigation. By experimenting with some angles you will also see that  $\\cos \\theta = -\\cos (180^{\\circ} - \\theta)$"
+  },
+  {
+    "id": 15563,
+    "type": "text",
+    "page_idx": 517,
+    "text": "It is also very important to notice that the value of  $\\cos \\theta$  is never larger than 1 normally smaller than  $-1$ ."
+  },
+  {
+    "id": 15564,
+    "type": "text",
+    "page_idx": 518,
+    "text": "The graph of  $y = \\tan \\theta$"
+  },
+  {
+    "id": 15565,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Finally, if you plot values of  $\\tan \\theta$  against  $\\theta$  you get this graph:"
+  },
+  {
+    "id": 15566,
+    "type": "image",
+    "page_idx": 518,
+    "img_path": "images/b08b12ad49132a15eccd888bf16faede9b13344d0f4fd2f8be0c6b1de94219d4.jpg"
+  },
+  {
+    "id": 15567,
+    "type": "text",
+    "page_idx": 518,
+    "text": "The graph approaches the vertical dotted lines, but it never touches nor crosses them."
+  },
+  {
+    "id": 15568,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Notice that this graph has no reflection symmetry, but it does repeat every  $180^{\\circ}$ . This means that  $\\tan \\theta = \\tan (180^{\\circ} + \\theta)$ ."
+  },
+  {
+    "id": 15569,
+    "type": "text",
+    "page_idx": 518,
+    "text": "Note that, unlike  $\\sin \\theta$  and  $\\cos \\theta$ ,  $\\tan \\theta$  is not restricted to being less than 1 or greater than -1."
+  }
+]
+```

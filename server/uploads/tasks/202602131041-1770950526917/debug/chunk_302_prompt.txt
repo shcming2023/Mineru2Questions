@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 21140,
+    "type": "text",
+    "page_idx": 774,
+    "text": "d  $a = b - \\frac{3y}{2}$"
+  },
+  {
+    "id": 21141,
+    "type": "text",
+    "text": "5 Given that  $y = \\frac{a}{a + 2}$ , express this formula in terms of  $a$ .",
+    "page_idx": 774
+  },
+  {
+    "id": 21142,
+    "type": "text",
+    "text": "6 A circle sector has an area  $(A)$  of  $\\frac{1}{2} r^2\\theta$ . Rearrange the formula to find the radius in terms of  $A$  and  $\\theta$ .",
+    "page_idx": 774
+  },
+  {
+    "id": 21143,
+    "type": "text",
+    "text": "7 Given that  $\\frac{y}{x} = \\frac{kx}{z^2}$ , express this formula in terms of  $x$ .",
+    "page_idx": 774
+  },
+  {
+    "id": 21144,
+    "type": "text",
+    "page_idx": 774,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 21145,
+    "type": "text",
+    "page_idx": 774,
+    "text": "You learnt how to factorise in Chapter 6."
+  },
+  {
+    "id": 21146,
+    "type": "text",
+    "page_idx": 775,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 21147,
+    "type": "text",
+    "page_idx": 775,
+    "text": "8 In physics, the kinetic energy (E) of a particle can be found using the formula  $E = \\frac{1}{2} mv^2$ , where  $m$  is the mass and  $v$  is the velocity of the particle."
+  },
+  {
+    "id": 21148,
+    "type": "text",
+    "text": "a Find E when m = 8 and v = 3.5.",
+    "page_idx": 775
+  },
+  {
+    "id": 21149,
+    "type": "text",
+    "text": "b Show how you could rearrange the formula to find  $\\nu$",
+    "page_idx": 775
+  },
+  {
+    "id": 21150,
+    "type": "text",
+    "page_idx": 775,
+    "text": "9 The volume  $(V)$  of a cylinder is found using the formula  $V = \\pi r^2 h$ , where  $r$  is the radius and  $h$  is the height of the cylinder."
+  },
+  {
+    "id": 21151,
+    "type": "text",
+    "text": "a Find the volume, correct to the nearest cm³, of a cylinder with a radius of 0.8 m and height of 1 m.",
+    "page_idx": 775
+  },
+  {
+    "id": 21152,
+    "type": "text",
+    "text": "b Rearrange the formula to make  $r$  the subject.",
+    "page_idx": 775
+  },
+  {
+    "id": 21153,
+    "type": "text",
+    "page_idx": 775,
+    "text": "10 You can use the formula  $A = \\frac{\\pi d^2}{4}$  to find the area (A) of a circle, where  $d$  is the diameter of the circle."
+  },
+  {
+    "id": 21154,
+    "type": "text",
+    "text": "a Find the area of a circle of diameter  $1.2\\mathrm{m}$",
+    "page_idx": 775
+  },
+  {
+    "id": 21155,
+    "type": "text",
+    "text": "b Use the formula  $A = \\pi r^2$  to find the area of the same circle.",
+    "page_idx": 775
+  },
+  {
+    "id": 21156,
+    "type": "text",
+    "text": "c Express the formula  $A = \\frac{\\pi d^2}{4}$  in a way that would allow you to find the diameter of the circle when the area is known.",
+    "page_idx": 775
+  },
+  {
+    "id": 21157,
+    "type": "text",
+    "page_idx": 775,
+    "text": "11 A cylindrical iron tank that is  $hm$  tall with a radius of  $rm$  is placed on a concrete base. The top of the tank and the curved surface are to be coated with a sealant to prevent rust."
+  },
+  {
+    "id": 21158,
+    "type": "text",
+    "text": "a Using  $h$  and  $r$  write a formula for the surface area to be painted.",
+    "page_idx": 775
+  },
+  {
+    "id": 21159,
+    "type": "text",
+    "text": "b 1 litre of sealant covers 6 square metres of surface. Modify the surface area formula you found in (a) to work out how many litres of sealant are needed for the tank.",
+    "page_idx": 775
+  },
+  {
+    "id": 21160,
+    "type": "text",
+    "text": "c Calculate the amount of sealant you would need to cover a tank that is 2.3 metres high with a radius of 1.7 metres.",
+    "page_idx": 775
+  },
+  {
+    "id": 21161,
+    "type": "text",
+    "page_idx": 775,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 21162,
+    "type": "text",
+    "page_idx": 775,
+    "text": "What strategies, skills and procedures did you use to complete this exercise?"
+  },
+  {
+    "id": 21163,
+    "type": "text",
+    "page_idx": 775,
+    "text": "Which were the most effective? Why?"
+  },
+  {
+    "id": 21164,
+    "type": "text",
+    "page_idx": 776,
+    "text": "22.3 Functions and function notation"
+  },
+  {
+    "id": 21165,
+    "type": "text",
+    "page_idx": 776,
+    "text": "A function is a rule or set of instructions for changing one number (the input) into another number (the output). If  $y$  is a function of  $x$ , then the value of  $y$  depends on the values you use for  $x$ . In a function, there is only one possible value of  $y$  for each value of  $x$ ."
+  },
+  {
+    "id": 21166,
+    "type": "text",
+    "page_idx": 776,
+    "text": "Function notation"
+  },
+  {
+    "id": 21167,
+    "type": "text",
+    "page_idx": 776,
+    "text": "Function notation is a mathematical way of writing equations (functions). Function notation is widely used in computer applications and also in technical fields."
+  },
+  {
+    "id": 21168,
+    "type": "text",
+    "page_idx": 776,
+    "text": "You already know that a function can be represented in a number of ways. For example, you can show the function  $y = 4x - 1$  using:"
+  },
+  {
+    "id": 21169,
+    "type": "text",
+    "text": "a function machine (flow diagram): Input  $\\rightarrow \\boxed{\\times 4}\\rightarrow \\boxed{-1}\\rightarrow$  output",
+    "page_idx": 776
+  },
+  {
+    "id": 21170,
+    "type": "text",
+    "text": "a mapping diagram:",
+    "page_idx": 776
+  },
+  {
+    "id": 21171,
+    "type": "image",
+    "page_idx": 776,
+    "img_path": "images/8e6298c215f2081860c35738acdaaa89ccee0fac30fe20c873ce9559d2bcea0f.jpg"
+  },
+  {
+    "id": 21172,
+    "type": "text",
+    "page_idx": 776,
+    "text": "a table of values:"
+  },
+  {
+    "id": 21173,
+    "type": "text",
+    "text": "[Table Row] <tr><td>x</td><td>1</td><td>2</td><td>3</td></tr>",
+    "page_idx": 776
+  },
+  {
+    "id": 21174,
+    "type": "text",
+    "text": "[Table Row] <tr><td>y</td><td>3</td><td>7</td><td>11</td></tr>",
+    "page_idx": 776
+  },
+  {
+    "id": 21175,
+    "type": "text",
+    "text": "a set of  $x$  and  $y$  -values (coordinates):  $\\{(1,3),(2,7),(3,11),(4,15)\\}$  In set notation this is written as  $\\{(x,y):y = 4x - 1\\}$",
+    "page_idx": 776
+  },
+  {
+    "id": 21176,
+    "type": "text",
+    "text": "a graph:",
+    "page_idx": 776
+  },
+  {
+    "id": 21177,
+    "type": "image",
+    "page_idx": 776,
+    "img_path": "images/d9240c88d0f570e14d94aa661a8c349a154466838c6a070bc700f33c5cfe1f4c.jpg"
+  },
+  {
+    "id": 21178,
+    "type": "text",
+    "page_idx": 776,
+    "text": "When you write the equation  $y = 4x - 1$  in function notation it becomes  $f(x) = 4x - 1$ ."
+  },
+  {
+    "id": 21179,
+    "type": "text",
+    "page_idx": 777,
+    "text": "You read  $\\mathrm{f}(x)$  as 'the function of  $x$ ' or 'f of  $x$ '."
+  },
+  {
+    "id": 21180,
+    "type": "image",
+    "page_idx": 777,
+    "img_path": "images/40ad46a59b4e557c4052f4461e89154c300cbac65c09fd4b30c246f17a8e1f39.jpg"
+  },
+  {
+    "id": 21181,
+    "type": "text",
+    "page_idx": 777,
+    "text": "If  $f(x) = 4x - 1$ , then  $f(5)$  means the value of the function when  $x = 5$ ."
+  },
+  {
+    "id": 21182,
+    "type": "text",
+    "page_idx": 777,
+    "text": "In other words,  $f(5) = 4 \\times 5 - 1 = 19$ ."
+  },
+  {
+    "id": 21183,
+    "type": "text",
+    "page_idx": 777,
+    "text": "Similarly.  $f(-2) = 4 \\times -2 - 1 = -9$ ."
+  },
+  {
+    "id": 21184,
+    "type": "text",
+    "page_idx": 777,
+    "text": "The number  $4x - 1$  is sometimes called the image of  $x$  (under function  $f$ )."
+  },
+  {
+    "id": 21185,
+    "type": "text",
+    "page_idx": 777,
+    "text": "When a problem involves two or more functions, you use different letters to represent them. For example, you could have:"
+  },
+  {
+    "id": 21186,
+    "type": "equation",
+    "page_idx": 777,
+    "text": "$$\ng (x) = x ^ {2} - 2 x + 3 \\text {a n d} h (x) = 5 x - 3\n$$"
+  },
+  {
+    "id": 21187,
+    "type": "text",
+    "page_idx": 777,
+    "text": "You can show the steps you take to work out the value of any function  $f(x)$  using a simple flow diagram. For example, you can represent the function  $h(x) = 5x - 3$  as:"
+  },
+  {
+    "id": 21188,
+    "type": "equation",
+    "page_idx": 777,
+    "text": "$$\nx - \\boxed {x 5} - \\boxed {- 3} \\rightarrow 5 x - 3\n$$"
+  },
+  {
+    "id": 21189,
+    "type": "text",
+    "page_idx": 777,
+    "text": "The function  $j(x) = 5(x - 3)$  can be represented as:"
+  },
+  {
+    "id": 21190,
+    "type": "equation",
+    "page_idx": 777,
+    "text": "$$\nx \\rightarrow \\boxed {- 3} \\rightarrow \\boxed {\\times 5} \\rightarrow 5 (x - 3)\n$$"
+  },
+  {
+    "id": 21191,
+    "type": "text",
+    "page_idx": 777,
+    "text": "Note that the flow charts show the same operations but, as they are done in a different order, they produce different results."
+  },
+  {
+    "id": 21192,
+    "type": "text",
+    "page_idx": 777,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 21193,
+    "type": "text",
+    "page_idx": 777,
+    "text": "Shadow maths"
+  },
+  {
+    "id": 21194,
+    "type": "text",
+    "text": "1 What does it mean mathematically when we say 'the length of your shadow is a function of your height and the time of day'?",
+    "page_idx": 777
+  },
+  {
+    "id": 21195,
+    "type": "text",
+    "text": "2 Investigate how you can use mathematical functions involving the length of a shadow and time to determine the height of tall objects such as trees or buildings. Share your ideas and findings with your group.",
+    "page_idx": 777
+  },
+  {
+    "id": 21196,
+    "type": "text",
+    "page_idx": 777,
+    "text": "TIP"
+  },
+  {
+    "id": 21197,
+    "type": "text",
+    "page_idx": 777,
+    "text": "In function notation you leave out the  $y$  and replace it with the notation  $f(x)$ . So, if  $f$  is a function and  $x$  is an input, then  $f(x)$  is the output when  $f$  is applied to  $x$ ."
+  },
+  {
+    "id": 21198,
+    "type": "image",
+    "page_idx": 777,
+    "img_path": "images/d53d698f3abde7dcf6621220df46e8e951b600486d100d27739a276c163c293c.jpg"
+  },
+  {
+    "id": 21199,
+    "type": "text",
+    "page_idx": 778,
+    "text": "WORKED EXAMPLE 10"
+  },
+  {
+    "id": 21200,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Given that  $f(x) = x^{2} - 3x$  and  $y = \\ldots$  find the value of:"
+  },
+  {
+    "id": 21201,
+    "type": "text",
+    "page_idx": 778,
+    "text": "a f(6)"
+  },
+  {
+    "id": 21202,
+    "type": "text",
+    "page_idx": 778,
+    "text": "b f(-3)"
+  },
+  {
+    "id": 21203,
+    "type": "text",
+    "page_idx": 778,
+    "text": "g(1)"
+  },
+  {
+    "id": 21204,
+    "type": "text",
+    "page_idx": 778,
+    "text": "d g(6)"
+  },
+  {
+    "id": 21205,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Answers"
+  },
+  {
+    "id": 21206,
+    "type": "text",
+    "text": "a  $f(6) = 6^{2} - 3(6) = 36 - 18 = 18$",
+    "page_idx": 778
+  },
+  {
+    "id": 21207,
+    "type": "text",
+    "text": "b  $f(-3) = (-3)^{2} - 3(-3) = 9 + 9 = 18$",
+    "page_idx": 778
+  },
+  {
+    "id": 21208,
+    "type": "text",
+    "text": "c g（）=4（）-6=2-6=-4",
+    "page_idx": 778
+  },
+  {
+    "id": 21209,
+    "type": "text",
+    "text": "d g(6) = 4(6) - 6 = 24 - 6 = 18",
+    "page_idx": 778
+  },
+  {
+    "id": 21210,
+    "type": "text",
+    "page_idx": 778,
+    "text": "WORKED EXAMPLE 11"
+  },
+  {
+    "id": 21211,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Given  $h(x) = 9 - x^2$"
+  },
+  {
+    "id": 21212,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Find:"
+  },
+  {
+    "id": 21213,
+    "type": "text",
+    "page_idx": 778,
+    "text": "i h(0)"
+  },
+  {
+    "id": 21214,
+    "type": "text",
+    "page_idx": 778,
+    "text": "ii h(3)"
+  },
+  {
+    "id": 21215,
+    "type": "text",
+    "page_idx": 778,
+    "text": "iii h(9)"
+  },
+  {
+    "id": 21216,
+    "type": "text",
+    "page_idx": 778,
+    "text": "iv h(-9)"
+  },
+  {
+    "id": 21217,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Answers"
+  },
+  {
+    "id": 21218,
+    "type": "text",
+    "text": "i  $h(0) = 9 - (0)^2 = 9 - 0 = 9$",
+    "page_idx": 778
+  },
+  {
+    "id": 21219,
+    "type": "text",
+    "text": "ii  $h(3) = 9 - (3)^2 = 9 - 9 = 0$",
+    "page_idx": 778
+  },
+  {
+    "id": 21220,
+    "type": "text",
+    "text": "iii  $h(9) = 9 - (9)^2 = 9 - 81 = -72$",
+    "page_idx": 778
+  },
+  {
+    "id": 21221,
+    "type": "text",
+    "text": "iv  $h(-9) = 9 - (-9)^2 = 9 - 81 = -72$",
+    "page_idx": 778
+  },
+  {
+    "id": 21222,
+    "type": "text",
+    "page_idx": 778,
+    "text": "WORKED EXAMPLE 12"
+  },
+  {
+    "id": 21223,
+    "type": "equation",
+    "page_idx": 778,
+    "text": "$$\nf (x) = 3 + 2 x\n$$"
+  },
+  {
+    "id": 21224,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Solve the equation  $f(x) = 6$ ."
+  },
+  {
+    "id": 21225,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Answer"
+  },
+  {
+    "id": 21226,
+    "type": "equation",
+    "page_idx": 778,
+    "text": "$$\n3 + 2 x = 6\n$$"
+  },
+  {
+    "id": 21227,
+    "type": "text",
+    "page_idx": 778,
+    "text": "The functions are equivalent."
+  },
+  {
+    "id": 21228,
+    "type": "equation",
+    "page_idx": 778,
+    "text": "$$\n\\begin{array}{l} 2 x = 6 - 3 \\\\ 2 x = 3 \\\\ x = 1. 5 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 21229,
+    "type": "text",
+    "page_idx": 778,
+    "text": "WORKED EXAMPLE 13"
+  },
+  {
+    "id": 21230,
+    "type": "text",
+    "page_idx": 778,
+    "text": "Given the functions  $f(x) = x^2$  and  $g(x) = x + 2$ ,"
+  },
+  {
+    "id": 21231,
+    "type": "text",
+    "text": "a solve the equation  $f(x) = g(x)$",
+    "page_idx": 778
+  },
+  {
+    "id": 21232,
+    "type": "text",
+    "text": "b solve the equation  $4g(x) = g(x) - 3.$",
+    "page_idx": 778
+  },
+  {
+    "id": 21233,
+    "type": "text",
+    "page_idx": 779,
+    "text": "WORKED EXAMPLE 13 CONTINUED"
+  },
+  {
+    "id": 21234,
+    "type": "text",
+    "page_idx": 779,
+    "text": "Answers"
+  },
+  {
+    "id": 21235,
+    "type": "text",
+    "page_idx": 779,
+    "text": "$f(x) = g(x)$"
+  },
+  {
+    "id": 21236,
+    "type": "equation",
+    "page_idx": 779,
+    "text": "$$\nf (x) = g (x)\n$$"
+  },
+  {
+    "id": 21237,
+    "type": "equation",
+    "page_idx": 779,
+    "text": "$$\nx ^ {2} = x + 2\n$$"
+  },
+  {
+    "id": 21238,
+    "type": "text",
+    "page_idx": 779,
+    "text": "The functions are equivalent."
+  },
+  {
+    "id": 21239,
+    "type": "equation",
+    "page_idx": 779,
+    "text": "$$\nx ^ {2} - x - 2 = 0\n$$"
+  }
+]
+```

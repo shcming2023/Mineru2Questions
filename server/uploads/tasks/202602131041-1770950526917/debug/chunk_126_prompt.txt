@@ -1,0 +1,810 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 8820,
+    "type": "text",
+    "page_idx": 257,
+    "text": "b a blue ball."
+  },
+  {
+    "id": 8821,
+    "type": "text",
+    "page_idx": 257,
+    "text": "[1]"
+  },
+  {
+    "id": 8822,
+    "type": "text",
+    "page_idx": 257,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q4, June 2019"
+  },
+  {
+    "id": 8823,
+    "type": "image",
+    "page_idx": 258,
+    "img_path": "images/c27f74550537949aa3ff1cf2a3802c90f4e500b2e73adb312070ab75e49f44ca.jpg"
+  },
+  {
+    "id": 8824,
+    "type": "text",
+    "page_idx": 258,
+    "text": "6 Write down the following numbers in standard form."
+  },
+  {
+    "id": 8825,
+    "type": "text",
+    "page_idx": 258,
+    "text": "a 640000"
+  },
+  {
+    "id": 8826,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8827,
+    "type": "text",
+    "page_idx": 258,
+    "text": "b 0.0006"
+  },
+  {
+    "id": 8828,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8829,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q7, June 2019"
+  },
+  {
+    "id": 8830,
+    "type": "text",
+    "page_idx": 258,
+    "text": "7 A bag contains blue, red, yellow and green balls only."
+  },
+  {
+    "id": 8831,
+    "type": "text",
+    "page_idx": 258,
+    "text": "A ball is taken from the bag at random."
+  },
+  {
+    "id": 8832,
+    "type": "text",
+    "page_idx": 258,
+    "text": "The table shows some information about the probabilities."
+  },
+  {
+    "id": 8833,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Colour</td><td>Blue</td><td>Red</td><td>Yellow</td><td>Green</td></tr>",
+    "page_idx": 258
+  },
+  {
+    "id": 8834,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Probability</td><td>0.15</td><td>0.2</td><td></td><td>0.43</td></tr>",
+    "page_idx": 258
+  },
+  {
+    "id": 8835,
+    "type": "text",
+    "page_idx": 258,
+    "text": "a Complete the table. [Using Figure 1 in the Unit 2 Past Paper Questions Resource Sheet.]"
+  },
+  {
+    "id": 8836,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[2]"
+  },
+  {
+    "id": 8837,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Abdul takes a ball at random and replaces it in the bag."
+  },
+  {
+    "id": 8838,
+    "type": "text",
+    "page_idx": 258,
+    "text": "He does this 200 times."
+  },
+  {
+    "id": 8839,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Find how many times he expects to take a red ball."
+  },
+  {
+    "id": 8840,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8841,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q4, June 2020"
+  },
+  {
+    "id": 8842,
+    "type": "text",
+    "page_idx": 258,
+    "text": "8 Work out $1.20 as a percentage of $16."
+  },
+  {
+    "id": 8843,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8844,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q2, June 2019"
+  },
+  {
+    "id": 8845,
+    "type": "text",
+    "page_idx": 258,
+    "text": "9 a Write the number 0.0605 in standard form."
+  },
+  {
+    "id": 8846,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8847,
+    "type": "text",
+    "page_idx": 258,
+    "text": "b Calculate  $(1.63 \\times 10^{12}) \\times (2.47 \\times 10^{-1})$ ."
+  },
+  {
+    "id": 8848,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Give your answer in standard form."
+  },
+  {
+    "id": 8849,
+    "type": "text",
+    "page_idx": 258,
+    "text": "[1]"
+  },
+  {
+    "id": 8850,
+    "type": "text",
+    "page_idx": 258,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q16, June 2020"
+  },
+  {
+    "id": 8851,
+    "type": "text",
+    "page_idx": 259,
+    "text": "10 The diagram shows the net of a triangular prism on a  $1\\mathrm{cm}^2$  grid."
+  },
+  {
+    "id": 8852,
+    "type": "image",
+    "page_idx": 259,
+    "img_path": "images/f1b090290a8e208ed4158f004795bdb0af6c1fdbb9f08cd4a5d09474e7d79f88.jpg"
+  },
+  {
+    "id": 8853,
+    "type": "text",
+    "page_idx": 259,
+    "text": "a Write down the mathematical name for the type of triangle shown on the grid."
+  },
+  {
+    "id": 8854,
+    "type": "text",
+    "page_idx": 259,
+    "text": "[1]"
+  },
+  {
+    "id": 8855,
+    "type": "text",
+    "page_idx": 260,
+    "text": "b i Measure the perpendicular height of the triangle."
+  },
+  {
+    "id": 8856,
+    "type": "text",
+    "text": "ii Calculate the area of the triangle.",
+    "page_idx": 260
+  },
+  {
+    "id": 8857,
+    "type": "text",
+    "text": "iii Calculate the volume of the triangular prism.",
+    "page_idx": 260
+  },
+  {
+    "id": 8858,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[1]"
+  },
+  {
+    "id": 8859,
+    "type": "text",
+    "text": "[2]",
+    "page_idx": 260
+  },
+  {
+    "id": 8860,
+    "type": "text",
+    "text": "[2]",
+    "page_idx": 260
+  },
+  {
+    "id": 8861,
+    "type": "text",
+    "page_idx": 260,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 31 Q3, June 2020"
+  },
+  {
+    "id": 8862,
+    "type": "text",
+    "page_idx": 260,
+    "text": "11 a Simplify  $8a + 3b - 2a + b$"
+  },
+  {
+    "id": 8863,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[2]"
+  },
+  {
+    "id": 8864,
+    "type": "text",
+    "page_idx": 260,
+    "text": "b Calculate the value of  $4x^{2} + xy$  when  $x = 3$  and  $y = -2$"
+  },
+  {
+    "id": 8865,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[2]"
+  },
+  {
+    "id": 8866,
+    "type": "text",
+    "page_idx": 260,
+    "text": "c Solve these equations."
+  },
+  {
+    "id": 8867,
+    "type": "text",
+    "page_idx": 260,
+    "text": "x 4 20"
+  },
+  {
+    "id": 8868,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[1]"
+  },
+  {
+    "id": 8869,
+    "type": "text",
+    "page_idx": 260,
+    "text": "ii  $3x - 5 = 16$"
+  },
+  {
+    "id": 8870,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[2]"
+  },
+  {
+    "id": 8871,
+    "type": "text",
+    "page_idx": 260,
+    "text": "iii  $5(2x + 1) = 27$"
+  },
+  {
+    "id": 8872,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[3]"
+  },
+  {
+    "id": 8873,
+    "type": "text",
+    "page_idx": 260,
+    "text": "d Make  $r$  the subject of this formula."
+  },
+  {
+    "id": 8874,
+    "type": "equation",
+    "page_idx": 260,
+    "text": "$$\np = 3 r - 5\n$$"
+  },
+  {
+    "id": 8875,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[2]"
+  },
+  {
+    "id": 8876,
+    "type": "text",
+    "page_idx": 260,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 31 Q9, June 2019"
+  },
+  {
+    "id": 8877,
+    "type": "text",
+    "page_idx": 260,
+    "text": "12"
+  },
+  {
+    "id": 8878,
+    "type": "image",
+    "page_idx": 260,
+    "img_path": "images/dd06bea3a4b7a39f863f80a99c3f4add427253ed10db79e50a67445c55e82fd9.jpg"
+  },
+  {
+    "id": 8879,
+    "type": "text",
+    "page_idx": 260,
+    "text": "The diagram shows the surface of a garden pond, made from a rectangle and two semicircles."
+  },
+  {
+    "id": 8880,
+    "type": "text",
+    "page_idx": 260,
+    "text": "The rectangle measures  $3\\mathrm{m}$  by  $1.2\\mathrm{m}$"
+  },
+  {
+    "id": 8881,
+    "type": "text",
+    "page_idx": 260,
+    "text": "a Calculate the area of this surface."
+  },
+  {
+    "id": 8882,
+    "type": "text",
+    "page_idx": 260,
+    "text": "[3]"
+  },
+  {
+    "id": 8883,
+    "type": "text",
+    "page_idx": 261,
+    "text": "b The pond is a prism and the water in the pond has a depth of  $20\\mathrm{cm}$  Calculate the number of litres of water in the pond."
+  },
+  {
+    "id": 8884,
+    "type": "text",
+    "page_idx": 261,
+    "text": "[3]"
+  },
+  {
+    "id": 8885,
+    "type": "text",
+    "page_idx": 261,
+    "text": "c After a rainfall, the number of litres of water in the pond is 1007. Calculate the increase in the depth of water in the pond. Give your answers in centimetres."
+  },
+  {
+    "id": 8886,
+    "type": "text",
+    "page_idx": 261,
+    "text": "[3]"
+  },
+  {
+    "id": 8887,
+    "type": "text",
+    "page_idx": 261,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q5. June 2019"
+  },
+  {
+    "id": 8888,
+    "type": "text",
+    "page_idx": 261,
+    "text": "13 a"
+  },
+  {
+    "id": 8889,
+    "type": "image",
+    "page_idx": 261,
+    "img_path": "images/54420dce39e115a4334c92f6f310f2e7247df0775c9253681fef0512c7de0571.jpg"
+  },
+  {
+    "id": 8890,
+    "type": "text",
+    "page_idx": 261,
+    "text": "The diagram shows a solid cone and a solid hemisphere."
+  },
+  {
+    "id": 8891,
+    "type": "text",
+    "page_idx": 261,
+    "text": "The cone has radius  $2.4\\mathrm{cm}$  and slant height  $6.3\\mathrm{cm}$"
+  },
+  {
+    "id": 8892,
+    "type": "text",
+    "page_idx": 261,
+    "text": "The hemisphere has radius  $R\\mathrm{cm}$"
+  },
+  {
+    "id": 8893,
+    "type": "text",
+    "page_idx": 261,
+    "text": "The total surface area of the cone is equal to the total surface area of the hemisphere."
+  },
+  {
+    "id": 8894,
+    "type": "text",
+    "page_idx": 261,
+    "text": "Calculate the value of  $R$ ."
+  },
+  {
+    "id": 8895,
+    "type": "text",
+    "page_idx": 261,
+    "text": "[The curved surface area,  $A$ , of a cone with radius  $r$  and slant height  $l$  is  $A = \\pi r l$ .]"
+  },
+  {
+    "id": 8896,
+    "type": "text",
+    "page_idx": 261,
+    "text": "[The curved surface area,  $A$ , of a sphere with radius  $r$  is  $A = 4\\pi r^2$ .]"
+  },
+  {
+    "id": 8897,
+    "type": "text",
+    "page_idx": 261,
+    "text": "[4]"
+  },
+  {
+    "id": 8898,
+    "type": "image",
+    "page_idx": 262,
+    "img_path": "images/881b85ab33cbdf84a89e9550b891caec5d80fc76a76d88a0e333f517b65b2af0.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 8899,
+    "type": "image",
+    "page_idx": 262,
+    "img_path": "images/09f2e25bd5004cc546b5fde6dc8b3c3bffb69d986a3f978f21081b9df4823ef5.jpg"
+  },
+  {
+    "id": 8900,
+    "type": "text",
+    "page_idx": 262,
+    "text": "The diagram shows a solid cone with radius  $7.6\\mathrm{cm}$  and height  $16\\mathrm{cm}$ ."
+  },
+  {
+    "id": 8901,
+    "type": "text",
+    "page_idx": 262,
+    "text": "A cut is made parallel to the base of the cone and the top section is removed."
+  },
+  {
+    "id": 8902,
+    "type": "text",
+    "page_idx": 262,
+    "text": "The remaining solid has height  $12\\mathrm{cm}$  as shown in the diagram."
+  },
+  {
+    "id": 8903,
+    "type": "text",
+    "page_idx": 262,
+    "text": "Calculate the volume of the remaining solid."
+  },
+  {
+    "id": 8904,
+    "type": "text",
+    "page_idx": 262,
+    "text": "[The volume,  $V$ , of a cone with radius  $r$  and height  $h$  is  $V = \\frac{1}{3}\\pi r^2 h$ .]"
+  },
+  {
+    "id": 8905,
+    "type": "text",
+    "page_idx": 262,
+    "text": "[4]"
+  },
+  {
+    "id": 8906,
+    "type": "text",
+    "page_idx": 262,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q3, June 2021"
+  },
+  {
+    "id": 8907,
+    "type": "text",
+    "page_idx": 263,
+    "text": "> Unit 2 Project"
+  },
+  {
+    "id": 8908,
+    "type": "text",
+    "page_idx": 263,
+    "text": "Odds and evens"
+  },
+  {
+    "id": 8909,
+    "type": "text",
+    "page_idx": 263,
+    "text": "This set of numbered balls is used to play a game:"
+  },
+  {
+    "id": 8910,
+    "type": "image",
+    "page_idx": 263,
+    "img_path": "images/e03e31d9d50124aeaf62f63d1249f4a17c2c555d79aa37f88b6758f430dbb4c1.jpg"
+  },
+  {
+    "id": 8911,
+    "type": "text",
+    "page_idx": 263,
+    "text": "To play the game, the balls are mixed up and two balls are randomly picked out together. For example:"
+  },
+  {
+    "id": 8912,
+    "type": "image",
+    "page_idx": 263,
+    "img_path": "images/777a7ab194d62df1b8ae1db59bc5107c106c2947c80c05033db655297a7cd878.jpg"
+  },
+  {
+    "id": 8913,
+    "type": "text",
+    "page_idx": 263,
+    "text": "The numbers on the balls are added together:  $4 + 5 = 9$"
+  },
+  {
+    "id": 8914,
+    "type": "text",
+    "page_idx": 263,
+    "text": "If the total is even, you win."
+  },
+  {
+    "id": 8915,
+    "type": "text",
+    "page_idx": 263,
+    "text": "If the total is odd, you lose."
+  },
+  {
+    "id": 8916,
+    "type": "text",
+    "page_idx": 263,
+    "text": "How can you decide whether the game is fair?"
+  },
+  {
+    "id": 8917,
+    "type": "text",
+    "page_idx": 263,
+    "text": "Here are three more sets of balls:"
+  },
+  {
+    "id": 8918,
+    "type": "image",
+    "page_idx": 263,
+    "img_path": "images/6c07bf0545f517286fabe81d1fa821528675a622de609efff92fcf9780632d98.jpg"
+  },
+  {
+    "id": 8919,
+    "type": "image",
+    "page_idx": 263,
+    "img_path": "images/fe901527e0af52a3c3f413ad3b69af4d1ed638d333d2ff64f936d843c152474a.jpg"
+  }
+]
+```

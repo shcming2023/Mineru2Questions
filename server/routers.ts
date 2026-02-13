@@ -110,8 +110,13 @@ const llmConfigRouter = router({
     .mutation(async ({ input }) => {
       try {
         const axios = (await import("axios")).default;
+        
+        // Handle URL with or without trailing slash and /chat/completions suffix
+        const base = input.apiUrl.replace(/\/+$/, "");
+        const endpoint = base.endsWith("/chat/completions") ? base : `${base}/chat/completions`;
+        
         const response = await axios.post(
-          `${input.apiUrl}/chat/completions`,
+          endpoint,
           {
             model: input.modelName,
             messages: [{ role: "user", content: "Hello, this is a test message. Please respond with 'OK'." }],

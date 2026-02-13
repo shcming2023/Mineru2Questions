@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 22120,
+    "type": "text",
+    "page_idx": 821,
+    "text": "Equal vectors"
+  },
+  {
+    "id": 22121,
+    "type": "text",
+    "page_idx": 821,
+    "text": "Equal vectors have the same size (magnitude) and direction. As vectors are usually independent of position, they can start at any point. The same vector can be at many places in a diagram."
+  },
+  {
+    "id": 22122,
+    "type": "text",
+    "page_idx": 821,
+    "text": "In the diagram,  $\\overrightarrow{AB}, \\overrightarrow{CD}, \\overrightarrow{XY}, \\overrightarrow{LM}$  and  $\\overrightarrow{RS}$  are equal vectors."
+  },
+  {
+    "id": 22123,
+    "type": "image",
+    "page_idx": 821,
+    "img_path": "images/d902720344b65e4f82e948188a25cd55d851410370fe43dc98ddcb2039b99616.jpg"
+  },
+  {
+    "id": 22124,
+    "type": "equation",
+    "page_idx": 821,
+    "text": "$$\n\\overrightarrow {A B} = \\overrightarrow {C D} = \\overrightarrow {X Y} = \\overrightarrow {L M} = \\overrightarrow {R S} = \\binom {1} {2}\n$$"
+  },
+  {
+    "id": 22125,
+    "type": "text",
+    "page_idx": 821,
+    "text": "When equal vectors share a common point, for example when  $\\overrightarrow{AB} = \\overrightarrow{BC}$  you can deduce that that the points  $A, B$  and  $C$  all lie on a straight line. When points lie on a straight line, they are collinear."
+  },
+  {
+    "id": 22126,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Multiplying a vector by a scalar"
+  },
+  {
+    "id": 22127,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Look at the diagram. Vector  $\\overrightarrow{AC}$  is twice as long as vector  $\\overrightarrow{AB}$ ."
+  },
+  {
+    "id": 22128,
+    "type": "text",
+    "page_idx": 822,
+    "text": "You can say:"
+  },
+  {
+    "id": 22129,
+    "type": "equation",
+    "page_idx": 822,
+    "text": "$$\n\\overrightarrow {A C} = 2 \\overrightarrow {A B} = 2 \\binom {2} {1} = \\binom {4} {2}.\n$$"
+  },
+  {
+    "id": 22130,
+    "type": "image",
+    "page_idx": 822,
+    "img_path": "images/3cab8310dcb1c4098d56e98a6508f7511baf06c8510975f8423ae050727dbfe9.jpg"
+  },
+  {
+    "id": 22131,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Here is another example."
+  },
+  {
+    "id": 22132,
+    "type": "text",
+    "page_idx": 822,
+    "text": "A force, represented by vector  $\\mathbf{f}$ , is needed to move a  $1\\mathrm{kg}$  concrete block."
+  },
+  {
+    "id": 22133,
+    "type": "text",
+    "page_idx": 822,
+    "text": "If you want to move a  $2\\mathrm{kg}$  concrete block, you need to apply twice the force. In other words, you would need to apply  $\\mathbf{f} + \\mathbf{f}$  or  $2\\mathbf{f}$ ."
+  },
+  {
+    "id": 22134,
+    "type": "text",
+    "page_idx": 822,
+    "text": "A force of 2f has the same direction as f, but it has twice its magnitude."
+  },
+  {
+    "id": 22135,
+    "type": "image",
+    "page_idx": 822,
+    "img_path": "images/2c577c69547eefc4113d14bd8a4d4bdd76de7ae9bf9870b234cc2d553d74f0a4.jpg"
+  },
+  {
+    "id": 22136,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Multiplying any vector  $\\binom{x}{y}$  by a scalar  $k$ , gives  $k\\binom{x}{y} = \\binom{kx}{ky}$ ."
+  },
+  {
+    "id": 22137,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Vector a multiplied by 2 is the vector 2a. Vector 2a is twice as long as vector a, but they have the same direction. In other words, they are either parallel or in a straight line."
+  },
+  {
+    "id": 22138,
+    "type": "equation",
+    "page_idx": 822,
+    "text": "$$\n\\text {I f} \\mathbf {a} = \\binom {3} {2} \\text {t h e n} 2 \\mathbf {a} = 2 \\binom {3} {2} = \\binom {6} {4}.\n$$"
+  },
+  {
+    "id": 22139,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Vector a multiplied by -1 is the vector -a, which is opposite in direction to a, but with the same magnitude as a."
+  },
+  {
+    "id": 22140,
+    "type": "text",
+    "page_idx": 822,
+    "text": "TIP"
+  },
+  {
+    "id": 22141,
+    "type": "text",
+    "page_idx": 822,
+    "text": "Remember a scalar is basically just a number. It has magnitude but no direction."
+  },
+  {
+    "id": 22142,
+    "type": "text",
+    "page_idx": 823,
+    "text": "WORKED EXAMPLE 15"
+  },
+  {
+    "id": 22143,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\n\\text {I f} u = \\binom {8} {- 4}, \\text {f i n d} \\frac {1}{4} u.\n$$"
+  },
+  {
+    "id": 22144,
+    "type": "text",
+    "page_idx": 823,
+    "text": "Answer"
+  },
+  {
+    "id": 22145,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\n\\frac {1}{4} u = \\frac {1}{4} \\left( \\begin{array}{l} 8 \\\\ - 4 \\end{array} \\right) = \\left( \\begin{array}{l l} \\frac {1}{4} \\times & 8 \\\\ \\frac {1}{4} \\times & - 4 \\end{array} \\right) = \\left( \\begin{array}{l} 2 \\\\ - 1 \\end{array} \\right)\n$$"
+  },
+  {
+    "id": 22146,
+    "type": "text",
+    "page_idx": 823,
+    "text": "WORKED EXAMPLE 16"
+  },
+  {
+    "id": 22147,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\n\\text {I f} \\mathbf {v} = \\binom {- 3} {2}, \\text {f i n d} - 5 \\mathbf {v}.\n$$"
+  },
+  {
+    "id": 22148,
+    "type": "text",
+    "page_idx": 823,
+    "text": "Answer"
+  },
+  {
+    "id": 22149,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\n- 5 v = - 5 \\binom {- 3} {2} = \\binom {- 5 \\times - 3} {- 5 \\times 2} = \\binom {1 5} {- 1 0}\n$$"
+  },
+  {
+    "id": 22150,
+    "type": "text",
+    "page_idx": 823,
+    "text": "TIP"
+  },
+  {
+    "id": 22151,
+    "type": "text",
+    "page_idx": 823,
+    "text": "When  $k$  is positive, ka is in the same direction as a and k times as long.When k is negative, then ka is opposite in direction to a but still k times as long."
+  },
+  {
+    "id": 22152,
+    "type": "text",
+    "page_idx": 823,
+    "text": "Exercise 23.7"
+  },
+  {
+    "id": 22153,
+    "type": "text",
+    "page_idx": 823,
+    "text": "1 If  $a = \\left( \\begin{array}{l}3\\\\ -7 \\end{array} \\right)$  calculate:"
+  },
+  {
+    "id": 22154,
+    "type": "text",
+    "page_idx": 823,
+    "text": "a 3a"
+  },
+  {
+    "id": 22155,
+    "type": "text",
+    "page_idx": 823,
+    "text": "b"
+  },
+  {
+    "id": 22156,
+    "type": "text",
+    "page_idx": 823,
+    "text": "c -2a"
+  },
+  {
+    "id": 22157,
+    "type": "text",
+    "page_idx": 823,
+    "text": "d -a"
+  },
+  {
+    "id": 22158,
+    "type": "text",
+    "page_idx": 823,
+    "text": "3 a 4"
+  },
+  {
+    "id": 22159,
+    "type": "text",
+    "page_idx": 823,
+    "text": "f 1.5a"
+  },
+  {
+    "id": 22160,
+    "type": "text",
+    "page_idx": 823,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 22161,
+    "type": "text",
+    "page_idx": 823,
+    "text": "2 The diagram shows a rectangular metal burglar bar. Each section of the burglar bar can be represented by a vector. Sections can also be compared in terms of vectors. So, for example,  $\\overrightarrow{AJ} = 3\\overrightarrow{AD}$ . Copy and complete these comparisons:"
+  },
+  {
+    "id": 22162,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\na \\quad \\overrightarrow {D F} = \\_ \\overrightarrow {J K}\n$$"
+  },
+  {
+    "id": 22163,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\n\\vec {J Q} = \\vec {J F}\n$$"
+  },
+  {
+    "id": 22164,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\n\\overrightarrow {H P} = \\_ \\overrightarrow {H F}\n$$"
+  },
+  {
+    "id": 22165,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\nd \\quad 2 \\overrightarrow {G O} = \\_ \\overrightarrow {G C}\n$$"
+  },
+  {
+    "id": 22166,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\ne \\quad 3 \\overrightarrow {D G} = \\_ \\overrightarrow {C L}\n$$"
+  },
+  {
+    "id": 22167,
+    "type": "equation",
+    "page_idx": 823,
+    "text": "$$\nf \\quad 6 \\overrightarrow {B E} = \\_ \\overrightarrow {C L}\n$$"
+  },
+  {
+    "id": 22168,
+    "type": "image",
+    "page_idx": 823,
+    "img_path": "images/4eed124b913c6f1a9a4cac6bb406634a6d5f9ac5c17e23c20ff7220424b20dfc.jpg"
+  },
+  {
+    "id": 22169,
+    "type": "text",
+    "page_idx": 823,
+    "text": "TIP"
+  },
+  {
+    "id": 22170,
+    "type": "text",
+    "page_idx": 823,
+    "text": "Given that  $\\overrightarrow{AJ} = 3\\overrightarrow{AD}$  and  $A$  is common to both vectors, points  $A, D$  and  $J$  are collinear."
+  },
+  {
+    "id": 22171,
+    "type": "text",
+    "page_idx": 824,
+    "text": "3 If  $\\mathbf{a} = \\begin{pmatrix} -1 \\\\ -4 \\end{pmatrix}$  and  $\\mathbf{b} = \\begin{pmatrix} 3 \\\\ 7 \\end{pmatrix}$  calculate:"
+  },
+  {
+    "id": 22172,
+    "type": "text",
+    "page_idx": 824,
+    "text": "a -2a"
+  },
+  {
+    "id": 22173,
+    "type": "text",
+    "page_idx": 824,
+    "text": "b 3b"
+  },
+  {
+    "id": 22174,
+    "type": "text",
+    "page_idx": 824,
+    "text": "3 2b"
+  },
+  {
+    "id": 22175,
+    "type": "text",
+    "page_idx": 824,
+    "text": "d -3a 4"
+  },
+  {
+    "id": 22176,
+    "type": "text",
+    "page_idx": 824,
+    "text": "e -1.5a"
+  },
+  {
+    "id": 22177,
+    "type": "text",
+    "page_idx": 824,
+    "text": "f -12b"
+  },
+  {
+    "id": 22178,
+    "type": "text",
+    "page_idx": 824,
+    "text": "3 a"
+  },
+  {
+    "id": 22179,
+    "type": "text",
+    "page_idx": 824,
+    "text": "5 b 9"
+  },
+  {
+    "id": 22180,
+    "type": "text",
+    "page_idx": 824,
+    "text": "Adding vectors"
+  },
+  {
+    "id": 22181,
+    "type": "text",
+    "page_idx": 824,
+    "text": "In the diagram, point  $A$  is translated to point  $B$  and then translated again to end up at point  $C$ . However, if you translated the point directly from  $A$  to  $C$ , you end up at the same point. In other words,  $\\overrightarrow{AB} + \\overrightarrow{BC} = \\overrightarrow{AC}$ ."
+  },
+  {
+    "id": 22182,
+    "type": "image",
+    "page_idx": 824,
+    "img_path": "images/d499fb3f21ec45a533cea6958e83259e889685514cf62a11135e287903c4b21b.jpg"
+  },
+  {
+    "id": 22183,
+    "type": "text",
+    "page_idx": 824,
+    "text": "You can represent each translation as a column vector:"
+  },
+  {
+    "id": 22184,
+    "type": "equation",
+    "page_idx": 824,
+    "text": "$$\n\\overrightarrow {A B} = \\binom {3} {1}, \\quad \\overrightarrow {B C} = \\binom {- 2} {2}, \\quad \\overrightarrow {A C} = \\binom {1} {3}\n$$"
+  },
+  {
+    "id": 22185,
+    "type": "text",
+    "page_idx": 824,
+    "text": "You know that  $\\overrightarrow{AB} + \\overrightarrow{BC} = \\overrightarrow{AC}$ , so:"
+  },
+  {
+    "id": 22186,
+    "type": "equation",
+    "page_idx": 824,
+    "text": "$$\n\\binom {3} {1} + \\binom {- 2} {2} = \\binom {1} {3}\n$$"
+  },
+  {
+    "id": 22187,
+    "type": "text",
+    "page_idx": 824,
+    "text": "So, to add the vectors, you add the corresponding  $x$ - and  $y$ -coordinates:"
+  },
+  {
+    "id": 22188,
+    "type": "equation",
+    "page_idx": 824,
+    "text": "$$\n\\binom {x _ {1}} {y _ {1}} + \\binom {x _ {2}} {y _ {2}} = \\binom {x _ {1} + x _ {2}} {y _ {1} + y _ {2}}\n$$"
+  },
+  {
+    "id": 22189,
+    "type": "text",
+    "page_idx": 824,
+    "text": "This is called the 'nose to tail' method or the triangle law."
+  },
+  {
+    "id": 22190,
+    "type": "text",
+    "page_idx": 824,
+    "text": "LINK"
+  },
+  {
+    "id": 22191,
+    "type": "text",
+    "page_idx": 824,
+    "text": "Airline pilots need to consider vectors when landing in a crosswind. The plane can be controlled to move relative to the air, but the air is often also moving in a different direction relative to the ground. The combination of the aircraft and air velocities is important when the pilot determines how to steer the aircraft onto a runway."
+  },
+  {
+    "id": 22192,
+    "type": "text",
+    "page_idx": 825,
+    "text": "Subtracting vectors"
+  },
+  {
+    "id": 22193,
+    "type": "text",
+    "page_idx": 825,
+    "text": "Think again about the three vectors:"
+  },
+  {
+    "id": 22194,
+    "type": "equation",
+    "page_idx": 825,
+    "text": "$$\n\\overrightarrow {A B} = \\binom {3} {1}, \\quad \\overrightarrow {B C} = \\binom {- 2} {2}, \\quad \\overrightarrow {A C} = \\binom {1} {3}\n$$"
+  },
+  {
+    "id": 22195,
+    "type": "text",
+    "page_idx": 825,
+    "text": "Subtracting a vector is the same as adding its negative, so:"
+  },
+  {
+    "id": 22196,
+    "type": "equation",
+    "page_idx": 825,
+    "text": "$$\n\\overrightarrow {A C} - \\overrightarrow {A B} = \\overrightarrow {A C} + (- \\overrightarrow {A B})\n$$"
+  },
+  {
+    "id": 22197,
+    "type": "text",
+    "page_idx": 825,
+    "text": "The diagram shows the result of adding  $\\overrightarrow{AC}$  and  $-\\overrightarrow{AB}$  'nose to tail'. This shows that vector  $\\overrightarrow{AC} - \\overrightarrow{AB}$  is the same as vector  $\\overrightarrow{BC}$ ."
+  },
+  {
+    "id": 22198,
+    "type": "equation",
+    "page_idx": 825,
+    "text": "$$\n\\mathrm {S o}, \\overrightarrow {A C} - \\overrightarrow {A B} = \\overrightarrow {B C}\n$$"
+  },
+  {
+    "id": 22199,
+    "type": "equation",
+    "page_idx": 825,
+    "text": "$$\n\\binom {1} {3} - \\binom {3} {1} = \\binom {- 2} {2}\n$$"
+  },
+  {
+    "id": 22200,
+    "type": "image",
+    "page_idx": 825,
+    "img_path": "images/ec759f8e651581d279aaef48d7e467633eebebd560a6c66d33dc7cf30d2da98a.jpg"
+  },
+  {
+    "id": 22201,
+    "type": "text",
+    "page_idx": 825,
+    "text": "To subtract the vectors, you subtract the corresponding  $x$ - and  $y$ -coordinates:"
+  },
+  {
+    "id": 22202,
+    "type": "equation",
+    "page_idx": 825,
+    "text": "$$\n\\binom {x _ {1}} {y _ {1}} - \\binom {x _ {2}} {y _ {2}} = \\binom {x _ {1}} {y _ {1}} + \\binom {- x _ {2}} {- y _ {2}} = \\binom {x _ {1} - x _ {2}} {y _ {1} - y _ {2}}\n$$"
+  },
+  {
+    "id": 22203,
+    "type": "text",
+    "page_idx": 825,
+    "text": "TIP"
+  },
+  {
+    "id": 22204,
+    "type": "text",
+    "page_idx": 825,
+    "text": "You could also use the fact that vector  $-\\overrightarrow{AB}$  is the same size as  $\\overrightarrow{AB}$  but in the opposite direction, so  $-\\overrightarrow{AB} = \\overrightarrow{BA}$ ."
+  },
+  {
+    "id": 22205,
+    "type": "text",
+    "page_idx": 825,
+    "text": "This means that  $\\overrightarrow{AC} - \\overrightarrow{AB} = \\overrightarrow{AC} + \\overrightarrow{BA}$"
+  },
+  {
+    "id": 22206,
+    "type": "text",
+    "page_idx": 825,
+    "text": "If you rearrange the vectors, you can apply the nose to tail rule method and add them:"
+  },
+  {
+    "id": 22207,
+    "type": "equation",
+    "page_idx": 825,
+    "text": "$$\n\\overrightarrow {A C} - \\overrightarrow {A B} = \\overrightarrow {B A} + \\overrightarrow {A C} = \\overrightarrow {B C}\n$$"
+  },
+  {
+    "id": 22208,
+    "type": "text",
+    "page_idx": 826,
+    "text": "WORKED EXAMPLE 17"
+  },
+  {
+    "id": 22209,
+    "type": "text",
+    "page_idx": 826,
+    "text": "In the figure, the various line segments represent vectors."
+  },
+  {
+    "id": 22210,
+    "type": "text",
+    "page_idx": 826,
+    "text": "Find in the figure directed line segments equal to the following:"
+  },
+  {
+    "id": 22211,
+    "type": "text",
+    "page_idx": 826,
+    "text": "a AE+EC"
+  },
+  {
+    "id": 22212,
+    "type": "text",
+    "page_idx": 826,
+    "text": "b DB+BE"
+  },
+  {
+    "id": 22213,
+    "type": "text",
+    "page_idx": 826,
+    "text": "$\\overrightarrow{AD} + \\overrightarrow{DB} + \\overrightarrow{BC}$"
+  },
+  {
+    "id": 22214,
+    "type": "text",
+    "page_idx": 826,
+    "text": "$\\overrightarrow{CB} +\\overrightarrow{BE} +\\overrightarrow{EA} +\\overrightarrow{AD}$"
+  },
+  {
+    "id": 22215,
+    "type": "text",
+    "page_idx": 826,
+    "text": "Answers"
+  },
+  {
+    "id": 22216,
+    "type": "text",
+    "page_idx": 826,
+    "text": "a AE+EC=AC"
+  },
+  {
+    "id": 22217,
+    "type": "text",
+    "page_idx": 826,
+    "text": "b DB+BE=DE"
+  },
+  {
+    "id": 22218,
+    "type": "text",
+    "page_idx": 826,
+    "text": "(If you travel from  $D$  to  $B$  and then from  $B$  to  $E$ , you have gone back on yourself and ended up at  $E$ , which is the same as travelling from  $D$  to  $E$ .)"
+  },
+  {
+    "id": 22219,
+    "type": "text",
+    "page_idx": 826,
+    "text": "$\\overrightarrow{AD} + \\overrightarrow{DB} + \\overrightarrow{BC} = \\overrightarrow{AC}$"
+  }
+]
+```

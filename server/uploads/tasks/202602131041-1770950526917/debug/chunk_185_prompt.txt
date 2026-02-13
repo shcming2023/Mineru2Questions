@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 12950,
+    "type": "text",
+    "page_idx": 414,
+    "text": "How many 5ml spoonfuls are there in a bottle that contains 0.3 litres of medicine?"
+  },
+  {
+    "id": 12951,
+    "type": "text",
+    "page_idx": 414,
+    "text": "5 Express each quantity in the units given in brackets."
+  },
+  {
+    "id": 12952,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a 14.23m (mm.km)"
+  },
+  {
+    "id": 12953,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b 19.06 g (mg. t)"
+  },
+  {
+    "id": 12954,
+    "type": "text",
+    "page_idx": 414,
+    "text": "23 litres (ml, cl)"
+  },
+  {
+    "id": 12955,
+    "type": "text",
+    "page_idx": 414,
+    "text": "d  $4\\mathrm{m}^2 (\\mathrm{mm}^2,\\mathrm{ha})$"
+  },
+  {
+    "id": 12956,
+    "type": "text",
+    "page_idx": 414,
+    "text": "13cm²（mm²，ha）"
+  },
+  {
+    "id": 12957,
+    "type": "text",
+    "page_idx": 414,
+    "text": "10cm3(mm3,m3)"
+  },
+  {
+    "id": 12958,
+    "type": "text",
+    "page_idx": 414,
+    "text": "6 A cube has sides of length  $3\\mathrm{m}$  . Find the volume of the cube in:"
+  },
+  {
+    "id": 12959,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a m"
+  },
+  {
+    "id": 12960,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b cm³"
+  },
+  {
+    "id": 12961,
+    "type": "text",
+    "page_idx": 414,
+    "text": "$\\mathbb{C}$  mm3 (give your answer in standard form)."
+  },
+  {
+    "id": 12962,
+    "type": "text",
+    "page_idx": 414,
+    "text": "The average radius of the Earth is  $6378\\mathrm{km}$"
+  },
+  {
+    "id": 12963,
+    "type": "text",
+    "page_idx": 414,
+    "text": "Assuming the Earth is a sphere, find the volume of the Earth, using each of the following units. Give your answers in standard form to 3 significant figures."
+  },
+  {
+    "id": 12964,
+    "type": "text",
+    "page_idx": 414,
+    "text": "The volume of a sphere  $= \\frac{4}{3}\\pi r^3$"
+  },
+  {
+    "id": 12965,
+    "type": "text",
+    "page_idx": 414,
+    "text": "a km³"
+  },
+  {
+    "id": 12966,
+    "type": "text",
+    "page_idx": 414,
+    "text": "b m"
+  },
+  {
+    "id": 12967,
+    "type": "text",
+    "page_idx": 414,
+    "text": "c mm"
+  },
+  {
+    "id": 12968,
+    "type": "image",
+    "page_idx": 414,
+    "img_path": "images/edb35d6485d32d309d20050c608dcf22946199bcd7d6d1fbd0dfeb800f3dc7cd.jpg"
+  },
+  {
+    "id": 12969,
+    "type": "text",
+    "page_idx": 414,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 12970,
+    "type": "text",
+    "page_idx": 414,
+    "text": "You learnt how to calculate volumes of three-dimensional shapes in Chapter"
+  },
+  {
+    "id": 12971,
+    "type": "text",
+    "page_idx": 414,
+    "text": "7. You also need to remember what you learnt about standard form in Chapter 5."
+  },
+  {
+    "id": 12972,
+    "type": "text",
+    "page_idx": 415,
+    "text": "8 The dimensions of the cone shown in the diagram are given in cm."
+  },
+  {
+    "id": 12973,
+    "type": "text",
+    "page_idx": 415,
+    "text": "Calculate the volume of the cone in:"
+  },
+  {
+    "id": 12974,
+    "type": "text",
+    "page_idx": 415,
+    "text": "a cm"
+  },
+  {
+    "id": 12975,
+    "type": "text",
+    "page_idx": 415,
+    "text": "b mm"
+  },
+  {
+    "id": 12976,
+    "type": "text",
+    "page_idx": 415,
+    "text": "C"
+  },
+  {
+    "id": 12977,
+    "type": "text",
+    "page_idx": 415,
+    "text": "km"
+  },
+  {
+    "id": 12978,
+    "type": "text",
+    "page_idx": 415,
+    "text": "Give your answers in standard form to 3 significant figures."
+  },
+  {
+    "id": 12979,
+    "type": "text",
+    "page_idx": 415,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 12980,
+    "type": "text",
+    "page_idx": 415,
+    "text": "You learnt the formula for the volume of a cone in Chapter 7: volume  $= \\frac{1}{3}\\pi r^2 h$ ."
+  },
+  {
+    "id": 12981,
+    "type": "text",
+    "page_idx": 415,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 12982,
+    "type": "text",
+    "page_idx": 415,
+    "text": "9 A jar holds 200 grams of flour."
+  },
+  {
+    "id": 12983,
+    "type": "text",
+    "text": "a How many 30 gram measures can you take from the jar?",
+    "page_idx": 415
+  },
+  {
+    "id": 12984,
+    "type": "text",
+    "text": "b How much flour will be left over?",
+    "page_idx": 415
+  },
+  {
+    "id": 12985,
+    "type": "text",
+    "page_idx": 415,
+    "text": "10 This is a lift in an office building."
+  },
+  {
+    "id": 12986,
+    "type": "image",
+    "page_idx": 415,
+    "img_path": "images/eaf9621428737c8938b9ac30adfd0417f7be8d84975493a008aa2c31050642be.jpg"
+  },
+  {
+    "id": 12987,
+    "type": "text",
+    "page_idx": 415,
+    "text": "The lift won't start if it holds more than  $300\\mathrm{kg}$"
+  },
+  {
+    "id": 12988,
+    "type": "text",
+    "text": "a Tomas (105 kg), Shaz (65 kg), Sindi (55 kg), Rashied (80 kg) and Mandy (70 kg) are waiting for the lift. Can they all ride together?",
+    "page_idx": 415
+  },
+  {
+    "id": 12989,
+    "type": "text",
+    "text": "Mandy says she will use the stairs. Can the others go safely into the lift?",
+    "page_idx": 415
+  },
+  {
+    "id": 12990,
+    "type": "text",
+    "text": "c Rashied says he will wait for the lift to come down again. Can the other four go together in the lift?",
+    "page_idx": 415
+  },
+  {
+    "id": 12991,
+    "type": "text",
+    "page_idx": 415,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 12992,
+    "type": "text",
+    "page_idx": 415,
+    "text": "11 a You may have seen the use of 'mega' and 'micro' in science. In Greek, 'mega' means 'large' and 'micro' means 'small'. Scientists use the word 'mega' to talk about 'millions' and 'micro' to talk about 'millionths'. Not everyone uses these words in quite the same way. Try to find out what 'mega' usually means in computing."
+  },
+  {
+    "id": 12993,
+    "type": "text",
+    "page_idx": 415,
+    "text": "b Try to find out about some more prefixes, like 'giga', 'terra', 'peta'. What others can you find?"
+  },
+  {
+    "id": 12994,
+    "type": "text",
+    "page_idx": 416,
+    "text": "LINK"
+  },
+  {
+    "id": 12995,
+    "type": "text",
+    "page_idx": 416,
+    "text": "It is important to have a good understanding of what different units mean. If the weather forecast on a website tells you the windspeed is  $11\\mathrm{m / s}$  this might seem low, but it is in fact close to  $40\\mathrm{km / h}$ . Getting this wrong might be a big mistake if you are climbing a mountain or driving a large truck!"
+  },
+  {
+    "id": 12996,
+    "type": "text",
+    "page_idx": 416,
+    "text": "13.2 Time"
+  },
+  {
+    "id": 12997,
+    "type": "text",
+    "page_idx": 416,
+    "text": "You have already learnt how to tell the time and you should know how to read and write time using the 12-hour and 24-hour systems."
+  },
+  {
+    "id": 12998,
+    "type": "text",
+    "page_idx": 416,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 12999,
+    "type": "text",
+    "page_idx": 416,
+    "text": "Sara left home at 2.15 p.m. and returned at 3.50 p.m. How long was Sara away from home?"
+  },
+  {
+    "id": 13000,
+    "type": "text",
+    "page_idx": 416,
+    "text": "Answer"
+  },
+  {
+    "id": 13001,
+    "type": "text",
+    "page_idx": 416,
+    "text": "From 2.15p.m. to 3.00p.m. is 45 minutes Start by counting on to the next  \nFrom 3.00p.m. to 3.50p.m. is 50 minutes whole hour."
+  },
+  {
+    "id": 13002,
+    "type": "text",
+    "text": "45 + 50 = 95 minutes Add together the times in minutes.",
+    "page_idx": 416
+  },
+  {
+    "id": 13003,
+    "type": "text",
+    "text": "= 1 hour and 35 minutes Convert to hours and minutes.",
+    "page_idx": 416
+  },
+  {
+    "id": 13004,
+    "type": "text",
+    "page_idx": 416,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 13005,
+    "type": "text",
+    "page_idx": 416,
+    "text": "Babylonian mathematics"
+  },
+  {
+    "id": 13006,
+    "type": "text",
+    "page_idx": 416,
+    "text": "It may seem strange to have 60 as the number for converting units of time. This choice seems to have been made by the ancient Babylonians. They used 60 as their 'base' number, in the same way that use 10 for our most common number system. We call our number system a decimal system. The Babylonian system was a sexagesimal system!"
+  },
+  {
+    "id": 13007,
+    "type": "text",
+    "text": "1 Find all of the factors of the number 60.",
+    "page_idx": 416
+  },
+  {
+    "id": 13008,
+    "type": "text",
+    "text": "2 Our decimal system is useful because we have 10 fingers and thumbs on our hands, divided into 2 lots of 5. Look at the factors of 60 and carry out some research to try to find out why the Babylonians might have chosen a sexagesimal system.",
+    "page_idx": 416
+  },
+  {
+    "id": 13009,
+    "type": "text",
+    "text": "3 The Babylonians also seem to be the reason why we have 360 degrees in a full circle. What unit of time do you know that is divided into just over 360 units? How does this relate to a full turn of a circle?",
+    "page_idx": 416
+  },
+  {
+    "id": 13010,
+    "type": "text",
+    "page_idx": 416,
+    "text": "The next example shows you how to calculate the duration of an event."
+  },
+  {
+    "id": 13011,
+    "type": "image",
+    "page_idx": 416,
+    "img_path": "images/9b66cb876c3675695d07762de8b3dd19b25843e05c34c86016af2d2dd6334afe.jpg"
+  },
+  {
+    "id": 13012,
+    "type": "text",
+    "page_idx": 417,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 13013,
+    "type": "text",
+    "page_idx": 417,
+    "text": "A train leaves at 05:35 and arrives at 18:20. How long is the journey?"
+  },
+  {
+    "id": 13014,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Answers"
+  },
+  {
+    "id": 13015,
+    "type": "text",
+    "page_idx": 417,
+    "text": "You cannot simply calculate 18:20 - 05:35 because this does not take into account that time is not decimal. You can use the degrees, minutes and seconds function of a calculator to work with time. Look for the DMS key to do this. To work out 18:20 - 05:35"
+  },
+  {
+    "id": 13016,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Enter 18"
+  },
+  {
+    "id": 13017,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Press DMS"
+  },
+  {
+    "id": 13018,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Enter 20"
+  },
+  {
+    "id": 13019,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Press DMS"
+  },
+  {
+    "id": 13020,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Press the -key to subtract."
+  },
+  {
+    "id": 13021,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Enter 5"
+  },
+  {
+    "id": 13022,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Press DMS"
+  },
+  {
+    "id": 13023,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Enter 35"
+  },
+  {
+    "id": 13024,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Press DMS"
+  },
+  {
+    "id": 13025,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Press"
+  },
+  {
+    "id": 13026,
+    "type": "text",
+    "page_idx": 417,
+    "text": "The display will show  $12^{\\circ}45'00''$"
+  },
+  {
+    "id": 13027,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Write this as 12 hours and 45 minutes."
+  },
+  {
+    "id": 13028,
+    "type": "text",
+    "page_idx": 417,
+    "text": "TIP"
+  },
+  {
+    "id": 13029,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Calculators work differently, so learn how the time functions work on your calculator. Try to use your calculator to get the same answers as in the worked examples. You can also use this to check your answers in any exercises."
+  },
+  {
+    "id": 13030,
+    "type": "text",
+    "page_idx": 417,
+    "text": "The methods you have seen in the examples so far are best used when you are dealing with time within the same day. But what happens when the time difference goes from one day to another day?"
+  },
+  {
+    "id": 13031,
+    "type": "text",
+    "page_idx": 417,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 13032,
+    "type": "text",
+    "page_idx": 417,
+    "text": "How much time passes from 19:35 on Monday to 03:55 on Tuesday?"
+  },
+  {
+    "id": 13033,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Answer"
+  },
+  {
+    "id": 13034,
+    "type": "text",
+    "page_idx": 417,
+    "text": "19:35 to 24:00 is one part and 00:00 to 03:55 the next day is the other part."
+  },
+  {
+    "id": 13035,
+    "type": "text",
+    "page_idx": 417,
+    "text": "A good way to start this problem is to divide the time into parts."
+  },
+  {
+    "id": 13036,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Part one:"
+  },
+  {
+    "id": 13037,
+    "type": "text",
+    "page_idx": 417,
+    "text": "19:35 to 20:00 is 25 minutes  \n20:00 to 24:00 is 4 hours  \nSo, 19:35 to 24:00 is 4 h 25 min"
+  },
+  {
+    "id": 13038,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Work out how much time passes to reach midnight."
+  },
+  {
+    "id": 13039,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Part two:"
+  },
+  {
+    "id": 13040,
+    "type": "text",
+    "page_idx": 417,
+    "text": "0:00 to 03:55 is 3 h 55 min"
+  },
+  {
+    "id": 13041,
+    "type": "text",
+    "page_idx": 417,
+    "text": "03:55 is 3 hours and 55 minutes past midnight."
+  },
+  {
+    "id": 13042,
+    "type": "text",
+    "page_idx": 417,
+    "text": "4h 25min + 3h 55min = 7h 80min = 8h 20min"
+  },
+  {
+    "id": 13043,
+    "type": "text",
+    "page_idx": 417,
+    "text": "Add the result of the two parts together."
+  },
+  {
+    "id": 13044,
+    "type": "text",
+    "page_idx": 417,
+    "text": "The total time is 8 hours and 20 minutes."
+  },
+  {
+    "id": 13045,
+    "type": "text",
+    "page_idx": 417,
+    "text": "80 minutes = 1 hour 20 minutes"
+  },
+  {
+    "id": 13046,
+    "type": "text",
+    "page_idx": 418,
+    "text": "Exercise 13.2"
+  },
+  {
+    "id": 13047,
+    "type": "text",
+    "page_idx": 418,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 13048,
+    "type": "text",
+    "page_idx": 418,
+    "text": "1 Aki has a satellite box that shows time in 24-hour format. He wants to set the machine to record some programmes."
+  },
+  {
+    "id": 13049,
+    "type": "text",
+    "page_idx": 418,
+    "text": "a Write down the timer settings for starting and finishing each recording."
+  }
+]
+```

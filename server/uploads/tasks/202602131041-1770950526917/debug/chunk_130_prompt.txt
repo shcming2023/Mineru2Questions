@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 9100,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Make a table to show the position of each term and include a row for the values of  $n^2$ ."
+  },
+  {
+    "id": 9101,
+    "type": "text",
+    "text": "[Table Row] <tr><td>n</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9102,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Term</td><td>2</td><td>5</td><td>10</td><td>17</td><td>26</td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9103,
+    "type": "text",
+    "text": "[Table Row] <tr><td>n2</td><td>1</td><td>4</td><td>9</td><td>16</td><td>25</td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9104,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Each term is 1 greater than the value of  $n^2$ , so the  $n$ th term is  $n^2 + 1$ ."
+  },
+  {
+    "id": 9105,
+    "type": "text",
+    "page_idx": 270,
+    "text": "All quadratic sequences have a constant second difference."
+  },
+  {
+    "id": 9106,
+    "type": "text",
+    "page_idx": 270,
+    "text": "If the sequence is cubic it will have a constant third difference and the rule for the sequence will involve  $n^3$ ."
+  },
+  {
+    "id": 9107,
+    "type": "text",
+    "page_idx": 270,
+    "text": "The general term of a quadratic sequence is in the form  $an^2 + bn + c$ ."
+  },
+  {
+    "id": 9108,
+    "type": "text",
+    "page_idx": 270,
+    "text": "This table shows the first four terms in the general sequence and their first and second differences."
+  },
+  {
+    "id": 9109,
+    "type": "text",
+    "text": "[Table Row] <tr><td>n</td><td>1</td><td>2</td><td>3</td><td>4</td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9110,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Term</td><td>a + b + c</td><td>4a + 2b + c</td><td>9a + 3b + c</td><td>16a + 4b + c</td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9111,
+    "type": "text",
+    "text": "[Table Row] <tr><td>1st difference</td><td>3a + b</td><td>5a + b</td><td>7a + b</td><td></td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9112,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2nd difference</td><td>2a</td><td>2a</td><td></td><td></td></tr>",
+    "page_idx": 270
+  },
+  {
+    "id": 9113,
+    "type": "text",
+    "page_idx": 270,
+    "text": "The table shows that for any quadratic sequence:"
+  },
+  {
+    "id": 9114,
+    "type": "text",
+    "text": "the 1st term is  $a + b + c$",
+    "page_idx": 270
+  },
+  {
+    "id": 9115,
+    "type": "text",
+    "text": "the 2nd term minus the 1st term  $(\\mathrm{T}_2 - \\mathrm{T}_1)$  is  $3a + b$",
+    "page_idx": 270
+  },
+  {
+    "id": 9116,
+    "type": "text",
+    "text": "the 2nd difference is  $2a$",
+    "page_idx": 270
+  },
+  {
+    "id": 9117,
+    "type": "text",
+    "page_idx": 270,
+    "text": "This gives us a way to work out the general term for complex quadratic sequences."
+  },
+  {
+    "id": 9118,
+    "type": "text",
+    "page_idx": 270,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 9119,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Find the nth term of the quadratic sequence 2, 8, 16, 26, 38 ..."
+  },
+  {
+    "id": 9120,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Answer"
+  },
+  {
+    "id": 9121,
+    "type": "image",
+    "page_idx": 270,
+    "img_path": "images/98ffe7fe0ca95734f3b80981369ff21b5994dc38f3eca35922b722aead8454a4.jpg"
+  },
+  {
+    "id": 9122,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Once you have values for each expression you can make equations to find  $a$ ,  $b$ , and  $c$ ."
+  },
+  {
+    "id": 9123,
+    "type": "equation",
+    "page_idx": 270,
+    "text": "$$\n2 a = 2, \\text {s o} a = 1\n$$"
+  },
+  {
+    "id": 9124,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Find the value of a first."
+  },
+  {
+    "id": 9125,
+    "type": "equation",
+    "page_idx": 270,
+    "text": "$$\n3 a + b = 6\n$$"
+  },
+  {
+    "id": 9126,
+    "type": "text",
+    "page_idx": 270,
+    "text": "Find b by substituting the value of a."
+  },
+  {
+    "id": 9127,
+    "type": "equation",
+    "page_idx": 270,
+    "text": "$$\n3 (1) + b = 6, \\text {s o} b = 3\n$$"
+  },
+  {
+    "id": 9128,
+    "type": "text",
+    "page_idx": 270,
+    "text": "TIP"
+  },
+  {
+    "id": 9129,
+    "type": "text",
+    "page_idx": 270,
+    "text": "If you are not told the sequence is quadratic, you will need to check that the second difference is constant before using this method."
+  },
+  {
+    "id": 9130,
+    "type": "text",
+    "page_idx": 271,
+    "text": "WORKED EXAMPLE 3 CONTINUED"
+  },
+  {
+    "id": 9131,
+    "type": "text",
+    "page_idx": 271,
+    "text": "$a + b + c = 2$ $1 + 3 + c = 2$  Find c by substituting the values of a and b."
+  },
+  {
+    "id": 9132,
+    "type": "equation",
+    "page_idx": 271,
+    "text": "$$\n4 + c = 2, \\text {s o} c = - 2\n$$"
+  },
+  {
+    "id": 9133,
+    "type": "text",
+    "page_idx": 271,
+    "text": "The nth term is  $n^2 + 3n - 2$  Insert the values of  $a$ ,  $b$  and  $c$  into the general term  $an^2 + bn + c$ ."
+  },
+  {
+    "id": 9134,
+    "type": "text",
+    "page_idx": 271,
+    "text": "Exponential sequences"
+  },
+  {
+    "id": 9135,
+    "type": "text",
+    "page_idx": 271,
+    "text": "Consider the sequence 20, 100, 500, 2500 ..."
+  },
+  {
+    "id": 9136,
+    "type": "text",
+    "page_idx": 271,
+    "text": "You find each term by multiplying the previous term by 5. This type of sequence is called an exponential sequence and expression for the  $n$ th term will involve an exponent (in terms of  $n$ )."
+  },
+  {
+    "id": 9137,
+    "type": "text",
+    "page_idx": 271,
+    "text": "Listing the terms can help you find the rule:"
+  },
+  {
+    "id": 9138,
+    "type": "text",
+    "page_idx": 271,
+    "text": "T2 20×5"
+  },
+  {
+    "id": 9139,
+    "type": "text",
+    "page_idx": 271,
+    "text": "T3 20×5×5=20×5²"
+  },
+  {
+    "id": 9140,
+    "type": "text",
+    "page_idx": 271,
+    "text": "T 20×5×5×5=20×5"
+  },
+  {
+    "id": 9141,
+    "type": "text",
+    "page_idx": 271,
+    "text": "You can see that for each term the exponent is one less than the term number."
+  },
+  {
+    "id": 9142,
+    "type": "text",
+    "page_idx": 271,
+    "text": "So for the nth term, the exponent will be  $n - 1$ :"
+  },
+  {
+    "id": 9143,
+    "type": "text",
+    "page_idx": 271,
+    "text": "T 20×5n-1"
+  },
+  {
+    "id": 9144,
+    "type": "text",
+    "page_idx": 271,
+    "text": "In general terms, for any geometric sequence with a common ratio  $r$  and the first term  $a$ , we can say the  $n$ th term  $= a \\times r^{n-1}$ ."
+  },
+  {
+    "id": 9145,
+    "type": "text",
+    "page_idx": 271,
+    "text": "Combinations of sequences"
+  },
+  {
+    "id": 9146,
+    "type": "text",
+    "page_idx": 271,
+    "text": "If you add or subtract equivalent terms of two or more sequences together to form a new sequence then you can find the  $n$ th term of this new sequence by adding or subtracting the  $n$ th terms of the original sequences."
+  },
+  {
+    "id": 9147,
+    "type": "text",
+    "page_idx": 271,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 9148,
+    "type": "text",
+    "page_idx": 271,
+    "text": "Complete this table of sequences."
+  },
+  {
+    "id": 9149,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Sequence</td><td>1st term</td><td>2nd term</td><td>3rd term</td><td>4th term</td><td></td><td>nth term</td></tr>",
+    "page_idx": 271
+  },
+  {
+    "id": 9150,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A</td><td>5</td><td>8</td><td>11</td><td></td><td></td><td></td></tr>",
+    "page_idx": 271
+  },
+  {
+    "id": 9151,
+    "type": "text",
+    "text": "[Table Row] <tr><td>B</td><td>2</td><td>5</td><td>10</td><td></td><td></td><td></td></tr>",
+    "page_idx": 271
+  },
+  {
+    "id": 9152,
+    "type": "text",
+    "text": "[Table Row] <tr><td>C</td><td>7</td><td>13</td><td>21</td><td></td><td></td><td></td></tr>",
+    "page_idx": 271
+  },
+  {
+    "id": 9153,
+    "type": "text",
+    "page_idx": 271,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 9154,
+    "type": "text",
+    "page_idx": 271,
+    "text": "You will work with these types of sequences involving real-life situations such as population growth, compound interest and depreciation when you deal with growth and decay in Chapter 17."
+  },
+  {
+    "id": 9155,
+    "type": "text",
+    "page_idx": 272,
+    "text": "WORKED EXAMPLE 4 CONTINUED"
+  },
+  {
+    "id": 9156,
+    "type": "text",
+    "page_idx": 272,
+    "text": "Answer"
+  },
+  {
+    "id": 9157,
+    "type": "text",
+    "page_idx": 272,
+    "text": "The terms in sequence A go up by 3 each time. It is a linear sequence with common difference 3 and  $n$ th term  $3n + 2$ ."
+  },
+  {
+    "id": 9158,
+    "type": "text",
+    "page_idx": 272,
+    "text": "The terms in sequence B are each 1 greater than the square number sequence. So the nth term is  $n^2 + 1$ ."
+  },
+  {
+    "id": 9159,
+    "type": "text",
+    "page_idx": 272,
+    "text": "In sequence C, each term is found by adding the equivalent terms of sequence A and B together:  $5 + 2 = 7$ ,  $8 + 5 = 13$ , and so on. You can find the nth term in a similar way."
+  },
+  {
+    "id": 9160,
+    "type": "text",
+    "page_idx": 272,
+    "text": "The completed table is:"
+  },
+  {
+    "id": 9161,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Sequence</td><td>1st term</td><td>2nd term</td><td>3rd term</td><td>4th term</td><td></td><td>nth term</td></tr>",
+    "page_idx": 272
+  },
+  {
+    "id": 9162,
+    "type": "text",
+    "text": "[Table Row] <tr><td>A</td><td>5</td><td>8</td><td>11</td><td>14</td><td></td><td>3n + 2</td></tr>",
+    "page_idx": 272
+  },
+  {
+    "id": 9163,
+    "type": "text",
+    "text": "[Table Row] <tr><td>B</td><td>2</td><td>5</td><td>10</td><td>17</td><td></td><td>n2 + 1</td></tr>",
+    "page_idx": 272
+  },
+  {
+    "id": 9164,
+    "type": "text",
+    "text": "[Table Row] <tr><td>C</td><td>7</td><td>13</td><td>21</td><td>31</td><td></td><td>n2 + 3n + 3</td></tr>",
+    "page_idx": 272
+  },
+  {
+    "id": 9165,
+    "type": "text",
+    "page_idx": 272,
+    "text": "Exercise 9.2"
+  },
+  {
+    "id": 9166,
+    "type": "text",
+    "page_idx": 272,
+    "text": "1 Write down the next three terms in each of the following sequences."
+  },
+  {
+    "id": 9167,
+    "type": "text",
+    "page_idx": 272,
+    "text": "a 3 7 11 15 19 ... b 4 9 16 25 36 ... c 23 19 13 5 -5"
+  },
+  {
+    "id": 9168,
+    "type": "text",
+    "page_idx": 272,
+    "text": "2 List the first three terms and find the 20th term of the number patterns given by the following rules, where  $\\mathrm{T} =$  term and  $n =$  the position of the term."
+  },
+  {
+    "id": 9169,
+    "type": "text",
+    "page_idx": 272,
+    "text": "a  $\\mathrm{T}_n = 4 - 3n$  b  $\\mathrm{T}_n = 2 - n$  c  $\\mathrm{T}_n = \\frac{1}{2} n^2$  d  $\\mathrm{T}_n = n(n + 1)(n - 1)$  e  $T_{n} = \\frac{3}{1 + n}$  f  $\\mathrm{T}_n = 2n^3$"
+  },
+  {
+    "id": 9170,
+    "type": "text",
+    "page_idx": 272,
+    "text": "3 Find the (i) 15th and (ii) nth term for each of the following sequences."
+  },
+  {
+    "id": 9171,
+    "type": "text",
+    "page_idx": 272,
+    "text": "a 5,7,9,11,13,... b 3,8,13,18,23,..."
+  },
+  {
+    "id": 9172,
+    "type": "text",
+    "page_idx": 272,
+    "text": "c 3,9,27,81,243,... d 0.5,2,3.5,5,6.5,..."
+  },
+  {
+    "id": 9173,
+    "type": "text",
+    "page_idx": 272,
+    "text": "e 8,5,2,-1,-4,... f 13,11,9,7,5,..."
+  },
+  {
+    "id": 9174,
+    "type": "text",
+    "page_idx": 272,
+    "text": "g 6,4.8,3.6,2.4,1.2,... h 2,8,18,32,50,..."
+  },
+  {
+    "id": 9175,
+    "type": "text",
+    "page_idx": 272,
+    "text": "4 Consider the sequence:"
+  },
+  {
+    "id": 9176,
+    "type": "text",
+    "page_idx": 272,
+    "text": "4,12,20,28,36,44,52,..."
+  },
+  {
+    "id": 9177,
+    "type": "text",
+    "text": "a Find the nth term of the sequence.",
+    "page_idx": 272
+  },
+  {
+    "id": 9178,
+    "type": "text",
+    "text": "b Find the 500th term.",
+    "page_idx": 272
+  },
+  {
+    "id": 9179,
+    "type": "text",
+    "text": "c Which term of this sequence has the value 236? Show full working.",
+    "page_idx": 272
+  },
+  {
+    "id": 9180,
+    "type": "text",
+    "text": "d Show that 154 is not a term in the sequence.",
+    "page_idx": 272
+  },
+  {
+    "id": 9181,
+    "type": "text",
+    "page_idx": 272,
+    "text": "TIP"
+  },
+  {
+    "id": 9182,
+    "type": "text",
+    "page_idx": 272,
+    "text": "In any sequence  $n$  must be a positive integer. There are no negative 'positions' for terms. For example,  $n$  can be 7 because it is possible to have a 7th term, but  $n$  cannot be -7 as it is not possible to have a -7th term."
+  },
+  {
+    "id": 9183,
+    "type": "text",
+    "page_idx": 273,
+    "text": "5 The following information is given about a quadratic sequence."
+  },
+  {
+    "id": 9184,
+    "type": "image",
+    "page_idx": 273,
+    "img_path": "images/12f6a67c53ab63dbb12104b303b7f992a51d8b340225907e4185d43673c53a3c.jpg"
+  },
+  {
+    "id": 9185,
+    "type": "text",
+    "page_idx": 273,
+    "text": "Copy the diagram and write the correct values in the empty boxes."
+  },
+  {
+    "id": 9186,
+    "type": "text",
+    "page_idx": 273,
+    "text": "6 Consider the sequence:"
+  },
+  {
+    "id": 9187,
+    "type": "text",
+    "page_idx": 273,
+    "text": "3,8,15,24,35..."
+  },
+  {
+    "id": 9188,
+    "type": "text",
+    "text": "a Show that this is a quadratic sequence.",
+    "page_idx": 273
+  },
+  {
+    "id": 9189,
+    "type": "text",
+    "text": "b Determine the value of the 6th term.",
+    "page_idx": 273
+  },
+  {
+    "id": 9190,
+    "type": "text",
+    "text": "c Write an expression for the general term.",
+    "page_idx": 273
+  },
+  {
+    "id": 9191,
+    "type": "text",
+    "text": "d Work out the 20th term.",
+    "page_idx": 273
+  },
+  {
+    "id": 9192,
+    "type": "text",
+    "text": "7 If  $x + 1$  and  $-x + 17$  are the second and sixth terms of a sequence with a common difference of 5, find the value of  $x$ .",
+    "page_idx": 273
+  },
+  {
+    "id": 9193,
+    "type": "text",
+    "text": "8 If  $x + 4$  and  $x - 4$  are the third and seventh terms of a sequence with a common difference of  $-2$ , determine  $n$  when  $T_n = x$ .",
+    "page_idx": 273
+  },
+  {
+    "id": 9194,
+    "type": "text",
+    "text": "9 a Write down the first five terms in the sequence with nth term  $2n^{2}$",
+    "page_idx": 273
+  },
+  {
+    "id": 9195,
+    "type": "text",
+    "text": "b Use your answer to part (a) to find the nth term for each of the following sequences:",
+    "page_idx": 273
+  },
+  {
+    "id": 9196,
+    "type": "text",
+    "text": "[Table Row] <tr><td>i</td><td>3</td><td>9</td><td>19</td><td>33</td><td>51</td></tr>",
+    "page_idx": 273
+  },
+  {
+    "id": 9197,
+    "type": "text",
+    "text": "[Table Row] <tr><td>ii</td><td>4</td><td>16</td><td>36</td><td>64</td><td>100</td></tr>",
+    "page_idx": 273
+  },
+  {
+    "id": 9198,
+    "type": "text",
+    "text": "[Table Row] <tr><td>iii</td><td>7</td><td>25</td><td>55</td><td>97</td><td>151</td></tr>",
+    "page_idx": 273
+  },
+  {
+    "id": 9199,
+    "type": "text",
+    "page_idx": 273,
+    "text": "c Now consider the sequence:"
+  }
+]
+```

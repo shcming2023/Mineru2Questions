@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 22330,
+    "type": "text",
+    "page_idx": 830,
+    "text": "Position vectors"
+  },
+  {
+    "id": 22331,
+    "type": "text",
+    "page_idx": 830,
+    "text": "A vector that starts from the origin  $(O)$  is called a position vector."
+  },
+  {
+    "id": 22332,
+    "type": "text",
+    "page_idx": 830,
+    "text": "In this diagram, point  $A$  has the position vector  $\\overrightarrow{OA}$  or a."
+  },
+  {
+    "id": 22333,
+    "type": "text",
+    "page_idx": 830,
+    "text": "If  $\\mathbf{a} = \\begin{pmatrix} 3 \\\\ 2 \\end{pmatrix}$  then the coordinates of point  $A$  will be (3, 2)."
+  },
+  {
+    "id": 22334,
+    "type": "text",
+    "page_idx": 830,
+    "text": "Because the coordinates of the point  $A$  are the same as the components of the column vector  $\\binom{3}{2}$  you can use position"
+  },
+  {
+    "id": 22335,
+    "type": "text",
+    "page_idx": 830,
+    "text": "vectors to find the magnitude of any vector."
+  },
+  {
+    "id": 22336,
+    "type": "image",
+    "page_idx": 830,
+    "img_path": "images/dff32e00492fed03e9ab9884e7fbe2917fc3463429bb20be118578af65e3d83e.jpg"
+  },
+  {
+    "id": 22337,
+    "type": "text",
+    "page_idx": 830,
+    "text": "WORKED EXAMPLE 23"
+  },
+  {
+    "id": 22338,
+    "type": "text",
+    "page_idx": 830,
+    "text": "The position vector of  $A$  is  $\\binom{3}{2}$  and the"
+  },
+  {
+    "id": 22339,
+    "type": "text",
+    "page_idx": 830,
+    "text": "position vector of  $B$  is  $\\binom{-2}{4}$"
+  },
+  {
+    "id": 22340,
+    "type": "text",
+    "page_idx": 830,
+    "text": "Find the vector 2AB."
+  },
+  {
+    "id": 22341,
+    "type": "text",
+    "page_idx": 830,
+    "text": "Answer"
+  },
+  {
+    "id": 22342,
+    "type": "equation",
+    "page_idx": 830,
+    "text": "$$\n\\overrightarrow {O A} = \\binom {3} {2} \\text {a n d} \\overrightarrow {O B} = \\binom {- 2} {4}\n$$"
+  },
+  {
+    "id": 22343,
+    "type": "equation",
+    "page_idx": 830,
+    "text": "$$\n\\begin{array}{l} \\overrightarrow {A B} = \\overrightarrow {A O} + \\overrightarrow {O B} = - \\overrightarrow {O A} + \\overrightarrow {O B} = \\overrightarrow {O B} - \\overrightarrow {O A} \\\\ = \\binom {- 2} {4} - \\binom {3} {2} = \\binom {- 5} {2} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 22344,
+    "type": "equation",
+    "page_idx": 830,
+    "text": "$$\n\\mathrm {S o}, 2 \\overrightarrow {A B} = 2 \\binom {- 5} {2} = \\binom {- 1 0} {4}.\n$$"
+  },
+  {
+    "id": 22345,
+    "type": "text",
+    "page_idx": 830,
+    "text": "Alternative method:"
+  },
+  {
+    "id": 22346,
+    "type": "text",
+    "page_idx": 830,
+    "text": "You could also find the column vector for  $\\overrightarrow{AB}$  by counting the movements parallel to the  $x$ -axis followed by those parallel to the  $y$ -axis."
+  },
+  {
+    "id": 22347,
+    "type": "text",
+    "page_idx": 830,
+    "text": "Movement parallel to  $x$ -axis  $= -5$  units. Movement parallel to the  $y$ -axis  $= 2$  units."
+  },
+  {
+    "id": 22348,
+    "type": "equation",
+    "page_idx": 830,
+    "text": "$$\n\\overrightarrow {A B} = \\left( \\begin{array}{c} - 5 \\\\ 2 \\end{array} \\right)\n$$"
+  },
+  {
+    "id": 22349,
+    "type": "image",
+    "page_idx": 830,
+    "img_path": "images/1f8a2421bca7d6d1fa992fac5dcf1068f65df5b595b1374f163f03be354b4be6.jpg"
+  },
+  {
+    "id": 22350,
+    "type": "text",
+    "page_idx": 831,
+    "text": "TIP"
+  },
+  {
+    "id": 22351,
+    "type": "text",
+    "page_idx": 831,
+    "text": "$\\overrightarrow{AB} = \\mathbf{b} - \\mathbf{a}$  where a and b are the positive vectors of A and B."
+  },
+  {
+    "id": 22352,
+    "type": "image",
+    "page_idx": 831,
+    "img_path": "images/6d10266470fa943e9c04292f2c474115708e59e9a26094ce83e9a15390345a81.jpg"
+  },
+  {
+    "id": 22353,
+    "type": "text",
+    "page_idx": 831,
+    "text": "WORKED EXAMPLE 24"
+  },
+  {
+    "id": 22354,
+    "type": "text",
+    "page_idx": 831,
+    "text": "If  $A$  is point  $(-1, -2)$  and  $B$  is  $(5, 6)$ , find  $|\\overrightarrow{AB}|$ ."
+  },
+  {
+    "id": 22355,
+    "type": "text",
+    "page_idx": 831,
+    "text": "Answer"
+  },
+  {
+    "id": 22356,
+    "type": "equation",
+    "page_idx": 831,
+    "text": "$$\n\\begin{array}{l} \\overrightarrow {O A} = \\left( \\begin{array}{l} - 1 \\\\ - 2 \\end{array} \\right) \\text {a n d} \\overrightarrow {O B} = \\left( \\begin{array}{l} 5 \\\\ 6 \\end{array} \\right). \\\\ \\overrightarrow {A B} = \\overrightarrow {A O} + \\overrightarrow {O B} = - \\overrightarrow {O A} + \\overrightarrow {O B} \\\\ = \\binom {- (- 1) + 5} {- (- 2) + 6} = \\binom {6} {8} \\\\ \\left| \\overrightarrow {A B} \\right| = \\sqrt {6 ^ {2} + 8 ^ {2}} = \\sqrt {3 6 + 6 4} = \\sqrt {1 0 0} = 1 0 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 22357,
+    "type": "text",
+    "page_idx": 831,
+    "text": "Exercise 23.9"
+  },
+  {
+    "id": 22358,
+    "type": "text",
+    "page_idx": 831,
+    "text": "1 Calculate the magnitude of each vector. Give your answers to 2 decimal places where necessary."
+  },
+  {
+    "id": 22359,
+    "type": "image",
+    "page_idx": 831,
+    "img_path": "images/d7a0cd206ac412d0340a107d9a86a3068def2afbff7e23441405fec7c1de24c1.jpg"
+  },
+  {
+    "id": 22360,
+    "type": "text",
+    "page_idx": 831,
+    "text": "2 Find the magnitude of the following vectors. Give your answers to 2 decimal places where necessary."
+  },
+  {
+    "id": 22361,
+    "type": "text",
+    "page_idx": 831,
+    "text": "a a=5 9"
+  },
+  {
+    "id": 22362,
+    "type": "text",
+    "page_idx": 831,
+    "text": "MN 7"
+  },
+  {
+    "id": 22363,
+    "type": "text",
+    "page_idx": 831,
+    "text": "x="
+  },
+  {
+    "id": 22364,
+    "type": "text",
+    "page_idx": 831,
+    "text": "d  $\\overrightarrow{PQ} = \\binom{-6}{-8}$"
+  },
+  {
+    "id": 22365,
+    "type": "text",
+    "page_idx": 831,
+    "text": "3  $O$  is the point  $(0,0)$ $P$  is (3,4),  $Q$  is  $(-5,12)$  and  $R$  is  $(-8, - 15)$"
+  },
+  {
+    "id": 22366,
+    "type": "text",
+    "page_idx": 831,
+    "text": "Find the values of:"
+  },
+  {
+    "id": 22367,
+    "type": "text",
+    "page_idx": 831,
+    "text": "a  $\\left| \\overrightarrow{OP}\\right|$"
+  },
+  {
+    "id": 22368,
+    "type": "text",
+    "page_idx": 831,
+    "text": "b"
+  },
+  {
+    "id": 22369,
+    "type": "text",
+    "page_idx": 831,
+    "text": "c |OR|"
+  },
+  {
+    "id": 22370,
+    "type": "text",
+    "page_idx": 832,
+    "text": "4 Points  $A,B$  and  $C$  have position vectors  $\\overrightarrow{OA} = \\binom{4}{2},\\overrightarrow{OB} = \\binom{-1}{3}$  and  $\\overrightarrow{OC} = \\binom{6}{-2}$"
+  },
+  {
+    "id": 22371,
+    "type": "text",
+    "text": "a Write down the coordinates of  $A,B$  and  $C$",
+    "page_idx": 832
+  },
+  {
+    "id": 22372,
+    "type": "text",
+    "text": "b Write down the vectors  $\\overrightarrow{AB}$ ,  $\\overrightarrow{CB}$  and  $\\overrightarrow{AC}$  in column vector form.",
+    "page_idx": 832
+  },
+  {
+    "id": 22373,
+    "type": "text",
+    "page_idx": 832,
+    "text": "5 Find the magnitude of:"
+  },
+  {
+    "id": 22374,
+    "type": "text",
+    "text": "a the vector joining the points  $(-3, -3)$  and  $(3, 5)$",
+    "page_idx": 832
+  },
+  {
+    "id": 22375,
+    "type": "text",
+    "text": "b the vector joining the points  $(-2,6)$  and  $(3, - 1)$",
+    "page_idx": 832
+  },
+  {
+    "id": 22376,
+    "type": "text",
+    "page_idx": 832,
+    "text": "TIP"
+  },
+  {
+    "id": 22377,
+    "type": "text",
+    "page_idx": 832,
+    "text": "If a question on vectors does not provide a diagram, it may help if you draw one yourself."
+  },
+  {
+    "id": 22378,
+    "type": "text",
+    "page_idx": 832,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 22379,
+    "type": "text",
+    "text": "6 Vector b shows the velocity (in km/h) of a car on a highway. The sides of each square on the grid represent a speed of  $20\\mathrm{km / h}$ . Find the speed at which the car was travelling.",
+    "page_idx": 832
+  },
+  {
+    "id": 22380,
+    "type": "text",
+    "text": "7 Vector v represents the velocity in km/h of a person jogging. The sides of each block on the grid represent a speed of 1 km/h. Calculate the speed at which the person was jogging.",
+    "page_idx": 832
+  },
+  {
+    "id": 22381,
+    "type": "image",
+    "page_idx": 832,
+    "img_path": "images/8be763d53ac4d112112e855208e354367503bfeaf6d7966d807e154fa924acc3.jpg"
+  },
+  {
+    "id": 22382,
+    "type": "image",
+    "page_idx": 832,
+    "img_path": "images/b692445e877c2530e7817b04f2973f7f3051b53e0ea69e4148df06120f0c3536.jpg"
+  },
+  {
+    "id": 22383,
+    "type": "text",
+    "page_idx": 832,
+    "text": "8 In the diagram  $OA = a$  and  $OB = b$"
+  },
+  {
+    "id": 22384,
+    "type": "text",
+    "page_idx": 832,
+    "text": "Also  $\\overrightarrow{AC} = 2\\mathbf{a}$  and  $\\overrightarrow{AD} = 3\\mathbf{b} - \\mathbf{a}$"
+  },
+  {
+    "id": 22385,
+    "type": "text",
+    "text": "a Write  $AB$  in terms of a and b.",
+    "page_idx": 832
+  },
+  {
+    "id": 22386,
+    "type": "text",
+    "text": "b  $OD = n\\mathbf{b}$  where  $n$  is a whole number. Find  $n$",
+    "page_idx": 832
+  },
+  {
+    "id": 22387,
+    "type": "text",
+    "text": "c Prove that  $OAB$  and  $OCD$  are similar triangles.",
+    "page_idx": 832
+  },
+  {
+    "id": 22388,
+    "type": "image",
+    "page_idx": 832,
+    "img_path": "images/5ec9ade730570013c94c925d28f50022f7acc8809e1e3d45ec4784c5cd67b807.jpg"
+  },
+  {
+    "id": 22389,
+    "type": "text",
+    "page_idx": 832,
+    "text": "9"
+  },
+  {
+    "id": 22390,
+    "type": "image",
+    "page_idx": 832,
+    "img_path": "images/11d5f58a97404f3d4cd1e54b6cac99a2476fe9f2571d6ba3f55c82174891000a.jpg"
+  },
+  {
+    "id": 22391,
+    "type": "text",
+    "page_idx": 832,
+    "text": "In the diagram  $\\overrightarrow{OP} = \\mathbf{p}, \\overrightarrow{OQ} = \\mathbf{q}, QR = \\frac{1}{2} OP$  and  $SQ = \\frac{1}{3} PQ$ ."
+  },
+  {
+    "id": 22392,
+    "type": "text",
+    "page_idx": 832,
+    "text": "$RQ$  is parallel to  $OP$ ."
+  },
+  {
+    "id": 22393,
+    "type": "text",
+    "page_idx": 832,
+    "text": "Find in terms of  $\\mathbf{p}$  and  $\\mathbf{q}$ :"
+  },
+  {
+    "id": 22394,
+    "type": "text",
+    "page_idx": 832,
+    "text": "a  $\\overrightarrow{PQ}$"
+  },
+  {
+    "id": 22395,
+    "type": "text",
+    "page_idx": 832,
+    "text": "b PS"
+  },
+  {
+    "id": 22396,
+    "type": "text",
+    "page_idx": 832,
+    "text": "C  $\\overrightarrow{OS}$"
+  },
+  {
+    "id": 22397,
+    "type": "text",
+    "page_idx": 832,
+    "text": "d OR"
+  },
+  {
+    "id": 22398,
+    "type": "text",
+    "page_idx": 833,
+    "text": "10 OATB is a parallelogram.  $M, N$  and  $P$  are midpoints of  $BT, AT$  and  $MN$  respectively.  $O$  is the origin and the position vectors of  $A$  and  $B$  are a and b respectively. Find in terms of a and/or b:"
+  },
+  {
+    "id": 22399,
+    "type": "text",
+    "page_idx": 833,
+    "text": "a MT"
+  },
+  {
+    "id": 22400,
+    "type": "text",
+    "page_idx": 833,
+    "text": "b TN"
+  },
+  {
+    "id": 22401,
+    "type": "text",
+    "page_idx": 833,
+    "text": "MN"
+  },
+  {
+    "id": 22402,
+    "type": "text",
+    "page_idx": 833,
+    "text": "the position vector of  $P$  , giving your answer in simplest form."
+  },
+  {
+    "id": 22403,
+    "type": "text",
+    "text": "11 Line  $MN$  has endpoints  $M(3,2)$  and  $N(7,14)$ . What are the coordinates of point  $P$ , which divides  $MN$  in the ratio  $1:3$ ?",
+    "page_idx": 833
+  },
+  {
+    "id": 22404,
+    "type": "text",
+    "text": "12 In this triangle,  $M$  is the midpoint of  $AB$  and the ratio  $ON:NA$  is  $1:2$ .",
+    "page_idx": 833
+  },
+  {
+    "id": 22405,
+    "type": "text",
+    "page_idx": 833,
+    "text": "Find in terms of a and b in its simplest form:"
+  },
+  {
+    "id": 22406,
+    "type": "text",
+    "page_idx": 833,
+    "text": "AB b AM c ON"
+  },
+  {
+    "id": 22407,
+    "type": "image",
+    "page_idx": 833,
+    "img_path": "images/f561ec35ce32ad25e8002960e6d60ffdabb1a46a430ff5fd4e873a8232918aa3.jpg"
+  },
+  {
+    "id": 22408,
+    "type": "text",
+    "page_idx": 833,
+    "text": "13 In this quadrilateral  $OABC$ ,  $AB$  is parallel to  $OC$  and the ratio  $OC$  to  $AB$  is  $2:3$ .  $\\overrightarrow{OA} = \\mathbf{a}$  and  $\\overrightarrow{OB} = \\mathbf{b}$ ."
+  },
+  {
+    "id": 22409,
+    "type": "text",
+    "page_idx": 833,
+    "text": "$N$  is the midpoint of  $OB$"
+  },
+  {
+    "id": 22410,
+    "type": "text",
+    "page_idx": 833,
+    "text": "$M$  is a point on  $AB$  such that  $\\overrightarrow{AM} = \\frac{1}{3}\\overrightarrow{AB}$ ."
+  },
+  {
+    "id": 22411,
+    "type": "image",
+    "page_idx": 833,
+    "img_path": "images/69984f903d804d595f88913afb058a1fac526d4928b2f08748d23afc88e027b8.jpg"
+  },
+  {
+    "id": 22412,
+    "type": "text",
+    "page_idx": 833,
+    "text": "a Find, in terms of a and b, in its simplest form:"
+  },
+  {
+    "id": 22413,
+    "type": "text",
+    "page_idx": 833,
+    "text": "i"
+  },
+  {
+    "id": 22414,
+    "type": "text",
+    "page_idx": 833,
+    "text": "AB"
+  },
+  {
+    "id": 22415,
+    "type": "text",
+    "page_idx": 833,
+    "text": "ii"
+  },
+  {
+    "id": 22416,
+    "type": "text",
+    "page_idx": 833,
+    "text": "AM"
+  },
+  {
+    "id": 22417,
+    "type": "text",
+    "page_idx": 833,
+    "text": "III"
+  },
+  {
+    "id": 22418,
+    "type": "text",
+    "page_idx": 833,
+    "text": "MN"
+  },
+  {
+    "id": 22419,
+    "type": "text",
+    "page_idx": 833,
+    "text": "iv"
+  },
+  {
+    "id": 22420,
+    "type": "text",
+    "page_idx": 833,
+    "text": "NC"
+  },
+  {
+    "id": 22421,
+    "type": "text",
+    "page_idx": 833,
+    "text": "b Explain why the vectors  $\\overrightarrow{MN}$  and  $\\overrightarrow{NC}$  shows that  $M, N$  and  $C$  lie on a straight line."
+  },
+  {
+    "id": 22422,
+    "type": "text",
+    "page_idx": 833,
+    "text": "DISCUSSION"
+  },
+  {
+    "id": 22423,
+    "type": "text",
+    "page_idx": 833,
+    "text": "Perpendicular vectors"
+  },
+  {
+    "id": 22424,
+    "type": "text",
+    "page_idx": 833,
+    "text": "Work with a partner. You will need a ruler and squared paper."
+  },
+  {
+    "id": 22425,
+    "type": "text",
+    "text": "1 Draw three different pairs of vectors that are perpendicular to each other.",
+    "page_idx": 833
+  },
+  {
+    "id": 22426,
+    "type": "text",
+    "text": "2 Use your diagrams to find a general rule for determining whether two vectors are perpendicular.",
+    "page_idx": 833
+  },
+  {
+    "id": 22427,
+    "type": "text",
+    "page_idx": 834,
+    "text": "SUMMARY"
+  },
+  {
+    "id": 22428,
+    "type": "text",
+    "page_idx": 834,
+    "text": "Do you know ...?"
+  },
+  {
+    "id": 22429,
+    "type": "text",
+    "page_idx": 834,
+    "text": "A transformation involves a change in the position and/or size of a shape."
+  }
+]
+```

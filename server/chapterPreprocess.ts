@@ -242,7 +242,7 @@ async function callChapterLLM(prompt: string, config: ChapterLLMConfig): Promise
     ],
     temperature: 0,
     max_tokens: 32000,
-    response_format: { type: 'json_object' },
+    // response_format: { type: 'json_object' }, // Removed for better compatibility
   });
 
   return response.data.choices[0].message.content;

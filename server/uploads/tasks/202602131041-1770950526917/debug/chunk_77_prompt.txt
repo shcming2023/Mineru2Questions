@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 5390,
+    "type": "text",
+    "page_idx": 178,
+    "text": "DISCUSSION"
+  },
+  {
+    "id": 5391,
+    "type": "text",
+    "page_idx": 178,
+    "text": "13 Discuss these questions about percentage increases and decreases in small groups. Be prepared to explain your answers to the class."
+  },
+  {
+    "id": 5392,
+    "type": "text",
+    "text": "a Two students start with the same number of points. Student A's points increase by  $10\\%$  each day. Student B's points decrease by  $10\\%$  each day. Will the original number of points have doubled and halved on the same day? Justify your answer.",
+    "page_idx": 178
+  },
+  {
+    "id": 5393,
+    "type": "text",
+    "text": "b Which results in more points: doubling the original number or a  $40\\%$  increase followed by a  $50\\%$  increase? Why?",
+    "page_idx": 178
+  },
+  {
+    "id": 5394,
+    "type": "text",
+    "text": "c Which of these offers gives cheaper data when you are buying airtime?",
+    "page_idx": 178
+  },
+  {
+    "id": 5395,
+    "type": "text",
+    "text": "50% discount from the price of data",
+    "page_idx": 178
+  },
+  {
+    "id": 5396,
+    "type": "text",
+    "text": "- 50% extra data free",
+    "page_idx": 178
+  },
+  {
+    "id": 5397,
+    "type": "text",
+    "page_idx": 179,
+    "text": "PEER ASSESSMENT"
+  },
+  {
+    "id": 5398,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Assess your partner's work in Exercise 5.10."
+  },
+  {
+    "id": 5399,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Provide feedback using these three headings:"
+  },
+  {
+    "id": 5400,
+    "type": "text",
+    "text": "What went well?",
+    "page_idx": 179
+  },
+  {
+    "id": 5401,
+    "type": "text",
+    "text": "How could your work be better?",
+    "page_idx": 179
+  },
+  {
+    "id": 5402,
+    "type": "text",
+    "text": "What steps can you take to improve?",
+    "page_idx": 179
+  },
+  {
+    "id": 5403,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Some sentence starters that you can use for each heading are given in the table."
+  },
+  {
+    "id": 5404,
+    "type": "text",
+    "text": "[Table Row] <tr><td>What went well?</td><td>How could your work be better?</td><td>Your next steps</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5405,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The things that went well were ...</td><td>To improve you can ...</td><td>Your next step should be ...</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5406,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You are good at ...</td><td>Try to ...</td><td>To make this even better</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5407,
+    "type": "text",
+    "text": "[Table Row] <tr><td>The best part of your work was ...</td><td>Next time you need to ...</td><td>you can ...</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5408,
+    "type": "text",
+    "text": "[Table Row] <tr><td>You can be proud of ...</td><td>If you do this again you could ...</td><td>It would be good if you could</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5409,
+    "type": "text",
+    "text": "[Table Row] <tr><td rowspan=\"3\">From your work I learned how to improve my own work by ...</td><td>To help you understand this ...</td><td>try to ...</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5410,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Look at ... in your coursebook</td><td>Ask for help on ...</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5411,
+    "type": "text",
+    "text": "[Table Row] <tr><td>to ...</td><td>Focus on ...</td></tr>",
+    "page_idx": 179
+  },
+  {
+    "id": 5412,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Reverse percentages"
+  },
+  {
+    "id": 5413,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Sometimes you are given the value or amount of an item after a percentage increase or decrease and you need to work out what the original value was. To solve these reverse percentage questions, it is important to remember that you are always dealing with percentages of the original values."
+  },
+  {
+    "id": 5414,
+    "type": "text",
+    "page_idx": 179,
+    "text": "WORKED EXAMPLE 17"
+  },
+  {
+    "id": 5415,
+    "type": "text",
+    "page_idx": 179,
+    "text": "A store is holding a sale in which every item is reduced by  $10\\%$ . A jacket in this sale is sold for $108."
+  },
+  {
+    "id": 5416,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Calculate the original price of the jacket."
+  },
+  {
+    "id": 5417,
+    "type": "text",
+    "page_idx": 179,
+    "text": "Answer"
+  },
+  {
+    "id": 5418,
+    "type": "text",
+    "page_idx": 179,
+    "text": "\\(\\frac{90}{100} \\times x = 108\\) The new cost is \\(90\\%\\) of the original.  \n\\(x = \\frac{100}{90} \\times 108\\) To solve for \\(x\\), multiply both sides of the equation by Original price \\(= \\\\)120\\) the reciprocal of \\(\\frac{90}{100}\\)."
+  },
+  {
+    "id": 5419,
+    "type": "text",
+    "page_idx": 179,
+    "text": "It is important to remember that undoing a  $10\\%$  decrease is not the same as increasing the reduced value by  $10\\%$ . If you increase the sale price of  $108$  by  $10\\%$  you will get  $\\frac{110}{100} \\times \\$108 = \\$118.80$ , which is a different (and incorrect) answer."
+  },
+  {
+    "id": 5420,
+    "type": "text",
+    "page_idx": 180,
+    "text": "You can use a bar model to help you with reverse percentage calculations."
+  },
+  {
+    "id": 5421,
+    "type": "text",
+    "page_idx": 180,
+    "text": "WORKED EXAMPLE 18"
+  },
+  {
+    "id": 5422,
+    "type": "text",
+    "page_idx": 180,
+    "text": "A shop advertises a laptop for sale for \\(320 during a \\(20 \\%\\)off sale. What was the original price of the laptop?"
+  },
+  {
+    "id": 5423,
+    "type": "text",
+    "page_idx": 180,
+    "text": "Answer"
+  },
+  {
+    "id": 5424,
+    "type": "image",
+    "page_idx": 180,
+    "img_path": "images/6fbcec285db2eebb31934ad20a80be77984935ac09cfb7fa3c974ac92fe79323.jpg"
+  },
+  {
+    "id": 5425,
+    "type": "text",
+    "page_idx": 180,
+    "text": "Draw a bar model."
+  },
+  {
+    "id": 5426,
+    "type": "text",
+    "page_idx": 180,
+    "text": "20% has been taken off, so $320 is 80% of the original cost."
+  },
+  {
+    "id": 5427,
+    "type": "equation",
+    "page_idx": 180,
+    "text": "$$\n1 \\% = \\frac {\\mathbb {S} 320}{80} = \\mathbb {S} 4\n$$"
+  },
+  {
+    "id": 5428,
+    "type": "equation",
+    "page_idx": 180,
+    "text": "$$\n100 \\% = \\$ 4 \\times 100 = \\$ 400\n$$"
+  },
+  {
+    "id": 5429,
+    "type": "text",
+    "page_idx": 180,
+    "text": "Divide $320 by 80 to find 1%"
+  },
+  {
+    "id": 5430,
+    "type": "text",
+    "page_idx": 180,
+    "text": "Multiply $4 by 100 to find 100%"
+  },
+  {
+    "id": 5431,
+    "type": "text",
+    "page_idx": 180,
+    "text": "Exercise 5.11"
+  },
+  {
+    "id": 5432,
+    "type": "text",
+    "text": "1 If  $20\\%$  of an amount is 35, what is  $100\\%$",
+    "page_idx": 180
+  },
+  {
+    "id": 5433,
+    "type": "text",
+    "text": "2 If  $35\\%$  of an amount is 127, what is  $100\\%$ ?",
+    "page_idx": 180
+  },
+  {
+    "id": 5434,
+    "type": "text",
+    "text": "3 245 is  $12.5\\%$  of an amount. What is the total amount?",
+    "page_idx": 180
+  },
+  {
+    "id": 5435,
+    "type": "text",
+    "text": "4 The table gives the sale price and the per cent by which the price was reduced for a number of items. Copy the table and complete it by calculating the original prices.",
+    "page_idx": 180
+  },
+  {
+    "id": 5436,
+    "type": "text",
+    "text": "[Table Row] <tr><td>Sale price ($)</td><td>% reduction</td><td>Original price ($)</td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5437,
+    "type": "text",
+    "text": "[Table Row] <tr><td>52.00</td><td>10</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5438,
+    "type": "text",
+    "text": "[Table Row] <tr><td>185.00</td><td>10</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5439,
+    "type": "text",
+    "text": "[Table Row] <tr><td>4700.00</td><td>5</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5440,
+    "type": "text",
+    "text": "[Table Row] <tr><td>2.90</td><td>5</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5441,
+    "type": "text",
+    "text": "[Table Row] <tr><td>24.50</td><td>12</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5442,
+    "type": "text",
+    "text": "[Table Row] <tr><td>10.00</td><td>8</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5443,
+    "type": "text",
+    "text": "[Table Row] <tr><td>12.50</td><td>7</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5444,
+    "type": "text",
+    "text": "[Table Row] <tr><td>9.75</td><td>15</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5445,
+    "type": "text",
+    "text": "[Table Row] <tr><td>199.50</td><td>20</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5446,
+    "type": "text",
+    "text": "[Table Row] <tr><td>99.00</td><td>25</td><td></td></tr>",
+    "page_idx": 180
+  },
+  {
+    "id": 5447,
+    "type": "text",
+    "page_idx": 180,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 5448,
+    "type": "text",
+    "page_idx": 180,
+    "text": "5 A shop keeper increases the cost price of items by  $22\\%$  before selling them. The selling price (after the increase) of ten items are given below. For each item, work out the cost price."
+  },
+  {
+    "id": 5449,
+    "type": "text",
+    "page_idx": 180,
+    "text": "a $25.00"
+  },
+  {
+    "id": 5450,
+    "type": "text",
+    "page_idx": 180,
+    "text": "b $200.00"
+  },
+  {
+    "id": 5451,
+    "type": "text",
+    "page_idx": 180,
+    "text": "c $14.50"
+  },
+  {
+    "id": 5452,
+    "type": "text",
+    "page_idx": 180,
+    "text": "d $23.99"
+  },
+  {
+    "id": 5453,
+    "type": "text",
+    "page_idx": 180,
+    "text": "e $15.80"
+  },
+  {
+    "id": 5454,
+    "type": "text",
+    "page_idx": 180,
+    "text": "f $45.80"
+  },
+  {
+    "id": 5455,
+    "type": "text",
+    "page_idx": 180,
+    "text": "g $29.75"
+  },
+  {
+    "id": 5456,
+    "type": "text",
+    "page_idx": 180,
+    "text": "h $129.20"
+  },
+  {
+    "id": 5457,
+    "type": "text",
+    "page_idx": 180,
+    "text": "i $0.99"
+  },
+  {
+    "id": 5458,
+    "type": "text",
+    "page_idx": 180,
+    "text": "j $0.80"
+  },
+  {
+    "id": 5459,
+    "type": "text",
+    "page_idx": 181,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 5460,
+    "type": "text",
+    "page_idx": 181,
+    "text": "6 Seven students were absent from a class on Monday. This is  $17.5\\%$  of the class."
+  },
+  {
+    "id": 5461,
+    "type": "text",
+    "text": "a How many students are there in the class in total?",
+    "page_idx": 181
+  },
+  {
+    "id": 5462,
+    "type": "text",
+    "text": "b How many students were present on Monday?",
+    "page_idx": 181
+  },
+  {
+    "id": 5463,
+    "type": "text",
+    "text": "7 A hat shop is holding a  $10\\%$  sale. If Jay buys a hat for $18 in the sale, how much did the hat cost before the sale?",
+    "page_idx": 181
+  },
+  {
+    "id": 5464,
+    "type": "text",
+    "text": "8 While Suresh is training for a race, he reduces his weight by  $5\\%$  over a 3-month period. If Suresh weighs  $76\\mathrm{kg}$  at the end of three months, how much did he weigh before he started training?",
+    "page_idx": 181
+  },
+  {
+    "id": 5465,
+    "type": "text",
+    "text": "The water in a pond evaporates at a rate of  $12\\%$  per week. If the pond now contains 185 litres of water, approximately how much water was in the pond a week ago?",
+    "page_idx": 181
+  },
+  {
+    "id": 5466,
+    "type": "text",
+    "page_idx": 181,
+    "text": "5.4 Standard form"
+  },
+  {
+    "id": 5467,
+    "type": "image",
+    "page_idx": 181,
+    "img_path": "images/11e235b0c806fce45ac0cd1aafcd3ee8806beb77c65eb29e1020009fa63b7c73.jpg"
+  },
+  {
+    "id": 5468,
+    "type": "text",
+    "text": "There are an estimated 10000000000000000000000000 stars in the universe.",
+    "page_idx": 181
+  },
+  {
+    "id": 5469,
+    "type": "text",
+    "text": "The star Betelgeuse has a mass of 218800000000000000000000000000000 kg.",
+    "page_idx": 181
+  },
+  {
+    "id": 5470,
+    "type": "text",
+    "text": "A single carbon atom has a mass of 0.000000000000000000000000000000199kg.",
+    "page_idx": 181
+  },
+  {
+    "id": 5471,
+    "type": "text",
+    "page_idx": 181,
+    "text": "It is clumsy and impractical to write out very large and very small numbers like this. You might make mistakes and add or miss out zeros in calculations. We use standard form to express very small and very large numbers as a number multiplied by a power of 10."
+  },
+  {
+    "id": 5472,
+    "type": "text",
+    "page_idx": 181,
+    "text": "LINK"
+  },
+  {
+    "id": 5473,
+    "type": "text",
+    "page_idx": 181,
+    "text": "Very small and very large numbers occur often in chemistry; the carbon atom mass, given here, is just one example. The reason this happens a lot is because the subject usually deals with very small objects in very large numbers."
+  },
+  {
+    "id": 5474,
+    "type": "text",
+    "page_idx": 181,
+    "text": "TIP"
+  },
+  {
+    "id": 5475,
+    "type": "text",
+    "page_idx": 181,
+    "text": "Standard form is also called scientific notation or exponential notation."
+  },
+  {
+    "id": 5476,
+    "type": "text",
+    "page_idx": 182,
+    "text": "Writing numbers in standard form"
+  },
+  {
+    "id": 5477,
+    "type": "text",
+    "page_idx": 182,
+    "text": "You can write any number in standard form by writing it as a number between 1 and 10 multiplied by a suitable power of 10. In algebraic language we say that any number can be written in the form  $A \\times 10^n$ , where  $1 \\leq A < 10$  and  $n$  is an integer."
+  },
+  {
+    "id": 5478,
+    "type": "text",
+    "page_idx": 182,
+    "text": "The numbers at the start of this section can be written in standard form as  $1 \\times 10^{24}$ ,  $2.188 \\times 10^{31}$  and  $1.99 \\times 10^{-26}$ ."
+  },
+  {
+    "id": 5479,
+    "type": "text",
+    "page_idx": 182,
+    "text": "When a number is in standard form, the index (power of 10) tells you how many places the digits have moved and whether they have moved to the right or left."
+  },
+  {
+    "id": 5480,
+    "type": "text",
+    "page_idx": 182,
+    "text": "WORKED EXAMPLE 19"
+  },
+  {
+    "id": 5481,
+    "type": "text",
+    "page_idx": 182,
+    "text": "Write 320000 in standard form."
+  },
+  {
+    "id": 5482,
+    "type": "text",
+    "page_idx": 182,
+    "text": "Answer"
+  },
+  {
+    "id": 5483,
+    "type": "text",
+    "page_idx": 182,
+    "text": "3.2"
+  },
+  {
+    "id": 5484,
+    "type": "image",
+    "page_idx": 182,
+    "img_path": "images/0778d4feeafc62ec947d4ef04174d0e6077b287f1957717e7f5cbf1203d4305a.jpg"
+  },
+  {
+    "id": 5485,
+    "type": "text",
+    "page_idx": 182,
+    "text": "Write the number with the decimal point after the first non-zero digit to get a number between 1 and 10."
+  },
+  {
+    "id": 5486,
+    "type": "text",
+    "page_idx": 182,
+    "text": "Work out how many places the first digit needs to move to get back to its original place. In this case, the 3 needs to move five places to the left to get back to its original hundred thousands position."
+  },
+  {
+    "id": 5487,
+    "type": "text",
+    "page_idx": 182,
+    "text": "$320000 = 3.2 \\times 10^{5}$"
+  },
+  {
+    "id": 5488,
+    "type": "text",
+    "page_idx": 182,
+    "text": "Work out the index (power of 10). In this case, the original number is bigger than 3.2 so the index will be positive."
+  },
+  {
+    "id": 5489,
+    "type": "text",
+    "page_idx": 182,
+    "text": "In other words, to move the digit 3 back to its original position you would need to multiply by 105."
+  }
+]
+```

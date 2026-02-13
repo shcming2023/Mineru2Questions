@@ -1,0 +1,822 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 6370,
+    "type": "text",
+    "page_idx": 213,
+    "text": "Circumference is the word used to identify the perimeter of a circle. Note that the diameter  $= 2 \\times$  radius  $= 2r$ . The Ancient Greeks knew that they could find the circumference of a circle by multiplying the diameter by a particular number. This number is now known as  $\\pi$ , which is the Greek letter 'pi'.  $\\pi$  is equal to 3.141592654... This is only the start of the number;  $\\pi$  is an irrational number, so the decimal places go on forever and never repeat."
+  },
+  {
+    "id": 6371,
+    "type": "text",
+    "page_idx": 213,
+    "text": "You can find the circumference of a circle using formulae that uses either the radius or the diameter:"
+  },
+  {
+    "id": 6372,
+    "type": "text",
+    "text": "Circumference  $= \\pi \\times$  diameter",
+    "page_idx": 213
+  },
+  {
+    "id": 6373,
+    "type": "text",
+    "text": "$= \\pi d$  (where  $d =$  diameter)",
+    "page_idx": 213
+  },
+  {
+    "id": 6374,
+    "type": "text",
+    "text": "$= 2\\pi r$  (where  $r =$  radius)",
+    "page_idx": 213
+  },
+  {
+    "id": 6375,
+    "type": "text",
+    "page_idx": 213,
+    "text": "Finding the area of a circle"
+  },
+  {
+    "id": 6376,
+    "type": "text",
+    "page_idx": 213,
+    "text": "There is a simple formula for calculating the area of a circle. Here is a method that shows how you can work out the formula:"
+  },
+  {
+    "id": 6377,
+    "type": "text",
+    "page_idx": 213,
+    "text": "Consider the circle shown in the diagram. It has been divided into 12 equal parts and these have been rearranged to give the diagram on the right."
+  },
+  {
+    "id": 6378,
+    "type": "image",
+    "page_idx": 213,
+    "img_path": "images/fbd23a338a42edc6354df4e785f36b7ab4d76f9bf7c6ecbc19c75a4b0c410c73.jpg"
+  },
+  {
+    "id": 6379,
+    "type": "text",
+    "page_idx": 213,
+    "text": "The parts of the circle are narrow, so the shape almost forms a rectangle with height equal to the radius of the circle and the length equal to half of the circumference."
+  },
+  {
+    "id": 6380,
+    "type": "text",
+    "page_idx": 214,
+    "text": "The formula for the area of a rectangle is area  $= bh$ , so:"
+  },
+  {
+    "id": 6381,
+    "type": "text",
+    "page_idx": 214,
+    "text": "Area of a circle is approximately equal to"
+  },
+  {
+    "id": 6382,
+    "type": "text",
+    "page_idx": 214,
+    "text": "$\\frac{1}{2} \\times 2\\pi r \\times r$  (Using the base and height shown in the diagram on the previous page.)"
+  },
+  {
+    "id": 6383,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n= \\pi r ^ {2} \\quad \\text {(S i m p l i f y .)}\n$$"
+  },
+  {
+    "id": 6384,
+    "type": "text",
+    "page_idx": 214,
+    "text": "If you try this yourself by dividing a circle into a greater number of parts that are even narrower, you will notice that the right-hand diagram will look even more like a rectangle."
+  },
+  {
+    "id": 6385,
+    "type": "text",
+    "page_idx": 214,
+    "text": "This indicates (but does not prove) that the area of a circle is given by:  $A = \\pi r^2$ ."
+  },
+  {
+    "id": 6386,
+    "type": "text",
+    "page_idx": 214,
+    "text": "You will now look at some examples so that you can see how to apply these formulae."
+  },
+  {
+    "id": 6387,
+    "type": "text",
+    "page_idx": 214,
+    "text": "MATHEMATICAL CONNECTIONS"
+  },
+  {
+    "id": 6388,
+    "type": "text",
+    "page_idx": 214,
+    "text": "BODMAS in Chapter 1 tells you to calculate the square of the radius before multiplying by  $\\pi$ ."
+  },
+  {
+    "id": 6389,
+    "type": "text",
+    "page_idx": 214,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 6390,
+    "type": "text",
+    "page_idx": 214,
+    "text": "For each of the following circles calculate the circumference and the area. Give each answer to 3 significant figures."
+  },
+  {
+    "id": 6391,
+    "type": "text",
+    "page_idx": 214,
+    "text": "a"
+  },
+  {
+    "id": 6392,
+    "type": "image",
+    "page_idx": 214,
+    "img_path": "images/83454450a82f5d2e763f2c57e14bdc959f69d1e17a64a2b1ec1b0a049ee31e39.jpg"
+  },
+  {
+    "id": 6393,
+    "type": "text",
+    "page_idx": 214,
+    "text": "b"
+  },
+  {
+    "id": 6394,
+    "type": "image",
+    "page_idx": 214,
+    "img_path": "images/76eeaa5873de96050ff5851570eb8225ca5fb5d08ff9f74a3b1cacced53ca42d.jpg"
+  },
+  {
+    "id": 6395,
+    "type": "text",
+    "page_idx": 214,
+    "text": "Answers"
+  },
+  {
+    "id": 6396,
+    "type": "text",
+    "page_idx": 214,
+    "text": "a Circumference  $= \\pi d$"
+  },
+  {
+    "id": 6397,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n= \\pi \\times 8\n$$"
+  },
+  {
+    "id": 6398,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n\\text {A r e a} = \\pi r ^ {2}\n$$"
+  },
+  {
+    "id": 6399,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n= 2 5. 1 3 2 7 \\dots\n$$"
+  },
+  {
+    "id": 6400,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\nr = \\frac {d}{2}\n$$"
+  },
+  {
+    "id": 6401,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n= \\pi \\times 4 ^ {2}\n$$"
+  },
+  {
+    "id": 6402,
+    "type": "text",
+    "page_idx": 214,
+    "text": "is approximately equal to  $25.1\\mathrm{mm}$  (3 s.f.)"
+  },
+  {
+    "id": 6403,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n\\begin{array}{l} = \\pi \\times 1 6 \\\\ = 5 0. 2 6 5 \\dots \\\\ = 5 0. 3 \\mathrm {m m} ^ {2} (3 \\mathrm {s}. \\mathrm {f}.) \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 6404,
+    "type": "text",
+    "page_idx": 214,
+    "text": "b Circumference  $= 2\\pi r$"
+  },
+  {
+    "id": 6405,
+    "type": "text",
+    "page_idx": 214,
+    "text": "only equal to  $31.4\\mathrm{cm}$  (3s.f.)"
+  },
+  {
+    "id": 6406,
+    "type": "equation",
+    "page_idx": 214,
+    "text": "$$\n\\begin{array}{l} = 2 \\times \\pi \\times 5 \\\\ \\text {A r e a} = \\pi r ^ {2} \\\\ = 3 1. 4 1 5 \\dots \\\\ = \\pi \\times 5 ^ {2} \\\\ = \\pi \\times 2 5 \\\\ = 7 8. 5 3 9 \\dots \\\\ = 7 8. 5 \\mathrm {c m} ^ {2} (3 \\mathrm {s}. \\mathrm {f}.) \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 6407,
+    "type": "text",
+    "page_idx": 214,
+    "text": "TIP"
+  },
+  {
+    "id": 6408,
+    "type": "text",
+    "page_idx": 214,
+    "text": "Your calculator should have a  $\\pi$  button. If it does not, use the approximation 3.142, but make sure that you write this in your working. Make sure that you record the final calculator answer before rounding and then state what level of accuracy you rounded to."
+  },
+  {
+    "id": 6409,
+    "type": "text",
+    "page_idx": 214,
+    "text": "TIP"
+  },
+  {
+    "id": 6410,
+    "type": "text",
+    "page_idx": 214,
+    "text": "Note that in (a), the diameter is given and in (b) the radius is given. Make sure that you look carefully at which measurement you are given and use the correct formula."
+  },
+  {
+    "id": 6411,
+    "type": "text",
+    "page_idx": 215,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 6412,
+    "type": "text",
+    "page_idx": 215,
+    "text": "Calculate the area of the shaded region in the diagram."
+  },
+  {
+    "id": 6413,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/1059d5fbcbf03a6f3b45b2bc6647fa7d03f095931341ba776f1b3f40f8ddd0ac.jpg",
+    "image_caption": "Answer"
+  },
+  {
+    "id": 6414,
+    "type": "equation",
+    "page_idx": 215,
+    "text": "$$\n\\begin{array}{r l} {\\mathrm {S h a d e d a r e a}} & {= \\mathrm {a r e a o f t r i a n g l e - a r e a o f c i r c l e .}} \\\\ {\\mathrm {A r e a}} & {= \\frac {1}{2} b h - \\pi r ^ {2}} \\\\ & {= \\frac {1}{2} \\times 1 8 \\times 2 0 - \\pi \\times 2. 5 ^ {2}} \\\\ {2 0 \\mathrm {c m}} & {= 1 6 0. 3 6 5 \\dots} \\\\ & {= 1 6 0 \\mathrm {c m} ^ {2} (3 \\mathrm {s . f .})} \\end{array}\n$$"
+  },
+  {
+    "id": 6415,
+    "type": "text",
+    "page_idx": 215,
+    "text": "Substitute in values of b, h and r."
+  },
+  {
+    "id": 6416,
+    "type": "text",
+    "page_idx": 215,
+    "text": "Round the answer. In this case it has been rounded to 3 significant figures."
+  },
+  {
+    "id": 6417,
+    "type": "text",
+    "page_idx": 215,
+    "text": "Exercise 7.2"
+  },
+  {
+    "id": 6418,
+    "type": "text",
+    "page_idx": 215,
+    "text": "1 Calculate the area and circumference in each of the following. Give your answers to 3 significant figures where necessary."
+  },
+  {
+    "id": 6419,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/21c41f249050b373cbd769c0cc3f8483f57b8d3a11fce263e4b366f9b174c375.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 6420,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/f1e7c72559fa460e039de212f5902fdcd4bf1fd3d94710a719e69b2f77bc9284.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 6421,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/a2a89df31c9b0b1a58fd729c222863a6da1b441df290f2dcc18ee924c57ee122.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 6422,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/756a9fd00d5536e9786f02f0046c5d228f00b0179c7a7bc91b9b0addae235591.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 6423,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/2c62004983518c8aae70cbd02f95c27a02c6c0bec3d1a428792e2bf4f455ad7c.jpg",
+    "image_caption": "e"
+  },
+  {
+    "id": 6424,
+    "type": "image",
+    "page_idx": 215,
+    "img_path": "images/1f3e29d01cfd6e8a96e528c4380dbdca68bb75025cddc75a9b2962271721765c.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 6425,
+    "type": "text",
+    "page_idx": 215,
+    "text": "TIP"
+  },
+  {
+    "id": 6426,
+    "type": "text",
+    "page_idx": 215,
+    "text": "You should always try to use exact values in the calculation, rather than finding decimal approximations for the radius and diameter. This will mean you are not introducing rounding errors."
+  },
+  {
+    "id": 6427,
+    "type": "text",
+    "page_idx": 216,
+    "text": "2 Calculate the area of the shaded region in each case. Give your answers to 3 significant figures where necessary."
+  },
+  {
+    "id": 6428,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/f01954a480f04c0002e8efabe2d169552a459b38c6ef4915bcef7a7b6d08693a.jpg",
+    "image_caption": "a"
+  },
+  {
+    "id": 6429,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/78472eb918da885f40401b3c18d503304fa2459b826287e9a9038f6c0bde70f7.jpg",
+    "image_caption": "b"
+  },
+  {
+    "id": 6430,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/fe197a662f3a97b4069289d08d96a95a19fbd3de1e745db250e8eae38434d471.jpg",
+    "image_caption": "C"
+  },
+  {
+    "id": 6431,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/527da974435949f7e2f5223628f3ad650ba321da67542770230f34f6f8b82ef0.jpg",
+    "image_caption": "d"
+  },
+  {
+    "id": 6432,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/3fcf99bf6e5ba8a1e60d1228673b209be511aa0f4de0808bcccca6a5693f5aa2.jpg",
+    "image_caption": "e"
+  },
+  {
+    "id": 6433,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/2db02ac264b2be19364b136810b85ab0b6e677683aa752193f1e8fbd2d091a6e.jpg",
+    "image_caption": "f"
+  },
+  {
+    "id": 6434,
+    "type": "text",
+    "page_idx": 216,
+    "text": "APPLY YOUR SKILLS"
+  },
+  {
+    "id": 6435,
+    "type": "text",
+    "text": "3 The diagram shows a plan for a rectangular garden with a circular pond. The part of the garden not covered by the pond is to be covered by grass. One bag of grass seed covers five square metres of lawn. Calculate the number of bags of seed that are needed.",
+    "page_idx": 216
+  },
+  {
+    "id": 6436,
+    "type": "text",
+    "text": "4 The diagram shows a road sign. If the triangle will be painted white and the rest of the sign will be painted red, calculate the area covered by each colour to 1 decimal place.",
+    "page_idx": 216
+  },
+  {
+    "id": 6437,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/71d12fbc8ad68f3244960ab4fde135860cfd2c139a25a855246932adce2eabd3.jpg"
+  },
+  {
+    "id": 6438,
+    "type": "image",
+    "page_idx": 216,
+    "img_path": "images/53f0b332e075637cc1924837c751b6bc7b867c1670558301449db6cfcc9cd159.jpg"
+  },
+  {
+    "id": 6439,
+    "type": "text",
+    "page_idx": 216,
+    "text": "Sixteen identical circles are to be cut from a square sheet of fabric with sides of  $0.4\\mathrm{m}$ . Find the area of the leftover fabric (to 2 d.p.) if the circles are made as large as possible."
+  },
+  {
+    "id": 6440,
+    "type": "text",
+    "page_idx": 216,
+    "text": "TIP"
+  },
+  {
+    "id": 6441,
+    "type": "text",
+    "page_idx": 216,
+    "text": "This is a good example of a problem in which you need to carry out a series of calculations. Set your work out in clear steps to show how you get to the solution."
+  },
+  {
+    "id": 6442,
+    "type": "text",
+    "page_idx": 217,
+    "text": "APPLY YOUR SKILLS CONTINUED"
+  },
+  {
+    "id": 6443,
+    "type": "text",
+    "page_idx": 217,
+    "text": "6 Two friends usually order a large pizza to share. The large pizza has a diameter of  $24\\mathrm{cm}$ . This week they want to eat different things on their pizzas, so they decide to order two small pizzas. The small pizza has a diameter of  $12\\mathrm{cm}$ . They want to know if there is the same amount of pizza in two small pizzas as in one large. Work out the answer."
+  },
+  {
+    "id": 6444,
+    "type": "text",
+    "page_idx": 217,
+    "text": "Exact answers as multiples of  $\\pi$"
+  },
+  {
+    "id": 6445,
+    "type": "text",
+    "page_idx": 217,
+    "text": "Pi is an irrational number so you cannot write out its exact value as a decimal. You can approximate it using a rounded decimal, or by using fractions that are similar in value, but none of these methods give the exact answer."
+  },
+  {
+    "id": 6446,
+    "type": "text",
+    "page_idx": 217,
+    "text": "If you are asked to give an exact answer in any calculation that uses pi it means you have to give the answer in terms of pi. In other words, your answer will be a multiple of pi and the  $\\pi$  symbol should be in the answer."
+  },
+  {
+    "id": 6447,
+    "type": "text",
+    "page_idx": 217,
+    "text": "If the circumference or area of a circle is given in terms of  $\\pi$ , you can work out the length of the diameter or radius by dividing by pi."
+  },
+  {
+    "id": 6448,
+    "type": "text",
+    "page_idx": 217,
+    "text": "For example, if  $C = 5\\pi$  cm the diameter is 5cm and the radius is 2.5cm (half the diameter)."
+  },
+  {
+    "id": 6449,
+    "type": "text",
+    "page_idx": 217,
+    "text": "Similarly, if  $A = 25\\pi \\mathrm{cm}^2$  then  $r^2 = 25$  and  $r = \\sqrt{25} = 5\\mathrm{cm}$ ."
+  },
+  {
+    "id": 6450,
+    "type": "text",
+    "page_idx": 217,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 6451,
+    "type": "text",
+    "page_idx": 217,
+    "text": "For each calculation, give your answer as a multiple of  $\\pi$ ."
+  },
+  {
+    "id": 6452,
+    "type": "text",
+    "text": "a Find the circumference of a circle with a diameter of  $12\\mathrm{cm}$",
+    "page_idx": 217
+  },
+  {
+    "id": 6453,
+    "type": "text",
+    "text": "b What is the exact circumference of a circle of radius  $4\\mathrm{mm}$",
+    "page_idx": 217
+  },
+  {
+    "id": 6454,
+    "type": "text",
+    "text": "c Determine the area of a circle with a diameter of  $10\\mathrm{m}$",
+    "page_idx": 217
+  },
+  {
+    "id": 6455,
+    "type": "text",
+    "text": "d What is the radius of a circle of circumference  $2.8\\pi \\mathrm{cm}$ ?",
+    "page_idx": 217
+  },
+  {
+    "id": 6456,
+    "type": "text",
+    "page_idx": 217,
+    "text": "Answers"
+  },
+  {
+    "id": 6457,
+    "type": "text",
+    "page_idx": 217,
+    "text": "a  $C = 12\\pi \\mathrm{cm}$"
+  },
+  {
+    "id": 6458,
+    "type": "equation",
+    "page_idx": 217,
+    "text": "$$\nC = \\pi d\n$$"
+  },
+  {
+    "id": 6459,
+    "type": "text",
+    "page_idx": 217,
+    "text": "Multiply the diameter by 12 and remember to write the units."
+  },
+  {
+    "id": 6460,
+    "type": "text",
+    "page_idx": 217,
+    "text": "b C=2πr"
+  },
+  {
+    "id": 6461,
+    "type": "equation",
+    "page_idx": 217,
+    "text": "$$\nC = 2 \\times \\pi \\times 4 = 8 \\pi \\mathrm {m m}\n$$"
+  },
+  {
+    "id": 6462,
+    "type": "text",
+    "page_idx": 217,
+    "text": "Use this version of the formula since you have been told the radius."
+  },
+  {
+    "id": 6463,
+    "type": "text",
+    "page_idx": 217,
+    "text": "A=πr²"
+  },
+  {
+    "id": 6464,
+    "type": "equation",
+    "page_idx": 217,
+    "text": "$$\n\\begin{array}{l} r = 5 m, \\text {s o} A = \\pi \\times 5 ^ {2} \\\\ A = 2 5 \\pi m \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 6465,
+    "type": "text",
+    "page_idx": 217,
+    "text": "d C=2πr"
+  },
+  {
+    "id": 6466,
+    "type": "equation",
+    "page_idx": 217,
+    "text": "$$\n\\begin{array}{l} \\mathrm {S o}, r = \\frac {\\mathrm {C}}{2 \\pi} \\\\ r = \\frac {2 . 8 \\pi}{2 \\pi} = 1. 4 \\mathrm {c m} \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 6467,
+    "type": "text",
+    "page_idx": 218,
+    "text": "Exercise 7.3"
+  },
+  {
+    "id": 6468,
+    "type": "text",
+    "page_idx": 218,
+    "text": "1 Find the circumference and area of each shape. Give each answer as a multiple of  $\\pi$ ."
+  },
+  {
+    "id": 6469,
+    "type": "image",
+    "page_idx": 218,
+    "img_path": "images/1f1f7d62b0466870edb9bdf1e5029ffde050cfcb07bbc949031bab1fe9fdc75c.jpg"
+  }
+]
+```

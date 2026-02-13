@@ -1,0 +1,809 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If there's no chapter title, use <title></title> (empty).
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 20860,
+    "type": "text",
+    "text": "i the three photographs",
+    "page_idx": 765
+  },
+  {
+    "id": 20861,
+    "type": "text",
+    "text": "ii the area inside the frame not covered by the photographs?",
+    "page_idx": 765
+  },
+  {
+    "id": 20862,
+    "type": "text",
+    "page_idx": 765,
+    "text": "5 A military helicopter flies to inspect an oil platform  $x\\mathrm{km}$  away. The helicopter flies directly to the ship at a speed of  $320\\mathrm{km / h}$  and directly back at a speed of  $240\\mathrm{km / hr}$ ."
+  },
+  {
+    "id": 20863,
+    "type": "text",
+    "text": "a Write an equation to calculate the total flying time  $(t)$  hours.",
+    "page_idx": 765
+  },
+  {
+    "id": 20864,
+    "type": "text",
+    "text": "b Calculate the flying time in minutes when the oil platform is  $120\\mathrm{km}$  away.",
+    "page_idx": 765
+  },
+  {
+    "id": 20865,
+    "type": "text",
+    "page_idx": 765,
+    "text": "REFLECTION"
+  },
+  {
+    "id": 20866,
+    "type": "text",
+    "page_idx": 765,
+    "text": "Reflect on your work in this exercise."
+  },
+  {
+    "id": 20867,
+    "type": "text",
+    "text": "- Which ideas in this work make most sense to you? Why?",
+    "page_idx": 765
+  },
+  {
+    "id": 20868,
+    "type": "text",
+    "text": "Did you struggle at all? If so, how did you overcome this?",
+    "page_idx": 765
+  },
+  {
+    "id": 20869,
+    "type": "text",
+    "text": "Why do you think we are studying this objective? How will you use what you have mastered here?",
+    "page_idx": 765
+  },
+  {
+    "id": 20870,
+    "type": "text",
+    "page_idx": 765,
+    "text": "Solving more complex problems"
+  },
+  {
+    "id": 20871,
+    "type": "text",
+    "page_idx": 765,
+    "text": "The problems you solved in Exercise 22.1 involved simple algebraic manipulation. You need to be able to set up equations to solve any problem. To do this, you need to read and make sense of the written problem, represent the situation as an equation and then solve it."
+  },
+  {
+    "id": 20872,
+    "type": "text",
+    "page_idx": 765,
+    "text": "To solve problems by setting up equations:"
+  },
+  {
+    "id": 20873,
+    "type": "text",
+    "text": "- Read the problem carefully, paying attention to the words used.",
+    "page_idx": 765
+  },
+  {
+    "id": 20874,
+    "type": "text",
+    "text": "- Decide what you need to find and what information is already given. It might help to draw a bar model to represent the problem.",
+    "page_idx": 765
+  },
+  {
+    "id": 20875,
+    "type": "text",
+    "text": "- Ask yourself if there is anything to be assumed or deduced from the given information. For example, if the problem mentions equal lengths and widths of a room can you assume the room is a rectangle? Or, if you are working with a pack of cards, can you assume it is a standard pack with 52 cards?",
+    "page_idx": 765
+  },
+  {
+    "id": 20876,
+    "type": "text",
+    "text": "- Consider whether there is a formula or mathematical relationship that you can use to connect the information in the problem. For example, if you are asked to find the distance around a round swimming pool, you can use the formula  $C = \\pi d$ , or if the problem involves time, distance and speed, you can use the distance-time-speed triangle to form an equation.",
+    "page_idx": 765
+  },
+  {
+    "id": 20877,
+    "type": "image",
+    "page_idx": 765,
+    "img_path": "images/e5acb4bc00632c36b51effd1aee73d83cb261af2e8a431b03a238dd787699e94.jpg"
+  },
+  {
+    "id": 20878,
+    "type": "text",
+    "page_idx": 766,
+    "text": "WORKED EXAMPLE 1"
+  },
+  {
+    "id": 20879,
+    "type": "text",
+    "page_idx": 766,
+    "text": "My mother was 26 years old when I was born. Now, she is three times as old as I am. What are our ages now?"
+  },
+  {
+    "id": 20880,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Answer"
+  },
+  {
+    "id": 20881,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Let my age now be x."
+  },
+  {
+    "id": 20882,
+    "type": "text",
+    "page_idx": 766,
+    "text": ". my mother's age now is 3x."
+  },
+  {
+    "id": 20883,
+    "type": "text",
+    "page_idx": 766,
+    "text": "She is 3 times as old as me."
+  },
+  {
+    "id": 20884,
+    "type": "text",
+    "page_idx": 766,
+    "text": "The difference in ages is 26 years, so:"
+  },
+  {
+    "id": 20885,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Mother will always be 26 years older."
+  },
+  {
+    "id": 20886,
+    "type": "equation",
+    "page_idx": 766,
+    "text": "$$\n\\begin{array}{l} 3 x - x = 2 6 \\\\ \\therefore 2 x = 2 6 \\\\ \\therefore x = 1 3 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20887,
+    "type": "text",
+    "page_idx": 766,
+    "text": "My age now is 13. My mother's age now is 39."
+  },
+  {
+    "id": 20888,
+    "type": "text",
+    "page_idx": 766,
+    "text": "WORKED EXAMPLE 2"
+  },
+  {
+    "id": 20889,
+    "type": "text",
+    "page_idx": 766,
+    "text": "The longest sides of a parallelogram are five times longer than its shorter sides. If it has a perimeter of  $9.6\\mathrm{m}$ , what are the lengths of the long and short sides?"
+  },
+  {
+    "id": 20890,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Answer"
+  },
+  {
+    "id": 20891,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Let the shorter side be  $x$  metres.  \n∴ the longer side is  $5x$ ."
+  },
+  {
+    "id": 20892,
+    "type": "image",
+    "page_idx": 766,
+    "img_path": "images/a912a6e4cd308d4bc5ec643ce2cb71e9908a5ee79eb7b0f007bf912645446459.jpg"
+  },
+  {
+    "id": 20893,
+    "type": "equation",
+    "page_idx": 766,
+    "text": "$$\n\\begin{array}{l} 5 x + x + 5 x + x = 9. 6 m \\\\ 1 2 x = 9. 6 m \\\\ x = \\frac {9 . 6}{1 2} = 0. 8 m \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20894,
+    "type": "text",
+    "page_idx": 766,
+    "text": "So, the shorter side is  $0.8\\mathrm{m}$  and the longer side is  $5\\times 0.8 = 4\\mathrm{m}$"
+  },
+  {
+    "id": 20895,
+    "type": "text",
+    "page_idx": 766,
+    "text": "INVESTIGATION"
+  },
+  {
+    "id": 20896,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Heart rates"
+  },
+  {
+    "id": 20897,
+    "type": "text",
+    "page_idx": 766,
+    "text": "In medicine, cardiac output (C) is the amount of blood (millilitres) that your heart pumps through your body in a minute. You can work out your own cardiac output using the equation  $C = V \\times R$ . V represents the stroke volume, which is the amount of blood your heart pumps each time it beats, and R represents your heart rate, the number of times your heart beats in a minute."
+  },
+  {
+    "id": 20898,
+    "type": "text",
+    "text": "1 Explain why C, V and R are all rates.",
+    "page_idx": 766
+  },
+  {
+    "id": 20899,
+    "type": "text",
+    "text": "2 Work with a partner to determine your own resting heart rate (R). You can do this by taking each other's pulses for 10 seconds and using that to the number of heart beats per minute. If you have a fitness device, it may work out your resting heart rate for you.",
+    "page_idx": 766
+  },
+  {
+    "id": 20900,
+    "type": "text",
+    "page_idx": 766,
+    "text": "TIP"
+  },
+  {
+    "id": 20901,
+    "type": "text",
+    "page_idx": 766,
+    "text": "Always say what the variables represent."
+  },
+  {
+    "id": 20902,
+    "type": "image",
+    "page_idx": 766,
+    "img_path": "images/2b0788b5a5bc33fac7ba680a3595d1f2444d545fd97f0a2ef9741a8ba9dbc498.jpg"
+  },
+  {
+    "id": 20903,
+    "type": "text",
+    "page_idx": 767,
+    "text": "INVESTIGATION CONTINUED"
+  },
+  {
+    "id": 20904,
+    "type": "text",
+    "text": "3 a Use a mean stroke volume of 80ml/beat and your own heart rate to determine your cardiac output.",
+    "page_idx": 767
+  },
+  {
+    "id": 20905,
+    "type": "text",
+    "text": "b Zef has a heartrate of 55 beats per minute and a stroke volume of  $92\\mathrm{cm}^3$ . How does Zef's cardiac output compare with yours?",
+    "page_idx": 767
+  },
+  {
+    "id": 20906,
+    "type": "text",
+    "text": "c Najwa has the same cardiac output as Zef with a stroke volume of  $59\\mathrm{cm}^3$ . Calculate Najwa's heart rate.",
+    "page_idx": 767
+  },
+  {
+    "id": 20907,
+    "type": "text",
+    "text": "4 Given that  $C = V \\times R$  is a directly proportionate relationship, describe what happens to your cardiac output for both an increase and a decrease in heart rate.",
+    "page_idx": 767
+  },
+  {
+    "id": 20908,
+    "type": "text",
+    "text": "5 Heart specialists sometimes have to consider the resistance of blood flow through a particular blood vessel. They use the formula  $R = \\frac{1}{r^4}$  to work this out. In this formula,  $R$  is the resistance of the blood flow and  $r$  is the radius of the blood vessel it flows through.",
+    "page_idx": 767
+  },
+  {
+    "id": 20909,
+    "type": "text",
+    "text": "a What type of relationship is this? Why?",
+    "page_idx": 767
+  },
+  {
+    "id": 20910,
+    "type": "text",
+    "text": "b A muscular artery has a diameter of  $10\\mathrm{mm}$  the vena cavae vein has a diameter of  $15\\mathrm{mm}$  and an arteriole has a diameter of  $2\\mathrm{mm}$  Calculate  $R$  for each type of blood vessel (ignore the units).",
+    "page_idx": 767
+  },
+  {
+    "id": 20911,
+    "type": "text",
+    "text": "c What happens to the resistance of blood flow as vessel diameter decreases?",
+    "page_idx": 767
+  },
+  {
+    "id": 20912,
+    "type": "text",
+    "text": "Why is narrowing of the arteries a health concern? (You may need to do some research to answer this fully.)",
+    "page_idx": 767
+  },
+  {
+    "id": 20913,
+    "type": "text",
+    "page_idx": 767,
+    "text": "Exercise 22.2"
+  },
+  {
+    "id": 20914,
+    "type": "text",
+    "text": "1 A parent is three times as old as their child. If the parent is 31 years older than the child, what are their ages?",
+    "page_idx": 767
+  },
+  {
+    "id": 20915,
+    "type": "text",
+    "text": "2 Jess and Silvia have 420 marbles between them. If Jess has five times as many marbles as Silvia, how many do they each have?",
+    "page_idx": 767
+  },
+  {
+    "id": 20916,
+    "type": "text",
+    "text": "3 Soumik has $5 less than Kofi. If they have $97.50 altogether, how much does each person have?",
+    "page_idx": 767
+  },
+  {
+    "id": 20917,
+    "type": "text",
+    "text": "4 Two competition winners are to share a prize of $750. If one winner receives twice as much as the other, how much will they each receive?",
+    "page_idx": 767
+  },
+  {
+    "id": 20918,
+    "type": "text",
+    "text": "5 A grandparent is six times as old as their grandchild. If the grandparent was 45 when the grandchild was born, how old is the grandchild?",
+    "page_idx": 767
+  },
+  {
+    "id": 20919,
+    "type": "text",
+    "text": "6 A rectangle with perimeter  $74\\mathrm{cm}$  is  $7\\mathrm{cm}$  longer than it is wide. What is the length of each side?",
+    "page_idx": 767
+  },
+  {
+    "id": 20920,
+    "type": "text",
+    "text": "7 Smitville is located between Jonesville and Cityville. Smitville is five times as far away from Cityville as it is from Jonesville. If the distance between Jonesville and Cityville is  $288\\mathrm{km}$ , how far is it from Jonesville to Smitville?",
+    "page_idx": 767
+  },
+  {
+    "id": 20921,
+    "type": "text",
+    "text": "Amira is twice as old as Pam. Nine years ago, their combined age was 18. What are their present ages?",
+    "page_idx": 767
+  },
+  {
+    "id": 20922,
+    "type": "text",
+    "page_idx": 767,
+    "text": "TIP"
+  },
+  {
+    "id": 20923,
+    "type": "text",
+    "page_idx": 767,
+    "text": "Remember to follow the basic steps in problem-solving when you are faced with a word problem."
+  },
+  {
+    "id": 20924,
+    "type": "text",
+    "text": "9 Jabu left town A at 6.00 a.m. and drove at an average speed of  $80\\mathrm{km / h}$  to town B. At 8.30 a.m., Sipho left town A to travel to town B and drove at an average speed of  $100\\mathrm{km / h}$ . At what time will Sipho catch up with Jabu?",
+    "page_idx": 768
+  },
+  {
+    "id": 20925,
+    "type": "text",
+    "text": "10 Remi took 40 minutes to complete a journey. He travelled half the distance at a speed of  $100\\mathrm{km / h}$  and the other half at  $60\\mathrm{km / h}$ . What distance did Remi travel to complete the journey?",
+    "page_idx": 768
+  },
+  {
+    "id": 20926,
+    "type": "text",
+    "page_idx": 768,
+    "text": "SELF ASSESSMENT"
+  },
+  {
+    "id": 20927,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Complete your own 3:2:1 summary to assess your understanding of writing equations and using them to solve problems."
+  },
+  {
+    "id": 20928,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Use these sentence stems:"
+  },
+  {
+    "id": 20929,
+    "type": "text",
+    "text": "3 things I learned are:",
+    "page_idx": 768
+  },
+  {
+    "id": 20930,
+    "type": "text",
+    "text": "2 questions I had were:",
+    "page_idx": 768
+  },
+  {
+    "id": 20931,
+    "type": "text",
+    "text": "I thing I understood really quickly was:",
+    "page_idx": 768
+  },
+  {
+    "id": 20932,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Deriving quadratic equations"
+  },
+  {
+    "id": 20933,
+    "type": "text",
+    "page_idx": 768,
+    "text": "To solve some word problems you might need to derive and solve a quadratic equation. Before you can solve the equation you must write the word problem using equations. You may need to use geometry, number facts, probability or any other appropriate techniques that relate to the topic you are working with."
+  },
+  {
+    "id": 20934,
+    "type": "text",
+    "page_idx": 768,
+    "text": "WORKED EXAMPLE 3"
+  },
+  {
+    "id": 20935,
+    "type": "text",
+    "page_idx": 768,
+    "text": "The product of two consecutive integers is 42. Form and solve a quadratic equation to find both possible pairs of integers."
+  },
+  {
+    "id": 20936,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Answer"
+  },
+  {
+    "id": 20937,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Use the letter  $n$  to represent the smaller of the two numbers. Then the larger of the two numbers is  $n + 1$ ."
+  },
+  {
+    "id": 20938,
+    "type": "text",
+    "page_idx": 768,
+    "text": "The product of the two numbers is 42, so"
+  },
+  {
+    "id": 20939,
+    "type": "equation",
+    "page_idx": 768,
+    "text": "$$\n\\begin{array}{l} n (n + 1) = 4 2 \\\\ \\Rightarrow n ^ {2} + n = 4 2 \\\\ \\Rightarrow n ^ {2} + n - 4 2 = 0 \\\\ \\Rightarrow (n + 7) (n - 6) = 0 \\\\ \\Rightarrow n = - 7 \\text {o r} n = 6 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20940,
+    "type": "equation",
+    "page_idx": 768,
+    "text": "$$\n\\text {I f} n = - 7, \\text {t h e n} n + 1 = - 6.\n$$"
+  },
+  {
+    "id": 20941,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Check: -7 and -6 are consecutive integers and  $-6 \\times -7 = 42$ ."
+  },
+  {
+    "id": 20942,
+    "type": "equation",
+    "page_idx": 768,
+    "text": "$$\n\\text {I f} n = 6, \\text {t h e n} n + 1 = 7.\n$$"
+  },
+  {
+    "id": 20943,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Check: 6 and 7 are consecutive integers and  $6 \\times 7 = 42$ ."
+  },
+  {
+    "id": 20944,
+    "type": "text",
+    "page_idx": 768,
+    "text": "So the pairs of integers are 6, 7 and -7, -6."
+  },
+  {
+    "id": 20945,
+    "type": "text",
+    "page_idx": 768,
+    "text": "TIP"
+  },
+  {
+    "id": 20946,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Refer back to"
+  },
+  {
+    "id": 20947,
+    "type": "text",
+    "page_idx": 768,
+    "text": "Chapter 2 if you need some ideas for completing a 3:2:1 self assessment."
+  },
+  {
+    "id": 20948,
+    "type": "text",
+    "page_idx": 768,
+    "text": "TIP"
+  },
+  {
+    "id": 20949,
+    "type": "text",
+    "page_idx": 768,
+    "text": "You might have spotted the solution 6, 7 without using algebra, but writing a quadratic equation means you will definitely find all the solutions."
+  },
+  {
+    "id": 20950,
+    "type": "text",
+    "page_idx": 769,
+    "text": "WORKED EXAMPLE 4"
+  },
+  {
+    "id": 20951,
+    "type": "text",
+    "page_idx": 769,
+    "text": "The length of a rectangle is  $2\\mathrm{cm}$  greater than its width. The area of the rectangle is  $15\\mathrm{cm}$ . Find its perimeter."
+  },
+  {
+    "id": 20952,
+    "type": "text",
+    "page_idx": 769,
+    "text": "Answer"
+  },
+  {
+    "id": 20953,
+    "type": "image",
+    "page_idx": 769,
+    "img_path": "images/c77054437f47229412c8d8dec25f216b20cc2423871f07a1943518389589d59e.jpg"
+  },
+  {
+    "id": 20954,
+    "type": "text",
+    "page_idx": 769,
+    "text": "Always draw a diagram to show the information and to help you visualise the situation."
+  },
+  {
+    "id": 20955,
+    "type": "text",
+    "page_idx": 769,
+    "text": "The area is the length  $\\times$  width, so"
+  },
+  {
+    "id": 20956,
+    "type": "equation",
+    "page_idx": 769,
+    "text": "$$\n\\begin{array}{l} x (x + 2) = 1 5 \\\\ \\Rightarrow x ^ {2} + 2 x = 1 5 \\\\ \\Rightarrow x ^ {2} + 2 x - 1 5 = 0 \\\\ \\Rightarrow (x + 5) (x - 3) = 0 \\\\ \\Rightarrow x = - 5 \\text {o r} x = 3 \\\\ \\end{array}\n$$"
+  },
+  {
+    "id": 20957,
+    "type": "text",
+    "page_idx": 769,
+    "text": "$x$  is the width of the rectangle,"
+  },
+  {
+    "id": 20958,
+    "type": "text",
+    "page_idx": 769,
+    "text": "so it cannot be a negative number."
+  },
+  {
+    "id": 20959,
+    "type": "text",
+    "page_idx": 769,
+    "text": "This means  $x$  must be 3."
+  }
+]
+```

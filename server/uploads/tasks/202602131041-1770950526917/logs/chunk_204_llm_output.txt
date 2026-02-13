@@ -1,0 +1,10 @@
+<chapter><title>14331</title>
+<qa_pair><label>WORKED EXAMPLE 18</label><type>example</type><question>14287,14288,14289,14290</question>
+<solution>14292,14293,14294,14295,14296,14297,14298,14299,14300,14301,14302,14303,14304,14305,14306,14307</solution></qa_pair>
+<qa_pair><label>Exercise 14.8</label><type>exercise</type><question>14308,14309,14310,14311,14312,14313,14314,14315,14316,14317,14318,14319,14320,14321,14322,14323,14324,14325,14326,14327,14328,14329,14330</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 19</label><type>example</type><question>14346,14347,14348,14349,14350</question>
+<solution>14351,14352,14353,14354,14355,14358,14359,14360,14361,14362,14363,14364,14365</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 20</label><type>example</type><question>14366,14367,14368</question>
+<solution>14369,14370,14371</solution></qa_pair>
+</chapter>
