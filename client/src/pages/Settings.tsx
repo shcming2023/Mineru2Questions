@@ -38,6 +38,7 @@ interface ConfigForm {
   modelName: string;
   maxWorkers: number;
   timeout: number;
+  contextWindow: number;
   isDefault: boolean;
   purpose: LLMPurpose;
 }
@@ -52,6 +53,7 @@ const defaultForm: ConfigForm = {
   modelName: "",
   maxWorkers: 5,
   timeout: 300,
+  contextWindow: 128000,
   isDefault: false,
   purpose: "vision_extract",
 };
@@ -146,6 +148,10 @@ export default function Settings() {
     if (!preset) return;
     
     setSelectedPreset(preset);
+    
+    // Find default model to get its context window
+    const defaultModel = preset.models.find(m => m.id === preset.defaultModel);
+    
     setForm(prev => ({
       ...prev,
       presetId,
@@ -154,6 +160,7 @@ export default function Settings() {
       modelName: preset.defaultModel,
       maxWorkers: preset.defaultMaxWorkers,
       timeout: preset.defaultTimeout,
+      contextWindow: defaultModel?.contextWindow || 128000,
       purpose: preset.primaryPurpose || "general",
     }));
   };
@@ -200,6 +207,7 @@ export default function Settings() {
       modelName: config.modelName,
       maxWorkers: config.maxWorkers,
       timeout: config.timeout,
+      contextWindow: config.contextWindow || 128000,
       isDefault: config.isDefault,
       purpose: config.purpose || "vision_extract",
     });
@@ -221,6 +229,7 @@ export default function Settings() {
       if (form.modelName) updates.modelName = form.modelName;
       updates.maxWorkers = form.maxWorkers;
       updates.timeout = form.timeout;
+      updates.contextWindow = form.contextWindow;
       updates.isDefault = form.isDefault;
       updates.purpose = form.purpose;
       updateMutation.mutate(updates);
@@ -476,7 +485,14 @@ export default function Settings() {
                   <>
                     <Select 
                       value={form.modelName} 
-                      onValueChange={(value) => setForm({ ...form, modelName: value })}
+                      onValueChange={(value) => {
+                        const model = selectedPreset?.models.find(m => m.id === value);
+                        setForm({ 
+                          ...form, 
+                          modelName: value,
+                          contextWindow: model?.contextWindow || form.contextWindow
+                        });
+                      }}
                     >
                       <SelectTrigger id="modelName">
                         <SelectValue placeholder="选择模型" />
@@ -536,6 +552,26 @@ export default function Settings() {
                   />
                   <p className="text-xs text-muted-foreground">
                     API请求超时时间
+                  </p>
+                </div>
+
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="contextWindow">上下文窗口 (tokens)</Label>
+                  <Input
+                    id="contextWindow"
+                    type="number"
+                    min="1000"
+                    step="1000"
+                    value={form.contextWindow}
+                    onChange={(e) => setForm({ ...form, contextWindow: parseInt(e.target.value) || 128000 })}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    模型最大上下文长度，用于长文本预检。
+                    {form.modelName && selectedPreset?.models.find(m => m.id === form.modelName)?.contextWindow && (
+                      <span className="ml-1 text-green-600 dark:text-green-400">
+                        (推荐: {selectedPreset.models.find(m => m.id === form.modelName)?.contextWindow})
+                      </span>
+                    )}
                   </p>
                 </div>
               </div>

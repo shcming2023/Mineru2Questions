@@ -34,6 +34,15 @@ export async function setupVite(app: Express, server: Server) {
 
       // always reload the index.html file from disk incase it changes
       let template = await fs.promises.readFile(clientTemplate, "utf-8");
+      
+      // Replace analytics environment variables
+      const analyticsEndpoint = process.env.VITE_ANALYTICS_ENDPOINT || "";
+      const analyticsWebsiteId = process.env.VITE_ANALYTICS_WEBSITE_ID || "";
+      
+      template = template
+        .replace(`%VITE_ANALYTICS_ENDPOINT%`, analyticsEndpoint)
+        .replace(`%VITE_ANALYTICS_WEBSITE_ID%`, analyticsWebsiteId);
+
       template = template.replace(
         `src="/src/main.tsx"`,
         `src="/src/main.tsx?v=${nanoid()}"`

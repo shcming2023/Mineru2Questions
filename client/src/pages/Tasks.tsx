@@ -50,9 +50,12 @@ export default function Tasks() {
   });
   
   const retryMutation = trpc.task.retry.useMutation({
-    onSuccess: () => {
-      toast.success("任务已重置,可以重新开始");
+    onSuccess: (data) => {
+      toast.success("已创建新的重试任务");
       utils.task.list.invalidate();
+      if (data?.id) {
+        setLocation(`/tasks/${data.id}`);
+      }
     },
     onError: (error) => toast.error(error.message),
   });
@@ -184,16 +187,37 @@ export default function Tasks() {
                           </Button>
                         )}
                         
-                        {task.status === "failed" && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => retryMutation.mutate({ id: task.id })}
-                            disabled={retryMutation.isPending}
-                          >
-                            <RotateCcw className="mr-1 h-4 w-4" />
-                            重试
-                          </Button>
+                        {(task.status === "failed" || task.status === "completed" || task.status === "paused") && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={retryMutation.isPending}
+                              >
+                                <RotateCcw className="mr-1 h-4 w-4" />
+                                重试
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>确认重试任务?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  系统将基于当前任务配置创建一个新的任务记录，并自动开始执行。
+                                  <br/>
+                                  原任务记录将保留。
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>取消</AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={() => retryMutation.mutate({ id: task.id })}
+                                >
+                                  确认重试
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         )}
                         
                         <AlertDialog>

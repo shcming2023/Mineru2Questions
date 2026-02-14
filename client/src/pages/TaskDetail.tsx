@@ -6,11 +6,12 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle, Clock, Cpu, Zap, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle, Clock, Cpu, Zap, ChevronLeft, ChevronRight, History as HistoryIcon, GitCompare } from "lucide-react";
 import { useLocation, useParams } from "wouter";
 import { toast } from "sonner";
 import { useState, useEffect, useRef, useMemo } from "react";
 import { Streamdown } from "streamdown";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const statusConfig = {
   pending: { label: "等待中", variant: "secondary" as const },
@@ -35,10 +36,11 @@ export default function TaskDetail() {
   const utils = trpc.useUtils();
   
   const [previewFormat, setPreviewFormat] = useState<"json" | "markdown">("json");
-  const [activeTab, setActiveTab] = useState<"status" | "logs" | "results">("status");
+  const [activeTab, setActiveTab] = useState<"status" | "logs" | "results" | "history">("status");
   const [autoScroll, setAutoScroll] = useState(true);
   const [resultPage, setResultPage] = useState(1);
   const [resultPageSize, setResultPageSize] = useState(10);
+  const [selectedTasks, setSelectedTasks] = useState<number[]>([]);
   const logsEndRef = useRef<HTMLDivElement>(null);
   
   const { data: task, isLoading, refetch } = trpc.task.get.useQuery(
@@ -49,6 +51,11 @@ export default function TaskDetail() {
         return query.state.data?.status === "processing" ? 2000 : false;
       }
     }
+  );
+
+  const { data: lineage } = trpc.task.getLineage.useQuery(
+    { taskId },
+    { enabled: taskId > 0 }
   );
   
   const { data: pageLogs } = trpc.task.getPageLogs.useQuery(
@@ -243,7 +250,7 @@ export default function TaskDetail() {
                 暂停
               </Button>
             )}
-            {task.status === "failed" && (
+            {(task.status === "failed" || task.status === "completed" || task.status === "paused") && (
               <Button variant="outline" size="sm" onClick={() => retryMutation.mutate({ id: taskId })}>
                 <RotateCcw className="mr-1 h-4 w-4" />
                 重试
@@ -254,7 +261,7 @@ export default function TaskDetail() {
 
         {/* 主要内容区域 - 使用Tabs */}
         <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as any)}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="status">处理状态</TabsTrigger>
             <TabsTrigger value="logs" className="flex items-center gap-2">
               <Terminal className="h-4 w-4" />
@@ -267,6 +274,7 @@ export default function TaskDetail() {
               )}
             </TabsTrigger>
             <TabsTrigger value="results">提取结果</TabsTrigger>
+            <TabsTrigger value="history">历史版本</TabsTrigger>
           </TabsList>
           
           {/* 处理状态Tab */}
@@ -598,6 +606,84 @@ export default function TaskDetail() {
                 </CardContent>
               </Card>
             )}
+          </TabsContent>
+          
+          {/* 历史版本Tab */}
+          <TabsContent value="history" className="mt-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    <HistoryIcon className="h-5 w-5" />
+                    任务族系历史
+                  </CardTitle>
+                  <CardDescription>查看同一输入物的所有执行版本</CardDescription>
+                </div>
+                <Button 
+                  size="sm" 
+                  disabled={selectedTasks.length < 2}
+                  onClick={() => setLocation(`/tasks/compare?ids=${selectedTasks.join(",")}`)}
+                >
+                  <GitCompare className="mr-1 h-4 w-4" />
+                  对比选中 ({selectedTasks.length})
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {lineage?.map((item) => (
+                    <div key={item.id} className={`flex items-center gap-4 p-4 rounded-lg border ${item.id === taskId ? "bg-muted/50 border-primary/50" : "bg-card"}`}>
+                      <Checkbox 
+                        checked={selectedTasks.includes(item.id)}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            if (selectedTasks.length >= 2) {
+                              toast.info("最多只能对比两个任务，已替换最早选中的任务");
+                              setSelectedTasks([selectedTasks[1], item.id]);
+                            } else {
+                              setSelectedTasks([...selectedTasks, item.id]);
+                            }
+                          } else {
+                            setSelectedTasks(selectedTasks.filter(id => id !== item.id));
+                          }
+                        }}
+                      />
+                      <div className="flex-1 flex items-center justify-between">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{item.name}</span>
+                            {item.id === taskId && <Badge variant="outline">当前</Badge>}
+                            <Badge variant={statusConfig[item.status].variant}>{statusConfig[item.status].label}</Badge>
+                          </div>
+                          <div className="text-sm text-muted-foreground mt-1">
+                            <span>ID: {item.id}</span>
+                            <span className="mx-2">·</span>
+                            <span>创建于 {formatDate(item.createdAt)}</span>
+                            {item.retryCount > 0 && (
+                               <>
+                                 <span className="mx-2">·</span>
+                                 <span>重试 #{item.retryCount}</span>
+                               </>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           {item.id !== taskId && (
+                             <Button variant="outline" size="sm" onClick={() => setLocation(`/tasks/${item.id}`)}>
+                               查看
+                             </Button>
+                           )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {!lineage?.length && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      暂无相关历史记录
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
         </Tabs>
       </div>

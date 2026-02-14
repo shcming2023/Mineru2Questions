@@ -62,6 +62,7 @@ export interface ChapterLLMConfig {
   apiKey: string;
   modelName: string;
   timeout?: number;
+  contextWindow?: number;
 }
 
 /** 章节预处理结果 */
@@ -88,18 +89,141 @@ export function flattenBlocks(raw: RawBlock[]): FlatBlock[] {
 // Step 1: 全文格式化（用于 LLM 输入）
 // ============================================================
 
+/**
+ * 格式化全文用于 LLM 输入
+ * 
+ * 优化策略：
+ * 1. 移除图片、公式等非文本噪声
+ * 2. 对非标题文本进行激进截断 (50 chars)
+ * 3. 保留潜在标题的完整性 (150 chars)
+ * 4. 保持 ID 和页码引用
+ */
 function formatFullText(blocks: FlatBlock[]): string {
   const lines: string[] = [];
 
   for (const b of blocks) {
+    // 1. 过滤明显噪声块
+    if (b.type === 'image' || b.type === 'figure') {
+      // 仅保留占位符，不发送内容
+      lines.push(`[${b.id}|p${b.page_idx}] [Image]`);
+      continue;
+    }
+    
+    if (b.type === 'equation') {
+      lines.push(`[${b.id}|p${b.page_idx}] [Equation]`);
+      continue;
+    }
+
     if (!b.text) continue;
-    const truncated = b.text.length > 150 ? b.text.substring(0, 150) + '...' : b.text;
+
+    // 2. 文本清洗
+    let cleanText = b.text
+      // 移除 Markdown 图片
+      .replace(/!\[.*?\]\(.*?\)/g, '[IMG]')
+      // 移除 Block Math
+      .replace(/\$\$[\s\S]*?\$\$/g, '[EQ]')
+      // 移除 Inline Math (简单匹配)
+      .replace(/\$[^$]+\$/g, '[EQ]')
+      // 压缩空白
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!cleanText) continue;
+
+    // 3. 智能截断
+    // 标题通常较短且可能有 text_level 标记
+    // 即使没有标记，超过 100 字符的段落几乎不可能是标题
+    const isPotentialHeader = 
+      b.type === 'header' || 
+      (b.text_level !== null && b.text_level !== undefined) ||
+      cleanText.length < 100;
+
+    // 标题保留更多上下文 (200)，正文适度截断 (200) 以保留上下文
+    const limit = 200;
+    const truncated = cleanText.length > limit ? cleanText.substring(0, limit) + '...' : cleanText;
+
+    // 4. 构建行
     const typeTag = b.type === 'header' ? 'H' : (b.text_level === 1 ? 'T1' : '');
     const tag = typeTag ? `${b.id}|p${b.page_idx}|${typeTag}` : `${b.id}|p${b.page_idx}`;
     lines.push(`[${tag}] ${truncated}`);
   }
 
   return lines.join('\n');
+}
+
+// ============================================================
+// Step 1.5: 分块处理 (支持超长文本)
+// ============================================================
+
+/**
+ * 将 blocks 切分为适合上下文窗口的 chunks
+ * 
+ * 策略：
+ * 1. 估算每个 block 格式化后的 token 数
+ * 2. 累积直到 limit (留 20% buffer)
+ * 3. 保持一定 overlap (2000 tokens) 避免切断边界标题
+ */
+function splitBlocksIntoChunks(blocks: FlatBlock[], maxTokens: number): FlatBlock[][] {
+  // 安全阈值：预留 20% 给 prompt 和 output
+  const safeLimit = Math.floor(maxTokens * 0.8);
+  const overlapTokens = 2000; // 重叠部分 token 数
+  
+  const chunks: FlatBlock[][] = [];
+  let currentChunk: FlatBlock[] = [];
+  let currentTokens = 0;
+  
+  // 预计算每个 block 的 token 大小 (粗略估计)
+  const blockSizes = blocks.map(b => {
+    // 模拟 formatFullText 的逻辑
+    if (b.type === 'image' || b.type === 'figure' || b.type === 'equation') return 30; // 占位符长度
+    if (!b.text) return 0;
+    // 简单清洗逻辑 + 截断逻辑 (200 chars)
+    const len = Math.min(b.text.length, 200); 
+    // ID tags (20 chars) + text
+    return Math.ceil((len + 20) / 1.5);
+  });
+
+  for (let i = 0; i < blocks.length; i++) {
+    const size = blockSizes[i];
+    
+    // 如果单个 block 就超过 limit (极不可能，但也防一下)
+    if (size > safeLimit) {
+      console.warn(`[ChapterPreprocess] Block ${blocks[i].id} exceeds token limit (${size} > ${safeLimit}), truncated.`);
+      // 仍然加入，依赖截断
+    }
+
+    if (currentTokens + size > safeLimit && currentChunk.length > 0) {
+      // 当前 chunk 已满，保存
+      chunks.push([...currentChunk]);
+      
+      // 开启新 chunk，带入 overlap
+      // 回溯寻找重叠的 blocks
+      let overlapSize = 0;
+      let backtrackIndex = i - 1;
+      const newChunk: FlatBlock[] = [];
+      
+      // 从后往前找，直到凑够 overlapTokens
+      while (backtrackIndex >= 0 && overlapSize < overlapTokens) {
+        newChunk.unshift(blocks[backtrackIndex]);
+        overlapSize += blockSizes[backtrackIndex];
+        backtrackIndex--;
+      }
+      
+      currentChunk = newChunk;
+      currentTokens = overlapSize;
+      
+      console.log(`[ChapterPreprocess] Chunk cut at block ${blocks[i].id}. New chunk starts with ${newChunk.length} overlap blocks.`);
+    }
+
+    currentChunk.push(blocks[i]);
+    currentTokens += size;
+  }
+
+  if (currentChunk.length > 0) {
+    chunks.push(currentChunk);
+  }
+
+  return chunks;
 }
 
 // ============================================================
@@ -114,41 +238,52 @@ Analyze the FULL TEXT of an educational document and identify ALL structural cha
 Each line is a text block: [ID|pageNumber|optionalTypeTag] text
 
 ## CRITICAL: Table of Contents vs. Document Body
-The first few pages may contain a TABLE OF CONTENTS (目录) listing chapter names with page numbers.
-You MUST IGNORE all table-of-contents entries. Only identify headings from the DOCUMENT BODY.
+The first few pages may contain a TABLE OF CONTENTS (listing chapter names with page numbers).
+You MUST IGNORE the actual Table of Contents lists.
+HOWEVER, do NOT ignore "Front Matter" sections (like Introduction, Preface) or "Unit" title pages that appear before the main chapters.
 
-Table of contents signs:
-- First few pages (typically pages 0-10)
-- Page numbers at end of text (e.g., "19.1 平方根与立方根 1", "第20章 二次根式 … 38")
-- Many heading-like entries densely packed on one page
-- Same titles appear again later in the body — those later ones are the real headings
+Table of contents signs (IGNORE these):
+- Pages explicitly labeled "Contents" or "Table of Contents"
+- Lists of titles followed by page numbers (e.g., "1.1 ... 5", "Chapter 2 ... 12")
+- Dense lists of headings on a single page
 
 ## What ARE Structural Headings (INCLUDE)
-- Chapters/Units/Parts/Topics (e.g., "第19章 实数", "Unit 5", "TOPIC 3")
-- Sections (e.g., "19.1 平方根与立方根", "Lesson 3-1")
-- Sub-sections (e.g., "19.1(一) 算术平方根", "19.2（二） 无理数")
-- Training sections (e.g., "阶段训练①" through "阶段训练⑨", "REVIEW")
-- Chapter reviews (e.g., "本章复习题", "本章复习题（一）")
-- Exam papers (e.g., "期末测试卷A卷", "期末测试卷B卷")
+- **Front Matter**: Introduction, Preface, How to use this book, Acknowledgements, etc.
+- **Back Matter**: Glossary, Index, Answers, etc.
+- **Organization Containers**: Units, Modules, Parts, Themes (e.g., "Unit 1", "Module A")
+- **Chapters**: (e.g., "Chapter 1", "1 Review of number concepts")
+- **Sections**: (e.g., "1.1 Different types of numbers")
+- **Sub-sections**: (e.g., "1.1.1", "Case Study")
+- **Assessments**: "Past paper questions", "Project", "Review", "Summary"
 
 ## What Are NOT Headings (MUST EXCLUDE)
-- Table of contents entries (see above)
-- Instructional labels: "要点归纳", "疑难分析", "基础训练", "拓展训练", "综合训练", "例题", "练习", "习题"
-- Problem type labels: "一、填空题", "二、选择题", "三、解答题", "四、计算题", "五、综合题"
-- Exercise numbers, problem text, page headers/footers
+- The actual Table of Contents list itself
+- Instructional labels: "Key points", "Tip", "Note", "Activity", "Exercise", "Q&A"
+- Problem type labels: "Question 1", "Section A", "Multiple Choice"
+- Running headers/footers (often repeated at top/bottom of pages)
 
-## Hierarchy (3 levels max)
-- **Level 1**: Chapters, Units, Parts, Topics, standalone exam papers
-- **Level 2**: Sections, Lessons, Reviews, Training sections within a L1
-- **Level 3**: Sub-sections within a L2 (e.g., "19.1(一)")
+## Hierarchy (Map to logical levels)
+        - **Level 1**: Top-level containers.
+          - Front Matter / Back Matter categories (e.g., "Front Matter", "Back Matter")
+          - Units / Parts / Modules / Themes (e.g., "Unit 1", "Part A")
+          - Standalone Chapters if no Units exist
+        - **Level 2**: Main content divisions.
+          - Chapters (if inside a Unit)
+          - Sections (if inside a standalone Chapter)
+          - Specific Front/Back Matter sections (e.g., "Introduction", "Foreword", "Glossary")
+        - **Level 3**: Sub-divisions.
+          - Sections (if inside a Unit->Chapter)
+          - Sub-sections
+          - Specific items like "1.1 Understanding units"
+        - **Level 4**: Deep sub-divisions (if needed).
+          - Sub-sections (e.g., "1.1.1")
 
-## Fragmented Titles
-If a heading is split across consecutive blocks (e.g., block 100="期末测试卷" + block 101="A卷"), merge them: output id as [100, 101].
+        ## Fragmented Titles
+If a heading is split across consecutive blocks (e.g., block 100="Chapter" + block 101="1"), merge them: output id as [100, 101].
 
 ## Completeness
-- Include EVERY instance (e.g., "本章复习题" appears 4 times → 4 entries)
-- Numbered series "阶段训练①②③④⑤⑥⑦⑧⑨" = 9 separate entries
-- When in doubt, INCLUDE it
+- Include EVERY structural heading from the very beginning (Introduction) to the very end (Index).
+- Do not skip "Unit" pages.
 
 ## Output Format
 Return ONLY valid JSON:
@@ -158,7 +293,7 @@ Return ONLY valid JSON:
     ...
   ]
 }
-Array MUST be in the LOGICAL order of the document (the order headings appear in the document flow, NOT necessarily ascending ID order — because PDF parsing may place a chapter title block after its first section block).
+Array MUST be in the LOGICAL order of the document.
 
 ---
 
@@ -181,12 +316,12 @@ function buildVerificationPrompt(
 ${firstResultJson}
 
 ## Common Errors to Check and Fix
-1. **Missing headings**: Some sub-sections may be missing. Check that ALL numbered sub-sections are included (e.g., if 21.2(一)(二)(三)(四) exist, all four must be present; if 22.3(一)(二)(三)(四) exist, all four must be present).
-2. **False positives**: "要点归纳", "疑难分析" are NOT structural headings — remove them.
-3. **Missing chapter heading**: If sections like "22.1", "22.2", "22.3" exist but "第22章" is missing, find and add it.
-4. **Fragmented exam titles**: "期末测试卷" + "A卷" on nearby blocks should be merged as one entry with id=[id1, id2], titled "期末测试卷A卷". Same for B卷.
-5. **Level errors**: Sections (like "22.1") should be L2 under their chapter (L1), not L1 themselves.
-6. **Table of contents entries**: Any entries from the first ~10 pages that look like TOC entries (with page numbers at end) should be removed.
+1. **Missing headings**: Check that ALL numbered sub-sections are included. Check for missing "Front Matter" or "Back Matter".
+2. **False positives**: Instructional labels like "Key points", "Exercises", "Questions" are NOT structural headings — remove them.
+3. **Missing parent**: If sections like "22.1", "22.2" exist but "Chapter 22" (or "Unit X") is missing, find and add it.
+4. **Fragmented titles**: Merge adjacent title fragments (e.g., "Chapter" + "1") into one entry.
+5. **Level errors**: Ensure correct hierarchy: Unit (L1) -> Chapter (L2) -> Section (L3). If no Units, then Chapter (L1).
+6. **Table of contents entries**: Only remove entries that are explicitly part of a "Contents" list (with page numbers at the end). DO NOT remove "Introduction" or "Unit" pages.
 
 ## Instructions
 - Review the previous result against the full document text below
@@ -219,7 +354,7 @@ async function callChapterLLM(prompt: string, config: ChapterLLMConfig): Promise
   const endpoint = base.endsWith('/chat/completions') ? base : `${base}/chat/completions`;
 
   const client = axios.create({
-    timeout: config.timeout || 120000,
+    timeout: config.timeout || 300000, // Default to 5 minutes
     headers: {
       'Authorization': `Bearer ${config.apiKey}`,
       'Content-Type': 'application/json',
@@ -252,17 +387,84 @@ async function callChapterLLM(prompt: string, config: ChapterLLMConfig): Promise
 // Step 4: 解析 LLM 输出
 // ============================================================
 
+/**
+ * 尝试修复截断的 JSON
+ * 
+ * LLM 输出可能会因为 max_tokens 限制而被截断。
+ * 此函数尝试通过查找最后一个闭合的大括号或中括号来修复 JSON。
+ */
+function tryRepairJSON(raw: string): any {
+  // 1. 尝试直接解析
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    // Continue to repair
+  }
+
+  // 2. 提取潜在的 JSON 部分 (从第一个 { 开始)
+  let jsonString = raw.trim();
+  const firstBrace = jsonString.indexOf('{');
+  if (firstBrace === -1) throw new Error('No JSON object found');
+  jsonString = jsonString.substring(firstBrace);
+
+  // 3. 尝试简单的修复 (补全末尾的 })
+  try { return JSON.parse(jsonString + '}'); } catch {}
+  try { return JSON.parse(jsonString + ']}'); } catch {}
+  try { return JSON.parse(jsonString + '"]}}'); } catch {} // 补全字符串+数组+对象
+
+  // 4. 倒序查找有效的闭合点
+  // 假设结构是 {"directory": [ ... ]}，我们尝试在每一个 '}' 处截断并补全 ']}'
+  let lastBrace = jsonString.lastIndexOf('}');
+  
+  // 限制尝试次数，避免死循环太久 (最多尝试最后 20 个闭合点)
+  let attempts = 0;
+  while (lastBrace > firstBrace && attempts < 20) {
+    attempts++;
+    
+    // 方案 A: 假设是在数组项之间截断 -> 补全 ]}
+    const candidateA = jsonString.substring(0, lastBrace + 1) + ']}';
+    try {
+      const parsed = JSON.parse(candidateA);
+      // 验证结构
+      if (parsed.directory || parsed.chapters || parsed.entries) {
+        console.warn(`[ChapterPreprocess] JSON repaired by appending ']}' at pos ${lastBrace + 1}`);
+        return parsed;
+      }
+    } catch {}
+
+    // 方案 B: 假设就是在根对象结束处 (即完整的 JSON) -> 已经在第 1 步试过了，但可能中间有乱码
+    const candidateB = jsonString.substring(0, lastBrace + 1);
+    try {
+      const parsed = JSON.parse(candidateB);
+      return parsed;
+    } catch {}
+
+    // 方案 C: 假设是在对象内部截断 -> 补全 }]}
+    // 这比较复杂，暂不处理，依赖方案 A 的回退
+
+    // 继续向前寻找下一个 '}'
+    lastBrace = jsonString.lastIndexOf('}', lastBrace - 1);
+  }
+
+  throw new Error('Failed to repair truncated JSON');
+}
+
 function parseLLMOutput(raw: string, validIds: Set<number>): { entries: DirectoryEntry[]; warnings: string[] } {
   const warnings: string[] = [];
 
   let parsed: any;
   try {
-    parsed = JSON.parse(raw);
-  } catch {
-    const match = raw.match(/\{[\s\S]*\}/);
-    if (!match) throw new Error('No valid JSON found in LLM output');
-    parsed = JSON.parse(match[0]);
-    warnings.push('JSON extracted from non-clean output');
+    parsed = tryRepairJSON(raw);
+  } catch (err: any) {
+    // Fallback: try regex extraction if repair failed
+    try {
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) throw err;
+      parsed = JSON.parse(match[0]);
+      warnings.push('JSON extracted via regex');
+    } catch {
+       throw new Error(`JSON parsing failed: ${err.message}`);
+    }
   }
 
   const rawEntries = parsed.directory || parsed.chapters || parsed.entries;
@@ -310,6 +512,7 @@ function postProcessCleanup(entries: DirectoryEntry[], blocks: FlatBlock[]): Dir
 
   // 可配置的噪声模式
   const noisePatterns = [
+    // 中文噪声
     /^要点归纳$/,
     /^疑难分析$/,
     /^基础训练$/,
@@ -319,6 +522,17 @@ function postProcessCleanup(entries: DirectoryEntry[], blocks: FlatBlock[]): Dir
     /^例题?\s*\d/,
     /^练习\s*\d/,
     /^习题\s*\d/,
+    
+    // English Noise Patterns (Conservative)
+    /^Key\s+Points$/i,
+    /^Tip$/i,
+    /^Note$/i,
+    /^Activity\s*\d*$/i,
+    /^Exercise\s*\d*$/i,
+    /^Q\s*&\s*A$/i,
+    /^Multiple\s+Choice$/i,
+    /^Section\s+[A-Z]$/i, // Section A, Section B usually part of exercises
+    /^Question\s*\d+$/i,
   ];
 
   return entries.filter(e => {
@@ -460,34 +674,102 @@ export async function preprocessChapters(
   // ========== Step 1: 全文格式化 ==========
   if (onProgress) await onProgress('章节预处理：格式化全文...');
   const fullText = formatFullText(blocks);
-  const estTokens = Math.ceil(fullText.length / 2);
+  // 估算 token 数 (粗略估算: 1 token ≈ 1.5 chars for Chinese/English mix, or use length/2 safe bound)
+  const estTokens = Math.ceil(fullText.length / 1.5); 
   console.log(`[ChapterPreprocess] 全文格式化: ${fullText.length} chars, ~${estTokens} tokens`);
-  fs.writeFileSync(path.join(debugDir, 'chapter_full_text.txt'), fullText);
-
+  
+  const limit = llmConfig.contextWindow ? Math.floor(llmConfig.contextWindow * 0.8) : 128000;
   const validIds = new Set(blocks.map(b => b.id));
-
+  
   // ========== Step 2: 第一轮 LLM 抽取 ==========
-  if (onProgress) await onProgress('章节预处理：第一轮 LLM 抽取（全文推理）...');
-  const prompt1 = buildExtractionPrompt(fullText, blocks.length, totalPages);
-  fs.writeFileSync(path.join(debugDir, 'chapter_prompt_round1.txt'), prompt1);
-
   let round1Entries: DirectoryEntry[] = [];
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const startTime = Date.now();
-      const llmRaw = await callChapterLLM(prompt1, llmConfig);
-      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-      console.log(`[ChapterPreprocess] Round 1 attempt ${attempt}: ${elapsed}s, ${llmRaw.length} chars`);
-      fs.writeFileSync(path.join(debugDir, `chapter_llm_round1_attempt${attempt}.json`), llmRaw);
+  
+  if (estTokens <= limit) {
+    // --------------------------------------------------------
+    // A. 单次全量处理 (Original Logic)
+    // --------------------------------------------------------
+    if (onProgress) await onProgress('章节预处理：第一轮 LLM 抽取（全文推理）...');
+    const prompt1 = buildExtractionPrompt(fullText, blocks.length, totalPages);
+    fs.writeFileSync(path.join(debugDir, 'chapter_prompt_round1.txt'), prompt1);
 
-      const { entries, warnings } = parseLLMOutput(llmRaw, validIds);
-      for (const w of warnings) console.warn(`[ChapterPreprocess] [WARN] ${w}`);
-      round1Entries = entries;
-      console.log(`[ChapterPreprocess] Round 1: ${entries.length} entries (L1=${entries.filter(e => e.level === 1).length}, L2=${entries.filter(e => e.level === 2).length}, L3=${entries.filter(e => e.level === 3).length})`);
-      break;
-    } catch (err: any) {
-      console.error(`[ChapterPreprocess] Round 1 attempt ${attempt} failed: ${err.message}`);
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const startTime = Date.now();
+        const llmRaw = await callChapterLLM(prompt1, llmConfig);
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        console.log(`[ChapterPreprocess] Round 1 attempt ${attempt}: ${elapsed}s, ${llmRaw.length} chars`);
+        fs.writeFileSync(path.join(debugDir, `chapter_llm_round1_attempt${attempt}.json`), llmRaw);
+
+        const { entries, warnings } = parseLLMOutput(llmRaw, validIds);
+        for (const w of warnings) console.warn(`[ChapterPreprocess] [WARN] ${w}`);
+        round1Entries = entries;
+        console.log(`[ChapterPreprocess] Round 1: ${entries.length} entries (L1=${entries.filter(e => e.level === 1).length}, L2=${entries.filter(e => e.level === 2).length}, L3=${entries.filter(e => e.level === 3).length})`);
+        break;
+      } catch (err: any) {
+        console.error(`[ChapterPreprocess] Round 1 attempt ${attempt} failed: ${err.message}`);
+      }
     }
+  } else {
+    // --------------------------------------------------------
+    // B. 分块处理 (Chunked Logic)
+    // --------------------------------------------------------
+    const msg = `文档内容过长 (~${estTokens} tokens)，超出模型上下文限制 (${llmConfig.contextWindow} tokens, 安全阈值 ${limit})，切换到分块处理模式。`;
+    console.warn(`[ChapterPreprocess] ${msg}`);
+    if (onProgress) await onProgress(`章节预处理：${msg}`);
+
+    // 切分 chunks (使用 formatFullText 的逻辑估算)
+    // 注意：这里需要传入 blocks 和 limit (token limit)
+    const blocksForChunks = splitBlocksIntoChunks(blocks, limit);
+    console.log(`[ChapterPreprocess] Split into ${blocksForChunks.length} chunks.`);
+
+    for (const [idx, chunkBlocks] of blocksForChunks.entries()) {
+      if (onProgress) await onProgress(`章节预处理：处理分块 ${idx + 1}/${blocksForChunks.length}...`);
+      
+      const chunkText = formatFullText(chunkBlocks);
+      const chunkPrompt = buildExtractionPrompt(chunkText, chunkBlocks.length, totalPages);
+      // Debug: Write chunk prompt to file
+      fs.writeFileSync(path.join(debugDir, `chapter_chunk_${idx + 1}_prompt.txt`), chunkPrompt);
+
+      const chunkValidIds = new Set(chunkBlocks.map(b => b.id));
+
+      let chunkEntries: DirectoryEntry[] = [];
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const startTime = Date.now();
+          const llmRaw = await callChapterLLM(chunkPrompt, llmConfig);
+          const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+          console.log(`[ChapterPreprocess] Chunk ${idx + 1} attempt ${attempt}: ${elapsed}s`);
+          
+          // Debug: Write chunk response to file
+          fs.writeFileSync(path.join(debugDir, `chapter_chunk_${idx + 1}_response_attempt${attempt}.json`), llmRaw);
+          
+          const { entries, warnings } = parseLLMOutput(llmRaw, chunkValidIds);
+          chunkEntries = entries;
+          break;
+        } catch (err: any) {
+           console.error(`[ChapterPreprocess] Chunk ${idx + 1} attempt ${attempt} failed: ${err.message}`);
+        }
+      }
+      
+      // Accumulate
+      round1Entries.push(...chunkEntries);
+    }
+    
+    // Deduplicate round1Entries (simple ID check)
+    const seenIds = new Set<number>();
+    const uniqueEntries: DirectoryEntry[] = [];
+    // Sort by ID first to ensure order? Usually output is ordered.
+    // Chunk output is ordered locally. Merging sequentially preserves global order.
+    
+    for (const entry of round1Entries) {
+      const pid = Array.isArray(entry.id) ? entry.id[0] : entry.id;
+      if (!seenIds.has(pid)) {
+        seenIds.add(pid);
+        uniqueEntries.push(entry);
+      }
+    }
+    round1Entries = uniqueEntries;
+    console.log(`[ChapterPreprocess] Merged Chunk Results: ${round1Entries.length} entries.`);
   }
 
   if (round1Entries.length === 0) {
@@ -509,31 +791,96 @@ export async function preprocessChapters(
 
   // ========== Step 4: 第二轮 LLM 校验修正 ==========
   if (onProgress) await onProgress('章节预处理：第二轮 LLM 校验修正...');
-  const prompt2 = buildVerificationPrompt(cleaned, fullText, blocks.length, totalPages);
-  fs.writeFileSync(path.join(debugDir, 'chapter_prompt_round2.txt'), prompt2);
+  
+  let finalEntries: DirectoryEntry[] = cleaned;
 
-  let finalEntries = cleaned;
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      const startTime = Date.now();
-      const llmRaw = await callChapterLLM(prompt2, llmConfig);
-      const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-      console.log(`[ChapterPreprocess] Round 2 attempt ${attempt}: ${elapsed}s, ${llmRaw.length} chars`);
-      fs.writeFileSync(path.join(debugDir, `chapter_llm_round2_attempt${attempt}.json`), llmRaw);
+  if (estTokens <= limit) {
+    // --------------------------------------------------------
+    // A. 单次全量校验 (Original Logic)
+    // --------------------------------------------------------
+    const prompt2 = buildVerificationPrompt(cleaned, fullText, blocks.length, totalPages);
+    fs.writeFileSync(path.join(debugDir, 'chapter_prompt_round2.txt'), prompt2);
 
-      const { entries, warnings } = parseLLMOutput(llmRaw, validIds);
-      for (const w of warnings) console.warn(`[ChapterPreprocess] [WARN] ${w}`);
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        const startTime = Date.now();
+        const llmRaw = await callChapterLLM(prompt2, llmConfig);
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        console.log(`[ChapterPreprocess] Round 2 attempt ${attempt}: ${elapsed}s, ${llmRaw.length} chars`);
+        fs.writeFileSync(path.join(debugDir, `chapter_llm_round2_attempt${attempt}.json`), llmRaw);
 
-      if (entries.length >= cleaned.length * 0.8) {
-        finalEntries = entries;
-        console.log(`[ChapterPreprocess] Round 2: ${entries.length} entries (L1=${entries.filter(e => e.level === 1).length}, L2=${entries.filter(e => e.level === 2).length}, L3=${entries.filter(e => e.level === 3).length})`);
-      } else {
-        console.warn(`[ChapterPreprocess] Round 2 结果过少 (${entries.length} < ${Math.floor(cleaned.length * 0.8)})，保留第一轮结果`);
+        const { entries, warnings } = parseLLMOutput(llmRaw, validIds);
+        for (const w of warnings) console.warn(`[ChapterPreprocess] [WARN] ${w}`);
+
+        if (entries.length >= cleaned.length * 0.8) {
+          finalEntries = entries;
+          console.log(`[ChapterPreprocess] Round 2: ${entries.length} entries (L1=${entries.filter(e => e.level === 1).length}, L2=${entries.filter(e => e.level === 2).length}, L3=${entries.filter(e => e.level === 3).length})`);
+        } else {
+          console.warn(`[ChapterPreprocess] Round 2 结果过少 (${entries.length} < ${Math.floor(cleaned.length * 0.8)})，保留第一轮结果`);
+        }
+        break;
+      } catch (err: any) {
+        console.error(`[ChapterPreprocess] Round 2 attempt ${attempt} failed: ${err.message}`);
       }
-      break;
-    } catch (err: any) {
-      console.error(`[ChapterPreprocess] Round 2 attempt ${attempt} failed: ${err.message}`);
     }
+  } else {
+    // --------------------------------------------------------
+    // B. 分块校验 (Chunked Verification)
+    // --------------------------------------------------------
+    if (onProgress) await onProgress('章节预处理：第二轮校验 (分块模式)...');
+    
+    // 复用之前切分的 blocksForChunks
+    const blocksForChunks = splitBlocksIntoChunks(blocks, limit);
+    const chunkResults: DirectoryEntry[] = [];
+    
+    for (const [idx, chunkBlocks] of blocksForChunks.entries()) {
+      const chunkText = formatFullText(chunkBlocks);
+      const chunkValidIds = new Set(chunkBlocks.map(b => b.id));
+      
+      // 找出当前 chunk 相关的 entries (ID 在 chunk 范围内)
+      // 注意：entries 可能跨越 chunk 边界，但通常只要主 ID 在范围内即可
+      const relevantEntries = cleaned.filter(e => {
+        const pid = Array.isArray(e.id) ? e.id[0] : e.id;
+        return chunkValidIds.has(pid);
+      });
+      
+      if (relevantEntries.length === 0) {
+        // 如果这个 chunk 没有识别出任何 entries，可能不需要校验，或者跳过
+        continue;
+      }
+
+      const chunkPrompt = buildVerificationPrompt(relevantEntries, chunkText, chunkBlocks.length, totalPages);
+      
+      let chunkVerified = relevantEntries; // 默认回退
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const llmRaw = await callChapterLLM(chunkPrompt, llmConfig);
+          const { entries } = parseLLMOutput(llmRaw, chunkValidIds);
+          
+          if (entries.length >= relevantEntries.length * 0.5) { // 分块校验容忍度稍高
+            chunkVerified = entries;
+            console.log(`[ChapterPreprocess] Chunk ${idx + 1} verified: ${relevantEntries.length} -> ${entries.length}`);
+          }
+          break;
+        } catch (err: any) {
+          console.error(`[ChapterPreprocess] Chunk ${idx + 1} verification failed: ${err.message}`);
+        }
+      }
+      chunkResults.push(...chunkVerified);
+    }
+    
+    // Dedupe again
+    const seenIds = new Set<number>();
+    const uniqueEntries: DirectoryEntry[] = [];
+    for (const entry of chunkResults) {
+      const pid = Array.isArray(entry.id) ? entry.id[0] : entry.id;
+      if (!seenIds.has(pid)) {
+        seenIds.add(pid);
+        uniqueEntries.push(entry);
+      }
+    }
+    finalEntries = uniqueEntries;
+    console.log(`[ChapterPreprocess] Merged Verification Results: ${finalEntries.length} entries.`);
   }
 
   // 再次清理

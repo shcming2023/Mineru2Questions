@@ -1,0 +1,783 @@
+[
+  {
+    "id": 13,
+    "text": "主编 王同启",
+    "level": 1,
+    "page": 1,
+    "block_range": {
+      "start": 13,
+      "end": 37
+    },
+    "parent_id": null
+  },
+  {
+    "id": 37,
+    "text": "出版说明",
+    "level": 1,
+    "page": 3,
+    "block_range": {
+      "start": 37,
+      "end": 50
+    },
+    "parent_id": null
+  },
+  {
+    "id": 50,
+    "text": "第19章 实数",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 50,
+      "end": 51
+    },
+    "parent_id": null
+  },
+  {
+    "id": 51,
+    "text": "19.1 平方根与立方根 1",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 51,
+      "end": 52
+    },
+    "parent_id": 50
+  },
+  {
+    "id": 52,
+    "text": "19.1（一）算术平方根 1",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 52,
+      "end": 53
+    },
+    "parent_id": 51
+  },
+  {
+    "id": 53,
+    "text": "19.1（二） 平方根 3",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 53,
+      "end": 54
+    },
+    "parent_id": 51
+  },
+  {
+    "id": 54,
+    "text": "19.1（三）立方根 7",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 54,
+      "end": 55
+    },
+    "parent_id": 51
+  },
+  {
+    "id": 55,
+    "text": "阶段训练1 11",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 55,
+      "end": 56
+    },
+    "parent_id": 50
+  },
+  {
+    "id": 56,
+    "text": "19.2 实数 13",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 56,
+      "end": 57
+    },
+    "parent_id": 50
+  },
+  {
+    "id": 57,
+    "text": "19.2（一）有理数的小数形式 13",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 57,
+      "end": 58
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 58,
+    "text": "19.2（二） 无理数 16",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 58,
+      "end": 59
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 59,
+    "text": "19.2（三）实数与数轴 19",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 59,
+      "end": 60
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 60,
+    "text": "19.2（四）实数的绝对值和大小比较 22",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 60,
+      "end": 61
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 61,
+    "text": "19.2（五）实数的运算 26",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 61,
+      "end": 62
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 62,
+    "text": "19.2(六） 科学记数法 29",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 62,
+      "end": 63
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 63,
+    "text": "本章复习题(一) 32",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 63,
+      "end": 64
+    },
+    "parent_id": 50
+  },
+  {
+    "id": 64,
+    "text": "本章复习题(二) 35",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 64,
+      "end": 65
+    },
+    "parent_id": 50
+  },
+  {
+    "id": 65,
+    "text": "第20章 二次根式 … 38",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 65,
+      "end": 66
+    },
+    "parent_id": null
+  },
+  {
+    "id": 66,
+    "text": "20.1 二次根式及其性质 38",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 66,
+      "end": 67
+    },
+    "parent_id": 65
+  },
+  {
+    "id": 67,
+    "text": "20.1(一）二次根式的概念 38",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 67,
+      "end": 68
+    },
+    "parent_id": 66
+  },
+  {
+    "id": 68,
+    "text": "20.1（二）二次根式的性质及最简二次根式 41",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 68,
+      "end": 69
+    },
+    "parent_id": 66
+  },
+  {
+    "id": 69,
+    "text": "20.2 二次根式的运算 47",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 69,
+      "end": 70
+    },
+    "parent_id": 65
+  },
+  {
+    "id": 70,
+    "text": "20.2（一）同类二次根式及二次根式的加减法 47",
+    "level": 3,
+    "page": 5,
+    "block_range": {
+      "start": 70,
+      "end": 71
+    },
+    "parent_id": 69
+  },
+  {
+    "id": 71,
+    "text": "阶段训练2 53",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 71,
+      "end": 72
+    },
+    "parent_id": 69
+  },
+  {
+    "id": 72,
+    "text": "20.2（二）二次根式的乘法和除法 56",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 72,
+      "end": 73
+    },
+    "parent_id": 69
+  },
+  {
+    "id": 73,
+    "text": "20.2（三） 分母有理化 59",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 73,
+      "end": 74
+    },
+    "parent_id": 69
+  },
+  {
+    "id": 74,
+    "text": "20.2（四）二次根式的混合运算 63",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 74,
+      "end": 75
+    },
+    "parent_id": 65
+  },
+  {
+    "id": 75,
+    "text": "阶段训练3 68",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 75,
+      "end": 76
+    },
+    "parent_id": 65
+  },
+  {
+    "id": 76,
+    "text": "本章复习题 71",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 76,
+      "end": 77
+    },
+    "parent_id": 65
+  },
+  {
+    "id": 77,
+    "text": "第21章 一元二次方程 75",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 77,
+      "end": 78
+    },
+    "parent_id": null
+  },
+  {
+    "id": 78,
+    "text": "21.1 一元二次方程的概念 75",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 78,
+      "end": 79
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 79,
+    "text": "21.2 一元二次方程的解法 78",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 79,
+      "end": 80
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 80,
+    "text": "21.2（一）特殊的一元二次方程的解法——因式分解法 78",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 80,
+      "end": 81
+    },
+    "parent_id": 79
+  },
+  {
+    "id": 81,
+    "text": "21.2（二）用开平方的方法解特殊的一元二次方程 82",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 81,
+      "end": 82
+    },
+    "parent_id": 79
+  },
+  {
+    "id": 82,
+    "text": "21.2（三） 一般的一元二次方程的解法——配方法 ………………………………………… 86",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 82,
+      "end": 83
+    },
+    "parent_id": 79
+  },
+  {
+    "id": 83,
+    "text": "21.2（四） 一般的一元二次方程的解法——公式法 90",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 83,
+      "end": 84
+    },
+    "parent_id": 79
+  },
+  {
+    "id": 84,
+    "text": "21.2（五）用合适的方法解一元二次方程 94",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 84,
+      "end": 85
+    },
+    "parent_id": 79
+  },
+  {
+    "id": 85,
+    "text": "阶段训练4 98",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 85,
+      "end": 86
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 86,
+    "text": "21.3 一元二次方程的判别式 … 101",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 86,
+      "end": 87
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 87,
+    "text": "21.3（一） 一元二次方程的根的判别式 101",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 87,
+      "end": 88
+    },
+    "parent_id": 86
+  },
+  {
+    "id": 88,
+    "text": "21.3（二）一元二次方程的根的判别式的应用 104",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 88,
+      "end": 89
+    },
+    "parent_id": 86
+  },
+  {
+    "id": 89,
+    "text": "21.4 一元二次方程的根与系数的关系 ………………………………………… 108",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 89,
+      "end": 90
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 90,
+    "text": "21.4(一） 一元二次方程的根与系数的关系(1) 108",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 90,
+      "end": 91
+    },
+    "parent_id": 89
+  },
+  {
+    "id": 91,
+    "text": "21.4（二）一元二次方程的根与系数的关系(2) 111",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 91,
+      "end": 92
+    },
+    "parent_id": 89
+  },
+  {
+    "id": 92,
+    "text": "21.5 一元二次方程的应用 … 116",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 92,
+      "end": 93
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 93,
+    "text": "21.5(一）二次三项式的因式分解 116",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 93,
+      "end": 94
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 94,
+    "text": "阶段训练5 120",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 94,
+      "end": 95
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 95,
+    "text": "21.5（二）列方程解实际问题 123",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 95,
+      "end": 96
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 96,
+    "text": "21.5（三）解分式方程 126",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 96,
+      "end": 97
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 97,
+    "text": "21.5（四）列分式方程解应用题 130",
+    "level": 3,
+    "page": 6,
+    "block_range": {
+      "start": 97,
+      "end": 98
+    },
+    "parent_id": 92
+  },
+  {
+    "id": 98,
+    "text": "阶段训练6 133",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 98,
+      "end": 99
+    },
+    "parent_id": 77
+  },
+  {
+    "id": 99,
+    "text": "本章复习题 136",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 99,
+      "end": 100
+    },
+    "parent_id": null
+  },
+  {
+    "id": 100,
+    "text": "第22章 直角三角形 140",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 100,
+      "end": 101
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 101,
+    "text": "22.1 直角三角形 140",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 101,
+      "end": 102
+    },
+    "parent_id": 100
+  },
+  {
+    "id": 102,
+    "text": "22.1（一）直角三角形的性质 140",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 102,
+      "end": 103
+    },
+    "parent_id": 100
+  },
+  {
+    "id": 103,
+    "text": "22.1（二） 直角三角形全等的判定 144",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 103,
+      "end": 104
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 104,
+    "text": "22.2角平分线 148",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 104,
+      "end": 105
+    },
+    "parent_id": 103
+  },
+  {
+    "id": 105,
+    "text": "22.2(一）角平分线性质定理 148",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 105,
+      "end": 106
+    },
+    "parent_id": 103
+  },
+  {
+    "id": 106,
+    "text": "22.2（二）角平分线的综合运用 153",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 106,
+      "end": 107
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 107,
+    "text": "阶段训练7 156",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 107,
+      "end": 108
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 108,
+    "text": "22.3 勾股定理 160",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 108,
+      "end": 109
+    },
+    "parent_id": 107
+  },
+  {
+    "id": 109,
+    "text": "22.3（一） 勾股定理的证明 160",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 109,
+      "end": 110
+    },
+    "parent_id": 107
+  },
+  {
+    "id": 110,
+    "text": "22.3（二） 勾股定理的应用 163",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 110,
+      "end": 111
+    },
+    "parent_id": 107
+  },
+  {
+    "id": 111,
+    "text": "阶段训练8 168",
+    "level": 3,
+    "page": 7,
+    "block_range": {
+      "start": 111,
+      "end": 112
+    },
+    "parent_id": 107
+  },
+  {
+    "id": 112,
+    "text": "22.3（三） 勾股定理的逆定理及其证明 171",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 112,
+      "end": 113
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 113,
+    "text": "22.3（四）勾股定理及其逆定理的应用 175",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 113,
+      "end": 114
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 114,
+    "text": "阶段训练9 180",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 114,
+      "end": 115
+    },
+    "parent_id": 99
+  },
+  {
+    "id": 115,
+    "text": "本章复习题 184",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 115,
+      "end": 116
+    },
+    "parent_id": null
+  },
+  {
+    "id": 116,
+    "text": "期末测试卷A卷 189",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 116,
+      "end": 118
+    },
+    "parent_id": null
+  },
+  {
+    "id": 118,
+    "text": "附：",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 118,
+      "end": 119
+    },
+    "parent_id": null
+  },
+  {
+    "id": 119,
+    "text": "参考答案",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 119,
+      "end": 3470
+    },
+    "parent_id": null
+  }
+]

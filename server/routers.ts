@@ -14,6 +14,7 @@ import {
   createExtractionTask,
   getExtractionTasksByUser,
   getExtractionTaskById,
+  getExtractionTasksByRootId,
   updateExtractionTask,
   deleteExtractionTask,
   createPageProcessingLogs,
@@ -25,6 +26,7 @@ import {
 } from "./db";
 import { storagePut, storageGet } from "./storage";
 import { startTaskProcessing, pauseTaskProcessing, cancelTaskProcessing } from "./taskProcessor";
+import { taskService } from "./taskService";
 
 // LLM配置路由
 const llmConfigRouter = router({
@@ -62,6 +64,7 @@ const llmConfigRouter = router({
       modelName: z.string().min(1).max(128),
       maxWorkers: z.number().min(1).max(50).default(5),
       timeout: z.number().min(30).max(1800).default(300),
+      contextWindow: z.number().min(1000).default(128000),
       isDefault: z.boolean().default(false),
       purpose: z.enum(["vision_extract", "long_context", "general"]).default("vision_extract")
     }))
@@ -83,6 +86,7 @@ const llmConfigRouter = router({
       modelName: z.string().min(1).max(128).optional(),
       maxWorkers: z.number().min(1).max(50).optional(),
       timeout: z.number().min(30).max(1800).optional(),
+      contextWindow: z.number().min(1000).optional(),
       isDefault: z.boolean().optional(),
       purpose: z.enum(["vision_extract", "long_context", "general"]).optional()
     }))
@@ -161,6 +165,19 @@ const taskRouter = router({
       }
       return task;
     }),
+
+  // 获取任务族系
+  getLineage: protectedProcedure
+    .input(z.object({ taskId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const task = await getExtractionTaskById(input.taskId, ctx.user.id);
+      if (!task) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "任务不存在" });
+      }
+      
+      const rootTaskId = task.rootTaskId || task.id;
+      return await getExtractionTasksByRootId(rootTaskId, ctx.user.id);
+    }),
   
   // 获取任务的页面处理日志
   getPageLogs: protectedProcedure
@@ -238,7 +255,14 @@ const taskRouter = router({
       
       return { id };
     }),
-  
+
+  // 重试任务
+  retry: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return await taskService.retryTask(input.id, ctx.user.id);
+    }),
+
   // 开始/恢复任务
   start: protectedProcedure
     .input(z.object({ id: z.number() }))
@@ -287,8 +311,8 @@ const taskRouter = router({
       return { success: true };
     }),
   
-  // 重试失败的任务
-  retry: protectedProcedure
+  // 重试失败的任务 (恢复)
+  retryFailed: protectedProcedure
     .input(z.object({ id: z.number() }))
     .mutation(async ({ ctx, input }) => {
       const task = await getExtractionTaskById(input.id, ctx.user.id);

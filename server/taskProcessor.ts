@@ -110,6 +110,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             apiKey: chapterLlmConfig.apiKey,
             modelName: chapterLlmConfig.modelName,
             timeout: (chapterLlmConfig.timeout || 120) * 1000,
+            contextWindow: chapterLlmConfig.contextWindow,
           };
           chapterResult = await preprocessChapters(
             contentListPath,
@@ -123,9 +124,12 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             `章节预处理完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
         } catch (err: any) {
           console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
-          await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
-            `章节预处理失败，回退到 LLM 自行判断章节: ${err.message}`);
-          // 不抛异常，回退到无章节预处理模式
+          await logTaskProgress(taskId, 'error', 'chapter_preprocess',
+            `章节预处理失败: ${err.message}`);
+          
+          // 严重错误（如上下文窗口超出），直接终止任务
+          await updateExtractionTask(taskId, { status: 'failed', errorMessage: `章节预处理失败: ${err.message}` });
+          throw err; 
         }
       } else {
         await logTaskProgress(taskId, 'warn', 'chapter_preprocess',

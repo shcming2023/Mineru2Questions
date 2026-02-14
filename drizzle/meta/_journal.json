@@ -29,6 +29,20 @@
       "when": 1770887452343,
       "tag": "0003_round_thunderball",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1770961712932,
+      "tag": "0004_worthless_iron_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1770966147503,
+      "tag": "0005_lowly_shadowcat",
+      "breakpoints": true
     }
   ]
 }

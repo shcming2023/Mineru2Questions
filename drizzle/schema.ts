@@ -30,6 +30,7 @@ export const llmConfigs = sqliteTable("llm_configs", {
   modelName: text("modelName", { length: 128 }).notNull(), // 模型名称
   maxWorkers: integer("maxWorkers").default(5).notNull(), // 并发数
   timeout: integer("timeout").default(300).notNull(), // 超时时间(秒)
+  contextWindow: integer("contextWindow").default(128000).notNull(), // 上下文窗口大小 (tokens)
   isDefault: integer("isDefault", { mode: "boolean" }).default(false).notNull(), // 是否为默认配置
   purpose: text("purpose", { enum: ["vision_extract", "long_context", "general"] }).default("vision_extract").notNull(), // 用途：视觉抽取 / 长文本推理 / 通用
   createdAt: integer("createdAt", { mode: "timestamp" }).defaultNow().notNull(),
@@ -72,6 +73,10 @@ export const extractionTasks = sqliteTable("extraction_tasks", {
   // 错误信息
   errorMessage: text("errorMessage"),
   retryCount: integer("retryCount").default(0).notNull(),
+  
+  // 任务族系
+  parentTaskId: integer("parentTaskId"), // 父任务ID
+  rootTaskId: integer("rootTaskId"), // 根任务ID (用于快速查询整个族系)
   
   createdAt: integer("createdAt", { mode: "timestamp" }).defaultNow().notNull(),
   updatedAt: integer("updatedAt", { mode: "timestamp" }).defaultNow().notNull(),

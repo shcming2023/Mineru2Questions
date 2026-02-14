@@ -1,0 +1,1 @@
+ALTER TABLE `llm_configs` ADD `contextWindow` integer DEFAULT 128000 NOT NULL;

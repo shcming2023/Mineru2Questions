@@ -3,8 +3,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { trpc } from "@/lib/trpc";
-import { Eye, Download, Loader2 } from "lucide-react";
+import { Eye, Download, Loader2, RotateCcw } from "lucide-react";
 import { useLocation } from "wouter";
+import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const statusConfig = {
   pending: { label: "等待中", variant: "secondary" as const },
@@ -16,10 +28,33 @@ const statusConfig = {
 
 export default function History() {
   const [, setLocation] = useLocation();
+  const utils = trpc.useContext();
   const { data: tasks, isLoading } = trpc.task.list.useQuery();
   
-  // 只显示已完成和失败的任务
-  const historyTasks = tasks?.filter(t => t.status === "completed" || t.status === "failed") || [];
+  const retryMutation = trpc.task.retry.useMutation({
+    onSuccess: (data) => {
+      toast.success("任务重试已启动", {
+        description: "已创建新的重试任务并开始执行",
+      });
+      utils.task.list.invalidate();
+      // 可以在这里选择是否跳转到新任务详情
+      // setLocation(\`/tasks/\${data.id}\`);
+    },
+    onError: (error) => {
+      toast.error("重试失败", {
+        description: error.message,
+      });
+    }
+  });
+
+  const handleRetry = (taskId: number) => {
+    retryMutation.mutate({ id: taskId });
+  };
+  
+  // 显示所有任务（包括处理中的，以便查看重试任务）
+  // 按照需求：提供任务族系视图，清晰展示同一输入物的所有执行历史
+  // 这里暂时还是列出列表，但我们应该允许用户看到所有状态的任务，或者至少是重试相关的
+  const historyTasks = tasks || [];
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleString();
@@ -107,6 +142,31 @@ export default function History() {
                           <Eye className="mr-1 h-4 w-4" />
                           查看详情
                         </Button>
+                        
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <Button variant="outline" size="sm">
+                              <RotateCcw className="mr-1 h-4 w-4" />
+                              重试
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>确认重试任务？</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                这将创建一个新的任务记录，使用原任务的参数和最新的处理逻辑重新执行。
+                                原任务记录将保留用于对比。
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>取消</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handleRetry(task.id)}>
+                                确认重试
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+
                         {task.status === "completed" && (
                           <Button variant="outline" size="sm">
                             <Download className="mr-1 h-4 w-4" />

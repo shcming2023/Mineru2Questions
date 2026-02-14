@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
 import TaskDetail from "./pages/TaskDetail";
+import TaskCompare from "./pages/TaskCompare";
 import NewTask from "./pages/NewTask";
 import Settings from "./pages/Settings";
 import History from "./pages/History";
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/tasks" component={Tasks} />
       <Route path="/tasks/new" component={NewTask} />
+      <Route path="/tasks/compare" component={TaskCompare} />
       <Route path="/tasks/:id" component={TaskDetail} />
       <Route path="/settings" component={Settings} />
       <Route path="/history" component={History} />

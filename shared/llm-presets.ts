@@ -24,6 +24,8 @@ export interface LLMPreset {
     id: string;
     name: string;
     description?: string;
+    /** 上下文窗口大小 (tokens) */
+    contextWindow: number;
     /** 推荐用途 */
     recommendedPurpose?: LLMPurpose;
   }>;
@@ -47,30 +49,35 @@ export const LLM_PRESETS: LLMPreset[] = [
         id: 'Qwen/Qwen2.5-VL-72B-Instruct',
         name: 'Qwen2.5-VL-72B-Instruct',
         description: '通义千问2.5视觉语言模型72B参数版本,支持图文理解',
+        contextWindow: 32768,
         recommendedPurpose: 'vision_extract'
       },
       {
         id: 'Qwen/Qwen2.5-72B-Instruct',
         name: 'Qwen2.5-72B-Instruct',
         description: '通义千问2.5文本模型72B参数版本',
+        contextWindow: 32768,
         recommendedPurpose: 'general'
       },
       {
         id: 'Qwen/Qwen2.5-7B-Instruct',
         name: 'Qwen2.5-7B-Instruct',
         description: '通义千问2.5文本模型7B参数版本',
+        contextWindow: 32768,
         recommendedPurpose: 'general'
       },
       {
         id: 'deepseek-ai/DeepSeek-V3',
         name: 'DeepSeek-V3',
         description: 'DeepSeek第三代模型,671B参数',
+        contextWindow: 65536,
         recommendedPurpose: 'general'
       },
       {
         id: 'deepseek-ai/DeepSeek-R1',
         name: 'DeepSeek-R1',
         description: 'DeepSeek推理模型,支持复杂推理任务',
+        contextWindow: 65536,
         recommendedPurpose: 'general'
       }
     ],
@@ -90,18 +97,21 @@ export const LLM_PRESETS: LLMPreset[] = [
         id: 'gpt-4o',
         name: 'GPT-4o',
         description: 'OpenAI最新多模态模型,支持图文理解',
+        contextWindow: 128000,
         recommendedPurpose: 'vision_extract'
       },
       {
         id: 'gpt-4-turbo',
         name: 'GPT-4 Turbo',
         description: 'GPT-4优化版本,速度更快',
+        contextWindow: 128000,
         recommendedPurpose: 'general'
       },
       {
         id: 'gpt-3.5-turbo',
         name: 'GPT-3.5 Turbo',
         description: 'GPT-3.5优化版本,性价比高',
+        contextWindow: 16385,
         recommendedPurpose: 'general'
       }
     ],
@@ -121,18 +131,21 @@ export const LLM_PRESETS: LLMPreset[] = [
         id: 'claude-3-5-sonnet-20241022',
         name: 'Claude 3.5 Sonnet',
         description: 'Anthropic最新模型,支持图文理解,200K上下文',
+        contextWindow: 200000,
         recommendedPurpose: 'general'
       },
       {
         id: 'claude-3-opus-20240229',
         name: 'Claude 3 Opus',
         description: 'Claude 3最强模型',
+        contextWindow: 200000,
         recommendedPurpose: 'general'
       },
       {
         id: 'claude-3-sonnet-20240229',
         name: 'Claude 3 Sonnet',
         description: 'Claude 3平衡版本',
+        contextWindow: 200000,
         recommendedPurpose: 'general'
       }
     ],
@@ -152,18 +165,21 @@ export const LLM_PRESETS: LLMPreset[] = [
         id: 'gemini-2.5-flash',
         name: 'Gemini 2.5 Flash',
         description: '1M上下文窗口,适合长文本推理和章节预处理',
+        contextWindow: 1000000,
         recommendedPurpose: 'long_context'
       },
       {
         id: 'gemini-2.5-pro',
         name: 'Gemini 2.5 Pro',
         description: '1M上下文窗口,最强推理能力',
+        contextWindow: 2000000,
         recommendedPurpose: 'long_context'
       },
       {
         id: 'gemini-2.0-flash',
         name: 'Gemini 2.0 Flash',
         description: '快速多模态模型',
+        contextWindow: 1000000,
         recommendedPurpose: 'general'
       }
     ],
@@ -183,12 +199,14 @@ export const LLM_PRESETS: LLMPreset[] = [
         id: 'deepseek-chat',
         name: 'DeepSeek-V3',
         description: '128K上下文,适合长文本推理',
+        contextWindow: 128000,
         recommendedPurpose: 'long_context'
       },
       {
         id: 'deepseek-reasoner',
         name: 'DeepSeek-R1',
         description: '推理模型,适合复杂任务',
+        contextWindow: 65536,
         recommendedPurpose: 'general'
       }
     ],

@@ -331,13 +331,13 @@ export default function NewTask() {
                   <SelectValue placeholder="选择题目抽取 LLM 配置(可选)" />
                 </SelectTrigger>
                 <SelectContent>
-                  {configs?.map((config) => (
+                  {visionConfigs.map((config: any) => (
                     <SelectItem key={config.id} value={config.id.toString()}>
                       <span>{config.name}</span>
                       <span className="text-muted-foreground ml-1">({config.modelName})</span>
                       {config.isDefault && <span className="text-primary ml-1">- 默认</span>}
-                      <span className={`ml-1 text-xs ${PURPOSE_BADGE_COLORS[(config as any).purpose as LLMPurpose] || ''}`}>
-                        [{PURPOSE_LABELS[(config as any).purpose as LLMPurpose] || '通用'}]
+                      <span className={`ml-1 text-xs ${PURPOSE_BADGE_COLORS[config.purpose as LLMPurpose] || ''}`}>
+                        [{PURPOSE_LABELS[config.purpose as LLMPurpose] || '通用'}]
                       </span>
                     </SelectItem>
                   ))}
@@ -359,13 +359,14 @@ export default function NewTask() {
                   <SelectItem value="none">
                     <span className="text-muted-foreground">不使用章节预处理</span>
                   </SelectItem>
-                  {configs?.map((config) => (
+                  {longContextConfigs.map((config: any) => (
                     <SelectItem key={config.id} value={config.id.toString()}>
                       <span>{config.name}</span>
                       <span className="text-muted-foreground ml-1">({config.modelName})</span>
+                      {config.contextWindow && <span className="text-xs text-muted-foreground ml-1">[{Math.round(config.contextWindow/1000)}k]</span>}
                       {config.isDefault && <span className="text-primary ml-1">- 默认</span>}
-                      <span className={`ml-1 text-xs ${PURPOSE_BADGE_COLORS[(config as any).purpose as LLMPurpose] || ''}`}>
-                        [{PURPOSE_LABELS[(config as any).purpose as LLMPurpose] || '通用'}]
+                      <span className={`ml-1 text-xs ${PURPOSE_BADGE_COLORS[config.purpose as LLMPurpose] || ''}`}>
+                        [{PURPOSE_LABELS[config.purpose as LLMPurpose] || '通用'}]
                       </span>
                     </SelectItem>
                   ))}

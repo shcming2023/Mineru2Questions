@@ -1,0 +1,34 @@
+<chapter><title>9538</title>
+<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>9538,9539,9540,9541,9542,9543</question>
+<solution>9544,9545,9546,9547,9548,9549,9550,9551,9552,9553,9554,9555,9556,9557,9558,9559,9560,9561,9562,9563,9564,9565,9566,9567,9568,9569</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 11</label><type>example</type><question>9574,9575,9576,9577</question>
+<solution>9578,9579,9580</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>9587,9588,9589,9590,9591</question>
+<solution>9592,9593,9594,9595,9596,9597,9598,9599,9600,9601,9602,9603,9604</solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>9605,9606,9607</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>9608</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>9609</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>9610</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>9611</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>9612</question>
+<solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>9613</question>
+<solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>9614</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>9615</question>
+<solution></solution></qa_pair>
+<qa_pair><label>10</label><type>exercise</type><question>9616</question>
+<solution></solution></qa_pair>
+<qa_pair><label>11</label><type>exercise</type><question>9617</question>
+<solution></solution></qa_pair>
+<qa_pair><label>12</label><type>exercise</type><question>9618</question>
+<solution></solution></qa_pair>
+<qa_pair><label>13</label><type>exercise</type><question>9619</question>
+<solution></solution></qa_pair>
+</chapter>

@@ -1,4 +1,4 @@
-import { eq, and, desc } from "drizzle-orm";
+import { eq, and, desc, or } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/better-sqlite3";
 import Database from "better-sqlite3";
 import { 
@@ -200,6 +200,21 @@ export async function getExtractionTaskById(id: number, userId: number): Promise
     .limit(1);
   
   return result[0];
+}
+
+export async function getExtractionTasksByRootId(rootTaskId: number, userId: number): Promise<ExtractionTask[]> {
+  const db = await getDb();
+  if (!db) return [];
+  
+  return await db.select().from(extractionTasks)
+    .where(and(
+      or(
+        eq(extractionTasks.rootTaskId, rootTaskId),
+        eq(extractionTasks.id, rootTaskId)
+      ),
+      eq(extractionTasks.userId, userId)
+    ))
+    .orderBy(desc(extractionTasks.createdAt));
 }
 
 export async function updateExtractionTask(id: number, updates: Partial<InsertExtractionTask>): Promise<void> {
