@@ -1,0 +1,74 @@
+[
+  {
+    "blockId": 2,
+    "page": 0,
+    "text": "UNIVERSITY PRESS",
+    "normalizedTitle": "CAMBRIDGE UNIVERSITY PRESS",
+    "level": 1,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1,
+    "page": 0,
+    "text": "CAMBRIDGE",
+    "normalizedTitle": "University Printing House, Cambridge CB2 8BS, United Kingdom",
+    "level": 1,
+    "confidence": 0.125,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1744,
+    "page": 49,
+    "text": "[3]",
+    "normalizedTitle": "314-321, 3rd Floor, Plot 3, Splendor Forum, Jasola District Centre, New Delhi - 110025, India",
+    "level": 1,
+    "confidence": 0.07142857142857142,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 2,
+    "page": 0,
+    "text": "UNIVERSITY PRESS",
+    "normalizedTitle": "Cambridge University Press is part of the University of Cambridge.",
+    "level": 1,
+    "confidence": 0.2857142857142857,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 9,
+    "page": 1,
+    "text": "",
+    "normalizedTitle": "20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2",
+    "level": 1,
+    "confidence": 0.4,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1074,
+    "page": 34,
+    "text": "a",
+    "normalizedTitle": "A catalogue record for this publication is available from the British Library",
+    "level": 1,
+    "confidence": 0.08333333333333333,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1732,
+    "page": 49,
+    "text": "[2]",
+    "normalizedTitle": "ISBN 978-1-009-15011-8 Digital Learner's Book (2 years)",
+    "level": 1,
+    "confidence": 0.14285714285714285,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1074,
+    "page": 34,
+    "text": "a",
+    "normalizedTitle": "(i) where you are abiding by a licence granted to your school or institution by the Copyright Licensing Agency;",
+    "level": 1,
+    "confidence": 0.05555555555555555,
+    "source": "toc_match"
+  }
+]

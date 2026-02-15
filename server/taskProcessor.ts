@@ -29,6 +29,7 @@ import {
   ChapterLLMConfig,
   ChapterPreprocessResult
 } from './chapterPreprocess';
+import { preprocessChaptersV2 } from './chapterPreprocessV2';
 
 /**
  * 启动任务处理
@@ -103,7 +104,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     if (task.chapterConfigId) {
       const chapterLlmConfig = await getLLMConfigById(task.chapterConfigId, userId);
       if (chapterLlmConfig) {
-        await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理（零筛选全文推理）...');
+        await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理 V2（自适应三轨混合架构）...');
         try {
           const chapterConfig: ChapterLLMConfig = {
             apiUrl: chapterLlmConfig.apiUrl,
@@ -112,7 +113,8 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             timeout: (chapterLlmConfig.timeout || 120) * 1000,
             contextWindow: chapterLlmConfig.contextWindow,
           };
-          chapterResult = await preprocessChapters(
+          // 使用 V2 自适应三轨混合架构
+          chapterResult = await preprocessChaptersV2(
             contentListPath,
             taskDir,
             chapterConfig,
@@ -121,7 +123,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             }
           );
           await logTaskProgress(taskId, 'info', 'chapter_preprocess',
-            `章节预处理完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
+            `章节预处理V2完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
         } catch (err: any) {
           console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
           await logTaskProgress(taskId, 'error', 'chapter_preprocess',

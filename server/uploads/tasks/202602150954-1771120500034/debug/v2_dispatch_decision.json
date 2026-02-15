@@ -1,0 +1,11 @@
+{
+  "useTOC": true,
+  "usePattern": true,
+  "useLLM": false,
+  "reason": "检测到 TOC 页面 (pages 5,6,7), 使用 TOC+Pattern 双轨道",
+  "tocPages": [
+    5,
+    6,
+    7
+  ]
+}

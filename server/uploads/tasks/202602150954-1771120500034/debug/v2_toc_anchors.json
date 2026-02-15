@@ -1,0 +1,1262 @@
+[
+  {
+    "blockId": 302,
+    "page": 13,
+    "text": "Review of number concepts",
+    "normalizedTitle": "1 Review of number concepts",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 355,
+    "page": 15,
+    "text": "1.1 Different types of numbers",
+    "normalizedTitle": "1.1 Different types of numbers",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 460,
+    "page": 18,
+    "text": "1.2 Multiples and factors",
+    "normalizedTitle": "1.2 Multiples and factors",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 620,
+    "page": 21,
+    "text": "1.3 Prime numbers",
+    "normalizedTitle": "1.3 Prime numbers",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 777,
+    "page": 26,
+    "text": "1.4 Working with directed numbers",
+    "normalizedTitle": "1.4 Working with directed numbers",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 877,
+    "page": 29,
+    "text": "1.5 Powers, roots and laws of indices",
+    "normalizedTitle": "1.5 Powers, roots and laws of indices",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1264,
+    "page": 38,
+    "text": "1.6 Order of operations",
+    "normalizedTitle": "1.6 Order of operations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1506,
+    "page": 43,
+    "text": "1.7 Rounding and estimating",
+    "normalizedTitle": "1.7 Rounding and estimating",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1780,
+    "page": 50,
+    "text": "Making sense of algebra",
+    "normalizedTitle": "2 Making sense of algebra",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1831,
+    "page": 52,
+    "text": "2.1 Using letters to represent unknown values",
+    "normalizedTitle": "2.1 Using letters to represent unknown values",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 1948,
+    "page": 55,
+    "text": "2.2 Substitution",
+    "normalizedTitle": "2.2 Substitution",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 2111,
+    "page": 59,
+    "text": "2.3 Simplifying expressions",
+    "normalizedTitle": "2.3 Simplifying expressions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 2376,
+    "page": 65,
+    "text": "2.4 Working with brackets",
+    "normalizedTitle": "2.4 Working with brackets",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 2586,
+    "page": 69,
+    "text": "2.5 Indices",
+    "normalizedTitle": "2.5 Indices",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3107,
+    "page": 82,
+    "text": "Lines, angles and shapes",
+    "normalizedTitle": "3 Lines, angles and shapes",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3132,
+    "page": 84,
+    "text": "3.1 Lines and angles",
+    "normalizedTitle": "3.1 Lines and angles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3434,
+    "page": 98,
+    "text": "3.2 Triangles",
+    "normalizedTitle": "3.2 Triangles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3565,
+    "page": 103,
+    "text": "3.3 Quadrilaterals",
+    "normalizedTitle": "3.3 Quadrilaterals",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3637,
+    "page": 106,
+    "text": "3.4 Polygons",
+    "normalizedTitle": "3.4 Polygons",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3727,
+    "page": 109,
+    "text": "3.5 Circles",
+    "normalizedTitle": "3.5 Circles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3771,
+    "page": 111,
+    "text": "3.6 Construction",
+    "normalizedTitle": "3.6 Construction",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3924,
+    "page": 118,
+    "text": "Collecting,  \norganising and  \ndisplaying data",
+    "normalizedTitle": "4 Collecting, organising and displaying data",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 3950,
+    "page": 121,
+    "text": "4.1 Collecting and classifying data",
+    "normalizedTitle": "4.1 Collecting and classifying data",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4017,
+    "page": 124,
+    "text": "4.2 Organising data",
+    "normalizedTitle": "4.2 Organising data",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4353,
+    "page": 136,
+    "text": "4.3 Using charts to display data",
+    "normalizedTitle": "4.3 Using charts to display data",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4738,
+    "page": 156,
+    "text": "Unit 1 Past Paper",
+    "normalizedTitle": "Past paper questions for Unit 1",
+    "level": 1,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4804,
+    "page": 159,
+    "text": "Unit 1 Project",
+    "normalizedTitle": "Unit 1 Project",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4821,
+    "page": 160,
+    "text": "Fractions, percentages and standard form",
+    "normalizedTitle": "5 Fractions, percentages and standard form",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4858,
+    "page": 162,
+    "text": "5.1 Revisiting fractions",
+    "normalizedTitle": "5.1 Revisiting fractions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 4925,
+    "page": 164,
+    "text": "5.2 Operations on fractions",
+    "normalizedTitle": "5.2 Operations on fractions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 5149,
+    "page": 170,
+    "text": "5.3 Percentages",
+    "normalizedTitle": "5.3 Percentages",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 5466,
+    "page": 181,
+    "text": "5.4 Standard form",
+    "normalizedTitle": "5.4 Standard form",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 5769,
+    "page": 191,
+    "text": "Equations, factors and formulae",
+    "normalizedTitle": "6 Equations, factors and formulae",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 5791,
+    "page": 192,
+    "text": "6.1 Solving equations",
+    "normalizedTitle": "6.1 Solving equations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 5976,
+    "page": 197,
+    "text": "6.2 Factorising algebraic expressions",
+    "normalizedTitle": "6.2 Factorising algebraic expressions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6097,
+    "page": 200,
+    "text": "6.3 Rearranging formulae",
+    "normalizedTitle": "6.3 Rearranging formulae",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6218,
+    "page": 205,
+    "text": "Perimeter, area and volume",
+    "normalizedTitle": "7 Perimeter, area and volume",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6250,
+    "page": 207,
+    "text": "",
+    "normalizedTitle": "7.1 Perimeter and area in two dimensions",
+    "level": 2,
+    "confidence": 0.4,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6572,
+    "page": 223,
+    "text": "7.2 Three-dimensional objects",
+    "normalizedTitle": "7.2 Three-dimensional objects",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6603,
+    "page": 225,
+    "text": "7.3 Surface areas and volumes of solids",
+    "normalizedTitle": "7.3 Surface areas and volumes of solids",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6816,
+    "page": 239,
+    "text": "Introduction to probability",
+    "normalizedTitle": "8 Introduction to probability",
+    "level": 1,
+    "confidence": 0.75,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 6835,
+    "page": 240,
+    "text": "8.1 Understanding basic probability",
+    "normalizedTitle": "8.1 Understanding basic probability",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 7012,
+    "page": 246,
+    "text": "8.2 Sample space diagrams",
+    "normalizedTitle": "8.2 Sample space diagrams",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 8604,
+    "page": 250,
+    "text": "8.3 Combining independent and mutually exclusive events",
+    "normalizedTitle": "8.3 Combining independent and mutually exclusive events",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 8788,
+    "page": 257,
+    "text": "Past paper questions",
+    "normalizedTitle": "Past paper questions for Unit 2",
+    "level": 1,
+    "confidence": 0.5,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 8907,
+    "page": 263,
+    "text": "> Unit 2 Project",
+    "normalizedTitle": "Unit 2 Project",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 8943,
+    "page": 265,
+    "text": "",
+    "normalizedTitle": "9Sequences,surds and sets",
+    "level": 1,
+    "confidence": 0.4,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 8986,
+    "page": 266,
+    "text": "9.1 Sequences",
+    "normalizedTitle": "9.1 Sequences",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 9344,
+    "page": 280,
+    "text": "9.2 Rational and irrational numbers",
+    "normalizedTitle": "9.2 Rational and irrational numbers",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 9507,
+    "page": 284,
+    "text": "9.3 Surds",
+    "normalizedTitle": "9.3 Surds",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 9912,
+    "page": 296,
+    "text": "9.4 Sets",
+    "normalizedTitle": "9.4 Sets",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 10320,
+    "page": 311,
+    "text": "Straight lines and quadratic equations",
+    "normalizedTitle": "10 Straight lines and quadratic equations",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 10355,
+    "page": 312,
+    "text": "10.1 Straight line graphs",
+    "normalizedTitle": "10.1 Straight line graphs",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 10842,
+    "page": 332,
+    "text": "10.2 Quadratic expressions and equations",
+    "normalizedTitle": "10.2 Quadratic expressions and equations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 11376,
+    "page": 346,
+    "text": "Pythagoras' theorem and similar shapes",
+    "normalizedTitle": "11 Pythagoras' theorem and similar shapes",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 11422,
+    "page": 348,
+    "text": "11.1 Pythagoras' theorem",
+    "normalizedTitle": "11.1 Pythagoras' theorem",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 11563,
+    "page": 355,
+    "text": "11.2 Understanding similar triangles",
+    "normalizedTitle": "11.2 Understanding similar triangles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 11672,
+    "page": 360,
+    "text": "11.3 Understanding similar shapes",
+    "normalizedTitle": "11.3 Understanding similar shapes",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 11906,
+    "page": 371,
+    "text": "11.4 Understanding congruence",
+    "normalizedTitle": "11.4 Understanding congruence",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12038,
+    "page": 377,
+    "text": "Averages and measures of spread",
+    "normalizedTitle": "12 Averages and measures of spread",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12064,
+    "page": 378,
+    "text": "12.1 Different types of average",
+    "normalizedTitle": "12.1 Different types of averages",
+    "level": 2,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12171,
+    "page": 382,
+    "text": "12.2 Making comparisons using averages and ranges",
+    "normalizedTitle": "12.2 Making comparisons using averages and ranges",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12263,
+    "page": 386,
+    "text": "12.3 Calculating averages and ranges for frequency data",
+    "normalizedTitle": "12.3 Calculating averages and ranges for frequency data",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12384,
+    "page": 391,
+    "text": "12.4 Estimating the mean and finding the modal class for grouped data",
+    "normalizedTitle": "12.4 Estimating the mean and finding the modal class for grouped data",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12479,
+    "page": 394,
+    "text": "12.5 Quartiles",
+    "normalizedTitle": "12.5 Quartiles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12705,
+    "page": 403,
+    "text": "Unit 3 Past Paper",
+    "normalizedTitle": "Past paper questions for Unit 3",
+    "level": 1,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12837,
+    "page": 410,
+    "text": "Unit 3 Project",
+    "normalizedTitle": "Unit 3 Project",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12859,
+    "page": 411,
+    "text": "Understanding measurement",
+    "normalizedTitle": "13 Understanding measurement",
+    "level": 1,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12882,
+    "page": 412,
+    "text": "13.1 Understanding units",
+    "normalizedTitle": "13.1 Understanding units",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 12996,
+    "page": 416,
+    "text": "13.2 Time",
+    "normalizedTitle": "13.2 Time",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 13126,
+    "page": 420,
+    "text": "13.3 Limits of accuracy - upper and lower bounds",
+    "normalizedTitle": "13.3 Limits of accuracy - upper and lower bounds",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 13338,
+    "page": 429,
+    "text": "13.4 Conversion graphs",
+    "normalizedTitle": "13.4 Conversion graphs",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 13402,
+    "page": 432,
+    "text": "13.5 Exchanging currencies",
+    "normalizedTitle": "13.5 Exchanging currencies",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 13549,
+    "page": 438,
+    "text": "Further solving of equations and inequalities",
+    "normalizedTitle": "14 Further solving of equations and inequalities",
+    "level": 1,
+    "confidence": 0.8571428571428571,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 13570,
+    "page": 439,
+    "text": "14.1 Simultaneous linear equations",
+    "normalizedTitle": "14.1 Simultaneous linear equations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 13928,
+    "page": 451,
+    "text": "14.2 Linear inequalities",
+    "normalizedTitle": "14.2 Linear inequalities",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14105,
+    "page": 456,
+    "text": "14.3 Regions in a plane",
+    "normalizedTitle": "14.3 Regions in a plane",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14206,
+    "page": 463,
+    "text": "14.4 Completing the square",
+    "normalizedTitle": "14.4 Completing the square",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14331,
+    "page": 466,
+    "text": "14.5 Quadratic formula",
+    "normalizedTitle": "14.5 Quadratic formula",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14445,
+    "page": 470,
+    "text": "14.6 Factorising quadratics where the coefficient of  $x^2$  is not 1",
+    "normalizedTitle": "14.6 Factorising quadratics where the coefficient of  $x^{2}$  is not 1",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14550,
+    "page": 472,
+    "text": "14.7 Algebraic fractions",
+    "normalizedTitle": "14.7 Algebraic fractions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14786,
+    "page": 482,
+    "text": ">Chapter 15 Scale drawings, bearings and trigonometry",
+    "normalizedTitle": "15 Scale drawings, bearings and trigonometry",
+    "level": 1,
+    "confidence": 0.8571428571428571,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14808,
+    "page": 483,
+    "text": "15.1 Scale drawings",
+    "normalizedTitle": "15.1 Scale drawings",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14877,
+    "page": 487,
+    "text": "15.2 Bearings",
+    "normalizedTitle": "15.2 Bearings",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 14946,
+    "page": 490,
+    "text": "15.3 Understanding the tangent, cosine and sine ratios",
+    "normalizedTitle": "15.3 Understanding the tangent, cosine and sine ratios",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 15361,
+    "page": 506,
+    "text": "15.4 Exact trigonometric ratios",
+    "normalizedTitle": "15.4 Exact trigonometric ratios",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 15427,
+    "page": 510,
+    "text": "15.5 Solving problems using trigonometry",
+    "normalizedTitle": "15.5 Solving problems using trigonometry",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 15531,
+    "page": 516,
+    "text": "15.6 Sines, cosines and tangents of angles greater than  $90^{\\circ}$",
+    "normalizedTitle": "15.6 Sines, cosines and tangents of angles greater than  $90^{\\circ}$",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 15665,
+    "page": 521,
+    "text": "15.7 The sine and cosine rules",
+    "normalizedTitle": "15.7 The sine and cosine rules",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 15854,
+    "page": 530,
+    "text": "15.8 Area of a triangle",
+    "normalizedTitle": "15.8 Area of a triangle",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 15915,
+    "page": 534,
+    "text": "15.9 Trigonometry in three dimensions",
+    "normalizedTitle": "15.9 Trigonometry in three dimensions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16083,
+    "page": 542,
+    "text": "Scatter diagrams and correlation",
+    "normalizedTitle": "16 Scatter diagrams and correlation",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16100,
+    "page": 543,
+    "text": "16.1 Introduction to bivariate data",
+    "normalizedTitle": "16.1 Introduction to bivariate data",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16270,
+    "page": 554,
+    "text": "Past paper questions",
+    "normalizedTitle": "Past paper questions for Unit 4",
+    "level": 1,
+    "confidence": 0.5,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16405,
+    "page": 561,
+    "text": "> Unit 4 Project",
+    "normalizedTitle": "Unit 4 Project",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16418,
+    "page": 562,
+    "text": "Managing money",
+    "normalizedTitle": "17 Managing money",
+    "level": 1,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16462,
+    "page": 564,
+    "text": "17.1 Earning money",
+    "normalizedTitle": "17.1 Earning money",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16611,
+    "page": 569,
+    "text": "17.2 Borrowing and investing money",
+    "normalizedTitle": "17.2 Borrowing and investing money",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 16904,
+    "page": 582,
+    "text": "17.3 Buying and selling",
+    "normalizedTitle": "17.3 Buying and selling",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17066,
+    "page": 590,
+    "text": "Curved graphs",
+    "normalizedTitle": "18 Curved graphs",
+    "level": 1,
+    "confidence": 0.6666666666666666,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17113,
+    "page": 593,
+    "text": "18.1 Review of quadratic graphs (the parabola)",
+    "normalizedTitle": "18.1 Review of quadratic graphs (the parabola)",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17361,
+    "page": 605,
+    "text": "18.2 Drawing reciprocal graphs (the hyperbola)",
+    "normalizedTitle": "18.2 Drawing reciprocal graphs (the hyperbola)",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17481,
+    "page": 611,
+    "text": "18.3 Using graphs to solve quadratic equations",
+    "normalizedTitle": "18.3 Using graphs to solve quadratic equations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17550,
+    "page": 614,
+    "text": "18.4 Simultaneous linear and non-linear equations",
+    "normalizedTitle": "18.4 Simultaneous linear and non-linear equations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17631,
+    "page": 617,
+    "text": "18.5 Other non-linear graphs",
+    "normalizedTitle": "18.5 Other non-linear graphs",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17834,
+    "page": 628,
+    "text": "18.6 Finding the gradient of a curve",
+    "normalizedTitle": "18.6 Finding the gradient of a curve",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 17894,
+    "page": 632,
+    "text": "18.7 Derivatives of functions",
+    "normalizedTitle": "18.7 Derivatives of functions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18339,
+    "page": 649,
+    "text": "Symmetry",
+    "normalizedTitle": "19 Symmetry",
+    "level": 1,
+    "confidence": 0.5,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18372,
+    "page": 651,
+    "text": "19.1 Symmetry in two dimensions",
+    "normalizedTitle": "19.1 Symmetry in two dimensions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18511,
+    "page": 657,
+    "text": "19.2 Symmetry in three dimensions",
+    "normalizedTitle": "19.2 Symmetry in three dimensions",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18560,
+    "page": 659,
+    "text": "19.3 Symmetry properties of circles",
+    "normalizedTitle": "19.3 Symmetry properties of circles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18657,
+    "page": 664,
+    "text": "19.4 Angle relationships in circles",
+    "normalizedTitle": "19.4 Angle relationships in circles",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18927,
+    "page": 679,
+    "text": "Histograms and cumulative frequency diagrams",
+    "normalizedTitle": "20 Histograms and cumulative frequency diagrams",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 18962,
+    "page": 681,
+    "text": "20.1 Histograms",
+    "normalizedTitle": "20.1 Histograms",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 19116,
+    "page": 688,
+    "text": "20.2 Cumulative frequency",
+    "normalizedTitle": "20.2 Cumulative frequency",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 19434,
+    "page": 703,
+    "text": "Past paper questions",
+    "normalizedTitle": "Past paper questions for Unit 5",
+    "level": 1,
+    "confidence": 0.5,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 19679,
+    "page": 716,
+    "text": "Unit 5 Project",
+    "normalizedTitle": "Unit 5 Project",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 19711,
+    "page": 718,
+    "text": "Ratio, rate and proportion",
+    "normalizedTitle": "21 Ratio, rate and proportion",
+    "level": 1,
+    "confidence": 0.8,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 19756,
+    "page": 720,
+    "text": "21.1 Working with ratio",
+    "normalizedTitle": "21.1 Working with ratio",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 19983,
+    "page": 728,
+    "text": "21.2 Ratio and scale",
+    "normalizedTitle": "21.2 Ratio and scale",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 20129,
+    "page": 733,
+    "text": "21.3 Rates",
+    "normalizedTitle": "21.3 Rates",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 20229,
+    "page": 737,
+    "text": "21.4 Kinematic graphs",
+    "normalizedTitle": "21.4 Kinematic graphs",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 20446,
+    "page": 747,
+    "text": "21.5 Proportion",
+    "normalizedTitle": "21.5 Proportion",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 20578,
+    "page": 753,
+    "text": "21.6 Direct and inverse proportion in algebraic terms",
+    "normalizedTitle": "21.6 Direct and inverse proportion in algebraic terms",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 20795,
+    "page": 762,
+    "text": "More equations, formulae and functions",
+    "normalizedTitle": "22 More equations, formulae and functions",
+    "level": 1,
+    "confidence": 0.8333333333333334,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 20826,
+    "page": 764,
+    "text": "22.1 Setting up equations to solve problems",
+    "normalizedTitle": "22.1 Setting up equations to solve problems",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 21010,
+    "page": 771,
+    "text": "22.2 Using and rearranging formulae",
+    "normalizedTitle": "22.2 Using and rearranging formulae",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 21164,
+    "page": 776,
+    "text": "22.3 Functions and function notation",
+    "normalizedTitle": "22.3 Functions and function notation",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 21600,
+    "page": 789,
+    "text": "Transformations and vectors",
+    "normalizedTitle": "23 Transformations and vectors",
+    "level": 1,
+    "confidence": 0.75,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 21649,
+    "page": 791,
+    "text": "23.1 Simple plane transformations",
+    "normalizedTitle": "23.1 Simple plane transformations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 21966,
+    "page": 809,
+    "text": "23.2 Further transformations",
+    "normalizedTitle": "23.2 Further transformations",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 22053,
+    "page": 817,
+    "text": "23.3 Vectors",
+    "normalizedTitle": "23.3 Vectors",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 22512,
+    "page": 838,
+    "text": "Probability using tree diagrams and Venn diagrams",
+    "normalizedTitle": "24 Probability using tree diagrams and Venn diagrams",
+    "level": 1,
+    "confidence": 0.8571428571428571,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 22534,
+    "page": 840,
+    "text": "24.1 Using tree diagrams to show",
+    "normalizedTitle": "24.1 Using tree diagrams to show outcomes",
+    "level": 2,
+    "confidence": 0.8571428571428571,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 22564,
+    "page": 841,
+    "text": "24.2 Calculating probability from tree diagrams",
+    "normalizedTitle": "24.2 Calculating probability from tree diagrams",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 22674,
+    "page": 845,
+    "text": "24.3 Calculating probability from Venn diagrams",
+    "normalizedTitle": "24.3 Calculating probability from Venn diagrams",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 22809,
+    "page": 851,
+    "text": "24.4 Conditional probability",
+    "normalizedTitle": "24.4 Conditional probability",
+    "level": 2,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 23046,
+    "page": 860,
+    "text": "Past paper questions",
+    "normalizedTitle": "Past paper questions for Unit 6",
+    "level": 1,
+    "confidence": 0.5,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 23360,
+    "page": 875,
+    "text": "> Glossary",
+    "normalizedTitle": "Glossary",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  },
+  {
+    "blockId": 23554,
+    "page": 880,
+    "text": "> Index",
+    "normalizedTitle": "Index",
+    "level": 1,
+    "confidence": 1,
+    "source": "toc_match"
+  }
+]
