@@ -1,0 +1,12 @@
+<chapter><title>17220</title>
+<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>17226,17227,17228</question>
+<solution>17229,17230,17231,17232,17233</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>17236,17237,17238,17239</question>
+<solution>17240,17241,17242,17243,17244,17245,17246</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>17260,17261,17262</question>
+<solution>17263,17264,17265,17266,17267,17268,17269,17270,17271,17272</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>17275,17276,17277</question>
+<solution>17278,17279,17280,17281,17282,17283,17284,17285,17286,17287,17288,17289,17290,17291,17292</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>17302,17303,17304,17305</question>
+<solution>17306,17307,17308,17309,17310,17311,17312,17313,17314,17315,17316,17317,17318,17319</solution></qa_pair>
+</chapter>

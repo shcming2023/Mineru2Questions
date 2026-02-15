@@ -1,0 +1,4688 @@
+[
+  {
+    "id": 12448,
+    "text": "[Table Row] <tr><td>55 &lt; T ≤ 60</td><td>17</td></tr>",
+    "level": 1,
+    "page": 393,
+    "block_range": {
+      "start": 12448,
+      "end": 12449
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12449,
+    "text": "[Table Row] <tr><td>60 &lt; T ≤ 65</td><td>6</td></tr>",
+    "level": 1,
+    "page": 393,
+    "block_range": {
+      "start": 12449,
+      "end": 12450
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12450,
+    "text": "[Table Row] <tr><td>65 &lt; T ≤ 70</td><td>2</td></tr>",
+    "level": 1,
+    "page": 393,
+    "block_range": {
+      "start": 12450,
+      "end": 12451
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12451,
+    "text": "[Table Row] <tr><td>70 &lt; T ≤ 75</td><td>1</td></tr>",
+    "level": 1,
+    "page": 393,
+    "block_range": {
+      "start": 12451,
+      "end": 12452
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12452,
+    "text": "Calculate an estimate for the mean temperature of the test tubes.",
+    "level": 1,
+    "page": 393,
+    "block_range": {
+      "start": 12452,
+      "end": 12454
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12454,
+    "text": "The symbol  $\\Sigma$  is the Greek letter capital 'sigma'. It is used to mean 's",
+    "level": 1,
+    "page": 393,
+    "block_range": {
+      "start": 12454,
+      "end": 12455
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12455,
+    "text": "4 Two athletics teams - the Hawks and the Eagles - are about to compete in a rac",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12455,
+      "end": 12456
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12456,
+    "text": "[Table Row] <tr><td>Mass (Mkg)</td><td>Frequency (f)</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12456,
+      "end": 12457
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12457,
+    "text": "[Table Row] <tr><td>55 &lt; M ≤ 65</td><td>2</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12457,
+      "end": 12458
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12458,
+    "text": "[Table Row] <tr><td>65 &lt; M ≤ 75</td><td>8</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12458,
+      "end": 12459
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12459,
+    "text": "[Table Row] <tr><td>75 &lt; M ≤ 85</td><td>12</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12459,
+      "end": 12460
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12460,
+    "text": "[Table Row] <tr><td>85 &lt; M ≤ 100</td><td>3</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12460,
+      "end": 12461
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12461,
+    "text": "[Table Row] <tr><td>Mass (Mkg)</td><td>Frequency (f)</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12461,
+      "end": 12462
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12462,
+    "text": "[Table Row] <tr><td>55 &lt; M ≤ 65</td><td>1</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12462,
+      "end": 12463
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12463,
+    "text": "[Table Row] <tr><td>65 &lt; M ≤ 75</td><td>7</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12463,
+      "end": 12464
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12464,
+    "text": "[Table Row] <tr><td>75 &lt; M ≤ 85</td><td>13</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12464,
+      "end": 12465
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12465,
+    "text": "[Table Row] <tr><td>85 &lt; M ≤ 100</td><td>4</td></tr>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12465,
+      "end": 12466
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12466,
+    "text": "a Calculate an estimate for the mean mass of each team.",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12466,
+      "end": 12467
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12467,
+    "text": "b Identify the modal class for the masses of each team.",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12467,
+      "end": 12468
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12468,
+    "text": "5 The table shows the lengths of 50 pieces of wire used in a physics laboratory.",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12468,
+      "end": 12469
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12469,
+    "text": "[Table Row] <tr><td>Length</td><td>26-30</td><td>31-35</td><td>36-40</td><td>41-",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12469,
+      "end": 12470
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12470,
+    "text": "[Table Row] <tr><td>Frequency (f)</td><td>4</td><td>10</td><td>12</td><td>18</td",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12470,
+      "end": 12471
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12471,
+    "text": "The table shows the ages of the teachers in a secondary school to the nearest ye",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12471,
+      "end": 12472
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12472,
+    "text": "[Table Row] <tr><td>Age in years</td><td>21-30</td><td>31-35</td><td>36-40</td><",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12472,
+      "end": 12473
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12473,
+    "text": "[Table Row] <tr><td>Frequency (f)</td><td>3</td><td>6</td><td>12</td><td>15</td>",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12473,
+      "end": 12474
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12474,
+    "text": "Calculate an estimate for the mean age of the teachers.",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12474,
+      "end": 12475
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12475,
+    "text": "LINK",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12475,
+      "end": 12476
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12476,
+    "text": "Psychology relies heavily on statistics and if you do a psychology course you of",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12476,
+      "end": 12478
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12478,
+    "text": "In this question ages are rounded to the nearest year. Someone who is 30 and a h",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12478,
+      "end": 12479
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12479,
+    "text": "12.5 Quartiles",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12479,
+      "end": 12480
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12480,
+    "text": "Quartiles are used to divide a data set into four groups. Quartiles are indicate",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12480,
+      "end": 12481
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12481,
+    "text": "You can use the following rules to estimate the positions of each quartile withi",
+    "level": 1,
+    "page": 394,
+    "block_range": {
+      "start": 12481,
+      "end": 12482
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12482,
+    "text": "$$\n\\begin{array}{l} Q _ {1} = \\text {l o w e r q u a r t i l e} = \\text {v a l u",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12482,
+      "end": 12483
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12483,
+    "text": "If the position does not turn out to be a whole number, find the mean of the pai",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12483,
+      "end": 12484
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12484,
+    "text": "Interquartile range",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12484,
+      "end": 12485
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12485,
+    "text": "As with the range, the interquartile range gives a measure of how spread out or ",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12485,
+      "end": 12486
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12486,
+    "text": "$$\nI Q R = Q _ {3} - Q _ {1}\n$$",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12486,
+      "end": 12487
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12487,
+    "text": "If one set of data has a smaller IQR than another set, then the first set is mor",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12487,
+      "end": 12488
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12488,
+    "text": "WORKED EXAMPLE 5",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12488,
+      "end": 12489
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12489,
+    "text": "For each set of data calculate the median, upper quartile, lower quartile and th",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12489,
+      "end": 12490
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12490,
+    "text": "a 13 12 8 6 11 14 8 5 1 10 16 12",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12490,
+      "end": 12491
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12491,
+    "text": "b 14 10 8 19 15 14 9",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12491,
+      "end": 12492
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12492,
+    "text": "Answer",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12492,
+      "end": 12493
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12493,
+    "text": "a First sort the data into ascending order:",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12493,
+      "end": 12494
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12494,
+    "text": "1568810111212131416",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12494,
+      "end": 12495
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12495,
+    "text": "There are an even number of items (12). So, to find the median, find the mean of",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12495,
+      "end": 12496
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12496,
+    "text": "Calculate the position of the quartiles:",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12496,
+      "end": 12497
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12497,
+    "text": "$$\n\\frac {1}{4} (1 2 + 1) = 3. 2 5 \\text {a n d} \\frac {3}{4} (1 2 + 1) = 9. 7 5",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12497,
+      "end": 12498
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12498,
+    "text": "These are not whole numbers, so the lower quartile is the mean of the 3rd and 4t",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12498,
+      "end": 12499
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12499,
+    "text": "$$\nQ _ {1} \\frac {(6 + 8)}{2} = 7 \\text {a n d} Q _ {3} = \\frac {(1 2 + 1 3)}{2}",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12499,
+      "end": 12500
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12500,
+    "text": "Then you know that the IQR = 12.5 - 7 = 5.5.",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12500,
+      "end": 12501
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12501,
+    "text": "b The ordered data is:",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12501,
+      "end": 12502
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12502,
+    "text": "891014141519",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12502,
+      "end": 12503
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12503,
+    "text": "There is an odd number of data values, so the median is in position  $\\frac{(7 +",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12503,
+      "end": 12504
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12504,
+    "text": "MATHEMATICAL CONNECTIONS",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12504,
+      "end": 12505
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12505,
+    "text": "In Chapter 20 you will learn about cumulative frequency graphs. These allow you ",
+    "level": 1,
+    "page": 395,
+    "block_range": {
+      "start": 12505,
+      "end": 12506
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12506,
+    "text": "WORKED EXAMPLE 5 CONTINUED",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12506,
+      "end": 12507
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12507,
+    "text": "There are seven items, so the positions of the quartiles are:  $\\frac{1}{4} (7 +",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12507,
+      "end": 12508
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12508,
+    "text": "These are whole numbers so the lower quartile is in position two and the upper q",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12508,
+      "end": 12509
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12509,
+    "text": "So  $Q_{1} = 9$  and  $Q_{3} = 15$ .",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12509,
+      "end": 12510
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12510,
+    "text": "IQR=15-9=6",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12510,
+      "end": 12511
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12511,
+    "text": "WORKED EXAMPLE 6",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12511,
+      "end": 12512
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12512,
+    "text": "Two companies sell sunflower seeds. In one year, seeds from Allbright produce fl",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12512,
+      "end": 12513
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12513,
+    "text": "Answer",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12513,
+      "end": 12514
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12514,
+    "text": "I would buy Barstows' seeds. Although Allbright sunflowers seem taller (with a h",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12514,
+      "end": 12515
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12515,
+    "text": "WORKED EXAMPLE 7",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12515,
+      "end": 12516
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12516,
+    "text": "The back-to-back stem-and-leaf diagram shows the concentration of low-density li",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12516,
+      "end": 12517
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12517,
+    "text": "[Table Row] <tr><td>Leaf</td><td>Stem</td><td>Leaf</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12517,
+      "end": 12518
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12518,
+    "text": "[Table Row] <tr><td>8 0</td><td>9</td><td></td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12518,
+      "end": 12519
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12519,
+    "text": "[Table Row] <tr><td>8 8 3 1</td><td>10</td><td></td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12519,
+      "end": 12520
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12520,
+    "text": "[Table Row] <tr><td>9 9 8 8 6 5 2</td><td>11</td><td>2</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12520,
+      "end": 12521
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12521,
+    "text": "[Table Row] <tr><td>9 9 8 7 7 0 0</td><td>12</td><td>0 1</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12521,
+      "end": 12522
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12522,
+    "text": "[Table Row] <tr><td>9 6 5 1 1 1</td><td>13</td><td>0 2 3</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12522,
+      "end": 12523
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12523,
+    "text": "[Table Row] <tr><td>4 2 2</td><td>14</td><td>1 3 5 6</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12523,
+      "end": 12524
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12524,
+    "text": "[Table Row] <tr><td>8 2 1</td><td>15</td><td>0 4 5 5 9</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12524,
+      "end": 12525
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12525,
+    "text": "[Table Row] <tr><td>6 5</td><td>16</td><td>0 1 4 7 8 9</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12525,
+      "end": 12526
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12526,
+    "text": "[Table Row] <tr><td>3</td><td>17</td><td>2 3 6 8 8</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12526,
+      "end": 12527
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12527,
+    "text": "[Table Row] <tr><td></td><td>18</td><td>0 2 4 5</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12527,
+      "end": 12528
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12528,
+    "text": "[Table Row] <tr><td></td><td>19</td><td>1 6 8</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12528,
+      "end": 12529
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12529,
+    "text": "[Table Row] <tr><td></td><td>20</td><td>1</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12529,
+      "end": 12530
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12530,
+    "text": "[Table Row] <tr><td></td><td>21</td><td>5</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12530,
+      "end": 12531
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12531,
+    "text": "[Table Row] <tr><td>Vegetarians\n0|9 represents 90</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12531,
+      "end": 12532
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12532,
+    "text": "[Table Row] <tr><td>Non-vegetarians\n11|2 represents 112</td></tr>",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12532,
+      "end": 12534
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12534,
+    "text": "Remember to count the data in ascending order when you work with the left-hand s",
+    "level": 1,
+    "page": 396,
+    "block_range": {
+      "start": 12534,
+      "end": 12535
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12535,
+    "text": "WORKED EXAMPLE 7 CONTINUED",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12535,
+      "end": 12536
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12536,
+    "text": "a Determine the median for each group.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12536,
+      "end": 12537
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12537,
+    "text": "b Find the range for:",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12537,
+      "end": 12538
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12538,
+    "text": "i vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12538,
+      "end": 12539
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12539,
+    "text": "ii non-vegetarians.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12539,
+      "end": 12540
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12540,
+    "text": "c Determine the interquartile range for:",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12540,
+      "end": 12541
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12541,
+    "text": "i vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12541,
+      "end": 12542
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12542,
+    "text": "ii non-vegetarians.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12542,
+      "end": 12543
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12543,
+    "text": "d LDL levels of  $<  130$  are desirable, levels of 130-160 are considered borde",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12543,
+      "end": 12544
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12544,
+    "text": "Answer",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12544,
+      "end": 12545
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12545,
+    "text": "a The data is already ordered and there are 35 values in each set.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12545,
+      "end": 12546
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12546,
+    "text": "$$\n\\frac {1}{2} (3 5 + 1) = 1 8, \\text {s o t h e m e d i a n i s t h e 1 8 t h ",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12546,
+      "end": 12547
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12547,
+    "text": "Median  $= 128$  for vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12547,
+      "end": 12548
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12548,
+    "text": "ii Median  $= 164$  for non-vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12548,
+      "end": 12549
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12549,
+    "text": "b i Range  $= 173 - 90 = 83$  for vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12549,
+      "end": 12550
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12550,
+    "text": "ii Range  $= 215 - 112 = 103$  for non-vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12550,
+      "end": 12551
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12551,
+    "text": "c Determine the position of  $Q_{1}$  and  $Q_{3}$",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12551,
+      "end": 12552
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12552,
+    "text": "The lower quartile  $= \\frac{1}{4} (35 + 1) = 9$ th value",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12552,
+      "end": 12553
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12553,
+    "text": "The upper quartile  $= \\frac{3}{4} (35 + 1) = 27$ th value",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12553,
+      "end": 12554
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12554,
+    "text": "IQR = Q3 - Q1 = 142 - 116 = 26 for vegetarians",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12554,
+      "end": 12555
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12555,
+    "text": "ii  $IQR = Q_{3} - Q_{1} = 180 - 145 = 35$  for non-vegetarians.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12555,
+      "end": 12556
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12556,
+    "text": "d For vegetarians the data is skewed toward the lower levels on the stem- and-le",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12556,
+      "end": 12557
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12557,
+    "text": "This might suggest that non-vegetarians have higher levels of bad cholesterol in",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12557,
+      "end": 12558
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12558,
+    "text": "Exercise 12.5",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12558,
+      "end": 12559
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12559,
+    "text": "1 Find the median, quartiles and interquartile range for each set of data.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12559,
+      "end": 12560
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12560,
+    "text": "Make sure that you show your method clearly.",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12560,
+      "end": 12561
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12561,
+    "text": "a 5 8 9 9 4 5 6 9 3 6 4",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12561,
+      "end": 12562
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12562,
+    "text": "b 12 14 12 17 19 21 23",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12562,
+      "end": 12563
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12563,
+    "text": "45121415171431819181914415",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12563,
+      "end": 12564
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12564,
+    "text": "d 3.1 2.4 5.1 2.3 2.5 4.2 3.4 6.1 4.8",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12564,
+      "end": 12565
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12565,
+    "text": "e 13.2 14.8 19.6 14.5 16.7 18.9 14.5 13.7 17.0 21.8 12.0 16.5",
+    "level": 1,
+    "page": 397,
+    "block_range": {
+      "start": 12565,
+      "end": 12566
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12566,
+    "text": "APPLY YOUR SKILLS",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12566,
+      "end": 12567
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12567,
+    "text": "Try to think about what the calculations in each question tell you about each si",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12567,
+      "end": 12568
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12568,
+    "text": "2 The area, in hectares, of 13 mango orchards in Sindh, Pakistan, were recorded ",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12568,
+      "end": 12569
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12569,
+    "text": "[Table Row] <tr><td>3.75</td><td>2.35</td><td>4.5</td><td>2.7</td><td>3.5</td><t",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12569,
+      "end": 12570
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12570,
+    "text": "[Table Row] <tr><td>19.25</td><td>32.1</td><td>28.4</td><td>7.2</td><td>3.6</td>",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12570,
+      "end": 12571
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12571,
+    "text": "a Find the range of the areas.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12571,
+      "end": 12572
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12572,
+    "text": "b Calculate the interquartile range.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12572,
+      "end": 12573
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12573,
+    "text": "C Which value is more representative of the spread of the data? Why?",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12573,
+      "end": 12574
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12574,
+    "text": "3 Members of a hiking group sometimes see a kingfisher when they walk in the par",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12574,
+      "end": 12575
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12575,
+    "text": "[Table Row] <tr><td>5</td><td>7</td><td>5</td><td>8</td><td>4</td><td>2</td><td>",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12575,
+      "end": 12576
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12576,
+    "text": "Find the median, quartiles and interquartile range for this data.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12576,
+      "end": 12577
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12577,
+    "text": "4 Padmaja is conducting a survey into the traffic on a road. Every Monday for ei",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12577,
+      "end": 12578
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12578,
+    "text": "[Table Row] <tr><td>Summer:</td><td>18</td><td>15</td><td>19</td><td>25</td><td>",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12578,
+      "end": 12579
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12579,
+    "text": "[Table Row] <tr><td>Winter:</td><td>12</td><td>9</td><td>14</td><td>11</td><td>1",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12579,
+      "end": 12580
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12580,
+    "text": "a Find the median number of cars for each period.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12580,
+      "end": 12581
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12581,
+    "text": "b Find the interquartile range for each period.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12581,
+      "end": 12582
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12582,
+    "text": "What differences do you notice? Try to explain why this might happen.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12582,
+      "end": 12583
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12583,
+    "text": "5 Julia and Aneesh are reading articles from different magazines. They count the",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12583,
+      "end": 12584
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12584,
+    "text": "Julia",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12584,
+      "end": 12585
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12585,
+    "text": "(reading the Statistician): 23 31 12 19 23 13 24",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12585,
+      "end": 12586
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12586,
+    "text": "Aneesh",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12586,
+      "end": 12587
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12587,
+    "text": "(reading the Algebraist): 19 12 13 16 18 15 18 21 22",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12587,
+      "end": 12588
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12588,
+    "text": "a Calculate the median for each article.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12588,
+      "end": 12589
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12589,
+    "text": "b Calculate the interquartile range for each article.",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12589,
+      "end": 12590
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12590,
+    "text": "Aneesh claims that the editor of the Algebraist has tried to control the writing",
+    "level": 1,
+    "page": 398,
+    "block_range": {
+      "start": 12590,
+      "end": 12591
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12591,
+    "text": "APPLY YOUR SKILLS CONTINUED",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12591,
+      "end": 12592
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12592,
+    "text": "6 The fuel economy  $(\\mathrm{km} / \\ell$  of petrol) of 18 new car models was t",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12592,
+      "end": 12593
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12593,
+    "text": "New car fuel economy  $(\\mathrm{km} / \\ell)$",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12593,
+      "end": 12594
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12594,
+    "text": "[Table Row] <tr><td colspan=\"3\">City traffic</td><td colspan=\"2\">Open road</td><",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12594,
+      "end": 12595
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12595,
+    "text": "[Table Row] <tr><td>Leaf</td><td>Stem</td><td>Leaf</td><td></td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12595,
+      "end": 12596
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12596,
+    "text": "[Table Row] <tr><td>0</td><td>8</td><td></td><td></td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12596,
+      "end": 12597
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12597,
+    "text": "[Table Row] <tr><td>4 2 1 0</td><td>9</td><td></td><td></td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12597,
+      "end": 12598
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12598,
+    "text": "[Table Row] <tr><td>5 3 1 1</td><td>10</td><td></td><td></td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12598,
+      "end": 12599
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12599,
+    "text": "[Table Row] <tr><td>8 3 2</td><td>11</td><td>5</td><td>5</td><td>9</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12599,
+      "end": 12600
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12600,
+    "text": "[Table Row] <tr><td>7 6 4</td><td>12</td><td>1</td><td>1</td><td>2 7</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12600,
+      "end": 12601
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12601,
+    "text": "[Table Row] <tr><td>1</td><td>13</td><td>3</td><td>6</td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12601,
+      "end": 12602
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12602,
+    "text": "[Table Row] <tr><td>5 2</td><td>14</td><td>5</td><td>6</td><td>7</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12602,
+      "end": 12603
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12603,
+    "text": "[Table Row] <tr><td></td><td>15</td><td>2</td><td>7</td><td>9</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12603,
+      "end": 12604
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12604,
+    "text": "[Table Row] <tr><td></td><td>16</td><td>0</td><td>1</td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12604,
+      "end": 12605
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12605,
+    "text": "[Table Row] <tr><td></td><td>17</td><td>4</td><td>·</td><td></td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12605,
+      "end": 12606
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12606,
+    "text": "[Table Row] <tr><td>Key</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12606,
+      "end": 12607
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12607,
+    "text": "[Table Row] <tr><td>0 | 8 represents 8.0 km/ℓ</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12607,
+      "end": 12608
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12608,
+    "text": "[Table Row] <tr><td>11 | 5 represents 11.5 km/ℓ</td></tr>",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12608,
+      "end": 12609
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12609,
+    "text": "a Find the range of the fuel economy  $(\\mathrm{km} / \\ell)$  of petrol for:",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12609,
+      "end": 12610
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12610,
+    "text": "city traffic",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12610,
+      "end": 12611
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12611,
+    "text": "open road driving.",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12611,
+      "end": 12612
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12612,
+    "text": "b Find the median fuel economy for:",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12612,
+      "end": 12613
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12613,
+    "text": "city traffic",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12613,
+      "end": 12614
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12614,
+    "text": "ii open road driving.",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12614,
+      "end": 12615
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12615,
+    "text": "c Determine the interquartile range for:",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12615,
+      "end": 12616
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12616,
+    "text": "city traffic",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12616,
+      "end": 12617
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12617,
+    "text": "open road driving.",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12617,
+      "end": 12618
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12618,
+    "text": "d Compare and comment on the data for both city traffic and open road driving.",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12618,
+      "end": 12619
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12619,
+    "text": "7 The table shows the marks that the same group of ten students received in thre",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12619,
+      "end": 12620
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12620,
+    "text": "[Table Row] <tr><td>Test 1</td><td>34</td><td>45</td><td>67</td><td>87</td><td>6",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12620,
+      "end": 12621
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12621,
+    "text": "[Table Row] <tr><td>Test 2</td><td>19</td><td>45</td><td>88</td><td>75</td><td>4",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12621,
+      "end": 12622
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12622,
+    "text": "[Table Row] <tr><td>Test 3</td><td>76</td><td>32</td><td>67</td><td>45</td><td>6",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12622,
+      "end": 12623
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12623,
+    "text": "a Calculate the range, interquartile range and median for each test.",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12623,
+      "end": 12624
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12624,
+    "text": "b Use the values in part (a) to comment on the performance of this group of stud",
+    "level": 1,
+    "page": 399,
+    "block_range": {
+      "start": 12624,
+      "end": 12625
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12625,
+    "text": "SUMMARY",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12625,
+      "end": 12626
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12626,
+    "text": "Do you know ...?",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12626,
+      "end": 12627
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12627,
+    "text": "Averages - the mode, median and mean - are used to summarise a collection of dat",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12627,
+      "end": 12628
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12628,
+    "text": "Discrete data can be listed or arranged in a frequency distribution.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12628,
+      "end": 12629
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12629,
+    "text": "Continuous data can be listed or arranged into groups.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12629,
+      "end": 12630
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12630,
+    "text": "The mean is affected by extreme data.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12630,
+      "end": 12631
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12631,
+    "text": "The median is less affected by extreme data.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12631,
+      "end": 12632
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12632,
+    "text": "The lower quartile  $(Q_{1})$  lies  $25\\%$  of the way through the data.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12632,
+      "end": 12633
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12633,
+    "text": "The upper quartile  $(Q_{1})$  lies  $75\\%$  of the way through the data.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12633,
+      "end": 12634
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12634,
+    "text": "The interquartile range  $(\\mathrm{IQR} = \\mathrm{Q}_3 - \\mathrm{Q}_1)$  gives a",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12634,
+      "end": 12635
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12635,
+    "text": "The range is the difference between the largest and smallest values and also mea",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12635,
+      "end": 12636
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12636,
+    "text": "Are you able to...?",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12636,
+      "end": 12637
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12637,
+    "text": "calculate the mean, median, mode and range of data given in a list",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12637,
+      "end": 12638
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12638,
+    "text": "calculate the mean, median, mode and range of data given in a frequency distribu",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12638,
+      "end": 12639
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12639,
+    "text": "calculate an estimate for the mean of grouped data",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12639,
+      "end": 12640
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12640,
+    "text": "find the modal class for grouped data",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12640,
+      "end": 12641
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12641,
+    "text": "compare sets of data using summary averages and-ranges",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12641,
+      "end": 12642
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12642,
+    "text": "find the quartiles of data arranged in order",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12642,
+      "end": 12643
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12643,
+    "text": "find the interquartile range for listed data.",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12643,
+      "end": 12644
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12644,
+    "text": "Practice questions",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12644,
+      "end": 12645
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12645,
+    "text": "1 A machine is set to make  $15\\mathrm{g}$  sweets, but in fact produces sweets ",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12645,
+      "end": 12646
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12646,
+    "text": "a Find the total weight of the 20 sweets. [2]",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12646,
+      "end": 12647
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12647,
+    "text": "b Another 30 sweets are made, this time with a mean of  $15.6\\mathrm{g}$  Find t",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12647,
+      "end": 12648
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12648,
+    "text": "A final batch of sweets is made, with total weight  $184\\mathrm{g}$ , giving an ",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12648,
+      "end": 12649
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12649,
+    "text": "2 Residents on a Pacific island record how many earth tremors can be felt each y",
+    "level": 1,
+    "page": 400,
+    "block_range": {
+      "start": 12649,
+      "end": 12650
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12650,
+    "text": "3 A scientist collects insects in two different places: in the sunlight and in t",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12650,
+      "end": 12651
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12651,
+    "text": "[Table Row] <tr><td colspan=\"5\">Leaf</td><td colspan=\"5\">Stem</td><td colspan=\"5",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12651,
+      "end": 12652
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12652,
+    "text": "[Table Row] <tr><td colspan=\"5\">Sunshine</td><td></td><td></td><td></td><td></td",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12652,
+      "end": 12653
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12653,
+    "text": "[Table Row] <tr><td></td><td></td><td></td><td></td><td></td><td>4</td><td>0</td",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12653,
+      "end": 12654
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12654,
+    "text": "[Table Row] <tr><td></td><td></td><td>2</td><td>8</td><td>3</td><td>1</td><td>1<",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12654,
+      "end": 12655
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12655,
+    "text": "[Table Row] <tr><td></td><td></td><td></td><td>8</td><td>3</td><td>1</td><td>2</",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12655,
+      "end": 12656
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12656,
+    "text": "[Table Row] <tr><td>4</td><td>7</td><td>0</td><td>6</td><td>2</td><td>1</td><td>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12656,
+      "end": 12657
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12657,
+    "text": "[Table Row] <tr><td></td><td></td><td>5</td><td>4</td><td>3</td><td>9</td><td>4<",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12657,
+      "end": 12658
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12658,
+    "text": "[Table Row] <tr><td></td><td></td><td></td><td></td><td></td><td>1</td><td>5</td",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12658,
+      "end": 12659
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12659,
+    "text": "[Table Row] <tr><td>Key:Sunshine 9 | 4 represents 4.9 g</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12659,
+      "end": 12660
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12660,
+    "text": "[Table Row] <tr><td>Shade 3 | 4 represents 3.4 g</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12660,
+      "end": 12661
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12661,
+    "text": "State out how many insects were collected in total. [1]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12661,
+      "end": 12662
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12662,
+    "text": "b Draw an ordered stem-and-leaf diagram, using the same data. [5]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12662,
+      "end": 12663
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12663,
+    "text": "c Find the median mass of the insects collected in sunshine. [2]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12663,
+      "end": 12664
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12664,
+    "text": "d Find the median mass of the insects collected in shade. [2]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12664,
+      "end": 12665
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12665,
+    "text": "Find the range of the masses of insects collected in the sunshine. [2]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12665,
+      "end": 12666
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12666,
+    "text": "Find the range of the masses of insects collected in the shade. [2]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12666,
+      "end": 12667
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12667,
+    "text": "Compare the masses of insects collected in the sunshine with the masses of those",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12667,
+      "end": 12668
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12668,
+    "text": "Find the interquartile range of the masses of insects collected in the sunshine.",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12668,
+      "end": 12669
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12669,
+    "text": "Find the interquartile range of the masses of insects collected in the shade. [2",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12669,
+      "end": 12670
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12670,
+    "text": "j Explain why either the range or the interquartile range would be a suitable me",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12670,
+      "end": 12671
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12671,
+    "text": "4 The following data shows the shoe sizes of people who use a bouncy castle.",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12671,
+      "end": 12672
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12672,
+    "text": "[Table Row] <tr><td>Shoe size</td><td>Frequency</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12672,
+      "end": 12673
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12673,
+    "text": "[Table Row] <tr><td>2</td><td>21</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12673,
+      "end": 12674
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12674,
+    "text": "[Table Row] <tr><td>3</td><td>11</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12674,
+      "end": 12675
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12675,
+    "text": "[Table Row] <tr><td>4</td><td>2</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12675,
+      "end": 12676
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12676,
+    "text": "[Table Row] <tr><td>5</td><td>n</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12676,
+      "end": 12677
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12677,
+    "text": "[Table Row] <tr><td>6</td><td>5</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12677,
+      "end": 12678
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12678,
+    "text": "[Table Row] <tr><td>7</td><td>2</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12678,
+      "end": 12679
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12679,
+    "text": "[Table Row] <tr><td>8</td><td>1</td></tr>",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12679,
+      "end": 12680
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12680,
+    "text": "a The median shoe size is known to be 3. Find the smallest and largest possible ",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12680,
+      "end": 12681
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12681,
+    "text": "Find the mean shoe size, giving your answer in terms of  $n$ . [2]",
+    "level": 1,
+    "page": 401,
+    "block_range": {
+      "start": 12681,
+      "end": 12682
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12682,
+    "text": "The mean shoe size is known to be 3.5. Find the number of people with size 5 sho",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12682,
+      "end": 12683
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12683,
+    "text": "[3]",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12683,
+      "end": 12684
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12684,
+    "text": "State the modal shoe size.",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12684,
+      "end": 12685
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12685,
+    "text": "[1]",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12685,
+      "end": 12686
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12686,
+    "text": "5 The temperature,  $T^{\\circ}C$  , in a hotel room is recorded several times in",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12686,
+      "end": 12687
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12687,
+    "text": "[Table Row] <tr><td>Temp (T°C)</td><td>25 &lt; T ≤ 30</td><td>30 &lt; T ≤ 35</td",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12687,
+      "end": 12688
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12688,
+    "text": "[Table Row] <tr><td>Frequency</td><td>16</td><td>5</td><td>2</td><td>1</td></tr>",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12688,
+      "end": 12689
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12689,
+    "text": "a Find the number of times the temperature of the room was recorded. [2]",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12689,
+      "end": 12690
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12690,
+    "text": "b State the modal class. [1]",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12690,
+      "end": 12691
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12691,
+    "text": "c Calculate an estimate for the mean room temperature. [3]",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12691,
+      "end": 12692
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12692,
+    "text": "SELF ASSESSMENT",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12692,
+      "end": 12693
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12693,
+    "text": "Analysing your mistakes can help you improve.",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12693,
+      "end": 12694
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12694,
+    "text": "Consider any questions that you got wrong.",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12694,
+      "end": 12695
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12695,
+    "text": "Did you understand the question and know what to do? If not, what can you do abo",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12695,
+      "end": 12696
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12696,
+    "text": "- Did you make any errors in your calculations? If so, what can you do to avoid ",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12696,
+      "end": 12697
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12697,
+    "text": "- Would doing corrections help you? If so, redo the questions you got wrong.",
+    "level": 1,
+    "page": 402,
+    "block_range": {
+      "start": 12697,
+      "end": 12698
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12698,
+    "text": "Past paper questions",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12698,
+      "end": 12699
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12699,
+    "text": "1 The nth term of a sequence is  $6n - 4$",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12699,
+      "end": 12700
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12700,
+    "text": "a Write down the first 3 terms in this sequence.",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12700,
+      "end": 12701
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12701,
+    "text": "b The  $k$ th term of this sequence is 422.",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12701,
+      "end": 12702
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12702,
+    "text": "Work out the value of  $k$ .",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12702,
+      "end": 12703
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12703,
+    "text": "[1]",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12703,
+      "end": 12705
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12705,
+    "text": "Unit 3 Past Paper",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12705,
+      "end": 12706
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12706,
+    "text": "Questions Resource",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12706,
+      "end": 12707
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12707,
+    "text": "Sheet is available on",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12707,
+      "end": 12708
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12708,
+    "text": "Cambridge O.",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12708,
+      "end": 12709
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12709,
+    "text": "[2]",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12709,
+      "end": 12710
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12710,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q12, June 2021",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12710,
+      "end": 12711
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12711,
+    "text": "2 Expand and simplify.",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12711,
+      "end": 12712
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12712,
+    "text": "$$\n(x - 5) (x - 7)\n$$",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12712,
+      "end": 12713
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12713,
+    "text": "[2]",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12713,
+      "end": 12714
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12714,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q17, June 2020",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12714,
+      "end": 12715
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12715,
+    "text": "Image",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12715,
+      "end": 12716
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12716,
+    "text": "The diagram shows a right-angled triangle.",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12716,
+      "end": 12717
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12717,
+    "text": "Calculate the value of  $x$ .",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12717,
+      "end": 12718
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12718,
+    "text": "[2]",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12718,
+      "end": 12719
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12719,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q12, June 2019",
+    "level": 1,
+    "page": 403,
+    "block_range": {
+      "start": 12719,
+      "end": 12720
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12720,
+    "text": "4 The diagram shows a point  $P$  and a line  $L$ .",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12720,
+      "end": 12721
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12721,
+    "text": "Image",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12721,
+      "end": 12722
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12722,
+    "text": "a Write down the co-ordinates of point  $P$",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12722,
+      "end": 12723
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12723,
+    "text": "[1]",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12723,
+      "end": 12724
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12724,
+    "text": "b Find the gradient of line  $L$",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12724,
+      "end": 12725
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12725,
+    "text": "[2]",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12725,
+      "end": 12726
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12726,
+    "text": "c Write down the equation of line  $L$  in the form  $y = mx + c$",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12726,
+      "end": 12727
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12727,
+    "text": "[2]",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12727,
+      "end": 12728
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12728,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q22, June 2019",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12728,
+      "end": 12729
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12729,
+    "text": "5",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12729,
+      "end": 12730
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12730,
+    "text": "Image",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12730,
+      "end": 12731
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12731,
+    "text": "Image",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12731,
+      "end": 12732
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12732,
+    "text": "a Explain why triangle ABC and triangle PQR are similar.",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12732,
+      "end": 12733
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12733,
+    "text": "[1]",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12733,
+      "end": 12734
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12734,
+    "text": "b' Find AC.",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12734,
+      "end": 12735
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12735,
+    "text": "[2]",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12735,
+      "end": 12736
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12736,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q17, June 2019",
+    "level": 1,
+    "page": 404,
+    "block_range": {
+      "start": 12736,
+      "end": 12737
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12737,
+    "text": "6 These are the first four terms of a sequence.",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12737,
+      "end": 12738
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12738,
+    "text": "5 8 11 14",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12738,
+      "end": 12739
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12739,
+    "text": "a Write down the next term.",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12739,
+      "end": 12740
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12740,
+    "text": "[1]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12740,
+      "end": 12741
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12741,
+    "text": "b Find an expression, in terms of  $n$ , for the  $n$ th term.",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12741,
+      "end": 12742
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12742,
+    "text": "[2]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12742,
+      "end": 12743
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12743,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 11 Q16, June 2019",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12743,
+      "end": 12744
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12744,
+    "text": "7 The diagram shows a line  $L$  and two points,  $A$  and  $B$ , on a grid.",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12744,
+      "end": 12745
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12745,
+    "text": "Image",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12745,
+      "end": 12746
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12746,
+    "text": "a Write down the coordinates of point  $A$",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12746,
+      "end": 12747
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12747,
+    "text": "[1]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12747,
+      "end": 12748
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12748,
+    "text": "Find the gradient of line  $L$",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12748,
+      "end": 12749
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12749,
+    "text": "[1]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12749,
+      "end": 12750
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12750,
+    "text": "Write down the equation of line  $L$  in the form  $y = mx + c$",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12750,
+      "end": 12751
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12751,
+    "text": "[2]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12751,
+      "end": 12752
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12752,
+    "text": "c i Draw a line that is perpendicular to line  $L$  and passes through the point",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12752,
+      "end": 12753
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12753,
+    "text": "[Using Figure 1 in the Unit 3 Past Paper Questions Resource Sheet.]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12753,
+      "end": 12754
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12754,
+    "text": "[1]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12754,
+      "end": 12755
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12755,
+    "text": "This line crosses the  $x$ -axis at point  $C$ .",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12755,
+      "end": 12756
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12756,
+    "text": "Mark point  $C$  on the grid and write down the coordinates of point  $C$ .",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12756,
+      "end": 12757
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12757,
+    "text": "[Using Figure 1 in the Unit 3 Past Paper Questions Resource Sheet.]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12757,
+      "end": 12758
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12758,
+    "text": "[1]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12758,
+      "end": 12759
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12759,
+    "text": "iii Find, by measuring, the perimeter of triangle ABC.",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12759,
+      "end": 12760
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12760,
+    "text": "[2]",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12760,
+      "end": 12761
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12761,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 31 Q4, June 2021",
+    "level": 1,
+    "page": 405,
+    "block_range": {
+      "start": 12761,
+      "end": 12762
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12762,
+    "text": "8 a On Monday, Main Street station sells 40 tickets.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12762,
+      "end": 12763
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12763,
+    "text": "There are four types of ticket: infant, child, adult and senior.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12763,
+      "end": 12764
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12764,
+    "text": "The bar chart shows the number of infant, child and adult tickets sold.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12764,
+      "end": 12765
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12765,
+    "text": "Image",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12765,
+      "end": 12766
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12766,
+    "text": "Complete the bar chart. [Using Figure 2 in the Unit 3 Past Paper Questions Resou",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12766,
+      "end": 12767
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12767,
+    "text": "[1]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12767,
+      "end": 12768
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12768,
+    "text": "ii Find how many more adult tickets were sold than child tickets.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12768,
+      "end": 12769
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12769,
+    "text": "[1]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12769,
+      "end": 12770
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12770,
+    "text": "iii Write down the modal type of ticket.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12770,
+      "end": 12771
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12771,
+    "text": "[1]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12771,
+      "end": 12772
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12772,
+    "text": "iv One of these 40 people is chosen at random.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12772,
+      "end": 12773
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12773,
+    "text": "[1]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12773,
+      "end": 12774
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12774,
+    "text": "Find the probability that this person is a child.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12774,
+      "end": 12775
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12775,
+    "text": "b At Donville station the number of tickets sold each day is recorded for seven ",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12775,
+      "end": 12776
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12776,
+    "text": "104 18 72 31 27 45 60",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12776,
+      "end": 12777
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12777,
+    "text": "Find",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12777,
+      "end": 12778
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12778,
+    "text": "the range,",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12778,
+      "end": 12779
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12779,
+    "text": "[1]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12779,
+      "end": 12780
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12780,
+    "text": "ii the median,",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12780,
+      "end": 12781
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12781,
+    "text": "[2]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12781,
+      "end": 12782
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12782,
+    "text": "iii the mean.",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12782,
+      "end": 12783
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12783,
+    "text": "[2]",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12783,
+      "end": 12784
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12784,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 31 Q3, June 2019",
+    "level": 1,
+    "page": 406,
+    "block_range": {
+      "start": 12784,
+      "end": 12785
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12785,
+    "text": "Image",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12785,
+      "end": 12786
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12786,
+    "text": "9 a The nth term of a sequence is  $n^2 + 3n$ .",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12786,
+      "end": 12787
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12787,
+    "text": "Find the first three terms of this sequence.",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12787,
+      "end": 12788
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12788,
+    "text": "[2]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12788,
+      "end": 12789
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12789,
+    "text": "These are the first five terms of a different sequence.",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12789,
+      "end": 12790
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12790,
+    "text": "25 18 11 4 -3",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12790,
+      "end": 12791
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12791,
+    "text": "Find the  $n$ th term of this sequence.",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12791,
+      "end": 12792
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12792,
+    "text": "[2]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12792,
+      "end": 12793
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12793,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q6, June 2021",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12793,
+      "end": 12794
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12794,
+    "text": "10 Write the recurring decimal 0.47 as a fraction.",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12794,
+      "end": 12795
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12795,
+    "text": "Show all your working.",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12795,
+      "end": 12796
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12796,
+    "text": "[2]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12796,
+      "end": 12797
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12797,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q9, June 2019",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12797,
+      "end": 12798
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12798,
+    "text": "11  $A$  is the point  $(5, -5)$  and  $B$  is the point  $(9, 3)$ .",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12798,
+      "end": 12799
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12799,
+    "text": "a Find the coordinates of the midpoint of  $AB$",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12799,
+      "end": 12800
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12800,
+    "text": "[2]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12800,
+      "end": 12801
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12801,
+    "text": "b Find the length of  $AB$",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12801,
+      "end": 12802
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12802,
+    "text": "[3]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12802,
+      "end": 12803
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12803,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q9, June 2021",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12803,
+      "end": 12804
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12804,
+    "text": "12 Factorise completely.",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12804,
+      "end": 12805
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12805,
+    "text": "a  $21a^{2} + 28ab$",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12805,
+      "end": 12806
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12806,
+    "text": "[2]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12806,
+      "end": 12807
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12807,
+    "text": "${20}{x}^{2} - {45}{y}^{2}$",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12807,
+      "end": 12808
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12808,
+    "text": "[3]",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12808,
+      "end": 12809
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12809,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 21 Q9, June 2020",
+    "level": 1,
+    "page": 407,
+    "block_range": {
+      "start": 12809,
+      "end": 12810
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12810,
+    "text": "13 a Find the size of an exterior angle of a regular polygon with 18 sides.",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12810,
+      "end": 12811
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12811,
+    "text": "Image",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12811,
+      "end": 12812
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12812,
+    "text": "In triangle  $ACD$ ,  $B$  lies on  $AC$  and  $E$  lies on  $AD$  such that  $B",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12812,
+      "end": 12813
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12813,
+    "text": "$AE = 5.2\\mathrm{cm}$  and  $ED = 2.6\\mathrm{cm}$",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12813,
+      "end": 12814
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12814,
+    "text": "Calculate  $BE$",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12814,
+      "end": 12815
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12815,
+    "text": "[2]",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12815,
+      "end": 12816
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12816,
+    "text": "[2]",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12816,
+      "end": 12817
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12817,
+    "text": "Two solids are mathematically similar.",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12817,
+      "end": 12818
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12818,
+    "text": "The smaller solid has height  $2\\mathrm{cm}$  and volume  $32\\mathrm{cm}^3$ .",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12818,
+      "end": 12819
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12819,
+    "text": "The larger solid has volume  $780\\mathrm{cm}^3$",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12819,
+      "end": 12820
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12820,
+    "text": "Calculate the height of the larger solid.",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12820,
+      "end": 12821
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12821,
+    "text": "[3]",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12821,
+      "end": 12822
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12822,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q11a, b, c, June 2021",
+    "level": 1,
+    "page": 408,
+    "block_range": {
+      "start": 12822,
+      "end": 12823
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12823,
+    "text": "14  $x$  is an integer.",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12823,
+      "end": 12824
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12824,
+    "text": "$$\n\\begin{array}{l} \\mathcal {E} = \\{x: 4 1 \\leqslant x \\leqslant 5 0 \\} \\\\ A = ",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12824,
+      "end": 12825
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12825,
+    "text": "a Complete the Venn diagram to show this information. [Using Figure 3 in the Uni",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12825,
+      "end": 12826
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12826,
+    "text": "b List the elements of",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12826,
+      "end": 12827
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12827,
+    "text": "[3]",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12827,
+      "end": 12828
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12828,
+    "text": "b List the elements of",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12828,
+      "end": 12829
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12829,
+    "text": "A∩C.",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12829,
+      "end": 12830
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12830,
+    "text": "[1]",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12830,
+      "end": 12831
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12831,
+    "text": "ii  $(B\\cup C)^{\\prime}$",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12831,
+      "end": 12832
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12832,
+    "text": "[1]",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12832,
+      "end": 12833
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12833,
+    "text": "Find  $\\mathfrak{n}(A\\cap B\\cap C)$",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12833,
+      "end": 12834
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12834,
+    "text": "[1]",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12834,
+      "end": 12835
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12835,
+    "text": "Cambridge IGCSE Mathematics (0580) Paper 41 Q5, June 2020",
+    "level": 1,
+    "page": 409,
+    "block_range": {
+      "start": 12835,
+      "end": 12836
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12836,
+    "text": "Unit 3 Project",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12836,
+      "end": 12837
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12837,
+    "text": "Unit 3 Project",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12837,
+      "end": 12838
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12838,
+    "text": "Litov's mean value theorem",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12838,
+      "end": 12839
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12839,
+    "text": "Start with any two numbers, for example 8 and 2.",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12839,
+      "end": 12840
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12840,
+    "text": "Generate a sequence where the next number is the mean of the previous two number",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12840,
+      "end": 12841
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12841,
+    "text": "So the next number is half of  $(8 + 2)$  , and the sequence continues: 8, 2, 5.",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12841,
+      "end": 12842
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12842,
+    "text": "The next number is half of  $(2 + 5)$  , and the sequence continues: 8, 2, 5, 3.",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12842,
+      "end": 12843
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12843,
+    "text": "What would happen if you continued this process indefinitely?",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12843,
+      "end": 12844
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12844,
+    "text": "Choose a few pairs of starting numbers and repeat the process.",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12844,
+      "end": 12845
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12845,
+    "text": "Each time, your sequence should get closer and closer to a value which we call t",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12845,
+      "end": 12846
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12846,
+    "text": "Can you find a relationship between your starting numbers and the limit of the s",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12846,
+      "end": 12847
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12847,
+    "text": "Can you explain why this happens?",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12847,
+      "end": 12848
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12848,
+    "text": "Investigate starting with three numbers",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12848,
+      "end": 12849
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12849,
+    "text": "Generate a sequence where the next number is the mean of the previous three numb",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12849,
+      "end": 12850
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12850,
+    "text": "- Check you agree that if we start with 4, 1, 10, the next number is 5, and the ",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12850,
+      "end": 12851
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12851,
+    "text": "What would happen if you continued this process indefinitely?",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12851,
+      "end": 12852
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12852,
+    "text": "Choose some more sets of three starting numbers.",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12852,
+      "end": 12853
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12853,
+    "text": "Can you find a relationship between your starting numbers and the limit of the s",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12853,
+      "end": 12854
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12854,
+    "text": "Can you explain why this happens?",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12854,
+      "end": 12855
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12855,
+    "text": "GO FURTHER",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12855,
+      "end": 12856
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12856,
+    "text": "Explore what happens when you have  $n$  starting numbers and you generate a seq",
+    "level": 1,
+    "page": 410,
+    "block_range": {
+      "start": 12856,
+      "end": 12857
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12857,
+    "text": "Chapter 13",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12857,
+      "end": 12858
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12858,
+    "text": "Chapter 13",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12858,
+      "end": 12859
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12859,
+    "text": "Understanding measurement",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12859,
+      "end": 12860
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12860,
+    "text": "IN THIS CHAPTER YOU WILL:",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12860,
+      "end": 12861
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12861,
+    "text": "learn how to convert between units in the metric system",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12861,
+      "end": 12862
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12862,
+    "text": "- solve problems involving time calculations and timetables",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12862,
+      "end": 12863
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12863,
+    "text": "use a calculator to work out time calculations",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12863,
+      "end": 12864
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12864,
+    "text": "find lower and upper bounds of numbers that are written to a given level of accu",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12864,
+      "end": 12865
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12865,
+    "text": "- solve problems involving upper and lower bounds",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12865,
+      "end": 12866
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12866,
+    "text": "- use conversion graphs to change units from one measuring system to another",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12866,
+      "end": 12867
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12867,
+    "text": "use exchange rates to convert currencies.",
+    "level": 1,
+    "page": 411,
+    "block_range": {
+      "start": 12867,
+      "end": 12868
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12868,
+    "text": "Meteorologists need to think about a very large number of measurements when pred",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12868,
+      "end": 12869
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12869,
+    "text": "All these different measurements mean that lots of small errors can combine to g",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12869,
+      "end": 12870
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12870,
+    "text": "GETTING STARTED",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12870,
+      "end": 12871
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12871,
+    "text": "Units are often grouped together or subdivided into different units. If you want",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12871,
+      "end": 12872
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12872,
+    "text": "1 Draw a similar diagram for kilograms, grams and milligrams.",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12872,
+      "end": 12873
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12873,
+    "text": "1 Draw a similar diagram for kilograms, grams and milligrams.",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12873,
+      "end": 12874
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12874,
+    "text": "2 Find out what the prefixes kilo-, milli-, centi- mean.",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12874,
+      "end": 12875
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12875,
+    "text": "3 Think about some other units and how to convert between them. Consider units o",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12875,
+      "end": 12876
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12876,
+    "text": "KEY WORDS",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12876,
+      "end": 12877
+    },
+    "parent_id": null
+  },
+  {
+    "id": 12877,
+    "text": "KEY WORDS",
+    "level": 1,
+    "page": 412,
+    "block_range": {
+      "start": 12877,
+      "end": 24566
+    },
+    "parent_id": null
+  }
+]

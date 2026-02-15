@@ -1,0 +1,8 @@
+{
+  "minBlocks": 40,
+  "minRatio": 0.02,
+  "patterns": {
+    "numericLabels": "^\\s*\\d+[.．、]",
+    "exampleLabels": "例\\d"
+  }
+}

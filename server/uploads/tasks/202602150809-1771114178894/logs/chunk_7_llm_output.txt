@@ -1,0 +1,28 @@
+<chapter><title>535</title>
+<qa_pair><label>8</label><type>exercise</type><question>492,493,494,495,496</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>497</question>
+<solution></solution></qa_pair>
+<qa_pair><label>10</label><type>exercise</type><question>498</question>
+<solution></solution></qa_pair>
+<qa_pair><label>11</label><type>exercise</type><question>499,500</question>
+<solution></solution></qa_pair>
+<qa_pair><label>12</label><type>exercise</type><question>501,502,503,504,505</question>
+<solution></solution></qa_pair>
+<qa_pair><label>13</label><type>exercise</type><question>506,507,508</question>
+<solution></solution></qa_pair>
+<qa_pair><label>14</label><type>exercise</type><question>509,510</question>
+<solution></solution></qa_pair>
+<qa_pair><label>15</label><type>exercise</type><question>511,512,513,514,515</question>
+<solution></solution></qa_pair>
+<qa_pair><label>16</label><type>exercise</type><question>517,518,519,520,521</question>
+<solution></solution></qa_pair>
+<qa_pair><label>17</label><type>exercise</type><question>522,523,524,525,526,527</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Solve & Discuss It!</label><type>exercise</type><question>529,530,531,532</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 1</label><type>example</type><question>546,547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564</question>
+<solution>565,566,567,568,569</solution></qa_pair>
+<qa_pair><label>EXAMPLE 2</label><type>example</type><question>570,571,572,573,574,575,576</question>
+<solution>578,579,580,581,582,583,584,585,586,587,588,589</solution></qa_pair>
+</chapter>

@@ -1,0 +1,58 @@
+<chapter><title>13126</title>
+<qa_pair><label>1</label><type>exercise</type><question>13090</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>13091,13092,13093,13094,13095,13096</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2b</label><type>exercise</type><question>13097</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2c</label><type>exercise</type><question>13098</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>13100,13101,13102,13103,13104,13105,13106,13107,13108,13109,13110,13111,13112,13113,13114,13115,13116,13117</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3b</label><type>exercise</type><question>13118</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3c</label><type>exercise</type><question>13119</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3d</label><type>exercise</type><question>13120,13121</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3dii</label><type>exercise</type><question>13122</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3e</label><type>exercise</type><question>13123,13124</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3eii</label><type>exercise</type><question>13125</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>13155,13156,13157,13158,13159,13160</question>
+<solution>13161,13162,13163,13164,13165,13166,13167,13168,13169</solution></qa_pair>
+<qa_pair><label>Exercise 13.4</label><type>exercise</type><question>13170,13171,13172</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 b</label><type>exercise</type><question>13173</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 c</label><type>exercise</type><question>13174</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 d</label><type>exercise</type><question>13175</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 e</label><type>exercise</type><question>13176</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 f</label><type>exercise</type><question>13177</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 2</label><type>exercise</type><question>13178,13179</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 2b</label><type>exercise</type><question>13180</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 2c</label><type>exercise</type><question>13181</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 2d</label><type>exercise</type><question>13182</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 2e</label><type>exercise</type><question>13183</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 2f</label><type>exercise</type><question>13184</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 3</label><type>exercise</type><question>13185,13186</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 3b</label><type>exercise</type><question>13187</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 3c</label><type>exercise</type><question>13188</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Exercise 13.4 3d</label><type>exercise</type><question>13189</question>
+<solution></solution></qa_pair>
+</chapter>

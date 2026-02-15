@@ -295,6 +295,11 @@ Return ONLY valid JSON:
 }
 Array MUST be in the LOGICAL order of the document.
 
+## CRITICAL RULE: RETURN ORIGINAL IDs
+The block IDs you see (e.g., [12479|p394|T1]) are GLOBAL IDs. You MUST return these exact IDs. DO NOT generate your own sequential IDs starting from 0.
+- CORRECT: {"id": 12479, ...}
+- WRONG: {"id": 0, ...} (when the block shown was [12479|...])
+
 ---
 
 Document: ${totalBlocks} blocks, ${totalPages} pages.
@@ -470,6 +475,24 @@ function parseLLMOutput(raw: string, validIds: Set<number>): { entries: Director
   const rawEntries = parsed.directory || parsed.chapters || parsed.entries;
   if (!Array.isArray(rawEntries)) throw new Error('Missing "directory" array');
 
+  const outputIdsList: number[] = rawEntries
+    .map((e: any) => Array.isArray(e.id) ? e.id[0] : e.id)
+    .filter((id: any) => typeof id === 'number') as number[];
+  if (outputIdsList.length > 0) {
+    const validIdsList = Array.from(validIds.values());
+    const minValid = Math.min(...validIdsList);
+    const maxOutput = Math.max(...outputIdsList);
+    const minOutput = Math.min(...outputIdsList);
+    if (maxOutput < 100 && minValid > 1000) {
+      warnings.push('ID space drift detected: output IDs appear 0-based while valid IDs are large.');
+      return { entries: [], warnings };
+    }
+    if (minOutput === 0 && maxOutput < 100 && minValid > 500) {
+      warnings.push('ID space drift detected (heuristic): small sequential IDs against large valid ID range.');
+      return { entries: [], warnings };
+    }
+  }
+
   const entries: DirectoryEntry[] = [];
   let invalidCount = 0;
 
@@ -612,6 +635,22 @@ function buildFlatMap(entries: DirectoryEntry[], blocks: FlatBlock[]): ChapterFl
   }
 
   return result;
+}
+
+function validateChapterEntries(entries: DirectoryEntry[], blocks: FlatBlock[]): { ok: boolean; error?: string } {
+  const allIds = new Set(blocks.map(b => b.id));
+  for (const entry of entries) {
+    const ids = Array.isArray(entry.id) ? entry.id : [entry.id];
+    for (const id of ids) {
+      if (!allIds.has(id)) {
+        return { ok: false, error: `Invalid block ID ${id}` };
+      }
+    }
+    if (typeof entry.level !== 'number' || entry.level < 1 || entry.level > 4) {
+      return { ok: false, error: `Invalid level ${entry.level}` };
+    }
+  }
+  return { ok: true };
 }
 
 // ============================================================
@@ -888,6 +927,18 @@ export async function preprocessChapters(
 
   // ========== Step 5: 构建 flat_map ==========
   if (onProgress) await onProgress('章节预处理：构建目录树...');
+  const validation = validateChapterEntries(finalEntries, blocks);
+  if (!validation.ok) {
+    console.warn(`[ChapterValidation] ${validation.error}`);
+    return {
+      flatMap: [],
+      blocks,
+      coverageRate: 0,
+      totalEntries: 0,
+      round1Entries: round1Entries.length,
+      round2Entries: finalEntries.length,
+    };
+  }
   const flatMap = buildFlatMap(finalEntries, blocks);
   console.log(`[ChapterPreprocess] flat_map: ${flatMap.length} entries`);
 

@@ -1,0 +1,28 @@
+<chapter><title>772</title>
+<qa_pair><label>22</label><type>exercise</type><question>773</question>
+<solution></solution></qa_pair>
+<qa_pair><label>23</label><type>exercise</type><question>774,775,776,777,778</question>
+<solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>779</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>780,781,782,783,784</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>785</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>786</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>787</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>788</question>
+<solution></solution></qa_pair>
+<qa_pair><label>MID-TOPIC PERFORMANCE TASK</label><type>exercise</type><question>792,793,794,795,796,797,798,799,800,801,802,803,804,805,806</question>
+<solution></solution></qa_pair>
+<qa_pair><label>ACTIVITY</label><type>exercise</type><question>812,813</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 1</label><type>example</type><question>829,830,831,833,834,835,836,837,838,839,840,841,842</question>
+<solution>843,844,845</solution></qa_pair>
+<qa_pair><label>EXAMPLE 3</label><type>example</type><question>854,855,856,857,858,859,860</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 4</label><type>example</type><question>861,862,863,864,865,866,867,868,869</question>
+<solution></solution></qa_pair>
+</chapter>

@@ -1,0 +1,14 @@
+<chapter><title>12644</title>
+<qa_pair><label>1</label><type>exercise</type><question>12645,12646,12647,12648</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>12649</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>12650,12651,12652,12653,12654,12655,12656,12657,12658,12659,12660,12661,12662,12663,12664,12665,12666,12667,12668,12669,12670</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>12671,12672,12673,12674,12675,12676,12677,12678,12679,12680,12681,12682,12683,12684,12685</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>12686,12687,12688,12689,12690,12691</question>
+<solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>12699</question>
+<solution></solution></qa_pair>
+</chapter>

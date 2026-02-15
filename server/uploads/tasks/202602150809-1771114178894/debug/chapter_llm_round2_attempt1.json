@@ -1,0 +1,2464 @@
+{
+  "directory": [
+    {
+      "id": 0,
+      "level": 1,
+      "title": "Topic Essential Question"
+    },
+    {
+      "id": 1,
+      "level": 1,
+      "title": "Topic Overview"
+    },
+    {
+      "id": 16,
+      "level": 1,
+      "title": "Topic Vocabulary"
+    },
+    {
+      "id": 31,
+      "level": 1,
+      "title": "Go online | PearsonRealize.com"
+    },
+    {
+      "id": 32,
+      "level": 1,
+      "title": "Lesson Digital Resources"
+    },
+    {
+      "id": 34,
+      "level": 1,
+      "title": "INTERACTIVE STUDENT EDITION"
+    },
+    {
+      "id": 37,
+      "level": 1,
+      "title": "INTERACTIVE ANIMATION"
+    },
+    {
+      "id": 40,
+      "level": 1,
+      "title": "ACTIVITY"
+    },
+    {
+      "id": 42,
+      "level": 1,
+      "title": "VIDEOS"
+    },
+    {
+      "id": 43,
+      "level": 1,
+      "title": "Hard-Working"
+    },
+    {
+      "id": 44,
+      "level": 1,
+      "title": "Organs"
+    },
+    {
+      "id": 51,
+      "level": 1,
+      "title": "PRACTICE"
+    },
+    {
+      "id": 53,
+      "level": 1,
+      "title": "TUTORIALS"
+    },
+    {
+      "id": 55,
+      "level": 1,
+      "title": "MATH TOOLS"
+    },
+    {
+      "id": 57,
+      "level": 1,
+      "title": "GAMES"
+    },
+    {
+      "id": 59,
+      "level": 1,
+      "title": "KEY CONCEPT"
+    },
+    {
+      "id": 61,
+      "level": 1,
+      "title": "GLOSSARY"
+    },
+    {
+      "id": 63,
+      "level": 1,
+      "title": "ASSESSMENT"
+    },
+    {
+      "id": 64,
+      "level": 1,
+      "title": "Did You Know?"
+    },
+    {
+      "id": 73,
+      "level": 1,
+      "title": "About 18 million acres of forest are lost to deforestation each year."
+    },
+    {
+      "id": 76,
+      "level": 1,
+      "title": "Fossil fuels are expected to supply almost [EQ] of world energy use through 2040."
+    },
+    {
+      "id": 81,
+      "level": 1,
+      "title": "Solar power, wind power and other renewable energy sources are helping to lessen the dependency on oil and fossil fuels."
+    },
+    {
+      "id": 82,
+      "level": 1,
+      "title": "Your Task: Going, Going, Gone?"
+    },
+    {
+      "id": 85,
+      "level": 1,
+      "title": "Review What You Know!"
+    },
+    {
+      "id": 86,
+      "level": 1,
+      "title": "Vocabulary"
+    },
+    {
+      "id": 96,
+      "level": 1,
+      "title": "Terminating and Repeating Decimals"
+    },
+    {
+      "id": 104,
+      "level": 1,
+      "title": "Multiplying Integers"
+    },
+    {
+      "id": 112,
+      "level": 1,
+      "title": "Simplifying Expressions"
+    },
+    {
+      "id": 120,
+      "level": 1,
+      "title": "Build Vocabulary"
+    },
+    {
+      "id": 130,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 137,
+      "level": 1,
+      "title": "Lesson 1-1"
+    },
+    {
+      "id": 138,
+      "level": 1,
+      "title": "Rational Numbers as Decimals"
+    },
+    {
+      "id": 142,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 147,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 149,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 151,
+      "level": 1,
+      "title": "Write Repeating Decimals as Fractions"
+    },
+    {
+      "id": 174,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 177,
+      "level": 1,
+      "title": "Convince Me!"
+    },
+    {
+      "id": 193,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 195,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 197,
+      "level": 1,
+      "title": "Write Decimals with Multiple Repeating Digits as Fractions"
+    },
+    {
+      "id": 208,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 215,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 220,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 225,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 248,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 262,
+      "level": 1,
+      "title": "Explain It!"
+    },
+    {
+      "id": 268,
+      "level": 1,
+      "title": "Lesson 1-2"
+    },
+    {
+      "id": 269,
+      "level": 1,
+      "title": "Understand Irrational Numbers"
+    },
+    {
+      "id": 273,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 278,
+      "level": 1,
+      "title": "A. Construct Arguments Is Nora or Sofia correct? Explain your reasoning."
+    },
+    {
+      "id": 279,
+      "level": 1,
+      "title": "B. Use Structure What is another nonterminating decimal number that can not be written as a fraction."
+    },
+    {
+      "id": 280,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 282,
+      "level": 1,
+      "title": "Construct Arguments Is 0.12112111211112... a rational number? Explain."
+    },
+    {
+      "id": 283,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 284,
+      "level": 1,
+      "title": "Identify Irrational Numbers"
+    },
+    {
+      "id": 298,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 303,
+      "level": 1,
+      "title": "Convince Me! Construct Arguments Jen classifies the number"
+    },
+    {
+      "id": 307,
+      "level": 1,
+      "title": "Classify [EQ]"
+    },
+    {
+      "id": 320,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 322,
+      "level": 1,
+      "title": "Classify Numbers as Rational or Irrational"
+    },
+    {
+      "id": 339,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 348,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 352,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 361,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 383,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 394,
+      "level": 1,
+      "title": "Determine whether the following numbers are rational or irrational. 8.NS.1.1"
+    },
+    {
+      "id": 404,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 413,
+      "level": 1,
+      "title": "Lesson 1-3"
+    },
+    {
+      "id": 414,
+      "level": 1,
+      "title": "Compare and"
+    },
+    {
+      "id": 415,
+      "level": 1,
+      "title": "Order Real"
+    },
+    {
+      "id": 416,
+      "level": 1,
+      "title": "Numbers"
+    },
+    {
+      "id": 419,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 424,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 427,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 429,
+      "level": 1,
+      "title": "Approximate an Irrational Number"
+    },
+    {
+      "id": 442,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 446,
+      "level": 1,
+      "title": "Compare [EQ] and 5.51326... . Plot each number at its approximate location on a number line."
+    },
+    {
+      "id": 461,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 463,
+      "level": 1,
+      "title": "Compare and Order Rational and Irrational Numbers"
+    },
+    {
+      "id": 472,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 477,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 482,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 488,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 516,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 528,
+      "level": 1,
+      "title": "PART A"
+    },
+    {
+      "id": 529,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 535,
+      "level": 1,
+      "title": "Look for Relationships"
+    },
+    {
+      "id": 536,
+      "level": 1,
+      "title": "Lesson 1-4"
+    },
+    {
+      "id": 537,
+      "level": 1,
+      "title": "Evaluate Square Roots and Cube Roots"
+    },
+    {
+      "id": 540,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 544,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 546,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 548,
+      "level": 1,
+      "title": "Evaluate Cube Roots to Solve Problems"
+    },
+    {
+      "id": 565,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 569,
+      "level": 1,
+      "title": "Convince Me! How can you find the cube root of 64?"
+    },
+    {
+      "id": 570,
+      "level": 1,
+      "title": "EXAMPLE 2"
+    },
+    {
+      "id": 572,
+      "level": 1,
+      "title": "Evaluate Perfect Squares and Perfect Cubes"
+    },
+    {
+      "id": 588,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 594,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 595,
+      "level": 1,
+      "title": "Evaluate Square Roots to Solve Problems"
+    },
+    {
+      "id": 602,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 613,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 617,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 622,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 646,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 658,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 665,
+      "level": 1,
+      "title": "Lesson 1-5"
+    },
+    {
+      "id": 666,
+      "level": 1,
+      "title": "Solve Equations"
+    },
+    {
+      "id": 667,
+      "level": 1,
+      "title": "Using Square Roots and Cube Roots"
+    },
+    {
+      "id": 671,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 676,
+      "level": 1,
+      "title": "Look for Relationships"
+    },
+    {
+      "id": 678,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 680,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 682,
+      "level": 1,
+      "title": "Solve Equations Involving Perfect Squares"
+    },
+    {
+      "id": 697,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 710,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 712,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 714,
+      "level": 1,
+      "title": "Solve Equations Involving Imperfect Squares and Cubes"
+    },
+    {
+      "id": 727,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 734,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 740,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 745,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 772,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 773,
+      "level": 1,
+      "title": "The Traverses are adding a new room to their house. The room will be a cube with a volume of 6,859 cubic feet. They are going to put in hardwood floors, which costs $10 per square foot. How much w..."
+    },
+    {
+      "id": 774,
+      "level": 1,
+      "title": "While packing for their cross-country move, the Chen family uses a crate that has the shape of a cube. 8.EE.1.2"
+    },
+    {
+      "id": 775,
+      "level": 1,
+      "title": "PART A"
+    },
+    {
+      "id": 776,
+      "level": 1,
+      "title": "If the crate has the volume [EQ] cubic feet, what is the length of one edge?"
+    },
+    {
+      "id": 777,
+      "level": 1,
+      "title": "PART B"
+    },
+    {
+      "id": 778,
+      "level": 1,
+      "title": "The Chens want to pack a large, framed painting. If the framed painting has the shape of a square with an area of 12 square feet, will the painting fit flat against a side of the crate? Explain."
+    },
+    {
+      "id": 789,
+      "level": 1,
+      "title": "How well did you do on the mid-topic checkpoint? Fill in the stars."
+    },
+    {
+      "id": 791,
+      "level": 1,
+      "title": "MID-TOPIC PERFORMANCE TASK"
+    },
+    {
+      "id": 792,
+      "level": 1,
+      "title": "Six members of the math club are forming two teams for a contest. The teams will be determined by having each student draw a number from a box."
+    },
+    {
+      "id": 793,
+      "level": 1,
+      "title": "PART A 8.NS.1.1"
+    },
+    {
+      "id": 794,
+      "level": 1,
+      "title": "The table shows the results of the draw. The students who drew rational numbers will form the team called the Tigers. The students who drew irrational numbers will form the team called the Lions."
+    },
+    {
+      "id": 795,
+      "level": 1,
+      "title": "List the members of each team."
+    },
+    {
+      "id": 796,
+      "level": 1,
+      "title": "Student"
+    },
+    {
+      "id": 797,
+      "level": 1,
+      "title": "Number Drawn"
+    },
+    {
+      "id": 798,
+      "level": 1,
+      "title": "Lydia"
+    },
+    {
+      "id": 799,
+      "level": 1,
+      "title": "√38"
+    },
+    {
+      "id": 800,
+      "level": 1,
+      "title": "Marcy"
+    },
+    {
+      "id": 801,
+      "level": 1,
+      "title": "6.34"
+    },
+    {
+      "id": 802,
+      "level": 1,
+      "title": "Caleb"
+    },
+    {
+      "id": 803,
+      "level": 1,
+      "title": "√36"
+    },
+    {
+      "id": 804,
+      "level": 1,
+      "title": "PART B 8.NS.1.2"
+    },
+    {
+      "id": 805,
+      "level": 1,
+      "title": "The student on each team who drew the greatest number will be the captain of that team. Who will be the captain of the Tigers? Show your work."
+    },
+    {
+      "id": 806,
+      "level": 1,
+      "title": "PART C 8.NS.1.2"
+    },
+    {
+      "id": 807,
+      "level": 1,
+      "title": "Who will be the captain of the Lions? Show your work."
+    },
+    {
+      "id": 808,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 816,
+      "level": 1,
+      "title": "Lesson 1-6"
+    },
+    {
+      "id": 817,
+      "level": 1,
+      "title": "Use Properties of Integer"
+    },
+    {
+      "id": 818,
+      "level": 1,
+      "title": "Exponents"
+    },
+    {
+      "id": 822,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 827,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 829,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 831,
+      "level": 1,
+      "title": "Multiply Exponential Expressions: Same Base"
+    },
+    {
+      "id": 843,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 845,
+      "level": 1,
+      "title": "Convince Me! Explain why the Product of Powers Property makes mathematical sense."
+    },
+    {
+      "id": 846,
+      "level": 1,
+      "title": "Find the volume in cubic inches of a cube with edge length of 2 feet."
+    },
+    {
+      "id": 854,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 856,
+      "level": 1,
+      "title": "Find the Power of a Power"
+    },
+    {
+      "id": 862,
+      "level": 1,
+      "title": "EXAMPLE 4"
+    },
+    {
+      "id": 863,
+      "level": 1,
+      "title": "Divide Exponential Expressions: Same Base"
+    },
+    {
+      "id": 874,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 880,
+      "level": 1,
+      "title": "Use these properties when simplifying expressions with exponents (when [EQ] , and [EQ] )."
+    },
+    {
+      "id": 882,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 886,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 893,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 926,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 943,
+      "level": 1,
+      "title": "Explore It!"
+    },
+    {
+      "id": 948,
+      "level": 1,
+      "title": "Lesson 1-7"
+    },
+    {
+      "id": 949,
+      "level": 1,
+      "title": "More Properties of Integer Exponents"
+    },
+    {
+      "id": 953,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 957,
+      "level": 1,
+      "title": "A. What representation can you use to show the relationship between the set number and the number of sit-ups?"
+    },
+    {
+      "id": 958,
+      "level": 1,
+      "title": "B. What conclusion can you make about the relationship between the number of sit-ups in each set?"
+    },
+    {
+      "id": 960,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 961,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 963,
+      "level": 1,
+      "title": "The Zero Exponent Property"
+    },
+    {
+      "id": 985,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 992,
+      "level": 1,
+      "title": "Convince Me! Why is [EQ]"
+    },
+    {
+      "id": 1001,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1007,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 1009,
+      "level": 1,
+      "title": "Expressions with Negative Exponents"
+    },
+    {
+      "id": 1017,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1021,
+      "level": 1,
+      "title": "Use these additional properties when simplifying or generating equivalent expressions with exponents (when [EQ] and [EQ] )."
+    },
+    {
+      "id": 1026,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 1030,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 1037,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 1083,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 1097,
+      "level": 1,
+      "title": "Explain It!"
+    },
+    {
+      "id": 1101,
+      "level": 1,
+      "title": "Lesson 1-8"
+    },
+    {
+      "id": 1102,
+      "level": 1,
+      "title": "Use Powers of 10 to Estimate Quantities"
+    },
+    {
+      "id": 1108,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 1113,
+      "level": 1,
+      "title": "74920000000000000000"
+    },
+    {
+      "id": 1114,
+      "level": 1,
+      "title": "A. How might Jeff have determined his estimate? How might Keegan have determined his estimate?"
+    },
+    {
+      "id": 1115,
+      "level": 1,
+      "title": "B. Whose estimate, Jeff's or Keegan's, is more logical? Explain."
+    },
+    {
+      "id": 1117,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 1118,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 1120,
+      "level": 1,
+      "title": "Estimate Very Large Quantities"
+    },
+    {
+      "id": 1141,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1153,
+      "level": 1,
+      "title": "Matthias used a laser to measure the average thickness of a human hair. A sheet of paper is about 0.0013 meter thick. How do the two thicknesses compare?"
+    },
+    {
+      "id": 1164,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 1166,
+      "level": 1,
+      "title": "Find How Many Times as Much"
+    },
+    {
+      "id": 1177,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1180,
+      "level": 1,
+      "title": "You can estimate a very large or very small number by rounding the number to its greatest place value, and then writing that number as a single digit times a power of 10."
+    },
+    {
+      "id": 1182,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 1186,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 1192,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 1219,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 1230,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 1236,
+      "level": 1,
+      "title": "Lesson 1-9"
+    },
+    {
+      "id": 1237,
+      "level": 1,
+      "title": "Understand"
+    },
+    {
+      "id": 1238,
+      "level": 1,
+      "title": "Scientific Notation"
+    },
+    {
+      "id": 1242,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 1248,
+      "level": 1,
+      "title": "Use Structure How can you use your knowledge of powers of 10 to rewrite the number?"
+    },
+    {
+      "id": 1249,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 1251,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 1253,
+      "level": 1,
+      "title": "Write Large Numbers in Scientific Notation"
+    },
+    {
+      "id": 1270,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1273,
+      "level": 1,
+      "title": "Convince Me! Why do very large numbers have positive exponents when written in scientific notation? Explain."
+    },
+    {
+      "id": 1274,
+      "level": 1,
+      "title": "EXAMPLE 2"
+    },
+    {
+      "id": 1276,
+      "level": 1,
+      "title": "Write Small Numbers in Scientific Notation"
+    },
+    {
+      "id": 1288,
+      "level": 1,
+      "title": "The width of the red blood cell, expressed in scientific notation, is [EQ] meter."
+    },
+    {
+      "id": 1291,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1293,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 1295,
+      "level": 1,
+      "title": "Convert Scientific Notation to Standard Form"
+    },
+    {
+      "id": 1304,
+      "level": 1,
+      "title": "Use Appropriate Tools Certain calculators may display scientific notation using the symbol EE or E. The number that follows is the power of 10."
+    },
+    {
+      "id": 1306,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1310,
+      "level": 1,
+      "title": "Scientific notation is a way to write very large numbers or very small numbers. Scientists use scientific notation as a more efficient and convenient way of writing such numbers."
+    },
+    {
+      "id": 1314,
+      "level": 1,
+      "title": "To write a number in scientific notation in standard form, multiply the decimal number by the power of 10."
+    },
+    {
+      "id": 1315,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 1325,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 1326,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 1349,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 1364,
+      "level": 1,
+      "title": "3- ACT MATH"
+    },
+    {
+      "id": 1365,
+      "level": 1,
+      "title": "ACT1"
+    },
+    {
+      "id": 1366,
+      "level": 1,
+      "title": "1. After watching the video, what is the first question that comes to mind?"
+    },
+    {
+      "id": 1367,
+      "level": 1,
+      "title": "2. Write the Main Question you will answer."
+    },
+    {
+      "id": 1368,
+      "level": 1,
+      "title": "3. Construct Arguments Predict an answer to this Main Question. Explain your prediction."
+    },
+    {
+      "id": 1369,
+      "level": 1,
+      "title": "4. On the number line below, write a number that is too small to be the answer. Write a number that is too large."
+    },
+    {
+      "id": 1370,
+      "level": 1,
+      "title": "5. Plot your prediction on the same number line."
+    },
+    {
+      "id": 1373,
+      "level": 1,
+      "title": "3-Act Mathematical Modeling: Hard-Working Organs"
+    },
+    {
+      "id": 1374,
+      "level": 1,
+      "title": "Go Online | PearsonRealize.com"
+    },
+    {
+      "id": 1377,
+      "level": 1,
+      "title": "MAFS.K12.MP.4.1 Model with mathematics. Also MP.1.1, MP.3.1, MP.5.1"
+    },
+    {
+      "id": 1378,
+      "level": 1,
+      "title": "MAFS.8.EE.1.1 Know and apply the properties of integer exponents to generate equivalent numerical expressions. Also 8.EE.1.3"
+    },
+    {
+      "id": 1380,
+      "level": 1,
+      "title": "6. What information in this situation would be helpful to know? How would you use that information?"
+    },
+    {
+      "id": 1381,
+      "level": 1,
+      "title": "7. Use Appropriate Tools What tools can you use to get the information you need? Record the information as you find it."
+    },
+    {
+      "id": 1382,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1383,
+      "level": 1,
+      "title": "8. Model with Math Represent the situation using the mathematical content, concepts, and skills from this topic. Use your representation to answer the Main Question."
+    },
+    {
+      "id": 1384,
+      "level": 1,
+      "title": "9. What is your answer to the Main Question? Is it greater or less than your prediction? Explain why."
+    },
+    {
+      "id": 1385,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1386,
+      "level": 1,
+      "title": "ACT3"
+    },
+    {
+      "id": 1387,
+      "level": 1,
+      "title": "10. Write the answer you saw in the video."
+    },
+    {
+      "id": 1388,
+      "level": 1,
+      "title": "11. Reasoning Does your answer match the answer in the video? If not, what are some reasons that would explain the difference?"
+    },
+    {
+      "id": 1389,
+      "level": 1,
+      "title": "12. Make Sense and Persevere Would you change your model now that you know the answer? Explain."
+    },
+    {
+      "id": 1390,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1391,
+      "level": 1,
+      "title": "Reflect"
+    },
+    {
+      "id": 1392,
+      "level": 1,
+      "title": "13. Model with Math Explain how you used a mathematical model to represent the situation. How did the model help you answer the Main Question?"
+    },
+    {
+      "id": 1393,
+      "level": 1,
+      "title": "14. Generalize What pattern did you notice in your calculations? How did that pattern help you solve the problem?"
+    },
+    {
+      "id": 1394,
+      "level": 1,
+      "title": "SEQUEL"
+    },
+    {
+      "id": 1395,
+      "level": 1,
+      "title": "15. Use Structure How many times does a heart beat in a lifetime? Use your solution to the Main Question to help you solve."
+    },
+    {
+      "id": 1396,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1398,
+      "level": 1,
+      "title": "Solve & Discuss It!"
+    },
+    {
+      "id": 1404,
+      "level": 1,
+      "title": "Lesson 1-10"
+    },
+    {
+      "id": 1405,
+      "level": 1,
+      "title": "Operations with"
+    },
+    {
+      "id": 1406,
+      "level": 1,
+      "title": "Numbers in"
+    },
+    {
+      "id": 1407,
+      "level": 1,
+      "title": "Scientific Notation"
+    },
+    {
+      "id": 1411,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 1415,
+      "level": 1,
+      "title": "Focus on math practices"
+    },
+    {
+      "id": 1418,
+      "level": 1,
+      "title": "EXAMPLE 1"
+    },
+    {
+      "id": 1420,
+      "level": 1,
+      "title": "Add or Subtract Numbers in Scientific Notation"
+    },
+    {
+      "id": 1436,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1440,
+      "level": 1,
+      "title": "Convince Me! In Example 1 and the Try It, why did you move the decimal point to get the final answer?"
+    },
+    {
+      "id": 1441,
+      "level": 1,
+      "title": "EXAMPLE 2"
+    },
+    {
+      "id": 1443,
+      "level": 1,
+      "title": "Multiply Numbers in Scientific Notation"
+    },
+    {
+      "id": 1455,
+      "level": 1,
+      "title": "The length of the main part of the bridge is approximately [EQ] feet."
+    },
+    {
+      "id": 1457,
+      "level": 1,
+      "title": "EXAMPLE 3"
+    },
+    {
+      "id": 1459,
+      "level": 1,
+      "title": "Divide Numbers in Scientific Notation"
+    },
+    {
+      "id": 1471,
+      "level": 1,
+      "title": "The queen ant lays about [EQ] eggs per day."
+    },
+    {
+      "id": 1473,
+      "level": 1,
+      "title": "Try It!"
+    },
+    {
+      "id": 1475,
+      "level": 1,
+      "title": "Operations with very large or very small numbers can be carried out more efficiently using scientific notation. The properties of exponents apply when carrying out operations."
+    },
+    {
+      "id": 1476,
+      "level": 1,
+      "title": "Addition or Subtraction"
+    },
+    {
+      "id": 1477,
+      "level": 1,
+      "title": "Multiplication"
+    },
+    {
+      "id": 1478,
+      "level": 1,
+      "title": "Division"
+    },
+    {
+      "id": 1483,
+      "level": 1,
+      "title": "Do You Understand?"
+    },
+    {
+      "id": 1487,
+      "level": 1,
+      "title": "Do You Know How?"
+    },
+    {
+      "id": 1494,
+      "level": 1,
+      "title": "Practice & Problem Solving"
+    },
+    {
+      "id": 1516,
+      "level": 1,
+      "title": "16. The greatest distance between the Sun and Jupiter is about [EQ] kilometers. The greatest distance between the Sun and Saturn is about [EQ] kilometers. What is the difference between these two dist..."
+    },
+    {
+      "id": 1517,
+      "level": 1,
+      "title": "18. Higher Order Thinking"
+    },
+    {
+      "id": 1518,
+      "level": 1,
+      "title": "a. What is the value of [EQ] in the equation [EQ] ?"
+    },
+    {
+      "id": 1519,
+      "level": 1,
+      "title": "b. Explain why the exponent on the left side of the equation is not equal to the sum of the exponents on the right side."
+    },
+    {
+      "id": 1520,
+      "level": 1,
+      "title": "Assessment Practice"
+    },
+    {
+      "id": 1521,
+      "level": 1,
+      "title": "19. Find [EQ] . When you regroup the factors, what do you notice about the quotient of the decimal factors? How does this affect the exponent of the quotient? 8.EE.1.4"
+    },
+    {
+      "id": 1522,
+      "level": 1,
+      "title": "20. Which expression has the least value? 8.EE.1.4"
+    },
+    {
+      "id": 1527,
+      "level": 1,
+      "title": "Topic Essential Questions"
+    },
+    {
+      "id": 1528,
+      "level": 1,
+      "title": "What are real numbers? How are real numbers used to solve problems?"
+    },
+    {
+      "id": 1530,
+      "level": 1,
+      "title": "Vocabulary Review"
+    },
+    {
+      "id": 1531,
+      "level": 1,
+      "title": "Draw lines to connect each vocabulary word with its definition."
+    },
+    {
+      "id": 1532,
+      "level": 1,
+      "title": "Vocabulary Word"
+    },
+    {
+      "id": 1533,
+      "level": 1,
+      "title": "1. cube root"
+    },
+    {
+      "id": 1534,
+      "level": 1,
+      "title": "2. irrational number"
+    },
+    {
+      "id": 1535,
+      "level": 1,
+      "title": "3. Product of Powers Property"
+    },
+    {
+      "id": 1536,
+      "level": 1,
+      "title": "4. perfect cube"
+    },
+    {
+      "id": 1537,
+      "level": 1,
+      "title": "5. perfect square"
+    },
+    {
+      "id": 1538,
+      "level": 1,
+      "title": "6. Power of Powers Property"
+    },
+    {
+      "id": 1539,
+      "level": 1,
+      "title": "7. Powers of Products Property"
+    },
+    {
+      "id": 1540,
+      "level": 1,
+      "title": "8. scientific notation"
+    },
+    {
+      "id": 1541,
+      "level": 1,
+      "title": "9. square root"
+    },
+    {
+      "id": 1542,
+      "level": 1,
+      "title": "Definition"
+    },
+    {
+      "id": 1543,
+      "level": 1,
+      "title": "a number that cannot be written in the form [EQ] , where [EQ] and [EQ] are integers and [EQ]"
+    },
+    {
+      "id": 1544,
+      "level": 1,
+      "title": "a way to express a number as the product of two factors, one greater than or equal to 1 and less than 10, and the other a power of 10"
+    },
+    {
+      "id": 1545,
+      "level": 1,
+      "title": "a number that when multiplied by itself equals the original number"
+    },
+    {
+      "id": 1546,
+      "level": 1,
+      "title": "the cube of an integer"
+    },
+    {
+      "id": 1547,
+      "level": 1,
+      "title": "a number whose cube equals the original number"
+    },
+    {
+      "id": 1548,
+      "level": 1,
+      "title": "To multiply two powers with the same base, keep the common base and add the exponents."
+    },
+    {
+      "id": 1549,
+      "level": 1,
+      "title": "To multiply two powers with the same exponent and different bases, multiply the bases and keep the exponent."
+    },
+    {
+      "id": 1550,
+      "level": 1,
+      "title": "a number that is the square of an integer"
+    },
+    {
+      "id": 1551,
+      "level": 1,
+      "title": "When you have an exponent raised to a power, keep the base and multiply the exponents."
+    },
+    {
+      "id": 1552,
+      "level": 1,
+      "title": "Use Vocabulary in Writing"
+    },
+    {
+      "id": 1553,
+      "level": 1,
+      "title": "Use vocabulary words to explain how to find the length of each side of a square garden with an area of 196 square inches."
+    },
+    {
+      "id": 1554,
+      "level": 1,
+      "title": "Concepts and Skills Review"
+    },
+    {
+      "id": 1555,
+      "level": 1,
+      "title": "LESSON 1-1 Rational Numbers as Decimals"
+    },
+    {
+      "id": 1556,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1557,
+      "level": 1,
+      "title": "You can write repeating decimals in fraction form by writing two equations. You multiply each side of one equation by a power of 10. Then you subtract the equations to eliminate the repeating decimal."
+    },
+    {
+      "id": 1558,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1559,
+      "level": 1,
+      "title": "Write 1.0505... as a mixed number."
+    },
+    {
+      "id": 1561,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1562,
+      "level": 1,
+      "title": "Write each number as a fraction or a mixed number."
+    },
+    {
+      "id": 1563,
+      "level": 1,
+      "title": "1.0.7"
+    },
+    {
+      "id": 1564,
+      "level": 1,
+      "title": "2.0.04"
+    },
+    {
+      "id": 1565,
+      "level": 1,
+      "title": "3.4.45"
+    },
+    {
+      "id": 1566,
+      "level": 1,
+      "title": "4.2.191919..."
+    },
+    {
+      "id": 1567,
+      "level": 1,
+      "title": "LESSON 1-2 Understand Irrational Numbers"
+    },
+    {
+      "id": 1568,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1569,
+      "level": 1,
+      "title": "An irrational number is a number that cannot be written in the form [EQ] , where [EQ] and [EQ] are integers and [EQ] . Rational and irrational numbers together make up the real number system."
+    },
+    {
+      "id": 1570,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1571,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1572,
+      "level": 1,
+      "title": "Classify [EQ] as rational or irrational."
+    },
+    {
+      "id": 1573,
+      "level": 1,
+      "title": "The number [EQ] is irrational because 50 is not the square of any integer."
+    },
+    {
+      "id": 1574,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1575,
+      "level": 1,
+      "title": "1. Determine which numbers are irrational. Select all that apply."
+    },
+    {
+      "id": 1576,
+      "level": 1,
+      "title": "√36"
+    },
+    {
+      "id": 1577,
+      "level": 1,
+      "title": "23"
+    },
+    {
+      "id": 1578,
+      "level": 1,
+      "title": "-4.232323..."
+    },
+    {
+      "id": 1579,
+      "level": 1,
+      "title": "0.151551555..."
+    },
+    {
+      "id": 1580,
+      "level": 1,
+      "title": "0.35"
+    },
+    {
+      "id": 1581,
+      "level": 1,
+      "title": "□π"
+    },
+    {
+      "id": 1582,
+      "level": 1,
+      "title": "2. Classify [EQ] as rational or irrational. Explain."
+    },
+    {
+      "id": 1583,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1584,
+      "level": 1,
+      "title": "To compare and order real numbers, it helps to first write each number in decimal form."
+    },
+    {
+      "id": 1585,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1586,
+      "level": 1,
+      "title": "Compare and order the following numbers. Locate each number on a number line."
+    },
+    {
+      "id": 1587,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1588,
+      "level": 1,
+      "title": "Write each number in decimal form."
+    },
+    {
+      "id": 1589,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1590,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1591,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1592,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1593,
+      "level": 1,
+      "title": "1. Between which two whole numbers does [EQ] lie?"
+    },
+    {
+      "id": 1594,
+      "level": 1,
+      "title": "√89 is between and"
+    },
+    {
+      "id": 1595,
+      "level": 1,
+      "title": "2. Compare and order the following numbers. Locate each number on a number line."
+    },
+    {
+      "id": 1596,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1597,
+      "level": 1,
+      "title": "LESSON 1-4 Evaluate Square Roots and Cube Roots"
+    },
+    {
+      "id": 1598,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1599,
+      "level": 1,
+      "title": "Remember that a perfect square is the square of an integer. A square root of a number is a number that when multiplied by itself is equal to the original number. Similarly, a perfect cube is the cube ..."
+    },
+    {
+      "id": 1600,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1601,
+      "level": 1,
+      "title": "A monument has a cube shape with a volume of 729 cubic meters. What is the length of each edge of the monument?"
+    },
+    {
+      "id": 1602,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1603,
+      "level": 1,
+      "title": "So, the length of each edge is 9 meters."
+    },
+    {
+      "id": 1604,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1605,
+      "level": 1,
+      "title": "Classify each number as a perfect square, a perfect cube, both, or neither."
+    },
+    {
+      "id": 1606,
+      "level": 1,
+      "title": "1.27"
+    },
+    {
+      "id": 1607,
+      "level": 1,
+      "title": "2.100"
+    },
+    {
+      "id": 1608,
+      "level": 1,
+      "title": "3.64"
+    },
+    {
+      "id": 1609,
+      "level": 1,
+      "title": "4.24"
+    },
+    {
+      "id": 1610,
+      "level": 1,
+      "title": "5. A gift box is a cube with a volume of 512 cubic inches. What is the length of each edge of the box?"
+    },
+    {
+      "id": 1611,
+      "level": 1,
+      "title": "LESSON 1-5 Solve Equations Using Square Roots and Cube Roots"
+    },
+    {
+      "id": 1612,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1613,
+      "level": 1,
+      "title": "You can use square roots to solve equations involving squares. You can use cube roots to solve equations involving cubes. Equations with square roots often have two solutions. Look at the context to s..."
+    },
+    {
+      "id": 1614,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1615,
+      "level": 1,
+      "title": "Mattie wants to build a square deck to make a kiddie play area of 144 square feet. What will be the length of each side of the deck?"
+    },
+    {
+      "id": 1616,
+      "level": 1,
+      "title": "Use the formula [EQ] to find each side length."
+    },
+    {
+      "id": 1617,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1618,
+      "level": 1,
+      "title": "Length cannot be negative, so the length of each side of the deck will be 12 feet."
+    },
+    {
+      "id": 1619,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1620,
+      "level": 1,
+      "title": "Solve for [EQ] ."
+    },
+    {
+      "id": 1621,
+      "level": 1,
+      "title": "1. [EQ]"
+    },
+    {
+      "id": 1622,
+      "level": 1,
+      "title": "2. [EQ]"
+    },
+    {
+      "id": 1623,
+      "level": 1,
+      "title": "3. [EQ]"
+    },
+    {
+      "id": 1624,
+      "level": 1,
+      "title": "4. [EQ]"
+    },
+    {
+      "id": 1625,
+      "level": 1,
+      "title": "5. A container has a cube shape. It has a volume of 216 cubic inches. What are the dimensions of one face of the container?"
+    },
+    {
+      "id": 1626,
+      "level": 1,
+      "title": "LESSON 1-6 Use Properties of Integer Exponents"
+    },
+    {
+      "id": 1627,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1628,
+      "level": 1,
+      "title": "These properties can help you write equivalent expressions that contain exponents."
+    },
+    {
+      "id": 1629,
+      "level": 1,
+      "title": "Product of Powers Property"
+    },
+    {
+      "id": 1630,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1631,
+      "level": 1,
+      "title": "Power of Powers Property"
+    },
+    {
+      "id": 1632,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1633,
+      "level": 1,
+      "title": "Power of Products Property"
+    },
+    {
+      "id": 1634,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1635,
+      "level": 1,
+      "title": "Quotient of Powers Property"
+    },
+    {
+      "id": 1636,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1637,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1638,
+      "level": 1,
+      "title": "Write an equivalent expression for [EQ]"
+    },
+    {
+      "id": 1639,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1640,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1641,
+      "level": 1,
+      "title": "Use the properties of exponents to write an equivalent expression for each given expression."
+    },
+    {
+      "id": 1642,
+      "level": 1,
+      "title": "1. [EQ]"
+    },
+    {
+      "id": 1643,
+      "level": 1,
+      "title": "2. [EQ]"
+    },
+    {
+      "id": 1644,
+      "level": 1,
+      "title": "3. [EQ]"
+    },
+    {
+      "id": 1645,
+      "level": 1,
+      "title": "4. [EQ]"
+    },
+    {
+      "id": 1646,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1647,
+      "level": 1,
+      "title": "The Zero Exponent Property states that any nonzero number raised to the power of 0 is equal to 1. The Negative Exponent Property states that for any nonzero rational number [EQ] and integer [EQ] , [EQ..."
+    },
+    {
+      "id": 1648,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1649,
+      "level": 1,
+      "title": "Evaluate the expression for [EQ] and [EQ] ."
+    },
+    {
+      "id": 1650,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1651,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1652,
+      "level": 1,
+      "title": "Write each expression using positive exponents."
+    },
+    {
+      "id": 1653,
+      "level": 1,
+      "title": "1. [EQ]"
+    },
+    {
+      "id": 1654,
+      "level": 1,
+      "title": "2. [EQ]"
+    },
+    {
+      "id": 1655,
+      "level": 1,
+      "title": "Evaluate each expression for [EQ] and [EQ] ."
+    },
+    {
+      "id": 1656,
+      "level": 1,
+      "title": "3. [EQ]"
+    },
+    {
+      "id": 1657,
+      "level": 1,
+      "title": "4. [EQ]"
+    },
+    {
+      "id": 1658,
+      "level": 1,
+      "title": "LESSON 1-8 Use Powers of 10 to Estimate Quantities"
+    },
+    {
+      "id": 1659,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1660,
+      "level": 1,
+      "title": "You can estimate very large and very small quantities by writing the number as a single digit times a power of 10."
+    },
+    {
+      "id": 1661,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1662,
+      "level": 1,
+      "title": "Keisha is about 1,823,933 minutes old. Write this age as a single digit times a power of 10."
+    },
+    {
+      "id": 1663,
+      "level": 1,
+      "title": "First round to the greatest place value. 1,823,933 is about 2,000,000."
+    },
+    {
+      "id": 1664,
+      "level": 1,
+      "title": "Write the rounded number as a single digit times a power of 10."
+    },
+    {
+      "id": 1665,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1666,
+      "level": 1,
+      "title": "Keisha is about [EQ] minutes old."
+    },
+    {
+      "id": 1667,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1668,
+      "level": 1,
+      "title": "1. In the year 2013 the population of California was about 38,332,521 people. Write the estimated population as a single digit times a power of 10."
+    },
+    {
+      "id": 1669,
+      "level": 1,
+      "title": "2. The wavelength of green light is about 0.00000051 meter. What is this estimated wavelength as a single digit times a power of 10?"
+    },
+    {
+      "id": 1670,
+      "level": 1,
+      "title": "3. The land area of Connecticut is about 12,549,000,000 square meters. The land area of Rhode Island is about 2,707,000,000 square meters. How many times greater is the land area of Connecticut than t..."
+    },
+    {
+      "id": 1671,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1672,
+      "level": 1,
+      "title": "A number in scientific notation is written as a product of two factors, one greater than or equal to 1 and less than 10, and the other a power of 10."
+    },
+    {
+      "id": 1673,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1674,
+      "level": 1,
+      "title": "Write 65,700,000 in scientific notation."
+    },
+    {
+      "id": 1675,
+      "level": 1,
+      "title": "First, place the decimal point to the right of the first nonzero digit."
+    },
+    {
+      "id": 1676,
+      "level": 1,
+      "title": "Then, count the number of digits to the right of the decimal point to determine the power of 10. 65,700,000 in scientific notation is [EQ] ."
+    },
+    {
+      "id": 1677,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1678,
+      "level": 1,
+      "title": "1. Write 803,000,000 in scientific notation."
+    },
+    {
+      "id": 1679,
+      "level": 1,
+      "title": "2. Write 0.0000000068 in scientific notation."
+    },
+    {
+      "id": 1680,
+      "level": 1,
+      "title": "3. Write [EQ] in standard form."
+    },
+    {
+      "id": 1681,
+      "level": 1,
+      "title": "4. The radius of a hydrogen atom is 0.000000000025 meter. How would you express this radius in scientific notation?"
+    },
+    {
+      "id": 1682,
+      "level": 1,
+      "title": "LESSON 1-10 Operations with Numbers in Scientific Notation"
+    },
+    {
+      "id": 1683,
+      "level": 1,
+      "title": "Quick Review"
+    },
+    {
+      "id": 1684,
+      "level": 1,
+      "title": "When multiplying and dividing numbers in scientific notation, multiply or divide the first factors. Then multiply or divide the powers of 10. When adding and subtracting numbers in scientific notation..."
+    },
+    {
+      "id": 1685,
+      "level": 1,
+      "title": "If the decimal part of the result is not greater than or equal to 1 and less than 10, move the decimal point and adjust the exponent."
+    },
+    {
+      "id": 1686,
+      "level": 1,
+      "title": "Example"
+    },
+    {
+      "id": 1687,
+      "level": 1,
+      "title": "Multiply [EQ] ."
+    },
+    {
+      "id": 1688,
+      "level": 1,
+      "title": "[Equation]"
+    },
+    {
+      "id": 1689,
+      "level": 1,
+      "title": "Practice"
+    },
+    {
+      "id": 1690,
+      "level": 1,
+      "title": "Perform each operation. Express your answers in scientific notation."
+    },
+    {
+      "id": 1691,
+      "level": 1,
+      "title": "1. [EQ]"
+    },
+    {
+      "id": 1692,
+      "level": 1,
+      "title": "2. [EQ]"
+    },
+    {
+      "id": 1693,
+      "level": 1,
+      "title": "3. [EQ]"
+    },
+    {
+      "id": 1694,
+      "level": 1,
+      "title": "4. The population of Town A is [EQ] people. The population of Town B is [EQ] people. How many times greater is the population of Town A than the population of Town B?"
+    },
+    {
+      "id": 1695,
+      "level": 1,
+      "title": "Crisscrossed"
+    },
+    {
+      "id": 1696,
+      "level": 1,
+      "title": "Fluency Practice"
+    },
+    {
+      "id": 1697,
+      "level": 1,
+      "title": "Solve each equation. Write your answers in the cross-number puzzle below. Each digit, negative sign, and decimal point of your answer goes in its own box."
+    },
+    {
+      "id": 1698,
+      "level": 1,
+      "title": "I can..."
+    },
+    {
+      "id": 1699,
+      "level": 1,
+      "title": "solve one-step equations, including those involving square roots and cube roots. 8.EE.3.7b"
+    },
+    {
+      "id": 1700,
+      "level": 1,
+      "title": "[Image]"
+    },
+    {
+      "id": 1701,
+      "level": 1,
+      "title": "Across"
+    },
+    {
+      "id": 1702,
+      "level": 1,
+      "title": "A [EQ]"
+    },
+    {
+      "id": 1703,
+      "level": 1,
+      "title": "B [EQ]"
+    },
+    {
+      "id": 1704,
+      "level": 1,
+      "title": "C [EQ]"
+    },
+    {
+      "id": 1705,
+      "level": 1,
+      "title": "D [EQ]"
+    },
+    {
+      "id": 1706,
+      "level": 1,
+      "title": "F [EQ]"
+    },
+    {
+      "id": 1707,
+      "level": 1,
+      "title": "J [EQ]"
+    },
+    {
+      "id": 1708,
+      "level": 1,
+      "title": "L [EQ]"
+    },
+    {
+      "id": 1709,
+      "level": 1,
+      "title": "M [EQ]"
+    },
+    {
+      "id": 1710,
+      "level": 1,
+      "title": "[EQ]"
+    },
+    {
+      "id": 1711,
+      "level": 1,
+      "title": "[EQ]"
+    },
+    {
+      "id": 1712,
+      "level": 1,
+      "title": "T [EQ]"
+    },
+    {
+      "id": 1713,
+      "level": 1,
+      "title": "V [EQ]"
+    },
+    {
+      "id": 1714,
+      "level": 1,
+      "title": "Down"
+    },
+    {
+      "id": 1715,
+      "level": 1,
+      "title": "A [EQ]"
+    },
+    {
+      "id": 1716,
+      "level": 1,
+      "title": "B [EQ]"
+    },
+    {
+      "id": 1717,
+      "level": 1,
+      "title": "C [EQ]"
+    },
+    {
+      "id": 1718,
+      "level": 1,
+      "title": "D [EQ]"
+    },
+    {
+      "id": 1719,
+      "level": 1,
+      "title": "E [EQ]"
+    },
+    {
+      "id": 1720,
+      "level": 1,
+      "title": "F [EQ]"
+    },
+    {
+      "id": 1721,
+      "level": 1,
+      "title": "G [EQ]"
+    },
+    {
+      "id": 1722,
+      "level": 1,
+      "title": "H [EQ]"
+    },
+    {
+      "id": 1723,
+      "level": 1,
+      "title": "K [EQ]"
+    },
+    {
+      "id": 1724,
+      "level": 1,
+      "title": "P [EQ]"
+    },
+    {
+      "id": 1725,
+      "level": 1,
+      "title": "R [EQ]"
+    },
+    {
+      "id": 1726,
+      "level": 1,
+      "title": "S [EQ]"
+    }
+  ]
+}

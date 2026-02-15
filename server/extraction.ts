@@ -164,18 +164,19 @@ export async function extractQuestions(
           const parser = new QuestionParser(chunk.blocks, imagesFolder, logDir);
           const questions = parser.parseWithFallback(llmOutput, chunk.index);
 
-          // Sanity Check: 检测 LLM 注意力衰减
-          // 修复：使用比例检测而非固定阈值，避免误报
-          // 建议阈值：题目数量 / block 数量 < 0.02 (即每 50 个 block 至少应有一个题目)
-          if (chunk.blocks.length > 40 && (questions.length / chunk.blocks.length < 0.02)) {
-             // 进一步检查：是不是真的只有文本很少？
-             // 简单策略：只要 blocks 多但产出少，就怀疑有问题。
-             // 除非这是最后一次重试，否则我们应该重试。
-             if (retries < maxRetries) {
-                throw new Error(`Sanity Check Failed: Input has ${chunk.blocks.length} blocks but only ${questions.length} questions extracted (Ratio: ${(questions.length / chunk.blocks.length).toFixed(3)}). Suspected LLM attention decay.`);
-             } else {
-                console.warn(`Chunk ${chunk.index}: Sanity check failed but reached max retries. Accepting result.`);
-             }
+          const sanityCfg = getSanityConfig();
+          const numRe = new RegExp(sanityCfg.patterns.numericLabels);
+          const exRe = new RegExp(sanityCfg.patterns.exampleLabels);
+          const hasNumericLabels = chunk.blocks.some(b => numRe.test(b.text ?? ''));
+          const hasExampleLabels = chunk.blocks.some(b => exRe.test(b.text ?? ''));
+          if (questions.length === 0 && (hasNumericLabels || hasExampleLabels)) {
+            if (retries < maxRetries) {
+              throw new Error(`Sanity Check Failed: Visible question labels but zero output`);
+            }
+          } else if (chunk.blocks.length > sanityCfg.minBlocks && (questions.length / chunk.blocks.length < sanityCfg.minRatio) && !hasNumericLabels) {
+            if (retries < maxRetries) {
+              throw new Error(`Sanity Check Failed: Low ratio ${questions.length}/${chunk.blocks.length}`);
+            }
           }
           
           chunkResults[index] = questions;
@@ -244,28 +245,27 @@ export async function extractQuestions(
     }
   }
 
-  // 5.5. 章节标题处理
-  let cleanedQuestions: ExtractedQuestion[];
-  if (chapterFlatMap && chapterFlatMap.length > 0) {
-    // 使用预处理的章节目录树覆盖 LLM 自行判断的章节标题
-    console.log(`[Extraction] 使用章节预处理结果覆盖章节标题 (${chapterFlatMap.length} 个章节条目)`);
-    for (const q of uniqueQuestions) {
-      // 通过 questionIds 的第一个 ID 查找所属章节
-      if (q.questionIds) {
-        const firstId = parseInt(q.questionIds.split(',')[0].trim(), 10);
-        if (!isNaN(firstId)) {
-          const chapterPath = findChapterForBlock(firstId, chapterFlatMap);
-          if (chapterPath) {
-            q.chapter_title = chapterPath;
-          }
-        }
+  // 5.5. 章节标题处理（融合策略）
+  for (const q of uniqueQuestions) {
+    const llmTitle = q.chapter_title;
+    let preTitle: string | null = null;
+    if (chapterFlatMap && chapterFlatMap.length > 0 && q.questionIds) {
+      const firstId = parseInt(q.questionIds.split(',')[0].trim(), 10);
+      if (!isNaN(firstId)) {
+        const chapterPath = findChapterForBlock(firstId, chapterFlatMap);
+        if (chapterPath) preTitle = chapterPath;
       }
     }
-    cleanedQuestions = uniqueQuestions;
-  } else {
-    // 回退：使用原有的章节标题清洗逻辑
-    cleanedQuestions = cleanChapterTitles(uniqueQuestions);
+    if (llmTitle && llmTitle.trim().length > 0 && isTitleValid(llmTitle)) {
+      q.chapter_title = llmTitle;
+    } else if (preTitle) {
+      q.chapter_title = preTitle;
+    } else {
+      q.chapter_title = '';
+    }
   }
+
+  const cleanedQuestions: ExtractedQuestion[] = cleanChapterTitles(uniqueQuestions);
   
   // 6. 质量过滤
   const filteredQuestions = filterLowQuality(cleanedQuestions);
@@ -323,6 +323,50 @@ function splitIntoChunks(
   return chunks;
 }
 
+function readJsonConfig<T>(p: string, fallback: T): T {
+  try {
+    if (fs.existsSync(p)) {
+      const s = fs.readFileSync(p, 'utf-8');
+      const v = JSON.parse(s);
+      return v as T;
+    }
+  } catch {}
+  return fallback;
+}
+
+type SanityConfig = { minBlocks: number; minRatio: number; patterns: { numericLabels: string; exampleLabels: string } };
+function getSanityConfig(): SanityConfig {
+  const cfgPath = path.join(process.cwd(), 'config', 'sanity_check.json');
+  const envMinBlocks = Number(process.env.SANITY_MIN_BLOCKS ?? 40);
+  const envMinRatio = Number(process.env.SANITY_MIN_RATIO ?? 0.02);
+  const fallback: SanityConfig = {
+    minBlocks: envMinBlocks,
+    minRatio: envMinRatio,
+    patterns: { numericLabels: "^\\s*\\d+[.．、]", exampleLabels: "例\\d" }
+  };
+  return readJsonConfig<SanityConfig>(cfgPath, fallback);
+}
+
+type TitleValidationConfig = { enabled: boolean; noisePatterns: string[]; structuralPatterns?: string[] };
+function getTitleValidationConfig(): TitleValidationConfig {
+  const cfgPath = path.join(process.cwd(), 'config', 'title_validation.json');
+  const fallback: TitleValidationConfig = { enabled: true, noisePatterns: [] };
+  return readJsonConfig<TitleValidationConfig>(cfgPath, fallback);
+}
+
+function isTitleValid(title: string | undefined): boolean {
+  if (!title) return false;
+  const cfg = getTitleValidationConfig();
+  if (!cfg.enabled) return true;
+  const t = title.trim();
+  if (!t) return false;
+  if (cfg.noisePatterns && cfg.noisePatterns.some(k => t.includes(k))) return false;
+  if (cfg.structuralPatterns && cfg.structuralPatterns.length > 0) {
+    const ok = cfg.structuralPatterns.some(p => new RegExp(p).test(t));
+    if (ok) return true;
+  }
+  return true;
+}
 /**
  * 调用 LLM 提取题目
  */
@@ -574,7 +618,27 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
  * 3. 黑名单过滤：过滤无效标题
  */
 export function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQuestion[] {
-  const titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式", "基础训练", "拓展训练"];
+  let titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式", "基础训练", "拓展训练"];
+  try {
+    const cfgPath = path.join(process.cwd(), 'config', 'noise_titles.json');
+    if (fs.existsSync(cfgPath)) {
+      const content = fs.readFileSync(cfgPath, 'utf-8');
+      const arr = JSON.parse(content);
+      if (Array.isArray(arr) && arr.every(x => typeof x === 'string')) {
+        titleBlacklist = arr;
+      }
+    }
+  } catch {}
+  try {
+    const tvPath = path.join(process.cwd(), 'config', 'title_validation.json');
+    if (fs.existsSync(tvPath)) {
+      const content = fs.readFileSync(tvPath, 'utf-8');
+      const obj = JSON.parse(content);
+      if (obj && Array.isArray(obj.noisePatterns) && obj.noisePatterns.every((x: any) => typeof x === 'string')) {
+        titleBlacklist = obj.noisePatterns;
+      }
+    }
+  } catch {}
   
   // 1. 第一遍：题号连续性检测 (P1 #3)
   // 如果题号连续 (如 10->11) 但章节标题变化，且新标题可能是噪声（在黑名单中），则回退到上一个有效标题

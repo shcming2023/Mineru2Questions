@@ -1,0 +1,46 @@
+<chapter><title>413</title>
+<qa_pair><label>2</label><type>exercise</type><question>350</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>351</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>353</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>354</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>355,356</question>
+<solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>365</question>
+<solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>366</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>367,368</question>
+<solution></solution></qa_pair>
+<qa_pair><label>10</label><type>exercise</type><question>369,370</question>
+<solution></solution></qa_pair>
+<qa_pair><label>11</label><type>exercise</type><question>371,372,373,374</question>
+<solution></solution></qa_pair>
+<qa_pair><label>12</label><type>exercise</type><question>375</question>
+<solution></solution></qa_pair>
+<qa_pair><label>13</label><type>exercise</type><question>376</question>
+<solution></solution></qa_pair>
+<qa_pair><label>14</label><type>exercise</type><question>377</question>
+<solution></solution></qa_pair>
+<qa_pair><label>15</label><type>exercise</type><question>378,379</question>
+<solution></solution></qa_pair>
+<qa_pair><label>16</label><type>exercise</type><question>380</question>
+<solution></solution></qa_pair>
+<qa_pair><label>17</label><type>exercise</type><question>381,382</question>
+<solution></solution></qa_pair>
+<qa_pair><label>18</label><type>exercise</type><question>384,385,386,387,388,389,390,391,392,393</question>
+<solution></solution></qa_pair>
+<qa_pair><label>19</label><type>exercise</type><question>394,395,396,397,398,399,400,401,402</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 1</label><type>example</type><question>427,428,429,431,432,433,434,435,436,437,438,439,440,441</question>
+<solution>442,443,444,445</solution></qa_pair>
+<qa_pair><label>Try It!</label><type>exercise</type><question>442,443,444</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Convince Me!</label><type>exercise</type><question>445</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Compare</label><type>exercise</type><question>446,447,448,449</question>
+<solution></solution></qa_pair>
+</chapter>
