@@ -399,15 +399,13 @@ async function callChapterLLM(prompt: string, config: ChapterLLMConfig): Promise
  * 此函数尝试通过查找最后一个闭合的大括号或中括号来修复 JSON。
  */
 function tryRepairJSON(raw: string): any {
-  // 1. 尝试直接解析
-  try {
-    return JSON.parse(raw);
-  } catch (e) {
-    // Continue to repair
-  }
-
-  // 2. 提取潜在的 JSON 部分 (从第一个 { 开始)
-  let jsonString = raw.trim();
+  try { return JSON.parse(raw); } catch {}
+  let repaired = raw.trim();
+  repaired = repaired.replace(/("level"\s*:\s*),/g, '$1 1,');
+  repaired = repaired.replace(/,(\s*[}\]])/g, '$1');
+  repaired = repaired.replace(/,\s*,+/g, ',');
+  try { return JSON.parse(repaired); } catch {}
+  let jsonString = repaired;
   const firstBrace = jsonString.indexOf('{');
   if (firstBrace === -1) throw new Error('No JSON object found');
   jsonString = jsonString.substring(firstBrace);
@@ -415,7 +413,7 @@ function tryRepairJSON(raw: string): any {
   // 3. 尝试简单的修复 (补全末尾的 })
   try { return JSON.parse(jsonString + '}'); } catch {}
   try { return JSON.parse(jsonString + ']}'); } catch {}
-  try { return JSON.parse(jsonString + '"]}}'); } catch {} // 补全字符串+数组+对象
+  try { return JSON.parse(jsonString + '"]}}'); } catch {}
 
   // 4. 倒序查找有效的闭合点
   // 假设结构是 {"directory": [ ... ]}，我们尝试在每一个 '}' 处截断并补全 ']}'
@@ -649,6 +647,17 @@ function validateChapterEntries(entries: DirectoryEntry[], blocks: FlatBlock[]):
     if (typeof entry.level !== 'number' || entry.level < 1 || entry.level > 4) {
       return { ok: false, error: `Invalid level ${entry.level}` };
     }
+  }
+  const totalBlocks = blocks.length;
+  const totalEntries = entries.length;
+  const level1Count = entries.filter(e => e.level === 1).length;
+  const maxLevel1Ratio = Number(process.env.CHAPTER_VALIDATION_MAX_LEVEL1_RATIO ?? 0.5);
+  const maxEntriesRatio = Number(process.env.CHAPTER_VALIDATION_MAX_ENTRIES_RATIO ?? 0.25);
+  if (totalEntries > 20 && level1Count / totalEntries > maxLevel1Ratio) {
+    return { ok: false, error: `Abnormally high percentage of level-1 entries (${level1Count}/${totalEntries})` };
+  }
+  if (totalBlocks > 100 && totalEntries / totalBlocks > maxEntriesRatio) {
+    return { ok: false, error: `Too many chapter entries (${totalEntries}) relative to total blocks (${totalBlocks})` };
   }
   return { ok: true };
 }

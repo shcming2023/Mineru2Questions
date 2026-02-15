@@ -7,8 +7,8 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>17863</title>
-<qa_pair><label>WORKED EXAMPLE 21</label><type>example</type><question>17864,17865,17866</question>
-<solution>17868,17869,17870</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 21</label><type>example</type><question>17864,17865,17866,17870</question>
+<solution>17868,17869</solution></qa_pair>
 </chapter>
 <chapter><title>17871</title>
 <qa_pair><label>WORKED EXAMPLE 22</label><type>example</type><question>17872,17873</question>

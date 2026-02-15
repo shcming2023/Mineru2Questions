@@ -21,9 +21,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>18</label><type>exercise</type><question>652,653,654,655,656</question>
 <solution></solution></qa_pair>
-<qa_pair><label>662</label><type>exercise</type><question>662,663,664</question>
-<solution></solution></qa_pair>
-<qa_pair><label>679</label><type>exercise</type><question>679</question>
+<qa_pair><label>ACTIVITY</label><type>exercise</type><question>662,663,664</question>
 <solution></solution></qa_pair>
 <qa_pair><label>EXAMPLE 1</label><type>example</type><question>680,681,682,684,685,686,687,688,689,690,691,692,693,694</question>
 <solution>695,696</solution></qa_pair>
@@ -31,7 +29,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>Convince Me!</label><type>exercise</type><question>702</question>
 <solution></solution></qa_pair>
-<qa_pair><label>703</label><type>exercise</type><question>703,704,705,706,707,708,709</question>
+<qa_pair><label>EXAMPLE 2</label><type>example</type><question>703,704,705,706,707,708,709</question>
 <solution></solution></qa_pair>
 <qa_pair><label>Try It!</label><type>exercise</type><question>710,711</question>
 <solution></solution></qa_pair>

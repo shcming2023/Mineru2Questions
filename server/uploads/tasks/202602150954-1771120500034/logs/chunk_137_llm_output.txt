@@ -19,8 +19,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>10</label><type>exercise</type><question>9665,9666</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>9669</title>
-<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>9674,9675,9676,9677,9678,9679</question>
+<qa_pair><label>13</label><type>example</type><question>9674,9675,9676,9677,9678,9679</question>
 <solution>9681,9682,9683,9684,9685,9686,9687,9688,9689</solution></qa_pair>
 </chapter>

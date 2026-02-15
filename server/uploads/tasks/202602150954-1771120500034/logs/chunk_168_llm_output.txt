@@ -8,6 +8,22 @@
 <qa_pair><label>4</label><type>exercise</type><question>11800</question>
 <solution></solution></qa_pair>
 </chapter>
+<chapter><title>11820</title>
+<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>11821,11822,11823</question>
+<solution>11824,11825,11826</solution></qa_pair>
+</chapter>
+<chapter><title>11829</title>
+<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>11830,11831</question>
+<solution>11832,11833,11834,11835</solution></qa_pair>
+</chapter>
+<chapter><title>11836</title>
+<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>11837</question>
+<solution>11838,11839</solution></qa_pair>
+</chapter>
+<chapter><title>11840</title>
+<qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>11841,11842,11843</question>
+<solution>11844,11845,11846,11847,11848,11849,11850</solution></qa_pair>
+</chapter>
 <chapter><title>11851</title>
 <qa_pair><label>1</label><type>exercise</type><question>11852,11853</question>
 <solution></solution></qa_pair>
@@ -15,16 +31,4 @@
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>11858,11859</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title></title>
-<qa_pair><label>WORKED EXAMPLE 11</label><type>example</type><question>11767,11768,11769,11770</question>
-<solution>11771,11772,11773,11774,11775,11776,11777,11778,11779</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>11820,11821,11822,11823</question>
-<solution>11824,11825,11826</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>11829,11830,11831</question>
-<solution>11832,11833,11834,11835</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>11836,11837</question>
-<solution>11838,11839</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>11840,11841,11842,11843</question>
-<solution>11844,11845,11846,11847,11848,11849,11850</solution></qa_pair>
 </chapter>

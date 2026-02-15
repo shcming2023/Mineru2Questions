@@ -256,10 +256,14 @@ export async function extractQuestions(
         if (chapterPath) preTitle = chapterPath;
       }
     }
-    if (llmTitle && llmTitle.trim().length > 0 && isTitleValid(llmTitle)) {
-      q.chapter_title = llmTitle;
-    } else if (preTitle) {
-      q.chapter_title = preTitle;
+    const llmIsValid = llmTitle && llmTitle.trim().length > 0 && isTitleValid(llmTitle);
+    const preIsValid = preTitle && isTitleValid(preTitle);
+    if (llmIsValid && preIsValid) {
+      q.chapter_title = (llmTitle as string).length >= (preTitle as string).length ? (llmTitle as string) : (preTitle as string);
+    } else if (llmIsValid) {
+      q.chapter_title = llmTitle as string;
+    } else if (preIsValid) {
+      q.chapter_title = preTitle as string;
     } else {
       q.chapter_title = '';
     }
@@ -723,25 +727,17 @@ function parseLabelToNumber(label: string): number {
  */
 function refineTitle(title: string): string {
   if (!title) return "";
-  
-  // 1. 去除空白字符
-  let newTitle = title.replace(/\s+/g, '');
-  
-  // 2. 优先提取阿拉伯数字编号 (如 "19.2", "1")
-  const arabicMatch = newTitle.match(/(\d+(\.\d+)*)/);
-  if (arabicMatch) {
-    return arabicMatch[0];
+  const trimmed = title.trim();
+  const aggressive = process.env.TITLE_REFINEMENT_AGGRESSIVE === '1';
+  if (aggressive) {
+    let newTitle = trimmed.replace(/\s+/g, '');
+    const arabicMatch = newTitle.match(/(\d+(\.\d+)*)/);
+    if (arabicMatch) return arabicMatch[0];
+    const chineseMatch = newTitle.match(/[一二三四五六七八九十百零]+/);
+    if (chineseMatch) return chineseMatch[0];
+    return newTitle;
   }
-  
-  // 3. 其次提取中文数字编号 (如 "第一章", "二")
-  // 注意：官方正则 r'[一二...]+' 会提取 "第一章" 中的 "一"，这里保持一致但稍微放宽以包含常见单位
-  const chineseMatch = newTitle.match(/[一二三四五六七八九十百零]+/);
-  if (chineseMatch) {
-    return chineseMatch[0];
-  }
-  
-  // 4. 如果都无法提取，返回去空后的标题
-  return newTitle;
+  return trimmed.replace(/\s+/g, ' ');
 }
 
 // ============= 任务控制存根 (兼容 routers.ts) =============

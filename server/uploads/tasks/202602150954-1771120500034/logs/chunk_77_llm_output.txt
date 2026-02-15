@@ -37,7 +37,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>5j</label><type>exercise</type><question>5448,5458</question>
 <solution></solution></qa_pair>
-<qa_pair><label>6</label><type>exercise</type><question>5460,5461,5462</question>
+<qa_pair><label>6a</label><type>exercise</type><question>5460,5461</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6b</label><type>exercise</type><question>5460,5462</question>
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>5463</question>
 <solution></solution></qa_pair>

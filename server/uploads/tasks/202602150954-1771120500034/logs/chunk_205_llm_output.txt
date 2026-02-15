@@ -50,8 +50,7 @@
 <qa_pair><label>5e</label><type>exercise</type><question>14430</question><solution></solution></qa_pair>
 <qa_pair><label>5f</label><type>exercise</type><question>14431</question><solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>14432</question><solution></solution></qa_pair>
-<qa_pair><label>7</label><type>exercise</type><question>14436,14437,14438,14439</question><solution></solution></qa_pair>
-</chapter>
-<chapter><title>14445</title>
-<qa_pair><label>21</label><type>example</type><question>14448,14449</question><solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>14436,14437</question><solution></solution></qa_pair>
+<qa_pair><label>7a</label><type>exercise</type><question>14438</question><solution></solution></qa_pair>
+<qa_pair><label>7b</label><type>exercise</type><question>14439</question><solution></solution></qa_pair>
 </chapter>

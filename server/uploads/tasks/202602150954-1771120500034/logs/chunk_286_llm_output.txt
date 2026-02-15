@@ -19,14 +19,14 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>20022</title>
-<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>20023,20024,20025</question>
+<qa_pair><label>8</label><type>example</type><question>20023,20024,20025</question>
 <solution>20027,20028,20029,20030,20031</solution></qa_pair>
 </chapter>
 <chapter><title>20039</title>
-<qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>20040</question>
+<qa_pair><label>9</label><type>example</type><question>20040</question>
 <solution>20042,20043,20044,20045,20046,20047,20048</solution></qa_pair>
 </chapter>
 <chapter><title>20057</title>
-<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>20058</question>
+<qa_pair><label>10</label><type>example</type><question>20058</question>
 <solution>20060,20061,20062,20063,20064,20065,20066</solution></qa_pair>
 </chapter>

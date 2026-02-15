@@ -1,9 +1,9 @@
 <chapter><title>2870</title>
 <qa_pair><label>2</label><type>exercise</type><question>2870,2871,2872,2873,2874</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 19</label><type>example</type><question>2894,2895</question>
+<qa_pair><label>19</label><type>example</type><question>2894,2895</question>
 <solution>2896,2897,2898,2899,2900,2901,2902,2903,2904,2905</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 20</label><type>example</type><question>2907,2908</question>
+<qa_pair><label>20</label><type>example</type><question>2907,2908</question>
 <solution>2909,2910,2911,2912,2913,2914</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>2916,2917,2918</question>
 <solution></solution></qa_pair>

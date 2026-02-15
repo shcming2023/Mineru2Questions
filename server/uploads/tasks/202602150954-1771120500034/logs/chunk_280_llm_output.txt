@@ -47,12 +47,12 @@
 <solution></solution></qa_pair>
 <qa_pair><label>iii</label><type>exercise</type><question>19675</question>
 <solution></solution></qa_pair>
-<qa_pair><label></label><type>exercise</type><question>19683,19684,19685,19686</question>
+<qa_pair><label>Monday's</label><type>exercise</type><question>19683,19684,19685,19686</question>
 <solution></solution></qa_pair>
-<qa_pair><label></label><type>exercise</type><question>19687,19688,19689,19690</question>
+<qa_pair><label>Tuesday's</label><type>exercise</type><question>19687,19688,19689,19690</question>
 <solution></solution></qa_pair>
-<qa_pair><label></label><type>exercise</type><question>19691,19692,19693,19694</question>
+<qa_pair><label>Wednesday's</label><type>exercise</type><question>19691,19692,19693,19694</question>
 <solution></solution></qa_pair>
-<qa_pair><label></label><type>exercise</type><question>19695,19696,19697,19698,19699</question>
+<qa_pair><label>Thursday's</label><type>exercise</type><question>19695,19696,19697,19698</question>
 <solution></solution></qa_pair>
 </chapter>

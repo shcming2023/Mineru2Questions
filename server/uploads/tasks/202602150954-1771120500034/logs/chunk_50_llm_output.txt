@@ -3,7 +3,7 @@
 <solution>3512,3513,3514,3515,3516,3517,3518,3519,3520,3521,3522,3523,3524,3525,3526,3527,3528</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>3532,3533,3534</question>
 <solution>3535,3536,3537,3538,3539,3540,3541,3542</solution></qa_pair>
-<qa_pair><label>Exercise 3.5</label><type>exercise</type><question>3546</question>
+<qa_pair><label>Exercise 3.5</label><type>exercise</type><question>3545,3546</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1a</label><type>exercise</type><question>3547,3548</question>
 <solution></solution></qa_pair>
@@ -11,7 +11,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>1C</label><type>exercise</type><question>3551,3552</question>
 <solution></solution></qa_pair>
-<qa_pair><label>2a</label><type>exercise</type><question>3554,3555</question>
+<qa_pair><label>2a</label><type>exercise</type><question>3553,3554,3555</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2b</label><type>exercise</type><question>3556,3557</question>
 <solution></solution></qa_pair>

@@ -1,5 +1,5 @@
 <chapter><title>1068</title>
-<qa_pair><label>10</label><type>example</type><question>1069,1070,1071</question>
+<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>1069,1070,1071</question>
 <solution>1072,1073,1074,1075,1076,1077,1078,1079</solution></qa_pair>
 </chapter>
 <chapter><title>1080</title>

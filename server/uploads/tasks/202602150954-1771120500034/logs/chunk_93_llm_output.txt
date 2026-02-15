@@ -1,7 +1,7 @@
 <chapter><title>6524</title>
 <qa_pair><label>1</label><type>exercise</type><question>6525,6526,6527,6528,6529,6530,6531,6532</question>
 <solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>6533,6534,6535,6536,6541,6542</question>
+<qa_pair><label>2</label><type>exercise</type><question>6533,6534,6535,6536</question>
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>6543,6544,6545</question>
 <solution></solution></qa_pair>

@@ -21,13 +21,11 @@
 <solution></solution></qa_pair>
 <qa_pair><label>7b</label><type>exercise</type><question>19063</question>
 <solution></solution></qa_pair>
-<qa_pair><label>7c</label><type>exercise</type><question>19064</question>
+<qa_pair><label>7c</label><type>exercise</type><question>19064,19065</question>
 <solution></solution></qa_pair>
-<qa_pair><label>7ci</label><type>exercise</type><question>19065</question>
+<qa_pair><label>7d</label><type>exercise</type><question>19074</question>
 <solution></solution></qa_pair>
-<qa_pair><label>7cii</label><type>exercise</type><question>19074</question>
-<solution></solution></qa_pair>
-<qa_pair><label>7d</label><type>exercise</type><question>19075</question>
+<qa_pair><label>7e</label><type>exercise</type><question>19075</question>
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>19077,19078,19079,19080,19081,19082,19083,19084,19085,19086,19087</question>
 <solution></solution></qa_pair>

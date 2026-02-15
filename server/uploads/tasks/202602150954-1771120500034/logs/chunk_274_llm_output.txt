@@ -1,13 +1,9 @@
 <chapter><title>19180</title>
 <qa_pair><label>3</label><type>example</type><question>19181,19182,19183,19184,19185,19186,19187,19188,19189,19190,19191,19192,19193,19194,19195,19196,19197,19198,19199</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>19200</title>
-<qa_pair><label>4</label><type>example</type><question>19201,19202,19203,19204,19205,19206,19207,19208</question>
+<qa_pair><label>4</label><type>example</type><question>19200,19201,19202,19203,19204,19205,19206,19207,19208</question>
 <solution>19209,19210,19211,19212,19213,19214,19215,19216,19217,19218,19219,19220</solution></qa_pair>
-</chapter>
-<chapter><title>19221</title>
-<qa_pair><label>5</label><type>example</type><question>19222,19223,19224,19225,19226</question>
+<qa_pair><label>5</label><type>example</type><question>19221,19222,19223,19224,19225,19226</question>
 <solution>19227,19228,19229,19230,19231,19232,19233,19234,19235,19236,19237</solution></qa_pair>
 </chapter>
 <chapter><title>19242</title>

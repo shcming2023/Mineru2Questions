@@ -9,7 +9,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>6479</question>
 <solution></solution></qa_pair>
-<qa_pair><label>3</label><type>exercise</type><question>6480,6481,6482,6483</question>
+<qa_pair><label>3</label><type>exercise</type><question>6480,6481</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>6482,6483</question>
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>6484,6485</question>
 <solution></solution></qa_pair>

@@ -53,20 +53,12 @@
 <solution></solution></qa_pair>
 <qa_pair><label>24</label><type>exercise</type><question>923</question>
 <solution></solution></qa_pair>
-<qa_pair><label>25</label><type>exercise</type><question>924</question>
+<qa_pair><label>25</label><type>exercise</type><question>924,925</question>
 <solution></solution></qa_pair>
 <qa_pair><label>26</label><type>exercise</type><question>927,928,929,930,931,932,933</question>
 <solution></solution></qa_pair>
 <qa_pair><label>27A</label><type>exercise</type><question>934,935,936</question>
 <solution></solution></qa_pair>
 <qa_pair><label>27B</label><type>exercise</type><question>937,938,939</question>
-<solution></solution></qa_pair>
-</chapter>
-<chapter><title>854</title>
-<qa_pair><label>EXAMPLE 3</label><type>example</type><question>854,855,856,857,858,859</question>
-<solution></solution></qa_pair>
-</chapter>
-<chapter><title>861</title>
-<qa_pair><label>EXAMPLE 4</label><type>example</type><question>861,862,863,864,865,866,867,868,869,870,871,872,873</question>
 <solution></solution></qa_pair>
 </chapter>

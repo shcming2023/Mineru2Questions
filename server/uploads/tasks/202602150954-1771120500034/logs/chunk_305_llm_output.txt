@@ -18,7 +18,7 @@
 <qa_pair><label>9</label><type>exercise</type><question>21424</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>21444</title>
-<qa_pair><label>17</label><type>example</type><question>21445</question>
+<chapter><title>21425</title>
+<qa_pair><label>17</label><type>example</type><question>21444,21445</question>
 <solution>21446,21447,21448,21449</solution></qa_pair>
 </chapter>

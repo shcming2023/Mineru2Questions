@@ -7,7 +7,9 @@
 <solution>14479,14480,14481,14482,14483,14484,14485</solution></qa_pair>
 <qa_pair><label>21</label><type>example</type><question>14486</question>
 <solution>14487,14488,14489,14490,14491,14492,14493,14494,14495,14496,14497</solution></qa_pair>
-<qa_pair><label>14.10</label><type>exercise</type><question>14498,14499,14500</question>
+<qa_pair><label>22</label><type>example</type><question>14516,14517</question>
+<solution>14518,14519</solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>14498,14499,14500</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>14501</question>
 <solution></solution></qa_pair>
@@ -37,6 +39,4 @@
 <solution></solution></qa_pair>
 <qa_pair><label>15</label><type>exercise</type><question>14514</question>
 <solution></solution></qa_pair>
-<qa_pair><label>22</label><type>example</type><question>14516,14517</question>
-<solution>14518,14519</solution></qa_pair>
 </chapter>

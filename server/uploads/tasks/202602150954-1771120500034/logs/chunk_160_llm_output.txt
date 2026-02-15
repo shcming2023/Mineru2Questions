@@ -1,11 +1,9 @@
 <chapter><title>11200</title>
 <qa_pair><label>17</label><type>example</type><question>11201,11202,11203,11204,11205</question>
-<solution>11207,11208,11209,11210,11211,11212,11213,11214,11215,11216,11217,11218,11219,11220,11221,11222,11223,11224,11225,11226,11227</solution></qa_pair>
-<qa_pair><label>17 CONTINUED</label><type>example</type><question>11229,11230,11231,11232,11233,11234,11235,11236,11237,11238,11239</question>
-<solution></solution></qa_pair>
+<solution>11207,11208,11209,11210,11211,11212,11213,11214,11215,11216,11217,11218,11219,11220,11221,11222,11223,11224,11225,11226,11227,11229,11230,11231,11232,11233,11234,11235,11236,11237,11238,11239</solution></qa_pair>
 <qa_pair><label>18</label><type>example</type><question>11241,11242</question>
 <solution>11243,11244,11245,11246,11247,11248,11249,11250,11251,11252,11253,11254</solution></qa_pair>
-<qa_pair><label>1</label><type>exercise</type><question>11256</question>
+<qa_pair><label>1</label><type>exercise</type><question>11255,11256</question>
 <solution></solution></qa_pair>
 <qa_pair><label>a</label><type>exercise</type><question>11257</question>
 <solution></solution></qa_pair>

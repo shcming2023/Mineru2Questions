@@ -59,8 +59,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>5</label><type>exercise</type><question>5540</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1</label><type>exercise</type><question>5551,5552,5553,5554,5555,5556,5557,5558</question>
+<qa_pair><label>1</label><type>exercise</type><question>5551,5552,5553,5554,5555,5556</question>
 <solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>5559</question>
+<qa_pair><label>2</label><type>exercise</type><question>5557,5558,5559</question>
 <solution></solution></qa_pair>
 </chapter>

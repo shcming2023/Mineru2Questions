@@ -11,6 +11,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>6443</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>6467</title>
 <qa_pair><label>1</label><type>exercise</type><question>6468,6469</question>
 <solution></solution></qa_pair>
 </chapter>

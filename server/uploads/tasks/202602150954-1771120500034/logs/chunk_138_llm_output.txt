@@ -16,5 +16,5 @@
 <qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>9723,9724,9725,9726,9727</question>
 <solution>9728,9729,9730,9731,9732,9733,9734,9735,9736,9737,9738,9739,9740,9741,9742,9743</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 16</label><type>example</type><question>9746,9747,9748</question>
-<solution>9749,9750,9751,9752,9753,9754,9757,9758,9759</solution></qa_pair>
+<solution>9749,9750,9751,9752,9753,9754,9755,9756,9757,9758,9759</solution></qa_pair>
 </chapter>

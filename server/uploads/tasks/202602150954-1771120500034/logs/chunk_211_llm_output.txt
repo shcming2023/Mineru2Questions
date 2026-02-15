@@ -25,4 +25,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>14867,14868,14869</question>
 <solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 1</label><type>example</type><question>14829,14830</question>
+<solution>14831,14832,14833,14834,14835</solution></qa_pair>
 </chapter>

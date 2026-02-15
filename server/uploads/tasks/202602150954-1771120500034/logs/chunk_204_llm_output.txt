@@ -37,12 +37,10 @@
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>14329,14330</question>
 <solution></solution></qa_pair>
-<qa_pair><label>19</label><type>example</type><question>14346,14347,14348</question>
-<solution>14351,14352,14353,14354,14355</solution></qa_pair>
-<qa_pair><label>19</label><type>example</type><question>14358,14359</question>
-<solution>14360,14361,14362</solution></qa_pair>
-<qa_pair><label>19</label><type>example</type><question>14363</question>
-<solution>14364,14365</solution></qa_pair>
-<qa_pair><label>20</label><type>example</type><question>14366,14367,14368</question>
+<qa_pair><label>例18</label><type>example</type><question>14287,14288,14289,14290</question>
+<solution>14291,14292,14293,14294,14295,14296,14297,14298,14299,14300,14301,14302,14303,14304,14305,14306,14307</solution></qa_pair>
+<qa_pair><label>例19</label><type>example</type><question>14346,14347,14348,14349,14350</question>
+<solution>14351,14352,14353,14354,14355,14358,14359,14360,14361,14362,14363,14364,14365</solution></qa_pair>
+<qa_pair><label>例20</label><type>example</type><question>14366,14367,14368</question>
 <solution>14369,14370,14371</solution></qa_pair>
 </chapter>

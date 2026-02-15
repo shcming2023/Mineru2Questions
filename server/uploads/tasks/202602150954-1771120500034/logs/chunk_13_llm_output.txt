@@ -1,3 +1,7 @@
+<chapter><title>918</title>
+<qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>919,920,921</question>
+<solution>923,924,925,926,927,928,929,930,931,932</solution></qa_pair>
+</chapter>
 <chapter><title>933</title>
 <qa_pair><label>1</label><type>exercise</type><question>935,936,937,938,939,940,941,942,943,944,945</question>
 <solution></solution></qa_pair>
@@ -11,8 +15,4 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>1006,1007,1008,1009</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>918</title>
-<qa_pair><label>9</label><type>example</type><question>919,920,921</question>
-<solution>922,923,924,925,926,927,928,929,930,931,932</solution></qa_pair>
 </chapter>

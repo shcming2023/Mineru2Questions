@@ -21,8 +21,6 @@
 <solution>21033,21034,21035,21036,21037,21038</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>21039,21040</question>
 <solution>21041,21042,21043,21044,21045,21046,21047</solution></qa_pair>
-<qa_pair><label>Exercise 22.4</label><type>exercise</type><question>21056</question>
-<solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>21057</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1a</label><type>exercise</type><question>21058</question>

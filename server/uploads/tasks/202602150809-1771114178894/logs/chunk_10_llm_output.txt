@@ -1,29 +1,3 @@
-<chapter><title>712</title>
-<qa_pair><label>EXAMPLE 3</label><type>example</type><question>712,713,714,715,716,717,718,719,720,721,722,723,724,725,726</question>
-<solution></solution></qa_pair>
-</chapter>
-<chapter><title>727</title>
-<qa_pair><label>a</label><type>exercise</type><question>728</question>
-<solution></solution></qa_pair>
-<qa_pair><label>b</label><type>exercise</type><question>729</question>
-<solution></solution></qa_pair>
-</chapter>
-<chapter><title>734</title>
-<qa_pair><label>1</label><type>exercise</type><question>735</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>736</question>
-<solution></solution></qa_pair>
-<qa_pair><label>3</label><type>exercise</type><question>737,738,739</question>
-<solution></solution></qa_pair>
-</chapter>
-<chapter><title>740</title>
-<qa_pair><label>5</label><type>exercise</type><question>741</question>
-<solution></solution></qa_pair>
-<qa_pair><label>6</label><type>exercise</type><question>742,743</question>
-<solution></solution></qa_pair>
-<qa_pair><label>7</label><type>exercise</type><question>744</question>
-<solution></solution></qa_pair>
-</chapter>
 <chapter><title>745</title>
 <qa_pair><label>8</label><type>exercise</type><question>750,751,752</question>
 <solution></solution></qa_pair>
@@ -53,14 +27,10 @@
 <solution></solution></qa_pair>
 <qa_pair><label>21</label><type>exercise</type><question>769,770,771</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>772</title>
 <qa_pair><label>22</label><type>exercise</type><question>773</question>
 <solution></solution></qa_pair>
 <qa_pair><label>23</label><type>exercise</type><question>774,775,776,777,778</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>779</title>
 <qa_pair><label>1</label><type>exercise</type><question>779</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>780,781,782,783,784</question>
@@ -73,8 +43,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>788</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>791</title>
-<qa_pair><label>PART A</label><type>exercise</type><question>792,793,794,795,796,797,798,799</question>
+<qa_pair><label>791</label><type>exercise</type><question>791,792,793,794,795,796,797,798,799</question>
 <solution></solution></qa_pair>
 </chapter>

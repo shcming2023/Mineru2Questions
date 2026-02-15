@@ -23,7 +23,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>18649,18652</question>
 <solution></solution></qa_pair>
-<qa_pair><label>18653</label><type>exercise</type><question>18653,18654</question>
+<qa_pair><label></label><type>exercise</type><question>18653,18654</question>
 <solution></solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>18662,18663,18666</question>
 <solution>18664,18665</solution></qa_pair>

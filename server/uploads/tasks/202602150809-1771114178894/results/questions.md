@@ -1,10 +1,10 @@
 # 提取的题目
 
-**总数**: 389
+**总数**: 380
 
 ---
 
-## ReviewWhatYouKnow!
+## Review What You Know!
 
 ### 1 (练习题)
 
@@ -41,6 +41,62 @@
 **题目**: 6. -0.222222...
 
 ---
+
+## Go Online
+
+### EXAMPLE 1 (例题)
+
+**题目**: EXAMPLE 1
+![image](images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
+Write Repeating Decimals as Fractions
+Scan for Multimedia
+![image](images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
+The Sluggers baseball team ended the season with the highest win percentage in their division. What is the Slugger's winning percentage written as a fraction?
+Statistics are often rounded. Here, the decimal 0.555... or 0.5 is rounded to the thousandths place.
+![image](images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
+Locate 0.555... on a number line.
+The decimal number 0.555... is between 0.5 and 0.6; so it is between  $\frac{1}{2}$ , or  $\frac{5}{10}$ , and  $\frac{6}{10}$ .
+![image](images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
+Reasoning How do you know that the repeating decimal 0.555... can be written as a fraction?
+Write the repeating decimal as a fraction.
+Assign a variable to represent the repeating decimal.
+Let  $x = 0.5$
+$$
+1 0 \cdot x = 1 0 \cdot 0. \overline {{5}}
+$$
+$$
+1 0 x = 5. \overline {{5}}
+$$
+$$
+1 0 x - x = 5. \overline {{5}} - 0. \overline {{5}}
+$$
+$$
+9 x = 5
+$$
+$$
+\frac {9 x}{9} = \frac {5}{9}
+$$
+$$
+x = \frac {5}{9}
+$$
+The Sluggers won  $\frac{5}{9}$  of their games.
+Because 0.5 has 1 repeating digit, multiply each side of the equation by  $10^{1}$ , or 10.
+Subtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x = 0.5$ , you can subtract  $x$  from one side and 0.5 from the other side.
+![image](images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
+
+![图片](../images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
+
+![图片](../images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
+
+![图片](../images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
+
+![图片](../images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
+
+![图片](../images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
+
+---
+
+## Review What You Know!
 
 ### 7 (练习题)
 
@@ -138,63 +194,17 @@
 
 ---
 
-## GoOnline
+### 134 (练习题)
 
-### EXAMPLE 1 (例题)
+**题目**: Jaylon has a wrench labeled 0.1875 inch and bolts labeled in fractions of an inch. Which size bolt will fit best with the wrench? Explain.
+![image](images/e470b90fda68577eea7cba68644ea1ce8d8115055ca40c521fdfc424d049844e.jpg)
+Reasoning How can you write these numbers in the same form?
 
-**题目**: EXAMPLE 1
-![image](images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
-Write Repeating Decimals as Fractions
-Scan for Multimedia
-![image](images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
-The Sluggers baseball team ended the season with the highest win percentage in their division. What is the Slugger's winning percentage written as a fraction?
-Statistics are often rounded. Here, the decimal 0.555... or 0.5 is rounded to the thousandths place.
-![image](images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
-Locate 0.555... on a number line.
-The decimal number 0.555... is between 0.5 and 0.6; so it is between  $\frac{1}{2}$ , or  $\frac{5}{10}$ , and  $\frac{6}{10}$ .
-![image](images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
-Reasoning How do you know that the repeating decimal 0.555... can be written as a fraction?
-Write the repeating decimal as a fraction.
-Assign a variable to represent the repeating decimal.
-Let  $x = 0.5$
-$$
-1 0 \cdot x = 1 0 \cdot 0. \overline {{5}}
-$$
-$$
-1 0 x = 5. \overline {{5}}
-$$
-$$
-1 0 x - x = 5. \overline {{5}} - 0. \overline {{5}}
-$$
-$$
-9 x = 5
-$$
-$$
-\frac {9 x}{9} = \frac {5}{9}
-$$
-$$
-x = \frac {5}{9}
-$$
-The Sluggers won  $\frac{5}{9}$  of their games.
-Because 0.5 has 1 repeating digit, multiply each side of the equation by  $10^{1}$ , or 10.
-Subtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x = 0.5$ , you can subtract  $x$  from one side and 0.5 from the other side.
-![image](images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
-
-![图片](../images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
-
-![图片](../images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
-
-![图片](../images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
-
-![图片](../images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
-
-![图片](../images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
-
-**解答**: The Sluggers won  $\frac{5}{9}$  of their games.
-Because 0.5 has 1 repeating digit, multiply each side of the equation by  $10^{1}$ , or 10.
-Subtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x = 0.5$ , you can subtract  $x$  from one side and 0.5 from the other side.
+![图片](../images/e470b90fda68577eea7cba68644ea1ce8d8115055ca40c521fdfc424d049844e.jpg)
 
 ---
+
+## Go Online
 
 ### Try It! (练习题)
 
@@ -211,38 +221,6 @@ Let  $x = 0.\overline{4}$
 $$
 \begin{array}{l} \boxed { \begin{array}{r l} \end{array} } \cdot x = \boxed { \begin{array}{r l} \end{array} } \cdot 0. \overline {{4}} \\ \boxed { \begin{array}{c} \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = \\ - x = \boxed {0. 4} \\ \boxed { \begin{array}{c} \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline 0. 5 m ^ {2} = 1. 0 m ^ {2} = 1. 5 m ^ {2} = 2. 0 m ^ {2} = 3. 0 m ^ {2} = 4. 0 m ^ {2} = 5. 0 m ^ {2} = 6. 0 m ^ {2} = 7. 0 m ^ {2} = 8. 0 m ^ {2} = 9. 0 m ^ {2} = 1 0. 0 m ^ {2} = 1 1. 0 m ^ {2} = 1 2. 0 m ^ {2} = 1 3. 0 m ^ {2} = 1 4. 0 m ^ {2} = 1 5. 0 m ^ {2} = 1 6. 0 m ^ {2} = 1 7. 0 m ^ {2} = 1 8. 0 m ^ {2} = 1 9. 0 m ^ {2} = 2 0. 0 m ^ {2} = 2 1. 0 m ^ {2} = 2 2. 0 m ^ {2} = 2 3. 0 m ^ {2} = 2 4. 0 m ^ {2} = 2 5. 0 m ^ {2} = 2 6. 0 m ^ {2} = 2 7. 0 m ^ {2} = 2 8. 0 m ^ {2} = 2 9. 0 m ^ {2} = 3 0. 0 m ^ {2}} \\ x = \boxed {} \\ \end{array}
 $$
-
----
-
-### EXAMPLE 2 (例题)
-
-**题目**: Sabine entered a division expression into her calculator. The quotient is shown on the calculator screen. What expression could Sabine have entered?
-![image](images/aaf71b84da2b2d3ce68bcf9ecb55bbc97edfc562cc214c46be02c24c210236cd.jpg)
-Let  $x = 0.26$
-${10x} = 2.\overline{6}$
-Multiply by  $10^{1}$ , or 10, because the decimal has 1 repeating digit.
-$$
-1 0 x - x = 2. \overline {{6}} - 0. 2 \overline {{6}}
-$$
-Subtract  $0.26$  from each side of the equation, and then solve for  $x$ . Because  $x = 0.26$ , you can subtract  $x$  from one side and  $0.26$  from the other side.
-$$
-9 x = 2. 4
-$$
-$$
-\frac {9 x}{9} = \frac {2 . 4}{9}
-$$
-$$
-x = \frac {2 4}{9 0}
-$$
-Write an equivalent fraction so that the numerator and denominator are integers.
-Sabine could have entered  $24 \div 90$ , or an equivalent expression such as  $8 \div 30$ .
-![image](images/241ebf7e1cadbb0f8141366e12006b5f75ac286eea3e9e65381e624441586b2b.jpg)
-
-![图片](../images/aaf71b84da2b2d3ce68bcf9ecb55bbc97edfc562cc214c46be02c24c210236cd.jpg)
-
-![图片](../images/241ebf7e1cadbb0f8141366e12006b5f75ac286eea3e9e65381e624441586b2b.jpg)
-
-**解答**: Sabine could have entered  $24 \div 90$ , or an equivalent expression such as  $8 \div 30$ .
 
 ---
 
@@ -279,12 +257,6 @@ Use Structure How do you know that subtracting  $x$  from one side of the equati
 
 ![图片](../images/bcbfdb36477078e9bd653877b58697cf96f51b6d3fa339af105ece2771af48c7.jpg)
 
-**解答**: $$
-x = \frac {2 0 7}{9 9} \text {o r} 2 \frac {1}{1 1}
-$$
-The repeating decimal has 2 repeating digits, so multiply each side of the equation by  $10^{2}$ , or 100.
-Subtract  $x$  from one side of the equation and its equivalent 2.09 from the other side of the equation.
-
 ---
 
 ### Try It! (练习题)
@@ -294,9 +266,10 @@ Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
-### 1 (练习题)
+### Do You Understand? (练习题)
 
-**题目**: 1. Essential Question How can you write repeating decimals as fractions?
+**题目**: Do You Understand?
+1. Essential Question How can you write repeating decimals as fractions?
 
 ---
 
@@ -312,13 +285,14 @@ Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
-### 4 (练习题)
+### Do You Know How? (练习题)
 
-**题目**: 4. A survey reported that  $63.63\%$  of moviegoers prefer action films. This percent represents a repeating decimal. Write it as a fraction.
+**题目**: Do You Know How?
+4. A survey reported that  $63.63\%$  of moviegoers prefer action films. This percent represents a repeating decimal. Write it as a fraction.
 
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 5 (练习题)
 
@@ -329,7 +303,7 @@ Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
-## GoOnline
+## Go Online
 
 ### 6 (练习题)
 
@@ -340,10 +314,55 @@ Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
+### Practice & Problem Solving (练习题)
+
+**题目**: Practice & Problem Solving
+![image](images/aaffbc4728358b87ff54b43eb67fd1730024412b1a4717bfd17fdddc6912e159.jpg)
+Scan for Multimedia
+![image](images/0c0e7d892aed94add6b5ea367ce76045951b2f209cd15ce290bacaa282370a68.jpg)
+Leveled Practice In 7 and 8, write the decimal as a fraction or mixed number.
+7. Write the number 0.21212121... as a fraction.
+
+![图片](../images/aaffbc4728358b87ff54b43eb67fd1730024412b1a4717bfd17fdddc6912e159.jpg)
+
+![图片](../images/0c0e7d892aed94add6b5ea367ce76045951b2f209cd15ce290bacaa282370a68.jpg)
+
+---
+
+### 8 (练习题)
+
+**题目**: ![image](images/1ba353945c35400b72347220a08f74a847c89134edc44ee1b1518d923c11fa47.jpg)
+8. Write 3.7 as a mixed number.
+
+![图片](../images/1ba353945c35400b72347220a08f74a847c89134edc44ee1b1518d923c11fa47.jpg)
+
+---
+
+### 9 (练习题)
+
+**题目**: ![image](images/12377b77a0340e4163832e2b13f16781349fc8fc3b6e9b111c18bf002c26205c.jpg)
+9. Write the number shown on the scale as a fraction.
+![image](images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
+
+![图片](../images/12377b77a0340e4163832e2b13f16781349fc8fc3b6e9b111c18bf002c26205c.jpg)
+
+![图片](../images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
+
+---
+
+### 10 (练习题)
+
+**题目**: 10. Tomas asked 15 students whether summer break should be longer. He used his calculator to divide the number of students who said yes by the total number of students. His calculator showed the result as 0.9333....
+a. Write this number as a fraction.
+b. How many students said that summer break should be longer?
+
+---
+
+## Practice & Problem Solving
+
 ### 7 (练习题)
 
-**题目**: Leveled Practice In 7 and 8, write the decimal as a fraction or mixed number.
-7. Write the number 0.21212121... as a fraction.
+**题目**: 7. Write the number 0.21212121... as a fraction.
 ![image](images/1ba353945c35400b72347220a08f74a847c89134edc44ee1b1518d923c11fa47.jpg)
 
 ![图片](../images/1ba353945c35400b72347220a08f74a847c89134edc44ee1b1518d923c11fa47.jpg)
@@ -358,31 +377,6 @@ Write the repeating decimal 4.1363636... as a fraction.
 ![图片](../images/12377b77a0340e4163832e2b13f16781349fc8fc3b6e9b111c18bf002c26205c.jpg)
 
 ---
-
-### 9 (练习题)
-
-**题目**: 9. Write the number shown on the scale as a fraction.
-![image](images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
-
-![图片](../images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
-
----
-
-### 10 (练习题)
-
-**题目**: 10. Tomas asked 15 students whether summer break should be longer. He used his calculator to divide the number of students who said yes by the total number of students. His calculator showed the result as 0.9333....
-a. Write this number as a fraction.
-b. How many students said that summer break should be longer?
-
----
-
-### 11 (练习题)
-
-**题目**: Write 0.8 as a fraction.
-
----
-
-## Practice&ProblemSolving
 
 ### 11 (练习题)
 
@@ -466,11 +460,14 @@ $⑤$  17.17090
 
 ---
 
+## Focus on math practices
+
 ### EXAMPLE 1 (例题)
 
 **题目**: EXAMPLE 1
 ![image](images/615cd73e2e5522f40aa0451a2a8a2f9d98ca68deedbb4cd598265a0745200bd9.jpg)
 Identify Irrational Numbers
+Scan for Multimedia
 ![image](images/f3459e9dbd0b69f824ed885927944ba793c0cad4f1177d9755bf976d8a7e837b.jpg)
 The Venn diagram shows the relationships among rational numbers.
 How would you classify the number 0.24758326...?
@@ -496,10 +493,11 @@ The number 0.24758326... is irrational because the decimal expansion is nonrepea
 
 **解答**: The decimal expansion does not terminate or repeat, so it cannot be written as a ratio of two integers.
 The number 0.24758326... is not a rational number.
-Numbers that are not rational are called irrational. An irrational number is a number that cannot be written in the form  $\frac{a}{b}$ , where  $a$  and  $b$  are integers and  $b \neq 0$ .
 The number 0.24758326... is irrational because the decimal expansion is nonrepeating and nonterminating.
 
 ---
+
+## Practice & Problem Solving
 
 ### Try It! (练习题)
 
@@ -530,7 +528,7 @@ The square root of a number is a number that when multiplied by itself equals th
 
 ---
 
-## Focusonmathpractices
+## Focus on math practices
 
 ### EXAMPLE 3 (例题)
 
@@ -642,28 +640,12 @@ Classify each number as rational or irrational and explain.
 
 ---
 
-## 1
-
 ### 11 (练习题)
 
 **题目**: 11. Lisa writes the following list of numbers.
 5.737737773...，26,√45,-2,0,9
 a. Which numbers are rational?
 b. Which numbers are irrational?
-
----
-
-## Focusonmathpractices
-
-### a (练习题)
-
-**题目**: a. Which numbers are rational?
-
----
-
-### b (练习题)
-
-**题目**: b. Which numbers are irrational?
 
 ---
 
@@ -694,7 +676,7 @@ b. Which numbers are irrational?
 
 ---
 
-## 1
+## Lesson 1-3
 
 ### 6 (练习题)
 
@@ -747,11 +729,14 @@ F None of the above
 
 ---
 
+## compare and order rational and irrational numbers.
+
 ### EXAMPLE 1 (例题)
 
 **题目**: EXAMPLE 1
 ![image](images/f398da4a2f96b853e83cdcba02db6b641e9ad8048daceb96cc5a0f60b3849ad1.jpg)
 Approximate an Irrational Number
+Scan for Multimedia
 ![image](images/aa4cd08b29d55ed8a67a6254c7e8021f265bab8dde5684ed243917b47cdfa111.jpg)
 Darcy wants to add the ribbon shown along the diagonal of the rectangular flag she is designing. Does Darcy have enough ribbon? Explain.
 ![image](images/7031daac32afe78d1a98085f0e881ee0cdcd11a6fe5791cae7411100db7c0d7a.jpg)
@@ -776,13 +761,6 @@ The length of the diagonal,  $\sqrt{74}$ , is about 8.6 feet. Darcy does not hav
 
 ![图片](../images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg)
 
-![图片](../images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)
-
-**解答**: Try It!
-Between which two whole numbers is  $\sqrt{12}$ ?
-![image](images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)
-Convince Me! Which of the two numbers is a better estimate for  $\sqrt{12}$ ? Explain.
-
 ---
 
 ### Try It! (练习题)
@@ -790,10 +768,13 @@ Convince Me! Which of the two numbers is a better estimate for  $\sqrt{12}$ ? Ex
 **题目**: Try It!
 Between which two whole numbers is  $\sqrt{12}$ ?
 ![image](images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)
+Convince Me! Which of the two numbers is a better estimate for  $\sqrt{12}$ ? Explain.
 
 ![图片](../images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)
 
 ---
+
+## Lesson 1-3
 
 ### Convince Me! (练习题)
 
@@ -812,40 +793,7 @@ Look for Relationships
 
 ---
 
-## compareandorderrationalandirrationalnumbers.
-
-### EXAMPLE 1 (例题)
-
-**题目**: EXAMPLE 1
-![image](images/f398da4a2f96b853e83cdcba02db6b641e9ad8048daceb96cc5a0f60b3849ad1.jpg)
-Approximate an Irrational Number
-Scan for Multimedia
-![image](images/aa4cd08b29d55ed8a67a6254c7e8021f265bab8dde5684ed243917b47cdfa111.jpg)
-Darcy wants to add the ribbon shown along the diagonal of the rectangular flag she is designing. Does Darcy have enough ribbon? Explain.
-![image](images/7031daac32afe78d1a98085f0e881ee0cdcd11a6fe5791cae7411100db7c0d7a.jpg)
-Approximate  $\sqrt{74}$  using perfect squares.
-
-![图片](../images/f398da4a2f96b853e83cdcba02db6b641e9ad8048daceb96cc5a0f60b3849ad1.jpg)
-
-![图片](../images/aa4cd08b29d55ed8a67a6254c7e8021f265bab8dde5684ed243917b47cdfa111.jpg)
-
-![图片](../images/7031daac32afe78d1a98085f0e881ee0cdcd11a6fe5791cae7411100db7c0d7a.jpg)
-
-![图片](../images/5b39c4819213ac6c47ba986653047df76c0ea0ce730f6770d989f22e99aa8142.jpg)
-
-![图片](../images/b64ddbb367cea32cde2be57f075717a53fd1184427a68cfa924fab67726894b8.jpg)
-
-![图片](../images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg)
-
-**解答**: Because 74 lies between the two consecutive perfect squares 64 and 81,  $\sqrt{74}$  is located between  $\sqrt{64}$  and  $\sqrt{81}$ .
-![image](images/5b39c4819213ac6c47ba986653047df76c0ea0ce730f6770d989f22e99aa8142.jpg)
-Find a better approximation by squaring decimals between 8 and 9. Then compare.
-Reasoning Which decimals can you use to find a better approximation?
-![image](images/b64ddbb367cea32cde2be57f075717a53fd1184427a68cfa924fab67726894b8.jpg)
-The length of the diagonal,  $\sqrt{74}$ , is about 8.6 feet. Darcy does not have enough ribbon.
-![image](images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg)
-
----
+## compare and order rational and irrational numbers.
 
 ### EXAMPLE 3 (例题)
 
@@ -856,14 +804,7 @@ Compare and order the numbers below.
 $$
 \pi^ {2}, 9 \frac {1}{2}, 9. 8, 9. \overline {{5}}, \sqrt {9 4}
 $$
-
-![图片](../images/416b88f8acc8fb6569a09326ca696c2b0cee18196d37b2be015964282219de1d.jpg)
-
-![图片](../images/37dbacf5976e1ad484fd89f08c1f2288ebce5a91ca3faa801407c0bcd9334fa8.jpg)
-
-![图片](../images/e51143eaaab3b7fecbfb86d23570bd13a1b6767596ef9ac247359209ab7fe840.jpg)
-
-**解答**: STEP 1 Use rational approximation to estimate the values of irrational numbers.
+STEP 1 Use rational approximation to estimate the values of irrational numbers.
 $$
 \begin{array}{l} \pi^ {2} \approx 3. 1 4 \times 3. 1 4 \approx 9. 8 5 9 6 \\ 9 \frac {1}{2} = 9. 5 \\ 9. 8 \\ 9. \overline {{5}} = 9. 5 5 5 5 \dots \\ \sqrt {9 4} \approx 9. 7 \\ \end{array}
 $$
@@ -873,6 +814,12 @@ $$
 \mathrm {S o}, 9 \frac {1}{2} <   9. \overline {{5}} <   \sqrt {9 4} <   9. 8 <   \pi^ {2}.
 $$
 ![image](images/e51143eaaab3b7fecbfb86d23570bd13a1b6767596ef9ac247359209ab7fe840.jpg)
+
+![图片](../images/416b88f8acc8fb6569a09326ca696c2b0cee18196d37b2be015964282219de1d.jpg)
+
+![图片](../images/37dbacf5976e1ad484fd89f08c1f2288ebce5a91ca3faa801407c0bcd9334fa8.jpg)
+
+![图片](../images/e51143eaaab3b7fecbfb86d23570bd13a1b6767596ef9ac247359209ab7fe840.jpg)
 
 ---
 
@@ -1016,7 +963,7 @@ Area  $= 90$  square units
 
 ---
 
-## 1
+## Lesson 1-4
 
 ### 16 (练习题)
 
@@ -1036,8 +983,11 @@ To the nearest whole inch
 PART B
 To the nearest tenth of an inch
 ![image](images/c693b4179f29496ca3cd3ee9f9ea904f5cc2af1d534ca5a054880e9bedede64f.jpg)
+![image](images/1860387badca20ea6448de90e374ecde3f5782ad513fda3b2f1951b18fe59cb3.jpg)
 
 ![图片](../images/c693b4179f29496ca3cd3ee9f9ea904f5cc2af1d534ca5a054880e9bedede64f.jpg)
+
+![图片](../images/1860387badca20ea6448de90e374ecde3f5782ad513fda3b2f1951b18fe59cb3.jpg)
 
 ---
 
@@ -1143,7 +1093,70 @@ Evaluate.
 
 ---
 
-## 3
+## EXAMPLE 2
+
+### A (练习题)
+
+**题目**: Evaluate.
+A.  $\sqrt[3]{64}$
+$$
+\begin{array}{l} \sqrt [ 3 ]{6 4} = \sqrt [ 3 ]{4 \cdot 4 \cdot 4} \\ = \sqrt [ 3 ]{4 ^ {3}} \\ = 4 \\ \end{array}
+$$
+
+---
+
+### B (练习题)
+
+**题目**: B.  $\sqrt{100}$
+$$
+\begin{array}{l} \sqrt {1 0 0} = \sqrt {1 0 \cdot 1 0} \\ = \sqrt {1 0 ^ {2}} \\ = 1 0 \\ \end{array}
+$$
+
+---
+
+### C (练习题)
+
+**题目**: C.  $\sqrt{49}$
+$$
+\begin{array}{l} \sqrt {4 9} = \sqrt {7 \cdot 7} \\ = \sqrt {7 ^ {2}} \\ = 7 \\ \end{array}
+$$
+
+---
+
+### D (练习题)
+
+**题目**: D.  $\sqrt[3]{8}$
+$$
+\begin{array}{l} \sqrt [ 3 ]{8} = \sqrt [ 3 ]{2 \cdot 2 \cdot 2} \\ = \sqrt [ 3 ]{2 ^ {3}} \\ = 2 \\ \end{array}
+$$
+
+---
+
+### a (练习题)
+
+**题目**: Try It!
+Evaluate.
+a.  $\sqrt[3]{27}$
+
+---
+
+### b (练习题)
+
+**题目**: b.  $\sqrt{25}$
+
+---
+
+### c (练习题)
+
+**题目**: c.  $\sqrt{81}$
+
+---
+
+### d (练习题)
+
+**题目**: d.  $\sqrt[3]{1}$
+
+---
 
 ### EXAMPLE 3 (例题)
 
@@ -1164,7 +1177,16 @@ Each side of the bulletin board measures 12 inches. Sean will need to cut a 12-i
 
 ---
 
-## DoYouUnderstand?
+### Try It! (练习题)
+
+**题目**: Try It!
+Emily wants to buy a tablecloth to cover a square card table. She knows the tabletop has an area of 9 square feet. What are the minimum dimensions of the tablecloth Emily needs?
+Emily should buy a tablecloth that measures at least feet by feet.
+$$
+\begin{array}{l} \sqrt {9} = \sqrt {\square \cdot \square} \\ = \sqrt {\square} ^ {2} \\ = \square \\ \end{array}
+$$
+
+---
 
 ### 1 (练习题)
 
@@ -1183,8 +1205,6 @@ Each side of the bulletin board measures 12 inches. Sean will need to cut a 12-i
 **题目**: 3. Critique Reasoning A cube-shaped box has a volume of 27 cubic inches. Bethany says each side of the cube measures 9 inches because  $9 \times 3 = 27$ . Is Bethany correct? Explain your reasoning.
 
 ---
-
-## DoYouKnowHow?
 
 ### 4 (练习题)
 
@@ -1207,8 +1227,6 @@ Each side of the bulletin board measures 12 inches. Sean will need to cut a 12-i
 
 ---
 
-## Practice&ProblemSolving
-
 ### 7 (练习题)
 
 **题目**: Leveled Practice In 7 and 8, evaluate the cube root or square root.
@@ -1223,7 +1241,7 @@ Edge length Edge length Edge length
 
 ---
 
-## 1
+## Lesson 1-5
 
 ### 8 (练习题)
 
@@ -1241,7 +1259,7 @@ Side length Side length
 
 ---
 
-## Practice&ProblemSolving
+## EXAMPLE 2
 
 ### 9 (练习题)
 
@@ -1300,8 +1318,6 @@ Side length Side length
 
 ---
 
-## AssessmentPractice
-
 ### 17 (练习题)
 
 **题目**: 17. Which expression has the greatest value? 8.EE.1.2
@@ -1325,21 +1341,15 @@ Will the block fit in the square hole? Explain.
 
 ---
 
-## 1
+## Lesson 1-5
 
-### 662 (练习题)
+### ACTIVITY (练习题)
 
 **题目**: Janine can use up to 150 one-inch blocks to build a solid, cube-shaped model. What are the dimensions of the
 possible models that she can build? How many blocks would Janine use for each model? Explain.
 ![image](images/3baa1ec3ac2d9eb3233d4a0fe610ecd9a5ee09e197828f7b7dbb9b7eb4ebc30a.jpg)
 
 ![图片](../images/3baa1ec3ac2d9eb3233d4a0fe610ecd9a5ee09e197828f7b7dbb9b7eb4ebc30a.jpg)
-
----
-
-### 679 (练习题)
-
-**题目**: Reasoning Janine wants to build a model using  $\frac{1}{2}$ -inch cubes. How many  $\frac{1}{2}$ -inch cubes would she use to build a solid, cube-shaped model with side lengths of 4 inches? Show your work.
 
 ---
 
@@ -1401,7 +1411,7 @@ Each side of the square measures meters.
 
 ---
 
-### 703 (练习题)
+### EXAMPLE 2 (例题)
 
 **题目**: Kyle has a large, cube-shaped terrarium for his iguana. He wants to cover the opening with a square screen. What are the dimensions,  $s,$  for the screen?
 $$
@@ -1464,68 +1474,7 @@ b. Solve  $c^2 = 27$ .
 
 ---
 
-## TryIt!
-
-### a (练习题)
-
-**题目**: a. Solve  $a^3 = 11$ .
-
----
-
-### b (练习题)
-
-**题目**: b. Solve  $c^2 = 27$ .
-
----
-
-## DoYouUnderstand?
-
-### 1 (练习题)
-
-**题目**: 1. Essential Question How can you solve equations with squares and cubes?
-
----
-
-### 2 (练习题)
-
-**题目**: 2. Be Precise Suri solved the equation  $x^{2} = 49$  and found that  $x = 7$ . What error did Suri make?
-
----
-
-### 3 (练习题)
-
-**题目**: 3. Construct Arguments There is an error in the work shown below. Explain the error and provide a correct solution.
-$$
-\begin{array}{l} x ^ {3} = 1 2 5 \\ \sqrt [ 3 ]{x ^ {3}} = \sqrt [ 3 ]{1 2 5} \\ x = 5 \text {a n d} x = - 5 \\ \end{array}
-$$
-4. Why are the solutions to  $x^{2} = 17$  irrational?
-
----
-
-## DoYouKnowHow?
-
-### 5 (练习题)
-
-**题目**: 5. If a cube has a volume of 27 cubic centimeters, what is the length of each edge? Use the volume formula,  $V = s^3$ , and show your work.
-
----
-
-### 6 (练习题)
-
-**题目**: 6. Darius is building a square launch pad for a rocket project. If the area of the launch pad is 121 square centimeters, what is its side length? Use the area formula,  $A = s^2$ , and show your work.  $A = 121\mathrm{cm}^2$
-![image](images/bab5b579401d47c6fc433878211a2436c122373cfe6e16d3e50ff89b4d3d100b.jpg)
-
-![图片](../images/bab5b579401d47c6fc433878211a2436c122373cfe6e16d3e50ff89b4d3d100b.jpg)
-
----
-
-### 7 (练习题)
-
-**题目**: 7. Solve the equation  $x^{3} = -215$ .
-
----
-
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 8 (练习题)
 
@@ -1629,8 +1578,6 @@ b. Explain how you can check that your result is correct.
 
 ---
 
-## AssessmentPractice
-
 ### 22 (练习题)
 
 **题目**: 22. The Traverses are adding a new room to their house. The room will be a cube with a volume of 6,859 cubic feet. They are going to put in hardwood floors, which costs $10 per square foot. How much will the hardwood floors cost? 8.EE.1.2
@@ -1646,8 +1593,6 @@ PART B
 The Chens want to pack a large, framed painting. If the framed painting has the shape of a square with an area of 12 square feet, will the painting fit flat against a side of the crate? Explain.
 
 ---
-
-## 1
 
 ### 1 (练习题)
 
@@ -1689,11 +1634,12 @@ D  $\frac{7}{30}$
 
 ---
 
-## AssessmentPractice
+## Assessment Practice
 
 ### MID-TOPIC PERFORMANCE TASK (练习题)
 
-**题目**: Six members of the math club are forming two teams for a contest. The teams will be determined by having each student draw a number from a box.
+**题目**: MID-TOPIC PERFORMANCE TASK
+Six members of the math club are forming two teams for a contest. The teams will be determined by having each student draw a number from a box.
 PART A 8.NS.1.1
 The table shows the results of the draw. The students who drew rational numbers will form the team called the Tigers. The students who drew irrational numbers will form the team called the Lions.
 List the members of each team.
@@ -1711,10 +1657,23 @@ Who will be the captain of the Lions? Show your work.
 
 ---
 
-### ACTIVITY (练习题)
+### Solve & Discuss It! (练习题)
 
-**题目**: One band's streaming video concert to benefit a global charity costs $1.00 to view.
+**题目**: Solve & Discuss It!
+![image](images/d3bb9931026a93e09cce44f9b271f4956bce0a19544544d2c4c634c3add89882.jpg)
+![image](images/7338816da64eb7a4051a3dfca2bdadfb9eb086f3cf2e9671272cc295eeb9efbc.jpg)
+One band's streaming video concert to benefit a global charity costs $1.00 to view.
 The first day, the concert got 2,187 views. The second day, it got about three times as many views. On the third day, it got 3 times as many views as on the second day. If the trend continues, how much money will the band raise on Day 7?
+![image](images/9f8bbea84798df23b16b9c65472514df6d6fb55291810b9834929f7c5de08633.jpg)
+![image](images/3baa511b8a14a7ca106438b4e8b92afd70af27fe60a7b4f10df15d8233845366.jpg)
+
+![图片](../images/d3bb9931026a93e09cce44f9b271f4956bce0a19544544d2c4c634c3add89882.jpg)
+
+![图片](../images/7338816da64eb7a4051a3dfca2bdadfb9eb086f3cf2e9671272cc295eeb9efbc.jpg)
+
+![图片](../images/9f8bbea84798df23b16b9c65472514df6d6fb55291810b9834929f7c5de08633.jpg)
+
+![图片](../images/3baa511b8a14a7ca106438b4e8b92afd70af27fe60a7b4f10df15d8233845366.jpg)
 
 ---
 
@@ -1752,6 +1711,13 @@ Convince Me! Explain why the Product of Powers Property makes mathematical sense
 
 ---
 
+### Try It! (练习题)
+
+**题目**: Try It!
+The local zoo welcomed a newborn African elephant that weighed  $3^{4}$  kg. It is expected that at adulthood, the newborn elephant will weigh approximately  $3^{4}$  times as much as its birth weight. What expression represents the expected adult weight of the newborn elephant?
+
+---
+
 ### EXAMPLE 3 (例题)
 
 **题目**: EXAMPLE 3
@@ -1767,8 +1733,6 @@ The Power of Powers Property states that to find the power of a power, multiply 
 ![图片](../images/61c09ee855f3cf43c1e3d69e69ab6f7b878624a758ae2dc7ea01f34227065471.jpg)
 
 ---
-
-## 4
 
 ### EXAMPLE 4 (例题)
 
@@ -1787,20 +1751,12 @@ $$
 = \frac {6 \times 6 \times 6 \times 6 \times 6}{6 \times 6 \times 6}
 $$
 6 multiplied 3 times
-Remember,  $\frac{6}{6} = 1$ .
-$$
-\begin{array}{l} = \frac {6 \times \boxed {6 \times 6 \times 6} \times 6}{\boxed {6 \times 6 \times 6}} \\ = 6 \times 6 \text {o r} 6 ^ {2} \\ \end{array}
-$$
-The Quotient of Powers Property states that when dividing two exponential expressions with the same base, subtract the exponents.
-![image](images/97f12f94230ae9f733bc4773a9b37d25a5e2983949f1ceb1ff03ecd460ea4ebc.jpg)
 
 ![图片](../images/3036361a7f802bf3ea3b061485069f1609a08178cce7dc031035256d54b91c48.jpg)
 
-![图片](../images/97f12f94230ae9f733bc4773a9b37d25a5e2983949f1ceb1ff03ecd460ea4ebc.jpg)
-
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 1 (练习题)
 
@@ -1986,6 +1942,9 @@ $2^{2} \cdot 2^{9}$
 ### 25 (练习题)
 
 **题目**: 25. Higher Order Thinking Use a property of exponents to write  $(3b)^{5}$  as a product of powers.
+![image](images/40628b14def6c213057a1d694b4c2e9ee083d67538c8da44487794ec90daec6a.jpg)
+
+![图片](../images/40628b14def6c213057a1d694b4c2e9ee083d67538c8da44487794ec90daec6a.jpg)
 
 ---
 
@@ -2019,7 +1978,7 @@ B Your classmate multiplied the exponents.
 
 ---
 
-## 1
+## Lesson 1-7
 
 ### 27 (练习题)
 
@@ -2041,6 +2000,7 @@ $\langle \widehat{\mathbb{C}}\rangle$  Your classmate subtracted the exponents.
 **题目**: EXAMPLE 1
 ![image](images/a22b2435c675b45fdb624b000ce460f15319ada62a4d91511e62fe32fffe92ff.jpg)
 The Zero Exponent Property
+![image](images/2726fa00239e5908c72d405fd34b6fece5aad92f9cf8ff2bfd5e3e0ccfc52cec.jpg)
 Marchella is playing a card-matching game with some classmates. Four matches have been made. It is Marchella's turn, and she chooses  $3^{0}$ . What card would complete her match?
 ![image](images/544a5206a69754e6c531641020ef577c4d9943728864afd4290e9947b4374aac.jpg)
 Organize the information in a table and look for a pattern.
@@ -2069,6 +2029,8 @@ The Zero Exponent Property states that  $a^0 = 1$  (assuming  $a \neq 0$ ).
 
 ![图片](../images/a22b2435c675b45fdb624b000ce460f15319ada62a4d91511e62fe32fffe92ff.jpg)
 
+![图片](../images/2726fa00239e5908c72d405fd34b6fece5aad92f9cf8ff2bfd5e3e0ccfc52cec.jpg)
+
 ![图片](../images/544a5206a69754e6c531641020ef577c4d9943728864afd4290e9947b4374aac.jpg)
 
 ![图片](../images/8d34a2b1d0e648393bbc22a195f6fca9a0c728ef8bcd19af6d59ed7a03579260.jpg)
@@ -2083,37 +2045,6 @@ Convince Me! Why is  $2(7^{0}) = 2?$
 
 ---
 
-### EXAMPLE 2 (例题)
-
-**题目**: Simplify the expression  $4^{3} \div 4^{5}$ .
-$$
-4 ^ {3} \div 4 ^ {5} = \frac {4 ^ {3}}{4 ^ {5}}
-$$
-Remember,  $\frac{4}{4} = 1$
-$$
-= \frac {\boxed {4 \times 4 \times 4}}{4 \times 4 \times 4 \times 4 \times 4} \times 4 = \frac {1}{1 6}
-$$
-and
-$$
-4 ^ {3} \div 4 ^ {5} = 4 ^ {(3 - 5)} = 4 ^ {- 2}
-$$
-Use the Quotient of Powers Property.
-$$
-\mathrm {S o}, 4 ^ {- 2} = \frac {1}{1 6}.
-$$
-The Negative Exponent Property states that  $a^{-n} = \frac{1}{a^n}$  (assuming  $a \neq 0$ ).
-![image](images/7d4b2e8a75624d34db3fff50bb510ace462ea7426369e10a8e059d8d288f3632.jpg)
-
-![图片](../images/7d4b2e8a75624d34db3fff50bb510ace462ea7426369e10a8e059d8d288f3632.jpg)
-
-**解答**: Try It!
-Write each expression using positive exponents.
-a.  $8^{-2}$
-b.  ${2}^{-4}$
-c.  $3 - 5$
-
----
-
 ### EXAMPLE 3 (例题)
 
 **题目**: EXAMPLE 3
@@ -2124,7 +2055,7 @@ Expressions with Negative Exponents
 
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 1 (练习题)
 
@@ -2202,7 +2133,7 @@ b.  ${14}\left( {x}^{-2}\right)$
 
 ---
 
-## 1
+## Lesson 1-8
 
 ### 11 (练习题)
 
@@ -2216,7 +2147,7 @@ b.  ${14}\left( {x}^{-2}\right)$
 
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 12 (练习题)
 
@@ -2227,7 +2158,7 @@ b.  ${14}\left( {x}^{-2}\right)$
 
 ---
 
-## 1
+## Lesson 1-8
 
 ### 13 (练习题)
 
@@ -2243,7 +2174,7 @@ b.  ${14}\left( {x}^{-2}\right)$
 
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 15 (练习题)
 
@@ -2293,7 +2224,7 @@ $$
 
 ---
 
-## 1
+## Lesson 1-8
 
 ### 20 (练习题)
 
@@ -2378,10 +2309,11 @@ There are zeros in the rounded number. The estimated speed of light
 is  $\times 10$  meters per second.
 $3\times 10 > 3\times 10$  so the speed of light is faster than the speed of sound.
 Convince Me! Country A has a population of 1,238,682,005 and Country B has a population of 1,106,487,394. How would you compare these populations?
+322 rounded to the greatest place value
 
 ---
 
-## EstimateVeryLargeQuantities
+## Estimate Very Large Quantities
 
 ### EXAMPLE 3 (例题)
 
@@ -2522,7 +2454,7 @@ The population of City C is how many times the population of City A?
 
 ---
 
-## 1
+## Lesson 1-9
 
 ### 16 (练习题)
 
@@ -2625,7 +2557,7 @@ Count the number of digits before the decimal point to determine the power of 10
 
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 1 (练习题)
 
@@ -2738,11 +2670,18 @@ b. Express the number in standard form.
 
 ---
 
-### 17 (练习题)
+## Lesson 1-10
+
+### 11 (练习题)
 
 **题目**: 17. Express  $2.58 \times 10^{-2}$  in standard form.
+![image](images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg)
+
+![图片](../images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg)
 
 ---
+
+## Practice & Problem Solving
 
 ### 18 (练习题)
 
@@ -2750,18 +2689,11 @@ b. Express the number in standard form.
 
 ---
 
-## 1
+### 19 (练习题)
 
-### 12 (练习题)
-
-**题目**: ![image](images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg)
-19. The length of a bacterial cell is  $5.2 \times 10^{-6}$  meter. Express the length of the cell in standard form.
-
-![图片](../images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg)
+**题目**: 19. The length of a bacterial cell is  $5.2 \times 10^{-6}$  meter. Express the length of the cell in standard form.
 
 ---
-
-## Practice&ProblemSolving
 
 ### 20 (练习题)
 
@@ -2784,101 +2716,61 @@ $4 \times  {10}^{-1}$
 
 ---
 
-## 1
+### 22 (练习题)
 
-### 21 (练习题)
+**题目**: 22. Jean's calculator display shows the number to the right. 8.EE.1.4
+PART A
+Express this number in scientific notation.
+
+---
+
+## Lesson 1-10
+
+### 16 (练习题)
 
 **题目**: 22. Jean's calculator display shows the number to the right. 8.EE.1.4
 PART A
 Express this number in scientific notation.
 ![image](images/0a4bba17d4540e260bb346a4870f6959093fd944ec2f11895f7f1d7c248b9645.jpg)
-
-![图片](../images/0a4bba17d4540e260bb346a4870f6959093fd944ec2f11895f7f1d7c248b9645.jpg)
-
----
-
-### 14 (练习题)
-
-**题目**: ![image](images/e04b8468a67a21e56d38aad5f0064409bc62ebdb3628475f6fe56c7af6e53c61.jpg)
-Assessment Practice
-21. Which of the following numbers are written in scientific notation? 8.EE.1.3
-
-![图片](../images/e04b8468a67a21e56d38aad5f0064409bc62ebdb3628475f6fe56c7af6e53c61.jpg)
-
----
-
-### 15 (练习题)
-
-**题目**: ${12} \times  {10}^{6}$
-
----
-
-### 17 (练习题)
-
-**题目**: ${6.89} \times  {10}^{6}$
-
----
-
-### 20 (练习题)
-
-**题目**: $4 \times  {10}^{-1}$
-
----
-
-### 22 (练习题)
-
-**题目**: PART B
+PART B
 Express this number in standard form.
 ![image](images/2dd8a5d9c248222a3c4166808941682632f246df67fab518153d623fa5e08a7b.jpg)
+
+![图片](../images/0a4bba17d4540e260bb346a4870f6959093fd944ec2f11895f7f1d7c248b9645.jpg)
 
 ![图片](../images/2dd8a5d9c248222a3c4166808941682632f246df67fab518153d623fa5e08a7b.jpg)
 
 ---
 
-### ACT1 (练习题)
-
-**题目**: 3- ACT MATH
-![image](images/19a9d35aa318ee8779f482bbfe25c2b96836fdbcc8db79608971ce752d0057f5.jpg)
-ACT1
-
-![图片](../images/19a9d35aa318ee8779f482bbfe25c2b96836fdbcc8db79608971ce752d0057f5.jpg)
-
----
-
-### 1 (练习题)
+### 18 (练习题)
 
 **题目**: 1. After watching the video, what is the first question that comes to mind?
 
 ---
 
-### 2 (练习题)
+### 19 (练习题)
 
 **题目**: 2. Write the Main Question you will answer.
 
 ---
 
-### 3 (练习题)
+### 20 (练习题)
 
 **题目**: 3. Construct Arguments Predict an answer to this Main Question. Explain your prediction.
 
 ---
 
-### 4 (练习题)
+### 21 (练习题)
 
 **题目**: 4. On the number line below, write a number that is too small to be the answer. Write a number that is too large.
 ![image](images/e8b071976db9769e4e4ac8281bc25a1a4303c52704d443f01289b311ef841603.jpg)
+5. Plot your prediction on the same number line.
 
 ![图片](../images/e8b071976db9769e4e4ac8281bc25a1a4303c52704d443f01289b311ef841603.jpg)
 
 ---
 
-### 5 (练习题)
-
-**题目**: 5. Plot your prediction on the same number line.
-
----
-
-### 3-Act Mathematical Modeling (练习题)
+### 22 (练习题)
 
 **题目**: 3-Act Mathematical Modeling: Hard-Working Organs
 ![image](images/44095844e9152f60be02577422d55b867fcbdcecee09a6b0839506ba3f975887.jpg)
@@ -2887,13 +2779,13 @@ ACT1
 
 ---
 
-### 6 (练习题)
+### 23 (练习题)
 
 **题目**: 6. What information in this situation would be helpful to know? How would you use that information?
 
 ---
 
-### 7 (练习题)
+### 24 (练习题)
 
 **题目**: 7. Use Appropriate Tools What tools can you use to get the information you need? Record the information as you find it.
 ![image](images/e261d80ef19758e3cf6e04034376edc322e627738dd63ec6ac0ae06bb5cd46cc.jpg)
@@ -2902,13 +2794,13 @@ ACT1
 
 ---
 
-### 8 (练习题)
+### 25 (练习题)
 
 **题目**: 8. Model with Math Represent the situation using the mathematical content, concepts, and skills from this topic. Use your representation to answer the Main Question.
 
 ---
 
-### 9 (练习题)
+### 26 (练习题)
 
 **题目**: 9. What is your answer to the Main Question? Is it greater or less than your prediction? Explain why.
 ![image](images/55db26184a30e06f027ab99887a0911efb1250496e36e7d592a6f30f9cef3907.jpg)
@@ -2917,19 +2809,19 @@ ACT1
 
 ---
 
-### 10 (练习题)
+### 28 (练习题)
 
 **题目**: 10. Write the answer you saw in the video.
 
 ---
 
-### 11 (练习题)
+### 29 (练习题)
 
 **题目**: 11. Reasoning Does your answer match the answer in the video? If not, what are some reasons that would explain the difference?
 
 ---
 
-### 12 (练习题)
+### 30 (练习题)
 
 **题目**: 12. Make Sense and Persevere Would you change your model now that you know the answer? Explain.
 ![image](images/b8ee9d3413b5f498c89683ed63dda729b987a6f3812544c83a74bbdd2c0ecc6c.jpg)
@@ -2938,31 +2830,31 @@ ACT1
 
 ---
 
-### Reflect (练习题)
+### 31 (练习题)
 
 **题目**: Reflect
 
 ---
 
-### 13 (练习题)
+### 32 (练习题)
 
 **题目**: 13. Model with Math Explain how you used a mathematical model to represent the situation. How did the model help you answer the Main Question?
 
 ---
 
-### 14 (练习题)
+### 33 (练习题)
 
 **题目**: 14. Generalize What pattern did you notice in your calculations? How did that pattern help you solve the problem?
 
 ---
 
-### SEQUEL (练习题)
+### 34 (练习题)
 
 **题目**: SEQUEL
 
 ---
 
-### 15 (练习题)
+### 35 (练习题)
 
 **题目**: 15. Use Structure How many times does a heart beat in a lifetime? Use your solution to the Main Question to help you solve.
 ![image](images/02bd2b7d7bc42895b20f91339e4d933776826d58724c5d46ab6229a6487b1ce6.jpg)
@@ -2971,7 +2863,15 @@ ACT1
 
 ---
 
-### Solve & Discuss It! (练习题)
+### 36 (练习题)
+
+**题目**: ![image](images/83c8096696f14692b5f088d6bc47344c73ecca86a7471d79a015c6e2fe3d275b.jpg)
+
+![图片](../images/83c8096696f14692b5f088d6bc47344c73ecca86a7471d79a015c6e2fe3d275b.jpg)
+
+---
+
+### 37 (练习题)
 
 **题目**: Solve & Discuss It!
 ![image](images/473476b4d75343b932004bc35097882fdb60b2a32b7e5fcdb169daa2c508922f.jpg)
@@ -2983,7 +2883,7 @@ ACT1
 
 ---
 
-### ACTIVITY (练习题)
+### 38 (练习题)
 
 **题目**: ACTIVITY
 The homecoming committee wants to fly an aerial banner over the football game. The banner is 1,280 inches long and 780 inches tall. How many different ways can the area of the banner be expressed?
@@ -3003,47 +2903,11 @@ Scan for Multimedia
 The mass of Earth and the mass of the Moon are shown. How much greater is the mass of Earth than that of the Moon?
 Use Structure What does the exponent tell you about the magnitude of the number?
 ![image](images/2e1ee7ec9b6af069f04da7e5ce9935454e46386dd7e2062163dde3a84dcd019c.jpg)
-
-![图片](../images/5bfe4a51e8f12bf5538c1a59947154b779c762383fe127268f2ddb4f22160bdd.jpg)
-
-![图片](../images/34610218f6cdcfe753287d9b93c8f4bc45915e1c0b6cd571bf934147d3550ccc.jpg)
-
-![图片](../images/2e1ee7ec9b6af069f04da7e5ce9935454e46386dd7e2062163dde3a84dcd019c.jpg)
-
-**解答**: ONE WAY Write the masses in standard form and then subtract.
-$$
-\begin{array}{l} 5. 9 7 \times 1 0 ^ {2 4} = 5, 9 7 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ 7. 3 5 \times 1 0 ^ {2 2} = 7 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ 5, 9 7 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ - 7 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ 5, 8 9 6, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ \end{array}
-$$
-The difference is about  $5.8965 \times 10^{24}$  kilograms.
-ANOTHER WAY Write the masses using the same power of 10. Then subtract.
-
----
-
-### EXAMPLE 1 (例题)
-
-**题目**: EXAMPLE 1
-![image](images/5bfe4a51e8f12bf5538c1a59947154b779c762383fe127268f2ddb4f22160bdd.jpg)
-Add or Subtract Numbers in Scientific Notation
-![image](images/34610218f6cdcfe753287d9b93c8f4bc45915e1c0b6cd571bf934147d3550ccc.jpg)
-The mass of Earth and the mass of the Moon are shown. How much greater is the mass of Earth than that of the Moon?
-Use Structure What does the exponent tell you about the magnitude of the number?
-![image](images/2e1ee7ec9b6af069f04da7e5ce9935454e46386dd7e2062163dde3a84dcd019c.jpg)
 ONE WAY Write the masses in standard form and then subtract.
 $$
 \begin{array}{l} 5. 9 7 \times 1 0 ^ {2 4} = 5, 9 7 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ 7. 3 5 \times 1 0 ^ {2 2} = 7 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ 5, 9 7 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ - 7 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ 5, 8 9 6, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0 \\ \end{array}
 $$
 The difference is about  $5.8965 \times 10^{24}$  kilograms.
-ANOTHER WAY Write the masses using the same power of 10. Then subtract.
-$$
-\begin{array}{l} 5. 9 7 \times 1 0 ^ {2 4} \\ = (5. 9 7 \times 1 0 ^ {2}) \times 1 0 ^ {2 2} \\ = 5 9 7 \times 1 0 ^ {2 2} \\ \end{array}
-$$
-Use a property of exponents to write  $10^{24}$  as  $10^{2} \times 10^{22}$ .
-$$
-\begin{array}{l} (5 9 7 \times 1 0 ^ {2 2}) - (7. 3 5 \times 1 0 ^ {2 2}) \\ = (5 9 7 - 7. 3 5) \times 1 0 ^ {2 2} \\ = 5 8 9. 6 5 \times 1 0 ^ {2 2} \\ = 5. 8 9 6 5 \times 1 0 ^ {2 4} \\ \end{array}
-$$
-Remember, the first factor must be greater than or equal to 1 and less than 10.
-The difference is about  $5.8965 \times 10^{24}$  kilograms.
-![image](images/e78bb006475a4600c34e091e15054f7e9fb1675e0d21976bf8ed62702bb68606.jpg)
 
 ![图片](../images/5bfe4a51e8f12bf5538c1a59947154b779c762383fe127268f2ddb4f22160bdd.jpg)
 
@@ -3051,7 +2915,7 @@ The difference is about  $5.8965 \times 10^{24}$  kilograms.
 
 ![图片](../images/2e1ee7ec9b6af069f04da7e5ce9935454e46386dd7e2062163dde3a84dcd019c.jpg)
 
-![图片](../images/e78bb006475a4600c34e091e15054f7e9fb1675e0d21976bf8ed62702bb68606.jpg)
+**解答**: ANOTHER WAY Write the masses using the same power of 10. Then subtract.
 
 ---
 
@@ -3065,7 +2929,6 @@ $$
 $$
 \begin{array}{l} 2. 5 \times 1 0 ^ {7} + \boxed {} \times 1 0 ^ {7} = (2. 5 + \boxed {}) \times 1 0 ^ {7} \\ = \boxed { \begin{array}{l} \end{array} } \times 1 0 ^ {7} \\ = \boxed {} \times \boxed {} \\ \end{array}
 $$
-Convince Me! In Example 1 and the Try It, why did you move the decimal point to get the final answer?
 
 ---
 
@@ -3084,13 +2947,6 @@ $$
 $$
 Express both numbers in scientific notation.
 STEP 2 Multiply.
-$$
-\begin{array}{l} (8. 2 \times 1 0 ^ {2}) \times (4. 3 \times 1 0 ^ {1}) \\ = (8. 2 \times 4. 3) \times (1 0 ^ {2} \times 1 0 ^ {1}) \\ = 3 5. 2 6 \times (1 0) ^ {2 + 1} \\ = 3 5. 2 6 \times 1 0 ^ {3} \\ = 3. 5 2 6 \times 1 0 ^ {4} \\ \end{array}
-$$
-Remember: The Product of Powers Property states that when multiplying powers with the same base, you add the exponents.
-The first factor must be less than 10 and greater than or equal to 1.
-The length of the main part of the bridge is approximately  $3.5 \times 10^{4}$  feet.
-![image](images/8c341ee7893054d85764c66cba60914ba9f171a0560fff1a2502f1084d39fac0.jpg)
 
 ![图片](../images/59e4e119c568d93ed28abc6108eb7c3c994ac84d5ece93b080b0b0def270397e.jpg)
 
@@ -3101,6 +2957,14 @@ The length of the main part of the bridge is approximately  $3.5 \times 10^{4}$ 
 ![图片](../images/e0cdfb39073e61f6642bd523698f37ba08341fe3d2126e6e9bbec15876bfffd5.jpg)
 
 ![图片](../images/8c341ee7893054d85764c66cba60914ba9f171a0560fff1a2502f1084d39fac0.jpg)
+
+**解答**: $$
+\begin{array}{l} (8. 2 \times 1 0 ^ {2}) \times (4. 3 \times 1 0 ^ {1}) \\ = (8. 2 \times 4. 3) \times (1 0 ^ {2} \times 1 0 ^ {1}) \\ = 3 5. 2 6 \times (1 0) ^ {2 + 1} \\ = 3 5. 2 6 \times 1 0 ^ {3} \\ = 3. 5 2 6 \times 1 0 ^ {4} \\ \end{array}
+$$
+Remember: The Product of Powers Property states that when multiplying powers with the same base, you add the exponents.
+The first factor must be less than 10 and greater than or equal to 1.
+The length of the main part of the bridge is approximately  $3.5 \times 10^{4}$  feet.
+![image](images/8c341ee7893054d85764c66cba60914ba9f171a0560fff1a2502f1084d39fac0.jpg)
 
 ---
 
@@ -3133,11 +2997,12 @@ $$
 $$
 The Quotient of Powers Property states that when dividing powers with the same base, you subtract the exponents.
 The queen ant lays about  $6.1 \times 10^{4}$  eggs per day.
-![image](images/76be83845c8975a7b5799d0d03bb54c628db8ebf69cf926928cb39645f3a7239.jpg)
 
 ![图片](../images/a6252f29793a3c209e5eb18f201fbf8f82df11aa9bef9974fc83e48a6b0c0bf5.jpg)
 
 ![图片](../images/76be83845c8975a7b5799d0d03bb54c628db8ebf69cf926928cb39645f3a7239.jpg)
+
+**解答**: ![image](images/76be83845c8975a7b5799d0d03bb54c628db8ebf69cf926928cb39645f3a7239.jpg)
 
 ---
 
@@ -3175,6 +3040,9 @@ There are  $1 \times 10^{14}$  good bacteria in the human body. There are  $2.6 
 ### 5 (练习题)
 
 **题目**: 5. The distance from Earth to the Moon is approximately  $1.2 \times 10^{9}$  feet. The Apollo 11 spacecraft was approximately 360 feet long. About how many spacecraft of that length would fit end to end from Earth to the Moon? Express your answer in scientific notation.
+![image](images/ddfe60438d1e48bb1416206b05c393c21ae9bd519d92a86964491d8ba1bb5bd2.jpg)
+
+![图片](../images/ddfe60438d1e48bb1416206b05c393c21ae9bd519d92a86964491d8ba1bb5bd2.jpg)
 
 ---
 
@@ -3192,7 +3060,7 @@ b. What is the difference in the mass of the two planets expressed in scientific
 
 ---
 
-## Practice&ProblemSolving
+## Practice & Problem Solving
 
 ### 8 (练习题)
 
@@ -3286,7 +3154,7 @@ $(5.43\times 10^{8}) - (2.33\times 10^{8})$
 
 ---
 
-### 例 (例题)
+### Example (例题)
 
 **题目**: Example
 Write 1.0505... as a mixed number.
@@ -3320,7 +3188,7 @@ $$
 
 ---
 
-## ConceptsandSkillsReview
+## Concepts and Skills Review
 
 ### Example (例题)
 
@@ -3393,7 +3261,8 @@ A monument has a cube shape with a volume of 729 cubic meters. What is the lengt
 $$
 \begin{array}{l} \sqrt [ 3 ]{7 2 9} = \sqrt [ 3 ]{9 \cdot 9 \cdot 9} \\ = \sqrt [ 3 ]{9 ^ {3}} \\ = 9 \\ \end{array}
 $$
-So, the length of each edge is 9 meters.
+
+**解答**: So, the length of each edge is 9 meters.
 
 ---
 
@@ -3417,7 +3286,8 @@ Use the formula  $A = s^2$  to find each side length.
 $$
 \begin{array}{l} 1 4 4 = s ^ {2} \\ \sqrt {1 4 4} = \sqrt {s ^ {2}} \\ \pm 1 2 = s \\ \end{array}
 $$
-Length cannot be negative, so the length of each side of the deck will be 12 feet.
+
+**解答**: Length cannot be negative, so the length of each side of the deck will be 12 feet.
 
 ---
 
@@ -3461,7 +3331,7 @@ $$
 
 ---
 
-## 1
+## Practice
 
 ### 1 (练习题)
 
@@ -3487,15 +3357,18 @@ $$
 
 ---
 
+## Example
+
 ### Example (例题)
 
-**题目**: Example
-Evaluate the expression for  $x = 2$  and  $y = 4$ .
+**题目**: Evaluate the expression for  $x = 2$  and  $y = 4$ .
 $$
 \begin{array}{l} \frac {2}{y ^ {- 2}} + 5 x ^ {0} = \frac {2}{(4) ^ {- 2}} + 5 (2) ^ {0} \\ = \frac {2 (4 ^ {2})}{1} + 5 (1) \\ = 2 (1 6) + 5 (1) \\ = 3 2 + 5 \\ = 3 7 \\ \end{array}
 $$
 
 ---
+
+## Practice
 
 ### 1 (练习题)
 
@@ -3521,10 +3394,11 @@ $$
 
 ---
 
+## Example
+
 ### Example (例题)
 
-**题目**: Example
-Keisha is about 1,823,933 minutes old. Write this age as a single digit times a power of 10.
+**题目**: Keisha is about 1,823,933 minutes old. Write this age as a single digit times a power of 10.
 First round to the greatest place value. 1,823,933 is about 2,000,000.
 Write the rounded number as a single digit times a power of 10.
 $$
@@ -3534,6 +3408,8 @@ $$
 **解答**: Keisha is about  $2 \times 10^{6}$  minutes old.
 
 ---
+
+## Practice
 
 ### 1 (练习题)
 
@@ -3553,14 +3429,17 @@ $$
 
 ---
 
+## Example
+
 ### Example (例题)
 
-**题目**: Example
-Write 65,700,000 in scientific notation.
+**题目**: Write 65,700,000 in scientific notation.
 First, place the decimal point to the right of the first nonzero digit.
 Then, count the number of digits to the right of the decimal point to determine the power of 10. 65,700,000 in scientific notation is  $6.57 \times 10^{7}$ .
 
 ---
+
+## Practice
 
 ### 1 (练习题)
 
@@ -3586,15 +3465,18 @@ Then, count the number of digits to the right of the decimal point to determine 
 
 ---
 
+## Example
+
 ### Example (例题)
 
-**题目**: Example
-Multiply  $(4.2 \times 10^{5}) \times (2.5 \times 10^{3})$ .
+**题目**: Multiply  $(4.2 \times 10^{5}) \times (2.5 \times 10^{3})$ .
 $$
 \begin{array}{l} (4. 2 \times 1 0 ^ {5}) \times (2. 5 \times 1 0 ^ {3}) \\ = (4. 2 \times 2. 5) \times (1 0 ^ {5} \times 1 0 ^ {3}) \\ = 1 0. 5 \times 1 0 ^ {8} \\ = 1. 0 5 \times 1 0 ^ {9} \\ \end{array}
 $$
 
 ---
+
+## Practice
 
 ### 1 (练习题)
 
@@ -3670,17 +3552,7 @@ $$
 
 ---
 
-## 1
-
-### Example (例题)
-
-**题目**: Multiply  $(4.2 \times 10^{5}) \times (2.5 \times 10^{3})$ .
-
-**解答**: $$
-\begin{array}{l} (4. 2 \times 1 0 ^ {5}) \times (2. 5 \times 1 0 ^ {3}) \\ = (4. 2 \times 2. 5) \times (1 0 ^ {5} \times 1 0 ^ {3}) \\ = 1 0. 5 \times 1 0 ^ {8} \\ = 1. 0 5 \times 1 0 ^ {9} \\ \end{array}
-$$
-
----
+## LESSON 1-10 Operations with Numbers in Scientific Notation
 
 ### N (练习题)
 

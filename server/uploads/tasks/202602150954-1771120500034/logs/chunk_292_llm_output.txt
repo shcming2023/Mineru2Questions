@@ -4,10 +4,6 @@
 <qa_pair><label>2</label><type>exercise</type><question>20480,20481,20482,20483</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>20486</title>
-<qa_pair><label>WORKED EXAMPLE 18</label><type>example</type><question>20487</question>
-<solution>20488,20489,20490,20491,20492,20493,20494,20495,20496,20497,20498,20499,20500</solution></qa_pair>
-</chapter>
 <chapter><title>20501</title>
 <qa_pair><label>1</label><type>exercise</type><question>20502</question>
 <solution></solution></qa_pair>
@@ -27,6 +23,10 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>20525</title>
-<qa_pair><label>APPLY YOUR SKILLS CONTINUED</label><type>exercise</type><question>20526,20527,20528,20529,20530,20531,20532,20533,20534,20535</question>
+<qa_pair><label>1</label><type>exercise</type><question>20526,20527,20528,20529,20530,20531,20532,20533,20534,20535</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>20536</title>
+<qa_pair><label>1</label><type>example</type><question>20486,20487</question>
+<solution>20488,20489,20490,20491,20492,20493,20494,20495,20496,20497,20498,20499,20500</solution></qa_pair>
 </chapter>

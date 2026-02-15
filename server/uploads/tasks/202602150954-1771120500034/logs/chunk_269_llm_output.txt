@@ -20,7 +20,3 @@
 <qa_pair><label>10</label><type>exercise</type><question>18912,18913,18914,18915,18916,18917,18918</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>18926</title>
-<qa_pair><label>20.1</label><type>exercise</type><question>18927</question>
-<solution></solution></qa_pair>
-</chapter>

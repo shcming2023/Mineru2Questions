@@ -3,7 +3,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>3035,3036</question>
 <solution></solution></qa_pair>
-<qa_pair><label>7</label><type>exercise</type><question>3037,3038,3039,3040,3041,3042,3043,3044</question>
+<qa_pair><label>7</label><type>exercise</type><question>3037,3038,3039,3040,3041,3042,3043</question>
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>3045,3046,3047</question>
 <solution></solution></qa_pair>
@@ -13,7 +13,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>11</label><type>exercise</type><question>3057,3058,3059,3060,3061,3062,3063</question>
 <solution></solution></qa_pair>
-<qa_pair><label>12</label><type>exercise</type><question>3064,3065,3066,3067,3068,3069,3070,3071</question>
+<qa_pair><label>12</label><type>exercise</type><question>3064,3065,3066,3067,3068,3069,3070</question>
 <solution></solution></qa_pair>
 <qa_pair><label>13</label><type>exercise</type><question>3072</question>
 <solution></solution></qa_pair>

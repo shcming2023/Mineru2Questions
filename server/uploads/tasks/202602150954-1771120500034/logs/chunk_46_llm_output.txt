@@ -9,8 +9,8 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>3311</title>
-<qa_pair><label>3</label><type>example</type><question>3312,3314,3315</question>
-<solution>3316,3317</solution></qa_pair>
+<qa_pair><label>3</label><type>example</type><question>3312,3314,3315,3316</question>
+<solution>3317</solution></qa_pair>
 <qa_pair><label>3</label><type>example</type><question>3318,3319</question>
 <solution></solution></qa_pair>
 </chapter>

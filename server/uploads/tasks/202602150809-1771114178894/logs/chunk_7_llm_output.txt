@@ -17,7 +17,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>16</label><type>exercise</type><question>517,518,519,520,521</question>
 <solution></solution></qa_pair>
-<qa_pair><label>17</label><type>exercise</type><question>522,523,524,525,526,527</question>
+<qa_pair><label>17</label><type>exercise</type><question>522,523,524,525,526,527,528</question>
 <solution></solution></qa_pair>
 <qa_pair><label>Solve & Discuss It!</label><type>exercise</type><question>529,530,531,532</question>
 <solution></solution></qa_pair>

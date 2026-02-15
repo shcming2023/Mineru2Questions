@@ -1,10 +1,10 @@
 # 提取的题目
 
-**总数**: 3622
+**总数**: 3529
 
 ---
 
-## 1
+## Chapter 1
 
 ### 1 (练习题)
 
@@ -14,7 +14,7 @@ a natural numbers
 
 ---
 
-## 1.1
+## 1.1 Different types of numbers
 
 ### 1 (练习题)
 
@@ -65,7 +65,7 @@ c Narcissistic numbers (in other words, numbers that love themselves!)
 
 ---
 
-## 1.2
+## Exercise 1.2
 
 ### 1 (练习题)
 
@@ -117,6 +117,8 @@ b List any symbols that you do not know. Try to find out what each one means.
 
 ---
 
+## 1.2 Multiples and factors
+
 ### WORKED EXAMPLE 1 (例题)
 
 **题目**: WORKED EXAMPLE 1
@@ -137,86 +139,85 @@ $$
 
 ---
 
-### Exercise 1.3 (练习题)
+### 1 (练习题)
 
-**题目**: Exercise 1.3
-1 List the first five multiples of:
+**题目**: 1 List the first five multiples of:
 
 ---
 
-### 1h (练习题)
+### 9 (练习题)
 
 **题目**: h 100
 
 ---
 
-### 2 (练习题)
+### 10 (练习题)
 
 **题目**: 2 Use a calculator to find and list the first ten multiples of:
 
 ---
 
-### 2d (练习题)
+### 14 (练习题)
 
 **题目**: d 114
 
 ---
 
-### 2e (练习题)
+### 15 (练习题)
 
 **题目**: e 299
 
 ---
 
-### 2f (练习题)
+### 16 (练习题)
 
 **题目**: f 350
 
 ---
 
-### 2g (练习题)
+### 17 (练习题)
 
 **题目**: g 1012
 
 ---
 
-### 2h (练习题)
+### 18 (练习题)
 
 **题目**: h 9123
 
 ---
 
-### 3 (练习题)
+### 19 (练习题)
 
 **题目**: 3 List:
 
 ---
 
-### 3a (练习题)
+### 20 (练习题)
 
 **题目**: a the multiples of 4 between 29 and 53
 
 ---
 
-### 3b (练习题)
+### 21 (练习题)
 
 **题目**: b the multiples of 50 less than 400
 
 ---
 
-### 3c (练习题)
+### 22 (练习题)
 
 **题目**: c the multiples of 100 between 4000 and 5000.
 
 ---
 
-### 4 (练习题)
+### 23 (练习题)
 
 **题目**: 4 Here are five numbers: 576, 396, 354, 792, 1164. Which of these are multiples of 12?
 
 ---
 
-### 5 (练习题)
+### 24 (练习题)
 
 **题目**: 5 Which of the following numbers are not multiples of 27?
 
@@ -243,38 +244,38 @@ Find the lowest number that appears in both sets. This is the LCM.
 
 ---
 
-### Exercise 1.4 (练习题)
+### 1 (练习题)
 
 **题目**: Exercise 1.4
 1 Find the lowest common multiple of:
 
 ---
 
-### 1a (练习题)
+### 2 (练习题)
 
 **题目**: a 2 and 5
 
 ---
 
-### 1b (练习题)
+### 3 (练习题)
 
 **题目**: b 8 and 10
 
 ---
 
-### 1c (练习题)
+### 4 (练习题)
 
 **题目**: 6 and 4
 
 ---
 
-### 1d (练习题)
+### 5 (练习题)
 
 **题目**: d 3 and 9
 
 ---
 
-## 1.4
+## Exercise 1.4
 
 ### 1 (练习题)
 
@@ -295,7 +296,7 @@ Give a reason for your answer.
 
 ---
 
-## Factors
+## WORKED EXAMPLE 3
 
 ### WORKED EXAMPLE 3 (例题)
 
@@ -303,9 +304,9 @@ Give a reason for your answer.
 a 12
 b 25
 c 110
+Answers
 
-**解答**: Answers
-a F12=1,2,3,4,6,12
+**解答**: a F12=1,2,3,4,6,12
 Find pairs of numbers that multiply to give 12:
 $$
 \begin{array}{l} 1 \times 1 2 \\ 2 \times 6 \\ 3 \times 4 \\ \end{array}
@@ -326,7 +327,7 @@ $$
 
 ---
 
-## 1.5
+## Exercise 1.5
 
 ### 1 (练习题)
 
@@ -385,16 +386,23 @@ g 210 is a factor of 210
 
 ---
 
+## The highest common factor (HCF)
+
 ### WORKED EXAMPLE 4 (例题)
 
 **题目**: WORKED EXAMPLE 4
 Find the highest common factor of 8 and 24.
-
-**解答**: Answer
+Answer
 
 ---
 
-## 1.6
+## 1.3 Prime numbers
+
+### Exercise 1.6 (练习题)
+
+**题目**: Exercise 1.6
+
+---
 
 ### 1 (练习题)
 
@@ -425,8 +433,6 @@ Give a reason for your answer.
 
 ---
 
-## APPLYYOURSKILLS
-
 ### 4 (练习题)
 
 **题目**: 4 Simeon has two lengths of rope. One piece is 72 metres long and the other is 90 metres long. He wants to cut both lengths of rope into the longest pieces of equal length possible. How long will the pieces be?
@@ -445,12 +451,9 @@ Give a reason for your answer.
 
 ---
 
-## INVESTIGATION
-
 ### 1 (练习题)
 
-**题目**: 1 Goldbach's conjecture (1742) is one of the oldest and best-known unsolved problems in number theory.
-a What is Goldbach's strong conjecture?
+**题目**: a What is Goldbach's strong conjecture?
 
 ---
 
@@ -460,13 +463,11 @@ a What is Goldbach's strong conjecture?
 
 ---
 
-### 2a (练习题)
+### a (练习题)
 
 **题目**: a Riemann built his ideas on the prime number theorem. Find out what this is and express it in simple language.
 
 ---
-
-## 1.7
 
 ### 1 (练习题)
 
@@ -499,11 +500,10 @@ b Try to write each composite number on your list as the sum of two prime number
 
 ---
 
-## 5
-
 ### 5 (例题)
 
-**题目**: Write the following numbers as the product of prime factors.
+**题目**: WORKED EXAMPLE 5
+Write the following numbers as the product of prime factors.
 a 36
 b 48
 
@@ -546,11 +546,10 @@ Write the prime factors in ascending order with  $\times$  signs.
 
 ---
 
-## 1.8
-
 ### 1 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
+**题目**: Exercise 1.8
+1 Express the following numbers as the product of prime factors.
 a 30
 f 504
 b 24
@@ -564,11 +563,10 @@ i 9240
 
 ---
 
-## 6
-
 ### 6 (例题)
 
-**题目**: Find the HCF of 168 and 180.
+**题目**: WORKED EXAMPLE 6
+Find the HCF of 168 and 180.
 
 **解答**: Answer
 $$
@@ -589,7 +587,7 @@ $$
 
 ---
 
-## 1.8
+## Exercise 1.8
 
 ### 1 (练习题)
 
@@ -600,68 +598,53 @@ a 30
 
 ### 2 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-f 504
-
----
-
-### 3 (练习题)
-
-**题目**: 1 Express the following numbers as the product of prime factors.
-b 24
+**题目**: f 504
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-g 650
+**题目**: g 650
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-c 100
+**题目**: c 100
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-h 1125
+**题目**: h 1125
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-d 225
+**题目**: d 225
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-i 756
+**题目**: i 756
 
 ---
 
 ### 9 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-e 360
+**题目**: e 360
 
 ---
 
 ### 10 (练习题)
 
-**题目**: 1 Express the following numbers as the product of prime factors.
-i 9240
+**题目**: i 9240
 
 ---
 
-## 6
+## WORKED EXAMPLE 6
 
 ### 7 (例题)
 
@@ -686,7 +669,7 @@ $$
 
 ---
 
-## 1.9
+## Exercise 1.9
 
 ### 1 (练习题)
 
@@ -697,50 +680,43 @@ a 48 and 108
 
 ### 2 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-b 120 and 216
+**题目**: b 120 and 216
 
 ---
 
 ### 3 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-c 72 and 90
+**题目**: c 72 and 90
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-d 52 and 78
+**题目**: d 52 and 78
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-100 and 125
+**题目**: 100 and 125
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-f 154 and 88
+**题目**: f 154 and 88
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-g 546 and 624
+**题目**: g 546 and 624
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 1 Find the HCF of these numbers by using prime factors.
-h 95 and 120
+**题目**: h 95 and 120
 
 ---
 
@@ -753,50 +729,43 @@ a 54 and 60
 
 ### 3 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-b 54 and 72
+**题目**: b 54 and 72
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-c 60 and 72
+**题目**: c 60 and 72
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-48 and 60
+**题目**: 48 and 60
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-120 and 180
+**题目**: 120 and 180
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-f 95 and 150
+**题目**: f 95 and 150
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-g 54 and 90
+**题目**: g 54 and 90
 
 ---
 
 ### 9 (练习题)
 
-**题目**: 2 Use prime factorisation to determine the LCM of the following numbers.
-h 90 and 120
+**题目**: h 90 and 120
 
 ---
 
@@ -809,26 +778,23 @@ a 72 and 108
 
 ### 4 (练习题)
 
-**题目**: 3 Determine both the HCF and LCM of the following numbers.
-b 25 and 200
+**题目**: b 25 and 200
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 3 Determine both the HCF and LCM of the following numbers.
-95 and 120
+**题目**: 95 and 120
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 3 Determine both the HCF and LCM of the following numbers.
-d 84 and 60
+**题目**: d 84 and 60
 
 ---
 
-## APPLYYOURSKILLS
+## APPLY YOUR SKILLS
 
 ### 4 (练习题)
 
@@ -863,13 +829,79 @@ c How many factors does  $r$  have?
 
 ---
 
-## 1.4
+## 1.4 Working with directed numbers
 
 ### 1 (练习题)
 
 **题目**: Exercise 1.10
 1 Express each of these situations using a directed number.
 a a profit of $100
+
+---
+
+### 2 (练习题)
+
+**题目**: b 25 km below sea level
+
+---
+
+### 3 (练习题)
+
+**题目**: c a drop of 10 marks
+
+---
+
+### 4 (练习题)
+
+**题目**: d a gain of  $2\mathrm{kg}$
+
+---
+
+### 5 (练习题)
+
+**题目**: e a loss of  $1.5\mathrm{kg}$
+
+---
+
+### 6 (练习题)
+
+**题目**: 8000 m above sea level
+
+---
+
+### 7 (练习题)
+
+**题目**: g a temperature of  $10^{\circ}C$  below zero
+
+---
+
+### 8 (练习题)
+
+**题目**: a fall of  $24\mathrm{m}$
+
+---
+
+### 9 (练习题)
+
+**题目**: i a debt of $2000
+
+---
+
+### 10 (练习题)
+
+**题目**: an increase of $250
+
+---
+
+### 11 (练习题)
+
+**题目**: k a time two hours behind local time
+
+---
+
+### 12 (练习题)
+
+**题目**: a height of  $400\mathrm{m}$
 
 ---
 
@@ -988,171 +1020,89 @@ c $200 is deposited. What is the new balance?
 
 ---
 
-## 1.5
+## 1.5 Powers, roots and laws of indices
 
-### b (练习题)
+### b -1.7 +□=8.3 (练习题)
 
 **题目**: b -1.7 +□=8.3
 
 ---
 
-### c (练习题)
+### c -7+□=-21 (练习题)
 
 **题目**: c -7+□=-21
 
 ---
 
-### d (练习题)
+### d 8-□=11 (练习题)
 
 **题目**: d 8-□=11
 
 ---
 
-### e (练习题)
+### e  $4 - \\square = 6.7$ (练习题)
 
 **题目**: e  $4 - \square = 6.7$
 
 ---
 
-### f (练习题)
+### f -8-□=-13 (练习题)
 
 **题目**: f -8-□=-13
 
 ---
 
-### g (练习题)
+### g  $12\\div \\square = -2$ (练习题)
 
 **题目**: g  $12\div \square = -2$
 
 ---
 
-### h (练习题)
+### h -18÷□=3 (练习题)
 
 **题目**: h -18÷□=3
 
 ---
 
-### i (练习题)
+### i  $\\square -3 = -9$ (练习题)
 
 **题目**: i  $\square -3 = -9$
 
 ---
 
-### j (练习题)
+### j -3x□=12 (练习题)
 
 **题目**: j -3x□=12
 
 ---
 
-### k (练习题)
+### k  $\\square \\times 4 = -16$ (练习题)
 
 **题目**: k  $\square \times 4 = -16$
 
 ---
 
-### 1 (练习题)
+### 1  $\\square \\times -4 = 20$ (练习题)
 
 **题目**: 1  $\square \times -4 = 20$
 
 ---
 
-### 4 (练习题)
+### 9 (练习题)
 
-**题目**: 4 Study the temperature graph carefully.
-![image](images/1fdff7b1f71aacc71eef1d9a176233503187e0440f65373690206f7264612d1b.jpg)
-a What was the temperature on Sunday 14 January?
-
-![图片](../images/1fdff7b1f71aacc71eef1d9a176233503187e0440f65373690206f7264612d1b.jpg)
-
----
-
-### 4b (练习题)
-
-**题目**: b By how much did the temperature drop from Sunday 14 to Monday 15?
-
----
-
-### 4c (练习题)
-
-**题目**: c What was the lowest temperature recorded?
-
----
-
-### 4d (练习题)
-
-**题目**: What is the difference between the highest and lowest temperatures?
-
----
-
-### 4e (练习题)
-
-**题目**: e On Monday 29 January the temperature changed by -12 degrees. What was the temperature on that day?
-
----
-
-### 6 (练习题)
-
-**题目**: 6 A bank account is $420 overdrawn.
-
----
-
-### 6a (练习题)
-
-**题目**: a Express this as a directed number.
-
----
-
-### 6b (练习题)
-
-**题目**: b How much money needs to be deposited for the account to have a balance of $500?
-
----
-
-### 6c (练习题)
-
-**题目**: c $200 is deposited. What is the new balance?
-
----
-
-### 9a (练习题)
-
-**题目**: a If it is 4p.m. in London, what time is it in Abu Dhabi?
-
----
-
-### 9b (练习题)
-
-**题目**: b If it is 3a.m. in London, what.time is it in Rio de Janiero?
-
----
-
-### 9c (练习题)
-
-**题目**: c If it is 3p.m. in Rio de Janeiro, what time is it in Abu Dhabi?
-
----
-
-### 9d (练习题)
-
-**题目**: d If it is 8 a.m. in Abu Dhabi, what time is it in Rio de Janeiro?
+**题目**: 9 Local time in Abu Dhabi is four hours ahead of local time in London. Local time in Rio de Janeiro is three hours behind local time in London.
+a If it is 4p.m. in London, what time is it in Abu Dhabi?
+b If it is 3a.m. in London, what.time is it in Rio de Janiero?
+c If it is 3p.m. in Rio de Janeiro, what time is it in Abu Dhabi?
+d If it is 8 a.m. in Abu Dhabi, what time is it in Rio de Janeiro?
 
 ---
 
 ### 10 (练习题)
 
 **题目**: 10 A fuel tank at a workshop should be refilled when the gauge shows 0; however, there is a 100 litre reserve in the tank, so the level can drop below 0 if the tank is not filled on time.
-
----
-
-### 10a (练习题)
-
-**题目**: a On 3 March, the gauge indicated 412 litres above the 0 mark. On 31 March the level had dropped to -66 litres. Calculate the mean rate of fuel use per day.
-
----
-
-### 10b (练习题)
-
-**题目**: b On 1 April, the tank was topped up. The workshop owner estimates that this amount of fuel would be enough for 30 days, after which the level should be 0. How much fuel was added to the tank?
+a On 3 March, the gauge indicated 412 litres above the 0 mark. On 31 March the level had dropped to -66 litres. Calculate the mean rate of fuel use per day.
+b On 1 April, the tank was topped up. The workshop owner estimates that this amount of fuel would be enough for 30 days, after which the level should be 0. How much fuel was added to the tank?
 
 ---
 
@@ -1206,23 +1156,21 @@ Multiply together to get the cube root of 512.
 
 ---
 
-### Exercise 1.12 (练习题)
+### 1 (练习题)
 
 **题目**: Exercise 1.12
 ![image](images/0d1577f066bded5492dc98e370be0605ed9bb6d99bc798081184d453a370458b.jpg)
 1 Write down the value of:
+a 32
+b 72
+c 11²
+d 12
 
 ![图片](../images/0d1577f066bded5492dc98e370be0605ed9bb6d99bc798081184d453a370458b.jpg)
 
 ---
 
-### 1c (练习题)
-
-**题目**: c 11²
-
----
-
-## 1.12
+## Exercise 1.12
 
 ### 1 (练习题)
 
@@ -1306,7 +1254,7 @@ t
 
 ---
 
-## 5
+## 5 Use the given product of prime factors to find the square root of each number. Show your working.
 
 ### 5 (练习题)
 
@@ -1386,7 +1334,7 @@ i 5★2
 
 ---
 
-### 10 (例题)
+### WORKED EXAMPLE 10 (例题)
 
 **题目**: WORKED EXAMPLE 10
 Express these numbers as products of their prime factors in index form.
@@ -1412,7 +1360,7 @@ $$
 
 ---
 
-## 1.13
+## Exercise 1.13
 
 ### 1 (练习题)
 
@@ -1519,7 +1467,7 @@ a 64
 
 ---
 
-## 1.14
+## Exercise 1.14
 
 ### 1 (练习题)
 
@@ -1796,7 +1744,7 @@ $$
 
 ---
 
-## 1.15
+## Exercise 1.15
 
 ### 1 (练习题)
 
@@ -1853,7 +1801,7 @@ c How many calories would a  $5000\mathrm{kg}$  elephant consume at rest?
 
 ---
 
-## 1.6
+## 1.6 Order of operations
 
 ### 12 (例题)
 
@@ -1861,36 +1809,12 @@ c How many calories would a  $5000\mathrm{kg}$  elephant consume at rest?
 Simplify.
 a  $7\times (3 + 4)$
 b (10 - 4) × (4 + 9)
-c 45-[20×(4-3)]
-
-**解答**: Answers
-a  $7\times 7 = 49$
-b  $6\times 13 = 78$
-$45 - [20\times 1] = 45 - 20 = 25$
-
----
-
-### 13 (例题)
-
-**题目**: WORKED EXAMPLE 13
-Calculate.
-4+28 a 17-9
-b 36÷4+100-36
-
-**解答**: Answers
-a  $(4 + 28)\div (17 - 9)$
-b 36÷4+100-36
-$$
-\begin{array}{l} = 3 2 \div 8 \\ = \sqrt {9} + \sqrt {6 4} \\ = 4 \\ = 3 + 8 \\ = 1 1 \\ \end{array}
-$$
 
 ---
 
 ### 1 (练习题)
 
-**题目**: Exercise 1.16
-![image](images/139f08bd1dafaa2faf2c3723bdbcc658e9a16cccb4f7943c56b7605c2c4300ff.jpg)
-1 Calculate. Show the steps in your working.
+**题目**: 1 Calculate. Show the steps in your working.
 a  $(4 + 7)\times 3$
 b (20-4)÷4
 c  $50\div (20 + 5)$
@@ -1903,11 +1827,6 @@ i 40÷(12-4)
 100÷(4+16)
 k  $121\div (33\div 3)$
 15×(15-15)
-![image](images/807a50a901c59a1b9d6551bd409d0eb859d72356e1490a806d0f85612983082c.jpg)
-
-![图片](../images/139f08bd1dafaa2faf2c3723bdbcc658e9a16cccb4f7943c56b7605c2c4300ff.jpg)
-
-![图片](../images/807a50a901c59a1b9d6551bd409d0eb859d72356e1490a806d0f85612983082c.jpg)
 
 ---
 
@@ -1971,7 +1890,24 @@ f  $\{6 + [5\times (2 + 30)]\} \times 10$
 
 ---
 
-## 3
+## WORKED EXAMPLE 13
+
+### 13 (例题)
+
+**题目**: Calculate.
+4+28 a 17-9
+b 36÷4+100-36
+
+**解答**: Answers
+a  $(4 + 28)\div (17 - 9)$
+b 36÷4+100-36
+$$
+\begin{array}{l} = 3 2 \div 8 \\ = \sqrt {9} + \sqrt {6 4} \\ = 4 \\ = 3 + 8 \\ = 1 1 \\ \end{array}
+$$
+
+---
+
+## 3 Simplify. Show the steps in your working.
 
 ### 3 (练习题)
 
@@ -2337,7 +2273,7 @@ $(\square + \square) - (\square - \square) = \square$
 
 ---
 
-## 14
+## WORKED EXAMPLE 14
 
 ### 14 (例题)
 
@@ -2354,7 +2290,7 @@ c 9 Enter 3 8 - 4 ） - 2 5 + 1 ）
 
 ---
 
-## 3
+## 3 Simplify. Show the steps in your working.
 
 ### WORKED EXAMPLE 14 (例题)
 
@@ -2444,9 +2380,9 @@ c 9 Enter 3 8 - 4 ） - 2 5 + 1 ）
 
 ---
 
-## 1.7
+## 1.7 Rounding and estimating
 
-### 15 (例题)
+### WORKED EXAMPLE 15 (例题)
 
 **题目**: WORKED EXAMPLE 15
 Round 64.839906 to:
@@ -2477,7 +2413,7 @@ Correct to 3 decimal places.
 
 ---
 
-### 16 (例题)
+### WORKED EXAMPLE 16 (例题)
 
 **题目**: WORKED EXAMPLE 16
 Round:
@@ -2521,7 +2457,7 @@ d 2.149
 
 ---
 
-## 1.18
+## Exercise 1.18
 
 ### 2 (练习题)
 
@@ -2593,7 +2529,7 @@ f 1 significant figure
 
 ---
 
-## 17
+## WORKED EXAMPLE 17
 
 ### 17 (例题)
 
@@ -2627,7 +2563,7 @@ Notice that if you round 35 up to 36 you get a square number and you can easily 
 
 ---
 
-## 1.19
+## Exercise 1.19
 
 ### 1 (练习题)
 
@@ -2701,7 +2637,7 @@ b an underestimate?
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -2872,7 +2808,7 @@ Find the word with code 7500.
 
 ---
 
-## 2
+## >Chapter 2
 
 ### 1 (练习题)
 
@@ -2930,7 +2866,7 @@ b Will the sum of three consecutive numbers always be even? Use algebra to justi
 
 ---
 
-## 2.1
+## 2.1 Using letters to represent unknown values
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -2996,6 +2932,8 @@ Write the division as a fraction.
 
 ---
 
+## Exercise 2.1
+
 ### 1 (练习题)
 
 **题目**: 1 Rewrite each expression in its simplest form.
@@ -3003,256 +2941,260 @@ a  $6\times x\times y$
 
 ---
 
-### 1a (练习题)
+## 2.1 Using letters to represent unknown values
+
+### a (练习题)
 
 **题目**: a  $6\times x\times y$
 
 ---
 
-### 1b (练习题)
+### b (练习题)
 
 **题目**: b 7xaxb
 
 ---
 
-### 1c (练习题)
+### c (练习题)
 
 **题目**: $x\times y\times z$
 
 ---
 
-### 1d (练习题)
+### d (练习题)
 
 **题目**: d  $2\times y\times y$
 
 ---
 
-### 1e (练习题)
+### e (练习题)
 
 **题目**: e  $a\times 4\times b$
 
 ---
 
-### 1f (练习题)
+### f (练习题)
 
 **题目**: f  $x\times y\times 12$
 
 ---
 
-### 1g (练习题)
+### g (练习题)
 
 **题目**: $5 \times b \times a$
 
 ---
 
-### 1h (练习题)
-
-**题目**: h  $y\times z\times z$
-
----
-
-### 1i (练习题)
+### i (练习题)
 
 **题目**: i  $6\div x$
 
 ---
 
-### 1j (练习题)
+### j (练习题)
 
 **题目**: j  $4x\div 2y$
 
 ---
 
-### 1k (练习题)
+### k (练习题)
 
 **题目**: k  $(x + 3)\div 4$
 
 ---
 
-### 1l (练习题)
+### l (练习题)
 
 **题目**: $m\times m\times m\div m\times m$
 
 ---
 
-### 1m (练习题)
+### m (练习题)
 
 **题目**: m  $4\times x + 5\times y$
 
 ---
 
-### 1n (练习题)
+### n (练习题)
 
 **题目**: n  $a\times 7 - 2\times b$
 
 ---
 
-### 1o (练习题)
+### o (练习题)
 
 **题目**: $2\times x\times (x - 4)$
 
 ---
 
-### 1p (练习题)
+### p (练习题)
 
 **题目**: $3 \times (x + 1) \div 2 \times x$
 
 ---
 
-### 1q (练习题)
+### q (练习题)
 
 **题目**: q  $2\times (x + 4)\div 3$
 
 ---
 
-### 1r (练习题)
+### r (练习题)
 
 **题目**: r  $(4\times x)\div (2\times x + 4\times x)$
 
 ---
 
-### 2 (练习题)
+## Exercise 2.1
+
+### 19 (练习题)
 
 **题目**: 2 Let the unknown number be  $m$ . Write expressions for:
 a the sum of the unknown number and 13
 
 ---
 
-### 2a (练习题)
+## 2.1 Using letters to represent unknown values
+
+### a (练习题)
 
 **题目**: a the sum of the unknown number and 13
 
 ---
 
-### 2b (练习题)
+### b (练习题)
 
 **题目**: a number that will exceed the unknown number by five
 
 ---
 
-### 2c (练习题)
+### c (练习题)
 
 **题目**: c the difference between 25 and the unknown number
 
 ---
 
-### 5 (练习题)
+## Exercise 2.1
+
+### 22 (练习题)
 
 **题目**: d the unknown number cubed
 
 ---
 
-### 6 (练习题)
+### 23 (练习题)
 
 **题目**: a third of the unknown number plus three
 
 ---
 
-### 7 (练习题)
+### 24 (练习题)
 
 **题目**: f four times the unknown number take away twice the number.
 
 ---
 
-### 3 (练习题)
+### 25 (练习题)
 
 **题目**: 3 Let the unknown number be  $x$ . Write expressions for:
 a three more than x
 
 ---
 
-### 4 (练习题)
+### 26 (练习题)
 
 **题目**: b six less than x
 
 ---
 
-### 5 (练习题)
+### 27 (练习题)
 
 **题目**: ten times x
 
 ---
 
-### 6 (练习题)
+### 28 (练习题)
 
 **题目**: d the sum of -8 and  $x$
 
 ---
 
-### 7 (练习题)
+### 29 (练习题)
 
 **题目**: the sum of the unknown number and its square
 
 ---
 
-### 8 (练习题)
+### 30 (练习题)
 
 **题目**: a number which is twice  $x$  more than  $x$
 
 ---
 
-### 9 (练习题)
+### 31 (练习题)
 
 **题目**: 9 the fraction obtained when double the unknown number is divided by the sum of the unknown number and four.
 
 ---
 
-### 4 (练习题)
+### 32 (练习题)
 
 **题目**: 4 A book and a pack of markers cost  $x$  dollars.
 a If the book costs $10 what does the pack of markers cost?
 
 ---
 
-### 5 (练习题)
+### 33 (练习题)
 
 **题目**: b If the pack of markers is three times the price of the book, what does the book cost?
 
 ---
 
-### 6 (练习题)
+### 34 (练习题)
 
 **题目**: c If the book costs $ (x - 15), what does the pack of markers cost?
 
 ---
 
-### 5 (练习题)
+### 35 (练习题)
 
 **题目**: 5 A woman is  $m$  years old.
 a How old will she be in ten years' time?
 
 ---
 
-### 6 (练习题)
+### 36 (练习题)
 
 **题目**: b How old was she ten years ago?
 
 ---
 
-### 7 (练习题)
+### 37 (练习题)
 
 **题目**: Her son is half her age. How old is the son?
 
 ---
 
-### 6 (练习题)
+### 38 (练习题)
 
 **题目**: 6 Three people win a prize of $p.
 a If they share the prize equally, how much will each receive?
 
 ---
 
-### 7 (练习题)
+### 39 (练习题)
 
 **题目**: b If one of the people wins three times as much money as the other two, how much will each receive?
 
 ---
 
-### 3 (例题)
+### WORKED EXAMPLE 3 (例题)
 
 **题目**: WORKED EXAMPLE 3
 Given that  $a = 2$  and  $b = 8$ , evaluate:
 a ab
+c 2a3
+d 2a(a + b)
 
 **解答**: Answers
 $\mathrm{a}\;\mathrm{{ab}} = \mathrm{a} \times  \mathrm{b}$
@@ -3261,46 +3203,28 @@ $= 2\times 8$
 Put back the multiplication sign.
 Substitute the values for  $a$  and  $b$ .
 Calculate the answer.
-
----
-
-### 3 (例题)
-
-**题目**: WORKED EXAMPLE 3 CONTINUED
+WORKED EXAMPLE 3 CONTINUED
 b  $3b - 2a = 3\times b - 2\times a$
-
-**解答**: $$
+$$
 \begin{array}{l} = 3 \times 8 - 2 \times 2 \\ = 2 4 - 4 \\ = 2 0 \\ \end{array}
+$$
+c  $2a^{3} = 2\times a^{3}$
+$$
+\begin{array}{l} = 2 \times 2 ^ {3} \\ = 2 \times 8 \\ = 1 6 \\ \end{array}
 $$
 Put back the multiplication signs.
 Substitute the values for  $a$  and  $b$ .
 Use the order of operations rules.
 (x before -).
 Calculate the answer.
-
----
-
-### 3 (例题)
-
-**题目**: c  $2a^{3} = 2\times a^{3}$
-
-**解答**: $$
-\begin{array}{l} = 2 \times 2 ^ {3} \\ = 2 \times 8 \\ = 1 6 \\ \end{array}
-$$
 Put back the multiplication signs.
 Substitute the value for  $a$ .
 Work out  $2^{3}$  first (grouping symbols first).
 Calculate the answer.
-
----
-
-### 3 (例题)
-
-**题目**: d  $2a(a + b) = 2\times a\times (a + b)$
-
-**解答**: $$
+$$
 \begin{array}{l} = 2 \times 2 \times (2 + 8) \\ = 4 \times 1 0 \\ \end{array}
 $$
+d  $2a(a + b) = 2\times a\times (a + b)$
 Put back the multiplication signs.
 Substitute the values for  $a$  and  $b$ .
 In this case you can carry out two steps at the same time: multiplication outside the bracket, and the addition inside.
@@ -3308,30 +3232,233 @@ Calculate the answer.
 
 ---
 
-## 2.2
+## Exercise 2.2
 
 ### 1 (练习题)
 
 **题目**: 1 Evaluate the following expressions for  $x = 3$
 a 3x
+
+---
+
+### 2 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 e  $2x^{2}$
+
+---
+
+### 3 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 i 2(x-1)
+
+---
+
+### 4 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 m 10x 6
+
+---
+
+### 5 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 b 10x
+
+---
+
+### 6 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 f 10-x
+
+---
+
+### 7 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 4x j 2
+
+---
+
+### 8 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 (4x+2) n 7
+
+---
+
+### 9 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 4x-2
+
+---
+
+### 10 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 g  $x^{2} + 7$
+
+---
+
+### 11 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 6x k 3
+
+---
+
+### 12 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 3(x+2) 7x+9
+
+---
+
+### 13 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 d  $x^{3}$
+
+---
+
+### 14 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 h  $x^{3} + x^{2}$
+
+---
+
+### 15 (练习题)
+
+**题目**: 1 Evaluate the following expressions for  $x = 3$
 90 1 x
 
 ---
 
-## 2.3
+### 2 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+a abc
+
+---
+
+### 3 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+d  $3b - 2(a + c)$
+
+---
+
+### 4 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+g  $ab + bc + ac$
+
+---
+
+### 5 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+j (b-c）+（a+c）
+
+---
+
+### 6 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+m  $\frac{4b}{a} +c$
+
+---
+
+### 7 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+P  $\frac{3abc}{10a}$
+
+---
+
+### 8 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+8a 3 a+b
+
+---
+
+### 9 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+b a²b
+
+---
+
+### 10 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+e  $a^2 +c^2$
+
+---
+
+### 11 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+h  $2(ab)^{2}$
+
+---
+
+### 12 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+k (a+b)(b-c)
+
+---
+
+### 13 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+4b² n
+
+---
+
+### 14 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+6b² (a+c)²
+
+---
+
+### 15 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+6ab -2bc
+
+---
+
+### 16 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+c  $4a + 2c$
+
+---
+
+### 17 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+${4b} - {2a} + c$
+
+---
+
+### 18 (练习题)
+
+**题目**: 2 What is the value of each expression when  $a = 3$  and  $b = 5$  and  $c = 2$ ?
+i  $3(a + b)$
+
+---
+
+## 2.3 Simplifying expressions
 
 ### 2 (练习题)
 
@@ -3428,6 +3555,8 @@ b 4a+6b+3a
 
 ---
 
+## Exercise 2.3
+
 ### 1 (练习题)
 
 **题目**: 1 Identify the like terms in each set.
@@ -3435,31 +3564,31 @@ a  $6x, - 2y,4x,x$
 
 ---
 
-### 2 (练习题)
+### 1 (练习题)
 
 **题目**: b x,-3y,3 4-5y
 
 ---
 
-### 3 (练习题)
+### 1 (练习题)
 
 **题目**: c ab,4b,-4ba,6a
 
 ---
 
-### 4 (练习题)
+### 1 (练习题)
 
 **题目**: d 2,-2x,3xy,3x,-2y
 
 ---
 
-### 5 (练习题)
+### 1 (练习题)
 
 **题目**: e 5a,5ab,ab,6a,5
 
 ---
 
-### 6 (练习题)
+### 1 (练习题)
 
 **题目**: f -1xy,-yx,-2y,3,3x
 
@@ -3472,97 +3601,97 @@ a  ${2y} + {6y}$
 
 ---
 
-### 3 (练习题)
+### 2 (练习题)
 
 **题目**: b  $9x - 2x$
 
 ---
 
-### 4 (练习题)
+### 2 (练习题)
 
 **题目**: 10x+3x
 
 ---
 
-### 5 (练习题)
+### 2 (练习题)
 
 **题目**: d  $21x + x$
 
 ---
 
-### 6 (练习题)
+### 2 (练习题)
 
 **题目**: e  $7x - 2x$
 
 ---
 
-### 7 (练习题)
+### 2 (练习题)
 
 **题目**: 4y-4y
 
 ---
 
-### 8 (练习题)
+### 2 (练习题)
 
 **题目**: 9x-10x
 
 ---
 
-### 9 (练习题)
+### 2 (练习题)
 
 **题目**: h  $y - 4y$
 
 ---
 
-### 11 (练习题)
+### 2 (练习题)
 
 **题目**: j 9xy-2xy
 
 ---
 
-### 12 (练习题)
+### 2 (练习题)
 
 **题目**: k 6pq-2qp
 
 ---
 
-### 13 (练习题)
+### 2 (练习题)
 
 **题目**: 14xyz-xyz
 
 ---
 
-### 14 (练习题)
+### 2 (练习题)
 
 **题目**: m 4x²-2x²
 
 ---
 
-### 15 (练习题)
+### 2 (练习题)
 
 **题目**: n 9y²-4y²
 
 ---
 
-### 16 (练习题)
+### 2 (练习题)
 
 **题目**: $y^{2} - 2y^{2}$
 
 ---
 
-### 17 (练习题)
+### 2 (练习题)
 
 **题目**: 14ab²-2ab²
 
 ---
 
-### 18 (练习题)
+### 2 (练习题)
 
 **题目**: 9x²y-4x²y
 
 ---
 
-### 19 (练习题)
+### 2 (练习题)
 
 **题目**: 10xy²-8xy²
 
@@ -3575,91 +3704,91 @@ a  $2x + y + 3x$
 
 ---
 
-### 4 (练习题)
+### 3 (练习题)
 
 **题目**: b  $4y - 2y + 4x$
 
 ---
 
-### 5 (练习题)
+### 3 (练习题)
 
 **题目**: 6x-4x+5x
 
 ---
 
-### 6 (练习题)
+### 3 (练习题)
 
 **题目**: d  $10 + 4x - 6$
 
 ---
 
-### 7 (练习题)
+### 3 (练习题)
 
 **题目**: 4xy-2y+2xy
 
 ---
 
-### 8 (练习题)
+### 3 (练习题)
 
 **题目**: $5x^{2} - 6x^{2} + 2x$
 
 ---
 
-### 9 (练习题)
+### 3 (练习题)
 
 **题目**: g  $5x + 4y - 6x$
 
 ---
 
-### 10 (练习题)
+### 3 (练习题)
 
 **题目**: h  $3y + 4x - x$
 
 ---
 
-### 11 (练习题)
+### 3 (练习题)
 
 **题目**: i  $4x + 6y + 4x$
 
 ---
 
-### 12 (练习题)
+### 3 (练习题)
 
 **题目**: j  $9x - 2y - x$
 
 ---
 
-### 13 (练习题)
+### 3 (练习题)
 
 **题目**: k  $12x^{2} - 4x + 2x^{2}$
 
 ---
 
-### 14 (练习题)
+### 3 (练习题)
 
 **题目**: 12x²-4x²+2x²
 
 ---
 
-### 15 (练习题)
+### 3 (练习题)
 
 **题目**: m 5xy-2x+7xy
 
 ---
 
-### 16 (练习题)
+### 3 (练习题)
 
 **题目**: ${xy} - {2xz} + {7xy}$
 
 ---
 
-### 17 (练习题)
+### 3 (练习题)
 
 **题目**: 3x²-2y²-4x²
 
 ---
 
-## Multiplyinganddividingexpressions
+## Multiplying and dividing expressions
 
 ### 7 (例题)
 
@@ -3722,23 +3851,102 @@ or  $\frac{12x}{3} \times \frac{4x}{21} = \frac{1x}{3} \times \frac{4x}{1} = \fr
 **题目**: Exercise 2.4
 1 Multiply.
 a  $2\times 6x$
-b  ${4y} \times  2$
-c  $3m\times 4$
-d  $2x\geq 3y$
-$4x\times 2y$
-f  $9x\times 3y$
-9  $8y\times 3z$
-${2x} \times  {3y} \times  2$
-4xyx2xy
-4xyx
-k  $9y\times 3xy$
-$4y \times  {2x} \times  {3y}$
-m  $2a\times 4ab$
-n 3ab×4bc
-6abc×2a
-P  $8abc\times 2ab$
-$4 \times  {2ab} \times  {3c}$
-12x²x2x3y²
+
+---
+
+### 1b (练习题)
+
+**题目**: b  ${4y} \times  2$
+
+---
+
+### 1c (练习题)
+
+**题目**: c  $3m\times 4$
+
+---
+
+### 1d (练习题)
+
+**题目**: d  $2x\geq 3y$
+
+---
+
+### 1e (练习题)
+
+**题目**: $4x\times 2y$
+
+---
+
+### 1f (练习题)
+
+**题目**: f  $9x\times 3y$
+
+---
+
+### 1g (练习题)
+
+**题目**: 9  $8y\times 3z$
+
+---
+
+### 1h (练习题)
+
+**题目**: ${2x} \times  {3y} \times  2$
+
+---
+
+### 1i (练习题)
+
+**题目**: 4xyx2xy
+
+---
+
+### 1k (练习题)
+
+**题目**: k  $9y\times 3xy$
+
+---
+
+### 1l (练习题)
+
+**题目**: $4y \times  {2x} \times  {3y}$
+
+---
+
+### 1m (练习题)
+
+**题目**: m  $2a\times 4ab$
+
+---
+
+### 1n (练习题)
+
+**题目**: n 3ab×4bc
+
+---
+
+### 1o (练习题)
+
+**题目**: 6abc×2a
+
+---
+
+### 1p (练习题)
+
+**题目**: P  $8abc\times 2ab$
+
+---
+
+### 1q (练习题)
+
+**题目**: $4 \times  {2ab} \times  {3c}$
+
+---
+
+### 1r (练习题)
+
+**题目**: 12x²x2x3y²
 
 ---
 
@@ -3746,23 +3954,108 @@ $4 \times  {2ab} \times  {3c}$
 
 **题目**: 2 Simplify.
 a  $3\times 2x\times 4$
-b  $5x\times 2x\times 3y$
-$2x\times 3y\times 2xy$
-d  $xy\times xz\times x$
-$2 \times  2 \times  {3x} \times  4$
-$f\left( x\right)  = 4 \times  {2x} \times  3{x}^{2}y$
-xxy²x
-${2a} \times  {3ab} \times  {2c}$
-10x2y3
-$4 \times  x \times  2 \times  y$
-k  $9\times x^{2}\times xy$
-$4xy^{2} \times 2x^{2}y$
-m  $7xy\times 2xz\times 3yz$
-4xyx2y7
-$9\times xyz\times 4xy.$
-3x²y×2xy²×3xy
-9x2xyx3x2
-$2x\times xy^{2}\times 3xy$
+
+---
+
+### 2b (练习题)
+
+**题目**: b  $5x\times 2x\times 3y$
+
+---
+
+### 2c (练习题)
+
+**题目**: $2x\times 3y\times 2xy$
+
+---
+
+### 2d (练习题)
+
+**题目**: d  $xy\times xz\times x$
+
+---
+
+### 2e (练习题)
+
+**题目**: $2 \times  2 \times  {3x} \times  4$
+
+---
+
+### 2f (练习题)
+
+**题目**: $f\left( x\right)  = 4 \times  {2x} \times  3{x}^{2}y$
+
+---
+
+### 2g (练习题)
+
+**题目**: xxy²x
+
+---
+
+### 2h (练习题)
+
+**题目**: ${2a} \times  {3ab} \times  {2c}$
+
+---
+
+### 2i (练习题)
+
+**题目**: 10x2y3
+
+---
+
+### 2j (练习题)
+
+**题目**: $4 \times  x \times  2 \times  y$
+
+---
+
+### 2k (练习题)
+
+**题目**: k  $9\times x^{2}\times xy$
+
+---
+
+### 2l (练习题)
+
+**题目**: $4xy^{2} \times 2x^{2}y$
+
+---
+
+### 2m (练习题)
+
+**题目**: m  $7xy\times 2xz\times 3yz$
+
+---
+
+### 2n (练习题)
+
+**题目**: 4xyx2y7
+
+---
+
+### 2o (练习题)
+
+**题目**: $9\times xyz\times 4xy.$
+
+---
+
+### 2p (练习题)
+
+**题目**: 3x²y×2xy²×3xy
+
+---
+
+### 2q (练习题)
+
+**题目**: 9x2xyx3x2
+
+---
+
+### 2r (练习题)
+
+**题目**: $2x\times xy^{2}\times 3xy$
 
 ---
 
@@ -3770,11 +4063,16 @@ $2x\times xy^{2}\times 3xy$
 
 **题目**: 3 Simplify.
 15r a 3
-40r b 10
 
 ---
 
-## 2.4
+### 3b (练习题)
+
+**题目**: 40r b 10
+
+---
+
+## 2.4 Working with brackets
 
 ### WORKED EXAMPLE 9 (例题)
 
@@ -3817,124 +4115,107 @@ a  $2(x + 6)$
 
 ---
 
-## 2.5
-
 ### 2 (练习题)
 
-**题目**: 1 Expand:
-b  $3(x + 2)$
+**题目**: b  $3(x + 2)$
 
 ---
 
+## Exercise 2.5
+
 ### 3 (练习题)
 
-**题目**: 1 Expand:
-c 4(2x+3)
+**题目**: c 4(2x+3)
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 1 Expand:
-d 10(x-6)
+**题目**: d 10(x-6)
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 1 Expand:
-e· 4(x-2)
+**题目**: e· 4(x-2)
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 1 Expand:
-f 3(2x-3)
+**题目**: f 3(2x-3)
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 1 Expand:
-g 5(a+4)
+**题目**: g 5(a+4)
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 1 Expand:
-h  $6(4 + a)$
+**题目**: h  $6(4 + a)$
 
 ---
 
 ### 9 (练习题)
 
-**题目**: 1 Expand:
-i 9(a+2)
+**题目**: i 9(a+2)
 
 ---
 
 ### 10 (练习题)
 
-**题目**: 1 Expand:
-j 7(2c-2d)
+**题目**: j 7(2c-2d)
 
 ---
 
 ### 11 (练习题)
 
-**题目**: 1 Expand:
-k 2(3c-2d)
+**题目**: k 2(3c-2d)
 
 ---
 
 ### 12 (练习题)
 
-**题目**: 1 Expand:
-4(c+4d)
+**题目**: 4(c+4d)
 
 ---
 
 ### 13 (练习题)
 
-**题目**: 1 Expand:
-m 5(2x-2y)
+**题目**: m 5(2x-2y)
 
 ---
 
 ### 14 (练习题)
 
-**题目**: 1 Expand:
-n 6(3x-2y)
+**题目**: n 6(3x-2y)
 
 ---
 
 ### 15 (练习题)
 
-**题目**: 1 Expand:
-3(4y-2x)
+**题目**: 3(4y-2x)
 
 ---
 
 ### 16 (练习题)
 
-**题目**: 1 Expand:
-4(s-4t²)
+**题目**: 4(s-4t²)
 
 ---
 
 ### 17 (练习题)
 
-**题目**: 1 Expand:
-q 9(t²-s)
+**题目**: q 9(t²-s)
 
 ---
 
 ### 18 (练习题)
 
-**题目**: 1 Expand:
-7(4t+t²)
+**题目**: 7(4t+t²)
 
 ---
 
@@ -3947,120 +4228,103 @@ a  $2x(x + y)$
 
 ### 3 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-b  $3y(x - y)$
+**题目**: b  $3y(x - y)$
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-c  $2x(x + 2y)$
+**题目**: c  $2x(x + 2y)$
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-d  $4x(3x - 2y)$
+**题目**: d  $4x(3x - 2y)$
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-e  $xy(x - y)$
+**题目**: e  $xy(x - y)$
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-f  $3y(4x + 2)$
+**题目**: f  $3y(4x + 2)$
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-g 2ab(9-4b)
+**题目**: g 2ab(9-4b)
 
 ---
 
 ### 9 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-h  $2a^{2}(3 - 2b)$
+**题目**: h  $2a^{2}(3 - 2b)$
 
 ---
 
 ### 10 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-i  $3a^{2}(4 - 4b)$
+**题目**: i  $3a^{2}(4 - 4b)$
 
 ---
 
 ### 11 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-j 4a(9-2b)
+**题目**: j 4a(9-2b)
 
 ---
 
 ### 12 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-k 5b(2-a)
+**题目**: k 5b(2-a)
 
 ---
 
 ### 13 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-1  $3a(4 - b)$
+**题目**: 1  $3a(4 - b)$
 
 ---
 
 ### 14 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-m  $2x^{2}y(y - 2x)$
+**题目**: m  $2x^{2}y(y - 2x)$
 
 ---
 
 ### 15 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-n 4xy²(3-2x)
+**题目**: n 4xy²(3-2x)
 
 ---
 
 ### 16 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-3xy²(x+y)
+**题目**: 3xy²(x+y)
 
 ---
 
 ### 17 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-P  $x^{2}y(2x + y)$
+**题目**: P  $x^{2}y(2x + y)$
 
 ---
 
 ### 18 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-q  $9x^{2}(9 - 2x)$
+**题目**: q  $9x^{2}(9 - 2x)$
 
 ---
 
 ### 19 (练习题)
 
-**题目**: 2 Remove the brackets to expand these expressions.
-r  $4xy^{2}(3 - x)$
+**题目**: r  $4xy^{2}(3 - x)$
 
 ---
 
@@ -4076,8 +4340,7 @@ a
 
 ### 4 (练习题)
 
-**题目**: 3 Given the formula for area,  $A =$  length  $\times$  width, write an expression for  $A$  in terms of  $x$  for each of the following rectangles. Expand the expression to give  $A$  in simplest terms.
-b
+**题目**: b
 ![image](images/6a439b97b1023736ede2b373da81ff9a21b378be0fd84b1c0547753373e66665.jpg)
 
 ![图片](../images/6a439b97b1023736ede2b373da81ff9a21b378be0fd84b1c0547753373e66665.jpg)
@@ -4086,8 +4349,7 @@ b
 
 ### 5 (练习题)
 
-**题目**: 3 Given the formula for area,  $A =$  length  $\times$  width, write an expression for  $A$  in terms of  $x$  for each of the following rectangles. Expand the expression to give  $A$  in simplest terms.
-C
+**题目**: C
 ![image](images/0b4dd837d21a4310f108076b1ba1ffd6cdb032643d8dc8e8af3e67576ca122f5.jpg)
 
 ![图片](../images/0b4dd837d21a4310f108076b1ba1ffd6cdb032643d8dc8e8af3e67576ca122f5.jpg)
@@ -4109,7 +4371,28 @@ Add like terms.
 
 ---
 
-## 2.6
+### 11 (例题)
+
+**题目**: b 2(6a+1)-2a+4
+
+**解答**: b  $2(6a + 1) - 2a + 4 = 12a + 2 - 2a + 4$
+$$
+= 1 0 a + 6
+$$
+Remove the brackets.
+Add or subtract like terms.
+
+---
+
+### 12 (例题)
+
+**题目**: c  $2x(x + 3) + x(x - 4)$
+
+**解答**: $2x(x + 3) + x(x - 4) = 2x^{2} + 6x + x^{2} - 4x$
+
+---
+
+## Exercise 2.6
 
 ### 1 (练习题)
 
@@ -4120,120 +4403,103 @@ a  $2(5 + x) + 3x$
 
 ### 2 (练习题)
 
-**题目**: 1 Expand and simplify.
-b  $3(y - 2) + 4y$
+**题目**: b  $3(y - 2) + 4y$
 
 ---
 
 ### 3 (练习题)
 
-**题目**: 1 Expand and simplify.
-c  $2x + 2(x - 4)$
+**题目**: c  $2x + 2(x - 4)$
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 1 Expand and simplify.
-d  $4x + 2(x - 3)$
+**题目**: d  $4x + 2(x - 3)$
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 1 Expand and simplify.
-e  $2t(4 + t) - 5$
+**题目**: e  $2t(4 + t) - 5$
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 1 Expand and simplify.
-f 4(x+2)-7
+**题目**: f 4(x+2)-7
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 1 Expand and simplify.
-g 6+3(x-2)
+**题目**: g 6+3(x-2)
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 1 Expand and simplify.
-4x+2(2x+3)
+**题目**: 4x+2(2x+3)
 
 ---
 
 ### 9 (练习题)
 
-**题目**: 1 Expand and simplify.
-2x+3+2(2x+3)
+**题目**: 2x+3+2(2x+3)
 
 ---
 
 ### 10 (练习题)
 
-**题目**: 1 Expand and simplify.
-j  $3(2h + 2) - 3h - 4$
+**题目**: j  $3(2h + 2) - 3h - 4$
 
 ---
 
 ### 11 (练习题)
 
-**题目**: 1 Expand and simplify.
-k  $6d + 2(d + 3)$
+**题目**: k  $6d + 2(d + 3)$
 
 ---
 
 ### 12 (练习题)
 
-**题目**: 1 Expand and simplify.
-7y+y(x-4)-4
+**题目**: 7y+y(x-4)-4
 
 ---
 
 ### 13 (练习题)
 
-**题目**: 1 Expand and simplify.
-m  $2x(x + 4) - 4$
+**题目**: m  $2x(x + 4) - 4$
 
 ---
 
 ### 14 (练习题)
 
-**题目**: 1 Expand and simplify.
-n  $2y(2x - 2y + 4)$
+**题目**: n  $2y(2x - 2y + 4)$
 
 ---
 
 ### 15 (练习题)
 
-**题目**: 1 Expand and simplify.
-2s(5-4s)-4s²
+**题目**: 2s(5-4s)-4s²
 
 ---
 
 ### 16 (练习题)
 
-**题目**: 1 Expand and simplify.
-p  $3x(2x + 4) - 9$
+**题目**: p  $3x(2x + 4) - 9$
 
 ---
 
 ### 17 (练习题)
 
-**题目**: 1 Expand and simplify.
-q 3y(y+2)-4y²
+**题目**: q 3y(y+2)-4y²
 
 ---
 
 ### 18 (练习题)
 
-**题目**: 1 Expand and simplify.
-r  $2(x - 1) + 4x - 4$
+**题目**: r  $2(x - 1) + 4x - 4$
 
 ---
 
@@ -4246,124 +4512,107 @@ a  $4(x + 40) + 2(x - 3)$
 
 ### 3 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-b  $2(x - 2) + 2(x + 3)$
+**题目**: b  $2(x - 2) + 2(x + 3)$
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-c  $3(x + 2) + 4(x + 5)$
+**题目**: c  $3(x + 2) + 4(x + 5)$
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-d  $8(x + 10) + 4(3 - 2x)$
+**题目**: d  $8(x + 10) + 4(3 - 2x)$
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-4(x²+2)+2(4-x²)
+**题目**: 4(x²+2)+2(4-x²)
 
 ---
 
 ### 7 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-4p（p+1）+2p（p+3）
+**题目**: 4p（p+1）+2p（p+3）
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-g  $3p(4q - 4) + 4(3pq + 4p)$
+**题目**: g  $3p(4q - 4) + 4(3pq + 4p)$
 
 ---
 
 ### 9 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-h  $2x(5y - 4) + 2(6x - 4xy)$
+**题目**: h  $2x(5y - 4) + 2(6x - 4xy)$
 
 ---
 
 ### 10 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-i  $3x(4 - 8y) + 3(2xy - 5x)$
+**题目**: i  $3x(4 - 8y) + 3(2xy - 5x)$
 
 ---
 
 ### 11 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-j  $3(6x - 4y) + x(3 - 2y)$
+**题目**: j  $3(6x - 4y) + x(3 - 2y)$
 
 ---
 
 ### 12 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-k  $3x^{2}(4 - x) + 2(5x^{2} - 2x^{3})$
+**题目**: k  $3x^{2}(4 - x) + 2(5x^{2} - 2x^{3})$
 
 ---
 
 ### 13 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-x(x-y）+3(2x-y)
+**题目**: x(x-y）+3(2x-y)
 
 ---
 
 ### 14 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-m  $4(s - 2) + 3s(4 - t)$
+**题目**: m  $4(s - 2) + 3s(4 - t)$
 
 ---
 
 ### 15 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-n  $x(x + y) + x(x - y)$
+**题目**: n  $x(x + y) + x(x - y)$
 
 ---
 
 ### 16 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-2x(x+y）+2(x²+3xy)
+**题目**: 2x(x+y）+2(x²+3xy)
 
 ---
 
 ### 17 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-p  $x(2x + 3) + 3(5 - 2x)$
+**题目**: p  $x(2x + 3) + 3(5 - 2x)$
 
 ---
 
 ### 18 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-q 4(2k-3)+(k-5)
+**题目**: q 4(2k-3)+(k-5)
 
 ---
 
 ### 19 (练习题)
 
-**题目**: 2 Simplify these expressions by removing brackets and collecting like terms.
-r  $3(4xy - 2x) + 5(3x - xy)$
+**题目**: r  $3(4xy - 2x) + 5(3x - xy)$
 
 ---
 
-## Expandingbracketswithnegativecoefficients
+## Expanding brackets with negative coefficients
 
 ### WORKED EXAMPLE 11 (例题)
 
@@ -4384,6 +4633,7 @@ $$
 Remember that the negative sign is attached to the 3.
 Remember that both terms in the second bracket are multiplied by -5.
 Collect like terms and simplify.
+WORKED EXAMPLE 11 CONTINUED
 8(p+4)-10(9p-6)=8p+32-90p+60
 $$
 = - 8 2 p + 9 2
@@ -4393,7 +4643,34 @@ Collect like terms and simplify.
 
 ---
 
-## 2.6
+## Exercise 2.6
+
+### 12 (例题)
+
+**题目**: b 4(y-7)-5(3y+5)
+
+**解答**: b  $4(y - 7) - 5(3y + 5) = 4y - 28 - 15y - 25$
+$$
+= - 1 1 y - 5 3
+$$
+Remember that the negative sign is attached to the 3.
+Remember that both terms in the second bracket are multiplied by -5.
+Collect like terms and simplify.
+
+---
+
+### 13 (例题)
+
+**题目**: c  $8(p + 4) - 10(9p - 6)$
+
+**解答**: 8(p+4)-10(9p-6)=8p+32-90p+60
+$$
+= - 8 2 p + 9 2
+$$
+Remove the brackets. Pay attention to the negative signs.
+Collect like terms and simplify.
+
+---
 
 ### 1 (练习题)
 
@@ -4403,7 +4680,73 @@ a -10(3p+6)
 
 ---
 
-## Expandingbracketswithnegativecoefficients
+### 2 (练习题)
+
+**题目**: b -3(5x+7)
+
+---
+
+## Expanding brackets with negative coefficients
+
+### 3 (练习题)
+
+**题目**: c -5(4y+0.2)
+
+---
+
+### 4 (练习题)
+
+**题目**: d -3(q-12)
+
+---
+
+### 5 (练习题)
+
+**题目**: e -12(2t-7)
+
+---
+
+### 6 (练习题)
+
+**题目**: f -1.5(8z-4)
+
+---
+
+### 7 (练习题)
+
+**题目**: g -3(2x+5y)
+
+---
+
+### 8 (练习题)
+
+**题目**: h -6(4p+5q)
+
+---
+
+### 9 (练习题)
+
+**题目**: i -9(3h-6k)
+
+---
+
+### 10 (练习题)
+
+**题目**: j -2(5h+5k-8j)
+
+---
+
+### 11 (练习题)
+
+**题目**: k -4(2a-3b-6c+4d)
+
+---
+
+### 12 (练习题)
+
+**题目**: -6(x²+6y²-2y³)
+
+---
 
 ### 2 (练习题)
 
@@ -4414,8 +4757,140 @@ a 2-5(x+2)
 
 ### 3 (练习题)
 
+**题目**: b 2-5(x-2)
+
+---
+
+### 4 (练习题)
+
+**题目**: c 14(x-3)-4(x-1)
+
+---
+
+### 5 (练习题)
+
+**题目**: d -7(f+3)-3(2f-7)
+
+---
+
+### 6 (练习题)
+
+**题目**: e  $3g - 7(7g - 7) + 2(5g - 6)$
+
+---
+
+### 7 (练习题)
+
+**题目**: f 6(3y-5)-2(3y-5)
+
+---
+
+### 8 (练习题)
+
+**题目**: g  $4x(x - 4) - 10x(3x + 6)$
+
+---
+
+### 9 (练习题)
+
+**题目**: h 14x(x+7)-3x(5x+7)
+
+---
+
+### 10 (练习题)
+
+**题目**: i  $x^{2} - 5x(2x - 6)$
+
+---
+
+### 11 (练习题)
+
+**题目**: j  $5q^{2} - 2q(q - 12) - 3q^{2}$
+
+---
+
+### 12 (练习题)
+
+**题目**: k  $18pq - 12p(5q - 7)$
+
+---
+
+### 13 (练习题)
+
+**题目**: 12m(2n-4)-24n(m-2)
+
+---
+
+### 3 (练习题)
+
 **题目**: 3 Expand each expression and simplify your answers as far as possible.
 a  $8x - 2(3 - 2x)$
+
+---
+
+### 4 (练习题)
+
+**题目**: b 11x-(6-2x)
+
+---
+
+### 5 (练习题)
+
+**题目**: 4x+5-3(2x-4)
+
+---
+
+### 6 (练习题)
+
+**题目**: d 7-2(x-3)+3x
+
+---
+
+### 7 (练习题)
+
+**题目**: e  $15 - 4(x - 2) - 3x$
+
+---
+
+### 8 (练习题)
+
+**题目**: 4x-2(1-3x)-6
+
+---
+
+### 9 (练习题)
+
+**题目**: g  $3(x + 5) - 4(5 - x)$
+
+---
+
+### 10 (练习题)
+
+**题目**: h  $x(x - 3) - 2(x - 4)$
+
+---
+
+### 11 (练习题)
+
+**题目**: i  $3x(x - 2) - (x - 2)$
+
+---
+
+### 12 (练习题)
+
+**题目**: j  $2x(3 + x) - 3(x - 2)$
+
+---
+
+### 13 (练习题)
+
+**题目**: k  $3(x - 5) - (3 + x)$
+
+---
+
+### 14 (练习题)
+
+**题目**: 2x(3x+1)-2(3-2x)
 
 ---
 
@@ -4443,7 +4918,7 @@ b  $2x^{2}y\times 3xy^{4}$
 
 ---
 
-## 2.8
+## Exercise 2.8
 
 ### 1 (练习题)
 
@@ -4464,7 +4939,7 @@ a  $x^{2}\times x^{6}$
 
 ---
 
-## 14
+## WORKED EXAMPLE 14
 
 ### 14 (例题)
 
@@ -4498,7 +4973,7 @@ $$
 
 ---
 
-## 15
+## WORKED EXAMPLE 15
 
 ### 15 (例题)
 
@@ -4527,7 +5002,7 @@ Expand the brackets first by multiplying the indices. Divide by subtracting the 
 
 ---
 
-## 2.8
+## Exercise 2.8
 
 ### 4 (练习题)
 
@@ -4632,61 +5107,61 @@ a  $x^{6}\div x^{4}$
 
 ---
 
-### 6 (练习题)
+### 7 (练习题)
 
 **题目**: f  $\frac{x^6}{x^4}$
 
 ---
 
-### 7 (练习题)
+### 8 (练习题)
 
 **题目**: 6x5 2x3
 
 ---
 
-### 8 (练习题)
+### 9 (练习题)
 
 **题目**: 9p7 h 3p4
 
 ---
 
-### 9 (练习题)
+### 10 (练习题)
 
 **题目**: 12y² 3y
 
 ---
 
-### 10 (练习题)
+### 11 (练习题)
 
 **题目**: 3x4 j 6x3
 
 ---
 
-### 11 (练习题)
+### 12 (练习题)
 
 **题目**: 15x3 k 5x3
 
 ---
 
-### 12 (练习题)
+### 13 (练习题)
 
 **题目**: 9b4 3b3
 
 ---
 
-### 13 (练习题)
+### 14 (练习题)
 
 **题目**: m 3x3 9x4
 
 ---
 
-### 14 (练习题)
+### 15 (练习题)
 
 **题目**: 16a²b² n 4ab
 
 ---
 
-### 15 (练习题)
+### 16 (练习题)
 
 **题目**: 12xy² 12xy²
 
@@ -4850,7 +5325,7 @@ a  $2x^{2}\times 3x^{3}\times 2x$
 
 ---
 
-## 2.9
+## Exercise 2.9
 
 ### 1 (练习题)
 
@@ -4911,7 +5386,7 @@ b  $2^{x} = 32$
 
 ---
 
-## 18
+## WORKED EXAMPLE 18
 
 ### WORKED EXAMPLE 18 (例题)
 
@@ -4950,7 +5425,7 @@ $$
 
 ---
 
-## 2
+## 2 Write in index notation.
 
 ### 2 (练习题)
 
@@ -4962,7 +5437,7 @@ d  $\sqrt[5]{(x - 2)}$
 
 ---
 
-### WORKED EXAMPLE 20 (例题)
+### 20 (例题)
 
 **题目**: WORKED EXAMPLE 20
 if  $2^{x + 3} = \frac{1}{16}$  find the value of  $x$ .
@@ -5008,74 +5483,40 @@ k 64=2
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
 **题目**: 1 For a number,  $n$  write an expression for:
 a the sum of the number and 12 [1]
+b twice the number minus four [1]
+c the number multiplied by  $x$  and then squared [1]
+d the square of the number cubed. [1]
 
 ---
 
 ### 2 (练习题)
 
-**题目**: b twice the number minus four [1]
+**题目**: 2 If  $n$  is any positive integer,
+a Write an expression that is an even number for all possible values of  $n$  [1]
+b Explain why  $2n + 1$  is always an odd number. [1]
+Every positive odd number  $p$  can be written in the form  $p = 2n + 1$ .
+c Write an expression, in terms of  $n$ , for the next largest odd number after  $p$ . [1]
+d Use your answer to part (c) to show that any two consecutive odd numbers always add up to an even number. [3]
 
 ---
 
 ### 3 (练习题)
 
-**题目**: c the number multiplied by  $x$  and then squared [1]
-
----
-
-### 4 (练习题)
-
-**题目**: d the square of the number cubed. [1]
-
----
-
-### 5 (练习题)
-
-**题目**: 2 If  $n$  is any positive integer,
-a Write an expression that is an even number for all possible values of  $n$  [1]
-
----
-
-### 6 (练习题)
-
-**题目**: b Explain why  $2n + 1$  is always an odd number. [1]
-
----
-
-### 7 (练习题)
-
-**题目**: Every positive odd number  $p$  can be written in the form  $p = 2n + 1$ .
-c Write an expression, in terms of  $n$ , for the next largest odd number after  $p$ . [1]
-
----
-
-### 8 (练习题)
-
-**题目**: d Use your answer to part (c) to show that any two consecutive odd numbers always add up to an even number. [3]
-
----
-
-### 9 (练习题)
-
 **题目**: 3 Walls are made from bricks with algebraic expressions written on the sides. Each expression is made by adding the two expressions underneath, like this.
 ![image](images/ba224a74238b94aa5be99be7dffa5c4c95aa79d550c4fe0d4afbaed6c5ded824.jpg)
 a Here is another wall. Write an expression for the brick at the top. [2]
-
-![图片](../images/ba224a74238b94aa5be99be7dffa5c4c95aa79d550c4fe0d4afbaed6c5ded824.jpg)
-
----
-
-### 10 (练习题)
-
-**题目**: ![image](images/5a4ab13ed4902613983a58a7481c4a82c416160c0c5b00ce6e565d5c22686439.jpg)
+![image](images/5a4ab13ed4902613983a58a7481c4a82c416160c0c5b00ce6e565d5c22686439.jpg)
 b Make a copy of the next wall and fill in the missing expressions. [3]
 ![image](images/fb96420176d43eb38850631a25923859cfe51f1af680492dc51b076957575efb.jpg)
+c Another wall is made with six bricks as before. The expressions in the bottom bricks are  $2h, j,$  and  $2k$  reading left to right, where  $h, j$  and  $k$  are integers. Explain why the top brick always contains an even number. [4]
+
+![图片](../images/ba224a74238b94aa5be99be7dffa5c4c95aa79d550c4fe0d4afbaed6c5ded824.jpg)
 
 ![图片](../images/5a4ab13ed4902613983a58a7481c4a82c416160c0c5b00ce6e565d5c22686439.jpg)
 
@@ -5083,123 +5524,15 @@ b Make a copy of the next wall and fill in the missing expressions. [3]
 
 ---
 
-### 11 (练习题)
-
-**题目**: c Another wall is made with six bricks as before. The expressions in the bottom bricks are  $2h, j,$  and  $2k$  reading left to right, where  $h, j$  and  $k$  are integers. Explain why the top brick always contains an even number. [4]
-
----
-
-### 12 (练习题)
+### 4 (练习题)
 
 **题目**: 4 Simplify.
 a  $9xy + 3x + 6xy - 2x$
 [2]
-
----
-
-### 13 (练习题)
-
-**题目**: b  $6xy - xy + 3y$
+b  $6xy - xy + 3y$
 [2]
 
 ---
-
-### 14 (练习题)
-
-**题目**: 5 Simplify.
-a 3b4 1 3
-[2]
-
----
-
-### 15 (练习题)
-
-**题目**: b 2(x3)2
-[2]
-
----
-
-### 16 (练习题)
-
-**题目**: 3x2x²
-[2]
-
----
-
-### 17 (练习题)
-
-**题目**: d (4ax²)0
-[2]
-
----
-
-### 18 (练习题)
-
-**题目**: e  $4x^{2}y\times x^{3}y^{2}$
-[2]
-
----
-
-### 19 (练习题)
-
-**题目**: f  $3x^{-4}\times 5x^{6}$
-[2]
-
----
-
-### 20 (练习题)
-
-**题目**: 3x5 6x-6 74x-4
-[3]
-
----
-
-### 21 (练习题)
-
-**题目**: h (4x-5)2
-[2]
-
----
-
-### 22 (练习题)
-
-**题目**: i  $\left(\frac{3x}{4y}\right)^3$
-[3]
-
----
-
-### 23 (练习题)
-
-**题目**: 4x12y-3 12x-7y9
-[3]
-
----
-
-### 24 (练习题)
-
-**题目**: 14p5q-4 5pq-7 k 30p4q4 2p-4q5
-[3]
-
----
-
-### 25 (练习题)
-
-**题目**: 6 Simplify  $7x^{3}y^{2}\times (2x)^{3} - (4x^{3}y)^{2} - 4xy^{2}\times 10x^{5}$  [3]
-![image](images/7f59af42aaf475d8b9faa2e799cf8f0c640f56ce1f6607e0f8364d21fbe90f10.jpg)
-
-![图片](../images/7f59af42aaf475d8b9faa2e799cf8f0c640f56ce1f6607e0f8364d21fbe90f10.jpg)
-
----
-
-### 26 (练习题)
-
-**题目**: 7 Find the value of  $(x + 5) - (x - 5)$  when:
-a  $x = 1$
-[1]
-
----
-
-## 3
 
 ### 5 (练习题)
 
@@ -5229,6 +5562,25 @@ i  $\left(\frac{3x}{4y}\right)^3$
 
 ---
 
+### 6 (练习题)
+
+**题目**: 6 Simplify  $7x^{3}y^{2}\times (2x)^{3} - (4x^{3}y)^{2} - 4xy^{2}\times 10x^{5}$  [3]
+![image](images/7f59af42aaf475d8b9faa2e799cf8f0c640f56ce1f6607e0f8364d21fbe90f10.jpg)
+
+![图片](../images/7f59af42aaf475d8b9faa2e799cf8f0c640f56ce1f6607e0f8364d21fbe90f10.jpg)
+
+---
+
+### 7 (练习题)
+
+**题目**: 7 Find the value of  $(x + 5) - (x - 5)$  when:
+a  $x = 1$
+[1]
+
+---
+
+## Chapter 3
+
 ### 7 (练习题)
 
 **题目**: 7 Find the value of  $(x + 5) - (x - 5)$  when:
@@ -5238,9 +5590,6 @@ b  $x = 0$
 [1]
 $x = 5$
 [1]
-![image](images/3d78abb09b7892aea5b6e6333f66a8be7e15b1508956045ba81462a80871fc27.jpg)
-
-![图片](../images/3d78abb09b7892aea5b6e6333f66a8be7e15b1508956045ba81462a80871fc27.jpg)
 
 ---
 
@@ -5292,9 +5641,6 @@ $3^{x} - 5 = 22.$
 [2]
 $4\times 6^{p} = 864$
 [2]
-![image](images/f13a7b986911ad567ac0c0152ce8c0e3b25cebece48acd07164aa6a682957769.jpg)
-
-![图片](../images/f13a7b986911ad567ac0c0152ce8c0e3b25cebece48acd07164aa6a682957769.jpg)
 
 ---
 
@@ -5350,48 +5696,7 @@ a  $n^{-1} = 2^{-2}$
 
 ---
 
-## 3.1
-
-### 1 (练习题)
-
-**题目**: 1 For each angle listed:
-state what type of angle it is (acute, right or obtuse)
-ii estimate its size in degrees
-iii use a protractor to measure the actual size of each angle to the nearest degree.
-a BAC
-b BAD
-${BAE}$
-d CAD
-e CAF
-f CAE
-9 DAB
-DAE
-i DAF
-![image](images/c8a8063694e596b321548d4ea526cf4951b1b221987236130c8f15c25e212d05.jpg)
-
-![图片](../images/c8a8063694e596b321548d4ea526cf4951b1b221987236130c8f15c25e212d05.jpg)
-
----
-
-### 2 (练习题)
-
-**题目**: 2 What is the size of reflex angle  $DAB$  in the diagram for question 1?
-
----
-
-### 3 (练习题)
-
-**题目**: 3 This protractor is circular.
-a How is this different from the  $180^{\circ}$  protractor?
-b Write instructions to teach someone how to use a circular protractor to measure the size of an obtuse angle.
-c How would you measure a reflex angle with a circular protractor?
-![image](images/67ed6f22cc4f3eec1fb6bdee192ea4441ec94b7d6ea069980653538fa5fda9d2.jpg)
-
-![图片](../images/67ed6f22cc4f3eec1fb6bdee192ea4441ec94b7d6ea069980653538fa5fda9d2.jpg)
-
----
-
-## Drawingangles
+## Measuring and drawing angles
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -5447,7 +5752,48 @@ For a reflex angle, draw a line as in (a) but mark one arm (X) as well as the ve
 
 ---
 
-## 3.2
+### 1 (练习题)
+
+**题目**: Exercise 3.1
+1 For each angle listed:
+state what type of angle it is (acute, right or obtuse)
+ii estimate its size in degrees
+iii use a protractor to measure the actual size of each angle to the nearest degree.
+a BAC
+b BAD
+${BAE}$
+d CAD
+e CAF
+f CAE
+9 DAB
+DAE
+i DAF
+![image](images/c8a8063694e596b321548d4ea526cf4951b1b221987236130c8f15c25e212d05.jpg)
+
+![图片](../images/c8a8063694e596b321548d4ea526cf4951b1b221987236130c8f15c25e212d05.jpg)
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 What is the size of reflex angle  $DAB$  in the diagram for question 1?
+
+---
+
+### 3 (练习题)
+
+**题目**: INVESTIGATION
+3 This protractor is circular.
+a How is this different from the  $180^{\circ}$  protractor?
+b Write instructions to teach someone how to use a circular protractor to measure the size of an obtuse angle.
+c How would you measure a reflex angle with a circular protractor?
+![image](images/67ed6f22cc4f3eec1fb6bdee192ea4441ec94b7d6ea069980653538fa5fda9d2.jpg)
+
+![图片](../images/67ed6f22cc4f3eec1fb6bdee192ea4441ec94b7d6ea069980653538fa5fda9d2.jpg)
+
+---
+
+## Exercise 3.2
 
 ### 1 (练习题)
 
@@ -5461,7 +5807,7 @@ f  $JKL = 355^{\circ}$
 
 ---
 
-## PEERASSESSMENT
+## PEER ASSESSMENT
 
 ### 1 (练习题)
 
@@ -5475,7 +5821,7 @@ f  $JKL = 355^{\circ}$
 
 ---
 
-## Anglesandparallellines
+## Angles and parallel lines
 
 ### 例3 (例题)
 
@@ -5506,7 +5852,7 @@ You know that when two lines intersect, the resulting vertically opposite angles
 
 ---
 
-## 3
+## WORKED EXAMPLE 3
 
 ### 3 (例题)
 
@@ -5517,7 +5863,7 @@ b  $48^{\circ} + 90^{\circ} + x = 180^{\circ}$  (angles on line)
 
 ---
 
-## 3.3
+## Exercise 3.3
 
 ### 1 (练习题)
 
@@ -5606,9 +5952,9 @@ C
 
 ---
 
-## 3
+## Angles and parallel lines
 
-### 4 (例题)
+### WORKED EXAMPLE 4 (例题)
 
 **题目**: WORKED EXAMPLE 4
 Find the size of angles  $a, b$  and  $c$  in this figure.
@@ -5712,82 +6058,104 @@ You know the values of  $a$  and  $c$ , so can use these to find  $b$ .
 
 ---
 
-## 3.2
+## 3.2 Triangles
 
-### WORKED EXAMPLE 5 (例题)
+### 5a (例题)
 
 **题目**: WORKED EXAMPLE 5
 Find the value of the unknown angles in each triangle. Give reasons for your answers.
 a  $82^{\circ} + 30^{\circ} + x = 180^{\circ}$  (angle sum of triangle)
-$$
-\begin{array}{l} x = 1 8 0 ^ {\circ} - 8 2 ^ {\circ} - 3 0 ^ {\circ} \\ x = 6 8 ^ {\circ} \\ \end{array}
-$$
 ![image](images/22d27628fbb5912a955e4e0632add1a65e5b4c7176c4fa2e348c49bad6b834c1.jpg)
 
 ![图片](../images/22d27628fbb5912a955e4e0632add1a65e5b4c7176c4fa2e348c49bad6b834c1.jpg)
 
+**解答**: $$
+\begin{array}{l} x = 1 8 0 ^ {\circ} - 8 2 ^ {\circ} - 3 0 ^ {\circ} \\ x = 6 8 ^ {\circ} \\ \end{array}
+$$
+
+---
+
+### 5b (例题)
+
+**题目**: b  $2x + 90^{\circ} = 180^{\circ}$  （angle sum of triangle）
+![image](images/618e3ccc0117fb75b09f342168802a1fc97116a571613ab23592db694825e014.jpg)
+
 ![图片](../images/618e3ccc0117fb75b09f342168802a1fc97116a571613ab23592db694825e014.jpg)
 
-**解答**: b  $2x + 90^{\circ} = 180^{\circ}$  （angle sum of triangle）
-![image](images/618e3ccc0117fb75b09f342168802a1fc97116a571613ab23592db694825e014.jpg)
-$$
+**解答**: $$
 \begin{array}{l} 2 x = 1 8 0 ^ {\circ} - 9 0 ^ {\circ} \\ 2 x = 9 0 ^ {\circ} \\ x = 4 5 ^ {\circ} \\ \end{array}
 $$
 
 ---
 
-### WORKED EXAMPLE 5 CONTINUED C (例题)
+### 5c (例题)
 
 **题目**: WORKED EXAMPLE 5 CONTINUED
 C
 ![image](images/8fb0bb334f64b1b950bb8d9de3ff4fe5c013c3170f84d9e94ea726951924742c.jpg)
 c
-$$
-\begin{array}{l} 7 0 ^ {\circ} + 3 5 ^ {\circ} + x = 1 8 0 ^ {\circ} \\ x = 1 8 0 ^ {\circ} - 1 0 5 ^ {\circ} \\ x = 7 5 ^ {\circ} \\ y = 7 5 ^ {\circ} \\ 7 0 ^ {\circ} + y + z = 1 8 0 ^ {\circ} \\ 7 0 ^ {\circ} + 7 5 ^ {\circ} + z = 1 8 0 ^ {\circ} \\ x = 1 8 0 ^ {\circ} - 7 5 ^ {\circ} - 7 0 ^ {\circ} \\ z = 3 5 ^ {\circ} \\ \text {o r} z = 3 5 ^ {\circ} \\ \end{array}
-$$
 
 ![图片](../images/8fb0bb334f64b1b950bb8d9de3ff4fe5c013c3170f84d9e94ea726951924742c.jpg)
 
-**解答**: (anglesumof triangle)
+**解答**: $$
+\begin{array}{l} 7 0 ^ {\circ} + 3 5 ^ {\circ} + x = 1 8 0 ^ {\circ} \\ x = 1 8 0 ^ {\circ} - 1 0 5 ^ {\circ} \\ x = 7 5 ^ {\circ} \\ y = 7 5 ^ {\circ} \\ 7 0 ^ {\circ} + y + z = 1 8 0 ^ {\circ} \\ 7 0 ^ {\circ} + 7 5 ^ {\circ} + z = 1 8 0 ^ {\circ} \\ x = 1 8 0 ^ {\circ} - 7 5 ^ {\circ} - 7 0 ^ {\circ} \\ z = 3 5 ^ {\circ} \\ \text {o r} z = 3 5 ^ {\circ} \\ \end{array}
+$$
+(anglesumof triangle)
 (corresponding angles)
 (anglesumof triangle)
 (corresponding angles)
 
 ---
 
-### WORKED EXAMPLE 6 (例题)
+### 6 (例题)
 
 **题目**: WORKED EXAMPLE 6
 Find the size of angle  $x, y$  and  $z$ .
-Answers
-a
+
+---
+
+### 6a (例题)
+
+**题目**: a
 ![image](images/7439d12edffb759990c4324dbff8fbcb739426918045d16bbb174df92b72ef93.jpg)
 a  $x = 60^{\circ} + 80^{\circ}$
-$$
-x = 1 4 0 ^ {\circ}
-$$
 
 ![图片](../images/7439d12edffb759990c4324dbff8fbcb739426918045d16bbb174df92b72ef93.jpg)
 
-![图片](../images/f3db4185eec647da724e8b6060e4ff3f8b774008e685d9db272a55ef40078f87.jpg)
+**解答**: $$
+x = 1 4 0 ^ {\circ}
+$$
+(exterior angle of triangle)
 
-![图片](../images/177a9abdbab4a7dd398966714528e13b50dc9f9a872de5c65007a2f290a1011d.jpg)
+---
 
-**解答**: (exterior angle of triangle)
-b
+### 6b (例题)
+
+**题目**: b
 ![image](images/f3db4185eec647da724e8b6060e4ff3f8b774008e685d9db272a55ef40078f87.jpg)
 b  $y + 70^{\circ} = 125^{\circ}$
-$$
+
+![图片](../images/f3db4185eec647da724e8b6060e4ff3f8b774008e685d9db272a55ef40078f87.jpg)
+
+**解答**: $$
 y = 1 2 5 ^ {\circ} - 7 0 ^ {\circ}
 $$
 $$
 y = 5 5 ^ {\circ}
 $$
 (exterior angle of triangle)
-c
+
+---
+
+### 6c (例题)
+
+**题目**: c
 ![image](images/177a9abdbab4a7dd398966714528e13b50dc9f9a872de5c65007a2f290a1011d.jpg)
 40°+z=110°
-$$
+
+![图片](../images/177a9abdbab4a7dd398966714528e13b50dc9f9a872de5c65007a2f290a1011d.jpg)
+
+**解答**: $$
 z = 1 1 0 ^ {\circ} - 4 0 ^ {\circ}
 $$
 $$
@@ -5797,48 +6165,7 @@ $$
 
 ---
 
-## 3.3
-
-### WORKED EXAMPLE 6 (例题)
-
-**题目**: WORKED EXAMPLE 6
-Find the size of angle  $x, y$  and  $z$ .
-
-![图片](../images/7439d12edffb759990c4324dbff8fbcb739426918045d16bbb174df92b72ef93.jpg)
-
-![图片](../images/f3db4185eec647da724e8b6060e4ff3f8b774008e685d9db272a55ef40078f87.jpg)
-
-![图片](../images/177a9abdbab4a7dd398966714528e13b50dc9f9a872de5c65007a2f290a1011d.jpg)
-
-**解答**: a
-![image](images/7439d12edffb759990c4324dbff8fbcb739426918045d16bbb174df92b72ef93.jpg)
-a  $x = 60^{\circ} + 80^{\circ}$
-$$
-x = 1 4 0 ^ {\circ}
-$$
-(exterior angle of triangle)
-b
-![image](images/f3db4185eec647da724e8b6060e4ff3f8b774008e685d9db272a55ef40078f87.jpg)
-b  $y + 70^{\circ} = 125^{\circ}$
-$$
-y = 1 2 5 ^ {\circ} - 7 0 ^ {\circ}
-$$
-$$
-y = 5 5 ^ {\circ}
-$$
-(exterior angle of triangle)
-c
-![image](images/177a9abdbab4a7dd398966714528e13b50dc9f9a872de5c65007a2f290a1011d.jpg)
-40°+z=110°
-$$
-z = 1 1 0 ^ {\circ} - 4 0 ^ {\circ}
-$$
-$$
-z = 7 0 ^ {\circ}
-$$
-(exterior angle of triangle ABC)
-
----
+## 3.3 Quadrilaterals
 
 ### WORKED EXAMPLE 7 (例题)
 
@@ -5865,7 +6192,8 @@ angle sum of triangle ABC)
 
 ### Exercise 3.5 (练习题)
 
-**题目**: 1 Find the size of each marked angle. Give reasons.
+**题目**: Exercise 3.5
+1 Find the size of each marked angle. Give reasons.
 
 ---
 
@@ -5898,7 +6226,8 @@ angle sum of triangle ABC)
 
 ### 2a (练习题)
 
-**题目**: a
+**题目**: 2 Calculate the value of  $x$  in each case. Give reasons.
+a
 ![image](images/3ed201c9cb06f420eafc79a0e4cb8e3da50e58df2864be8b27e7fba57e59584f.jpg)
 
 ![图片](../images/3ed201c9cb06f420eafc79a0e4cb8e3da50e58df2864be8b27e7fba57e59584f.jpg)
@@ -5938,7 +6267,7 @@ angle sum of triangle ABC)
 
 ---
 
-## 3.4
+## 3.4 Polygons
 
 ### WORKED EXAMPLE 8 (例题)
 
@@ -5995,7 +6324,7 @@ angle sum of triangle KXY
 
 ---
 
-## 3.6
+## Exercise 3.6
 
 ### 1 (练习题)
 
@@ -6044,7 +6373,7 @@ b The diagonals are not equal in length. What quadrilaterals could it NOT be?
 
 ---
 
-## 3.4
+## 3.4 Polygons
 
 ### WORKED EXAMPLE 9 (例题)
 
@@ -6082,7 +6411,7 @@ A polygon has an angle sum of  $2340^{\circ}$ . How many sides does it have?
 
 ---
 
-## 3.7
+## Exercise 3.7
 
 ### 1 (练习题)
 
@@ -6135,12 +6464,11 @@ the size of each exterior angle.
 
 ---
 
-## 3.5
+## 3.5 Circles
 
 ### 1 (练习题)
 
-**题目**: Exercise 3.8
-1 Name the circle parts shown in blue on these circles.
+**题目**: 1 Name the circle parts shown in blue on these circles.
 ![a](images/c092ff6f1ee4d31ef78e33014b5d49f6531f17d5a3e72521da4ffe6848ca0fa3.jpg)
 ![b](images/140c9c88c8ce1e8f960ba2c9b712913b4c4f2da4443048fdf3d4377753d41b15.jpg)
 ![C](images/29e50dbf81d4619667b1c52d8a4691552ced4c1b1fd65dc69bfd108297282abd.jpg)
@@ -6194,50 +6522,6 @@ Construct triangle ABC with  $AB = 5\mathrm{cm}$ $BC = 6\mathrm{cm}$  and  $CA =
 ![Answers](images/efe66c854003cdf0b43ecedea71cb893b1f4b9a0403b0211527aa18d34847bf6.jpg)
 ![image](images/d3b694f38935864f937cea214a55bdf399d1d77f312c5ccedce8edbbc29216ed.jpg)
 ![image](images/db42bacbe9f0033d4aab90b0acbcff88ce8d4905f6dec759d5846705c3f445fb.jpg)
-
-![图片](../images/efe66c854003cdf0b43ecedea71cb893b1f4b9a0403b0211527aa18d34847bf6.jpg)
-
-![图片](../images/d3b694f38935864f937cea214a55bdf399d1d77f312c5ccedce8edbbc29216ed.jpg)
-
-![图片](../images/db42bacbe9f0033d4aab90b0acbcff88ce8d4905f6dec759d5846705c3f445fb.jpg)
-
-![图片](../images/e620985d42de3f994d3e2396fc29f84abb5650c26fa2a038f9d99dfae8cfb87c.jpg)
-
-![图片](../images/87f06507481f749ed995c35a39d335dcf778fb94761c24888a4ee864b8c09002.jpg)
-
-![图片](../images/9ddebb2c7746cb187f98c5ae01b5b80a52a3d22242631940b7c46f55659bc2af.jpg)
-
-![图片](../images/118b0e2b8ae09affffb327bffb2b18e5831781596f2b394bc1c353514675ebc3.jpg)
-
-**解答**: Always start with a rough sketch.
-Draw the longest side  $(BC = 6cm)$  and label it.
-Set your pair of compasses at 5cm. Place the point on B and draw an arc.
-![image](images/e620985d42de3f994d3e2396fc29f84abb5650c26fa2a038f9d99dfae8cfb87c.jpg)
-![image](images/87f06507481f749ed995c35a39d335dcf778fb94761c24888a4ee864b8c09002.jpg)
-Set your pair of compasses at 4cm. Place the point on C and draw an arc.
-![image](images/9ddebb2c7746cb187f98c5ae01b5b80a52a3d22242631940b7c46f55659bc2af.jpg)
-![image](images/118b0e2b8ae09affffb327bffb2b18e5831781596f2b394bc1c353514675ebc3.jpg)
-The point where the arcs cross is A. Join BA and CA.
-
----
-
-## Constructingtriangles
-
-### 1 (练习题)
-
-**题目**: Exercise 3.9
-1 Construct these lines.
-a  $AB = 6\mathrm{cm}$
-
----
-
-### WORKED EXAMPLE 11 (例题)
-
-**题目**: WORKED EXAMPLE 11
-Construct triangle ABC with  $AB = 5\mathrm{cm}$ $BC = 6\mathrm{cm}$  and  $CA = 4\mathrm{cm}$
-![Answers](images/efe66c854003cdf0b43ecedea71cb893b1f4b9a0403b0211527aa18d34847bf6.jpg)
-![image](images/d3b694f38935864f937cea214a55bdf399d1d77f312c5ccedce8edbbc29216ed.jpg)
-![image](images/db42bacbe9f0033d4aab90b0acbcff88ce8d4905f6dec759d5846705c3f445fb.jpg)
 Always start with a rough sketch.
 Draw the longest side  $(BC = 6cm)$  and label it.
 Set your pair of compasses at 5cm. Place the point on B and draw an arc.
@@ -6264,11 +6548,31 @@ The point where the arcs cross is A. Join BA and CA.
 
 ---
 
-### 4 (练习题)
+## Constructing triangles
+
+### 1 (练习题)
 
 **题目**: Exercise 3.9
 1 Construct these lines.
-2 Accurately construct these triangles.
+a  $AB = 6\mathrm{cm}$
+
+---
+
+### 1b (练习题)
+
+**题目**: b  $CD = 75\mathrm{mm}$
+
+---
+
+### 1c (练习题)
+
+**题目**: c  $EF = 5.5\mathrm{cm}$
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Accurately construct these triangles.
 a
 ![image](images/f1233a2e44241445c102774455462344fe4fd540113323065da0fd991c4d8575.jpg)
 
@@ -6276,42 +6580,52 @@ a
 
 ---
 
-### 5 (练习题)
+### 2b (练习题)
 
-**题目**: Exercise 3.9
-1 Construct these lines.
-b
+**题目**: b
 ![image](images/7bfadecabc6428419a39359a7f9a89442f0fd327d3f32070902c840ac03b2d07.jpg)
 
 ![图片](../images/7bfadecabc6428419a39359a7f9a89442f0fd327d3f32070902c840ac03b2d07.jpg)
 
 ---
 
-### 6 (练习题)
+### 2C (练习题)
 
-**题目**: Exercise 3.9
-1 Construct these lines.
-C
+**题目**: C
 ![image](images/eee7e3b5749f77fbdf018d34d06888c4be7c054113a0f5d00ba50d5d184c3300.jpg)
 
 ![图片](../images/eee7e3b5749f77fbdf018d34d06888c4be7c054113a0f5d00ba50d5d184c3300.jpg)
 
 ---
 
-### 7 (练习题)
+### 3 (练习题)
 
-**题目**: Exercise 3.9
-1 Construct these lines.
-3 Construct these triangles.
+**题目**: 3 Construct these triangles.
 a Triangle  $ABC$  with  $BC = 8.5\mathrm{cm}$ $AB_{*} = 7.2\mathrm{cm}$  and  $AC = 6.9\mathrm{cm}$
 
 ---
 
-### 11 (练习题)
+### 3b (练习题)
 
-**题目**: Exercise 3.9
-1 Construct these lines.
-4 The diagram shows a rough sketch for a logo design.  $AE$  and  $CE$  are straight lines and  $AD = 8\mathrm{cm}$
+**题目**: b Triangle  $XYZ$  with  $YZ = 86\mathrm{mm}$ $XY = 120\mathrm{mm}$  and  $XZ = 66\mathrm{mm}$
+
+---
+
+### 3c (练习题)
+
+**题目**: c Equilateral triangle DEF with sides of  $6.5\mathrm{cm}$
+
+---
+
+### 3d (练习题)
+
+**题目**: d Isosceles triangle  $PQR$  with a base of  $4\mathrm{cm}$  and  $PQ = PR = 6.5\mathrm{cm}$
+
+---
+
+### 4 (练习题)
+
+**题目**: 4 The diagram shows a rough sketch for a logo design.  $AE$  and  $CE$  are straight lines and  $AD = 8\mathrm{cm}$
 ![image](images/042b0d225f0be81ab854ceac5f959ab34cba64df7c8457482c07e96df6e65bdf.jpg)
 a Construct an accurate drawing using a ruler and a pair of compasses.
 
@@ -6319,25 +6633,150 @@ a Construct an accurate drawing using a ruler and a pair of compasses.
 
 ---
 
-### 12 (练习题)
+### 4b (练习题)
 
-**题目**: Exercise 3.9
-1 Construct these lines.
-b Measure your diagram to find these lengths, to 1 decimal place.
+**题目**: b Measure your diagram to find these lengths, to 1 decimal place.
 i DE
-
----
-
-### 13 (练习题)
-
-**题目**: Exercise 3.9
-1 Construct these lines.
 ii
 EF
 
 ---
 
-## 4
+### a (练习题)
+
+**题目**: a Describe your experience of learning to construct accurate sketches.
+
+---
+
+### b (练习题)
+
+**题目**: b What did you like best and what did you like least about the practical drawing work? Why?
+
+---
+
+### c (练习题)
+
+**题目**: c Is the statement about learning true for you in the context of drawing accurate diagrams?
+
+---
+
+### d (练习题)
+
+**题目**: d Is it true for you generally? Explain why or why not.
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Draw a table like this one:
+[Table Row] <tr><td>Success criteria</td><td>Evidence of success</td><td>Improvements</td></tr>
+[Table Row] <tr><td></td><td></td><td></td></tr>
+[Table Row] <tr><td></td><td></td><td></td></tr>
+[Table Row] <tr><td></td><td></td><td></td></tr>
+[Table Row] <tr><td></td><td></td><td></td></tr>
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Look back at the learning intentions at the start of this chapter. Use these to develop a list of criteria that you can use to decide whether you have met the learning intentions. For example:
+I know all the key words and their meanings and I use them in my work.
+
+---
+
+### 3 (练习题)
+
+**题目**: 3 Once you have your list, check your work against the success criteria.
+- Place a tick (✓) in the second column if you can find evidence that you have met each one. (You are looking for how your work shows you have achieved the criteria.)
+If you cannot find evidence, write down what you can do to improve in that particular area.
+
+---
+
+### 4 (练习题)
+
+**题目**: 4 Make any improvements that you need to over the next few days and then reassess your work using the same criteria.
+
+---
+
+## Chapter 4
+
+### 1 (练习题)
+
+**题目**: 1 a Measure this line and construct  $AB$  the same length in your book using a ruler and compasses.
+A B
+b At point A, measure and draw angle BAC, a  $75^{\circ}$  angle. [2]
+c At point  $B$  measure and draw angle  $ABD$  , an angle of  $125^{\circ}$  [2]
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Determine  $x$  in each figure. Give reasons.
+a
+![[3]](images/dae9951db14226db3a47bd60b46a966a34159340f5c2eafe9927830fca684454.jpg)
+b
+![[2]](images/f722cc6bd8b8b5206ea8154437c449b734cf11767420512b26fd02668a55b283.jpg)
+C
+![[2]](images/706d82b660a3142369d2e3a58095170391ea078e65a1b933c3776154f6a9d99b.jpg)
+
+![图片](../images/dae9951db14226db3a47bd60b46a966a34159340f5c2eafe9927830fca684454.jpg)
+
+![图片](../images/f722cc6bd8b8b5206ea8154437c449b734cf11767420512b26fd02668a55b283.jpg)
+
+![图片](../images/706d82b660a3142369d2e3a58095170391ea078e65a1b933c3776154f6a9d99b.jpg)
+
+---
+
+### 9 (练习题)
+
+**题目**: 9 Construct triangle  $PQR$  with sides  $PQ = 4.5\mathrm{cm}$ $QR = 5\mathrm{cm}$  and  $PR = 7\mathrm{cm}$  [3]
+
+---
+
+### 10 (练习题)
+
+**题目**: 10 a Construct a triangle with sizes of length  $5\mathrm{cm}$ $7\mathrm{cm}$  and  $9\mathrm{cm}$  [3]
+b Construct the perpendicular bisector of each of the three sides. What do you notice? [3]
+c Draw a circle with its centre at the point where the lines intersect and passing through each vertex of the triangle. [3]
+Construct a different triangle and repeat b and c above. What do you notice? [3]
+
+---
+
+### 11 (练习题)
+
+**题目**: 11 The sum of the interior angles of a convex polygon is  $5400^{\circ}$ . Work out how many sides the polygon has. [3]
+
+---
+
+### 12 (练习题)
+
+**题目**: 12 The diagram shows a regular pentagon  $ABCDE$ .
+a Find x. [3] b Find y. [3]
+![image](images/2a32654b21855cee2f54e3f0029a30450f15c11048a5eb7ce241192099e1dcec.jpg)
+
+![图片](../images/2a32654b21855cee2f54e3f0029a30450f15c11048a5eb7ce241192099e1dcec.jpg)
+
+---
+
+### 13 (练习题)
+
+**题目**: 13 Regular polygon A has 10 sides and exterior angle  $3x$ . Regular polygon B has exterior angle  $\frac{5}{3}x$ .
+Work out the number of sides polygon B has. [5]
+
+---
+
+### 14 (练习题)
+
+**题目**: 14 The diagram shows a triangle and two parallel lines.
+a Write down angles UVP and WVQ in terms of  $a$  and  $c$ . Give reasons for your answers.
+b Use your answer to a to prove that the sum of the interior angles of a triangle is 180 degrees.
+c Write down the exterior angle  $RQV$  in terms of  $c$  [1]
+d Use your answers to b and c to show that the exterior angle of a triangle is equal to the sum of the two opposite interior angles. [2]
+![image](images/cac2223168bf1aad58fd4011e2ff3c466583a86fc71e520dba39dae427c467e6.jpg)
+
+![图片](../images/cac2223168bf1aad58fd4011e2ff3c466583a86fc71e520dba39dae427c467e6.jpg)
+
+---
 
 ### 1 (练习题)
 
@@ -6406,7 +6845,47 @@ j How many pieces of fruit do you eat in a week?
 
 ---
 
-## 4.2
+## 4.2 Organising data
+
+### WORKED EXAMPLE 1 (例题)
+
+**题目**: WORKED EXAMPLE 1
+Aisha wanted to find out what people thought about pop-up adverts on their social media feeds. She did a survey of 100 people. Each person chose an answer A, B, C or D.
+What do you think about this statement? Please choose one response.
+Advertising should be strictly controlled on social media. Pop-up adverts should be banned from all social media feeds.
+A I strongly agree
+B I agree
+C I disagree
+D I strongly disagree
+Aisha recorded these results:
+[Table Row] <tr><td>A</td><td>B</td><td>A</td><td>C</td><td>A</td><td>C</td><td>C</td><td>D</td><td>A</td><td>C</td></tr>
+[Table Row] <tr><td>C</td><td>C</td><td>D</td><td>A</td><td>D</td><td>D</td><td>C</td><td>C</td><td>C</td><td>A</td></tr>
+[Table Row] <tr><td>B</td><td>B</td><td>A</td><td>C</td><td>D</td><td>B</td><td>B</td><td>A</td><td>C</td><td>C</td></tr>
+[Table Row] <tr><td>A</td><td>B</td><td>C</td><td>A</td><td>D</td><td>B</td><td>C</td><td>D</td><td>A</td><td>B</td></tr>
+[Table Row] <tr><td>A</td><td>C</td><td>C</td><td>D</td><td>A</td><td>C</td><td>C</td><td>C</td><td>D</td><td>A</td></tr>
+[Table Row] <tr><td>D</td><td>D</td><td>C</td><td>C</td><td>C</td><td>A</td><td>B</td><td>B</td><td>A</td><td>C</td></tr>
+[Table Row] <tr><td>D</td><td>C</td><td>C</td><td>D</td><td>A</td><td>C</td><td>A</td><td>B</td><td>D</td><td>B</td></tr>
+[Table Row] <tr><td>C</td><td>C</td><td>D</td><td>A</td><td>D</td><td>D</td><td>C</td><td>C</td><td>C</td><td>A</td></tr>
+[Table Row] <tr><td>B</td><td>B</td><td>A</td><td>C</td><td>D</td><td>B</td><td>B</td><td>C</td><td>C</td><td>C</td></tr>
+[Table Row] <tr><td>A</td><td>B</td><td>C</td><td>A</td><td>D</td><td>B</td><td>C</td><td>D</td><td>A</td><td>B</td></tr>
+a Draw a tally table to organise the results.
+b What do the results of her survey suggest people think about pop-up advertising on social media?
+
+**解答**: WORKED EXAMPLE 1 CONTINUED
+Answers
+a
+[Table Row] <tr><td>Response</td><td>Tally</td></tr>
+[Table Row] <tr><td>A</td><td>HHHHHHIII</td></tr>
+[Table Row] <tr><td>B</td><td>HHHHHHIII</td></tr>
+[Table Row] <tr><td>C</td><td>HHHHHHHHHHII</td></tr>
+[Table Row] <tr><td>D</td><td>HHHHHH</td></tr>
+Count each letter. Make a tally each time you count one.
+It may help to cross the letters off the list as you count them.
+Check that your tallies add up to 100 to make sure you have included all the scores. (It is more efficient to work across the rows or down the columns, putting a tally into the correct row in your table, rather than counting one letter at a time.)
+b The results suggest that people generally don't think advertising should be banned on social media. 57 people disagreed or strongly disagreed. Only 24 of the 100 people strongly agreed with Aisha's statement.
+By giving people a very definite statement and asking them to respond to it, Aisha has shown her own bias and that could affect the results of her survey. It is quite possible that people think some control is necessary, but not that adverts should be banned completely. However, they don't have that as an option when they answer. The people in the sample could also affect the responses, so Aisha will have to carefully consider any conclusions from this survey.
+
+---
 
 ### 1 (练习题)
 
@@ -6445,47 +6924,7 @@ Why do you think he scored six, seven and eight so many times?
 
 ---
 
-## 1
-
-### WORKED EXAMPLE 1 (例题)
-
-**题目**: Aisha wanted to find out what people thought about pop-up adverts on their social media feeds. She did a survey of 100 people. Each person chose an answer A, B, C or D.
-What do you think about this statement? Please choose one response.
-Advertising should be strictly controlled on social media. Pop-up adverts should be banned from all social media feeds.
-A I strongly agree
-B I agree
-C I disagree
-D I strongly disagree
-Aisha recorded these results:
-[Table Row] <tr><td>A</td><td>B</td><td>A</td><td>C</td><td>A</td><td>C</td><td>C</td><td>D</td><td>A</td><td>C</td></tr>
-[Table Row] <tr><td>C</td><td>C</td><td>D</td><td>A</td><td>D</td><td>D</td><td>C</td><td>C</td><td>C</td><td>A</td></tr>
-[Table Row] <tr><td>B</td><td>B</td><td>A</td><td>C</td><td>D</td><td>B</td><td>B</td><td>A</td><td>C</td><td>C</td></tr>
-[Table Row] <tr><td>A</td><td>B</td><td>C</td><td>A</td><td>D</td><td>B</td><td>C</td><td>D</td><td>A</td><td>B</td></tr>
-[Table Row] <tr><td>A</td><td>C</td><td>C</td><td>D</td><td>A</td><td>C</td><td>C</td><td>C</td><td>D</td><td>A</td></tr>
-[Table Row] <tr><td>D</td><td>D</td><td>C</td><td>C</td><td>C</td><td>A</td><td>B</td><td>B</td><td>A</td><td>C</td></tr>
-[Table Row] <tr><td>D</td><td>C</td><td>C</td><td>D</td><td>A</td><td>C</td><td>A</td><td>B</td><td>D</td><td>B</td></tr>
-[Table Row] <tr><td>C</td><td>C</td><td>D</td><td>A</td><td>D</td><td>D</td><td>C</td><td>C</td><td>C</td><td>A</td></tr>
-[Table Row] <tr><td>B</td><td>B</td><td>A</td><td>C</td><td>D</td><td>B</td><td>B</td><td>C</td><td>C</td><td>C</td></tr>
-[Table Row] <tr><td>A</td><td>B</td><td>C</td><td>A</td><td>D</td><td>B</td><td>C</td><td>D</td><td>A</td><td>B</td></tr>
-a Draw a tally table to organise the results.
-b What do the results of her survey suggest people think about pop-up advertising on social media?
-
-**解答**: Answers
-a
-[Table Row] <tr><td>Response</td><td>Tally</td></tr>
-[Table Row] <tr><td>A</td><td>HHHHHHIII</td></tr>
-[Table Row] <tr><td>B</td><td>HHHHHHIII</td></tr>
-[Table Row] <tr><td>C</td><td>HHHHHHHHHHII</td></tr>
-[Table Row] <tr><td>D</td><td>HHHHHH</td></tr>
-Count each letter. Make a tally each time you count one.
-It may help to cross the letters off the list as you count them.
-Check that your tallies add up to 100 to make sure you have included all the scores. (It is more efficient to work across the rows or down the columns, putting a tally into the correct row in your table, rather than counting one letter at a time.)
-b The results suggest that people generally don't think advertising should be banned on social media. 57 people disagreed or strongly disagreed. Only 24 of the 100 people strongly agreed with Aisha's statement.
-By giving people a very definite statement and asking them to respond to it, Aisha has shown her own bias and that could affect the results of her survey. It is quite possible that people think some control is necessary, but not that adverts should be banned completely. However, they don't have that as an option when they answer. The people in the sample could also affect the responses, so Aisha will have to carefully consider any conclusions from this survey.
-
----
-
-## 4.3
+## Exercise 4.3
 
 ### 1 (练习题)
 
@@ -6531,7 +6970,7 @@ Use a grouped frequency table to organise the data.
 
 ---
 
-## Stem-and-leafdiagrams
+## Stem-and-leaf diagrams
 
 ### 1 (练习题)
 
@@ -6553,7 +6992,7 @@ c Which branch appears to have sold the most pairs? Why?
 
 ---
 
-## APPLYYOURSKILLS
+## APPLY YOUR SKILLS
 
 ### 3 (练习题)
 
@@ -6574,7 +7013,7 @@ ii the conditions in the water improved and the fish increased in length?
 
 ---
 
-## APPLYYOURSKILLSCONTINUED
+## APPLY YOUR SKILLS CONTINUED
 
 ### 4 (练习题)
 
@@ -6590,7 +7029,7 @@ d What does the stem-and-leaf diagram tell you about pulse rates and exercise in
 
 ---
 
-## 4.5
+## Exercise 4.5
 
 ### 1 (练习题)
 
@@ -6715,44 +7154,12 @@ b 3 hours
 
 ---
 
-## 4.3
-
-### a (练习题)
-
-**题目**: a Find the flying distance from Hong Kong to:
-i Dubai
-ii London
-iii Sydney
-
----
-
-### b (练习题)
-
-**题目**: b Which is the longer flight: Istanbul to Montreal or Mumbai to Lagos?
-
----
-
-### c (练习题)
-
-**题目**: c What is the total flying distance for a return flight from London to Sydney and back?
-
----
-
-### d (练习题)
-
-**题目**: d If a plane flies at an average speed of 400 miles per hour, how long will it take to fly the distance from Singapore to Hong Kong to the nearest hour?
-
----
-
-### e (练习题)
-
-**题目**: e Why are there some empty blocks in this table?
-
----
+## 4.3 Using charts to display data
 
 ### 1 (练习题)
 
-**题目**: 1 A pictogram showing how many tourists visit the top five tourist destinations uses this symbol.
+**题目**: Exercise 4.7
+1 A pictogram showing how many tourists visit the top five tourist destinations uses this symbol.
 ![image](images/09dcc80154414f53d72e982e0b5650bc60a8a0993fa24196e4013ec0aae379d2.jpg)
 How many tourists are represented by each of these symbols?
 a
@@ -6821,14 +7228,30 @@ This frequency table shows the number of people who were treated for road accide
 
 ---
 
-## 4.8
-
 ### 1 (练习题)
 
 **题目**: 1 Draw a bar chart to show each of these sets of data.
 a
 [Table Row] <tr><td>Favourite take-away food</td><td>Burgers</td><td>Noodles</td><td>Fried chicken</td><td>Hot chips</td><td>Other</td></tr>
 [Table Row] <tr><td>No. of people</td><td>40</td><td>30</td><td>84</td><td>20</td><td>29</td></tr>
+
+---
+
+### 1b (练习题)
+
+**题目**: b
+[Table Row] <tr><td colspan="2">African countries with the highest HIV/AIDS infection rates (2021 est)</td></tr>
+[Table Row] <tr><td>Country</td><td>% of adults (aged 15 to 49) infected</td></tr>
+[Table Row] <tr><td>Eswatini</td><td>27.0</td></tr>
+[Table Row] <tr><td>Botswana</td><td>20.7</td></tr>
+[Table Row] <tr><td>Lesotho</td><td>22.8</td></tr>
+[Table Row] <tr><td>Zimbabwe</td><td>12.8</td></tr>
+[Table Row] <tr><td>South Africa</td><td>19.0</td></tr>
+[Table Row] <tr><td>Namibia</td><td>11.6</td></tr>
+[Table Row] <tr><td>Zambia</td><td>11.3</td></tr>
+[Table Row] <tr><td>Malawi</td><td>8.9</td></tr>
+[Table Row] <tr><td>Equatorial Guinea</td><td>7.3</td></tr>
+[Table Row] <tr><td>Mozambique</td><td>10.6</td></tr>
 
 ---
 
@@ -6856,7 +7279,34 @@ b composite bar chart.
 
 ---
 
-## 6
+### PEER ASSESSMENT (练习题)
+
+**题目**: How can you decide whether another student's bar chart is correct or not?
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Work in small groups to write a checklist to assess whether someone can draw an accurate and clear bar chart.
+Consider the learning outcomes for this work and what you have covered in the lessons.
+- Your statements should be clear, specific and easy to check. For example: The chart has a clear heading [ ] yes [ ] no
+Leave space in your checklist to add comments. For example: Your heading has spelling mistakes in it. or The vertical scale needs to start at 0.
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Use your checklist to assess another student's completed work in Exercise 4.8.
+
+---
+
+### 3 (练习题)
+
+**题目**: 3 Use the checklist to suggest corrections, improvements or learning goals that still need to be met.
+
+---
+
+## WORKED EXAMPLE 6
 
 ### WORKED EXAMPLE 6 (例题)
 
@@ -6887,8 +7337,6 @@ Label the chart and give it a title.
 
 ---
 
-## 7
-
 ### WORKED EXAMPLE 7 (例题)
 
 **题目**: WORKED EXAMPLE 7
@@ -6912,11 +7360,10 @@ c Things Javi didn't bother to list. Possibly eating, showering, getting dressed
 
 ---
 
-## 4.9
-
 ### 1 (练习题)
 
-**题目**: 1 The table shows the results of a survey carried out on a university campus to find out about the use of online support services among students. Draw a pie chart to illustrate this data.
+**题目**: Exercise 4.9
+1 The table shows the results of a survey carried out on a university campus to find out about the use of online support services among students. Draw a pie chart to illustrate this data.
 [Table Row] <tr><td>Category</td><td>Number of students</td></tr>
 [Table Row] <tr><td>Never used online support</td><td>160</td></tr>
 [Table Row] <tr><td>Used online support in the past</td><td>110</td></tr>
@@ -6946,6 +7393,8 @@ c Things Javi didn't bother to list. Possibly eating, showering, getting dressed
 
 ---
 
+## Exercise 4.9
+
 ### 4 (练习题)
 
 **题目**: 4 The nationalities of students in an international school are shown on this pie chart.
@@ -6963,7 +7412,7 @@ iv French?
 
 ---
 
-## Linegraphs
+## Line graphs
 
 ### 11 (练习题)
 
@@ -6990,7 +7439,7 @@ How does the shape of the graph and the slope of the lines tell a story even tho
 
 ---
 
-## 4.10
+## Exercise 4.10
 
 ### 1 (练习题)
 
@@ -7031,7 +7480,7 @@ d The group stopped running at 6:55. What happened to Nadia's pulse after she st
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -7221,6 +7670,12 @@ Cambridge IGCSE Mathematics (0580) Paper 11 Q8, June 2020
 **题目**: 2 By rounding each number in the calculation correct to 1 significant figure, estimate
 the value of  $\frac{38.7 \times 3.115}{20.3 - 4.1^2}$ .
 You must show all your working.
+TIP
+Unit 1 Past Paper
+Questions Resource
+Sheet is available on
+Cambridge GO.
+Cambridge IGCSE Mathematics (0580) Paper 11 Q20, June 2021
 
 ---
 
@@ -7271,6 +7726,7 @@ Complete the pictogram. [Using Figure 1 in the Unit 1 Past Paper Questions Resou
 [Table Row] <tr><td>Netball</td><td></td></tr>
 [Table Row] <tr><td>Football</td><td></td></tr>
 [Table Row] <tr><td>Hockey</td><td></td></tr>
+[Table Row] <tr><td>Tennis</td><td></td></tr>
 Key:  $\bigoplus$  represents 4 people
 [2]
 Cambridge IGCSE Mathematics (0580) Paper 11 Q1, June 2021
@@ -7315,7 +7771,7 @@ iv  $2^{-3}\times 24^{2}$  [1]
 
 ---
 
-## 5
+## Chapter 5
 
 ### 1 (练习题)
 
@@ -7337,7 +7793,7 @@ b an increase of  $40\%$  followed by an increase of  $50\%$  is not equal to an
 
 ---
 
-## 5.1
+## 5.1 Revisiting fractions
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -7431,18 +7887,47 @@ Work in pairs or small groups to investigate how many fractions you can make. La
 
 ---
 
-### WORKED EXAMPLE 3 (例题)
+## 5.2 Operations on fractions
+
+### 3 (例题)
 
 **题目**: WORKED EXAMPLE 3
 Calculate.
+a  $\frac{3}{4}\times \frac{2}{7}$
+b  $\frac{5}{7}\times 3$
+
+**解答**: a  $\frac{3}{4} \times \frac{2}{7} = \frac{3 \times 2}{4 \times 7} = \frac{6}{28} = \frac{3}{14}$
+Another method is to cancel before multiplying:
+$$
+\frac {3}{2 4} \times \frac {2}{7} = \frac {3 \times 1}{2 \times 7} = \frac {3}{1 4}
+$$
+b  $\frac{5}{7} \times 3 = \frac{5 \times 3}{7 \times 1} = \frac{15}{7}$
 
 ---
 
-## 5.2
+### 4 (例题)
+
+**题目**: WORKED EXAMPLE 4
+Write each of the following as a single fraction in its simplest form.
+a 3 +5 4 6
+b 23-15
+
+**解答**: a 3 5 4 6
+$$
+\begin{array}{l} = \frac {9}{1 2} + \frac {1 0}{1 2} \\ = \frac {1 9}{1 2} \\ = 1 \frac {7}{1 2} \\ \end{array}
+$$
+b 23-15 11-12 4 7
+$$
+\begin{array}{l} = \frac {7 7}{2 8} - \frac {4 8}{2 8} \\ = \frac {7 7 - 4 8}{2 8} \\ = \frac {2 9}{2 8} \\ = 1 \frac {1}{2 8} \\ \end{array}
+$$
+
+---
 
 ### 1 (练习题)
 
-**题目**: 1 a  $\frac{2}{3}\times \frac{5}{9}$
+**题目**: Exercise 5.2
+Evaluate each of the following.
+1 a  $\frac{2}{3}\times \frac{5}{9}$
 
 ---
 
@@ -7450,218 +7935,117 @@ Calculate.
 
 **题目**: b
 1 8 4 9
+d  $\frac{2}{7}\times \frac{14}{16}$
 
 ---
 
 ### 3 (练习题)
 
-**题目**: d  $\frac{2}{7}\times \frac{14}{16}$
-
----
-
-### 4 (练习题)
-
 **题目**: 50 2 a 128 500
-
----
-
-### 5 (练习题)
-
-**题目**: b  $1\frac{1}{3}\times \frac{2}{7}$
-
----
-
-### 6 (练习题)
-
-**题目**: 2 7 8
-
----
-
-### 7 (练习题)
-
-**题目**: d  $\frac{4}{5}$  of  $3\frac{2}{7}$
-
----
-
-### 8 (练习题)
-
-**题目**: e 1 1/3 of 24
-
----
-
-### 9 (练习题)
-
-**题目**: f  $5\frac{1}{2}\times 7\frac{1}{4}$
-
----
-
-### 10 (练习题)
-
-**题目**: g 8 20 1 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
-
----
-
-### 11 (练习题)
-
-**题目**: h 7 10
+b  $1\frac{1}{3}\times \frac{2}{7}$
+2 7 8
+d  $\frac{4}{5}$  of  $3\frac{2}{7}$
+e 1 1/3 of 24
+f  $5\frac{1}{2}\times 7\frac{1}{4}$
+g 8 20 1 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9 9
+h 7 10
 
 ---
 
 ### 1 (练习题)
 
-**题目**: 1 a 1 3 + 1 3
+**题目**: Exercise 5.3
+Evaluate the following.
+1 a 1 3 + 1 3
 
 ---
 
 ### 2 (练习题)
 
 **题目**: e  $\frac{1}{6} +\frac{1}{5}$
+b
+2 5 3 8
 
 ---
 
-## 5.3
+## Exercise 5.3
 
 ### 1 (练习题)
 
-**题目**: b
+**题目**: 1 a 1 3 + 1 3
+e  $\frac{1}{6} +\frac{1}{5}$
+b
 2 5 3 8
 5 3 8 8
-
----
-
-### 1 (练习题)
-
-**题目**: g 2-1
-
----
-
-### 1 (练习题)
-
-**题目**: d 5 8 9 9
-
----
-
-### 1 (练习题)
-
-**题目**: h 51-316
+g 2-1
+d 5 8 9 9
+h 51-316
 
 ---
 
 ### 2 (练习题)
 
 **题目**: 2 a 4- 3
-
----
-
-### 2 (练习题)
-
-**题目**: d 11-7
-
----
-
-### 2 (练习题)
-
-**题目**: 9 51-316+4
-
----
-
-### 2 (练习题)
-
-**题目**: j 3 2 4
-
----
-
-### 2 (练习题)
-
-**题目**: b  $6 + \frac{5}{11}$
-
----
-
-### 2 (练习题)
-
-**题目**: e 3-4
-
----
-
-### 2 (练习题)
-
-**题目**: h 1+2-1
-
----
-
-### 2 (练习题)
-
-**题目**: k 3 1-1+7 4
+d 11-7
+9 51-316+4
+j 3 2 4
+b  $6 + \frac{5}{11}$
+e 3-4
+h 1+2-1
+k 3 1-1+7 4
 11+7
+f 5 3 16 4 8
+3 14 7 3 8
+1 2-3+4
 
 ---
 
-### 2 (练习题)
-
-**题目**: f 5 3 16 4 8
-
----
-
-### 2 (练习题)
-
-**题目**: 3 14 7 3 8
-
----
-
-### 2 (练习题)
-
-**题目**: 1 2-3+4
-
----
-
-### 1 (练习题)
+### 18 (练习题)
 
 **题目**: 1 You can convert any fraction to a decimal number using your calculator. For example, if you work out  $\frac{1}{2}$  as a decimal by dividing 1 by 2 you will get the decimal 0.5.
 Try converting the following fractions to decimals:
 2 5
+3 7
+4 9
+3 16
 
 ---
 
-### 2 (练习题)
+### 19 (练习题)
 
 **题目**: 2 Which fractions in question 1 stop ('terminate') after a few decimal places and which seem to go on forever? Try some more fractions and decide which of these two groups they fall into.
 
 ---
 
-### 3 (练习题)
+### 20 (练习题)
 
 **题目**: 3 Look at the dominators of the fractions that with decimals that terminate. What do they have in common? [Hint: what are the factors of the denominator each time?]
 
 ---
 
-### 4 (练习题)
+### 21 (练习题)
 
 **题目**: 4 Now work out the decimals for:
 1
+4 7
+5 7
+Do the answers have anything in common?
 
 ---
 
-### 4 (练习题)
-
-**题目**: Do the answers have anything in common?
-
----
-
-### 4 (练习题)
+### 22 (练习题)
 
 **题目**: Try the same thing with denominator 11. What about 13?
 
 ---
 
-### 4 (练习题)
+### 23 (练习题)
 
 **题目**: Explain any patterns that you see.
 
 ---
 
-## 5
-
-### WORKED EXAMPLE 5 (例题)
+### 5 (例题)
 
 **题目**: WORKED EXAMPLE 5
 Evaluate each of the following.
@@ -7682,29 +8066,7 @@ $$
 $$
 Convert the mixed fractions to improper fractions.
 Multiply by the reciprocal of  $\frac{7}{3}$ .
-
----
-
-## 5.3
-
-### 5 (例题)
-
-**题目**: b 13 2 1 3 4 3 2 3
-
-**解答**: b  $1\frac{3}{4} +2\frac{1}{3} = \frac{7}{4} +\frac{7}{3}$
-$$
-\begin{array}{l} = \frac {1}{4} \times \frac {3}{7} \\ = \frac {3}{4} \\ \end{array}
-$$
-Convert the mixed fractions to improper fractions.
-Multiply by the reciprocal of  $\frac{7}{3}$ .
-
----
-
-### 5 (例题)
-
-**题目**: 5 8 2
-
-**解答**: c  $\frac{5}{8} \div 2 = \frac{5}{8} \div \frac{2}{1}$
+c  $\frac{5}{8} \div 2 = \frac{5}{8} \div \frac{2}{1}$
 Write 2 as an improper fraction.
 $$
 = \frac {5}{8} \times \frac {1}{2}
@@ -7712,13 +8074,7 @@ $$
 
 ---
 
-### 5 (例题)
-
-**题目**: d  $\frac{6}{7} +3$
-
----
-
-## 5.4
+## Exercise 5.4
 
 ### 1 (练习题)
 
@@ -7780,7 +8136,7 @@ $$
 
 ---
 
-## 5.5
+## Exercise 5.5
 
 ### 1 (练习题)
 
@@ -7830,7 +8186,7 @@ $$
 
 ---
 
-## 5
+## WORKED EXAMPLE 5 CONTINUED
 
 ### WORKED EXAMPLE 5 CONTINUED (例题)
 
@@ -7854,7 +8210,7 @@ $$
 
 ---
 
-## 6
+## WORKED EXAMPLE 6
 
 ### WORKED EXAMPLE 6 (例题)
 
@@ -7864,7 +8220,8 @@ a 0.1 3
 b  $\frac{1.3}{2.4}$
 36 0.12
 
-**解答**: a 0.1 0.1×10 3 3×10
+**解答**: Answers
+a 0.1 0.1×10 3 3×10
 $$
 = \frac {1}{3 0}
 $$
@@ -7872,6 +8229,8 @@ Multiply 0.1 by 10 to convert 0.1 to an integer.
 Make sure the fraction is equivalent by also multiplying the denominator (3) by 10.
 
 ---
+
+## WORKED EXAMPLE 6 CONTINUED
 
 ### WORKED EXAMPLE 6 CONTINUED (例题)
 
@@ -7892,7 +8251,7 @@ Simplify the final fraction by cancelling.
 
 ---
 
-## 7
+## WORKED EXAMPLE 7
 
 ### WORKED EXAMPLE 7 (例题)
 
@@ -7906,7 +8265,7 @@ $$
 
 ---
 
-## 8
+## WORKED EXAMPLE 8
 
 ### WORKED EXAMPLE 8 (例题)
 
@@ -7919,7 +8278,7 @@ This means that the total  $\left(\frac{5}{5}\right)$  is  $5 \times 180 = 900$ 
 
 ---
 
-## 5.6
+## Exercise 5.6
 
 ### 1 (练习题)
 
@@ -7957,9 +8316,9 @@ This means that the total  $\left(\frac{5}{5}\right)$  is  $5 \times 180 = 900$ 
 
 ---
 
-## 5.3
+## 5.3 Percentages
 
-### WORKED EXAMPLE 9 (例题)
+### 9 (例题)
 
 **题目**: WORKED EXAMPLE 9
 Convert each of the following percentages to fractions in their simplest form.
@@ -7977,11 +8336,10 @@ Write as a fraction with a denominator of 100, then simplify.
 
 ---
 
-## 10
+### 10 (例题)
 
-### WORKED EXAMPLE 10 (例题)
-
-**题目**: Convert each of the following fractions into percentages.
+**题目**: WORKED EXAMPLE 10
+Convert each of the following fractions into percentages.
 a 1 20
 1 8
 
@@ -7999,11 +8357,10 @@ $$
 
 ---
 
-## 11
+### 11 (例题)
 
-### WORKED EXAMPLE 11 (例题)
-
-**题目**: Convert the following fractions into percentages:
+**题目**: WORKED EXAMPLE 11
+Convert the following fractions into percentages:
 3 a 40
 8 15
 25 4
@@ -8015,11 +8372,14 @@ b  $\frac{8}{15} \times \frac{100}{1} = \frac{160}{3} = 53.3$  (1 d.p.), so  $\f
 
 ---
 
-## 5.7
+## Exercise 5.7
 
 ### 1 (练习题)
 
-**题目**: 1 Convert each of the following percentages into fractions in their simplest form.
+**题目**: ![image](images/2e4d9458731b74862b5e7b365d54d75923d1c8e1d060786807f2ccada789dddf.jpg)
+1 Convert each of the following percentages into fractions in their simplest form.
+
+![图片](../images/2e4d9458731b74862b5e7b365d54d75923d1c8e1d060786807f2ccada789dddf.jpg)
 
 ---
 
@@ -8089,13 +8449,12 @@ f
 
 ---
 
-## 12
+## WORKED EXAMPLE 12
 
 ### 12a (例题)
 
 **题目**: a Express 16 as a percentage of 48.
-
-**解答**: Answer
+Answer
 $$
 \frac{16}{48}\times 100 = 33.3\% (1d.p.)
 $$
@@ -8113,8 +8472,7 @@ $$
 ### 12b (例题)
 
 **题目**: b Express 15 as a percentage of 75.
-
-**解答**: Answer
+Answer
 $$
 \begin{array}{l} \frac {1 5}{7 5} \times 1 0 0 = \frac {1}{5} \times 1 0 0 \\ = 20\% \\ \end{array}
 $$
@@ -8125,27 +8483,25 @@ Write 15 as a fraction of 75, then simplify and multiply by 100. You know that 1
 ### 12c (例题)
 
 **题目**: c Express 18 as a percentage of 23.
-
-![图片](../images/a1ac2eb447130386668b52894ac3165b57f3495c0dcf9ffc8baba4823559a163.jpg)
-
-**解答**: Answer
+Answer
 To calculate  $\frac{18}{23} \times 100$  you can use your calculator. Enter:
 ![image](images/a1ac2eb447130386668b52894ac3165b57f3495c0dcf9ffc8baba4823559a163.jpg)
+
+![图片](../images/a1ac2eb447130386668b52894ac3165b57f3495c0dcf9ffc8baba4823559a163.jpg)
 
 ---
 
 ### 12d (例题)
 
 **题目**: d Express 24 grams as a percentage of 15.
-
-**解答**: Answer
+Answer
 $$
 \frac{24}{15}\times 100 = \frac{2400}{15} = 160\%
 $$
 
 ---
 
-## 5.8
+## Exercise 5.8
 
 ### 1 (练习题)
 
@@ -8161,73 +8517,67 @@ h  $\frac{1}{2}\%$  of 55 litres.
 
 ---
 
-### 2 (练习题)
-
-**题目**: 2 Express:
-
----
-
-### 1 (练习题)
+### 1a (练习题)
 
 **题目**: a 5% of 300
 
 ---
 
-### 2 (练习题)
+### 1b (练习题)
 
 **题目**: b 20% of 60
 
 ---
 
-### 3 (练习题)
+### 1c (练习题)
 
 **题目**: c 75% of 180
 
 ---
 
-### 4 (练习题)
+### 1d (练习题)
 
 **题目**: d 120% of 300
 
 ---
 
-### 5 (练习题)
+### 1e (练习题)
 
 **题目**: e  $7.5\%$  of 1000
 
 ---
 
-### 6 (练习题)
+### 1f (练习题)
 
 **题目**: f 90% of 50kg
 
 ---
 
-### 7 (练习题)
+### 1g (练习题)
 
 **题目**: g 2.6% of 3 metres
 
 ---
 
-### 8 (练习题)
+### 1h (练习题)
 
 **题目**: h  $\frac{1}{2}\%$  of 55 litres.
 
 ---
 
-### 1 (练习题)
+### 2a (练习题)
 
 **题目**: a 14 as a percentage of 35
 
 ---
 
-### 2 (练习题)
+### 2b (练习题)
 
 **题目**: b 3.5 as a percentage of 14
 
 ---
 
-### 3 (练习题)
+### 2c (练习题)
 
 **题目**: c 17 as a percentage of 63.
 
@@ -8269,6 +8619,30 @@ h  $\frac{1}{2}\%$  of 55 litres.
 
 ---
 
+### WORKED EXAMPLE 13 (例题)
+
+**题目**: WORKED EXAMPLE 13
+The value of a house increased from  $120000 to$ 124800 between August and December. What percentage increase is this?
+
+**解答**: Answer
+$$
+\$ 124800 - \$ 120000 = \$ 4800
+$$
+First calculate the increase.
+$$
+\% \text {increase} = \frac {\text {increase}}{\text {original}} \times 100 \%
+$$
+Write the increase as a fraction of the original and multiply by 100.
+$$
+= \frac{4800}{120000}\times 100\%
+$$
+Then do the calculation (either in your head or using a calculator).
+$$
+= 4 \%
+$$
+
+---
+
 ### 1 (练习题)
 
 **题目**: 1 Over a five-year period, the population of the state of Louisiana in the United States of America decreased from 4468976 to 4287768. Find the percentage decrease in the population of Louisiana in this period.
@@ -8305,36 +8679,10 @@ h  $\frac{1}{2}\%$  of 55 litres.
 
 ---
 
-## 13
-
-### WORKED EXAMPLE 13 (例题)
-
-**题目**: The value of a house increased from  $120000 to$ 124800 between August and December. What percentage increase is this?
-
-**解答**: Answer
-$$
-\$ 124800 - \$ 120000 = \$ 4800
-$$
-First calculate the increase.
-$$
-\% \text {increase} = \frac {\text {increase}}{\text {original}} \times 100 \%
-$$
-Write the increase as a fraction of the original and multiply by 100.
-$$
-= \frac{4800}{120000}\times 100\%
-$$
-Then do the calculation (either in your head or using a calculator).
-$$
-= 4 \%
-$$
-
----
-
-## 14
-
 ### WORKED EXAMPLE 14 (例题)
 
-**题目**: Increase 56 by: a 10%
+**题目**: WORKED EXAMPLE 14
+Increase 56 by: a 10%
 b 15%
 c 4%
 
@@ -8357,8 +8705,6 @@ $$
 $$
 
 ---
-
-## Reversepercentages
 
 ### WORKED EXAMPLE 15 (例题)
 
@@ -8392,20 +8738,10 @@ A licence for anti-virus software normally costs $70.00. What would you pay for 
 **解答**: Answer
 ![image](images/3c48155ea6a427dd1c04556f7802d46f6feadf1afb7aa494b521369ee49b2ffd.jpg)
 Draw a bar model.
-A  $25\%$  discount means the software is now  $75\%$  of the original cost.
-\(100\% = \\)70\( and you need to find \(75\%\).
-$$
-1 \% = \frac {\mathbb {S} 7 0}{1 0 0} = \mathbb {S} 0. 7
-$$
-Divide $70 by 100 to find 1%
-$$
-75 \% = \\( 0.7 \times 75 = \\) 52.50
-$$
-Multiply by 75 to find  $75\%$
 
 ---
 
-## 5.10
+## Exercise 5.10
 
 ### 1 (练习题)
 
@@ -8450,8 +8786,6 @@ d 100%
 1 2%
 
 ---
-
-## APPLYYOURSKILLS
 
 ### 5 (练习题)
 
@@ -8501,8 +8835,6 @@ d 100%
 
 ---
 
-## DISCUSSION
-
 ### 13 (练习题)
 
 **题目**: 13 Discuss these questions about percentage increases and decreases in small groups. Be prepared to explain your answers to the class.
@@ -8514,9 +8846,9 @@ c Which of these offers gives cheaper data when you are buying airtime?
 
 ---
 
-## Reversepercentages
+## DISCUSSION
 
-### WORKED EXAMPLE 17 (例题)
+### 17 (例题)
 
 **题目**: WORKED EXAMPLE 17
 A store is holding a sale in which every item is reduced by  $10\%$ . A jacket in this sale is sold for $108.
@@ -8528,8 +8860,6 @@ Calculate the original price of the jacket.
 It is important to remember that undoing a  $10\%$  decrease is not the same as increasing the reduced value by  $10\%$ . If you increase the sale price of  $108$  by  $10\%$  you will get  $\frac{110}{100} \times \$108 = \$118.80$ , which is a different (and incorrect) answer.
 
 ---
-
-## DISCUSSION
 
 ### 13a (练习题)
 
@@ -8670,10 +9000,21 @@ j $0.80
 
 ---
 
+## 5.4 Standard form
+
 ### 6 (练习题)
 
 **题目**: 6 Seven students were absent from a class on Monday. This is  $17.5\%$  of the class.
 a How many students are there in the class in total?
+b How many students were present on Monday?
+
+---
+
+## DISCUSSION
+
+### 6b (练习题)
+
+**题目**: 6 Seven students were absent from a class on Monday. This is  $17.5\%$  of the class.
 b How many students were present on Monday?
 
 ---
@@ -8714,7 +9055,7 @@ In other words, to move the digit 3 back to its original position you would need
 
 ---
 
-## 5.4
+## 5.4 Standard form
 
 ### 20 (例题)
 
@@ -8891,18 +9232,18 @@ Standard form on a calculator
 a Find the  $\times 10^{\circ}$  button or the Exp or EE button on your calculator. These are known as the exponent keys.
 b Enter these calculations. Check that you get the correct answers.
 i 2.134 × 104 ii 3:124 × 10-6
-Answers: i 21340 ii 0.000003124
-c Did you have to enter  $\times 10?$  Why?
 
 ---
 
 ### 2 (练习题)
 
-**题目**: 2 Here are ten calculator displays giving answers in standard form in different ways.
+**题目**: Answers: i 21340 ii 0.000003124
+c Did you have to enter  $\times 10?$  Why?
+2 Here are ten calculator displays giving answers in standard form in different ways.
 
 ---
 
-## 5.13
+## Exercise 5.13
 
 ### 1 (练习题)
 
@@ -8931,8 +9272,6 @@ g  $\sqrt{3.24 \times 10^{7}}$  h  $\sqrt[3]{4.2 \times 10^{-8}}$  i  $\sqrt[3]{
 
 ---
 
-## APPLYYOURSKILLS
-
 ### 4 (练习题)
 
 **题目**: 4 A hardware designer is trying to work out whether a small cuboid shaped chip will fit into the available space in a new smartwatch. The chip has a volume of  $7.927 \times 10^{-17}$  m. The space available is also a cuboid 0.000000327 m long. 0.0000002 m wide and 0.000116 m high. Will the chip fit into this space? Show your working.
@@ -8946,8 +9285,6 @@ a Write  $2^{30}$  in standard form correct to 3 significant figures.
 b There are 1024 gigabytes in a terabyte. How many bytes is this? Give your answer in standard form correct to 1 significant figure.
 
 ---
-
-## 21
 
 ### 21 (例题)
 
@@ -8993,8 +9330,6 @@ Subtract the indices to divide the powers.
 
 ---
 
-## 22
-
 ### 22 (例题)
 
 **题目**: WORKED EXAMPLE 22
@@ -9014,7 +9349,7 @@ $$
 
 ---
 
-## 5.14
+## Exercise 5.14
 
 ### 1 (练习题)
 
@@ -9219,14 +9554,11 @@ a 10 seconds?
 
 ---
 
-## 6
+## Chapter 6
 
 ### 1 (练习题)
 
-**题目**: ![image](images/b5c43a59145112a689dd1667db217e9ffcddf5d8655711128f860ef7b8287257.jpg)
-1 Calculate  $\frac{5}{6}\left(\frac{1}{4} +\frac{1}{8}\right)$  giving your answer as a fraction in its lowest terms. [4]
-
-![图片](../images/b5c43a59145112a689dd1667db217e9ffcddf5d8655711128f860ef7b8287257.jpg)
+**题目**: 1 Calculate  $\frac{5}{6}\left(\frac{1}{4} +\frac{1}{8}\right)$  giving your answer as a fraction in its lowest terms. [4]
 
 ---
 
@@ -9286,14 +9618,12 @@ standard form correct to 3 significant figures. [3]
 
 ---
 
-### 7 (练习题)
+### 9 (练习题)
 
 **题目**: 7 A light year is the distance light travels in a year. The speed of light is  $3.0 \times 10^{5}$
 kilometres per second.
 a Calculate, to the nearest kilometre, the number of kilometres in one light year.
 [3]
-b Proxima Centauri is  $4.0 \times 10^{13}$  kilometres from our Sun. Work out how many light years there are in  $4.0 \times 10^{13}$  kilometres. Give your answer to 3 significant figures.
-[2]
 
 ---
 
@@ -9351,24 +9681,52 @@ a What was the car's value when it was one year old? [2]
 
 ---
 
-### 7a (练习题)
+### GETTING STARTED (练习题)
 
-**题目**: a Calculate, to the nearest kilometre, the number of kilometres in one light year.
-[3]
+**题目**: In each diagram, the numbers or expressions in any pair of circles add up to the number or expression in the square between them. Copy and complete each diagram by working out the missing numbers or expressions.
+![image](images/c886a83989a1907b3bbc74cdece02e92c50a04f5506f6b1428dd2b7c3e58c47a.jpg)
+![image](images/e056d0926796210b68e8e89258f5ae1b0ac23a55686e25fdb9157a4ce083372b.jpg)
+![image](images/b9102ef3118011f18f3256600ded2f997cbca5491721b1593bef5ec6182f43fc.jpg)
+![image](images/30dd52f1317e18f0bf25035a6ada91205de4259353cf317651591c4a952e7f52.jpg)
+
+![图片](../images/c886a83989a1907b3bbc74cdece02e92c50a04f5506f6b1428dd2b7c3e58c47a.jpg)
+
+![图片](../images/e056d0926796210b68e8e89258f5ae1b0ac23a55686e25fdb9157a4ce083372b.jpg)
+
+![图片](../images/b9102ef3118011f18f3256600ded2f997cbca5491721b1593bef5ec6182f43fc.jpg)
+
+![图片](../images/30dd52f1317e18f0bf25035a6ada91205de4259353cf317651591c4a952e7f52.jpg)
 
 ---
 
-### WORKED EXAMPLE 1 (例题)
+### 6.1 (例题)
 
-**题目**: WORKED EXAMPLE 1
-An equation with  $x$  on both sides and all  $x$  terms with the same sign:
+**题目**: I think of a number, x. If I multiply my number by three and then add one, the answer is 13. What is my number?
+
+![图片](../images/f21f13a6577d5728fc7fca3888506652045eb9f24d6a61203c9fc6242a0cb521.jpg)
+
+**解答**: To solve this problem you need to understand what is happening to  $x$  and then undo the operations in reverse order. This diagram (sometimes called a function machine) shows what is happening to  $x$ , with the reverse process written underneath. Notice how the answer to the problem appears quite easily:
+![image](images/f21f13a6577d5728fc7fca3888506652045eb9f24d6a61203c9fc6242a0cb521.jpg)
+You can reach the solution more efficiently using algebra. Follow the instructions in the question:
+$$
+3 x + 1 = 1 3
+$$
+$$
+\begin{array}{l} 3 x + 1 - 1 = 1 3 - 1 \quad \text {(s u b t r a c t o n e f r o m b o t h s i d e s)} \\ 3 x = 1 2 \\ \frac {3 x}{3} = \frac {1 2}{3} \quad \text {(d i v i d e b o t h s i d e s b y t h r e e)} \\ x = 4 \\ \end{array}
+$$
+
+---
+
+### WORKED EXAMPLE 1a (例题)
+
+**题目**: An equation with  $x$  on both sides and all  $x$  terms with the same sign:
 a Solve the equation  $5x - 2 = 3x + 6$
-Answer
+
+**解答**: Answer
 $$
 5 x - 2 = 3 x + 6
 $$
-
-**解答**: $$
+$$
 5 x - 2 - 3 x = 3 x + 6 - 3 x
 $$
 $$
@@ -9392,16 +9750,16 @@ Divide both sides by 2.
 
 ---
 
-### WORKED EXAMPLE 1 (例题)
+### WORKED EXAMPLE 1b (例题)
 
 **题目**: An equation with  $x$  on both sides and  $x$  terms with different signs:
 b Solve the equation  $5x + 12 = 20 - 11x$
-Answer
+
+**解答**: Answer
 $$
 5 x + 1 2 = 2 0 - 1 1 x
 $$
-
-**解答**: $$
+$$
 5 x + 1 2 + 1 1 x = 2 0 - 1 1 x + 1 1 x
 $$
 $$
@@ -9419,9 +9777,9 @@ $$
 
 ---
 
-## 1
+## WORKED EXAMPLE 1
 
-### WORKED EXAMPLE 1a (例题)
+### 1a (例题)
 
 **题目**: a Solve the equation  $5x - 2 = 3x + 6$
 $$
@@ -9452,7 +9810,7 @@ Divide both sides by 2.
 
 ---
 
-### WORKED EXAMPLE 1b (例题)
+### 1b (例题)
 
 **题目**: b Solve the equation  $5x + 12 = 20 - 11x$
 $$
@@ -9483,7 +9841,7 @@ Divide both sides by 16.
 
 ---
 
-### WORKED EXAMPLE 1c (例题)
+### 1c (例题)
 
 **题目**: c Solve the equation  $2(y - 4) + 4(y + 2) = 30$
 $$
@@ -9505,7 +9863,7 @@ Divide both sides by 6.
 
 ---
 
-### WORKED EXAMPLE 1d (例题)
+### 1d (例题)
 
 **题目**: d Solve the equation  $\frac{6}{7} p = 10$
 $$
@@ -9527,7 +9885,7 @@ Write the fraction in its simplest form.
 
 ---
 
-### WORKED EXAMPLE 1e (例题)
+### 1e (例题)
 
 **题目**: e Solve the equation  $\frac{2}{3} + \frac{1}{3x} = \frac{4 - x}{6x}$
 $$
@@ -9553,7 +9911,7 @@ Leave your answer as a fraction.
 
 ---
 
-### WORKED EXAMPLE 2a (例题)
+### 2a (例题)
 
 **题目**: a  $3^{3x + 1} = 81$
 a  $3^{3x + 1} = 81$
@@ -9577,7 +9935,7 @@ Divide both sides by 3.
 
 ---
 
-### WORKED EXAMPLE 2b (例题)
+### 2b (例题)
 
 **题目**: b  $32^{\times} = 2$
 b (25)×=21
@@ -9598,7 +9956,7 @@ Solve for  $x$ .
 
 ---
 
-### WORKED EXAMPLE 2c (例题)
+### 2c (例题)
 
 **题目**: c  $3^{x + 1} = 9^{x}$
 c  $3^{x + 1} = (3^{2})^{x}$
@@ -9610,18 +9968,60 @@ $$
 
 ---
 
-## 6.1
+## Exercise 6.1
 
 ### 1 (练习题)
 
 **题目**: 1 Solve the following equations.
 a  $4x + 3 = 31$
+
+---
+
+### 2 (练习题)
+
+**题目**: 1 Solve the following equations.
 b  $8x + 42 = 2$
+
+---
+
+### 3 (练习题)
+
+**题目**: 1 Solve the following equations.
 c  $6x - 1 = 53$
+
+---
+
+### 4 (练习题)
+
+**题目**: 1 Solve the following equations.
 d  $7x - 4 = -66$
+
+---
+
+### 5 (练习题)
+
+**题目**: 1 Solve the following equations.
 ${9y} + 7 = {52}$
+
+---
+
+### 6 (练习题)
+
+**题目**: 1 Solve the following equations.
 f  $11n - 19 = 102$
+
+---
+
+### 7 (练习题)
+
+**题目**: 1 Solve the following equations.
 g  $12q - 7 = 14$
+
+---
+
+### 8 (练习题)
+
+**题目**: 1 Solve the following equations.
 h  $206t + 3 = 106$
 
 ---
@@ -9630,10 +10030,40 @@ h  $206t + 3 = 106$
 
 **题目**: 2 Solve the following equations.
 a  ${12x} + 1 = {7x} + {11}$
+
+---
+
+### 3 (练习题)
+
+**题目**: 2 Solve the following equations.
 b  ${6x} + 1 = {7x} + {11}$
+
+---
+
+### 4 (练习题)
+
+**题目**: 2 Solve the following equations.
 $6y + 1 = 3y - 8$
+
+---
+
+### 5 (练习题)
+
+**题目**: 2 Solve the following equations.
 d  $11x + 1 = 12 - 4x$
+
+---
+
+### 6 (练习题)
+
+**题目**: 2 Solve the following equations.
 e  $8 - 8p = 9 - 9p$
+
+---
+
+### 7 (练习题)
+
+**题目**: 2 Solve the following equations.
 f  $\frac{1}{2} x - 7 = \frac{1}{4} x + 8$
 
 ---
@@ -9642,10 +10072,40 @@ f  $\frac{1}{2} x - 7 = \frac{1}{4} x + 8$
 
 **题目**: 3 Solve the following equations.
 a  $4(x + 1) = 12$
+
+---
+
+### 4 (练习题)
+
+**题目**: 3 Solve the following equations.
 b  $2(2p + 1) = 14$
+
+---
+
+### 5 (练习题)
+
+**题目**: 3 Solve the following equations.
 c  $8(3t + 2) = 40$
+
+---
+
+### 6 (练习题)
+
+**题目**: 3 Solve the following equations.
 d  $5(m - 2) = 15$
+
+---
+
+### 7 (练习题)
+
+**题目**: 3 Solve the following equations.
 e  $-5(n - 6) = -20$
+
+---
+
+### 8 (练习题)
+
+**题目**: 3 Solve the following equations.
 f  $- 2\left( {x + 2}\right)  = {4x} + 9$
 
 ---
@@ -9654,24 +10114,103 @@ f  $- 2\left( {x + 2}\right)  = {4x} + 9$
 
 **题目**: 4 Solve for  $x$ .
 a  $7(x + 2) = 4(x + 5)$
-b  $4\left( {x - 2}\right)  + 2\left( {x + 5}\right)  = {14}$
-$7x - (3x + 11) = 6 - (5 - 3x)$
-d  $3(x + 1) = 2(x + 1) + 2x$
-e  $4 + 2(2 - x) = 3 - 2(5 - x)$
-f  $2(p - 1) + 7(3p + 2) = 7(p - 4)$
-g  $2(p - 1) - 7(3p - 2) = 7(p - 4)$
-h  $3(2x + 5) - (3x + 2) = 10$
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 5 Solve for  $x$ .
+**题目**: 4 Solve for  $x$ .
+b  $4\left( {x - 2}\right)  + 2\left( {x + 5}\right)  = {14}$
+
+---
+
+### 6 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+$7x - (3x + 11) = 6 - (5 - 3x)$
+
+---
+
+### 7 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+d  $3(x + 1) = 2(x + 1) + 2x$
+
+---
+
+### 8 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+e  $4 + 2(2 - x) = 3 - 2(5 - x)$
+
+---
+
+### 9 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+f  $2(p - 1) + 7(3p + 2) = 7(p - 4)$
+
+---
+
+### 10 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+g  $2(p - 1) - 7(3p - 2) = 7(p - 4)$
+
+---
+
+### 11 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+h  $3(2x + 5) - (3x + 2) = 10$
+
+---
+
+### 12 (练习题)
+
+**题目**: 4 Solve for  $x$ .
+5 Solve for  $x$ .
+
+---
+
+### 13 (练习题)
+
+**题目**: 4 Solve for  $x$ .
 2x+1 3 8
+
+---
+
+### 14 (练习题)
+
+**题目**: 4 Solve for  $x$ .
 b  $\frac{2x}{3} +1 = 8$
+
+---
+
+### 15 (练习题)
+
+**题目**: 4 Solve for  $x$ .
 3 5x+11=21
+
+---
+
+### 16 (练习题)
+
+**题目**: 4 Solve for  $x$ .
 d  $\frac{x + 3}{2} = x$
+
+---
+
+### 17 (练习题)
+
+**题目**: 4 Solve for  $x$ .
 $2x - 1 = 3x$
+
+---
+
+### 18 (练习题)
+
+**题目**: 4 Solve for  $x$ .
 $\frac{3x}{2} + 5 = {2x}$
 
 ---
@@ -9680,10 +10219,40 @@ $\frac{3x}{2} + 5 = {2x}$
 
 **题目**: 6 Solve the following equations.
 $\frac{3}{x} - 2 = \frac{1}{2} - \frac{9}{2x}$
+
+---
+
+### 7 (练习题)
+
+**题目**: 6 Solve the following equations.
 b  $\frac{2}{x} +\frac{3}{2x} = 7$
+
+---
+
+### 8 (练习题)
+
+**题目**: 6 Solve the following equations.
 5+8 2(x+4) x
+
+---
+
+### 9 (练习题)
+
+**题目**: 6 Solve the following equations.
 d  $\frac{x - 1}{3x} -\frac{1}{9} = \frac{x - 3}{9x}$
+
+---
+
+### 10 (练习题)
+
+**题目**: 6 Solve the following equations.
 4 4 1 3x 5 5x
+
+---
+
+### 11 (练习题)
+
+**题目**: 6 Solve the following equations.
 $\frac{4}{x + 1} = \frac{5}{x - 2}$
 
 ---
@@ -9692,22 +10261,49 @@ $\frac{4}{x + 1} = \frac{5}{x - 2}$
 
 **题目**: 7 Solve the following equations for  $x$ .
 a  $3^{3x} = 27$
+
+---
+
+### 8 (练习题)
+
+**题目**: 7 Solve the following equations for  $x$ .
 b  $2^{3x + 4} = 32$
+
+---
+
+### 9 (练习题)
+
+**题目**: 7 Solve the following equations for  $x$ .
 c·8.14x+3=1
+
+---
+
+### 10 (练习题)
+
+**题目**: 7 Solve the following equations for  $x$ .
 d 5²(3x+1)=625
+
+---
+
+### 11 (练习题)
+
+**题目**: 7 Solve the following equations for  $x$ .
 e  $4^{3x} = 2^{x + 1}$
+
+---
+
+### 12 (练习题)
+
+**题目**: 7 Solve the following equations for  $x$ .
 f  $9^{3x + 4} = 27^{4x + 3}$
 
 ---
 
-## 2
-
 ### WORKED EXAMPLE 2 (例题)
 
-**题目**: Solve each equation to find the value of  $x$ .
+**题目**: WORKED EXAMPLE 2
+Solve each equation to find the value of  $x$ .
 a  $3^{3x + 1} = 81$
-b  $32^{\times} = 2$
-c  $3^{x + 1} = 9^{x}$
 
 **解答**: a  $3^{3x + 1} = 81$
 Notice that 81 is the 4th power of 3.
@@ -9726,38 +10322,101 @@ $$
 x = 1
 $$
 Divide both sides by 3.
-b (25)×=21
-Write both terms as powers of 2.
-$$
-2 ^ {5 x} = 2 ^ {1}
-$$
-Remove the brackets using the index laws.
-$$
-5 x = 1
-$$
-Equate the indices.
-$$
-x = \frac {1}{5}
-$$
-Solve for  $x$ .
-c  $3^{x + 1} = (3^{2})^{x}$
-Write both terms with the same base (as powers of 3).
-$$
-3 ^ {x + 1} = 3 ^ {2 x}
-$$
-Remove the brackets using the index laws.
-$$
-x + 1 = 2 x
-$$
-Equate the indices.
-$$
-x = 1
-$$
-Solve for  $x$ .
 
 ---
 
-## 6.2
+## 6.2 Factorising algebraic expressions
+
+### WORKED EXAMPLE 3 (例题)
+
+**题目**: WORKED EXAMPLE 3
+Factorise each of the following expressions as fully as possible.
+a  $15x + 12y$
+b 18mn-30m
+c  $36p^{2}q - 24pq^{2}$
+d  $15(x - 2) - 20(x - 2)^{3}$
+e  $6bx - 15cx + 10cy - 4by$
+f ax + by + atx + bty
+
+**解答**: a  $15x + 12y$
+The HCF of 12 and 15 is 3, but  $x$  and  $y$  have no common factors.
+${15x} + {12y} = 3\left( {{5x} + {4y}}\right)$
+Because  $3 \times 5x = 15x$  and  $3 \times 4y = 12y$
+b 18mn-30m
+The HCF of 18 and  $30 = 6$  and the HCF of  $mn$  and  $m$  is  $m$ .
+$$
+1 8 m n - 3 0 m = 6 m (3 n - 5)
+$$
+Because  $6m \times 3n = 18mn$  and  $6m \times -5 = -30m$ .
+36p²q-24pq²
+The HCF of 36 and  $24 = 12$  and  $p^2 q$  and  $pq^2$  have common factor  $pq$ .
+$$
+3 6 p ^ {2} q - 2 4 p q ^ {2} = 1 2 p q (3 p - 2 q)
+$$
+Because  $12pq \times 3p = 36p^2q$  and  $12pq \times -2q = -24pq^2$ .
+Sometimes, the terms can have an expression in brackets that is common to both terms.
+d  $15(x - 2) - 20(x - 2)^{3}$
+The HCF of 15 and 20 is 5 and the HCF of  $(x - 2)$  and  $(x - 2)^{3}$  is  $(x - 2)$
+Because  $5(x - 2) \times 3 = 15(x - 2)$  and  $5(x - 2) \times 4(x - 2)^2 = 20(x - 2)^3$ .
+$$
+\begin{array}{l} 1 5 (x - 2) - 2 0 (x - 2) ^ {3} \\ 1 5 (x - 2) - 2 0 (x - 2) ^ {3} \\ = 5 (x - 2) [ 3 - 4 (x - 2) ^ {2} ] \\ \end{array}
+$$
+
+---
+
+### WORKED EXAMPLE 3 CONTINUED (例题)
+
+**题目**: WORKED EXAMPLE 3 CONTINUED
+You also need to be able to factorise expressions in the form
+$$
+a x + b x + k a y + k b y.
+$$
+You can do this by collecting like terms and factorising the  $x$  and the  $y$  terms separately.
+e 6bx-15cx+10cy-4by
+f ax + by + atx + bty
+
+**解答**: $$
+\begin{array}{l} = (6 b x - 1 5 c x) + (1 0 c y - 4 b y) \quad \text {C o l l e c t} \\ = 3 x (2 b - 5 c) + 2 y (5 c - 2 b) \quad \text {F a c t o r i s e} x \text {a n d} y \text {t e r m s s e p a r a t e l y .} \\ = 3 x (2 b - 5 c) - 2 y (2 b - 5 c) \quad \text {T a k e a c o m m o n f a c t o r o f - 1 . T h e b r a c k e t} \\ = (2 b - 5 c) (3 x - 2 y) \quad (2 b - 5 c) \text {i s h o w a c o m m e n t i f a t i o n} \\ \end{array}
+$$
+$= ax + atx + by + bty$  Collect like terms and factorise the  $x$  and  $y$  terms separately.
+$= ax(1 + t) + by(1 + t)$  The HCF of ax and atx is ax and the HCF of by and bty is by.
+$= (ax + by)(1 + t)$  The bracket  $(1 + t)$  is a common factor.
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Factorise.
+a  $3x + 6$
+b 15y-12
+c 8-16z
+d  $35 + 25t$
+e  $2x - 4$
+$f\left( {3x} + 7\right)$
+g 18k-64
+h  $33p + 22$
+i  $2x + 4y$
+j  $3p - 15q$
+k 13r-26s
+1  $2p + 4q + 6r$
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Factorise as fully as possible.
+a 21u-49v+35w
+b  $3xy + 3x$
+c  $3x^{2} + 3x$
+d  $15pq + 21p$
+e  $9m^{2} - 33m$
+f  $90m^{3} - 80m^{2}$
+g  $36x^{3} + 24x^{5}$
+h  $32p^{2}q - 4pq^{2}$
+
+---
+
+## Exercise 6.2
 
 ### 1 (练习题)
 
@@ -9831,7 +10490,7 @@ Solve for  $x$ .
 
 ---
 
-### 1 (练习题)
+### 2 (练习题)
 
 **题目**: 2 Factorise as fully as possible.
 
@@ -10050,8 +10709,18 @@ Solve for  $x$ .
 ### 6 (练习题)
 
 **题目**: 6 A rectangular field is  $40\mathrm{m}$  long and  $(12x + 30)$  metres wide.
-a Find the perimeter of the field and factorise your answer as fully as possible.
-b Find the area of the field and factorise your answer as fully as possible.
+
+---
+
+### 6a (练习题)
+
+**题目**: a Find the perimeter of the field and factorise your answer as fully as possible.
+
+---
+
+### 6b (练习题)
+
+**题目**: b Find the area of the field and factorise your answer as fully as possible.
 
 ---
 
@@ -10064,54 +10733,64 @@ b Find the area of the field and factorise your answer as fully as possible.
 ### 8 (练习题)
 
 **题目**: 8 a Given  $a = 3 \times 10^{m}$  and  $b = 9 \times 10^{m + 3}$ , find the value of  $a + b$ , factorising your answer completely.
-b Why is this answer not in standard form?
-c What would the answer be if written in standard form?
 
 ---
 
-### 1 (练习题)
+### 8b (练习题)
+
+**题目**: b Why is this answer not in standard form?
+
+---
+
+### 8c (练习题)
+
+**题目**: c What would the answer be if written in standard form?
+
+---
+
+### INVESTIGATION 1 (练习题)
 
 **题目**: 1 Take any three consecutive positive whole numbers and add them up. Do this for at least four sets of numbers.
 
 ---
 
-### 2 (练习题)
+### INVESTIGATION 2 (练习题)
 
 **题目**: 2 What do your answers all have in common?
 
 ---
 
-### 3 (练习题)
+### INVESTIGATION 3 (练习题)
 
 **题目**: 3 Now let your first whole number be  $n$ .
 
 ---
 
-### 3a (练习题)
+### INVESTIGATION 3a (练习题)
 
 **题目**: a What would the next two whole numbers be?
 
 ---
 
-### 3b (练习题)
+### INVESTIGATION 3b (练习题)
 
 **题目**: b Add the three numbers up and factorise your answer. How does this relate to your answer for question 2?
 
 ---
 
-### 4 (练习题)
+### INVESTIGATION 4 (练习题)
 
 **题目**: 4 Now repeat questions 1, 2 and 3 for sets of five consecutive whole numbers? What happens? What about seven consecutive numbers?
 
 ---
 
-### 5 (练习题)
+### INVESTIGATION 5 (练习题)
 
 **题目**: 5 Now repeat questions 1 and 2 for sets of four consecutive whole numbers? What happens? What about six consecutive numbers?
 
 ---
 
-### 6 (练习题)
+### INVESTIGATION 6 (练习题)
 
 **题目**: 6 Investigate this further by trying different numbers of consecutive integers.
 
@@ -10121,21 +10800,31 @@ c What would the answer be if written in standard form?
 
 **题目**: WORKED EXAMPLE 4
 a  $x + y = c(y)$
-a-b d (b)
-c  $\sqrt{x} +y = z(x)$
 
-**解答**: Answers
-a  $x + y = c$
+**解答**: a  $x + y = c$
 $$
 \Rightarrow y = c - x
 $$
 Subtract  $x$  from both sides.
-b  $\frac{a - b}{c} = d$
+
+---
+
+### WORKED EXAMPLE 4b (例题)
+
+**题目**: a-b d (b)
+
+**解答**: b  $\frac{a - b}{c} = d$
 $\Rightarrow a - b = cd$  Multiply both sides by c to clear the fraction.
 
 ---
 
-## 6.3
+### WORKED EXAMPLE 4c (例题)
+
+**题目**: c  $\sqrt{x} +y = z(x)$
+
+---
+
+## 6.3 Rearranging formulae
 
 ### 1 (练习题)
 
@@ -10150,17 +10839,12 @@ $\Rightarrow a - b = cd$  Multiply both sides by c to clear the fraction.
 d  $\frac{x - a}{b} = c$  (x) e  $x(c - y) = d$  (y) f  $a - b = c$  (b)
 3 a  $p - \frac{r}{q} = t$  (r) b  $\frac{x - a}{b} = c$  (b) c  $a(n - m) = t$  (m)
 d  $\frac{a}{b} = \frac{c}{d}$  (a) e  $\frac{x - a}{b} = c$  (a) f  $\frac{xy}{z} = t$  (z)
-
----
-
-### 3 (练习题)
-
-**题目**: 4 a  $\sqrt{b} = c$  (b) b  $\sqrt{ab} = c$  (b) c a  $\sqrt{b} = c$  (b)
+4 a  $\sqrt{b} = c$  (b) b  $\sqrt{ab} = c$  (b) c a  $\sqrt{b} = c$  (b)
 d  $\sqrt{b + c} = c$  (b) e  $\sqrt{x - b} = c$  (b) f  $\frac{x}{\sqrt{y}} = c$  (y)
 
 ---
 
-### 4 (练习题)
+### 3 (练习题)
 
 **题目**: 5 The perimeter of a rectangle can be given as  $P = 2(1 + w)$ , where  $l$  is the length and  $w$  is the width of the rectangle.
 a Make w the subject of the formula.
@@ -10168,7 +10852,7 @@ b Find w if a rectangle has a length of  $45\mathrm{cm}$  and a perimeter of  $1
 
 ---
 
-### 5 (练习题)
+### 4 (练习题)
 
 **题目**: 6 A small plane is about to take off from an aircraft carrier. The plane is pushed forwards using a steam device, so that it accelerates at a rate controlled by the ship's crew.
 The pilot knows that if  $u =$  initial speed, and  $v =$  speed at time  $t$  seconds, then:
@@ -10181,7 +10865,7 @@ b Calculate the initial speed of the plane if the speed at 2 seconds is  $78\mat
 
 ---
 
-### 6 (练习题)
+### 5 (练习题)
 
 **题目**: 7 If the length of a pendulum is  $l$  metres, the acceleration due to gravity is  $gms^{-2}$  and  $T$  is the period of the oscillation in seconds then:
 $$
@@ -10233,7 +10917,7 @@ Sabina knows that the temperature drops by  $13^{\circ}\mathrm{C}$  after a heig
 
 ---
 
-## 7
+## Chapter 7
 
 ### 7 (练习题)
 
@@ -10301,7 +10985,7 @@ d The area of the rectangle is  $15\%$  larger than the area of a square. Find t
 
 ---
 
-## 7.1
+## Exercise 7.1
 
 ### 1 (练习题)
 
@@ -10554,7 +11238,7 @@ $$
 
 ---
 
-## 7.2
+## Exercise 7.2
 
 ### 1 (练习题)
 
@@ -10634,6 +11318,8 @@ $$
 
 ---
 
+## Exercise 7.3
+
 ### 1 (练习题)
 
 **题目**: 1 Find the circumference and area of each shape. Give each answer as a multiple of  $\pi$ .
@@ -10643,7 +11329,7 @@ $$
 
 ---
 
-## 2
+## WORKED EXAMPLE 2
 
 ### WORKED EXAMPLE 3 (例题)
 
@@ -10692,7 +11378,7 @@ $$
 
 ---
 
-## 7.3
+## Exercise 7.3
 
 ### 1 (练习题)
 
@@ -10747,7 +11433,12 @@ a Calculate the circumference of a circle of diameter  $10\mathrm{cm}$
 
 **题目**: 3 A circle of circumference  $12\pi \mathrm{cm}$  is precision cut from a metal square as shown.
 a What is the length of each side of the square?
-b What area of metal is left after the circle has been cut out? Give your answer in terms of  $\pi$
+
+---
+
+### 3 (练习题)
+
+**题目**: b What area of metal is left after the circle has been cut out? Give your answer in terms of  $\pi$
 ![image](images/c381ec19aa4e455cfc4a397f39e3e5382c8c440dfcca905fc6adc0008f706b6d.jpg)
 
 ![图片](../images/c381ec19aa4e455cfc4a397f39e3e5382c8c440dfcca905fc6adc0008f706b6d.jpg)
@@ -10763,7 +11454,7 @@ b What area of metal is left after the circle has been cut out? Give your answer
 
 ---
 
-## 5
+## WORKED EXAMPLE 5
 
 ### 5 (例题)
 
@@ -10821,7 +11512,7 @@ is approximately equal to  $28.6\mathrm{cm}$
 
 ---
 
-## 7.4
+## Exercise 7.4
 
 ### 1 (练习题)
 
@@ -10884,8 +11575,14 @@ is approximately equal to  $28.6\mathrm{cm}$
 
 **题目**: 2 Find the area of the coloured region and find the arc length / in each of the following. Give your answers to 3 significant figures.
 ![a](images/129011efbdc66a484efbf1f59e818cd83b8e90c23ab762275e9c3d5b490739d4.jpg)
+![b](images/7490116e9b1c04d342b168a4addb6efef6cd4e00aab26918e71d2e9b51fa121d.jpg)
+![C](images/78baf49d35a34dbd8b18e120c0b69d39eafde4cee38bc85572613b84a5bd020d.jpg)
 
 ![图片](../images/129011efbdc66a484efbf1f59e818cd83b8e90c23ab762275e9c3d5b490739d4.jpg)
+
+![图片](../images/7490116e9b1c04d342b168a4addb6efef6cd4e00aab26918e71d2e9b51fa121d.jpg)
+
+![图片](../images/78baf49d35a34dbd8b18e120c0b69d39eafde4cee38bc85572613b84a5bd020d.jpg)
 
 ---
 
@@ -10929,27 +11626,6 @@ is approximately equal to  $28.6\mathrm{cm}$
 ![图片](../images/e117331344593c489621dbd176acdd565646b45aa8a056bd273882a84d9eaad0.jpg)
 
 ![图片](../images/c5cd7262964b90b04a953ed1cf4ac1a53ba6efd81e4534fed9d387574b6cb3ca.jpg)
-
----
-
-### 2 (练习题)
-
-**题目**: 2 Find the area of the coloured region and find the arc length / in each of the following. Give your answers to 3 significant figures.
-![a](images/129011efbdc66a484efbf1f59e818cd83b8e90c23ab762275e9c3d5b490739d4.jpg)
-![b](images/7490116e9b1c04d342b168a4addb6efef6cd4e00aab26918e71d2e9b51fa121d.jpg)
-![C](images/78baf49d35a34dbd8b18e120c0b69d39eafde4cee38bc85572613b84a5bd020d.jpg)
-![h](images/22a13658ae27ea5439a63e5eed76509b3e04656c159f34c79f244eebd22edad3.jpg)
-![d](images/7a37375562eb4ae006d044366ac87daf26e5c0d2f6fa38a179c215cc632c84c6.jpg)
-
-![图片](../images/129011efbdc66a484efbf1f59e818cd83b8e90c23ab762275e9c3d5b490739d4.jpg)
-
-![图片](../images/7490116e9b1c04d342b168a4addb6efef6cd4e00aab26918e71d2e9b51fa121d.jpg)
-
-![图片](../images/78baf49d35a34dbd8b18e120c0b69d39eafde4cee38bc85572613b84a5bd020d.jpg)
-
-![图片](../images/22a13658ae27ea5439a63e5eed76509b3e04656c159f34c79f244eebd22edad3.jpg)
-
-![图片](../images/7a37375562eb4ae006d044366ac87daf26e5c0d2f6fa38a179c215cc632c84c6.jpg)
 
 ---
 
@@ -11056,7 +11732,7 @@ Calculate the value of  $h$ . Give your answer to 3 significant figures.
 
 ---
 
-## 7.5
+## Exercise 7.5
 
 ### 1 (练习题)
 
@@ -11114,7 +11790,7 @@ b Find the volume of the cuboid in  $\mathfrak{m}^3$
 
 ---
 
-## 7.6
+## 7.3 Surface areas and volumes of solids
 
 ### 1 (练习题)
 
@@ -11197,7 +11873,7 @@ c When the maximum number of cardboard boxes are stored, what volume of empty sp
 
 ---
 
-## APPLYYOURSKILLS
+## Exercise 7.7
 
 ### 1 (练习题)
 
@@ -11320,7 +11996,7 @@ b Amira will use the containers to hold a sweet mix of seeds called mukhwas. Cal
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -11401,7 +12077,37 @@ Calculate the volume and the surface area of the frustum. [6]
 
 ---
 
-## 8
+## Chapter 8
+
+### Chapter 8 (练习题)
+
+**题目**: Introduction to probability
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Try to work out how to use the random number button on your calculator.
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Play a game of 'higher or lower' with yourself.
+- Start by getting a random number from your calculator.
+- Guess whether the next number will be 'higher' or 'lower'.
+Find another random number and work out whether it was 'higher' or 'lower' than the previous number.
+Were you correct?
+If yes, take another go; if no, stop.
+Write down the number of turns you take without getting it wrong.
+
+---
+
+### 3 (练习题)
+
+**题目**: 3 Think about how you can maximise your chances of being correct. For which numbers would you most sensibly choose 'higher'? What about lower?
+
+---
 
 ### 1 (例题)
 
@@ -11429,7 +12135,7 @@ a prime number?
 
 ---
 
-## 1
+## WORKED EXAMPLE 1
 
 ### WORKED EXAMPLE 3 (例题)
 
@@ -11538,7 +12244,7 @@ b Write your answer to part (a) as a percentage.
 
 ---
 
-## 8.1
+## Exercise 8.1
 
 ### 2 (练习题)
 
@@ -11621,45 +12327,13 @@ d a prime-numbered card.
 
 ### 1 (练习题)
 
-**题目**: 1 Complete the activities on this exit ticket.
-[Table Row] <tr><td>Events</td><td>A Throwing a number greater than 2 on a regular dice.</td><td>B Drawing a red card from a set of 12 red, 12 white and 6 blue cards.</td><td>C Throwing a 7 using a regular dice.</td><td>D Getting heads 14 times when you toss a coin 20 times.</td></tr>
+**题目**: [Table Row] <tr><td>Events</td><td>A Throwing a number greater than 2 on a regular dice.</td><td>B Drawing a red card from a set of 12 red, 12 white and 6 blue cards.</td><td>C Throwing a 7 using a regular dice.</td><td>D Getting heads 14 times when you toss a coin 20 times.</td></tr>
 a Which event has a probability of 0?
 b What is the probability of event B not happening?
 c Calculate the probability of A happening.
 d What type of probability is described in event D?
 
 ---
-
-### 2 (练习题)
-
-**题目**: 2 Which emoji best describes how you feel about this work?
-Choose one of these or draw your own.
-![image](images/3a0ad7cf420bdc4970606336bd1a5ef2c194ac9a0a3b0e58412db471568657e6.jpg)
-![image](images/be6fefdbc1af0771e55fb4f138ec4e5a4d2364134f7eda30f60260d75be9b8be.jpg)
-![image](images/398b286de5c1e6b9f78b7d6cc9b3f70a86e1168213bdb995a2c1ece6d955b68f.jpg)
-![image](images/0a73e73200887338b86b06cbb6e54dafd56f33688263ba6a14c135cb96d024f3.jpg)
-![image](images/c21ba051a1add1685b774fc4233436743d2f1db0a85dd4d5f3d188b40dc50e21.jpg)
-![image](images/f4c53c89a15d6d9187882966ca55d984aa004ba32813eaca370139c3fd9c61af.jpg)
-![image](images/6c644263fda9d128d9c2883a789b2efaea2617f67bd045b2c83aa63c8fcae192.jpg)
-3 Write a sentence explaining why you chose that emoji.
-
-![图片](../images/3a0ad7cf420bdc4970606336bd1a5ef2c194ac9a0a3b0e58412db471568657e6.jpg)
-
-![图片](../images/be6fefdbc1af0771e55fb4f138ec4e5a4d2364134f7eda30f60260d75be9b8be.jpg)
-
-![图片](../images/398b286de5c1e6b9f78b7d6cc9b3f70a86e1168213bdb995a2c1ece6d955b68f.jpg)
-
-![图片](../images/0a73e73200887338b86b06cbb6e54dafd56f33688263ba6a14c135cb96d024f3.jpg)
-
-![图片](../images/c21ba051a1add1685b774fc4233436743d2f1db0a85dd4d5f3d188b40dc50e21.jpg)
-
-![图片](../images/f4c53c89a15d6d9187882966ca55d984aa004ba32813eaca370139c3fd9c61af.jpg)
-
-![图片](../images/6c644263fda9d128d9c2883a789b2efaea2617f67bd045b2c83aa63c8fcae192.jpg)
-
----
-
-## 8.2
 
 ### 7 (例题)
 
@@ -11679,6 +12353,8 @@ Red
 [Table Row] <tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
 
 ---
+
+## 8.2 Sample space diagrams
 
 ### 1 (练习题)
 
@@ -11763,7 +12439,17 @@ a Copy and complete the sample space diagrams for each set.
 
 ---
 
-## 8
+### 5 (练习题)
+
+**题目**: 5 Two dice are thrown and the result is obtained by adding the two numbers.
+Two sets of dice are available.
+Set A: one dice has four faces numbered 1 to 4 and the other eight faces numbered 1 to 8.
+Set B: each dice has six faces numbered 1 to 6.
+a Copy and complete the sample space diagrams for each set.
+
+---
+
+## WORKED EXAMPLE 8
 
 ### WORKED EXAMPLE 8 (例题)
 
@@ -11787,6 +12473,7 @@ b  $P$  (neither passes)  $= P$  (Noa fails and Sunja fails
 $$
 \begin{array}{l} P (\text {f a i l}) = P (\text {n o t p a s s}) \\ = \left(1 - \frac {3}{4}\right) \times \left(1 - \frac {5}{6}\right) \\ = 1 - P (\text {p a s s}) \\ = \frac {1}{4} \times \frac {1}{6} \\ = \frac {1}{2 4} \\ \end{array}
 $$
+WORKED EXAMPLE 8 CONTINUED
 c  $P$  (at least one passes)  $= 1 - P$  (neither passes)
 $$
 = 1 - \frac {1}{2 4} = \frac {2 3}{2 4}
@@ -11805,7 +12492,7 @@ $B =$  Noa fails and Sunja passes.
 
 ---
 
-## 8.3
+## Exercise 8.3
 
 ### 1 (练习题)
 
@@ -11854,7 +12541,7 @@ exacone of Kirti and Hussein passes.
 
 ---
 
-## 9
+## WORKED EXAMPLE 9
 
 ### WORKED EXAMPLE 9 (例题)
 
@@ -11876,7 +12563,7 @@ $$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -11959,9 +12646,10 @@ ii B [2]
 iii  $A$  and  $B$  [3]
 iv A or B or both. [3]
 c i Use your answer to part (b) to show that the result,  $P(A$  or  $B) = P(A) + P(B)$  , is.not true for these events. [3]
-ii Why is the result not true for these events? [2]
 
 ---
+
+## Past paper questions
 
 ### 1 (练习题)
 
@@ -12066,7 +12754,7 @@ Give your answer in standard form.
 
 ---
 
-## 0580
+## Cambridge IGCSE Mathematics (0580) Paper 11 Q4, June 2019
 
 ### 10 (练习题)
 
@@ -12152,33 +12840,7 @@ Calculate the volume of the remaining solid.
 
 ---
 
-### Unit 2 Project (练习题)
-
-**题目**: > Unit 2 Project
-Odds and evens
-This set of numbered balls is used to play a game:
-![image](images/e03e31d9d50124aeaf62f63d1249f4a17c2c555d79aa37f88b6758f430dbb4c1.jpg)
-To play the game, the balls are mixed up and two balls are randomly picked out together. For example:
-![image](images/777a7ab194d62df1b8ae1db59bc5107c106c2947c80c05033db655297a7cd878.jpg)
-The numbers on the balls are added together:  $4 + 5 = 9$
-If the total is even, you win.
-If the total is odd, you lose.
-How can you decide whether the game is fair?
-Here are three more sets of balls:
-![image](images/6c07bf0545f517286fabe81d1fa821528675a622de609efff92fcf9780632d98.jpg)
-![image](images/fe901527e0af52a3c3f413ad3b69af4d1ed638d333d2ff64f936d843c152474a.jpg)
-
-![图片](../images/e03e31d9d50124aeaf62f63d1249f4a17c2c555d79aa37f88b6758f430dbb4c1.jpg)
-
-![图片](../images/777a7ab194d62df1b8ae1db59bc5107c106c2947c80c05033db655297a7cd878.jpg)
-
-![图片](../images/6c07bf0545f517286fabe81d1fa821528675a622de609efff92fcf9780632d98.jpg)
-
-![图片](../images/fe901527e0af52a3c3f413ad3b69af4d1ed638d333d2ff64f936d843c152474a.jpg)
-
----
-
-## 9
+## Chapter 9
 
 ### 1 (练习题)
 
@@ -12218,54 +12880,19 @@ How many specialists treat children and perform surgery?
 
 ---
 
-## 9.1
+## 9.1 Sequences
 
 ### 1 (练习题)
 
 **题目**: 1 Draw a diagram to show how each of the following sequences continues and find the next three terms in each case.
 a 5,7,9,11,13,...
-
----
-
-### 2 (练习题)
-
-**题目**: b 3,8,13,18,23,...
-
----
-
-### 3 (练习题)
-
-**题目**: c 3,9,27,81,243,...
-
----
-
-### 4 (练习题)
-
-**题目**: d 0.5,2,3.5,5,6.5,..
-
----
-
-### 5 (练习题)
-
-**题目**: e 8,5,2,-1,-4,...
-
----
-
-### 6 (练习题)
-
-**题目**: f 13,11,9,7,5,...
-
----
-
-### 7 (练习题)
-
-**题目**: g 6,4.8,3.6,2.4,1.2,...
-
----
-
-### 8 (练习题)
-
-**题目**: h 2.3,1.1,-0.1,-1.3,...
+b 3,8,13,18,23,...
+c 3,9,27,81,243,...
+d 0.5,2,3.5,5,6.5,..
+e 8,5,2,-1,-4,...
+f 13,11,9,7,5,...
+g 6,4.8,3.6,2.4,1.2,...
+h 2.3,1.1,-0.1,-1.3,...
 
 ---
 
@@ -12273,18 +12900,8 @@ a 5,7,9,11,13,...
 
 **题目**: 2 Find the next three terms in each of the following sequences and explain the rule that you used in each case.
 a 1,-3,9,-27,...
-
----
-
-### 3 (练习题)
-
-**题目**: b Mo, Tu, We, Th, ...
-
----
-
-### 4 (练习题)
-
-**题目**: c a,c,f,j,o,...
+b Mo, Tu, We, Th, ...
+c a,c,f,j,o,...
 
 ---
 
@@ -12293,18 +12910,8 @@ a 1,-3,9,-27,...
 **题目**: 3 The first term  $(T_{1})$  of a sequence is 5. The term-to-term rule for the sequence is 'add  $x$ '.
 Find the value of  $x$  that will give you each of these sequences:
 a every second term is not an integer
-
----
-
-### 4 (练习题)
-
-**题目**: b every second term is a multiple of 10.
-
----
-
-### 5 (练习题)
-
-**题目**: c  $\mathrm{T}_2 <   \mathrm{T}_1$
+b every second term is a multiple of 10.
+c  $\mathrm{T}_2 <   \mathrm{T}_1$
 
 ---
 
@@ -12322,19 +12929,17 @@ a
 
 ---
 
-## Relatingatermtoitspositioninthesequence
-
 ### WORKED EXAMPLE 2 (例题)
 
 **题目**: WORKED EXAMPLE 2
 Find an expression for the nth term of the sequence 2, 5, 10, 17, 26 ...
+Answer
 
 ![图片](../images/3cd5aeb32df8100ddc3a940b47eacbb815e78763b932946faad57e657bbcb255.jpg)
 
 ![图片](../images/81450af1377167d9ecd59acbf7c58b2ccf09692c114eba7f696589ffedc6852d.jpg)
 
-**解答**: Answer
-Work out the difference between terms in the sequence. This is known as the first difference.
+**解答**: Work out the difference between terms in the sequence. This is known as the first difference.
 ![image](images/3cd5aeb32df8100ddc3a940b47eacbb815e78763b932946faad57e657bbcb255.jpg)
 The first difference is not constant so work out the second difference:
 ![image](images/81450af1377167d9ecd59acbf7c58b2ccf09692c114eba7f696589ffedc6852d.jpg)
@@ -12354,11 +12959,11 @@ Each term is 1 greater than the value of  $n^2$ , so the  $n$ th term is  $n^2 +
 
 **题目**: WORKED EXAMPLE 3
 Find the nth term of the quadratic sequence 2, 8, 16, 26, 38 ...
+Answer
 
 ![图片](../images/98ffe7fe0ca95734f3b80981369ff21b5994dc38f3eca35922b722aead8454a4.jpg)
 
-**解答**: Answer
-![image](images/98ffe7fe0ca95734f3b80981369ff21b5994dc38f3eca35922b722aead8454a4.jpg)
+**解答**: ![image](images/98ffe7fe0ca95734f3b80981369ff21b5994dc38f3eca35922b722aead8454a4.jpg)
 Once you have values for each expression you can make equations to find  $a$ ,  $b$ , and  $c$ .
 $$
 2 a = 2, \text {s o} a = 1
@@ -12376,7 +12981,7 @@ If you are not told the sequence is quadratic, you will need to check that the s
 
 ---
 
-## 9.2
+## Exercise 9.2
 
 ### 1 (练习题)
 
@@ -12436,13 +13041,13 @@ d Work out the 20th term.
 
 ### 7 (练习题)
 
-**题目**: d Work out the 20th term.
+**题目**: 7 If  $x + 1$  and  $-x + 17$  are the second and sixth terms of a sequence with a common difference of 5, find the value of  $x$ .
 
 ---
 
 ### 8 (练习题)
 
-**题目**: 7 If  $x + 1$  and  $-x + 17$  are the second and sixth terms of a sequence with a common difference of 5, find the value of  $x$ .
+**题目**: 8 If  $x + 4$  and  $x - 4$  are the third and seventh terms of a sequence with a common difference of  $-2$ , determine  $n$  when  $T_n = x$ .
 
 ---
 
@@ -12457,7 +13062,40 @@ c Now consider the sequence:
 
 ---
 
-## 4
+## WORKED EXAMPLE 3
+
+### WORKED EXAMPLE 3 (例题)
+
+**题目**: Find the nth term of the quadratic sequence 2, 8, 16, 26, 38 ...
+
+![图片](../images/98ffe7fe0ca95734f3b80981369ff21b5994dc38f3eca35922b722aead8454a4.jpg)
+
+**解答**: Answer
+![image](images/98ffe7fe0ca95734f3b80981369ff21b5994dc38f3eca35922b722aead8454a4.jpg)
+Once you have values for each expression you can make equations to find  $a$ ,  $b$ , and  $c$ .
+$$
+2 a = 2, \text {s o} a = 1
+$$
+Find the value of a first.
+$$
+3 a + b = 6
+$$
+Find b by substituting the value of a.
+$$
+3 (1) + b = 6, \text {s o} b = 3
+$$
+TIP
+If you are not told the sequence is quadratic, you will need to check that the second difference is constant before using this method.
+WORKED EXAMPLE 3 CONTINUED
+$a + b + c = 2$ $1 + 3 + c = 2$  Find c by substituting the values of a and b.
+$$
+4 + c = 2, \text {s o} c = - 2
+$$
+The nth term is  $n^2 + 3n - 2$  Insert the values of  $a$ ,  $b$  and  $c$  into the general term  $an^2 + bn + c$ .
+
+---
+
+## WORKED EXAMPLE 4
 
 ### WORKED EXAMPLE 4 (例题)
 
@@ -12477,12 +13115,6 @@ The completed table is:
 [Table Row] <tr><td>A</td><td>5</td><td>8</td><td>11</td><td>14</td><td></td><td>3n + 2</td></tr>
 [Table Row] <tr><td>B</td><td>2</td><td>5</td><td>10</td><td>17</td><td></td><td>n2 + 1</td></tr>
 [Table Row] <tr><td>C</td><td>7</td><td>13</td><td>21</td><td>31</td><td></td><td>n2 + 3n + 3</td></tr>
-
----
-
-### 8 (练习题)
-
-**题目**: 8 If  $x + 4$  and  $x - 4$  are the third and seventh terms of a sequence with a common difference of  $-2$ , determine  $n$  when  $T_n = x$ .
 
 ---
 
@@ -12575,12 +13207,76 @@ The diagram shows a pattern made with squares.
 
 ---
 
-## Generatingsequencesfrompatterns
+## Exercise 9.3
 
-### WORKED EXAMPLE 5 (例题)
+### 1 (练习题)
 
-**题目**: WORKED EXAMPLE 5
-The diagram shows a pattern made with squares.
+**题目**: For each of the following shape sequences:
+i draw a sequence table for the first six patterns, taking care to use the correct letter for the pattern number and the correct letter for the number of shapes
+ii find a formula for the number of shapes used in terms of the pattern number
+iii use your formula to find the number of shapes used in the 300th pattern.
+![image](images/d7e79f3263ff4e54f38f3edda32dd5d5594972900693d5b8ebdaafc1d59496ea.jpg)
+![image](images/6e70e46440bcc68476ad5f545d3f0132e6ff4ef6b6e46dbeab275e66453c75ea.jpg)
+![image](images/2815aeb12ecfbaeb1cf651f89d0c9f09ca15b6f1aa2fc58b1674a7a577a153e7.jpg)
+
+![图片](../images/d7e79f3263ff4e54f38f3edda32dd5d5594972900693d5b8ebdaafc1d59496ea.jpg)
+
+![图片](../images/6e70e46440bcc68476ad5f545d3f0132e6ff4ef6b6e46dbeab275e66453c75ea.jpg)
+
+![图片](../images/2815aeb12ecfbaeb1cf651f89d0c9f09ca15b6f1aa2fc58b1674a7a577a153e7.jpg)
+
+---
+
+### d (练习题)
+
+**题目**: d
+![image](images/131962f297e98a7f3f270359c1f25219eccd21edf83f3b89cb972846be4a6969.jpg)
+
+![图片](../images/131962f297e98a7f3f270359c1f25219eccd21edf83f3b89cb972846be4a6969.jpg)
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Find the first three terms and the 25th term of each sequence.
+a  $u_{n} = 4n + 1$
+b  $u_{n} = 3n - 5$
+C  ${u}_{n} = {5n} - \frac{1}{2}$
+d  $u_{n} = -2n + 1$
+e  $u_{n} = \frac{n}{2} +1$
+f  $u_{n} = 2n^{2} - 1$
+g  $u_{n} = n^{2}$
+h  $u_{n} = 5 + 2^{n - 1}$
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 The numbers 30 and 110 are found in the sequence  $u_{n} = n(n - 1)$ . In which position is each number found?
+
+---
+
+### 3 (练习题)
+
+**题目**: 3 Which term in the sequence  $u_n = 2n^2 + 5$  has a value of 167?
+
+---
+
+## Exercise 9.4
+
+### 4 (练习题)
+
+**题目**: 4 For the sequence  $u_{n} = 2n^{2} - 5n + 3$ , determine:
+a the value of the tenth term.
+b the value of  $n$  for which  $u_{n} = 45$
+
+---
+
+## WORKED EXAMPLE 5
+
+### 5 (例题)
+
+**题目**: The diagram shows a pattern made with squares.
 ![image](images/9aae1fe9d7c323a027524a7048913e568511c36268366b4b657ed65015ec2eba.jpg)
 ![image](images/94cf10f6e6f4d0d10ff9e0d0b92d4bec6df7321add01404e26efb137ad0463ed.jpg)
 ![image](images/7672cb7ab8f83538f8e6e8b65fbd1b56fad35bd7d33e172b2ae5526adfd2e42d.jpg)
@@ -12594,7 +13290,8 @@ c How many squares will there be in pattern 100?
 
 ![图片](../images/7672cb7ab8f83538f8e6e8b65fbd1b56fad35bd7d33e172b2ae5526adfd2e42d.jpg)
 
-**解答**: a
+**解答**: Answers
+a
 [Table Row] <tr><td>Pattern number (p)</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
 [Table Row] <tr><td>Number of squares (s)</td><td>7</td><td>11</td><td>15</td><td>19</td><td>23</td><td>27</td></tr>
 WORKED EXAMPLE 5 CONTINUED
@@ -12620,10 +13317,11 @@ Notice that  $p$  has been used for the pattern number rather than  $n$  here. Y
 
 ---
 
-### WORKED EXAMPLE 6 (例题)
+## WORKED EXAMPLE 6
 
-**题目**: WORKED EXAMPLE 6
-The position to term rule for a sequence is given as  $u_n = 3n - 1$ .
+### 6 (例题)
+
+**题目**: The position to term rule for a sequence is given as  $u_n = 3n - 1$ .
 What are the first three terms of the sequence?
 
 **解答**: Answer
@@ -12640,6 +13338,8 @@ $$
 The first three terms are 2, 5 and 8.
 
 ---
+
+## Converting recurring decimals to fractions
 
 ### WORKED EXAMPLE 7 (例题)
 
@@ -12658,42 +13358,7 @@ $144 = n^{2}$ $n^2 = 144$  has solutions  $n = 12$  and
 
 ---
 
-### Exercise 9.4 (练习题)
-
-**题目**: Exercise 9.4
-1 Find the first three terms and the 25th term of each sequence.
-a  $u_{n} = 4n + 1$
-b  $u_{n} = 3n - 5$
-C  ${u}_{n} = {5n} - \frac{1}{2}$
-d  $u_{n} = -2n + 1$
-e  $u_{n} = \frac{n}{2} +1$
-f  $u_{n} = 2n^{2} - 1$
-g  $u_{n} = n^{2}$
-h  $u_{n} = 5 + 2^{n - 1}$
-
----
-
-### 2 (练习题)
-
-**题目**: 2 The numbers 30 and 110 are found in the sequence  $u_{n} = n(n - 1)$ . In which position is each number found?
-
----
-
-### 3 (练习题)
-
-**题目**: 3 Which term in the sequence  $u_n = 2n^2 + 5$  has a value of 167?
-
----
-
-## 9.4
-
-### 4 (练习题)
-
-**题目**: 4 For the sequence  $u_{n} = 2n^{2} - 5n + 3$ , determine:
-a the value of the tenth term.
-b the value of  $n$  for which  $u_{n} = 45$
-
----
+## Exercise 9.4
 
 ### 5 (练习题)
 
@@ -12703,7 +13368,7 @@ b Given that  $u_{3} = -4$ , list the first five terms of the sequence.
 
 ---
 
-## 9.5
+## 9.2 Rational and irrational numbers
 
 ### 1 (练习题)
 
@@ -12761,16 +13426,17 @@ d  $x$  is a natural number.
 
 ---
 
-## 8
+## Converting recurring decimals to fractions
 
-### 8 (例题)
+### WORKED EXAMPLE 8 (例题)
 
-**题目**: Use algebra to write each of the following as fractions. Simplify your fractions as far as possible.
+**题目**: WORKED EXAMPLE 8
+Use algebra to write each of the following as fractions. Simplify your fractions as far as possible.
 a 0.3
 
 ---
 
-## 9.6
+## Exercise 9.6
 
 ### 1 (练习题)
 
@@ -12822,166 +13488,22 @@ $$
 ### 3 (练习题)
 
 **题目**: 2 Write each recurring decimal as a fraction in its lowest terms.
+a 0.5
+e 0.61
+0.208
+m 2.45
+q 2.36 + 3.63
+b 0.1
+f 0.32
+0.02
+3.105
+0.17+0.71
+0.8
+g 0.618
 
 ---
 
-### 4 (练习题)
-
-**题目**: a 0.5
-
----
-
-### 5 (练习题)
-
-**题目**: e 0.61
-
----
-
-### 6 (练习题)
-
-**题目**: 0.208
-
----
-
-### 7 (练习题)
-
-**题目**: m 2.45
-
----
-
-### 8 (练习题)
-
-**题目**: q 2.36 + 3.63
-
----
-
-### 9 (练习题)
-
-**题目**: b 0.1
-
----
-
-### 10 (练习题)
-
-**题目**: f 0.32
-
----
-
-### 12 (练习题)
-
-**题目**: 3.105
-
----
-
-### 13 (练习题)
-
-**题目**: 0.17+0.71
-
----
-
-### 15 (练习题)
-
-**题目**: g 0.618
-
----
-
-## 9.3
-
-### k (练习题)
-
-**题目**: k 0.18
-
----
-
-### d (练习题)
-
-**题目**: d 0.24
-
----
-
-### h (练习题)
-
-**题目**: h 0.233
-
----
-
-### 1 (练习题)
-
-**题目**: 1 a Write down the numerical value of each of the following:
-
----
-
-### i (练习题)
-
-**题目**: i 1-0.9 ii 1-0.99 iii 1-0.999
-
----
-
-### iv (练习题)
-
-**题目**: iv 1-0.999999999
-
----
-
-### b (练习题)
-
-**题目**: b Comment on your answers to (a). What happened to the answer as the number of digits in the subtracted number increased? What did the answer get closer to? Will it ever get there?
-
----
-
-### c (练习题)
-
-**题目**: c Use algebra to express 0.6 and 0.2 as fractions in their simplest form.
-
----
-
-### d (练习题)
-
-**题目**: d Express  $0.6 + 0.2$  as a recurring decimal.
-
----
-
-### e (练习题)
-
-**题目**: e Use your answer to (c) to express  $0.6 + 0.2$  as a fraction in its lowest terms.
-
----
-
-### f (练习题)
-
-**题目**: f Now repeat parts (c), (d) and (e) using the recurring decimals 0.4 and 0.5.
-
----
-
-### g (练习题)
-
-**题目**: g Explain how your findings for part (f) relate to your answers in parts (a) and (b).
-
----
-
-### 2 (练习题)
-
-**题目**: 2 A teacher asked a class to find the greatest number that is less than 4.5. Jeevan gave the answer 4.4.
-
----
-
-### a (练习题)
-
-**题目**: a Why is Jeevan not correct?
-
----
-
-### b (练习题)
-
-**题目**: b Why is Ryan not correct?
-
----
-
-### c (练习题)
-
-**题目**: c Is Jamila correct? Give full reasons for your answer, including any algebra that helps you to explain. Can you think of a better answer than Jamila's?
-
----
+## 9.3 Surds
 
 ### 9 (例题)
 
@@ -13024,22 +13546,21 @@ Work out the root of the perfect square.
 
 ---
 
-## 10
+## WORKED EXAMPLE 10
 
-### WORKED EXAMPLE 11 (例题)
+### 11 (例题)
 
 **题目**: WORKED EXAMPLE 11
 Write each expression in the form  $\sqrt{n}$ .
 a 3√7
 b 4√3
 
-**解答**: Answers
-a  $3\sqrt{7} = 3\times \sqrt{7}$  which is equivalent to  $\sqrt{9}\times \sqrt{7} = \sqrt{63}$
+**解答**: a  $3\sqrt{7} = 3\times \sqrt{7}$  which is equivalent to  $\sqrt{9}\times \sqrt{7} = \sqrt{63}$
 b  $4\sqrt{3} = 4\times \sqrt{3}$  which is equivalent to  $\sqrt{16}\times \sqrt{3} = \sqrt{48}$
 
 ---
 
-### WORKED EXAMPLE 12 (例题)
+### 12 (例题)
 
 **题目**: WORKED EXAMPLE 12
 Simplify and collect like terms.
@@ -13047,8 +13568,7 @@ a  $3\sqrt{5} +\sqrt{5}$
 4√5-2√2+6√5-3√2
 7√5-√20
 
-**解答**: Answers
-a  $3\sqrt{5} +\sqrt{5} = 4\sqrt{5}$
+**解答**: a  $3\sqrt{5} +\sqrt{5} = 4\sqrt{5}$
 Add the coefficients (remember  $\sqrt{5}$  means  $1 \times \sqrt{5}$ ).
 b  $4\sqrt{5} -2\sqrt{2} +6\sqrt{5} -3\sqrt{2}$
 Group like terms and add the coefficients.
@@ -13091,7 +13611,7 @@ k 298
 
 ---
 
-## 9.7
+## Exercise 9.7
 
 ### 2 (练习题)
 
@@ -13185,9 +13705,7 @@ f 4(√7-√2)-（√7-√2）
 
 ---
 
-## Multiplyinganddividingsurds
-
-### WORKED EXAMPLE 13 (例题)
+### 13 (例题)
 
 **题目**: WORKED EXAMPLE 13
 Simplify.
@@ -13213,6 +13731,8 @@ Multiply the whole numbers and multiply the surds.
 Use  $\sqrt{x} \div \sqrt{y} = \sqrt{\frac{x}{y}}$ .
 
 ---
+
+## Multiplying and dividing surds
 
 ### d (练习题)
 
@@ -13316,227 +13836,63 @@ $$
 $$
 TIP
 Rationalising the denominator can help you simplify expressions when you are asked to give an exact answer. If you are asked for an approximate value, you can use a calculator to work with the surds and you don't need to rationalise the denominator.
+MATHEMATICAL CONNECTIONS
+You will learn more about multiplying two pairs of brackets in Chapter 10.
 WORKED EXAMPLE 16 CONTINUED
 4+√2 (4+√2)(3+2√7) 3-2√7 (3-2√7)(3+2√7)
 Multiply the numerator and denominator by  $3 + \sqrt{7}$ .
 
 ---
 
-## 9.8
+## Exercise 9.8
 
 ### 1 (练习题)
 
 **题目**: a  $\sqrt{7}\times \sqrt{5}$
+b  $\sqrt{3}\times \sqrt{11}$
+6√3×4√2
+9√10×√3
+e -2√5×2√6
+9√6×√6
+2√3×3√2
+h 2√3×√6
+-4√2×-√5
 
 ---
 
 ### 2 (练习题)
 
-**题目**: b  $\sqrt{3}\times \sqrt{11}$
+**题目**: 2 Simplify.
+a√14-√7
+b 24-√4
+c -√30-√3
+√5 d 10
+45 e 3
+√2 18
+633 11
+-2√27 9
+12√15 35
+5√30 j 156
+3√90 3 3
+3√27 1 12
 
 ---
 
 ### 3 (练习题)
 
-**题目**: 6√3×4√2
-
----
-
-### 4 (练习题)
-
-**题目**: 9√10×√3
-
----
-
-### 5 (练习题)
-
-**题目**: e -2√5×2√6
-
----
-
-### 6 (练习题)
-
-**题目**: 9√6×√6
-
----
-
-### 7 (练习题)
-
-**题目**: 2√3×3√2
-
----
-
-### 8 (练习题)
-
-**题目**: h 2√3×√6
-
----
-
-### 9 (练习题)
-
-**题目**: -4√2×-√5
-
----
-
-### 10 (练习题)
-
-**题目**: ![image](images/d5a033eba8c1392e3393cc677aab43e42f650c8aad5f4a99a2d69842e09d1bab.jpg)
-![image](images/c745a1048eca36f0b07df09525814e33a7016593523cb154d7ae3f891f5e7e85.jpg)
-![image](images/a2b0e9ce60542afbd241b3c172b9060b17eda5eee15cf906be4a532b129d68e3.jpg)
-![image](images/0dc5fa75082287ef61a02cfd73fae8c1b351817375264912589dc2e70f3fe63e.jpg)
-![image](images/5fd282a069e94fa60645de8c5b23ed0e77592898be5ed3394a61f71b51a51a25.jpg)
-![image](images/5ef626c465e91c3688180b330b2e38d57c354be3a71fa2d2a2301b041cb4e560.jpg)
-![image](images/f7cec8e035003b5e24a304a5f6eec0ca3e6424501e702098413e480505dbcb58.jpg)
-
-![图片](../images/d5a033eba8c1392e3393cc677aab43e42f650c8aad5f4a99a2d69842e09d1bab.jpg)
-
-![图片](../images/c745a1048eca36f0b07df09525814e33a7016593523cb154d7ae3f891f5e7e85.jpg)
-
-![图片](../images/a2b0e9ce60542afbd241b3c172b9060b17eda5eee15cf906be4a532b129d68e3.jpg)
-
-![图片](../images/0dc5fa75082287ef61a02cfd73fae8c1b351817375264912589dc2e70f3fe63e.jpg)
-
-![图片](../images/5fd282a069e94fa60645de8c5b23ed0e77592898be5ed3394a61f71b51a51a25.jpg)
-
-![图片](../images/5ef626c465e91c3688180b330b2e38d57c354be3a71fa2d2a2301b041cb4e560.jpg)
-
-![图片](../images/f7cec8e035003b5e24a304a5f6eec0ca3e6424501e702098413e480505dbcb58.jpg)
-
----
-
-### 11 (练习题)
-
-**题目**: 2 Simplify.
-
----
-
-### 12 (练习题)
-
-**题目**: a√14-√7
-
----
-
-### 13 (练习题)
-
-**题目**: b 24-√4
-
----
-
-### 14 (练习题)
-
-**题目**: c -√30-√3
-
----
-
-### 15 (练习题)
-
-**题目**: √5 d 10
-
----
-
-### 16 (练习题)
-
-**题目**: 45 e 3
-
----
-
-### 17 (练习题)
-
-**题目**: √2 18
-
----
-
-### 18 (练习题)
-
-**题目**: 633 11
-
----
-
-### 19 (练习题)
-
-**题目**: -2√27 9
-
----
-
-### 20 (练习题)
-
-**题目**: 12√15 35
-
----
-
-### 21 (练习题)
-
-**题目**: 5√30 j 156
-
----
-
-### 22 (练习题)
-
-**题目**: 3√90 3 3
-
----
-
-### 23 (练习题)
-
-**题目**: 3√27 1 12
-
----
-
-### 24 (练习题)
-
 **题目**: 3 Multiply out the brackets and simplify each expression.
+a 2(√5+4)
+b 3(√2+1)
+-2（4+√3）
+d -4(6+√5)
+e 2(3√11-2)
+f 4(1-2√3)
+g√2（2+√5）
+6（√2+3）
 
 ---
 
-### 25 (练习题)
-
-**题目**: a 2(√5+4)
-
----
-
-### 26 (练习题)
-
-**题目**: b 3(√2+1)
-
----
-
-### 27 (练习题)
-
-**题目**: -2（4+√3）
-
----
-
-### 28 (练习题)
-
-**题目**: d -4(6+√5)
-
----
-
-### 29 (练习题)
-
-**题目**: e 2(3√11-2)
-
----
-
-### 30 (练习题)
-
-**题目**: f 4(1-2√3)
-
----
-
-### 31 (练习题)
-
-**题目**: g√2（2+√5）
-
----
-
-### 32 (练习题)
-
-**题目**: 6（√2+3）
-
----
-
-## 9.9
+## Exercise 9.9
 
 ### 1 (练习题)
 
@@ -13580,13 +13936,48 @@ Calculate the area of the rectangular metal plate Suri started with.
 
 ---
 
+## WORKED EXAMPLE 17
+
+### 17 (例题)
+
+**题目**: What is the exact area of a circular disc of diameter  $\sqrt{3}$  cm?
+
+**解答**: Answer
+$$
+\text {A r e a} = \pi r ^ {2}
+$$
+If the diameter is  $\sqrt{3}$  , then the radius is  $\frac{\sqrt{3}}{2}$
+$$
+\begin{array}{l} A = \pi \left(\frac {\sqrt {3}}{2}\right) \left(\frac {\sqrt {3}}{2}\right) \\ = \frac {3}{4} \pi \mathrm {c m} ^ {2} \quad \text {I n c l u d e u n i t s i n y o u r a n s w e r}. \\ \end{array}
+$$
+
+---
+
+## WORKED EXAMPLE 18
+
+### 18 (例题)
+
+**题目**: The lengths of the two shorter sides of a right-angled triangle are  $\sqrt{6}$  and  $\sqrt{18}$ . Calculate the exact length of the hypotenuse  $(h)$ .
+
+**解答**: Answer
+$$
+\begin{array}{l} h ^ {2} = (\sqrt {6}) ^ {2} + (\sqrt {1 8}) ^ {2} \quad \text {U s e P y t h a g o r a s s t h e o r e m :} \\ = 6 + 1 8 \\ = 2 4 \\ \end{array}
+$$
+$$
+\begin{array}{l} h = \sqrt {2 4} \\ = \sqrt {4} \times \sqrt {6} \\ = 2 \sqrt {6} \mathrm {c m} \\ \end{array}
+$$
+
+---
+
+## Exercise 9.9
+
 ### 6 (练习题)
 
 **题目**: 6 A sheet of A3 paper has sides in the ratio  $1:\sqrt{2}$ . If the paper is  $297\mathrm{mm}$  wide, calculate the exact length of its diagonal
 
 ---
 
-## 9.10
+## Exercise 9.10
 
 ### 1 (练习题)
 
@@ -13622,24 +14013,6 @@ P {hexagon, heptagon, triangle, ...}
 
 ---
 
-## 18
-
-### WORKED EXAMPLE 18 (例题)
-
-**题目**: The lengths of the two shorter sides of a right-angled triangle are  $\sqrt{6}$  and  $\sqrt{18}$ . Calculate the exact length of the hypotenuse  $(h)$ .
-
-**解答**: Answer
-$$
-\begin{array}{l} h ^ {2} = (\sqrt {6}) ^ {2} + (\sqrt {1 8}) ^ {2} \quad \text {U s e P y t h a g o r a s s t h e o r e m :} \\ = 6 + 1 8 \\ = 2 4 \\ \end{array}
-$$
-$$
-\begin{array}{l} h = \sqrt {2 4} \\ = \sqrt {4} \times \sqrt {6} \\ = 2 \sqrt {6} \mathrm {c m} \\ \end{array}
-$$
-
----
-
-## 9.10
-
 ### 3 (练习题)
 
 **题目**: 3 Describe each set fully in words.
@@ -13670,8 +14043,7 @@ a List the sets:
 i WU T ii WnT
 b Is it true that  $T\subseteq W?$
 
-**解答**: Answers
-a i  $W \cup T = \text{set of all members of } W \text{ or of } T \text{ or of both} = \{4, 5, 8, 12, 16, 20, 24, 28\}$ .
+**解答**: a i  $W \cup T = \text{set of all members of } W \text{ or of } T \text{ or of both} = \{4, 5, 8, 12, 16, 20, 24, 28\}$ .
 ii  $W\cap T =$  set of all elements that appear in both  $W$  and  $T = \{8,20,24\}$
 b  $5\in T$  but  $5\notin W$  . This means it is not true that every member of  $T$  is also a member of  $W$  so  $T$  is not a subset of  $W$
 
@@ -13679,8 +14051,7 @@ b  $5\in T$  but  $5\notin W$  . This means it is not true that every member of 
 
 ### 1 (练习题)
 
-**题目**: Exercise 9.11
-1  $A = \{2,4,6,8,10\}$  and  $B = \{1,3,5,6,8,10\}$
+**题目**: 1  $A = \{2,4,6,8,10\}$  and  $B = \{1,3,5,6,8,10\}$
 a List the elements of:
 i  $A\cap B$  ii  $A\cup B$
 b Find:
@@ -13688,7 +14059,7 @@ i  $n(A\cap B)$  ii  $n(A\cup B)$
 
 ---
 
-## 9.11
+## Exercise 9.11
 
 ### 2 (练习题)
 
@@ -13729,9 +14100,9 @@ what is  $H\cup H^{\prime}$
 
 ---
 
-## Venndiagrams
+## Venn diagrams
 
-### 20 (例题)
+### WORKED EXAMPLE 20 (例题)
 
 **题目**: WORKED EXAMPLE 20
 For the following sets:
@@ -13758,8 +14129,6 @@ f  $A\cap B^{\prime} = \mathrm{set}$  of all elements that are both in set A and
 
 ---
 
-## 9.12
-
 ### 1 (练习题)
 
 **题目**: 1 Use the given Venn diagram to answer the following questions.
@@ -13771,6 +14140,8 @@ c List the elements of  $A\cup B$
 ![图片](../images/c007dca271857b06c0bd3ef594f1ce152b10f7081a5d2bc58de90b484fffdd68.jpg)
 
 ---
+
+## Exercise 9.12
 
 ### 2 (练习题)
 
@@ -13849,7 +14220,7 @@ g (A∩C)U(A∩B)
 
 ---
 
-## Setbuildernotation
+## Set builder notation
 
 ### WORKED EXAMPLE 21 (例题)
 
@@ -13874,16 +14245,7 @@ So,  $D = \{x : x \text{ is a triangle,}$  If  $D$  is the set of all right-angl
 
 ---
 
-### 1 (练习题)
-
-**题目**: Exercise 9.13
-1 Describe each of these sets using set builder notation.
-a square numbers less than 101
-b days of the week
-
----
-
-## 9.13
+## Exercise 9.13
 
 ### 1 (练习题)
 
@@ -13945,7 +14307,7 @@ b  $B = \{x:x^3$  is negative}
 
 ---
 
-### 1 (练习题)
+### Practice questions 1 (练习题)
 
 **题目**: 1 Pattern I
 Pattern 2
@@ -13970,7 +14332,7 @@ d Find the number of the pattern that has 89 dots. [3]
 
 ---
 
-## 10
+## Chapter 10
 
 ### 2 (练习题)
 
@@ -14046,17 +14408,18 @@ b Find integers  $p$  and  $q$  , such that  $(3 + 2\sqrt{5})^{2} = p + \frac{q}
 $$
 \frac {3}{4 + \sqrt {7}} + \frac {7}{4 - \sqrt {7}} \tag {4}
 $$
-
----
-
-### 10 (练习题)
-
-**题目**: ![image](images/515c528ef8143db0d1dc5a78a5118aeb8cb2fe13d6f01bfcfd4826198c880fd9.jpg)
+![image](images/515c528ef8143db0d1dc5a78a5118aeb8cb2fe13d6f01bfcfd4826198c880fd9.jpg)
 For the Venn diagram shown above, find:
 a n(MnN) [1] b n(N) [1] c MUN [1] d M'nN [1]
 e  $(\mathbf{M}\cap \mathbf{N})^{\prime}$  [1] f  $\mathbf{M}\cup \mathbf{N}^{\prime}$  [1] g  $\mathbf{M}^{\prime}\cup \mathbf{N}^{\prime}$  [1]
 
 ![图片](../images/515c528ef8143db0d1dc5a78a5118aeb8cb2fe13d6f01bfcfd4826198c880fd9.jpg)
+
+---
+
+### 10 (练习题)
+
+**题目**: 10 24 people live on Sport Street in Tennisville. 15 play cricket, 7 play rugby and 5 play neither. Find the number of Sports Street residents who play rugby but not cricket.
 
 ---
 
@@ -14161,7 +14524,7 @@ b What equation could you use to describe the line you get when you plot the poi
 
 ---
 
-### WORKED EXAMPLE 1 (例题)
+### 1 (例题)
 
 **题目**: WORKED EXAMPLE 1
 A straight line has equation  $y = 2x + 3$ . Construct a table of values for  $x$  and  $y$  and draw the line on a labelled pair of axes. Use integer values of  $x$  from -3 to 2.
@@ -14177,7 +14540,7 @@ Notice that the  $y$ -values range from  $-3$  to  $7$ , so your  $y$ -axis shou
 
 ---
 
-### WORKED EXAMPLE 2 (例题)
+### 2 (例题)
 
 **题目**: WORKED EXAMPLE 2
 Draw the line with equation  $y = -x + 3$  for  $x$ -values from -2 to 5.
@@ -14188,7 +14551,7 @@ The table for this line is:
 
 ---
 
-## 10.1
+## Exercise 10.1
 
 ### 1 (练习题)
 
@@ -14251,7 +14614,7 @@ h Compare the equations of graphs that are parallel to each other. How are they 
 
 ---
 
-## 10.2
+## Exercise 10.2
 
 ### 2 (练习题)
 
@@ -14269,10 +14632,44 @@ A graph parallel to the  $y$  -axis which goes through the point  $(-2,0)$
 
 ---
 
-### 3 (练习题)
+### 3 (例题)
 
-**题目**: Exercise 10.3
-1 Calculate the gradient of each line. Leave your answer as a whole number or a fraction in its lowest terms.
+**题目**: WORKED EXAMPLE 3
+Calculate the gradient of each line. Leave your answer as a whole number or fraction in its lowest terms.
+![a](images/dc31e2bb2bc691129fc814953e27a07b995fa345e4c4f606abac63ec0d054186.jpg)
+![b](images/45fea38ff65058450505931064587a066c579d6a4c2146236727430ec0d22509.jpg)
+
+![图片](../images/dc31e2bb2bc691129fc814953e27a07b995fa345e4c4f606abac63ec0d054186.jpg)
+
+![图片](../images/45fea38ff65058450505931064587a066c579d6a4c2146236727430ec0d22509.jpg)
+
+**解答**: Answers
+a Notice that the graph passes through the points (2, 4) and (4, 10).
+$$
+G r a d i e n t = \frac {y - c h a n g e}{x - c h a n g e} = \frac {1 0 - 4}{4 - 2} = \frac {6}{2} = 3
+$$
+b Notice that the graph passes through the points (2, 1) and (4, 0).
+$$
+G r a d i e n t = \frac {y - c h a n g e}{x - c h a n g e} = \frac {0 - 1}{4 - 2} = - \frac {1}{2}
+$$
+
+---
+
+### 4 (例题)
+
+**题目**: WORKED EXAMPLE 4
+Calculate the gradient of the line that passes through the points (3, 5) and (7, 17).
+![Answer](images/450f9ac500f0d0a401f8341bef5ae1b0358cad8494a45c29fc4653e4f433ca96.jpg)
+
+![图片](../images/450f9ac500f0d0a401f8341bef5ae1b0358cad8494a45c29fc4653e4f433ca96.jpg)
+
+**解答**: Think about where the points will be, in relation to each other, on a pair of axes. You don't need to draw this accurately, but the diagram will give you an idea of how the line may appear. Gradient  $= \frac{12}{4} = 3$
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Calculate the gradient of each line. Leave your answer as a whole number or a fraction in its lowest terms.
 ![a](images/7f0168d64354f5e7dd4e98ea4c297771b97893e994f6449ef3f25e2a1688330f.jpg)
 ![b](images/517262193104f2d273978aad89a95b6b72bf3609f929bce5737f92bee6faa7a2.jpg)
 ![C](images/fa81d8a1f63e25e212119548d1bcb2cbfa2fa8ba0461820304d3a369f67d42c6.jpg)
@@ -14327,44 +14724,7 @@ f  $A(3, - 5)$  and  $B(7,12)$
 
 ---
 
-## 3
-
-### 3 (例题)
-
-**题目**: WORKED EXAMPLE 3
-Calculate the gradient of each line. Leave your answer as a whole number or fraction in its lowest terms.
-![a](images/dc31e2bb2bc691129fc814953e27a07b995fa345e4c4f606abac63ec0d054186.jpg)
-![b](images/45fea38ff65058450505931064587a066c579d6a4c2146236727430ec0d22509.jpg)
-
-![图片](../images/dc31e2bb2bc691129fc814953e27a07b995fa345e4c4f606abac63ec0d054186.jpg)
-
-![图片](../images/45fea38ff65058450505931064587a066c579d6a4c2146236727430ec0d22509.jpg)
-
-**解答**: Answers
-a Notice that the graph passes through the points (2, 4) and (4, 10).
-$$
-G r a d i e n t = \frac {y - c h a n g e}{x - c h a n g e} = \frac {1 0 - 4}{4 - 2} = \frac {6}{2} = 3
-$$
-b Notice that the graph passes through the points (2, 1) and (4, 0).
-$$
-G r a d i e n t = \frac {y - c h a n g e}{x - c h a n g e} = \frac {0 - 1}{4 - 2} = - \frac {1}{2}
-$$
-
----
-
-### 4 (例题)
-
-**题目**: WORKED EXAMPLE 4
-Calculate the gradient of the line that passes through the points (3, 5) and (7, 17).
-![Answer](images/450f9ac500f0d0a401f8341bef5ae1b0358cad8494a45c29fc4653e4f433ca96.jpg)
-
-![图片](../images/450f9ac500f0d0a401f8341bef5ae1b0358cad8494a45c29fc4653e4f433ca96.jpg)
-
-**解答**: Think about where the points will be, in relation to each other, on a pair of axes. You don't need to draw this accurately, but the diagram will give you an idea of how the line may appear. Gradient  $= \frac{12}{4} = 3$
-
----
-
-## 10.4
+## Exercise 10.4
 
 ### 1 (练习题)
 
@@ -14385,12 +14745,14 @@ a  $x + y = 4$
 b  $x + 2y = 4$
 $x + \frac{y}{2} = 3$
 d  $x = 4y - 2$
+$x = \frac{y}{4} + 2$
+${2x} - {3y} =  - 9$
 
 ---
 
-## 5
+## WORKED EXAMPLE 5
 
-### 5 (例题)
+### WORKED EXAMPLE 5 (例题)
 
 **题目**: Find the gradient and  $y$ -intercept of the lines given by each of the following equations.
 a  $y = 3x + 4$
@@ -14434,9 +14796,9 @@ $$
 
 ---
 
-## 6
+## WORKED EXAMPLE 6
 
-### 6 (例题)
+### WORKED EXAMPLE 6 (例题)
 
 **题目**: Find the equation of each line.
 a
@@ -14460,470 +14822,140 @@ Graph crosses y-axis at 1.
 
 ---
 
-## 10.4
-
-### 1 (练习题)
-
-**题目**: 1 Find the gradient and  $y$ -intercept of the lines with the following equations. Sketch the graph in each case, taking care to show where the graph cuts the  $y$ -axis.
-a  $y = 4x - 5$
-
----
-
-### 2 (练习题)
-
-**题目**: 1 Find the gradient and  $y$ -intercept of the lines with the following equations. Sketch the graph in each case, taking care to show where the graph cuts the  $y$ -axis.
-b  $y = 2x + 3$
-
----
+## Exercise 10.4
 
 ### 3 (练习题)
 
-**题目**: 1 Find the gradient and  $y$ -intercept of the lines with the following equations. Sketch the graph in each case, taking care to show where the graph cuts the  $y$ -axis.
-$y = -3x - 2$
+**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
+a  $2y = x - 4$
+b  $2x + y - 1 = 0$
+$x = \frac{y}{2} -2$
+${2x} - y - 5 = 0$
+e  $2x - y + 5 = 0$
+$x + 3y - 6 = 0$
+$4y = 12x - 8$
+4x+y=2
+$y = x + 2$
+$j\;\frac{y}{3} = {2x} - 4$
+$k\frac{x}{2} - {4y} = {12}$
+$- \frac{y}{3} = {4x} - 2$
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 1 Find the gradient and  $y$ -intercept of the lines with the following equations. Sketch the graph in each case, taking care to show where the graph cuts the  $y$ -axis.
-d  $y = -x + 3$
+**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
+a a gradient of 2 and a y-intercept of 3
+b a gradient of -3 and a  $y$  -intercept of -2
+a gradient of 3 and a  $y$  -intercept of -1
+d a  $y$  -intercept of -0.75 and a gradient of 0.75
+e a  $y$  -intercept of -2 and a gradient of 0
+a gradient of 0 and a  $y$  -intercept of 4.
 
 ---
 
 ### 5 (练习题)
 
-**题目**: 1 Find the gradient and  $y$ -intercept of the lines with the following equations. Sketch the graph in each case, taking care to show where the graph cuts the  $y$ -axis.
-e  $y = \frac{1}{3} x + 2$
+**题目**: 5 Find the equation (in the form  $ax + by = c$ ) of a line which has:
+a a gradient of  $-\frac{3}{2}$  and a  $y$ -intercept at  $(0, -0.5)$
+b a  $y$  -intercept of 2 and a gradient of  $-\frac{3}{4}$
+a y-intercept of -3 and a gradient of  $\frac{4}{8}$
 
 ---
 
 ### 6 (练习题)
 
-**题目**: 1 Find the gradient and  $y$ -intercept of the lines with the following equations. Sketch the graph in each case, taking care to show where the graph cuts the  $y$ -axis.
-$y = 6 - \frac{1}{4}x$
-
----
-
-### 7 (练习题)
-
-**题目**: 2 Sketch the graph of each equation. Show where the graph cuts the  $y$ -axis.
-a  $x + y = 4$
-
----
-
-### 8 (练习题)
-
-**题目**: 2 Sketch the graph of each equation. Show where the graph cuts the  $y$ -axis.
-b  $x + 2y = 4$
-
----
-
-### 9 (练习题)
-
-**题目**: 2 Sketch the graph of each equation. Show where the graph cuts the  $y$ -axis.
-$x + \frac{y}{2} = 3$
-
----
-
-### 10 (练习题)
-
-**题目**: 2 Sketch the graph of each equation. Show where the graph cuts the  $y$ -axis.
-d  $x = 4y - 2$
-
----
-
-### 11 (练习题)
-
-**题目**: 2 Sketch the graph of each equation. Show where the graph cuts the  $y$ -axis.
-$x = \frac{y}{4} + 2$
-
----
-
-### 12 (练习题)
-
-**题目**: 2 Sketch the graph of each equation. Show where the graph cuts the  $y$ -axis.
-${2x} - {3y} =  - 9$
-
----
-
-### 13 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-a  $2y = x - 4$
-
----
-
-### 14 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-b  $2x + y - 1 = 0$
-
----
-
-### 15 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$x = \frac{y}{2} -2$
-
----
-
-### 16 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-${2x} - y - 5 = 0$
-
----
-
-### 17 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-e  $2x - y + 5 = 0$
-
----
-
-### 18 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$x + 3y - 6 = 0$
-
----
-
-### 19 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$4y = 12x - 8$
-
----
-
-### 20 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-4x+y=2
-
----
-
-### 21 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$y = x + 2$
-
----
-
-### 22 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$j\;\frac{y}{3} = {2x} - 4$
-
----
-
-### 23 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$k\frac{x}{2} - {4y} = {12}$
-
----
-
-### 24 (练习题)
-
-**题目**: 3 Rearrange each equation so that it is in the form  $y = mx + c$  and then find the gradient and  $y$ -intercept of each graph.
-$- \frac{y}{3} = {4x} - 2$
-
----
-
-### 25 (练习题)
-
-**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
-a a gradient of 2 and a y-intercept of 3
-
----
-
-### 26 (练习题)
-
-**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
-b a gradient of -3 and a  $y$  -intercept of -2
-
----
-
-### 27 (练习题)
-
-**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
-a gradient of 3 and a  $y$  -intercept of -1
-
----
-
-### 28 (练习题)
-
-**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
-d a  $y$  -intercept of -0.75 and a gradient of 0.75
-
----
-
-### 29 (练习题)
-
-**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
-e a  $y$  -intercept of -2 and a gradient of 0
-
----
-
-### 30 (练习题)
-
-**题目**: 4 Find the equation (in the form  $y = mx + c$ ) of a line which has:
-a gradient of 0 and a  $y$  -intercept of 4.
-
----
-
-### 31 (练习题)
-
-**题目**: 5 Find the equation (in the form  $ax + by = c$ ) of a line which has:
-a a gradient of  $-\frac{3}{2}$  and a  $y$ -intercept at  $(0, -0.5)$
-
----
-
-### 32 (练习题)
-
-**题目**: 5 Find the equation (in the form  $ax + by = c$ ) of a line which has:
-b a  $y$  -intercept of 2 and a gradient of  $-\frac{3}{4}$
-
----
-
-### 33 (练习题)
-
-**题目**: 5 Find the equation (in the form  $ax + by = c$ ) of a line which has:
-a y-intercept of -3 and a gradient of  $\frac{4}{8}$
-
----
-
-### 34 (练习题)
-
 **题目**: 6 Find an equation for each line.
 a
 ![image](images/6323072436940eb3c55c136eb331bb4c8e473ad56fc89d400c2ab59facfd2900.jpg)
+b
+![image](images/a2390a10c60ea1d71feebe82a46d19f27591c2fb38f36c1f444da964c614d9e2.jpg)
+C
+![image](images/1ccf38ac74d884eb8815dd01bdfb6995e366783ce6512ee06ee59499a2630f09.jpg)
+d
+![image](images/a264e250d22aae664dcb30bce78f23c49620b054889cc1377b617e5186b030b7.jpg)
+e
+![image](images/4ba56ed63c1e2d56c8e2218b4a738e2943cf35175508ebc0b0ec1a6838bff485.jpg)
+f
+![image](images/8998599ce4027e02413baaf40456f338b5a45249942b9fe21ce0449c8ddbc4c3.jpg)
+9
+![image](images/7ecdcdce5bb2136e25e207bd7e18ea3f9a7e32b8e9d83defc328bd0383eaaaa9.jpg)
+h
+![image](images/dd7923c01a195b5fd4f61a1706af5b1761e9398bdc26ec36fa14103dfabab151.jpg)
+i
+![image](images/84fff3bc9fd8e6ea48dd4fbae1d5a3c98cb04f69bf761f735643bdaee72b3fec.jpg)
 
 ![图片](../images/6323072436940eb3c55c136eb331bb4c8e473ad56fc89d400c2ab59facfd2900.jpg)
 
----
-
-### 35 (练习题)
-
-**题目**: 6 Find an equation for each line.
-b
-![image](images/a2390a10c60ea1d71feebe82a46d19f27591c2fb38f36c1f444da964c614d9e2.jpg)
-
 ![图片](../images/a2390a10c60ea1d71feebe82a46d19f27591c2fb38f36c1f444da964c614d9e2.jpg)
-
----
-
-### 36 (练习题)
-
-**题目**: 6 Find an equation for each line.
-C
-![image](images/1ccf38ac74d884eb8815dd01bdfb6995e366783ce6512ee06ee59499a2630f09.jpg)
 
 ![图片](../images/1ccf38ac74d884eb8815dd01bdfb6995e366783ce6512ee06ee59499a2630f09.jpg)
 
----
-
-### 37 (练习题)
-
-**题目**: 6 Find an equation for each line.
-d
-![image](images/a264e250d22aae664dcb30bce78f23c49620b054889cc1377b617e5186b030b7.jpg)
-
 ![图片](../images/a264e250d22aae664dcb30bce78f23c49620b054889cc1377b617e5186b030b7.jpg)
-
----
-
-### 38 (练习题)
-
-**题目**: 6 Find an equation for each line.
-e
-![image](images/4ba56ed63c1e2d56c8e2218b4a738e2943cf35175508ebc0b0ec1a6838bff485.jpg)
 
 ![图片](../images/4ba56ed63c1e2d56c8e2218b4a738e2943cf35175508ebc0b0ec1a6838bff485.jpg)
 
----
-
-### 39 (练习题)
-
-**题目**: 6 Find an equation for each line.
-f
-![image](images/8998599ce4027e02413baaf40456f338b5a45249942b9fe21ce0449c8ddbc4c3.jpg)
-
 ![图片](../images/8998599ce4027e02413baaf40456f338b5a45249942b9fe21ce0449c8ddbc4c3.jpg)
-
----
-
-### 40 (练习题)
-
-**题目**: 6 Find an equation for each line.
-9
-![image](images/7ecdcdce5bb2136e25e207bd7e18ea3f9a7e32b8e9d83defc328bd0383eaaaa9.jpg)
 
 ![图片](../images/7ecdcdce5bb2136e25e207bd7e18ea3f9a7e32b8e9d83defc328bd0383eaaaa9.jpg)
 
----
-
-### 41 (练习题)
-
-**题目**: 6 Find an equation for each line.
-h
-![image](images/dd7923c01a195b5fd4f61a1706af5b1761e9398bdc26ec36fa14103dfabab151.jpg)
-
 ![图片](../images/dd7923c01a195b5fd4f61a1706af5b1761e9398bdc26ec36fa14103dfabab151.jpg)
-
----
-
-### 42 (练习题)
-
-**题目**: 6 Find an equation for each line.
-i
-![image](images/84fff3bc9fd8e6ea48dd4fbae1d5a3c98cb04f69bf761f735643bdaee72b3fec.jpg)
 
 ![图片](../images/84fff3bc9fd8e6ea48dd4fbae1d5a3c98cb04f69bf761f735643bdaee72b3fec.jpg)
 
 ---
 
-### 43 (练习题)
+### 7 (练习题)
 
 **题目**: 7 Find the equation of the line which passes through each pair of points.
 a  $A(2,3)$  and  $B(4,11)$
-
----
-
-### 44 (练习题)
-
-**题目**: 7 Find the equation of the line which passes through each pair of points.
 b  $A(4,5)$  and  $B(8, - 7)$
-
----
-
-### 45 (练习题)
-
-**题目**: 7 Find the equation of the line which passes through each pair of points.
 A(-1,-3) and  $B(4,6)$
-
----
-
-### 46 (练习题)
-
-**题目**: 7 Find the equation of the line which passes through each pair of points.
 d  $A(3, - 5)$  and  $B(7,12)$
 
 ---
 
-### 47 (练习题)
+### 8 (练习题)
 
 **题目**: 8 Write down the equation of a line that is parallel to:
 a  $y = -3x$
-
----
-
-### 48 (练习题)
-
-**题目**: 8 Write down the equation of a line that is parallel to:
 b  $y = 2x - 3$
-
----
-
-### 49 (练习题)
-
-**题目**: 8 Write down the equation of a line that is parallel to:
 $y = \frac{x}{2} + 4$
-
----
-
-### 50 (练习题)
-
-**题目**: 8 Write down the equation of a line that is parallel to:
 d  $y = -x - 2$
-
----
-
-### 51 (练习题)
-
-**题目**: 8 Write down the equation of a line that is parallel to:
 $x = 8$
-
----
-
-### 52 (练习题)
-
-**题目**: 8 Write down the equation of a line that is parallel to:
 f  $y = -6$
 
 ---
 
-### 53 (练习题)
+### 9 (练习题)
 
 **题目**: 9 Which of the following lines are parallel to  $y = \frac{1}{2} x$ ?
 a  $y = \frac{1}{2} x + 1$
-
----
-
-### 54 (练习题)
-
-**题目**: 9 Which of the following lines are parallel to  $y = \frac{1}{2} x$ ?
 b  $y = 2x$
-
----
-
-### 55 (练习题)
-
-**题目**: 9 Which of the following lines are parallel to  $y = \frac{1}{2} x$ ?
 $y + 1 = \frac{1}{2} x$
-
----
-
-### 56 (练习题)
-
-**题目**: 9 Which of the following lines are parallel to  $y = \frac{1}{2} x$ ?
 d  $2y + x = -6$
-
----
-
-### 57 (练习题)
-
-**题目**: 9 Which of the following lines are parallel to  $y = \frac{1}{2} x$ ?
 $y = 2x - 4$
 
 ---
 
-### 58 (练习题)
+### 10 (练习题)
 
 **题目**: 10 Find the equation of a line parallel to  $y = 2x + 4$  which:
 has a  $y$  -intercept of -2
-
----
-
-### 59 (练习题)
-
-**题目**: 10 Find the equation of a line parallel to  $y = 2x + 4$  which:
 b passes through the origin.
-
----
-
-### 60 (练习题)
-
-**题目**: 10 Find the equation of a line parallel to  $y = 2x + 4$  which:
 c passes through the point  $(0, - 4)$
-
----
-
-### 61 (练习题)
-
-**题目**: 10 Find the equation of a line parallel to  $y = 2x + 4$  which:
 has a  $y$  -intercept of  $\frac{1}{2}$
 
 ---
 
-### 62 (练习题)
+### 11 (练习题)
 
 **题目**: 11 A graph has the equation  $3y - 2x = 9$
 a Write down the equation of one other graph that is parallel to this one.
 
 ---
 
-## 10.5
+## Exercise 10.5
 
 ### 1 (练习题)
 
@@ -15030,78 +15062,23 @@ $$
 
 ---
 
-## 10.6
+## Exercise 10.6
 
 ### 1 (练习题)
 
 **题目**: 1 Find the  $x$ - and  $y$ -intercepts for each of the following lines. Sketch the graph in each case.
 a  $y = -5x + 10$
-
----
-
-### 2 (练习题)
-
-**题目**: b  $y = \frac{x}{3} - 1$
-
----
-
-### 3 (练习题)
-
-**题目**: $y = -3x + 6$
-
----
-
-### 4 (练习题)
-
-**题目**: d  $y = 4x + 2$
-
----
-
-### 5 (练习题)
-
-**题目**: $y = 3x + 1$
-
----
-
-### 6 (练习题)
-
-**题目**: f  $y = -x + 2$
-
----
-
-### 7 (练习题)
-
-**题目**: g  $y = 2x - 3$
-
----
-
-### 8 (练习题)
-
-**题目**: 2x 1 h y=3-1
-
----
-
-### 9 (练习题)
-
-**题目**: $y = \frac{x}{4} - 2$
-
----
-
-### 10 (练习题)
-
-**题目**: j  $y - \frac{2x}{5} = +1$
-
----
-
-### 11 (练习题)
-
-**题目**: [ - 2 + y = \frac{x}{4}]
-
----
-
-### 12 (练习题)
-
-**题目**: y 4x-2 3
+b  $y = \frac{x}{3} - 1$
+$y = -3x + 6$
+d  $y = 4x + 2$
+$y = 3x + 1$
+f  $y = -x + 2$
+g  $y = 2x - 3$
+2x 1 h y=3-1
+$y = \frac{x}{4} - 2$
+j  $y - \frac{2x}{5} = +1$
+[ - 2 + y = \frac{x}{4}]
+y 4x-2 3
 
 ---
 
@@ -15109,54 +15086,19 @@ a  $y = -5x + 10$
 
 **题目**: 2 For each equation the given point lies on the graph. Find each value of  $c$ .
 a  $y = 3x + c$  (1,5)
+b  $y = 6x + c$  (1,2)
+$y = -2x + c$  (-3，-3)
+d  $y = \frac{3}{4} x + c$  (4,-5)
+$y = \frac{1}{2} x + c (-2,3)$
+f  $y = c - \frac{1}{2} x$  (-4,5)
+g  $y = c + 4x$  （-1，-6）
+2 2x+c=y (3,4) 3
 
 ---
 
-### 3 (练习题)
+## WORKED EXAMPLE 9
 
-**题目**: b  $y = 6x + c$  (1,2)
-
----
-
-### 4 (练习题)
-
-**题目**: $y = -2x + c$  (-3，-3)
-
----
-
-### 5 (练习题)
-
-**题目**: d  $y = \frac{3}{4} x + c$  (4,-5)
-
----
-
-### 6 (练习题)
-
-**题目**: $y = \frac{1}{2} x + c (-2,3)$
-
----
-
-### 7 (练习题)
-
-**题目**: f  $y = c - \frac{1}{2} x$  (-4,5)
-
----
-
-### 8 (练习题)
-
-**题目**: g  $y = c + 4x$  （-1，-6）
-
----
-
-### 9 (练习题)
-
-**题目**: 2 2x+c=y (3,4) 3
-
----
-
-## 9
-
-### WORKED EXAMPLE 9 (例题)
+### 9 (例题)
 
 **题目**: Find the distance between the points (1, 1) and (7, 9).
 ![image](images/00c00284c4a1afde5369e2b83cec98aede96781ec82949d0555bbe4165e7b2eb.jpg)
@@ -15183,6 +15125,8 @@ a = 1 0 \text {u n i t s}
 $$
 
 ---
+
+## 10.2 Quadratic expressions and equations
 
 ### WORKED EXAMPLE 10 (例题)
 
@@ -15212,7 +15156,7 @@ $$
 
 ---
 
-## 10.7
+## Exercise 10.7
 
 ### 1 (练习题)
 
@@ -15274,7 +15218,7 @@ h (4, -1) and (5, 5)
 
 ---
 
-## 10.2
+## 10.2 Quadratic expressions and equations
 
 ### WORKED EXAMPLE 11 (例题)
 
@@ -15301,7 +15245,7 @@ Outside:  $2x \times 9 = 18x$
 
 ---
 
-## 10.8
+## Exercise 10.8
 
 ### 1 (练习题)
 
@@ -15544,6 +15488,8 @@ a  $\left( {{2x} + 3}\right) \left( {x + 3}\right)$
 
 **题目**: 4 Expand and simplify each of the following.
 a  $(2x^{2} - 4y)(y - x^{2})$
+b  $(x + y)(2y^{2} - 4x^{3})$
+c  $(3x^{2} - y)(2x + 3y)$
 
 ---
 
@@ -15565,7 +15511,7 @@ a  $(2x^{2} - 4y)(y - x^{2})$
 
 ---
 
-## 12
+## WORKED EXAMPLE 12
 
 ### WORKED EXAMPLE 12 (例题)
 
@@ -15583,96 +15529,66 @@ Collect like terms to simplify.
 
 ---
 
-## 10.9
-
-### 1 (练习题)
-
-**题目**: 1 Find the square of each binomial. Try to do this by inspection first and then check your answers.
-a  $(x - y)^2$
-
----
-
-### 2 (练习题)
-
-**题目**: b (a+b)²
-
----
-
 ### 3 (练习题)
 
-**题目**: c  $(2x + 3y)^2$
+**题目**: 3 Expand and simplify each of the following.
+a  $\left( {{2x} + 3}\right) \left( {x + 3}\right)$
+b (3y+7)(y+1)
+c  $(7z + 1)(z + 2)$
+d (t+5)(4t-3)
+(2w-7)(w-8)
+f (4g-1)(4g+1)
+g (8x-1)(9x+4)
+h (20c-3)(18c-4)
+(2m-4)(3-m)
 
 ---
 
-### 4 (练习题)
+### 5 (练习题)
 
-**题目**: d  $(3x - 2y)^2$
+**题目**: 5 Expand and simplify.
+a  $(5x + 2)(3x - 3)(x + 2)$
+b (x-5)(x-5)(x+5)
+c  $(4x - 1)(x + 1)(3x - 2)$
+d  $(x + 4)(2x + 4)(2x + 4)$
+e  $(2x - 3)(3x - 2)(2x - 1)$
+f (3x-2)²(2x-1)
+g (x+2)
+h  $(2x - 2)^{3}$
+i  $(x^{2}y^{2} + x^{2})(xy + x)(xy - x)$
+j  $\left(\frac{1}{3} +\frac{x}{2}\right)\left(\frac{1}{9} -\frac{x^2}{4}\right)\left(\frac{1}{3} -\frac{x}{2}\right)$
 
 ---
 
 ### 6 (练习题)
 
-**题目**: f (y-4x²)²
+**题目**: 6 The volume of a cuboid can be found using the formula  $V = lh h$ , where  $l$  is the length,  $w$  is the width and  $h$  is the height.
+A cuboid has length  $\left(2x + \frac{1}{2}\right)\mathfrak{m}$  width  $(x - 2)\mathfrak{m}$  and height  $(x - 2)\mathfrak{m}$
+a Write an expression for the volume of the cuboid in factor form.
+b Expand the expression.
+c Determine the volume of the cuboid when  $x = 2.2\mathrm{m}$
 
 ---
 
-### 7 (练习题)
+### 1 (练习题)
 
-**题目**: g (x² - y²)²
-
----
-
-### 8 (练习题)
-
-**题目**: h (2+y)²
-
----
-
-### 9 (练习题)
-
-**题目**: i  $(-2x - 4y^{2})^{2}$
-
----
-
-### 10 (练习题)
-
-**题目**: j  $\left(\frac{1}{2x} -\frac{1}{4y}\right)^2$
-
----
-
-### 11 (练习题)
-
-**题目**: k  $\left(\frac{3x}{4} -\frac{y}{2}\right)^2$
-
----
-
-### 12 (练习题)
-
-**题目**: 1  $\left(a + \frac{1}{2} b\right)^{2}$
-
----
-
-### 13 (练习题)
-
-**题目**: m  $(-ab - c^4)^2$
-
----
-
-### 14 (练习题)
-
-**题目**: n  $(3x^{2}y - 1)^{2}$
-
----
-
-### 15 (练习题)
-
-**题目**: $\left(\frac{2x}{3} + 4y\right)^2$
-
----
-
-### 16 (练习题)
-
-**题目**: P[-(x-3)]²
+**题目**: 1 Find the square of each binomial. Try to do this by inspection first and then check your answers.
+a  $(x - y)^2$
+b (a+b)²
+c  $(2x + 3y)^2$
+d  $(3x - 2y)^2$
+e
+f (y-4x²)²
+g (x² - y²)²
+h (2+y)²
+i  $(-2x - 4y^{2})^{2}$
+j  $\left(\frac{1}{2x} -\frac{1}{4y}\right)^2$
+k  $\left(\frac{3x}{4} -\frac{y}{2}\right)^2$
+1  $\left(a + \frac{1}{2} b\right)^{2}$
+m  $(-ab - c^4)^2$
+n  $(3x^{2}y - 1)^{2}$
+$\left(\frac{2x}{3} + 4y\right)^2$
+P[-(x-3)]²
 
 ---
 
@@ -15680,60 +15596,15 @@ a  $(x - y)^2$
 
 **题目**: 2 Simplify.
 a  $(x - 2)^2 -(x - 4)^2$
-
----
-
-### 3 (练习题)
-
-**题目**: b  $(x + 2)(x - 2) - (3 - x)(5 + x)$
-
----
-
-### 4 (练习题)
-
-**题目**: $(y + 2x)^2 +(2x - y)(-y + 2x)$
-
----
-
-### 5 (练习题)
-
-**题目**: d  $\frac{1}{2} (3x - 2)\left(\frac{x}{3} +2\right)$
-
----
-
-### 6 (练习题)
-
-**题目**: e  $3(x + 2)(2x + 0.6)$
-
----
-
-### 7 (练习题)
-
-**题目**: f (√2x-y)(√2x+y)-(4x-y)2
-
----
-
-### 8 (练习题)
-
-**题目**: g  $(x + 4)(x - 5) - 2(x - 1)^2$
-
----
-
-### 9 (练习题)
-
-**题目**: h  $(2x - y)^2 +(x - 2y)(x + 2y) - (x + 4y)^2$
-
----
-
-### 10 (练习题)
-
-**题目**: i  $-2x(x + 1)^2 -(x - 5)(-3x)$
-
----
-
-### 11 (练习题)
-
-**题目**: j  $(3 + 2x)^2 -5(5x + 2)$
+b  $(x + 2)(x - 2) - (3 - x)(5 + x)$
+$(y + 2x)^2 +(2x - y)(-y + 2x)$
+d  $\frac{1}{2} (3x - 2)\left(\frac{x}{3} +2\right)$
+e  $3(x + 2)(2x + 0.6)$
+f (√2x-y)(√2x+y)-(4x-y)2
+g  $(x + 4)(x - 5) - 2(x - 1)^2$
+h  $(2x - y)^2 +(x - 2y)(x + 2y) - (x + 4y)^2$
+i  $-2x(x + 1)^2 -(x - 5)(-3x)$
+j  $(3 + 2x)^2 -5(5x + 2)$
 
 ---
 
@@ -15741,57 +15612,15 @@ a  $(x - 2)^2 -(x - 4)^2$
 
 **题目**: 3 Evaluate each expression when  $x = 4$
 a  $(x + 7)(x - 7) - x^{2}$
+b  ${x}^{2} - \left( {x - 3}\right) \left( {x + 3}\right)$
+c  $(3 + 2x)^2 -(2x + 3)(2x - 3)$
+d (x+2)2
+e  $(x^{2} + 3)(x - 4)$
+f  $(2x + 3)^2 -4(x + 1)(2 - 3x)$
 
 ---
 
-### 4 (练习题)
-
-**题目**: b  ${x}^{2} - \left( {x - 3}\right) \left( {x + 3}\right)$
-
----
-
-### 5 (练习题)
-
-**题目**: c  $(3 + 2x)^2 -(2x + 3)(2x - 3)$
-
----
-
-### 6 (练习题)
-
-**题目**: d (x+2)2
-
----
-
-### 7 (练习题)
-
-**题目**: e  $(x^{2} + 3)(x - 4)$
-
----
-
-### 8 (练习题)
-
-**题目**: f  $(2x + 3)^2 -4(x + 1)(2 - 3x)$
-
----
-
-## 13
-
-### 13 (例题)
-
-**题目**: WORKED EXAMPLE 13
-Expand and simplify.
-a  $(x + 6)(x + 12)$
-b  $(x + 4)(x - 13)$
-
-**解答**: Answers
-a  $(x + 6)(x + 12) = x^{2} + 18x + 72$
-$6 + 12 = 18$  and  $6 \times 12 = 72$  so this gives  $18x$  and  $72$ .
-b  $(x + 4)(x - 13) = x^{2} - 9x - 52$
-$4 + -13 = -9$  and  $4 \times -13 = -52$  so this gives  $-9x$  and  $-52$ .
-
----
-
-## 10.10
+## Exercise 10.10
 
 ### 1a (练习题)
 
@@ -15865,9 +15694,10 @@ $4 + -13 = -9$  and  $4 \times -13 = -52$  so this gives  $-9x$  and  $-52$ .
 
 ---
 
-### 2a (练习题)
+### 2 (练习题)
 
-**题目**: a  $x^{2} - 8x + 12$
+**题目**: 2 Factorise each of the following.
+a  $x^{2} - 8x + 12$
 
 ---
 
@@ -15889,7 +15719,24 @@ $4 + -13 = -9$  and  $4 \times -13 = -52$  so this gives  $-9x$  and  $-52$ .
 
 ---
 
-## 14
+## WORKED EXAMPLE 13
+
+### 13 (例题)
+
+**题目**: WORKED EXAMPLE 13
+Expand and simplify.
+a  $(x + 6)(x + 12)$
+b  $(x + 4)(x - 13)$
+
+**解答**: Answers
+a  $(x + 6)(x + 12) = x^{2} + 18x + 72$
+$6 + 12 = 18$  and  $6 \times 12 = 72$  so this gives  $18x$  and  $72$ .
+b  $(x + 4)(x - 13) = x^{2} - 9x - 52$
+$4 + -13 = -9$  and  $4 \times -13 = -52$  so this gives  $-9x$  and  $-52$ .
+
+---
+
+## WORKED EXAMPLE 14
 
 ### 14 (例题)
 
@@ -15941,135 +15788,134 @@ $$
 
 ---
 
-## 10.10
+## Exercise 10.10
 
-### 2.5 (练习题)
+### 6 (练习题)
 
 **题目**: ${x}^{2} - {12x} + {32}$
 
 ---
 
-### 2.6 (练习题)
+### 7 (练习题)
 
 **题目**: ${x}^{2} - {14x} + {49}$
 
 ---
 
-### 2.7 (练习题)
+### 8 (练习题)
 
 **题目**: g  $x^{2} - 8x - 20$
 
 ---
 
-### 2.8 (练习题)
+### 9 (练习题)
 
 **题目**: h  $x^{2} - 7x - 18$
 
 ---
 
-### 2.9 (练习题)
+### 10 (练习题)
 
 **题目**: $x^{2} - 4x - 32$
 
 ---
 
-### 2.10 (练习题)
+### 11 (练习题)
 
 **题目**: j  $x^{2} + x - 6$
 
 ---
 
-### 2.11 (练习题)
+### 12 (练习题)
 
 **题目**: k  $x^{2} + 8x - 33$
 
 ---
 
-### 2.12 (练习题)
+### 13 (练习题)
 
 **题目**: ${x}^{2} + {10x} - {24}$
 
 ---
 
-### 3.1 (练习题)
+### 3 (练习题)
 
-**题目**: a  $y^{2} + 7y - 170$
+**题目**: 3 Factorise each of the following.
+a  $y^{2} + 7y - 170$
 
 ---
 
-### 3.2 (练习题)
+### 4 (练习题)
 
 **题目**: b  $p^2 +8p - 84$
 
 ---
 
-### 3.3 (练习题)
+### 5 (练习题)
 
 **题目**: $w^{2} - 24w + 144$
 
 ---
 
-### 3.4 (练习题)
+### 6 (练习题)
 
 **题目**: d  $t^2 +16t - 36$
 
 ---
 
-### 3.5 (练习题)
+### 7 (练习题)
 
 **题目**: e v²+20v+75
 
 ---
 
-### 3.6 (练习题)
+### 8 (练习题)
 
 **题目**: f  $3x^{2} + 21x + 36$
 
 ---
 
-### 3.7 (练习题)
+### 9 (练习题)
 
 **题目**: g  $5x^{2} - 5x - 10$
 
 ---
 
-### 3.8 (练习题)
+### 10 (练习题)
 
 **题目**: h  $3x^{2} - 9x - 30$
 
 ---
 
-### 3.9 (练习题)
+### 11 (练习题)
 
 **题目**: i  $3x^{2} - 6x + 3$
 
 ---
 
-### 3.10 (练习题)
+### 12 (练习题)
 
 **题目**: j  $2x^{2} - 14x - 36$
 
 ---
 
-### 3.11 (练习题)
+### 13 (练习题)
 
 **题目**: k -2x²-14x-24
 
 ---
 
-### 3.12 (练习题)
+### 14 (练习题)
 
 **题目**: x²-100
 
 ---
 
-### 15 (例题)
+### WORKED EXAMPLE 15 (例题)
 
 **题目**: WORKED EXAMPLE 15
 Factorise the following using the difference between two squares:
 a  $x^{2} - 49$
-b x²-1 4
-16y²-25w²
 
 **解答**: a  $49 = 7^{2}$
 $$
@@ -16080,13 +15926,27 @@ $$
 x ^ {2} - a ^ {2} = (x - a) (x + a).
 $$
 You know that  $\sqrt{49} = 7$  so you can write 49 as  $7^{2}$ . This gives you  $a^2$ . Substitute  $7^2$  into the formula.
-b  $\left(\frac{1}{2}\right)^{2} = \frac{1}{4}$
+
+---
+
+### WORKED EXAMPLE 15 (例题)
+
+**题目**: b x²-1 4
+
+**解答**: b  $\left(\frac{1}{2}\right)^{2} = \frac{1}{4}$
 $$
 \begin{array}{l} x ^ {2} - \frac {1}{4} = x ^ {2} - \left(\frac {1}{2}\right) ^ {2} \\ = \left(x - \frac {1}{2}\right) \left(x + \frac {1}{2}\right) \\ \end{array}
 $$
 $\sqrt{\frac{1}{4}}$  is  $\frac{1}{2}$  so you can rewrite  $\frac{1}{4}$  as  $\left(\frac{1}{2}\right)^2$
 and substitute it into the formula for the difference between two squares.
-$(4y)^2 = 4y \times 4y = 16y^2$  and
+
+---
+
+### WORKED EXAMPLE 15 (例题)
+
+**题目**: 16y²-25w²
+
+**解答**: $(4y)^2 = 4y \times 4y = 16y^2$  and
 $$
 1 6 y ^ {2} = (4 y) ^ {2}
 $$
@@ -16106,6 +15966,8 @@ $$
 
 ---
 
+## WORKED EXAMPLE 16
+
 ### 16 (例题)
 
 **题目**: WORKED EXAMPLE 16
@@ -16113,11 +15975,30 @@ Factorise:
 a  $x^{2} + 8x + 16$
 b  $x^{2} - 10x + 25$
 
-**解答**: Answers
+**解答**: a  $x^{2} + 8x + 16$
+$$
+\begin{array}{l} = (x + 4) (x + 4) \\ = (x + 4) ^ {2} \\ \end{array}
+$$
+Check for the perfect square pattern.
+Take the root of each square. Note the signs are both positive.
+b  $x^{2} - 10x + 25$
+$$
+\begin{array}{l} = (x - 5) (x - 5) \\ = (x - 5) ^ {2} \\ \end{array}
+$$
+Check for the perfect square pattern.
+Take the root of each square. Note the signs are both negative.
 
 ---
 
-## 10.11
+## Exercise 10.10
+
+### WORKED EXAMPLE 16 (例题)
+
+**题目**: b  $x^{2} - 10x + 25$
+
+---
+
+## Exercise 10.11
 
 ### 1 (练习题)
 
@@ -16287,7 +16168,9 @@ b  $x^{2} - 10x + 25$
 
 ---
 
-### WORKED EXAMPLE 17 (例题)
+## WORKED EXAMPLE 17
+
+### 17 (例题)
 
 **题目**: WORKED EXAMPLE 17
 Solve each of the following equations for  $x$ .
@@ -16315,24 +16198,6 @@ $$
 \text {o r} x - 3 = 0 \Rightarrow x = 3.
 $$
 Again, there are two possible values of  $x$ .
-
----
-
-## 17
-
-### 17 CONTINUED (例题)
-
-**题目**: WORKED EXAMPLE 17 CONTINUED
-$x^{2} + 6x - 4 = 12$
-$\Rightarrow x^{2} + 6x - 16 = 0$  (subtract 12 from both sides)
-Factorising, you get  $(x + 8)(x - 2) = 0$
-So either  $x + 8 = 0 \Rightarrow x = -8$ .
-or  $x - 2 = 0\Rightarrow x = 2$
-d Factorise  $x^{2} - 8x + 16 = 0$
-to give  $(x - 4)(x - 4) = 0$
-So either  $x - 4 = 0 \Rightarrow x = 4$ .
-or  $x - 4 = 0\Rightarrow x = 4$
-Of course these are both the same thing, so the only solution is  $x = 4$ .
 
 ---
 
@@ -16368,7 +16233,8 @@ Or  $x + 4 = 0\Rightarrow x = -4$
 
 ### 1 (练习题)
 
-**题目**: 1 Solve the following equations by factorisation.
+**题目**: Exercise 10.12
+1 Solve the following equations by factorisation.
 
 ---
 
@@ -16504,7 +16370,7 @@ Or  $x + 4 = 0\Rightarrow x = -4$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -16627,12 +16493,18 @@ a  $x^{2} - 15x - 34$  [2] b  $16x^{2} - 49y^{2}$  [2]
 
 ---
 
-### 18 (练习题)
+## >Chapter 11
+
+### 12 (练习题)
 
 **题目**: 12 a Factorise each of the following.
 i  $12x^{2} - 6x$  [3] ii  $y^{2} - 13y + 42$  [2] iii  $d^{2} - 196$  [2]
+b Solve the following equations.
+i  $12x^{2} - 6x = 0$  [3] ii  $y^{2} - 13y + 30 = -12$  [3] iii  $d^{2} - 196 = 0$  [3]
 
 ---
+
+## Practice questions
 
 ### 19 (练习题)
 
@@ -16669,9 +16541,13 @@ b Hence or otherwise solve the equation  $2x^{2} - 100x + 1218 = 0$  A farmer wa
 
 ---
 
-### 24 (练习题)
+## >Chapter 11
 
-**题目**: ![image](images/5d046deb89d8a3862595287ef434e0bbd32ede4d76dd680494522f79b6e34658.jpg)
+### 16 (练习题)
+
+**题目**: 16 a Factorise the expression  $x^{2} - 50x + 609$  [2]
+b Hence or otherwise solve the equation  $2x^{2} - 100x + 1218 = 0$  A farmer wants to use  $100\mathrm{m}$  of fencing to build three sides of the rectangular pen shown in the diagram:
+![image](images/5d046deb89d8a3862595287ef434e0bbd32ede4d76dd680494522f79b6e34658.jpg)
 c Find an expression for the length  $AD$  in terms of  $x$  [2]
 d Find an expression for the area of the pen in terms of  $x$  [1]
 e The farmer wants the area of the pen to be exactly 609 square metres. Using your answer to (d), find and solve an equation for  $x$  and determine all possible dimensions of the pen. [3]
@@ -16679,6 +16555,8 @@ e The farmer wants the area of the pen to be exactly 609 square metres. Using yo
 ![图片](../images/5d046deb89d8a3862595287ef434e0bbd32ede4d76dd680494522f79b6e34658.jpg)
 
 ---
+
+## Practice questions
 
 ### 25 (练习题)
 
@@ -16710,29 +16588,32 @@ Find the area of triangle ACD.
 
 ---
 
-## 11
+## >Chapter 11
 
-### b (练习题)
+### 1 (练习题)
 
 **题目**: b Write 9991 as the difference between two square numbers. [2]
 
 ---
 
-### c (练习题)
+### 2 (练习题)
 
 **题目**: c Use your answer to b to write 9991 as a product of prime factors. [2]
 
 ---
 
-### 16d (练习题)
+### 17 (练习题)
 
-**题目**: d Find an expression for the area of the pen in terms of  $x$  [1]
-
----
-
-### 16e (练习题)
-
-**题目**: e The farmer wants the area of the pen to be exactly 609 square metres. Using your answer to (d), find and solve an equation for  $x$  and determine all possible dimensions of the pen. [3]
+**题目**: 17 The gradient of the line joining the points  $A(3,2)$  and  $B(11,b)$  has gradient  $\frac{1}{2}$ .
+a Find the value of  $b$
+[3]
+b Find the midpoint of  $A$  and  $B$
+[2]
+c Find the equation of a line that passes through the point  $A$  , but is perpendicular to the line passing through  $A$  and  $B$
+[3]
+The line joining  $A$  to  $B$  passes through the  $x$ -axis at the point  $C$  and the line perpendicular to  $AB$ , through  $A$ , passes through the  $x$ -axis at the point  $D$ .
+Find the area of triangle ACD.
+[3]
 
 ---
 
@@ -16740,54 +16621,14 @@ Find the area of triangle ACD.
 
 **题目**: 1 Calculations for Pythagoras' theorem involve lots of squares and square roots. Check you know how to use the  $\sqrt{}$  button on your calculator by confirming the answers to these calculations.
 a  $\sqrt{9} = 3$
-
----
-
-### 1 (练习题)
-
-**题目**: b  $\sqrt{1.96} = 1.4$
-
----
-
-### 1 (练习题)
-
-**题目**: c  $\sqrt{2.34} = 1.53$  (to 2 d.p.)
-
----
-
-### 1 (练习题)
-
-**题目**: d  $\sqrt{9 + 16} = 5$
-
----
-
-### 1 (练习题)
-
-**题目**: e  $\sqrt{25 + 144} = 13$
-
----
-
-### 1 (练习题)
-
-**题目**: f  $\sqrt{6^2 + 8^2} = 10$
-
----
-
-### 1 (练习题)
-
-**题目**: g  $\sqrt{15 - 6} = 3$
-
----
-
-### 1 (练习题)
-
-**题目**: h  $\sqrt{10.3^3 - 8.6^2} = 5.67$  (to 2 d.p.)
-
----
-
-### 1 (练习题)
-
-**题目**: i  $\sqrt{1.44} + 3.5 = 4.7$
+b  $\sqrt{1.96} = 1.4$
+c  $\sqrt{2.34} = 1.53$  (to 2 d.p.)
+d  $\sqrt{9 + 16} = 5$
+e  $\sqrt{25 + 144} = 13$
+f  $\sqrt{6^2 + 8^2} = 10$
+g  $\sqrt{15 - 6} = 3$
+h  $\sqrt{10.3^3 - 8.6^2} = 5.67$  (to 2 d.p.)
+i  $\sqrt{1.44} + 3.5 = 4.7$
 
 ---
 
@@ -16795,42 +16636,12 @@ a  $\sqrt{9} = 3$
 
 **题目**: 2 Calculate the following, giving your answers to 2 decimal places unless the answer is exact.
 a 121
-
----
-
-### 2 (练习题)
-
-**题目**: b 6.25
-
----
-
-### 2 (练习题)
-
-**题目**: c  $\sqrt{5.67}$
-
----
-
-### 2 (练习题)
-
-**题目**: d  $\sqrt{32 + 17}$
-
----
-
-### 2 (练习题)
-
-**题目**: e  $\sqrt{10^{2} + 24^{2}}$
-
----
-
-### 2 (练习题)
-
-**题目**: f 28.1²-4.2²
-
----
-
-### 2 (练习题)
-
-**题目**: 3 The answers to parts (d), (e) and (f) in question 1 are all positive integers. When three positive integers  $a$ ,  $b$  and  $c$  satisfy  $a^2 + b^2 = c^2$  they are called a Pythagorean triple. Do some research to find some others and try to learn to recognise some.
+b 6.25
+c  $\sqrt{5.67}$
+d  $\sqrt{32 + 17}$
+e  $\sqrt{10^{2} + 24^{2}}$
+f 28.1²-4.2²
+3 The answers to parts (d), (e) and (f) in question 1 are all positive integers. When three positive integers  $a$ ,  $b$  and  $c$  satisfy  $a^2 + b^2 = c^2$  they are called a Pythagorean triple. Do some research to find some others and try to learn to recognise some.
 
 ---
 
@@ -16840,7 +16651,7 @@ a 121
 
 ---
 
-### 4a (练习题)
+### 4 (练习题)
 
 **题目**: 4 a Copy and complete this table by substituting different values of  $a$  into the expressions.
 [Table Row] <tr><td>a</td><td>b=a2-1/2</td><td>c=a2+1/2</td></tr>
@@ -16848,22 +16659,13 @@ a 121
 [Table Row] <tr><td>5</td><td></td><td></td></tr>
 [Table Row] <tr><td>7</td><td></td><td></td></tr>
 [Table Row] <tr><td>9</td><td></td><td></td></tr>
+b Test whether the sets of numbers are Pythagorean triples.
+c What happens for other odd values of a? What happens if  $a = 1$ ?
+![image](images/c0ceb6400c286ae20eeb2e53521847ae5294179b113b2cc4d9ed0adb5949da1f.jpg)
+
+![图片](../images/c0ceb6400c286ae20eeb2e53521847ae5294179b113b2cc4d9ed0adb5949da1f.jpg)
 
 ---
-
-### 4b (练习题)
-
-**题目**: b Test whether the sets of numbers are Pythagorean triples.
-
----
-
-### 4c (练习题)
-
-**题目**: c What happens for other odd values of a? What happens if  $a = 1$ ?
-
----
-
-## 11.1
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -16880,18 +16682,10 @@ b
 
 **解答**: Answers
 a a² + b² = c²
-$$
-\begin{array}{l} 3 ^ {2} + 5 ^ {2} = x ^ {2} \\ 9 + 2 5 = x ^ {2} \\ \Rightarrow x ^ {2} = 3 4 \\ x = \sqrt {3 4} = 5. 8 3 0 9 \dots \\ \end{array}
-$$
-is approximately equal to  $5.8\mathrm{cm}$  (1 d.p.)
-Round your final answer to 1 decimal place.
-b a² + b² = c²
-$$
-\begin{array}{l} 8 ^ {2} + x ^ {2} = 1 7 ^ {2} \\ 6 4 + x ^ {2} = 2 8 9 \\ x ^ {2} = 2 8 9 - 6 4 \\ x ^ {2} = 2 2 5 \\ x = \sqrt {2 2 5} = 1 5 \mathrm {c m} \\ \end{array}
-$$
-You need to find a shorter side, so rearrange the formula to make  $x^{2}$  the subject.
 
 ---
+
+## 11.1 Pythagoras' theorem
 
 ### WORKED EXAMPLE 2 (例题)
 
@@ -16935,7 +16729,7 @@ Think about the triangle that is formed and draw it. Label each side and substit
 
 ---
 
-## 11.2
+## 11.2 Understanding similar triangles
 
 ### WORKED EXAMPLE 4 (例题)
 
@@ -16959,7 +16753,7 @@ Apply Pythagoras' theorem.
 
 ---
 
-## 11.1
+## 11.1 Pythagoras' theorem
 
 ### 1 (练习题)
 
@@ -17054,7 +16848,7 @@ Apply Pythagoras' theorem.
 
 ---
 
-## 11.2
+## 11.2 Understanding similar triangles
 
 ### 1 (练习题)
 
@@ -17199,7 +16993,7 @@ a
 
 ---
 
-### 2 (练习题)
+### 1b (练习题)
 
 **题目**: b
 ![image](images/df89d8c47d8c3c8a3992659e5ffb6b2c2420c7360d78ff2395801a0e9e83a384.jpg)
@@ -17211,7 +17005,7 @@ a
 
 ---
 
-### C (练习题)
+### 1C (练习题)
 
 **题目**: C
 ![image](images/5d5a71fb3498f25dc0f91cfdaeaafc6ebac7f8c511043a9e0a062cb0e3c450f8.jpg)
@@ -17223,7 +17017,7 @@ a
 
 ---
 
-### d (练习题)
+### 1d (练习题)
 
 **题目**: d
 ![image](images/1f60e32fb650a054e12d12f9a6a6960054e173eb3377870b06453a8d6843dbce.jpg)
@@ -17235,19 +17029,7 @@ a
 
 ---
 
-### # (练习题)
-
-**题目**: #
-![image](images/f3c62932b7bb02d218e899066fc0bd35d031449fcf05e7a113799b0d17406e7d.jpg)
-![image](images/633b1908c5c48abba6ec4aa89ced3ea8e21d19b9be1e5679a545f3908ade096e.jpg)
-
-![图片](../images/f3c62932b7bb02d218e899066fc0bd35d031449fcf05e7a113799b0d17406e7d.jpg)
-
-![图片](../images/633b1908c5c48abba6ec4aa89ced3ea8e21d19b9be1e5679a545f3908ade096e.jpg)
-
----
-
-### f (练习题)
+### 1f (练习题)
 
 **题目**: f
 ![image](images/11420e2a29bfeb36fd5264fcdf584090cf122989e75d562013e9eab94cff584c.jpg)
@@ -17274,7 +17056,7 @@ a
 
 ---
 
-## 11.3
+## 11.3 Understanding similar shapes
 
 ### WORKED EXAMPLE 7 (例题)
 
@@ -17411,7 +17193,7 @@ $$
 
 ---
 
-## Areaofsimilarshapes
+## Area of similar shapes
 
 ### 9 (例题)
 
@@ -17521,7 +17303,7 @@ Diagonal AC is 12 cm long.
 
 ---
 
-## 11.5
+## Exercise 11.5
 
 ### 2 (练习题)
 
@@ -17568,7 +17350,90 @@ c halves the lengths of the sides?
 
 ---
 
-## 11.6
+## WORKED EXAMPLE 12
+
+### WORKED EXAMPLE 12 (例题)
+
+**题目**: The cones shown in the diagram are mathematically similar. The smaller cone has a volume of  $40\mathrm{cm}^3$ . Find the volume of the larger cone.
+![image](images/dfb9d7d40ae6b19a5c0cf2431ae8dd1a5646bdbb869a137b123c4223b986eafb.jpg)
+![image](images/37e6097a87ee22ee84aebbe03c7af45f970c701bc3a61eb4b24db5bce167b0a5.jpg)
+
+![图片](../images/dfb9d7d40ae6b19a5c0cf2431ae8dd1a5646bdbb869a137b123c4223b986eafb.jpg)
+
+![图片](../images/37e6097a87ee22ee84aebbe03c7af45f970c701bc3a61eb4b24db5bce167b0a5.jpg)
+
+**解答**: Answer
+Scale factor of lengths  $= \frac{12}{3} = 4$ $\Rightarrow$  Scale factor of volumes  $= 4^{3} = 64$
+So the volume of the larger cone  $= 64 \times 40 = 2560 \, \text{cm}^3$ .
+
+---
+
+## WORKED EXAMPLE 13
+
+### WORKED EXAMPLE 13 (例题)
+
+**题目**: The two shapes shown in the diagram are mathematically similar. If the area of the larger shape is  $216\mathrm{cm}^2$ , and the area of the smaller shape is  $24\mathrm{cm}^2$ , find the length  $x$  in the diagram.
+![image](images/e8c4c8402d95511dc557e319ef7e616be403f742c8cd5fb6315a39d5cac37c6d.jpg)
+
+![图片](../images/e8c4c8402d95511dc557e319ef7e616be403f742c8cd5fb6315a39d5cac37c6d.jpg)
+
+**解答**: Answer
+Scale factor of areas  $= \frac{216}{24} = 9$
+$$
+\begin{array}{l} \Rightarrow (\text {S c a l e f a c t o r o f l e n g t h s}) ^ {2} = 9 \\ \Rightarrow \text {S c a l e f a c t o r o f l e n g t h s} = \sqrt {9} = 3 \\ \end{array}
+$$
+$$
+\mathrm {S o}: x = 3 \times 1 2 = 3 6 \mathrm {c m}
+$$
+
+---
+
+## WORKED EXAMPLE 14
+
+### WORKED EXAMPLE 14 (例题)
+
+**题目**: A shipping crate has a volume of  $2000\mathrm{cm}^3$ . If the dimensions of the crate are doubled, what will its new volume be?
+
+**解答**: Answer
+$$
+\begin{array}{l} \frac {\text {O r i g i n a l v o l u m e}}{\text {N e w v o l u m e}} = \left(\frac {\text {o r i g i n a l d i m e n s i o n s}}{\text {n e w d i m e n s i o n s}}\right) ^ {3} \\ \frac {2 0 0 0}{\text {N e w v o l u m e}} = \left(\frac {1}{2}\right) ^ {3} \\ \frac {2 0 0 0}{\text {N e w v o l u m e}} = \frac {1}{8} \\ \text {N e w v o l u m e} = 2 0 0 0 \times 8 \\ \text {N e w v o l u m e} = 1 6 0 0 0 \mathrm {c m} ^ {3} \\ \end{array}
+$$
+
+---
+
+## WORKED EXAMPLE 15
+
+### WORKED EXAMPLE 15 (例题)
+
+**题目**: The two cuboids  $A$  and  $B$  are similar. The larger cuboid has a surface area of  $608 \, \text{cm}^2$ . What is the surface area of the smaller cuboid?
+![image](images/75d0bbe6b9f46cb32ddffaeed56c35a1d8a86f44d521856594eeed1eeef18e9c.jpg)
+![image](images/f54200cf79cf9cbffcfc5bf1fec527d0d5a481bf1d40306988ea3d377a036eb8.jpg)
+
+![图片](../images/75d0bbe6b9f46cb32ddffaeed56c35a1d8a86f44d521856594eeed1eeef18e9c.jpg)
+
+![图片](../images/f54200cf79cf9cbffcfc5bf1fec527d0d5a481bf1d40306988ea3d377a036eb8.jpg)
+
+**解答**: Answer
+$$
+\frac {\text {S u r f a c e a r e a} A}{\text {S u r f a c e a r e a} B} = \left(\frac {\text {w i d t h} A}{\text {w i d t h} B}\right) ^ {2}
+$$
+$$
+\frac {\text {S u r f a c e a r e a A}}{6 0 8} = \left(\frac {5}{8}\right) ^ {2}
+$$
+$$
+\frac {\text {S u r f a c e a r e a A}}{6 0 8} = \frac {2 5}{6 4}
+$$
+$$
+\text {S u r f a c e a r e a} A = \frac {2 5}{6 4} \times 6 0 8
+$$
+$$
+\text {S u r f a c e a r e a} A = 2 3 7. 5 \mathrm {c m} ^ {2}
+$$
+Cuboid A has a surface area of  $237.5\mathrm{cm}^2$
+
+---
+
+## Exercise 11.6
 
 ### 1 (练习题)
 
@@ -17595,85 +17460,6 @@ c What is the ratio of their volumes?
 ![图片](../images/da74fc72137531b9cdc159d4d2e761ae116695ab7c69b065391997a8c95faaff.jpg)
 
 ![图片](../images/e3ef6c9e665e907d893a1f7eb5d36d15c9ee02b3b98d9cb93d3e5ba16cf43117.jpg)
-
----
-
-### WORKED EXAMPLE 12 (例题)
-
-**题目**: WORKED EXAMPLE 12
-The cones shown in the diagram are mathematically similar. The smaller cone has a volume of  $40\mathrm{cm}^3$ . Find the volume of the larger cone.
-![image](images/dfb9d7d40ae6b19a5c0cf2431ae8dd1a5646bdbb869a137b123c4223b986eafb.jpg)
-![image](images/37e6097a87ee22ee84aebbe03c7af45f970c701bc3a61eb4b24db5bce167b0a5.jpg)
-
-![图片](../images/dfb9d7d40ae6b19a5c0cf2431ae8dd1a5646bdbb869a137b123c4223b986eafb.jpg)
-
-![图片](../images/37e6097a87ee22ee84aebbe03c7af45f970c701bc3a61eb4b24db5bce167b0a5.jpg)
-
-**解答**: Answer
-Scale factor of lengths  $= \frac{12}{3} = 4$ $\Rightarrow$  Scale factor of volumes  $= 4^{3} = 64$
-So the volume of the larger cone  $= 64 \times 40 = 2560 \, \text{cm}^3$ .
-
----
-
-### WORKED EXAMPLE 13 (例题)
-
-**题目**: WORKED EXAMPLE 13
-The two shapes shown in the diagram are mathematically similar. If the area of the larger shape is  $216\mathrm{cm}^2$ , and the area of the smaller shape is  $24\mathrm{cm}^2$ , find the length  $x$  in the diagram.
-![image](images/e8c4c8402d95511dc557e319ef7e616be403f742c8cd5fb6315a39d5cac37c6d.jpg)
-
-![图片](../images/e8c4c8402d95511dc557e319ef7e616be403f742c8cd5fb6315a39d5cac37c6d.jpg)
-
-**解答**: Answer
-Scale factor of areas  $= \frac{216}{24} = 9$
-$$
-\begin{array}{l} \Rightarrow (\text {S c a l e f a c t o r o f l e n g t h s}) ^ {2} = 9 \\ \Rightarrow \text {S c a l e f a c t o r o f l e n g t h s} = \sqrt {9} = 3 \\ \end{array}
-$$
-$$
-\mathrm {S o}: x = 3 \times 1 2 = 3 6 \mathrm {c m}
-$$
-
----
-
-### WORKED EXAMPLE 14 (例题)
-
-**题目**: WORKED EXAMPLE 14
-A shipping crate has a volume of  $2000\mathrm{cm}^3$ . If the dimensions of the crate are doubled, what will its new volume be?
-
-**解答**: Answer
-$$
-\begin{array}{l} \frac {\text {O r i g i n a l v o l u m e}}{\text {N e w v o l u m e}} = \left(\frac {\text {o r i g i n a l d i m e n s i o n s}}{\text {n e w d i m e n s i o n s}}\right) ^ {3} \\ \frac {2 0 0 0}{\text {N e w v o l u m e}} = \left(\frac {1}{2}\right) ^ {3} \\ \frac {2 0 0 0}{\text {N e w v o l u m e}} = \frac {1}{8} \\ \text {N e w v o l u m e} = 2 0 0 0 \times 8 \\ \text {N e w v o l u m e} = 1 6 0 0 0 \mathrm {c m} ^ {3} \\ \end{array}
-$$
-
----
-
-### WORKED EXAMPLE 15 (例题)
-
-**题目**: WORKED EXAMPLE 15
-The two cuboids  $A$  and  $B$  are similar. The larger cuboid has a surface area of  $608 \, \text{cm}^2$ . What is the surface area of the smaller cuboid?
-![image](images/75d0bbe6b9f46cb32ddffaeed56c35a1d8a86f44d521856594eeed1eeef18e9c.jpg)
-![image](images/f54200cf79cf9cbffcfc5bf1fec527d0d5a481bf1d40306988ea3d377a036eb8.jpg)
-
-![图片](../images/75d0bbe6b9f46cb32ddffaeed56c35a1d8a86f44d521856594eeed1eeef18e9c.jpg)
-
-![图片](../images/f54200cf79cf9cbffcfc5bf1fec527d0d5a481bf1d40306988ea3d377a036eb8.jpg)
-
-**解答**: Answer
-$$
-\frac {\text {S u r f a c e a r e a} A}{\text {S u r f a c e a r e a} B} = \left(\frac {\text {w i d t h} A}{\text {w i d t h} B}\right) ^ {2}
-$$
-$$
-\frac {\text {S u r f a c e a r e a A}}{6 0 8} = \left(\frac {5}{8}\right) ^ {2}
-$$
-$$
-\frac {\text {S u r f a c e a r e a A}}{6 0 8} = \frac {2 5}{6 4}
-$$
-$$
-\text {S u r f a c e a r e a} A = \frac {2 5}{6 4} \times 6 0 8
-$$
-$$
-\text {S u r f a c e a r e a} A = 2 3 7. 5 \mathrm {c m} ^ {2}
-$$
-Cuboid A has a surface area of  $237.5\mathrm{cm}^2$
 
 ---
 
@@ -17801,7 +17587,7 @@ $$
 
 ---
 
-## 11.4
+## 11.4 Understanding congruence
 
 ### 1 (练习题)
 
@@ -17946,7 +17732,7 @@ Give your answer in metres.
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 2 (练习题)
 
@@ -18031,7 +17817,7 @@ Show that if  $a$  is prime and  $a$  is a member of a Pythagorean triple, then 
 
 ---
 
-## 12
+## Chapter 12
 
 ### 1 (练习题)
 
@@ -18082,7 +17868,7 @@ Jess says to Roham, "On average, I read for 3 hours per week."
 
 ---
 
-## 12.1
+## 12.1 Different types of average
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -18107,17 +17893,12 @@ $$
 
 ---
 
-## Dealingwithextremevalues
-
-### Exercise 12.1 (练习题)
-
-**题目**: Exercise 12.1
-
----
+## Dealing with extreme values
 
 ### 1 (练习题)
 
-**题目**: 1 For each of the following data sets calculate:
+**题目**: Exercise 12.1
+1 For each of the following data sets calculate:
 the mode
 ii the medium
 the mean.
@@ -18222,12 +18003,6 @@ e Team Socrates are slightly faster as a whole and they are slightly more consis
 
 ---
 
-### INVESTIGATION (练习题)
-
-**题目**: INVESTIGATION
-
----
-
 ### 1.1 (练习题)
 
 **题目**: 1.1 Calculate the mean and range of these lengths:
@@ -18257,7 +18032,7 @@ e Team Socrates are slightly faster as a whole and they are slightly more consis
 
 ---
 
-## 12.2
+## Exercise 12.2
 
 ### 1 (练习题)
 
@@ -18295,8 +18070,6 @@ Which shop would you recommend to someone who is looking to buy a new light bulb
 
 ---
 
-## SELFASSESSMENT
-
 ### 1 (练习题)
 
 **题目**: 1 Read through this activity that a class had to complete for homework. Think about how you would answer each question.
@@ -18321,14 +18094,25 @@ What could the developer say to compare the two sets of data? [3]
 
 ---
 
-## 12.3
+### 2 (练习题)
 
-### 1 (练习题)
+**题目**: 2 Here is one student's answer to the homework activity.
+What mark would you give this student out of 10? Why?
+1 a Mean  $=$  sum of values/number of values  $= 8394 / 48$ $= 174.88$  visits per hour (2 dp.) Median  $= (179 + 183) / 2 = 181$  visits per hour Mode  $= 148$  b Range  $= 238 - 100 = 138$
+2 The website consistently gets over 100 visits per hour with an average of 175 visits per hour.
+3 The mean number of visits to Company B's website is a bit higher than Company A's but the median number of visits to Company B is much lower. This suggests that the mean of Company B is affected by a few high values and the usual number of visits is actually lower. The data for Company B has quite a wide range and this suggests that the data is spread out and the number of visits per hour is less consistent than for Company A.
 
-**题目**: a Did this student do anything differently to how you would have worked? What?
+---
+
+### 3 (练习题)
+
+**题目**: 3 The work above is an example of a model answer.
+a Did this student do anything differently to how you would have worked? What?
 b How can examples of good work like this one help you to improve your own work?
 
 ---
+
+## 12.3 Calculating averages and ranges for frequency data
 
 ### 1 (练习题)
 
@@ -18363,6 +18147,8 @@ c the mean
 the range.
 
 ---
+
+## Exercise 12.3
 
 ### 4 (练习题)
 
@@ -18451,7 +18237,7 @@ b The class with the highest frequency is the modal class. In this case it is th
 
 ---
 
-## 12.4
+## Exercise 12.4
 
 ### 1 (练习题)
 
@@ -18534,7 +18320,7 @@ Calculate an estimate for the mean age of the teachers.
 
 ---
 
-## 12.5
+## 12.5 Quartiles
 
 ### WORKED EXAMPLE 5 (例题)
 
@@ -18637,6 +18423,8 @@ This might suggest that non-vegetarians have higher levels of bad cholesterol in
 
 ---
 
+## Exercise 12.5
+
 ### 1 (练习题)
 
 **题目**: 1 Find the median, quartiles and interquartile range for each set of data.
@@ -18735,7 +18523,39 @@ b Use the values in part (a) to comment on the performance of this group of stud
 
 ---
 
-## Practicequestions
+## WORKED EXAMPLE 7 CONTINUED
+
+### 7 (例题)
+
+**题目**: a Determine the median for each group.
+b Find the range for:
+i vegetarians
+ii non-vegetarians.
+c Determine the interquartile range for:
+i vegetarians
+ii non-vegetarians.
+d LDL levels of  $<  130$  are desirable, levels of 130-160 are considered borderline high and levels  $>160$  are considered high risk. Using these figures, comment on what the distribution on the stem-and-leaf diagram suggests.
+
+**解答**: Answer
+a The data is already ordered and there are 35 values in each set.
+$$
+\frac {1}{2} (3 5 + 1) = 1 8, \text {s o t h e m e d i a n i s t h e 1 8 t h v a l u e}.
+$$
+Median  $= 128$  for vegetarians
+ii Median  $= 164$  for non-vegetarians
+b i Range  $= 173 - 90 = 83$  for vegetarians
+ii Range  $= 215 - 112 = 103$  for non-vegetarians
+c Determine the position of  $Q_{1}$  and  $Q_{3}$
+The lower quartile  $= \frac{1}{4} (35 + 1) = 9$ th value
+The upper quartile  $= \frac{3}{4} (35 + 1) = 27$ th value
+IQR = Q3 - Q1 = 142 - 116 = 26 for vegetarians
+ii  $IQR = Q_{3} - Q_{1} = 180 - 145 = 35$  for non-vegetarians.
+d For vegetarians the data is skewed toward the lower levels on the stem- and-leaf diagram. More than half of the values are in the desirable range, with only three in the high-risk range. For non-vegetarians, the data is more spread out. Only three values are in the desirable range, 12 are borderline high and 20 are in the high-risk category.
+This might suggest that non-vegetarians have higher levels of bad cholesterol in general. However, without considering other risk factors or medical history, you cannot say this for certain from one set of data.
+
+---
+
+## Practice questions
 
 ### 1 (练习题)
 
@@ -18812,16 +18632,45 @@ c Calculate an estimate for the mean room temperature. [3]
 ### 1 (练习题)
 
 **题目**: 1 The nth term of a sequence is  $6n - 4$
+a Write down the first 3 terms in this sequence.
 
 ---
 
-## Pastpaperquestions
+### 4b (练习题)
 
-### 1 (练习题)
+**题目**: Find the mean shoe size, giving your answer in terms of  $n$ . [2]
 
-**题目**: 1 The nth term of a sequence is  $6n - 4$
-a Write down the first 3 terms in this sequence.
-b The  $k$ th term of this sequence is 422.
+---
+
+### 4c (练习题)
+
+**题目**: The mean shoe size is known to be 3.5. Find the number of people with size 5 shoes.
+[3]
+
+---
+
+### 4d (练习题)
+
+**题目**: State the modal shoe size.
+[1]
+
+---
+
+### 5b (练习题)
+
+**题目**: b State the modal class. [1]
+
+---
+
+### 5c (练习题)
+
+**题目**: c Calculate an estimate for the mean room temperature. [3]
+
+---
+
+### 1b (练习题)
+
+**题目**: b The  $k$ th term of this sequence is 422.
 Work out the value of  $k$ .
 [1]
 
@@ -18837,7 +18686,7 @@ $$
 
 ---
 
-### 3 (练习题)
+### 2 (练习题)
 
 **题目**: Cambridge IGCSE Mathematics (0580) Paper 11 Q17, June 2020
 ![image](images/4fad025446aaf79ff3b6c1d30a6019052a4e08ce2baf6757dcb5d14b3cf40e9d.jpg)
@@ -18855,12 +18704,22 @@ Calculate the value of  $x$ .
 ![image](images/5ac5c75f8daa7ebbe4186cec4c1f394aedc613a97ef4bae1d1cdc7426286d191.jpg)
 a Write down the co-ordinates of point  $P$
 [1]
-b Find the gradient of line  $L$
-[2]
-c Write down the equation of line  $L$  in the form  $y = mx + c$
-[2]
 
 ![图片](../images/5ac5c75f8daa7ebbe4186cec4c1f394aedc613a97ef4bae1d1cdc7426286d191.jpg)
+
+---
+
+### 4b (练习题)
+
+**题目**: b Find the gradient of line  $L$
+[2]
+
+---
+
+### 4c (练习题)
+
+**题目**: c Write down the equation of line  $L$  in the form  $y = mx + c$
+[2]
 
 ---
 
@@ -18872,12 +18731,17 @@ c Write down the equation of line  $L$  in the form  $y = mx + c$
 ![image](images/a2ca070377ac5a05c66b9ee57d42c740ca491c7ace19d66297d4a5d0e5ef029d.jpg)
 a Explain why triangle ABC and triangle PQR are similar.
 [1]
-b' Find AC.
-[2]
 
 ![图片](../images/5b0e3fe8dc69873cabb91840331d6a991163364c7de95843c96d5eb0a700e3e0.jpg)
 
 ![图片](../images/a2ca070377ac5a05c66b9ee57d42c740ca491c7ace19d66297d4a5d0e5ef029d.jpg)
+
+---
+
+### 5b (练习题)
+
+**题目**: b' Find AC.
+[2]
 
 ---
 
@@ -18887,10 +18751,86 @@ b' Find AC.
 5 8 11 14
 a Write down the next term.
 [1]
-b Find an expression, in terms of  $n$ , for the  $n$ th term.
+
+---
+
+### 6b (练习题)
+
+**题目**: b Find an expression, in terms of  $n$ , for the  $n$ th term.
 [2]
 
 ---
+
+### 7 (练习题)
+
+**题目**: 7 The diagram shows a line  $L$  and two points,  $A$  and  $B$ , on a grid.
+![image](images/682a3aaef47b007dd4d90c48ae1fb58472e91cea61c8d647e11953ef0fff5b5d.jpg)
+a Write down the coordinates of point  $A$
+[1]
+
+![图片](../images/682a3aaef47b007dd4d90c48ae1fb58472e91cea61c8d647e11953ef0fff5b5d.jpg)
+
+---
+
+### 7b (练习题)
+
+**题目**: Find the gradient of line  $L$
+[1]
+
+---
+
+### 7c (练习题)
+
+**题目**: Write down the equation of line  $L$  in the form  $y = mx + c$
+[2]
+
+---
+
+### 7ci (练习题)
+
+**题目**: c i Draw a line that is perpendicular to line  $L$  and passes through the point  $A$
+[Using Figure 1 in the Unit 3 Past Paper Questions Resource Sheet.]
+[1]
+
+---
+
+### 7cii (练习题)
+
+**题目**: This line crosses the  $x$ -axis at point  $C$ .
+Mark point  $C$  on the grid and write down the coordinates of point  $C$ .
+[Using Figure 1 in the Unit 3 Past Paper Questions Resource Sheet.]
+[1]
+
+---
+
+### 7ciii (练习题)
+
+**题目**: iii Find, by measuring, the perimeter of triangle ABC.
+[2]
+
+---
+
+### 8a (练习题)
+
+**题目**: 8 a On Monday, Main Street station sells 40 tickets.
+There are four types of ticket: infant, child, adult and senior.
+The bar chart shows the number of infant, child and adult tickets sold.
+![image](images/22eec4908f0985c2cf5036e2e1edec00d503f627373f9b3d3d3c3e2cde1d8667.jpg)
+Complete the bar chart. [Using Figure 2 in the Unit 3 Past Paper Questions Resource Sheet.]
+[1]
+
+![图片](../images/22eec4908f0985c2cf5036e2e1edec00d503f627373f9b3d3d3c3e2cde1d8667.jpg)
+
+---
+
+### 8aii (练习题)
+
+**题目**: ii Find how many more adult tickets were sold than child tickets.
+[1]
+
+---
+
+## Cambridge IGCSE Mathematics (0580) Paper 11 Q16, June 2019
 
 ### 7 (练习题)
 
@@ -18926,23 +18866,6 @@ Complete the bar chart. [Using Figure 2 in the Unit 3 Past Paper Questions Resou
 [1]
 ii Find how many more adult tickets were sold than child tickets.
 [1]
-
-![图片](../images/22eec4908f0985c2cf5036e2e1edec00d503f627373f9b3d3d3c3e2cde1d8667.jpg)
-
----
-
-## 8
-
-### 8 (练习题)
-
-**题目**: 8 a On Monday, Main Street station sells 40 tickets.
-There are four types of ticket: infant, child, adult and senior.
-The bar chart shows the number of infant, child and adult tickets sold.
-![image](images/22eec4908f0985c2cf5036e2e1edec00d503f627373f9b3d3d3c3e2cde1d8667.jpg)
-Complete the bar chart. [Using Figure 2 in the Unit 3 Past Paper Questions Resource Sheet.]
-[1]
-ii Find how many more adult tickets were sold than child tickets.
-[1]
 iii Write down the modal type of ticket.
 [1]
 iv One of these 40 people is chosen at random.
@@ -18962,11 +18885,10 @@ iii the mean.
 
 ---
 
-## 9
-
 ### 9 (练习题)
 
-**题目**: 9 a The nth term of a sequence is  $n^2 + 3n$ .
+**题目**: ![image](images/9e59b5a7f228b78809626f39d38aae8eaf7a23eee16849abf98399b98f2c7ee9.jpg)
+9 a The nth term of a sequence is  $n^2 + 3n$ .
 Find the first three terms of this sequence.
 [2]
 These are the first five terms of a different sequence.
@@ -18974,9 +18896,9 @@ These are the first five terms of a different sequence.
 Find the  $n$ th term of this sequence.
 [2]
 
----
+![图片](../images/9e59b5a7f228b78809626f39d38aae8eaf7a23eee16849abf98399b98f2c7ee9.jpg)
 
-## 10
+---
 
 ### 10 (练习题)
 
@@ -18985,8 +18907,6 @@ Show all your working.
 [2]
 
 ---
-
-## 11
 
 ### 11 (练习题)
 
@@ -18998,8 +18918,6 @@ b Find the length of  $AB$
 
 ---
 
-## 12
-
 ### 12 (练习题)
 
 **题目**: 12 Factorise completely.
@@ -19009,8 +18927,6 @@ ${20}{x}^{2} - {45}{y}^{2}$
 [3]
 
 ---
-
-## 13
 
 ### 13 (练习题)
 
@@ -19030,8 +18946,6 @@ Calculate the height of the larger solid.
 ![图片](../images/15f7ae93a21398c34b43aa3bf42d1b2f33ae3b03c1fc297a8274862e89452d2f.jpg)
 
 ---
-
-## 14
 
 ### 14 (练习题)
 
@@ -19054,7 +18968,7 @@ Find  $\mathfrak{n}(A\cap B\cap C)$
 
 ---
 
-## 13
+## Chapter 13
 
 ### 13a (练习题)
 
@@ -19132,7 +19046,7 @@ A∩C.
 
 ---
 
-## 13.1
+## 13.1 Understanding units
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -19310,8 +19224,6 @@ $\mathbb{C}$  mm3 (give your answer in standard form).
 
 ---
 
-## 13.2
-
 ### 7 (练习题)
 
 **题目**: The average radius of the Earth is  $6378\mathrm{km}$
@@ -19326,8 +19238,6 @@ c mm
 
 ---
 
-## 13.1
-
 ### 8 (练习题)
 
 **题目**: 8 The dimensions of the cone shown in the diagram are given in cm.
@@ -19340,105 +19250,7 @@ Give your answers in standard form to 3 significant figures.
 
 ---
 
-## 13.2
-
-### 5 (练习题)
-
-**题目**: 5 Express each quantity in the units given in brackets.
-a 14.23m (mm.km)
-b 19.06 g (mg. t)
-23 litres (ml, cl)
-d  $4\mathrm{m}^2 (\mathrm{mm}^2,\mathrm{ha})$
-13cm²（mm²，ha）
-10cm3(mm3,m3)
-
----
-
-### 9 (练习题)
-
-**题目**: 9 A jar holds 200 grams of flour.
-a How many 30 gram measures can you take from the jar?
-b How much flour will be left over?
-
----
-
-### 10 (练习题)
-
-**题目**: 10 This is a lift in an office building.
-![image](images/eaf9621428737c8938b9ac30adfd0417f7be8d84975493a008aa2c31050642be.jpg)
-The lift won't start if it holds more than  $300\mathrm{kg}$
-a Tomas (105 kg), Shaz (65 kg), Sindi (55 kg), Rashied (80 kg) and Mandy (70 kg) are waiting for the lift. Can they all ride together?
-Mandy says she will use the stairs. Can the others go safely into the lift?
-c Rashied says he will wait for the lift to come down again. Can the other four go together in the lift?
-
-![图片](../images/eaf9621428737c8938b9ac30adfd0417f7be8d84975493a008aa2c31050642be.jpg)
-
----
-
-### 11 (练习题)
-
-**题目**: 11 a You may have seen the use of 'mega' and 'micro' in science. In Greek, 'mega' means 'large' and 'micro' means 'small'. Scientists use the word 'mega' to talk about 'millions' and 'micro' to talk about 'millionths'. Not everyone uses these words in quite the same way. Try to find out what 'mega' usually means in computing.
-b Try to find out about some more prefixes, like 'giga', 'terra', 'peta'. What others can you find?
-
----
-
-### 2 (例题)
-
-**题目**: WORKED EXAMPLE 2
-Sara left home at 2.15 p.m. and returned at 3.50 p.m. How long was Sara away from home?
-
-**解答**: Answer
-From 2.15p.m. to 3.00p.m. is 45 minutes Start by counting on to the next  
-From 3.00p.m. to 3.50p.m. is 50 minutes whole hour.
-45 + 50 = 95 minutes Add together the times in minutes.
-= 1 hour and 35 minutes Convert to hours and minutes.
-
----
-
-### 3 (例题)
-
-**题目**: WORKED EXAMPLE 3
-A train leaves at 05:35 and arrives at 18:20. How long is the journey?
-
-**解答**: Answers
-You cannot simply calculate 18:20 - 05:35 because this does not take into account that time is not decimal. You can use the degrees, minutes and seconds function of a calculator to work with time. Look for the DMS key to do this. To work out 18:20 - 05:35
-Enter 18
-Press DMS
-Enter 20
-Press DMS
-Press the -key to subtract.
-Enter 5
-Press DMS
-Enter 35
-Press DMS
-Press
-The display will show  $12^{\circ}45'00''$
-Write this as 12 hours and 45 minutes.
-
----
-
-### 4 (例题)
-
-**题目**: WORKED EXAMPLE 4
-How much time passes from 19:35 on Monday to 03:55 on Tuesday?
-
-**解答**: Answer
-19:35 to 24:00 is one part and 00:00 to 03:55 the next day is the other part.
-A good way to start this problem is to divide the time into parts.
-Part one:
-19:35 to 20:00 is 25 minutes  
-20:00 to 24:00 is 4 hours  
-So, 19:35 to 24:00 is 4 h 25 min
-Work out how much time passes to reach midnight.
-Part two:
-0:00 to 03:55 is 3 h 55 min
-03:55 is 3 hours and 55 minutes past midnight.
-4h 25min + 3h 55min = 7h 80min = 8h 20min
-Add the result of the two parts together.
-The total time is 8 hours and 20 minutes.
-80 minutes = 1 hour 20 minutes
-
----
+## Exercise 13.2
 
 ### 1 (练习题)
 
@@ -19494,7 +19306,7 @@ ii He enters this into the calculator using the DMS key and gets the answer  $-4
 
 ---
 
-## 13.3
+## Exercise 13.3
 
 ### 1 (练习题)
 
@@ -19522,7 +19334,7 @@ c Arjun arrives at Beeston bus station at 2.15p.m. What is the time of the next 
 
 ---
 
-## APPLYYOURSKILLSCONTINUED
+## APPLY YOUR SKILLS CONTINUED
 
 ### 3 (练习题)
 
@@ -19549,102 +19361,40 @@ c How long is it between the first high tide and the first low tide on day 7?
 
 ---
 
-## 13.3
+## WORKED EXAMPLE 4
+
+### WORKED EXAMPLE 4 (例题)
+
+**题目**: How much time passes from 19:35 on Monday to 03:55 on Tuesday?
+
+**解答**: Answer
+19:35 to 24:00 is one part and 00:00 to 03:55 the next day is the other part.
+A good way to start this problem is to divide the time into parts.
+Part one:
+19:35 to 20:00 is 25 minutes  
+20:00 to 24:00 is 4 hours  
+So, 19:35 to 24:00 is 4 h 25 min
+Work out how much time passes to reach midnight.
+Part two:
+0:00 to 03:55 is 3 h 55 min
+03:55 is 3 hours and 55 minutes past midnight.
+4h 25min + 3h 55min = 7h 80min = 8h 20min
+Add the result of the two parts together.
+The total time is 8 hours and 20 minutes.
+80 minutes = 1 hour 20 minutes
+
+---
+
+## 13.3 Limits of accuracy - upper and lower bounds
 
 ### 1 (练习题)
 
-**题目**: c Thabo arrives at Ninesides station at 6.50p.m. How long will he have to wait for the next train to Crosswell?
-
----
-
-### 2b (练习题)
-
-**题目**: b Write down the timetable for the first bus on this service to leave Aville after the 10:50 bus.
-
----
-
-### 2c (练习题)
-
-**题目**: c Arjun arrives at Beeston bus station at 2.15p.m. What is the time of the next bus to Darby?
-
----
-
-### 3b (练习题)
-
-**题目**: b How long is it between high tides on day 2?
-
----
-
-### 3c (练习题)
-
-**题目**: c How long is it between the first high tide and the first low tide on day 7?
-
----
-
-### 3d (练习题)
-
-**题目**: d Tatsuo likes to go surfing an hour before high tide.
-What time will this be on Sunday 5 February?
-
----
-
-### 3dii (练习题)
-
-**题目**: ii Explain why it is unlikely to be at 01:29.
-
----
-
-### 3e (练习题)
-
-**题目**: e Sandra owns a fishing boat.
-She cannot go out in the mornings if the low tide occurs between 5 a.m. and 9 a.m. On which days does this happen?
-
----
-
-### 3eii (练习题)
-
-**题目**: ii Sandra takes her boat out in the afternoons if high tide is between 11 a.m. and 2.30 p.m. On which days can she go out in the afternoons?
-
----
-
-### WORKED EXAMPLE 5 (例题)
-
-**题目**: WORKED EXAMPLE 5
-Find the upper and lower bounds of the following, taking into account the level of rounding shown in each case.
-a  $10\mathrm{cm}$  to the nearest cm
-b 22.5, to 1 decimal place
-c 128000,to 3 significant figures
-d 120, to the nearest 20
-
-![图片](../images/f9c91ed7933227af09673d87f4c9efff46d325cd85ab5ea32b68b469a5172ed8.jpg)
-
-![图片](../images/f6aeba0bfe846790c9c16278ccb7eaf453218d6f1442c346a4245d35fe3911e2.jpg)
-
-![图片](../images/a925f2c6525c6ec4d6dbe8f5fb0428b4fa3a99b2c5703ba59a06e45703620698.jpg)
-
-![图片](../images/63c598991a166d114350ba7d652979930251cf5911d1f99641102e353d5e0a66.jpg)
-
-**解答**: Answers
-a Show  $10\mathrm{cm}$  on a number line. The real value will be closest to  $10\mathrm{cm}$  if it lies between the lower bound of  $9.5\mathrm{cm}$  and the upper bound of  $10.5\mathrm{cm}$ .
-b Look at 22.5 on a number line. The real value will be closest to 22.5 if it lies between the lower bound of 22.45 and the upper bound of 22.55.
-128000 is shown on a number line. 128000 lies between the lower bound of 127500 and the upper bound of 128500.
-120 is shown on a number line. 120 lies between the lower bound of 110 and the upper bound of 130.
-![image](images/f9c91ed7933227af09673d87f4c9efff46d325cd85ab5ea32b68b469a5172ed8.jpg)
-![image](images/f6aeba0bfe846790c9c16278ccb7eaf453218d6f1442c346a4245d35fe3911e2.jpg)
-![image](images/a925f2c6525c6ec4d6dbe8f5fb0428b4fa3a99b2c5703ba59a06e45703620698.jpg)
-![image](images/63c598991a166d114350ba7d652979930251cf5911d1f99641102e353d5e0a66.jpg)
-
----
-
-### Exercise 13.4 (练习题)
-
-**题目**: Exercise 13.4
-Each of the following numbers is given to the nearest whole number. Find the lower and upper bounds of the numbers.
+**题目**: Each of the following numbers is given to the nearest whole number. Find the lower and upper bounds of the numbers.
 a 12
 
 ---
 
-## 13.4
+## Exercise 13.4
 
 ### 2 (练习题)
 
@@ -19681,120 +19431,153 @@ f 127
 
 ---
 
-## 13.3
+## 13.3 Limits of accuracy - upper and lower bounds
 
-### Exercise 13.4 2 (练习题)
+### 2 (练习题)
 
 **题目**: 2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers.
 a 2.7
 
 ---
 
-## 13.4
+## Exercise 13.4
 
-### 8 (练习题)
+### 3 (练习题)
 
 **题目**: 2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers.
 b 34.4
 
 ---
 
-### 9 (练习题)
+### 4 (练习题)
 
 **题目**: 2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers.
 c 5.0
 
 ---
 
-### 10 (练习题)
+### 5 (练习题)
 
 **题目**: 2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers.
 d 1.1
 
 ---
 
-### 11 (练习题)
+### 6 (练习题)
 
 **题目**: 2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers.
 e -2.3
 
 ---
 
-### 12 (练习题)
+### 7 (练习题)
 
 **题目**: 2 Each of the following numbers is correct to 1 decimal place. Write down the lower and upper bounds of the numbers.
 f -7.2
 
 ---
 
-## 13.3
+## 13.3 Limits of accuracy - upper and lower bounds
 
-### Exercise 13.4 3 (练习题)
+### 3 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 a 132 (nearest whole number)
 
 ---
 
-## 13.4
+## Exercise 13.4
 
-### 14 (练习题)
+### 4 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 b 300 (nearest one hundred)
 
 ---
 
-### 15 (练习题)
+### 5 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 405 (nearest five)
 
 ---
 
-### 16 (练习题)
+### 6 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 d 15 million (nearest million)
 
 ---
 
-### 17 (练习题)
+## WORKED EXAMPLE 5
+
+### 5 (例题)
+
+**题目**: WORKED EXAMPLE 5
+Find the upper and lower bounds of the following, taking into account the level of rounding shown in each case.
+a  $10\mathrm{cm}$  to the nearest cm
+b 22.5, to 1 decimal place
+c 128000,to 3 significant figures
+d 120, to the nearest 20
+
+![图片](../images/f9c91ed7933227af09673d87f4c9efff46d325cd85ab5ea32b68b469a5172ed8.jpg)
+
+![图片](../images/f6aeba0bfe846790c9c16278ccb7eaf453218d6f1442c346a4245d35fe3911e2.jpg)
+
+![图片](../images/a925f2c6525c6ec4d6dbe8f5fb0428b4fa3a99b2c5703ba59a06e45703620698.jpg)
+
+![图片](../images/63c598991a166d114350ba7d652979930251cf5911d1f99641102e353d5e0a66.jpg)
+
+**解答**: Answers
+a Show  $10\mathrm{cm}$  on a number line. The real value will be closest to  $10\mathrm{cm}$  if it lies between the lower bound of  $9.5\mathrm{cm}$  and the upper bound of  $10.5\mathrm{cm}$ .
+b Look at 22.5 on a number line. The real value will be closest to 22.5 if it lies between the lower bound of 22.45 and the upper bound of 22.55.
+128000 is shown on a number line. 128000 lies between the lower bound of 127500 and the upper bound of 128500.
+120 is shown on a number line. 120 lies between the lower bound of 110 and the upper bound of 130.
+![image](images/f9c91ed7933227af09673d87f4c9efff46d325cd85ab5ea32b68b469a5172ed8.jpg)
+![image](images/f6aeba0bfe846790c9c16278ccb7eaf453218d6f1442c346a4245d35fe3911e2.jpg)
+![image](images/a925f2c6525c6ec4d6dbe8f5fb0428b4fa3a99b2c5703ba59a06e45703620698.jpg)
+![image](images/63c598991a166d114350ba7d652979930251cf5911d1f99641102e353d5e0a66.jpg)
+
+---
+
+## Exercise 13.4
+
+### 7 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 e 32.3 (1 d.p.)
 
 ---
 
-### 18 (练习题)
+### 8 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 f 26.7 (1 d.p.)
 
 ---
 
-### 19 (练习题)
+### 9 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 g 0.5(1 d.p.)
 
 ---
 
-### 20 (练习题)
+### 10 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 h 12.34 (2 d.p.)
 
 ---
 
-### 21 (练习题)
+### 11 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 i 132 (3 s.f.)
 
 ---
 
-### 22 (练习题)
+### 12 (练习题)
 
 **题目**: 3 Each of the following numbers has been rounded to the degree of accuracy shown in brackets. Find the upper and lower bounds in each case.
 j 0.134 (3 s.f.)
@@ -19824,7 +19607,7 @@ b the actual time taken.
 
 ---
 
-### 7 (练习题)
+### 6 (练习题)
 
 **题目**: 6 The length of a piece of thread is  $4.5\mathrm{m}$  to the nearest  $10\mathrm{cm}$ . The actual length of the thread is  $L\mathrm{cm}$ . Find the range of possible values for  $L$ , giving your answer in the form  $\ldots \leq L < \ldots$
 
@@ -19863,6 +19646,7 @@ Divide the distance in each column by each speed.
 [Table Row] <tr><td>3.95</td><td>94.94</td><td>97.47</td></tr>
 [Table Row] <tr><td></td><td></td><td></td></tr>
 The greatest possible time is 100 seconds. The least possible time is 94.94 seconds (correct to 2 decimal places).
+TIP
 $$
 \text {T i m e} = \frac {\text {d i s t a n c e}}{\text {s p e e d}}
 $$
@@ -19875,7 +19659,11 @@ $$
 If  $a = 3.6$  (to 1 d.p.) and  $b = 14$  (to the nearest whole number), find the upper and lower bounds for each of the following:
 a a+b
 
-**解答**: Answers
+**解答**: b ab
+c b-a
+d  $\frac{a}{b}$
+a+b
+Answers
 First, find the upper and lower bounds of  $a$  and  $b$ :
 $$
 3. 5 5 \leqslant a <   3. 6 5 \text {a n d} 1 3. 5 \leqslant b <   1 4. 5
@@ -19889,10 +19677,30 @@ $$
 \begin{array}{l} = 3. 5 5 + 1 3. 5 \\ = 1 7. 0 5 \\ \end{array}
 $$
 You can write this as:  $17.05 \leqslant (a + b) < 18.15$
+b Upper bound for ab = upper bound for a  $\times$  upper bound for b
+$$
+\begin{array}{l} = 3. 6 5 \times 1 4. 5 \\ = 5 2. 9 2 5 \\ \end{array}
+$$
+Lower bound for  $ab =$  lower bound of  $a \times$  lower bound of  $b$
+$$
+\begin{array}{l} = 3. 5 5 \times 1 3. 5 \\ = 4 7. 9 2 5 \\ \end{array}
+$$
+You can write this as:  $47.925 \leqslant ab < 52.925$
+c Think carefully about  $b - a$  .To find the upper bound you need to subtract the smallest possible number from the largest possible number. So:
+Upper bound for  $(b - a) =$  upper bound for  $b -$  lower bound for a
+$$
+\begin{array}{l} = 1 4. 5 - 3. 5 5 \\ = 1 0. 9 5 \\ \end{array}
+$$
+For the lower bound, subtract the largest possible number from the smallest possible number:
+Lower bound for  $(b - a) =$  lower bound for  $b$  - upper bound for a
+$$
+\begin{array}{l} = 1 3. 5 - 3. 6 5 \\ = 9. 8 5 \\ \end{array}
+$$
+You can write this as:  $9.85 \leqslant (b - a) < 10.95$
 
 ---
 
-## 13.5
+## Exercise 13.5
 
 ### 1 (练习题)
 
@@ -20010,7 +19818,7 @@ Find the upper and lower bounds for  $v$ , giving your answer correct to 3 signi
 
 ---
 
-## 8
+## WORKED EXAMPLE 8
 
 ### WORKED EXAMPLE 8 (例题)
 
@@ -20080,7 +19888,7 @@ You can write this as:  $4.67 \leq \frac{a + b}{a} < 5.11$
 
 ---
 
-## 13.4
+## 13.4 Conversion graphs
 
 ### 1 (练习题)
 
@@ -20147,6 +19955,7 @@ c By calculating the mass of a piece of meat that takes only 25 minutes to cook,
 **题目**: 5 You are told that Mount Everest is approximately 29000 ft high, and that this measurement is approximately 8850 m.
 a Draw a conversion graph for feet and metres on graph paper.
 b You are now told that Mount Snowdon is approximately 1085 m high. What is this measurement in feet? Use your graph to help you.
+c A tunnel in the French Alps is 3400 feet long. Approximately what is the measurement in metres?
 
 ---
 
@@ -20162,7 +19971,7 @@ There are, in fact, 80 ploggs in one splodge. If Mount Adil on planet Ktorides i
 
 ---
 
-## 13.5
+## 13.5 Exchanging currencies
 
 ### 9 (例题)
 
@@ -20224,7 +20033,7 @@ $$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -20238,7 +20047,7 @@ the speed, in mph, of a train travelling at  $110\mathrm{km / h}$
 
 ---
 
-## 13.5
+## 13.5 Exchanging currencies
 
 ### 2 (练习题)
 
@@ -20246,7 +20055,7 @@ the speed, in mph, of a train travelling at  $110\mathrm{km / h}$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 2 (练习题)
 
@@ -20364,7 +20173,7 @@ find the maximum possible gradient of the line  $AB$
 
 ---
 
-## 14
+## Chapter 14
 
 ### 11 (练习题)
 
@@ -20444,18 +20253,12 @@ So this line passes through the points (0, 5) and  $\left(\frac{5}{2}, 0\right)$
 
 ---
 
-## 1
+## WORKED EXAMPLE 1
 
 ### 1 (练习题)
 
-**题目**: Exercise 14.1
-1 Draw the lines for each pair of equations and then use the point of intersection to find the simultaneous solution. The axes that you should use are given in each case.
-
----
-
-### 1a (练习题)
-
-**题目**: a  $x + 2y = 11$
+**题目**: 1 Draw the lines for each pair of equations and then use the point of intersection to find the simultaneous solution. The axes that you should use are given in each case.
+a  $x + 2y = 11$
 $$
 2 x + y = 1 0
 $$
@@ -20463,7 +20266,7 @@ $$
 
 ---
 
-### 1b (练习题)
+### 2 (练习题)
 
 **题目**: b  $x - y = -1$
 $$
@@ -20473,7 +20276,7 @@ $$
 
 ---
 
-### 1c (练习题)
+### 3 (练习题)
 
 **题目**: 5x-4y=-1
 $$
@@ -20486,19 +20289,14 @@ $$
 ### 2 (练习题)
 
 **题目**: 2 Use the graphs shown to find the solutions to the following pairs of simultaneous equations.
-
----
-
-### 2a (练习题)
-
-**题目**: a  $y = x$
+a  $y = x$
 $$
 y = - 2
 $$
 
 ---
 
-### 2b (练习题)
+### 3 (练习题)
 
 **题目**: b  $y = x$
 $$
@@ -20507,7 +20305,7 @@ $$
 
 ---
 
-### 2c (练习题)
+### 4 (练习题)
 
 **题目**: $y = 4 - 2x$
 $$
@@ -20516,7 +20314,7 @@ $$
 
 ---
 
-### 2d (练习题)
+### 5 (练习题)
 
 **题目**: d  $y = 4 - 2x$
 $$
@@ -20525,7 +20323,7 @@ $$
 
 ---
 
-### 2e (练习题)
+### 6 (练习题)
 
 **题目**: e  $y = -2$
 $$
@@ -20534,7 +20332,7 @@ $$
 
 ---
 
-### 2f (练习题)
+### 7 (练习题)
 
 **题目**: f  $y = x$
 $$
@@ -20549,19 +20347,14 @@ $$
 ### 3 (练习题)
 
 **题目**: 3 For each pair of equations, find three points on each line and draw the graphs. Use your graphs to estimate the solution of each pair of simultaneous equations.
-
----
-
-### 3a (练习题)
-
-**题目**: a  $3y = -4x + 3$
+a  $3y = -4x + 3$
 $$
 x = 2 y + 1
 $$
 
 ---
 
-### 3b (练习题)
+### 4 (练习题)
 
 **题目**: b  $2 - x = -y$
 $$
@@ -20570,7 +20363,7 @@ $$
 
 ---
 
-### 3c (练习题)
+### 5 (练习题)
 
 **题目**: $4x = 1 + 6y$
 $$
@@ -20579,7 +20372,7 @@ $$
 
 ---
 
-### 3d (练习题)
+### 6 (练习题)
 
 **题目**: d  $3x + 2y = 7$
 $$
@@ -20616,26 +20409,25 @@ $$
 
 ### 1 (练习题)
 
-**题目**: 1 Plot the following lines on the same pair of axes:
+**题目**: 2 Why is it not possible to solve these equations simultaneously?
 
 ---
 
 ### 2 (练习题)
 
-**题目**: 2 Why is it not possible to solve these equations simultaneously?
+**题目**: 3 Is there any way that you can tell, from the equations, that there are no solutions?
 
 ---
 
 ### 3 (练习题)
 
-**题目**: 3 Is there any way that you can tell, from the equations, that there are no solutions?
+**题目**: 4 (Challenge!) If you have the following pair of equations, what needs to be true for there to be a solution?
 
 ---
 
 ### 4 (练习题)
 
-**题目**: 4 (Challenge!) If you have the following pair of equations, what needs to be true for there to be a solution?
-$$
+**题目**: $$
 \begin{array}{l} a x + b y = 3 \\ c x + d y = 4 \\ \end{array}
 $$
 
@@ -20672,7 +20464,7 @@ Substitute [3] into [1] by replacing  $y$  with  $24 - 4x$
 
 ---
 
-## Algebraicsolutionofsimultaneouslinearequations
+## Algebraic solution of simultaneous linear equations
 
 ### WORKED EXAMPLE 3 (例题)
 
@@ -20716,14 +20508,8 @@ $$
 \begin{array}{l} 2 x - 3 y = - 8 \\ 5 x + 3 y = 1 \\ 7 x = - 7 [ 1 ] + [ 2 ] \\ \Rightarrow x = - 1 \\ \end{array}
 $$
 Notice that both equations have the same coefficient of  $y$  though the signs are different. If you add the equations together, you make use of the fact that  $-3y + 3y = 0$
-
----
-
-### WORKED EXAMPLE 4 CONTINUED (例题)
-
-**题目**: WORKED EXAMPLE 4 CONTINUED
-
-**解答**: $$
+WORKED EXAMPLE 4 CONTINUED
+$$
 \begin{array}{l} 2 x - 3 y = - 8 \\ \Rightarrow 2 (- 1) - 3 y = - 8 \\ 6 - 3 y = 0 \\ 3 y = 6 \\ y = 2 \\ \end{array}
 $$
 Substitute in [1]
@@ -20772,7 +20558,7 @@ Solve simultaneously:
 
 ---
 
-## 14.2
+## Exercise 14.2
 
 ### 1 (练习题)
 
@@ -20780,9 +20566,9 @@ Solve simultaneously:
 
 ---
 
-## 4
+## WORKED EXAMPLE 4 CONTINUED
 
-### WORKED EXAMPLE 4 (例题)
+### 4 (例题)
 
 **题目**: WORKED EXAMPLE 4 CONTINUED
 $$
@@ -20798,9 +20584,9 @@ The second equation is also satisfied by these values, so  $x = -1$  and  $y = 2
 
 ---
 
-## 5
+## WORKED EXAMPLE 5
 
-### WORKED EXAMPLE 5 (例题)
+### 5 (例题)
 
 **题目**: WORKED EXAMPLE 5
 Solve simultaneously:
@@ -20828,9 +20614,9 @@ Equation [2] is also satisfied by these values, so  $x = -1$  and  $y = 3$ .
 
 ---
 
-## 6
+## WORKED EXAMPLE 6
 
-### WORKED EXAMPLE 6 (例题)
+### 6 (例题)
 
 **题目**: WORKED EXAMPLE 6
 Solve simultaneously:
@@ -20891,9 +20677,9 @@ So the pair of values  $x = 2$  and  $y = -4$  satisfy the pair of simultaneous 
 
 ---
 
-## 7
+## WORKED EXAMPLE 7
 
-### WORKED EXAMPLE 7 (例题)
+### 7 (例题)
 
 **题目**: WORKED EXAMPLE 7
 Solve simultaneously:
@@ -20959,9 +20745,9 @@ So  $x = 3$  and  $y = -3$  satisfy the pair of simultaneous equations.
 
 ---
 
-## 8
+## WORKED EXAMPLE 8
 
-### WORKED EXAMPLE 8 (例题)
+### 8 (例题)
 
 **题目**: WORKED EXAMPLE 8
 Solve simultaneously:
@@ -20991,325 +20777,7 @@ So  $x = 4$  and  $y = -2$  satisfy the pair of simultaneous equations.
 
 ---
 
-## 14.2
-
-### 1 (练习题)
-
-**题目**: 1 Solve for  $x$  and  $y$  by substitution. Check each solution.
-a  $y + x = 7$
-$$
-y = x + 3
-$$
-
----
-
-### 2 (练习题)
-
-**题目**: d  $x - 8 = 2y$
-$$
-x + y = - 2
-$$
-
----
-
-### 3 (练习题)
-
-**题目**: g  $4x - 1 = 2y$
-$$
-x + 1 = 3 y
-$$
-
----
-
-### 4 (练习题)
-
-**题目**: b  $y = 1 - x$
-$$
-x - 5 = y
-$$
-
----
-
-### 5 (练习题)
-
-**题目**: e  $3x - 2 = -2y$
-$$
-2 x - y = - 8
-$$
-
----
-
-### 6 (练习题)
-
-**题目**: h  $3x - 4y = 1$
-$$
-2 x = 4 - 3 y
-$$
-
----
-
-### 7 (练习题)
-
-**题目**: $2x + y = -14$
-$$
-y = 6
-$$
-
----
-
-### 8 (练习题)
-
-**题目**: f  $3x + y = 6$
-$$
-9 x + 2 y = 1
-$$
-
----
-
-### 1 (练习题)
-
-**题目**: 2 Solve for  $x$  and  $y$  by elimination. Check each solution.
-a  $2x - y = 4$
-$$
-5 x + y = 2 4
-$$
-
----
-
-### 2 (练习题)
-
-**题目**: d  $5x - 2y = 27$
-$$
-3 x + 2 y = 1 3
-$$
-
----
-
-### 3 (练习题)
-
-**题目**: ${4x} + y = {27}$
-$$
-3 x - y = 1 5
-$$
-
----
-
-### 4 (练习题)
-
-**题目**: j  $6x - y = 18$
-$$
-4 x - y = 1 0
-$$
-
----
-
-### 5 (练习题)
-
-**题目**: b  $- {3x} + {2y} = 6$
-$$
-3 x + 5 y = 3 6
-$$
-
----
-
-### 6 (练习题)
-
-**题目**: [x + {2y} = {11}]
-$$
-x + 3 y = 1 5
-$$
-
----
-
-### 7 (练习题)
-
-**题目**: h  $4x - y = 16$
-$$
-6 x - y = 2 6
-$$
-
----
-
-### 8 (练习题)
-
-**题目**: k  $x + y = 12$
-$$
-5 x - y = 2 4
-$$
-
----
-
-### 9 (练习题)
-
-**题目**: $2x + 5y = 12$
-$$
-2 x + 3 y = 8
-$$
-
----
-
-### 10 (练习题)
-
-**题目**: f  $-2x + 5y = 13$
-$$
-2 x + 3 y = 1 1
-$$
-
----
-
-### 11 (练习题)
-
-**题目**: i  $6x - 5y = 9$
-$$
-2 x + 5 y = 2 3
-$$
-
----
-
-### 12 (练习题)
-
-**题目**: ${4x} + {3y} = {22}$
-$$
-4 x + y = 1 8
-$$
-
----
-
-### 3 (练习题)
-
-**题目**: 3 Solve simultaneously. Use the method you find easiest. Check all solutions.
-a  $5x + 3y = 22$ $10x - y = 16$
-
----
-
-### 4 (练习题)
-
-**题目**: b  $4x + 3y = 25$ $x + 9y = 31$
-
----
-
-### 5 (练习题)
-
-**题目**: -3x+y=5 -6x+5y=-20
-
----
-
-### 6 (练习题)
-
-**题目**: d  $x + y = 10$ $3x + 5y = 40$
-
----
-
-### 7 (练习题)
-
-**题目**: e  $5x + y = 11$ $-2x + 2y = 1$
-
----
-
-### 8 (练习题)
-
-**题目**: ${4x} - {3y} = {11}$ ${5x} - {9y} =  - 2$
-
----
-
-### 9 (练习题)
-
-**题目**: g  $6x + 2y = 9$ $7x + 4y = 12$
-
----
-
-### 10 (练习题)
-
-**题目**: 12x-13y=34 3x-26y=19
-
----
-
-### 11 (练习题)
-
-**题目**: i  $5x - 17y = -3$ $25x - 19y = -45$
-
----
-
-### 12 (练习题)
-
-**题目**: j  $3x - 3y = 13$ $4x - 12y = -6$
-
----
-
-### 13 (练习题)
-
-**题目**: k  $10x^{\prime} = 2 - 2y$ $2y = -7x - 1$
-
----
-
-### 14 (练习题)
-
-**题目**: -2y=1-7x 4x=4+2y
-
----
-
-### 15 (练习题)
-
-**题目**: m  $x = 12 + y$ $2x = 3 - y$
-
----
-
-### 16 (练习题)
-
-**题目**: n  $3x + 4y = -1$ $3x + 10 = 2y$
-
----
-
-### 17 (练习题)
-
-**题目**: $2x + y = 7$ $11 + x = 2y$
-
----
-
-### 4 (练习题)
-
-**题目**: 4 Solve simultaneously.
-a  $3x + 7y = 37$ $5x + 6y = 39$
-
----
-
-### 5 (练习题)
-
-**题目**: b  $2x - 5y = -16$ $3x - 5y = -14$
-
----
-
-### 6 (练习题)
-
-**题目**: -7x+4y=41 -5x+6y=45
-
----
-
-### 7 (练习题)
-
-**题目**: d  $7x + 4y = 54$ $2x + 3y = 21$
-
----
-
-### 8 (练习题)
-
-**题目**: $2x - y = 1$ $3x + 5y = 34$
-
----
-
-### 9 (练习题)
-
-**题目**: $3x - 4y = 25$ $x - 3y = 15$
-
----
-
-### 10 (练习题)
-
-**题目**: ${7x} - {4y} = {23}$ ${4x} + {5y} = {35}$
-
----
-
-## 8
+## Exercise 14.2
 
 ### WORKED EXAMPLE 8 (例题)
 
@@ -21342,9 +20810,403 @@ So  $x = 4$  and  $y = -2$  satisfy the pair of simultaneous equations.
 
 ---
 
-## 14.2
+### 1a (练习题)
 
-### 9 (例题)
+**题目**: a  $y + x = 7$
+$$
+y = x + 3
+$$
+
+---
+
+### 1d (练习题)
+
+**题目**: d  $x - 8 = 2y$
+$$
+x + y = - 2
+$$
+
+---
+
+### 1g (练习题)
+
+**题目**: g  $4x - 1 = 2y$
+$$
+x + 1 = 3 y
+$$
+
+---
+
+### 1b (练习题)
+
+**题目**: b  $y = 1 - x$
+$$
+x - 5 = y
+$$
+
+---
+
+### 1e (练习题)
+
+**题目**: e  $3x - 2 = -2y$
+$$
+2 x - y = - 8
+$$
+
+---
+
+### 1h (练习题)
+
+**题目**: h  $3x - 4y = 1$
+$$
+2 x = 4 - 3 y
+$$
+
+---
+
+### 1c (练习题)
+
+**题目**: $2x + y = -14$
+$$
+y = 6
+$$
+
+---
+
+### 1f (练习题)
+
+**题目**: f  $3x + y = 6$
+$$
+9 x + 2 y = 1
+$$
+
+---
+
+### 2a (练习题)
+
+**题目**: a  $2x - y = 4$
+$$
+5 x + y = 2 4
+$$
+
+---
+
+### 2d (练习题)
+
+**题目**: d  $5x - 2y = 27$
+$$
+3 x + 2 y = 1 3
+$$
+
+---
+
+### 2g (练习题)
+
+**题目**: ${4x} + y = {27}$
+$$
+3 x - y = 1 5
+$$
+
+---
+
+### 2j (练习题)
+
+**题目**: j  $6x - y = 18$
+$$
+4 x - y = 1 0
+$$
+
+---
+
+### 2b (练习题)
+
+**题目**: b  $- {3x} + {2y} = 6$
+$$
+3 x + 5 y = 3 6
+$$
+
+---
+
+### 2e (练习题)
+
+**题目**: [x + {2y} = {11}]
+$$
+x + 3 y = 1 5
+$$
+
+---
+
+### 2h (练习题)
+
+**题目**: h  $4x - y = 16$
+$$
+6 x - y = 2 6
+$$
+
+---
+
+### 2k (练习题)
+
+**题目**: k  $x + y = 12$
+$$
+5 x - y = 2 4
+$$
+
+---
+
+### 2c (练习题)
+
+**题目**: $2x + 5y = 12$
+$$
+2 x + 3 y = 8
+$$
+
+---
+
+### 2f (练习题)
+
+**题目**: f  $-2x + 5y = 13$
+$$
+2 x + 3 y = 1 1
+$$
+
+---
+
+### 2i (练习题)
+
+**题目**: i  $6x - 5y = 9$
+$$
+2 x + 5 y = 2 3
+$$
+
+---
+
+### 2l (练习题)
+
+**题目**: ${4x} + {3y} = {22}$
+$$
+4 x + y = 1 8
+$$
+
+---
+
+### 3a (练习题)
+
+**题目**: a  $5x + 3y = 22$ $10x - y = 16$
+
+---
+
+### 3b (练习题)
+
+**题目**: b  $4x + 3y = 25$ $x + 9y = 31$
+
+---
+
+### 3c (练习题)
+
+**题目**: -3x+y=5 -6x+5y=-20
+
+---
+
+### 3d (练习题)
+
+**题目**: d  $x + y = 10$ $3x + 5y = 40$
+
+---
+
+### 3e (练习题)
+
+**题目**: e  $5x + y = 11$ $-2x + 2y = 1$
+
+---
+
+### 3f (练习题)
+
+**题目**: ${4x} - {3y} = {11}$ ${5x} - {9y} =  - 2$
+
+---
+
+### 3g (练习题)
+
+**题目**: g  $6x + 2y = 9$ $7x + 4y = 12$
+
+---
+
+### 3h (练习题)
+
+**题目**: 12x-13y=34 3x-26y=19
+
+---
+
+### 3i (练习题)
+
+**题目**: i  $5x - 17y = -3$ $25x - 19y = -45$
+
+---
+
+### 3j (练习题)
+
+**题目**: j  $3x - 3y = 13$ $4x - 12y = -6$
+
+---
+
+### 3k (练习题)
+
+**题目**: k  $10x^{\prime} = 2 - 2y$ $2y = -7x - 1$
+
+---
+
+### 3l (练习题)
+
+**题目**: -2y=1-7x 4x=4+2y
+
+---
+
+### 3m (练习题)
+
+**题目**: m  $x = 12 + y$ $2x = 3 - y$
+
+---
+
+### 3n (练习题)
+
+**题目**: n  $3x + 4y = -1$ $3x + 10 = 2y$
+
+---
+
+### 3o (练习题)
+
+**题目**: $2x + y = 7$ $11 + x = 2y$
+
+---
+
+### 4a (练习题)
+
+**题目**: a  $3x + 7y = 37$ $5x + 6y = 39$
+
+---
+
+### 4b (练习题)
+
+**题目**: b  $2x - 5y = -16$ $3x - 5y = -14$
+
+---
+
+### 4c (练习题)
+
+**题目**: -7x+4y=41 -5x+6y=45
+
+---
+
+### 4d (练习题)
+
+**题目**: d  $7x + 4y = 54$ $2x + 3y = 21$
+
+---
+
+### 4e (练习题)
+
+**题目**: $2x - y = 1$ $3x + 5y = 34$
+
+---
+
+### 4f (练习题)
+
+**题目**: $3x - 4y = 25$ $x - 3y = 15$
+
+---
+
+### 4g (练习题)
+
+**题目**: ${7x} - {4y} = {23}$ ${4x} + {5y} = {35}$
+
+---
+
+## 14.2 Linear inequalities
+
+### 3 (练习题)
+
+**题目**: 3 Solve simultaneously. Use the method you find easiest. Check all solutions.
+a  $5x + 3y = 22$ $10x - y = 16$
+b  $4x + 3y = 25$ $x + 9y = 31$
+-3x+y=5 -6x+5y=-20
+d  $x + y = 10$ $3x + 5y = 40$
+e  $5x + y = 11$ $-2x + 2y = 1$
+${4x} - {3y} = {11}$ ${5x} - {9y} =  - 2$
+g  $6x + 2y = 9$ $7x + 4y = 12$
+12x-13y=34 3x-26y=19
+i  $5x - 17y = -3$ $25x - 19y = -45$
+j  $3x - 3y = 13$ $4x - 12y = -6$
+k  $10x^{\prime} = 2 - 2y$ $2y = -7x - 1$
+-2y=1-7x 4x=4+2y
+m  $x = 12 + y$ $2x = 3 - y$
+n  $3x + 4y = -1$ $3x + 10 = 2y$
+$2x + y = 7$ $11 + x = 2y$
+
+---
+
+### 4 (练习题)
+
+**题目**: 4 Solve simultaneously.
+a  $3x + 7y = 37$ $5x + 6y = 39$
+b  $2x - 5y = -16$ $3x - 5y = -14$
+-7x+4y=41 -5x+6y=45
+d  $7x + 4y = 54$ $2x + 3y = 21$
+$2x - y = 1$ $3x + 5y = 34$
+$3x - 4y = 25$ $x - 3y = 15$
+${7x} - {4y} = {23}$ ${4x} + {5y} = {35}$
+h  $3x - y = 2$ $3x + 5y = 26$
+i  $2x + 7y = 25$ $x + y = 5$
+j  $x + 3 = y$ $4x + y = -7$
+k  $3x + 11 = -y$ $-2x + y = 4$
+$y = {6x} - 1$ ${4x} - {3y} =  - 4$
+m  $2x + 3y - 8 = 0$ $4x + 5 = y$
+n  $y = \frac{2}{3} x + 6$ $2y - 4x = 20$
+$8x - 5y = 0$ $13x = 8y + 1$
+
+---
+
+### 5 (练习题)
+
+**题目**: 5 Solve each pair of equations simultaneously.
+a  $3x + \frac{2y}{3} = 0$ $2x - \frac{y}{4} = 14$
+b  $4y + x + 5 = 0$ $y = x - 5$
+3y-3x 8 3y-2=2
+d  $2x + \frac{y}{2} = 3$ $6x = -2y$
+$y = 3x - 6$ $2x + \frac{3y}{7} = -5$
+$\frac{3x}{7} -\frac{2y}{13} = 5$ $x + \frac{1}{3} y = \frac{3}{5}$
+
+---
+
+### 6 (练习题)
+
+**题目**: 6 Form a pair of simultaneous equations for each situation, and use them to solve the problem. Let the unknown numbers be  $x$  and  $y$ .
+a The sum of two numbers is 120 and one of the numbers is 3 times the other. Find the value of the numbers.
+b The sum of two numbers is -34 and their difference is 5. Find the numbers.
+A pair of numbers has a sum of 52 and a difference of 11. Find the numbers.
+d The combined ages of two people is 34. If one person is 6 years younger than the other, find their ages.
+
+---
+
+### 7 (练习题)
+
+**题目**: 7 A computer store sold 4 hard drives and 10 pen drives for $200, and 6 hard drives and 14 pen drives for $290. Find the cost of a hard drive and the cost of a pen drive.
+
+---
+
+### 8 (练习题)
+
+**题目**: 8 A large sports stadium has 21 000 seats. The seats are organised into blocks of either 400 or 450 seats. There are three times as many blocks of 450 seats as there are blocks of 400 seats. How many blocks are there in total?
+
+---
+
+### 9 (练习题)
+
+**题目**: 9 Work with a partner to create some more problems like those in questions 6-8. Set questions for each other and try solving them. Explain clearly what the two answers represent.
+
+---
+
+### WORKED EXAMPLE 9 (例题)
 
 **题目**: WORKED EXAMPLE 9
 a Show the set of values that satisfy each of the following inequalities on a number line.
@@ -21379,77 +21241,37 @@ b  $x$  must be greater than, but not equal to 4.2, so the smallest possible val
 
 ---
 
-## Numberlines
+## Number lines
 
-### Exercise 14.3 (练习题)
+### 1 (练习题)
 
 **题目**: Exercise 14.3
 1 Draw a number line to represent the possible values of the variable in each case.
 $$
 a x <   5
 $$
-
----
-
-### 1b (练习题)
-
-**题目**: $$
+$$
 b x > 2
 $$
-
----
-
-### 1c (练习题)
-
-**题目**: $$
+$$
 \mathrm {c} \quad p \leqslant 6
 $$
-
----
-
-### 1d (练习题)
-
-**题目**: $$
+$$
 d \quad y > - 8
 $$
-
----
-
-### 1e (练习题)
-
-**题目**: $$
+$$
 e \quad q \geqslant - 5
 $$
-
----
-
-### 1f (练习题)
-
-**题目**: $$
+$$
 f x <   - 4
 $$
-
----
-
-### 1g (练习题)
-
-**题目**: $$
+$$
 g 1. 2 <   x <   3. 5
 $$
-
----
-
-### 1h (练习题)
-
-**题目**: $$
+$$
 h - 3. 2 <   x \leqslant 2. 9
 $$
-
----
-
-### 1i (练习题)
-
-**题目**: $$
+$$
 - 4. 5 \leqslant k \leqslant - 3. 1
 $$
 
@@ -21461,68 +21283,28 @@ $$
 $$
 a \quad 3 <   b <   3 3
 $$
-
----
-
-### 2b (练习题)
-
-**题目**: $$
+$$
 b 7 <   h \leqslant 1 9
 $$
-
----
-
-### 2c (练习题)
-
-**题目**: $$
+$$
 c \quad 1 8 \leqslant e \leqslant 2 7
 $$
-
----
-
-### 2d (练习题)
-
-**题目**: $$
+$$
 d - 3 \leqslant f <   0
 $$
-
----
-
-### 2e (练习题)
-
-**题目**: $$
+$$
 e - 3 \leqslant f \leqslant 0
 $$
-
----
-
-### 2f (练习题)
-
-**题目**: $$
+$$
 f 2. 5 <   m <   1 1. 3
 $$
-
----
-
-### 2g (练习题)
-
-**题目**: $$
+$$
 g - 7 <   g \leq - 4
 $$
-
----
-
-### 2h (练习题)
-
-**题目**: $$
+$$
 h \quad \pi <   r <   2 \pi
 $$
-
----
-
-### 2i (练习题)
-
-**题目**: $$
+$$
 i \sqrt {5} <   w <   \sqrt {1 8}
 $$
 
@@ -21584,9 +21366,14 @@ Add 7 to both sides to get the same answer as before.
 
 **题目**: WORKED EXAMPLE 10 CONTINUED
 c  $5x - 3\leqslant 2x + 18$
-$$
+
+**解答**: $$
 \begin{array}{l} 5 x - 3 - 2 x \leqslant 2 x + 1 8 - 2 x \\ 3 x - 3 \leqslant 1 8 \\ 3 x \leqslant 2 1 \\ x \leqslant 7 \\ \end{array}
 $$
+Subtract the smaller number of  $x$ 's from both sides (2x).
+Simplify.
+Add 3 to both sides.
+Divide both sides by 3.
 d  $4 - 7x\leqslant 53$
 $$
 4 \leqslant 5 3 + 7 x
@@ -21595,14 +21382,9 @@ $$
 - 4 9 \leqslant 7 x
 $$
 
-**解答**: Subtract the smaller number of  $x$ 's from both sides (2x).
-Simplify.
-Add 3 to both sides.
-Divide both sides by 3.
-
 ---
 
-## 14.4
+## Exercise 14.4
 
 ### 1a (练习题)
 
@@ -21790,7 +21572,7 @@ Divide both sides by 3.
 
 ---
 
-## 14.3
+## 14.3 Regions in a plane
 
 ### 1 (练习题)
 
@@ -21829,7 +21611,7 @@ g  $0\leqslant x\leqslant 2$
 
 ---
 
-## 11
+## WORKED EXAMPLE 11
 
 ### WORKED EXAMPLE 11 (例题)
 
@@ -21843,7 +21625,7 @@ Consider any point in the region above the line. The easiest point to use is the
 
 ---
 
-## 12
+## WORKED EXAMPLE 12
 
 ### WORKED EXAMPLE 12 (例题)
 
@@ -21858,7 +21640,7 @@ When  $x = 0$  and  $y = 0$ ,  $3x - 5y = 0$ . Since 0 is less than 15, the orig
 
 ---
 
-## 13
+## WORKED EXAMPLE 13
 
 ### WORKED EXAMPLE 13 (例题)
 
@@ -21872,7 +21654,7 @@ The boundary line is  $3x - 2y = 0$  and it is included in the region. It is sho
 
 ---
 
-## 14
+## WORKED EXAMPLE 14
 
 ### WORKED EXAMPLE 14 (例题)
 
@@ -21885,7 +21667,34 @@ First find the equation of the boundary. Its gradient  $= \frac{-4}{2} = -2$  an
 
 ---
 
-## 14.5
+## Exercise 14.5
+
+### WORKED EXAMPLE 13 (例题)
+
+**题目**: WORKED EXAMPLE 13
+By shading the unwanted region, show the region that represents the inequality  $3x - 2y \geq 0$ .
+
+![图片](../images/03c338337a682ed02b0cefc3dd2304249ad2303e38924afee579c89a236bbafe.jpg)
+
+**解答**: Answer
+![image](images/03c338337a682ed02b0cefc3dd2304249ad2303e38924afee579c89a236bbafe.jpg)
+You cannot take the origin as the checking point because it lies on the boundary line. Instead take the point  $P(0,2)$ , which is above the line. When  $x = 0$  and  $y = 2$ ,  $3x - 2y = -4$ , which is less than 0. Hence  $P$  is not in the required region.
+The boundary line is  $3x - 2y = 0$  and it is included in the region. It is shown as a solid line in the diagram.
+
+---
+
+### WORKED EXAMPLE 14 (例题)
+
+**题目**: WORKED EXAMPLE 14
+Find the inequality that is represented by the unshaded region in this diagram.
+![image](images/8c98cf8f6669d84114baad161e1c4cf4294f1503e44baa5bd924bebd404d2d85.jpg)
+
+![图片](../images/8c98cf8f6669d84114baad161e1c4cf4294f1503e44baa5bd924bebd404d2d85.jpg)
+
+**解答**: Answer
+First find the equation of the boundary. Its gradient  $= \frac{-4}{2} = -2$  and its intercept on the  $y$ -axis is  $y = 4$ . Therefore the boundary line is  $y = -2x + 4$ . This can be rewritten as  $y + 2x = 4$ . Take  $P(3,2)$  in the unshaded region as the check-point:  $2 + 6 = 8$ . Note that 8 is greater than 4 and hence the unshaded region represents  $y + 2x > 4$ . As the boundary is a broken line, it is not included, and so the sign is not  $\geq$ .
+
+---
 
 ### 4a (练习题)
 
@@ -21958,8 +21767,7 @@ First find the equation of the boundary. Its gradient  $= \frac{-4}{2} = -2$  an
 
 ### 6b (练习题)
 
-**题目**: 6 For each of the following diagrams, find the inequality that is represented by the unshaded region.
-![b](images/b241fd9d6ecaf8ec4dcda573c47bbb0b177d08c33b112f2c49933db580c8525b.jpg)
+**题目**: ![b](images/b241fd9d6ecaf8ec4dcda573c47bbb0b177d08c33b112f2c49933db580c8525b.jpg)
 
 ![图片](../images/b241fd9d6ecaf8ec4dcda573c47bbb0b177d08c33b112f2c49933db580c8525b.jpg)
 
@@ -21967,8 +21775,7 @@ First find the equation of the boundary. Its gradient  $= \frac{-4}{2} = -2$  an
 
 ### 6c (练习题)
 
-**题目**: 6 For each of the following diagrams, find the inequality that is represented by the unshaded region.
-![C](images/538ebfb5acc4b9114bcac4f0ee83aa738d76e501b0974e9d054cb4dc0ed777eb.jpg)
+**题目**: ![C](images/538ebfb5acc4b9114bcac4f0ee83aa738d76e501b0974e9d054cb4dc0ed777eb.jpg)
 
 ![图片](../images/538ebfb5acc4b9114bcac4f0ee83aa738d76e501b0974e9d054cb4dc0ed777eb.jpg)
 
@@ -21976,10 +21783,32 @@ First find the equation of the boundary. Its gradient  $= \frac{-4}{2} = -2$  an
 
 ### 6d (练习题)
 
-**题目**: 6 For each of the following diagrams, find the inequality that is represented by the unshaded region.
-![d](images/03df830e6541fa17baa05b1c8d9eb8efb0ca8e16940c98067912b2ec161db350.jpg)
+**题目**: ![d](images/03df830e6541fa17baa05b1c8d9eb8efb0ca8e16940c98067912b2ec161db350.jpg)
 
 ![图片](../images/03df830e6541fa17baa05b1c8d9eb8efb0ca8e16940c98067912b2ec161db350.jpg)
+
+---
+
+### WORKED EXAMPLE 15 (例题)
+
+**题目**: WORKED EXAMPLE 15
+By shading the unwanted regions, show the region defined by the set of inequalities  $y < x + 2$ ,  $y \leq 4$  and  $x \leq 3$ .
+![Answer](images/abf56583c00d667bfa17f4d216374c7543542ab09c72812878449b80e94cb0f3.jpg)
+
+![图片](../images/abf56583c00d667bfa17f4d216374c7543542ab09c72812878449b80e94cb0f3.jpg)
+
+![图片](../images/a0e77bca7d7e8af6d5ed55d2fb4206273e6f5b1c9764251ba33161798d324209.jpg)
+
+**解答**: The boundaries of the required region are  $y = x + 2$  (broken line),  $y = 4$  (solid line) and  $x = 3$  (solid line).
+Start by drawing the line  $y = x + 2$ .  $y < x + 2$  so shade the unwanted region above the line.
+WORKED EXAMPLE 15 CONTINUED
+![image](images/a0e77bca7d7e8af6d5ed55d2fb4206273e6f5b1c9764251ba33161798d324209.jpg)
+Continue drawing the other boundary lines and shading the unwanted regions.
+The unshaded region in the diagram represents the set of inequalities
+$$
+y <   x + 2, y \leqslant 4 \text {a n d} x \leqslant 3.
+$$
+Notice that this region does not have a finite area - it is not 'closed'.
 
 ---
 
@@ -22031,8 +21860,6 @@ First find the equation of the boundary. Its gradient  $= \frac{-4}{2} = -2$  an
 
 ---
 
-## 14.4
-
 ### WORKED EXAMPLE 16 (例题)
 
 **题目**: WORKED EXAMPLE 16
@@ -22071,7 +21898,7 @@ $$
 
 ---
 
-## 14.7
+## Exercise 14.7
 
 ### 1 (练习题)
 
@@ -22146,99 +21973,99 @@ $x^{2} + 6x + 14$
 
 ---
 
-### 13 (练习题)
+### 2 (练习题)
 
 **题目**: 2 Solve the following quadratic equations using the method of completing the square. Give your final answer to 2 decimal places.
 $x^{2} + 6x - 5 = 0$
 
 ---
 
-### 14 (练习题)
+### 3 (练习题)
 
 **题目**: ${x}^{2} + {8x} + 4 = 0$
 
 ---
 
-### 15 (练习题)
+### 4 (练习题)
 
 **题目**: $x^{2} - 4x + 2 = 0$
 
 ---
 
-### 16 (练习题)
+### 5 (练习题)
 
 **题目**: $x^{2} + 5x - 7 = 0$
 
 ---
 
-### 17 (练习题)
+### 6 (练习题)
 
 **题目**: ${x}^{2} - {3x} + 2 = 0$
 
 ---
 
-### 18 (练习题)
+### 7 (练习题)
 
 **题目**: $x^{2} - 12x + 1 = 0$
 
 ---
 
-### 19 (练习题)
+### 3 (练习题)
 
 **题目**: 3 Solve each equation by completing the square.
 a  $x^{2} - x - 10 = 0$
 
 ---
 
-### 20 (练习题)
+### 4 (练习题)
 
 **题目**: b  $x^{2} + 3x - 6 = 0$
 
 ---
 
-### 21 (练习题)
+### 5 (练习题)
 
 **题目**: $x(6 + x) = 1$
 
 ---
 
-### 22 (练习题)
+### 6 (练习题)
 
 **题目**: d  $x^{2} + 2x = 8$
 
 ---
 
-### 23 (练习题)
+### 7 (练习题)
 
 **题目**: e  $5x = 10 - \frac{1}{x}$
 
 ---
 
-### 24 (练习题)
+### 8 (练习题)
 
 **题目**: $f\left( x\right)  - 5 = \frac{2}{x}$
 
 ---
 
-### 25 (练习题)
+### 9 (练习题)
 
 **题目**: g  $(x - 1)(x + 2) - 1 = 0$
 
 ---
 
-### 26 (练习题)
+### 10 (练习题)
 
 **题目**: h  $(x - 4)(x + 2) = -5$
 
 ---
 
-### 27 (练习题)
+### 11 (练习题)
 
 **题目**: i  $x^{2} = x + 1$
 
 ---
 
-### 28 (练习题)
+### 4 (练习题)
 
 **题目**: 4 You can use a formula to complete the square if that works better for you.
 $$
@@ -22247,39 +22074,10 @@ $$
 
 ---
 
-### 29 (练习题)
+### 3 (例题)
 
-**题目**: Completing the square when the coefficient of  $x$  is not 1
-
----
-
-### 30 (练习题)
-
-**题目**: Sometimes you will need to write an expression in completed square form when the coefficient of  $x$  is not equal to 1. This means that you will need a number other than 1 in front of the squared bracket. Read through Worked example 18 to see how to do this.
-WORKED EXAMPLE 18
+**题目**: WORKED EXAMPLE 18
 Write these expressions in the form  $a(x + p)^2 + q$
-a  $2x^{2} + 8x - 3$
-
----
-
-### 31 (练习题)
-
-**题目**: b  $3x^{2} + 5x - 2$
-
----
-
-### 32 (练习题)
-
-**题目**: Exercise 14.8
-1 Write each of the following expressions in the form  $a(x + p)^2 + q$ .
-
----
-
-## 18
-
-### WORKED EXAMPLE 18 (例题)
-
-**题目**: Write these expressions in the form  $a(x + p)^2 + q$
 a  $2x^{2} + 8x - 3$
 b  $3x^{2} + 5x - 2$
 
@@ -22301,15 +22099,9 @@ $$
 = 2 (x + 2) ^ {2} - 1 1
 $$
 Simplify.
-
----
-
-### WORKED EXAMPLE 18 CONTINUED (例题)
-
-**题目**: WORKED EXAMPLE 18 CONTINUED
+WORKED EXAMPLE 18 CONTINUED
 b  $3x^{2} + 5x - 2$
-
-**解答**: $$
+$$
 \begin{array}{l} = 3 \left(x ^ {2} + \frac {5}{3} x\right) - 2 \\ = 3 \left\{\left(x + \frac {5}{6}\right) ^ {2} - \left(\frac {5}{6}\right) ^ {2} \right\} - 2 \\ = 3 \left(x + \frac {5}{6}\right) ^ {2} - 3 \left(\frac {2 5}{3 6}\right) - 2 \\ = 3 \left(x + \frac {5}{6}\right) ^ {2} - \frac {2 5}{1 2} - 2 \\ = 3 \left(x + \frac {5}{6}\right) ^ {2} - \frac {2 5}{1 2} - \frac {2 4}{1 2} \\ = 3 \left(x + \frac {5}{6}\right) ^ {2} - \frac {4 9}{1 2} \\ \end{array}
 $$
 Take the coefficient of  $x^2$  out of the first two terms only.
@@ -22319,7 +22111,7 @@ Simplify fully.
 
 ---
 
-## 14.8
+## Exercise 14.8
 
 ### 1 (练习题)
 
@@ -22438,11 +22230,13 @@ $b^{2} - 4ac\geqslant 0$  , the equation  $ax^2 +bx + c = 0$  has solutions  $x 
 
 ---
 
-### 19 (例题)
+### 例19 (例题)
 
 **题目**: WORKED EXAMPLE 19
 Solve the following quadratic equations, giving your answers to 3 significant figures.
 a  $x^{2} + 4x + 3 = 0$
+b  $x^{2} - 7x + 11 = 0$
+$3x^{2} - 2x - 1 = 0$
 
 **解答**: Answers
 a Compare the quadratic equation  $x^{2} + 4x + 3 = 0$  with  $ax^2 +bx + c = 0$  From this you can see that  $a = 1$ $b = 4$  and  $c = 3$
@@ -22453,29 +22247,17 @@ $$
 S _ {0}, x = \frac {- 4 + 2}{2} = \frac {- 2}{2} = - 1 \text {o r} x = \frac {- 4 - 2}{2} = \frac {- 6}{2} = - 3
 $$
 Notice that the original quadratic equation can be factorised to give  $(x + 1)(x + 3) = 0$  and the same solutions. If you can factorise the quadratic then you should because the method is much simpler.
-
----
-
-### 19 (例题)
-
-**题目**: WORKED EXAMPLE 19 CONTINUED
+WORKED EXAMPLE 19 CONTINUED
 b  $x^{2} - 7x + 11 = 0$  so  $a = 1$ $b = -7$  and  $c = 11$
-
-**解答**: $$
+$$
 \begin{array}{l} x = \frac {- (- 7) \pm \sqrt {(- 7) ^ {2} - 4 \times 1 \times 1 1}}{2 \times 1} = \frac {7 \pm \sqrt {4 9 - 4 4}}{2} \\ = \frac {7 \pm \sqrt {5}}{2} \\ \end{array}
 $$
 $$
 S _ {0}, x = \frac {7 + \sqrt {5}}{2} = 4. 6 1 8 0 \dots \text {o r} x = \frac {7 - \sqrt {5}}{2} = 2. 3 8 1 9 \dots
 $$
 $x$  is approximately equal to 4.62 or 2.38 (3 s.f.)
-
----
-
-### 19 (例题)
-
-**题目**: c  $3x^{2} - 2x - 1 = 0$  so  $a = 3,b = -2$  and  $c = -1$
-
-**解答**: $$
+c  $3x^{2} - 2x - 1 = 0$  so  $a = 3,b = -2$  and  $c = -1$
+$$
 \begin{array}{l} x = \frac {- (- 2) \pm \sqrt {(- 2) ^ {2} - 4 \times 3 \times (- 1)}}{2 \times 3} = \frac {2 \pm \sqrt {4 + 1 2}}{6} \\ = \frac {2 \pm \sqrt {1 6}}{6} \\ = \frac {2 \pm 4}{6} \\ \end{array}
 $$
 $$
@@ -22484,7 +22266,7 @@ $$
 
 ---
 
-### 20 (例题)
+### 例20 (例题)
 
 **题目**: WORKED EXAMPLE 20
 Use the quadratic formula to find the exact solutions, in surd form, to this equation:
@@ -22502,7 +22284,7 @@ $$
 
 ---
 
-## 14.9
+## Exercise 14.9
 
 ### 1 (练习题)
 
@@ -22814,12 +22596,22 @@ $$
 
 **题目**: 7 A biologist claims that the average height,  $h$  metres, of trees of a certain species after  $t$  months is given by  $h = \frac{1}{5} t^{\frac{1}{2}} + \frac{1}{3} t^{\frac{1}{3}}$ .
 For this model:
-a find the average height of trees of this species after 64 months
-find the number of months that the trees have been growing when the model predicts an average height of 10 metres. Give your answer to 3 significant figures.
 
 ---
 
-## 14.6
+### 7a (练习题)
+
+**题目**: a find the average height of trees of this species after 64 months
+
+---
+
+### 7b (练习题)
+
+**题目**: find the number of months that the trees have been growing when the model predicts an average height of 10 metres. Give your answer to 3 significant figures.
+
+---
+
+## 14.6 Factorising quadratics where the coefficient of $x^2$ is not 1
 
 ### 21 (例题)
 
@@ -22911,7 +22703,17 @@ $$
 
 ---
 
-### 14.10 (练习题)
+### 22 (例题)
+
+**题目**: WORKED EXAMPLE 22
+Factorise  $10x^{2} + 11x - 8$
+
+**解答**: Answer
+$10 \times -8 = -80$
+
+---
+
+### 1 (练习题)
 
 **题目**: Exercise 14.10
 Factorise each of the following expressions.
@@ -23003,17 +22805,7 @@ a  $3{x}^{2} + {14x} + 8$
 
 ---
 
-### 22 (例题)
-
-**题目**: WORKED EXAMPLE 22
-Factorise  $10x^{2} + 11x - 8$
-
-**解答**: Answer
-$10 \times -8 = -80$
-
----
-
-## 14.7
+## 14.7 Algebraic fractions
 
 ### WORKED EXAMPLE 23 (例题)
 
@@ -23054,155 +22846,176 @@ $(x - 3)$  is a factor of both the numerator and the denominator, so you can can
 
 ---
 
-### Exercise 14.11 (练习题)
+### a (练习题)
+
+**题目**: a  $3{x}^{2} + {14x} + 8$
+
+---
+
+### 14.11 (练习题)
 
 **题目**: Exercise 14.11
-1 Go back to Exercise 14.10 and try to factorise the expressions using this new method.
 
 ---
 
-### Exercise 14.11 (练习题)
+### 1 (练习题)
+
+**题目**: 1 Go back to Exercise 14.10 and try to factorise the expressions using this new method.
+
+---
+
+### 2 (练习题)
 
 **题目**: 2 Factorise each expression completely. Remember to remove any common factors before factorising.
-a  $6x^{2} - 5x - 21$
 
 ---
 
-### Exercise 14.11 (练习题)
+### a (练习题)
+
+**题目**: a  $6x^{2} - 5x - 21$
+
+---
+
+### b (练习题)
 
 **题目**: b -2x²-13x-15
 
 ---
 
-### Exercise 14.11 (练习题)
+### c (练习题)
 
 **题目**: 4x²+12xy+9y²
 
 ---
 
-### Exercise 14.11 (练习题)
+### d (练习题)
 
 **题目**: d  $6x^{2} - 19xy - 7y^{2}$
 
 ---
 
-### Exercise 14.11 (练习题)
+### e (练习题)
 
 **题目**: e  ${x}^{3} - {13}{x}^{2} + {36x}$
 
 ---
 
-### Exercise 14.11 (练习题)
+### f (练习题)
 
 **题目**: $6{x}^{2} - {38xy} + {40}{y}^{2}$
 
 ---
 
-### Exercise 14.11 (练习题)
+### g (练习题)
 
 **题目**: 6x²+7x+2
 
 ---
 
-### Exercise 14.11 (练习题)
+### h (练习题)
 
 **题目**: h  $3x^{2} - 13x + 12$
 
 ---
 
-### Exercise 14.11 (练习题)
+### i (练习题)
 
 **题目**: 3x²-39x+120
 
 ---
 
-### Exercise 14.11 (练习题)
+### j (练习题)
 
 **题目**: j  $px^{2} + 7px + 12p$
 
 ---
 
-### Exercise 14.11 (练习题)
+### k (练习题)
 
 **题目**: k  $5x^{3} - 16x^{2} + 12x$
 
 ---
 
-### Exercise 14.11 (练习题)
+### l (练习题)
 
 **题目**: 48x-24x²+3x³
 
 ---
 
-### Exercise 14.11 (练习题)
+### m (练习题)
 
 **题目**: m  $(x + 1)^2 -5(x + 1) + 6$
 
 ---
 
-### Exercise 14.11 (练习题)
+### n (练习题)
 
 **题目**: n  $(2x + 1)^{2} - 8(2x + 1) + 15$
 
 ---
 
-### Exercise 14.11 (练习题)
+### o (练习题)
 
 **题目**: 3(2x+5)²-17(2x+5)+10
 
 ---
 
-### Exercise 14.12 (练习题)
+### 14.12 (练习题)
 
 **题目**: Exercise 14.12
 Simplify each of the following fractions by dividing both the numerator and the denominator by their HCF.
-1 a  $\frac{2x}{4}$
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1a (练习题)
+
+**题目**: 1 a  $\frac{2x}{4}$
+
+---
+
+### 1b (练习题)
 
 **题目**: $\frac{3y}{12}$
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1d (练习题)
 
 **题目**: 10y d y
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1e (练习题)
 
 **题目**: 6t 36
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1f (练习题)
 
 **题目**: 9u 27
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1g (练习题)
 
 **题目**: 5t 50
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1i (练习题)
 
 **题目**: 15z 20
 
 ---
 
-### Exercise 14.12 (练习题)
+### 1j (练习题)
 
 **题目**: 161 12
 
 ---
 
-## Multiplyinganddividingalgebraicfractions
+## Multiplying and dividing algebraic fractions
 
 ### WORKED EXAMPLE 24 (例题)
 
@@ -23276,196 +23089,185 @@ Write as a single fraction in its lowest terms,  $\frac{3x + 4}{x^2 + x - 6} - \
 
 ---
 
-## Addingandsubtractingalgebraicfractions
+## Adding and subtracting algebraic fractions
 
 ### 1 (练习题)
 
 **题目**: Exercise 14.14
 Write each of the following as a single fraction in its lowest terms.
+1 a 2 +y 4
 
 ---
 
-### 1a (练习题)
-
-**题目**: 1 a 2 +y 4
-
----
-
-### 1b (练习题)
+### 2 (练习题)
 
 **题目**: （x+y） (x+y） 3 12
 
 ---
 
-### 1c (练习题)
+### 3 (练习题)
 
 **题目**: i 2a+3a 7 14
 
 ---
 
-### 1d (练习题)
+### 4 (练习题)
 
 **题目**: b 1+5
 
 ---
 
-### 1e (练习题)
+### 5 (练习题)
 
 **题目**: f 2x+5x 3 6
 
 ---
 
-### 1f (练习题)
+### 6 (练习题)
 
 **题目**: x+2y j 9 7
 
 ---
 
-### 1g (练习题)
+### 7 (练习题)
 
 **题目**: C  $\frac{u}{7} +\frac{u}{5}$
 
 ---
 
-### 1h (练习题)
+### 8 (练习题)
 
 **题目**: 3y 5y 4 8
 
 ---
 
-### 1i (练习题)
+### 9 (练习题)
 
 **题目**: d  $\frac{z}{7} -\frac{z}{14}$
 
 ---
 
-### 1j (练习题)
+### 10 (练习题)
 
 **题目**: 2a 3a 5 8
 
 ---
 
-### 1k (练习题)
+### 11 (练习题)
 
 **题目**: 5(x+1)² 3(x+1)² 2 a 7 8
 
 ---
 
-### 1l (练习题)
+### 12 (练习题)
 
 **题目**: d  $\frac{2x}{3} +\frac{3x}{7} -\frac{x}{4}$
 
 ---
 
-### 1m (练习题)
+### 13 (练习题)
 
 **题目**: 10pqr-3pqr 17 8
 
 ---
 
-### 1n (练习题)
+### 14 (练习题)
 
 **题目**: 8x²+3x²-
 
 ---
 
-### 1o (练习题)
+### 15 (练习题)
 
 **题目**: 3p 3p 3p 5 7 10
 
 ---
 
-### 1p (练习题)
+### 16 (练习题)
 
 **题目**: 5-x 3-x 3-x 2 3 9
 
 ---
 
-### 3a (练习题)
+### 17 (练习题)
 
 **题目**: 3 a +3
 
 ---
 
-### 3b (练习题)
+### 18 (练习题)
 
 **题目**: b  $\frac{2}{3a} +\frac{5}{4a}$
 
 ---
 
-### 3c (练习题)
+### 19 (练习题)
 
 **题目**: 3x +5x 2y 3y
 
 ---
 
-### 3e (练习题)
+### 21 (练习题)
 
 **题目**: e 3 4 2x 3x
 
 ---
 
-### 3f (练习题)
+### 22 (练习题)
 
 **题目**: f 5 3 4e 20e
 
 ---
 
-### 4a (练习题)
+### 23 (练习题)
 
 **题目**: 4 a  $\frac{1}{x + 1} +\frac{1}{x + 4}$
 
 ---
 
-### 4b (练习题)
+### 24 (练习题)
 
 **题目**: 3 2 b x-2 x-1
 
 ---
 
-### 4c (练习题)
+### 25 (练习题)
 
 **题目**: d  $\frac{3}{x} -\frac{1}{2x}$
 
 ---
 
-### 4d (练习题)
+### 26 (练习题)
 
 **题目**: 5 4 2xy 3xy
 
 ---
 
-### 4f (练习题)
-
-**题目**: x+1 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2
-
----
-
-### 4g (练习题)
+### 28 (练习题)
 
 **题目**: h  $\frac{3(x^2 - 1)}{7y} -\frac{2(x^2 - 1)}{9y^2}$
 
 ---
 
-### 4h (练习题)
+### 29 (练习题)
 
 **题目**: 1 -x 2y
 
 ---
 
-### 4i (练习题)
+### 30 (练习题)
 
 **题目**: j x+1 -y+z 12xy
 
 ---
 
-### 4j (练习题)
+### 31 (练习题)
 
 **题目**: k  $\frac{1}{(x + 2)} -\frac{1}{(x + 3)(x + 2)}$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -23617,11 +23419,20 @@ b Given that  $x$  and  $y$  satisfy these three inequalities, find the greatest
 
 ---
 
-## 15
+## >Chapter 15 Scale drawings, bearings and trigonometry
 
-### GETTING STARTED (练习题)
+### 1 (练习题)
 
-**题目**: GETTING STARTED
+**题目**: IN THIS CHAPTER YOU WILL:
+- interpret scale drawings
+calculate bearings
+calculate sine, cosine and tangent ratios for right-angled triangles
+- use sine, cosine and tangent ratios to calculate the angles and lengths of sides of right-angled triangles
+- solve trigonometric equations, finding all the solutions between  $0^{\circ}$  and  $360^{\circ}$
+- apply the sine and cosine rules to calculate unknown sides and angles in triangles that are not right-angled
+calculate the area of a triangle that is not right-angled using the sine ratio
+- use the sine, cosine and tangent ratios, together with Pythagoras' theorem in three-dimensions
+- use exact sine, cosine and tangent ratios for certain angles.
 
 ---
 
@@ -23683,7 +23494,7 @@ c Find the length of the side  $CD$  of the field.
 
 ---
 
-## 15.2
+## Exercise 15.2
 
 ### 2 (练习题)
 
@@ -23696,6 +23507,23 @@ b Draw a scale drawing using a scale of  $1\mathrm{cm}$  to  $50\mathrm{cm}$  to
 
 ---
 
+## >Chapter 15 Scale drawings, bearings and trigonometry
+
+### WORKED EXAMPLE 1 (例题)
+
+**题目**: WORKED EXAMPLE 1
+A rectangular field is  $100\mathrm{m}$  long and  $45\mathrm{m}$  wide. A scale drawing of the field is made with a scale of  $1\mathrm{cm}$  to  $10\mathrm{m}$ . What are the length and width of the field in the drawing?
+
+**解答**: Answer
+10m is represented by 1cm
+:  $100\mathrm{m}$  is represented by  $(100\div 10)\mathrm{cm} = 10\mathrm{cm}$
+and  $45\mathrm{m}$  is represented by  $(45\div 10)\mathrm{cm} = 4.5\mathrm{cm}$
+So, the dimensions on the drawing are: length  $= 10\mathrm{cm}$  and width  $= 4.5\mathrm{cm}$
+
+---
+
+## Exercise 15.2
+
 ### 3 (练习题)
 
 **题目**: 3 The scale diagram represents the vertical wall  $TF$  of a building that stands on horizontal ground. It is drawn to a scale of  $1 \, \text{cm}$  to  $8 \, \text{m}$ .
@@ -23706,6 +23534,8 @@ b Find the distance from the point  $A$  to the bottom  $(B)$  of the building.
 ![图片](../images/618e373ee3961505974cd416b5a021365343dbc69c6de8ce3aeb6f24f202eefe.jpg)
 
 ---
+
+## 15.2 Bearings
 
 ### 1 (练习题)
 
@@ -23766,7 +23596,7 @@ b How far south-east is the start of the hike from the parking lot? Give your an
 
 ---
 
-## 2
+## WORKED EXAMPLE 2
 
 ### 2 (例题)
 
@@ -23785,7 +23615,7 @@ Notice that the difference between the two bearings  $(48^{\circ}$  and  $228^{\
 
 ---
 
-## 15.3
+## 15.3 Understanding the tangent, cosine and sine ratios
 
 ### 1 (练习题)
 
@@ -23879,76 +23709,56 @@ Find the value of  $x$  in the diagram. Give your answer to the nearest mm.
 
 ---
 
-## Tangentratio
+## Tangent ratio
+
+### WORKED EXAMPLE 5 (例题)
+
+**题目**: WORKED EXAMPLE 5
+The angle of approach of an airliner should be  $3^{\circ}$ . If a plane is 305 metres above the ground, how far should it be from the airfield?
+![image](images/518a0eeb9be6707fe8e321fb141169f79c4483865275ab902412b10088396430.jpg)
+
+![图片](../images/518a0eeb9be6707fe8e321fb141169f79c4483865275ab902412b10088396430.jpg)
+
+**解答**: Answer
+$$
+\begin{array}{l} \tan 3 ^ {\circ} = \frac {3 0 5}{x} \\ \Rightarrow x \tan 3 ^ {\circ} = 3 0 5 \\ \Rightarrow x = \frac {3 0 5}{\tan 3 ^ {\circ}} \\ = 5 8 1 9. 7 4 \dots \\ \approx 5 8 2 0 \text {(n e a r e s t m e t r e)} \\ \end{array}
+$$
+
+---
 
 ### 1 (练习题)
 
 **题目**: 1 Calculate the value of these tangent ratios, giving your answers to 3 significant figures where necessary.
 ![image](images/27e2d8d2c79ec9533e3806b52e0aa29e9d48317c6b1d3b889d8a7ef527eeb673.jpg)
 tan35°
+![image](images/e2582b081de0a0e06d0c6049c4295f2827e90c9d49fc202bb1f4320c0e7aebcf.jpg)
+tan46°
+![image](images/e3290d1eb061c0bd3992417b869aeb2febb0488a9d28a7b855152f12304bfaf9.jpg)
+tan 18°
+![image](images/803f6d696c527045aa53c8c7046b35ce84957d48e94a168c747cefa8fc6eb127.jpg)
+tan45°
+![image](images/fd3c08d204398d00c5071551757c87a77fd11ea7b1824f562b71cf2ce8764441.jpg)
+tan 15.6°
+![image](images/70ad7383a7616dd67fa713c6b3a169a4f9a957cbf800a7ed765e2ef8a65da980.jpg)
+tan 17.9°
+![image](images/87b9a640e450b4c9087679d0c20ad47f65ec0cbb68b0dc7717ed66c0894134d6.jpg)
+tan0.5°
+![image](images/f9d6017bd9c0bd2118b0d079f637d8d3b55c5abea498f62d7e6616bfa19a01b5.jpg)
+tan0°
 
 ![图片](../images/27e2d8d2c79ec9533e3806b52e0aa29e9d48317c6b1d3b889d8a7ef527eeb673.jpg)
 
----
-
-### 2 (练习题)
-
-**题目**: ![image](images/e2582b081de0a0e06d0c6049c4295f2827e90c9d49fc202bb1f4320c0e7aebcf.jpg)
-tan46°
-
 ![图片](../images/e2582b081de0a0e06d0c6049c4295f2827e90c9d49fc202bb1f4320c0e7aebcf.jpg)
-
----
-
-### 3 (练习题)
-
-**题目**: ![image](images/e3290d1eb061c0bd3992417b869aeb2febb0488a9d28a7b855152f12304bfaf9.jpg)
-tan 18°
 
 ![图片](../images/e3290d1eb061c0bd3992417b869aeb2febb0488a9d28a7b855152f12304bfaf9.jpg)
 
----
-
-### 4 (练习题)
-
-**题目**: ![image](images/803f6d696c527045aa53c8c7046b35ce84957d48e94a168c747cefa8fc6eb127.jpg)
-tan45°
-
 ![图片](../images/803f6d696c527045aa53c8c7046b35ce84957d48e94a168c747cefa8fc6eb127.jpg)
-
----
-
-### 5 (练习题)
-
-**题目**: ![image](images/fd3c08d204398d00c5071551757c87a77fd11ea7b1824f562b71cf2ce8764441.jpg)
-tan 15.6°
 
 ![图片](../images/fd3c08d204398d00c5071551757c87a77fd11ea7b1824f562b71cf2ce8764441.jpg)
 
----
-
-### 6 (练习题)
-
-**题目**: ![image](images/70ad7383a7616dd67fa713c6b3a169a4f9a957cbf800a7ed765e2ef8a65da980.jpg)
-tan 17.9°
-
 ![图片](../images/70ad7383a7616dd67fa713c6b3a169a4f9a957cbf800a7ed765e2ef8a65da980.jpg)
 
----
-
-### 7 (练习题)
-
-**题目**: ![image](images/87b9a640e450b4c9087679d0c20ad47f65ec0cbb68b0dc7717ed66c0894134d6.jpg)
-tan0.5°
-
 ![图片](../images/87b9a640e450b4c9087679d0c20ad47f65ec0cbb68b0dc7717ed66c0894134d6.jpg)
-
----
-
-### 8 (练习题)
-
-**题目**: ![image](images/f9d6017bd9c0bd2118b0d079f637d8d3b55c5abea498f62d7e6616bfa19a01b5.jpg)
-tan0°
 
 ![图片](../images/f9d6017bd9c0bd2118b0d079f637d8d3b55c5abea498f62d7e6616bfa19a01b5.jpg)
 
@@ -23958,54 +23768,24 @@ tan0°
 
 **题目**: 2 For each of the following triangles find the required tangent ratio as a fraction in the lowest terms.
 ![a](images/d04fe25aa934e735093751e132117b2df7ca418ac6bcc9282e970eff41fbb1d7.jpg)
+![b](images/2554120bfe1792211cf5bb20e10466d2c6133e4c8f54b4ad738ac8d35e09a677.jpg)
+![C 9](images/17d7fc04e90ecc601e041e692cbb34d707ba5457aeef2420ab1f14100ad395f7.jpg)
+![d](images/69ecf8238f54519b5f1b41f720e7c25cfbf8596c34bd441552790e61937e1329.jpg)
+![e](images/04536a869756b31153e712464444dd6cb939341b391c09bd34c55ca98b591fcb.jpg)
+![f](images/2b22a80df41fdc17fb5e0998c5ce7ea2a34154a380016c0da3c5bde94eac7e2f.jpg)
+![image](images/b1ba0c49aacef4ef5fd497f64da878734ba6eec2d4a1eb326dd2e6949b285644.jpg)
 
 ![图片](../images/d04fe25aa934e735093751e132117b2df7ca418ac6bcc9282e970eff41fbb1d7.jpg)
 
----
-
-### 3 (练习题)
-
-**题目**: ![b](images/2554120bfe1792211cf5bb20e10466d2c6133e4c8f54b4ad738ac8d35e09a677.jpg)
-
 ![图片](../images/2554120bfe1792211cf5bb20e10466d2c6133e4c8f54b4ad738ac8d35e09a677.jpg)
-
----
-
-### 4 (练习题)
-
-**题目**: ![C 9](images/17d7fc04e90ecc601e041e692cbb34d707ba5457aeef2420ab1f14100ad395f7.jpg)
 
 ![图片](../images/17d7fc04e90ecc601e041e692cbb34d707ba5457aeef2420ab1f14100ad395f7.jpg)
 
----
-
-### 5 (练习题)
-
-**题目**: ![d](images/69ecf8238f54519b5f1b41f720e7c25cfbf8596c34bd441552790e61937e1329.jpg)
-
 ![图片](../images/69ecf8238f54519b5f1b41f720e7c25cfbf8596c34bd441552790e61937e1329.jpg)
-
----
-
-### 6 (练习题)
-
-**题目**: ![e](images/04536a869756b31153e712464444dd6cb939341b391c09bd34c55ca98b591fcb.jpg)
 
 ![图片](../images/04536a869756b31153e712464444dd6cb939341b391c09bd34c55ca98b591fcb.jpg)
 
----
-
-### 7 (练习题)
-
-**题目**: ![f](images/2b22a80df41fdc17fb5e0998c5ce7ea2a34154a380016c0da3c5bde94eac7e2f.jpg)
-
 ![图片](../images/2b22a80df41fdc17fb5e0998c5ce7ea2a34154a380016c0da3c5bde94eac7e2f.jpg)
-
----
-
-### 8 (练习题)
-
-**题目**: ![image](images/b1ba0c49aacef4ef5fd497f64da878734ba6eec2d4a1eb326dd2e6949b285644.jpg)
 
 ![图片](../images/b1ba0c49aacef4ef5fd497f64da878734ba6eec2d4a1eb326dd2e6949b285644.jpg)
 
@@ -24015,46 +23795,21 @@ tan0°
 
 **题目**: 3 Find the length of the lettered side in each triangle. Give your answers to 3 significant figures where necessary.
 ![a b](images/42fb839ab43d84e0e63e1958a9d403ba145f6ea72813239ed2078d3e9d53bfd3.jpg)
+![image](images/ff882024eee49979eda554131e0433ce43dea7860f6ac8a4fc616d0ad9aa1112.jpg)
+![C](images/9da81989eb401c8bc0c678f31c369a9f298fa9286f394e4d1dd0384bc154bec7.jpg)
+![d](images/1a666297ae07b8772a2f5646ad0da6a4fe8023bf3c360523cd67d03149809906.jpg)
+![e f](images/666b87d1add4944f6792ab27ad1d32d8ee22323d73b42c631e2f61eb5eb9f947.jpg)
+![image](images/4e134233bb0b96775ed163e1e148246ccf1c878cd9968edfef117f37897879b5.jpg)
 
 ![图片](../images/42fb839ab43d84e0e63e1958a9d403ba145f6ea72813239ed2078d3e9d53bfd3.jpg)
 
----
-
-### 4 (练习题)
-
-**题目**: ![image](images/ff882024eee49979eda554131e0433ce43dea7860f6ac8a4fc616d0ad9aa1112.jpg)
-
 ![图片](../images/ff882024eee49979eda554131e0433ce43dea7860f6ac8a4fc616d0ad9aa1112.jpg)
-
----
-
-### 5 (练习题)
-
-**题目**: ![C](images/9da81989eb401c8bc0c678f31c369a9f298fa9286f394e4d1dd0384bc154bec7.jpg)
 
 ![图片](../images/9da81989eb401c8bc0c678f31c369a9f298fa9286f394e4d1dd0384bc154bec7.jpg)
 
----
-
-### 6 (练习题)
-
-**题目**: ![d](images/1a666297ae07b8772a2f5646ad0da6a4fe8023bf3c360523cd67d03149809906.jpg)
-
 ![图片](../images/1a666297ae07b8772a2f5646ad0da6a4fe8023bf3c360523cd67d03149809906.jpg)
 
----
-
-### 7 (练习题)
-
-**题目**: ![e f](images/666b87d1add4944f6792ab27ad1d32d8ee22323d73b42c631e2f61eb5eb9f947.jpg)
-
 ![图片](../images/666b87d1add4944f6792ab27ad1d32d8ee22323d73b42c631e2f61eb5eb9f947.jpg)
-
----
-
-### 8 (练习题)
-
-**题目**: ![image](images/4e134233bb0b96775ed163e1e148246ccf1c878cd9968edfef117f37897879b5.jpg)
 
 ![图片](../images/4e134233bb0b96775ed163e1e148246ccf1c878cd9968edfef117f37897879b5.jpg)
 
@@ -24064,92 +23819,42 @@ tan0°
 
 **题目**: 4 Calculate the lettered length in each triangle. Be careful when substituting lengths into the tangent ratio formula.
 ![a f](images/2b11f200ed4d17c26fc680164f33cd886a34615e6eb3efaaafc03be98d13985a.jpg)
+![b](images/093c90098343f1be42ae0ab9aa7407718ffc062451ccc394a590c81f63fda7a6.jpg)
+![C h](images/d115500c547d7108f0f3f16a3477322a968e8b12a6cce4e16f9ceb01d7b0dcd5.jpg)
+![d e](images/97e89574554571ade8bb29f9ffde8f02cc0c34f7d55d7cb9ebee0d376e1d464f.jpg)
+![1](images/2277a201fb0ac83391048dcfd959a5e4d35b290676a18c1075fb53513c0e1708.jpg)
+![image](images/f8ae83f8c03f99eec5aa3bfb66c3169dfcaf21dbb6e18d369e937c4ea829faa9.jpg)
+![9](images/3267dabe0cdb835ef4cd116478728e94305eb7d50a59dbccf0587698e6002cb8.jpg)
+![image](images/22cdf2c49ab2d34248c38d44c069ba9fe93543bc3a52698532ee63ef560e93d9.jpg)
+![i](images/0aa49d923aabf26165012c26c8bca77725fc1c15ff87957630c91b48b1551ab2.jpg)
+![5](images/b87bcb8217d134ffeddbaf53233a9f6851422a3dfa0aef0fda428207492cb6fb.jpg)
 
 ![图片](../images/2b11f200ed4d17c26fc680164f33cd886a34615e6eb3efaaafc03be98d13985a.jpg)
 
----
-
-### 5 (练习题)
-
-**题目**: ![b](images/093c90098343f1be42ae0ab9aa7407718ffc062451ccc394a590c81f63fda7a6.jpg)
-
 ![图片](../images/093c90098343f1be42ae0ab9aa7407718ffc062451ccc394a590c81f63fda7a6.jpg)
-
----
-
-### 6 (练习题)
-
-**题目**: ![C h](images/d115500c547d7108f0f3f16a3477322a968e8b12a6cce4e16f9ceb01d7b0dcd5.jpg)
 
 ![图片](../images/d115500c547d7108f0f3f16a3477322a968e8b12a6cce4e16f9ceb01d7b0dcd5.jpg)
 
----
-
-### 7 (练习题)
-
-**题目**: ![d e](images/97e89574554571ade8bb29f9ffde8f02cc0c34f7d55d7cb9ebee0d376e1d464f.jpg)
-
 ![图片](../images/97e89574554571ade8bb29f9ffde8f02cc0c34f7d55d7cb9ebee0d376e1d464f.jpg)
-
----
-
-### 8 (练习题)
-
-**题目**: ![1](images/2277a201fb0ac83391048dcfd959a5e4d35b290676a18c1075fb53513c0e1708.jpg)
 
 ![图片](../images/2277a201fb0ac83391048dcfd959a5e4d35b290676a18c1075fb53513c0e1708.jpg)
 
----
-
-### 9 (练习题)
-
-**题目**: ![image](images/f8ae83f8c03f99eec5aa3bfb66c3169dfcaf21dbb6e18d369e937c4ea829faa9.jpg)
-
 ![图片](../images/f8ae83f8c03f99eec5aa3bfb66c3169dfcaf21dbb6e18d369e937c4ea829faa9.jpg)
-
----
-
-### 10 (练习题)
-
-**题目**: ![9](images/3267dabe0cdb835ef4cd116478728e94305eb7d50a59dbccf0587698e6002cb8.jpg)
 
 ![图片](../images/3267dabe0cdb835ef4cd116478728e94305eb7d50a59dbccf0587698e6002cb8.jpg)
 
----
-
-### 11 (练习题)
-
-**题目**: ![image](images/22cdf2c49ab2d34248c38d44c069ba9fe93543bc3a52698532ee63ef560e93d9.jpg)
-
 ![图片](../images/22cdf2c49ab2d34248c38d44c069ba9fe93543bc3a52698532ee63ef560e93d9.jpg)
 
----
-
-### 12 (练习题)
-
-**题目**: ![i](images/0aa49d923aabf26165012c26c8bca77725fc1c15ff87957630c91b48b1551ab2.jpg)
-
 ![图片](../images/0aa49d923aabf26165012c26c8bca77725fc1c15ff87957630c91b48b1551ab2.jpg)
-
----
-
-### 13 (练习题)
-
-**题目**: ![5](images/b87bcb8217d134ffeddbaf53233a9f6851422a3dfa0aef0fda428207492cb6fb.jpg)
 
 ![图片](../images/b87bcb8217d134ffeddbaf53233a9f6851422a3dfa0aef0fda428207492cb6fb.jpg)
 
 ---
 
-### a (练习题)
+### 5 (练习题)
 
 **题目**: a Use your calculator to find the value of tan  $47^{\circ}$  correct to 4 decimal places.
-
----
-
-### b (练习题)
-
-**题目**: b The diagram shows a vertical tree,  $OT$ , whose base,  $O$ , is  $30\mathrm{m}$  horizontally from point  $M$ . The angle of elevation of  $T$  from  $M$  is  $47^{\circ}$ . Calculate the height of the tree.
+b The diagram shows a vertical tree,  $OT$ , whose base,  $O$ , is  $30\mathrm{m}$  horizontally from point  $M$ . The angle of elevation of  $T$  from  $M$  is  $47^{\circ}$ . Calculate the height of the tree.
 
 ---
 
@@ -24162,24 +23867,11 @@ tan0°
 
 ---
 
-## 7
-
 ### 7 (练习题)
 
 **题目**: 7 The right-angled triangle ABC has angle  $BAC = 30^{\circ}$ . Taking the length of BC to be one unit:
 a work out the length of AC
 b use Pythagoras' theorem to obtain the length of AB.
-![image](images/4c43f3a60c7b21fdea3224992d65e5cb6b7a34bd133f74f20b2730a85eb1094c.jpg)
-
-![图片](../images/4c43f3a60c7b21fdea3224992d65e5cb6b7a34bd133f74f20b2730a85eb1094c.jpg)
-
----
-
-## Tangentratio
-
-### 8 (练习题)
-
-**题目**: b use Pythagoras' theorem to obtain the length of AB.
 ![image](images/4c43f3a60c7b21fdea3224992d65e5cb6b7a34bd133f74f20b2730a85eb1094c.jpg)
 
 ![图片](../images/4c43f3a60c7b21fdea3224992d65e5cb6b7a34bd133f74f20b2730a85eb1094c.jpg)
@@ -24201,7 +23893,7 @@ b use Pythagoras' theorem to obtain the length of AB.
 
 ---
 
-## 15.6
+## Exercise 15.6
 
 ### 1 (练习题)
 
@@ -24273,7 +23965,7 @@ e
 
 ---
 
-## 6
+## WORKED EXAMPLE 6
 
 ### WORKED EXAMPLE 6 (例题)
 
@@ -24300,8 +23992,6 @@ C
 So the angle is  $70.1^{\circ}$
 
 ---
-
-## 7
 
 ### WORKED EXAMPLE 7 (例题)
 
@@ -24358,45 +24048,7 @@ $$
 
 ---
 
-## 4
-
-### 4 (练习题)
-
-**题目**: 4 Calculate the lettered length in each triangle. Be careful when substituting lengths into the tangent ratio formula.
-![a f](images/2b11f200ed4d17c26fc680164f33cd886a34615e6eb3efaaafc03be98d13985a.jpg)
-![b](images/093c90098343f1be42ae0ab9aa7407718ffc062451ccc394a590c81f63fda7a6.jpg)
-![C h](images/d115500c547d7108f0f3f16a3477322a968e8b12a6cce4e16f9ceb01d7b0dcd5.jpg)
-![d e](images/97e89574554571ade8bb29f9ffde8f02cc0c34f7d55d7cb9ebee0d376e1d464f.jpg)
-![1](images/2277a201fb0ac83391048dcfd959a5e4d35b290676a18c1075fb53513c0e1708.jpg)
-![image](images/f8ae83f8c03f99eec5aa3bfb66c3169dfcaf21dbb6e18d369e937c4ea829faa9.jpg)
-![9](images/3267dabe0cdb835ef4cd116478728e94305eb7d50a59dbccf0587698e6002cb8.jpg)
-![image](images/22cdf2c49ab2d34248c38d44c069ba9fe93543bc3a52698532ee63ef560e93d9.jpg)
-![i](images/0aa49d923aabf26165012c26c8bca77725fc1c15ff87957630c91b48b1551ab2.jpg)
-![5](images/b87bcb8217d134ffeddbaf53233a9f6851422a3dfa0aef0fda428207492cb6fb.jpg)
-
-![图片](../images/2b11f200ed4d17c26fc680164f33cd886a34615e6eb3efaaafc03be98d13985a.jpg)
-
-![图片](../images/093c90098343f1be42ae0ab9aa7407718ffc062451ccc394a590c81f63fda7a6.jpg)
-
-![图片](../images/d115500c547d7108f0f3f16a3477322a968e8b12a6cce4e16f9ceb01d7b0dcd5.jpg)
-
-![图片](../images/97e89574554571ade8bb29f9ffde8f02cc0c34f7d55d7cb9ebee0d376e1d464f.jpg)
-
-![图片](../images/2277a201fb0ac83391048dcfd959a5e4d35b290676a18c1075fb53513c0e1708.jpg)
-
-![图片](../images/f8ae83f8c03f99eec5aa3bfb66c3169dfcaf21dbb6e18d369e937c4ea829faa9.jpg)
-
-![图片](../images/3267dabe0cdb835ef4cd116478728e94305eb7d50a59dbccf0587698e6002cb8.jpg)
-
-![图片](../images/22cdf2c49ab2d34248c38d44c069ba9fe93543bc3a52698532ee63ef560e93d9.jpg)
-
-![图片](../images/0aa49d923aabf26165012c26c8bca77725fc1c15ff87957630c91b48b1551ab2.jpg)
-
-![图片](../images/b87bcb8217d134ffeddbaf53233a9f6851422a3dfa0aef0fda428207492cb6fb.jpg)
-
----
-
-## 15.6
+## Exercise 15.6
 
 ### 6 (练习题)
 
@@ -24429,6 +24081,12 @@ Find the length of the sides lettered in each of the following diagrams.
 
 ![图片](../images/035d9cbd9a8e6662b9306da8b9193f8b38f29e7a65af74f252fa018df8113f0b.jpg)
 
+![图片](../images/af1c010156de8216be0eb376ebf538133f495cdedaff16d80eefb3245998510c.jpg)
+
+![图片](../images/60a5355b0821f99d394977dff3a911d1dcca1b4999d33d8974732f014da8a466.jpg)
+
+![图片](../images/06ce007a7509af46635b5d8e69fd538b0f0aea5d7e62e21460e108a7710f64a7.jpg)
+
 **解答**: Answers
 a opp(55°) = x
 $$
@@ -24442,6 +24100,10 @@ c opp(50°) = hcm
 $$
 \begin{array}{l} \operatorname {a d j} (5 0 ^ {\circ}) = 3 5. 2 \mathrm {c m} \\ \text {S o} 5 0 ^ {\circ} = \frac {\text {o p p} (5 0 ^ {\circ})}{\text {a d j} (5 0 ^ {\circ})} = \frac {h}{3 5 . 2} \\ \Rightarrow h = 3 5. 2 \tan 5 0 ^ {\circ} \\ \Rightarrow h = 4 1. 9 \mathrm {c m} (\text {t o} 1 \mathrm {d}. \mathrm {p}.) \\ \end{array}
 $$
+Identify the sides that you are going to consider clearly:
+![image](images/af1c010156de8216be0eb376ebf538133f495cdedaff16d80eefb3245998510c.jpg)
+![image](images/60a5355b0821f99d394977dff3a911d1dcca1b4999d33d8974732f014da8a466.jpg)
+![image](images/06ce007a7509af46635b5d8e69fd538b0f0aea5d7e62e21460e108a7710f64a7.jpg)
 
 ---
 
@@ -24460,6 +24122,10 @@ b
 
 ![图片](../images/ae131c3274bd60e640ea7602da0c37bf28fcef722518be3b60eecff490d4cfb5.jpg)
 
+![图片](../images/5b07b66ac8ba2a356c8b92242c6dd086b0b34f94a77419cf6e0ab6e6c69e3802.jpg)
+
+![图片](../images/7630ed7ca7d1bb0908915da2529586b266a38b1c6d8e8212939062f109909127.jpg)
+
 **解答**: Answers
 a opp(x) = 8cm
 $$
@@ -24467,6 +24133,13 @@ $$
 $$
 Once again, clearly identify the sides and ratio to be used:
 ![image](images/ae131c3274bd60e640ea7602da0c37bf28fcef722518be3b60eecff490d4cfb5.jpg)
+WORKED EXAMPLE 9 CONTINUED
+b adj(y) = 31.4m
+$$
+\begin{array}{l} \mathrm {h y p} = 6 3. 2 \mathrm {m} \\ \mathrm {S o} \cos y = \frac {\mathrm {a d j} (y)}{\mathrm {h y p}} = \frac {3 1 . 4}{6 3 . 2} \\ \Rightarrow y = \cos^ {- 1} \left(\frac {3 1 . 4}{6 3 . 2}\right) \\ \Rightarrow y = 6 0. 2 ^ {\circ} (1 d. p.) \\ \end{array}
+$$
+![image](images/5b07b66ac8ba2a356c8b92242c6dd086b0b34f94a77419cf6e0ab6e6c69e3802.jpg)
+![image](images/7630ed7ca7d1bb0908915da2529586b266a38b1c6d8e8212939062f109909127.jpg)
 
 ---
 
@@ -24488,7 +24161,7 @@ $$
 
 ---
 
-## 15.7
+## Exercise 15.7
 
 ### 1 (练习题)
 
@@ -24611,7 +24284,7 @@ e
 
 ---
 
-## 3
+## 3 For each of the following triangles, use the letters of the sides to write down the given trigonometric ratio.
 
 ### 4 (练习题)
 
@@ -24804,7 +24477,7 @@ c What do you notice?
 
 ---
 
-## 15.5
+## 15.5 Solving problems using trigonometry
 
 ### Exercise 15.8 (练习题)
 
@@ -24822,7 +24495,7 @@ c What do you notice?
 
 ---
 
-## 15.8
+## Exercise 15.8
 
 ### 2 (练习题)
 
@@ -24857,7 +24530,7 @@ c What do you notice?
 
 ---
 
-## 15.5
+## 15.5 Solving problems using trigonometry
 
 ### WORKED EXAMPLE 11 (例题)
 
@@ -24972,7 +24645,7 @@ c the capacity inside the tent (i.e. the volume).
 
 ---
 
-## 15.9
+## Exercise 15.9
 
 ### 4 (练习题)
 
@@ -25047,11 +24720,92 @@ e Find the area of the pentagon.
 
 ---
 
-## 15.10
+### WORKED EXAMPLE 14 (例题)
+
+**题目**: WORKED EXAMPLE 14
+Which acute angle has the same sine as  $120^{\circ}$ ?
+
+**解答**: Answer
+$$
+\sin (1 8 0 ^ {\circ} - \theta) = \sin \theta
+$$
+The graph of  $\sin \theta$  gives this relationship.
+$$
+\sin (1 8 0 ^ {\circ} - 1 2 0 ^ {\circ}) = \sin 1 2 0 ^ {\circ}
+$$
+Let  $\theta = 120^{\circ}$  and subtract to find another angle with the same sine value.
+$$
+\sin 6 0 ^ {\circ} = \sin 1 2 0 ^ {\circ}
+$$
+
+---
+
+### WORKED EXAMPLE 15 (例题)
+
+**题目**: WORKED EXAMPLE 15
+Express each of the following in terms of another angle between  $0^{\circ}$  and  $180^{\circ}$
+a cos100°
+b -cos  $35^{\circ}$
+
+**解答**: Answers
+a cos(180°-0）=-cos0
+Start with the general relationship.
+$$
+\cos (1 8 0 ^ {\circ} - 1 0 0 ^ {\circ}) = - \cos 1 0 0 ^ {\circ}
+$$
+Let  $\theta = 100^{\circ}$  and subtract.
+$$
+\cos 8 0 ^ {\circ} = - \cos 1 0 0 ^ {\circ}
+$$
+So, cos  $100^{\circ} = -\cos 80^{\circ}$
+Rearrange to find another value equal to  $\cos 100^{\circ}$
+b -cosθ=cos(180°-θ)
+$$
+- \cos 3 5 ^ {\circ} = \cos 1 4 5 ^ {\circ}
+$$
+
+---
+
+### WORKED EXAMPLE 16 (例题)
+
+**题目**: WORKED EXAMPLE 16
+Solve the following equations, giving all possible solutions in the range 0 to 360 degrees.
+a sinθ=√2
+.b tanθ=3
+c cosx=-
+
+![图片](../images/298df332f5ff678efc5e4b54ec8730623990ff16e628b3a1f1c304963cae5fa8.jpg)
+
+![图片](../images/9910d2ef73831776588efe0b6544e0a64c48e102672b183e6fa95780ddfa66f4.jpg)
+
+![图片](../images/d745b24b2c6e08cb9fb3e215234dfd809d9fea5c95eb05b79950d802a866690a.jpg)
+
+![图片](../images/9a825fe817c2aa3a618aaca7caa992bf8e85891fd56dcc4487e9fcd72dde34e1.jpg)
+
+**解答**: Answers
+a Use your calculator to find one solution:  $\sin^{-1}\left(\frac{1}{\sqrt{2}}\right) = 45^{\circ}.$
+Now mark  $\theta = 45$  degrees on a sketch of the graph  $y = \sin \theta$  and draw the line  $y = \frac{1}{\sqrt{2}}$  like this:
+![image](images/298df332f5ff678efc5e4b54ec8730623990ff16e628b3a1f1c304963cae5fa8.jpg)
+Using the symmetry of the graph, you can see that there is another solution at  $\theta = 135^{\circ}$ .
+Use your calculator to check that sin  $135^{\circ} = \frac{1}{\sqrt{2}}$ .
+Notice that  $135^{\circ} = 180^{\circ} - 45^{\circ}$ . You can use this rule, but drawing a sketch graph always makes it easier to understand why there is a second solution.
+WORKED EXAMPLE 16 CONTINUED
+b Use your calculator to find one solution:  $\tan^{-1}(3) = 71.6^{\circ}$ . As before, mark this on a sketch of the graph  $y = \tan \theta$  and draw the line  $y = 3$ .
+![image](images/9910d2ef73831776588efe0b6544e0a64c48e102672b183e6fa95780ddfa66f4.jpg)
+You can see that the second solution is  $180^{\circ} + 71.6^{\circ} = 251.6^{\circ}$ . More solutions can be found by adding 180 degrees over and over, but these will all be larger than 360 degrees, so they are not in the range that you want.
+c Use your calculator to find one solution:  $\cos^{-1}\left(-\frac{1}{2}\right) = 120^{\circ}$  Draw a sketch and mark the values:
+![image](images/d745b24b2c6e08cb9fb3e215234dfd809d9fea5c95eb05b79950d802a866690a.jpg)
+You can now see that the second solution will be at  $360^{\circ} - 120^{\circ} = 240^{\circ}$ .
+Note that you only need to sketch the part of the graph for 0 to  $360^{\circ}$  because you are only looking for solutions between these two values of  $\theta$ .
+There are more solutions, but in the range 0 to  $360^{\circ}$  the line  $y = \frac{1}{\sqrt{2}}$  only meets the graph  $y = \sin \theta$  twice.
+![image](images/9a825fe817c2aa3a618aaca7caa992bf8e85891fd56dcc4487e9fcd72dde34e1.jpg)
+
+---
 
 ### 1 (练习题)
 
-**题目**: 1 Express each of the following in terms of the same trigonometric ratio of another angle between  $0^{\circ}$  and  $180^{\circ}$ .
+**题目**: Exercise 15.10
+1 Express each of the following in terms of the same trigonometric ratio of another angle between  $0^{\circ}$  and  $180^{\circ}$ .
 a cos 120°
 
 ---
@@ -25110,128 +24864,38 @@ a cos 120°
 
 ---
 
-### 2a (练习题)
+### 2.1 (练习题)
 
 **题目**: 2 Solve each of the following equations, giving all solutions between 0 and 360 degrees.
 a sinθ=1
 
 ---
 
-### 2b (练习题)
+### 2.2 (练习题)
 
 **题目**: b sinθ=1
 
 ---
 
-### 2c (练习题)
+### 2.3 (练习题)
 
 **题目**: 2 c cosθ=2
 
 ---
 
-### 2d (练习题)
+### 2.4 (练习题)
 
 **题目**: d tan  $\theta = 5$
 
 ---
 
-### 2e (练习题)
+### 2.5 (练习题)
 
 **题目**: $\cos \theta = -\frac{\sqrt{3}}{2}$
 
 ---
 
-## 14
-
-### 14 (例题)
-
-**题目**: Which acute angle has the same sine as  $120^{\circ}$ ?
-
-**解答**: Answer
-$$
-\sin (1 8 0 ^ {\circ} - \theta) = \sin \theta
-$$
-The graph of  $\sin \theta$  gives this relationship.
-$$
-\sin (1 8 0 ^ {\circ} - 1 2 0 ^ {\circ}) = \sin 1 2 0 ^ {\circ}
-$$
-Let  $\theta = 120^{\circ}$  and subtract to find another angle with the same sine value.
-$$
-\sin 6 0 ^ {\circ} = \sin 1 2 0 ^ {\circ}
-$$
-
----
-
-## 15
-
-### 15 (例题)
-
-**题目**: Express each of the following in terms of another angle between  $0^{\circ}$  and  $180^{\circ}$
-a cos100°
-b -cos  $35^{\circ}$
-
-**解答**: Answers
-a cos(180°-0）=-cos0
-Start with the general relationship.
-$$
-\cos (1 8 0 ^ {\circ} - 1 0 0 ^ {\circ}) = - \cos 1 0 0 ^ {\circ}
-$$
-Let  $\theta = 100^{\circ}$  and subtract.
-$$
-\cos 8 0 ^ {\circ} = - \cos 1 0 0 ^ {\circ}
-$$
-So, cos  $100^{\circ} = -\cos 80^{\circ}$
-Rearrange to find another value equal to  $\cos 100^{\circ}$
-b -cosθ=cos(180°-θ)
-$$
-- \cos 3 5 ^ {\circ} = \cos 1 4 5 ^ {\circ}
-$$
-
----
-
-## 16
-
-### 16 (例题)
-
-**题目**: Solve the following equations, giving all possible solutions in the range 0 to 360 degrees.
-a sinθ=√2
-.b tanθ=3
-c cosx=-
-
-![图片](../images/298df332f5ff678efc5e4b54ec8730623990ff16e628b3a1f1c304963cae5fa8.jpg)
-
-![图片](../images/9910d2ef73831776588efe0b6544e0a64c48e102672b183e6fa95780ddfa66f4.jpg)
-
-![图片](../images/d745b24b2c6e08cb9fb3e215234dfd809d9fea5c95eb05b79950d802a866690a.jpg)
-
-![图片](../images/9a825fe817c2aa3a618aaca7caa992bf8e85891fd56dcc4487e9fcd72dde34e1.jpg)
-
-**解答**: Answers
-a Use your calculator to find one solution:  $\sin^{-1}\left(\frac{1}{\sqrt{2}}\right) = 45^{\circ}.$
-Now mark  $\theta = 45$  degrees on a sketch of the graph  $y = \sin \theta$  and draw the line  $y = \frac{1}{\sqrt{2}}$  like this:
-![image](images/298df332f5ff678efc5e4b54ec8730623990ff16e628b3a1f1c304963cae5fa8.jpg)
-Using the symmetry of the graph, you can see that there is another solution at  $\theta = 135^{\circ}$ .
-Use your calculator to check that sin  $135^{\circ} = \frac{1}{\sqrt{2}}$ .
-Notice that  $135^{\circ} = 180^{\circ} - 45^{\circ}$ . You can use this rule, but drawing a sketch graph always makes it easier to understand why there is a second solution.
-TIP
-As well as  $\theta$  other variables can be used to represent the angle. In part (c) of the example,  $x$  is used. You work in exactly the same way whatever variable is used.
-TIP
-This only needs to be a sketch and doesn't need to be accurate. It should be just enough for you to see how the symmetry can help.
-WORKED EXAMPLE 16 CONTINUED
-b Use your calculator to find one solution:  $\tan^{-1}(3) = 71.6^{\circ}$ . As before, mark this on a sketch of the graph  $y = \tan \theta$  and draw the line  $y = 3$ .
-![image](images/9910d2ef73831776588efe0b6544e0a64c48e102672b183e6fa95780ddfa66f4.jpg)
-You can see that the second solution is  $180^{\circ} + 71.6^{\circ} = 251.6^{\circ}$ . More solutions can be found by adding 180 degrees over and over, but these will all be larger than 360 degrees, so they are not in the range that you want.
-c Use your calculator to find one solution:  $\cos^{-1}\left(-\frac{1}{2}\right) = 120^{\circ}$  Draw a sketch and mark the values:
-![image](images/d745b24b2c6e08cb9fb3e215234dfd809d9fea5c95eb05b79950d802a866690a.jpg)
-You can now see that the second solution will be at  $360^{\circ} - 120^{\circ} = 240^{\circ}$ .
-TIP
-Note that you only need to sketch the part of the graph for 0 to  $360^{\circ}$  because you are only looking for solutions between these two values of  $\theta$ .
-There are more solutions, but in the range 0 to  $360^{\circ}$  the line  $y = \frac{1}{\sqrt{2}}$  only meets the graph  $y = \sin \theta$  twice.
-![image](images/9a825fe817c2aa3a618aaca7caa992bf8e85891fd56dcc4487e9fcd72dde34e1.jpg)
-
----
-
-## 15.10
+## Exercise 15.10
 
 ### 1 (练习题)
 
@@ -25352,7 +25016,7 @@ a Angle DEF is opposite a side of length 10cm. This forms one pair.
 
 ---
 
-## 15.11
+## WORKED EXAMPLE 17
 
 ### 1 (练习题)
 
@@ -25483,7 +25147,7 @@ $$
 
 ---
 
-## 15.12
+## Exercise 15.12
 
 ### 1 (练习题)
 
@@ -25549,9 +25213,9 @@ b the bearing on which the pilot must steer the boat to return to Aardvark Islan
 
 ---
 
-## 20
+## WORKED EXAMPLE 20
 
-### 20 (例题)
+### WORKED EXAMPLE 20 (例题)
 
 **题目**: In triangle DEF,  $F = 120^{\circ}$ , side  $EF = 25$  m and side  $FD = 34$  m. Calculate the length of side  $DE$ .
 ![image](images/531fe896bca61a2696f475a21b0b548b793fb135cbc20ab88eaeecb657b825f9.jpg)
@@ -25570,9 +25234,9 @@ Length of  $DE = 51.3\mathrm{m}$  (to 3 s.f.)
 
 ---
 
-## 21
+## WORKED EXAMPLE 21
 
-### 21 (例题)
+### WORKED EXAMPLE 21 (例题)
 
 **题目**: In triangle  $PQR,R = 100^{\circ}$  ,side  $PR = 8cm$  and side  $RQ = 5cm$
 a Calculate the length of side PQ.
@@ -25608,9 +25272,9 @@ $$
 
 ---
 
-## 22
+## WORKED EXAMPLE 22
 
-### 22 (例题)
+### WORKED EXAMPLE 22 (例题)
 
 **题目**: a Change the subject of the formula  $c^2 = a^2 +b^2 -2ab\cos C$  to cos C.
 b Use your answer to part (a) to find the smallest angle in the triangle which has sides of length  $7\mathrm{m},8\mathrm{m}$  and  $13\mathrm{m}$
@@ -25636,9 +25300,9 @@ The smallest angle of the triangle  $= 27.8^{\circ}$  (to 1 d.p.)
 
 ---
 
-## 15.8
+## WORKED EXAMPLE 23
 
-### WORKED EXAMPLE 23 (例题)
+### 23 (例题)
 
 **题目**: WORKED EXAMPLE 23
 Calculate the areas of each of the following shapes.
@@ -25660,7 +25324,7 @@ $$
 
 ---
 
-### WORKED EXAMPLE 24 (例题)
+### 24 (例题)
 
 **题目**: WORKED EXAMPLE 24
 The diagram shows a triangle with area  $20\mathrm{cm}^2$
@@ -25680,7 +25344,7 @@ $$
 
 ---
 
-## 15.13
+## Exercise 15.13
 
 ### 1 (练习题)
 
@@ -25759,20 +25423,17 @@ b the lengths of the sides.
 
 ---
 
-## 15.9
-
 ### 7 (练习题)
 
-**题目**: ![7](images/1c0f029d0ba19b5820b5084d1cfd3508a0ba2d0b00038efcdc746e935f223c31.jpg)
-The diagram shows triangle  $PQR$ , which has an area of  $630\mathrm{cm}^2$ .
+**题目**: The diagram shows triangle  $PQR$ , which has an area of  $630\mathrm{cm}^2$ .
 a Use the formula area  $= \frac{1}{2} pr\sin Q$  to find  $Q$  correct to 1 decimal place.
 b Find  $P$  correct to 1 decimal place.
 
-![图片](../images/1c0f029d0ba19b5820b5084d1cfd3508a0ba2d0b00038efcdc746e935f223c31.jpg)
-
 ---
 
-### 25 (例题)
+## 15.9 Trigonometry in three dimensions
+
+### WORKED EXAMPLE 25 (例题)
 
 **题目**: WORKED EXAMPLE 25
 The diagram represents a room which has the shape of a cuboid.  $AB = 6m$ ,  $AD = 4m$  and  $AP = 2m$ . Calculate the angle between the diagonal  $BS$  and the floor  $ABCD$ .
@@ -25864,7 +25525,7 @@ d the length of  $DC$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -25994,7 +25655,7 @@ the value of t [2]
 
 ---
 
-## 16
+## >Chapter 16
 
 ### 1 (练习题)
 
@@ -26050,7 +25711,7 @@ the distance  $AB$  [3]
 
 ---
 
-### 11 (练习题)
+### 11d (练习题)
 
 **题目**: Both ships took the same time,  $t$  hours, to reach their positions. The speed of the faster ship was  $20\mathrm{km / h}$ . For an object travelling at a constant speed,
 $$
@@ -26061,7 +25722,7 @@ the value of t [2]
 
 ---
 
-### 11ii (练习题)
+### 11dii (练习题)
 
 **题目**: ii the speed of the slower ship. [2]
 
@@ -26134,7 +25795,7 @@ a 2cosx-√3=0
 
 ---
 
-## 16.1
+## 16.1 Introduction to bivariate data
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -26162,6 +25823,8 @@ c The line of best fit is drawn on the diagram. The line should extend across th
 d The appropriate lines are drawn on the diagram. A height of  $164\mathrm{cm}$  corresponds to a foot length of approximately  $26\mathrm{cm}$ .
 e A foot length of  $17\mathrm{cm}$  corresponds to a height of approximately  $132\mathrm{cm}$
 Most points are reasonably close to the line, so the correlation is fairly strong. This means that the line of best fit will allow a good level of accuracy when estimates are made.
+TIP
+If you are asked to comment on a prediction that you have made, always keep in mind the strength of the correlation as shown in the diagram. If the correlation is weak you should say that your prediction may not be very reliable.
 
 ---
 
@@ -26170,6 +25833,7 @@ Most points are reasonably close to the line, so the correlation is fairly stron
 **题目**: 1 What is the correlation shown by each of the following scatter diagrams? In each case you should comment on the strength of correlation.
 ![image](images/580ff868c2fe144cbe105fa475b3173694545acaa579676e03cfdd03ac840dfd.jpg)
 ![image](images/188ad5a7fbfb610b9b05573eb05c96f8a5e153874e42251b84aebffbe697920b.jpg)
+TIP
 
 ![图片](../images/580ff868c2fe144cbe105fa475b3173694545acaa579676e03cfdd03ac840dfd.jpg)
 
@@ -26198,6 +25862,8 @@ a Draw a scatter diagram to show the mass of each dog against the duration of th
 b How strong is the correlation between the masses of the dogs and the duration of their morning walks?
 
 ---
+
+## Exercise 16.1
 
 ### 4 (练习题)
 
@@ -26262,12 +25928,13 @@ f You are asked by a manager to work out the maintenance time that will reduce t
 
 ---
 
-## Pastpaperquestions
+## Past paper questions
 
 ### 1 (练习题)
 
 **题目**: 1 The length,  $l$  metres, of a piece of rope is  $5.67\mathrm{m}$  correct to the nearest centimetre. Copy and complete this statement about the value of  $l$
 ![image](images/c97ab3989e46a31739d730df5a29204037fa83b80441f18f4cc6b1aa5d6ecb84.jpg)
+Adapted from Cambridge IGCSE Mathematics (0580) Paper 11 Q15, June 2021
 
 ![图片](../images/c97ab3989e46a31739d730df5a29204037fa83b80441f18f4cc6b1aa5d6ecb84.jpg)
 
@@ -26283,6 +25950,7 @@ $$
 x - 5 y = 4 0
 $$
 [3]
+Cambridge IGCSE Mathematics (0580) Paper 11 Q21, June 2021
 
 ---
 
@@ -26294,6 +25962,16 @@ $$
 a Complete the scatter diagram. [Using Figure 1 in the Unit 4 Past Paper Questions Resource Sheet.] The first ten points have been plotted for you.
 ![image](images/6432ed389512f70f29638059d5eabd6d15d7fe041a692d6bcb041efad6b0a4b3.jpg)
 [2]
+b What type of correlation is shown in this scatter diagram?
+[1]
+One student has a high score in the speaking test and a low score in the written test.
+On the scatter diagram, put a ring around the point. [Using Figure 1 in the Unit 4 Past Paper Questions Resource Sheet.]
+[1]
+On the scatter diagram, draw a line of best fit. [Using Figure 1 in the Unit 4 Past Paper Questions Resource Sheet.]
+[1]
+e Use your line of best fit to estimate a score in the written test for a student who scored 25 in the speaking test.
+[1]
+Cambridge IGCSE Mathematics (0580) Paper 31 Q6, June 2019
 
 ![图片](../images/6432ed389512f70f29638059d5eabd6d15d7fe041a692d6bcb041efad6b0a4b3.jpg)
 
@@ -26308,6 +25986,7 @@ b i Point  $C$  is  $28\mathrm{km}$  from  $A$  and  $20\mathrm{km}$  from  $B$ 
 [3]
 ii Measure angle ACB.
 [1]
+Cambridge IGCSE Mathematics (0580) Paper 31 Q10, June 2020
 
 ![图片](../images/4246e14c8182acc3db1a913a4b500fd186029963e4d29cbdc851dfdbb5ca5875.jpg)
 
@@ -26334,6 +26013,7 @@ i Use this information to write down two equations in  $x$  and  $y$
 [2]
 ii Find the age of Alphonse and the age of Beatrice.
 [3]
+Cambridge IGCSE Mathematics (0580) Paper 31 Q8, June 2020
 
 ---
 
@@ -26344,6 +26024,7 @@ $w = 12$  correct to the nearest whole number.
 $h = 4$  correct to the nearest whole number.
 Work out the upper bound for the value of  $P$ .
 [2]
+Cambridge IGCSE Mathematics (0580) Paper 21 Q18, June 2020
 
 ---
 
@@ -26352,6 +26033,7 @@ Work out the upper bound for the value of  $P$ .
 **题目**: 7  $x^{2} + 4x - 9 = (x + a)^{2} + b$
 Find the value of  $a$  and the value of  $b$ .
 [3]
+Cambridge IGCSE Mathematics (0580) Paper 21 Q13, June 2019
 
 ---
 
@@ -26362,6 +26044,7 @@ The scale of the map is  $1:24000$ .
 Calculate the actual area of the lake.
 Give your answer in  $\mathbf{km}^2$
 [2]
+Cambridge IGCSE Mathematics (0580) Paper 21 Q13, June 2021
 
 ---
 
@@ -26374,8 +26057,6 @@ $$
 [3]
 
 ---
-
-## KEYWORDS
 
 ### d (练习题)
 
@@ -26468,9 +26149,12 @@ $(3x - 5y)(2x + y)$
 
 ---
 
-### 14 (练习题)
+## Chapter 17
 
-**题目**: ![14](images/60366e706e2d5f5046aae6586e358c00b82ec352ae88c48ce0f1a4781df01cf1.jpg)
+### 1 (练习题)
+
+**题目**: Cambridge IGCSE Mathematics (0580) Paper 41 Q3, June 2020
+![14](images/60366e706e2d5f5046aae6586e358c00b82ec352ae88c48ce0f1a4781df01cf1.jpg)
 The diagram shows a field  $ABCDE$ .
 a Calculate the perimeter of the field ABCDE.
 [4]
@@ -26488,22 +26172,59 @@ d Calculate the area of the field ABCDE. Give your answer in hectares.
 
 ---
 
-## 17
+### 1 (练习题)
+
+**题目**: ii  $4(5 - 3x) = 23$
+
+---
+
+### 2 (练习题)
+
+**题目**: d Simplify.
+(27x°)
+
+---
+
+### 3 (练习题)
+
+**题目**: Expand and simplify.
+$(3x - 5y)(2x + y)$
+
+---
+
+### 2 (练习题)
+
+**题目**: Cambridge IGCSE Mathematics (0580) Paper 41 Q3, June 2019
+![image](images/c33f845721b53cba7fb7638cefb5bb6ca8df1ecf9b0f2e63c173ce08bd672290.jpg)
+
+![图片](../images/c33f845721b53cba7fb7638cefb5bb6ca8df1ecf9b0f2e63c173ce08bd672290.jpg)
+
+---
+
+### 1 (练习题)
+
+**题目**: > Unit 4 Project
+Marbles in a box
+Consider an imaginary three-dimensional game where two players take it in turn to place different coloured marbles into a box.
+The box is made from 27 transparent unit cubes arranged in a 3-by-3-by-3 array.
+![image](images/8a34944ed11f1d96971f832093358183165691e38d7e55c57782260aca88a0f2.jpg)
+The aim of the game is to make a winning row of three of your own marbles. Rows can be horizontal, vertical or diagonal.
+This diagram shows the placement of one winning row. The marbles are on three levels and the row is diagonal.
+![image](images/b90cb8bccd9425c7d9afac1948f0d16e584a3dfaf82fbe02caede20c43350e8c.jpg)
+How many different ways are there to make a winning row?
+Explain clearly how you got to your answer.
+TIP
+Take note that in this diagram the edges of the cubes are not shown, just the placement of the marbles on each level.
+
+![图片](../images/8a34944ed11f1d96971f832093358183165691e38d7e55c57782260aca88a0f2.jpg)
+
+![图片](../images/b90cb8bccd9425c7d9afac1948f0d16e584a3dfaf82fbe02caede20c43350e8c.jpg)
+
+---
 
 ### 1 (练习题)
 
 **题目**: 1 The box contains some of the terms people use to talk about money and finance.
-[Table Row] <tr><td>earnings</td><td>wages</td><td>salary</td><td>commission</td><td>deductions</td><td></td></tr>
-[Table Row] <tr><td>net income</td><td>gross income</td><td>simple interest</td><td rowspan="2" colspan="2">selling price</td><td></td></tr>
-[Table Row] <tr><td>compound growth</td><td>· investment</td><td>cost price</td><td></td></tr>
-[Table Row] <tr><td>profit loss</td><td>mark up</td><td>discount</td><td colspan="2">principal amount</td><td></td></tr>
-[Table Row] <tr><td>rate of interest</td><td>appreciation</td><td>depreciation</td><td colspan="2">transaction</td><td rowspan="2"></td></tr>
-[Table Row] <tr><td>inflation rate</td><td>annually</td><td>credit</td><td>debit</td><td></td></tr>
-a Copy this table.
-[Table Row] <tr><td>I&#x27;ve never heard this before</td><td>I have heard this but I am not sure what it means</td><td>I know what this means and can explain it to others</td></tr>
-[Table Row] <tr><td></td><td></td><td></td></tr>
-b Write the terms from the box in the appropriate columns.
-c Work in pairs. Find the meanings of any words you wrote in the first two columns. If you can, explain the words you know to each other. If not, find out what they mean in financial contexts.
 
 ---
 
@@ -26524,7 +26245,7 @@ T
 
 ---
 
-### WORKED EXAMPLE 1 (例题)
+### 例1 (例题)
 
 **题目**: WORKED EXAMPLE 1
 Emmanuel makes beaded necklaces. He is paid in South African rand at a rate of R24.50 per completed necklace. He is able to make 55 necklaces per week. Calculate his weekly earnings from the sale of necklaces.
@@ -26535,7 +26256,7 @@ $= \mathbb{R}1347.50$
 
 ---
 
-### WORKED EXAMPLE 2 (例题)
+### 例2 (例题)
 
 **题目**: WORKED EXAMPLE 2
 Sanjay works as a sales representative for a company that sells mobile phones in the United Arab Emirates. He is paid a retainer of 800 Dhs (dirhams) per week plus a commission of  $4.5\%$  of all sales.
@@ -26548,7 +26269,7 @@ If he made no sales, he would earn no commission, only his retainer.
 
 ---
 
-## 17.1
+## 17.1 Earning money
 
 ### WORKED EXAMPLE 3 (例题)
 
@@ -26667,7 +26388,7 @@ the range of earnings.
 
 ---
 
-## Deductionsfromearnings
+## Deductions from earnings
 
 ### 3 (练习题)
 
@@ -26772,7 +26493,7 @@ How much is the amount due in part (i)?
 
 ---
 
-## 17.2
+## 17.2 Borrowing and investing money
 
 ### WORKED EXAMPLE 5 (例题)
 
@@ -26871,7 +26592,7 @@ So, the interest rate = 20%
 
 ---
 
-## APPLYYOURSKILLS
+## APPLY YOUR SKILLS
 
 ### 6 (练习题)
 
@@ -27034,7 +26755,7 @@ $$
 
 ---
 
-## Compoundinterest
+## Compound interest
 
 ### WORKED EXAMPLE 12 (例题)
 
@@ -27098,7 +26819,7 @@ b  $19.5\%$  compounded half-yearly (the interest rate will be half of 19.5 for 
 
 ---
 
-## 14
+## WORKED EXAMPLE 14
 
 ### WORKED EXAMPLE 14 (例题)
 
@@ -27127,7 +26848,7 @@ Use the formula for exponential decay and substitute the given values.
 
 ---
 
-## 17.7
+## Exercise 17.7
 
 ### 1 (练习题)
 
@@ -27205,9 +26926,9 @@ b How long will it take for the population to drop below 7 million people?
 
 ---
 
-## 17.3
+## 17.3 Buying and selling
 
-### 18 (例题)
+### WORKED EXAMPLE 18 (例题)
 
 **题目**: WORKED EXAMPLE 18
 At a market, a trader makes a profit of  $1.08 on an item selling for$ 6.48.
@@ -27223,7 +26944,7 @@ $$
 
 ---
 
-### 19 (例题)
+### WORKED EXAMPLE 19 (例题)
 
 **题目**: WORKED EXAMPLE 19
 Find the selling price of an article bought for $400 and sold at a loss of 10%.
@@ -27240,7 +26961,7 @@ $$
 
 ---
 
-### 20 (例题)
+### WORKED EXAMPLE 20 (例题)
 
 **题目**: WORKED EXAMPLE 20
 A trader sells her product for $39. If her mark up is 30%, what is the cost price of the product?
@@ -27258,7 +26979,7 @@ Divide by 130 to find  $1\%$  and then multiply by 100 to find  $100\%$  (which 
 
 ---
 
-### 21 (例题)
+### WORKED EXAMPLE 21 (例题)
 
 **题目**: WORKED EXAMPLE 21
 During a sale, a shop offers a discount of  $15\%$  on a pair of jeans originally priced at $75. What is the sale price?
@@ -27282,32 +27003,11 @@ $$
 
 ### 1 (练习题)
 
-**题目**: Exercise 17.9
-1 Find the price that each of each of the following items sold for:
-
----
-
-### 1a (练习题)
-
-**题目**: a cost price $130, profit 20%
-
----
-
-### 1b (练习题)
-
-**题目**: b cost price $320, profit 25%
-
----
-
-### 1c (练习题)
-
-**题目**: cost price $399, loss 15%
-
----
-
-### 1d (练习题)
-
-**题目**: d cost price $750, loss 33 3%.
+**题目**: 1 Find the price that each of each of the following items sold for:
+a cost price $130, profit 20%
+b cost price $320, profit 25%
+cost price $399, loss 15%
+d cost price $750, loss 33 3%.
 
 ---
 
@@ -27349,44 +27049,13 @@ $$
 
 ### 8 (练习题)
 
-**题目**: APPLY YOUR SKILLS
-8 VAT at a rate of  $17\%$  is added each time an item is sold on. The original cost of an item is  $\$ 112.00$ . The item is sold to a wholesaler, who sells it on to a retailer. The retailer sells it to the public.
-
----
-
-### 8a (练习题)
-
-**题目**: a How much tax will the item have incurred?
-
----
-
-### 8b (练习题)
-
-**题目**: b Express the tax as a percentage of the original price.
-
----
-
-## 17.9
-
-### 1 (练习题)
-
-**题目**: 1 Find the price that each of each of the following items sold for:
-a cost price $130, profit 20%
-b cost price $320, profit 25%
-cost price $399, loss 15%
-d cost price $750, loss 33 3%.
-
----
-
-### 8 (练习题)
-
 **题目**: 8 VAT at a rate of  $17\%$  is added each time an item is sold on. The original cost of an item is  $\$ 112.00$ . The item is sold to a wholesaler, who sells it on to a retailer. The retailer sells it to the public.
 a How much tax will the item have incurred?
 b Express the tax as a percentage of the original price.
 
 ---
 
-## 17.10
+## Exercise 17.10
 
 ### 1 (练习题)
 
@@ -27417,7 +27086,7 @@ b Express the tax as a percentage of the original price.
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -27519,7 +27188,7 @@ Estimate the time in minutes after the water was left to cool that the temperatu
 
 ---
 
-## 18
+## Chapter 18
 
 ### 1 (练习题)
 
@@ -27557,7 +27226,7 @@ c Describe in your own words the effect that the coefficient of the  $x^{2}$  te
 
 ---
 
-## 18.1
+## Exercise 18.1
 
 ### 1 (练习题)
 
@@ -27610,7 +27279,7 @@ To draw the graph:
 
 ---
 
-## 18.2
+## Exercise 18.2
 
 ### 1 (练习题)
 
@@ -27664,7 +27333,7 @@ e Why do you think this graph shows only positive values of height?
 
 ---
 
-## Sketchingquadraticfunctions
+## Sketching quadratic functions
 
 ### 例3 (例题)
 
@@ -27705,7 +27374,7 @@ Sketch and label the graph.
 
 ---
 
-## Sketchingsimplequadraticfunctions
+## Sketching simple quadratic functions
 
 ### WORKED EXAMPLE 5 (例题)
 
@@ -27794,7 +27463,7 @@ $$
 
 ---
 
-## 18.3
+## Exercise 18.3
 
 ### 1 (练习题)
 
@@ -27951,9 +27620,7 @@ a Determine the turning point of the graph of the relationship.
 
 ---
 
-## 18.2
-
-### 8 (例题)
+### WORKED EXAMPLE 8 (例题)
 
 **题目**: WORKED EXAMPLE 8
 Construct a table of values and then draw a graph of  $xy = -12$  ( $x \neq 0$ ) for  $-12 \leq x \leq 12$ .
@@ -27971,6 +27638,8 @@ WORKED EXAMPLE 8 CONTINUED
 Plot the points to draw the graph.
 
 ---
+
+## 18.2 Drawing reciprocal graphs (the hyperbola)
 
 ### WORKED EXAMPLE 9 (例题)
 
@@ -28041,11 +27710,12 @@ $y = \frac{4}{x} + 2$
 
 ---
 
-## 18.3
+## 18.3 Using graphs to solve quadratic equations
 
 ### WORKED EXAMPLE 10 (例题)
 
-**题目**: This is the graph of  $y = x^{2} - 2x - 7$ . Use the graph to solve the following equations.
+**题目**: WORKED EXAMPLE 10
+This is the graph of  $y = x^{2} - 2x - 7$ . Use the graph to solve the following equations.
 a  $x^{2} - 2x - 7 = 0$
 b  $x^{2} - 2x - 7 = 3$
 c  $x^{2} - 2x = 1$
@@ -28053,7 +27723,8 @@ c  $x^{2} - 2x = 1$
 
 ![图片](../images/09a1e6042d2ba2986b1a5f17313af3f05109655c195bf752a6b5659a8a3caf45.jpg)
 
-**解答**: Answers
+**解答**: WORKED EXAMPLE 10 CONTINUED
+Answers
 a Since this is the graph of  $y = x^{2} - 2x - 7$  simply find the points on the curve that have a  $y$ -coordinate of 0 (i.e. where the curve cuts the  $x$ -axis).
 There are two such points marked A and B on the graph.
 The  $x$ -coordinates of these points are -1.8 and 3.8, so the solutions of the equation  $x^{2} - 2x - 7 = 0$  are  $x = -1.8$  and  $x = 3.8$ .
@@ -28069,7 +27740,7 @@ The solutions of the equation  $x^{2} - 2x = 1$  are  $x = -0.4$  and  $x = 2.4$
 
 ---
 
-## 18.4
+## 18.4 Simultaneous linear and non-linear equations
 
 ### 1 (练习题)
 
@@ -28084,7 +27755,7 @@ c  $x^{2} - x = 6$
 
 ---
 
-## 18.3
+## 18.3 Using graphs to solve quadratic equations
 
 ### 2 (练习题)
 
@@ -28102,7 +27773,7 @@ b  $x^{2} + 3x + 1 = 0(-4\leqslant x\leqslant 1)$
 
 ---
 
-## 18.4
+## 18.4 Simultaneous linear and non-linear equations
 
 ### 4 (练习题)
 
@@ -28169,6 +27840,8 @@ Substitute each value of  $x$  into [3] to find the corresponding  $y$ -values.
 
 ---
 
+## Algebraic solutions of simultaneous linear and non-linear equations
+
 ### WORKED EXAMPLE 14 (例题)
 
 **题目**: WORKED EXAMPLE 14
@@ -28176,10 +27849,10 @@ Find the points of intersection of these graphs by solving the equations algebra
 $$
 \begin{array}{l} 2 y = 1 0 x - x ^ {2} - 2 (1) \\ x + y = 6 (2) \\ \end{array}
 $$
-
-**解答**: WORKED EXAMPLE 14 CONTINUED
+WORKED EXAMPLE 14 CONTINUED
 Answer
-$$
+
+**解答**: $$
 \begin{array}{l} x + y = 6 \\ y = 6 - x \tag {3} \\ 2 (6 - x) = 1 0 x - x ^ {2} - 2 \\ 1 2 - 2 x = 1 0 x - x ^ {2} - 2 \\ x ^ {2} - 1 2 x + 1 4 = 0 \\ x = \frac {1 2 \pm \sqrt {1 2 ^ {2} - 4 (1) (1 4)}}{2 (1)} \\ = \frac {1 2 \pm \sqrt {8 8}}{2} \\ = \frac {1 2 \pm 2 \sqrt {2 2}}{2} \\ \end{array}
 $$
 $$
@@ -28192,8 +27865,18 @@ $$
 a n d y = 6 - (6 - \sqrt {2 2}) = \sqrt {2 2}
 $$
 The points of intersection are:
+$$
+(6 + \sqrt {2 2}, - \sqrt {2 2}) \text {a n d} (6 - \sqrt {2 2}, \sqrt {2 2})
+$$
+Rearrange the linear equation to the form  $y = \ldots$
+Substitute [3] into [2].
+Use the quadratic formula to find the values of  $x$ .
+Find the corresponding  $y$ -values.
+Write your answers as pairs of coordinates.
 
 ---
+
+## 18.4 Simultaneous linear and non-linear equations
 
 ### 5 (练习题)
 
@@ -28203,7 +27886,7 @@ i  $x^{2} - 2x - 4 = 0$  .ii  $x^{2} - 2x - 4 = 3$  iii  $x^{2} - 2x - 4 = -1$
 
 ---
 
-## Algebraicsolutionsofsimultaneouslinearandnon-linearequations
+## Algebraic solutions of simultaneous linear and non-linear equations
 
 ### 1 (练习题)
 
@@ -28347,7 +28030,7 @@ a Construct a table of values of  $y$  for whole and half values  $x$
 
 ---
 
-## MATHEMATICALCONNECTIONS
+## MATHEMATICAL CONNECTIONS
 
 ### WORKED EXAMPLE 16 CONTINUED (例题)
 
@@ -28457,7 +28140,7 @@ iii What happens if the value of a is negative?
 
 ---
 
-## Graphsofequationswithcombinationsofterms
+## Graphs of equations with combinations of terms
 
 ### WORKED EXAMPLE 19 (例题)
 
@@ -28479,12 +28162,16 @@ Complete this table of values and plot the graph of  $y = x^3 - \frac{1}{x}$  fo
 
 ---
 
-## 18.8
+### Exercise 18.8 (练习题)
+
+**题目**: Exercise 18.8
+1 Construct a table of values for  $-3 \leq x \leq 3$  (including negative and positive values of 0.5 and 0.2) for each equation and draw the graph.
+
+---
 
 ### 1a (练习题)
 
-**题目**: 1 Construct a table of values for  $-3 \leq x \leq 3$  (including negative and positive values of 0.5 and 0.2) for each equation and draw the graph.
-a  $y = 3 + x^{2} - \frac{2}{x}$
+**题目**: a  $y = 3 + x^{2} - \frac{2}{x}$
 
 ---
 
@@ -28506,7 +28193,7 @@ a  $y = 3 + x^{2} - \frac{2}{x}$
 
 ---
 
-## Exponentialgraphs
+## Exponential graphs
 
 ### WORKED EXAMPLE 20 (例题)
 
@@ -28531,7 +28218,11 @@ $$
 
 ---
 
-## 18.9
+### Exercise 18.9 (练习题)
+
+**题目**: Exercise 18.9
+
+---
 
 ### 1a (练习题)
 
@@ -28556,11 +28247,32 @@ $$
 **题目**: 2 The graph of  $y = 10^x$  for  $-0.2 \leq x \leq 1.0$  is shown here.
 ![image](images/d24d948a91d31479e10be493e30ce823da0b2f582de3ebca4f7af6f0a53ceb90.jpg)
 a Use the graph to find the value of:
-i 100.3
-ii 10-0.1
-ii Copy the diagram using tracing paper and draw a straight line graph that will allow you solve the equation  $10^{x} = 8 - 5x$ .
 
 ![图片](../images/d24d948a91d31479e10be493e30ce823da0b2f582de3ebca4f7af6f0a53ceb90.jpg)
+
+---
+
+### 2a i (练习题)
+
+**题目**: i 100.3
+
+---
+
+### 2a ii (练习题)
+
+**题目**: ii 10-0.1
+
+---
+
+### 2a iii (练习题)
+
+**题目**: ii Copy the diagram using tracing paper and draw a straight line graph that will allow you solve the equation  $10^{x} = 8 - 5x$ .
+
+---
+
+### APPLY YOUR SKILLS (练习题)
+
+**题目**: APPLY YOUR SKILLS
 
 ---
 
@@ -28570,14 +28282,34 @@ ii Copy the diagram using tracing paper and draw a straight line graph that will
 ![image](images/c63424ef7dee37ac72c288a5e7e7256f921bc03e21f5a4c2d303381a1b66c11a.jpg)
 The graph shows the increase in bacteria numbers in a six-hour period.
 ![image](images/f04bcbd70662539ab41ed2825a6e6997de6aee3615c8ff9034a5f6d6759227fe.jpg)
-a How many bacteria are there after one hour?
-b How long does it take for the number of bacteria to exceed 40 cells?
-c How many cells will there be after six hours?
-d When would you expect the population to exceed one million bacteria if it continued to grow at this rate?
 
 ![图片](../images/c63424ef7dee37ac72c288a5e7e7256f921bc03e21f5a4c2d303381a1b66c11a.jpg)
 
 ![图片](../images/f04bcbd70662539ab41ed2825a6e6997de6aee3615c8ff9034a5f6d6759227fe.jpg)
+
+---
+
+### 3a (练习题)
+
+**题目**: a How many bacteria are there after one hour?
+
+---
+
+### 3b (练习题)
+
+**题目**: b How long does it take for the number of bacteria to exceed 40 cells?
+
+---
+
+### 3c (练习题)
+
+**题目**: c How many cells will there be after six hours?
+
+---
+
+### 3d (练习题)
+
+**题目**: d When would you expect the population to exceed one million bacteria if it continued to grow at this rate?
 
 ---
 
@@ -28595,7 +28327,7 @@ d When would you expect the population to exceed one million bacteria if it cont
 
 ---
 
-## 18.6
+## 18.6 Finding the gradient of a curve
 
 ### WORKED EXAMPLE 21 (例题)
 
@@ -28629,7 +28361,7 @@ The tree was growing at a rate of 2.8 metres per year.
 
 ---
 
-## 18.10
+## Exercise 18.10
 
 ### 1 (练习题)
 
@@ -28662,7 +28394,7 @@ b Find the gradient of the curve at the point  $A(1,2)$
 
 ---
 
-## 23
+## WORKED EXAMPLE 23
 
 ### WORKED EXAMPLE 23 (例题)
 
@@ -28689,7 +28421,7 @@ The rule is the same for positive and negative terms.
 
 ---
 
-## 24
+## WORKED EXAMPLE 24
 
 ### WORKED EXAMPLE 24 (例题)
 
@@ -28709,107 +28441,7 @@ The gradient of the curve at the point (2, 32) is 48.
 
 ---
 
-## 18.11
-
-### 1 (练习题)
-
-**题目**: 1 For each of the following, find  $\frac{\mathrm{dy}}{\mathrm{dx}}$ .
-a  $y = x^4$
-
----
-
-### 2 (练习题)
-
-**题目**: b  $y = x^{6}$
-
----
-
-### 3 (练习题)
-
-**题目**: c  $y = x^{9}$
-
----
-
-### 4 (练习题)
-
-**题目**: d  $y = 4x^{3}$
-
----
-
-### 5 (练习题)
-
-**题目**: e  $y = 12x^{2}$
-
----
-
-### 6 (练习题)
-
-**题目**: f  $y = 7x^{7}$
-
----
-
-### 7 (练习题)
-
-**题目**: g  $y = -4x^4$
-
----
-
-### 8 (练习题)
-
-**题目**: h  $y = 7x^{12}$
-
----
-
-### 9 (练习题)
-
-**题目**: i  $y = -16x^{5}$
-
----
-
-### 2 (练习题)
-
-**题目**: 2 Find the gradient of each of the following curves at the given point.
-a  $y = x^{2}$  at the point (3, 9)
-
----
-
-### 3 (练习题)
-
-**题目**: b  $y = x^{3}$  at the point (1, 1)
-
----
-
-### 4 (练习题)
-
-**题目**: $y = x^4$  at the point (2, 16)
-
----
-
-### 5 (练习题)
-
-**题目**: d  $y = 4x^{2}$  at the point  $(-1,4)$
-
----
-
-### 6 (练习题)
-
-**题目**: e  $y = -3x^{3}$  at the point (2, -24)
-
----
-
-### 7 (练习题)
-
-**题目**: f  $y = -5x^{6}$  at the point  $(-2, - 320)$
-
----
-
-### 8 (练习题)
-
-**题目**: 3 Find the coordinates of the point at which the curve with equation  $y = 3x^2$  has gradient 18.
-
----
-
-## 25
+## WORKED EXAMPLE 23
 
 ### WORKED EXAMPLE 25 (例题)
 
@@ -28825,102 +28457,42 @@ Differentiate each term separately and then subtract.
 
 ---
 
-## 18.12
+## Exercise 18.11
 
 ### 1 (练习题)
 
-**题目**: 1 Find  $\frac{\mathrm{dy}}{\mathrm{dx}}$  for each of the following.
-a  $y = x^4 +x^5$
+**题目**: 1 For each of the following, find  $\frac{\mathrm{dy}}{\mathrm{dx}}$ .
+a  $y = x^4$
+b  $y = x^{6}$
+c  $y = x^{9}$
+d  $y = 4x^{3}$
+e  $y = 12x^{2}$
+f  $y = 7x^{7}$
+g  $y = -4x^4$
+h  $y = 7x^{12}$
+i  $y = -16x^{5}$
 
 ---
 
 ### 2 (练习题)
 
-**题目**: b  $y = 3x^{3} - 5x^{4}$
+**题目**: 2 Find the gradient of each of the following curves at the given point.
+a  $y = x^{2}$  at the point (3, 9)
+b  $y = x^{3}$  at the point (1, 1)
+$y = x^4$  at the point (2, 16)
+d  $y = 4x^{2}$  at the point  $(-1,4)$
+e  $y = -3x^{3}$  at the point (2, -24)
+f  $y = -5x^{6}$  at the point  $(-2, - 320)$
 
 ---
 
 ### 3 (练习题)
 
-**题目**: $y = {7x}^{6} + 9{x}^{2}$
+**题目**: 3 Find the coordinates of the point at which the curve with equation  $y = 3x^2$  has gradient 18.
 
 ---
 
-### 4 (练习题)
-
-**题目**: d  $y = \frac{1}{3} x^3 -4x^7$
-
----
-
-### 5 (练习题)
-
-**题目**: $y = 6x^{5} - \frac{8}{11} x^{4}$
-
----
-
-### 6 (练习题)
-
-**题目**: f  $y = -7x^{2} + 3x^{6}$
-
----
-
-### 7 (练习题)
-
-**题目**: g  $y = 12x^{3} + \frac{2}{3} x^{8}$
-
----
-
-### 8 (练习题)
-
-**题目**: h  $y = -10x^{12} - 8x^{10}$
-
----
-
-### 9 (练习题)
-
-**题目**: i  $y = 4x^{2} - 12x^{3} + 5x^{4}$
-
----
-
-### 10 (练习题)
-
-**题目**: j  $y = -\frac{8}{11} x^4 +\frac{2}{7} x^3 -\frac{3}{4} x^2$
-
----
-
-### 2 (练习题)
-
-**题目**: 2 Find the gradient of each curve at the point with the given  $x$ -coordinate.
-a  $y = 3x^{3} + 2x^{2}$
-at  $x = 3$
-
----
-
-### 3 (练习题)
-
-**题目**: b  $y =  - 2{x}^{4} + 3{x}^{2}$
-at  $x = -2$
-
----
-
-### 4 (练习题)
-
-**题目**: $y = 3x^4 +6x^3 -3x^2$
-at  $x = -1$
-
----
-
-### 5 (练习题)
-
-**题目**: 3 Find the coordinates of the point where the curve with equation  $y = 2x^3 + 3x^2$  has gradient 12.
-
----
-
-### 6 (练习题)
-
-**题目**: 4 Find the coordinates of the points where the curve with equation  $y = \frac{1}{4} x^4 - \frac{3}{2} x^2$  has gradient zero.
-
----
+## Exercise 18.12
 
 ### 1 (练习题)
 
@@ -28950,7 +28522,19 @@ at  $x = -1$
 
 ---
 
-## 18.13
+### 3 (练习题)
+
+**题目**: 3 Find the coordinates of the point where the curve with equation  $y = 2x^3 + 3x^2$  has gradient 12.
+
+---
+
+### 4 (练习题)
+
+**题目**: 4 Find the coordinates of the points where the curve with equation  $y = \frac{1}{4} x^4 - \frac{3}{2} x^2$  has gradient zero.
+
+---
+
+## Exercise 18.13
 
 ### 1 (练习题)
 
@@ -29045,7 +28629,7 @@ b Show that the tangent at the point with  $x$ -coordinate  $-3$  is also parall
 
 ---
 
-## 18.14
+## Equations of tangents
 
 ### WORKED EXAMPLE 27 (例题)
 
@@ -29081,11 +28665,36 @@ So the equation of the tangent is  $y = 8x - 11$ .
 ### 1 (练习题)
 
 **题目**: 1 Find the equation of the tangent of each curve at the given point.
-a  $y = x^{2}$  at the point with coordinates (3, 9)
-b  $y = x^{2}$  at the point with  $x$  coordinate-2
-$y = x^{3} + x^{2}$  at the point with  $x$  coordinate 4
-d  $y = 3x^{3} - 2x + 1$  at the point with  $x$  coordinate 1.5
-$y = \frac{1}{4} x^{2} + \frac{1}{5} x$  at the point with  $x$ -coordinate  $\frac{1}{2}$
+
+---
+
+### 1a (练习题)
+
+**题目**: a  $y = x^{2}$  at the point with coordinates (3, 9)
+
+---
+
+### 1b (练习题)
+
+**题目**: b  $y = x^{2}$  at the point with  $x$  coordinate-2
+
+---
+
+### 1c (练习题)
+
+**题目**: $y = x^{3} + x^{2}$  at the point with  $x$  coordinate 4
+
+---
+
+### 1d (练习题)
+
+**题目**: d  $y = 3x^{3} - 2x + 1$  at the point with  $x$  coordinate 1.5
+
+---
+
+### 1e (练习题)
+
+**题目**: $y = \frac{1}{4} x^{2} + \frac{1}{5} x$  at the point with  $x$ -coordinate  $\frac{1}{2}$
 
 ---
 
@@ -29125,88 +28734,93 @@ $$
 
 ---
 
-## 18.15
+## Exercise 18.15
 
 ### 1 (练习题)
 
 **题目**: 1 Find the turning point or points on the following curves and explain whether each point is a maximum or a minimum.
-a  $y = x^{2} - 4x + 1$
 
 ---
 
-### 2 (练习题)
+### 1a (练习题)
+
+**题目**: a  $y = x^{2} - 4x + 1$
+
+---
+
+### 1b (练习题)
 
 **题目**: b  $y = x^{2} + 6x - 4$
 
 ---
 
-### 3 (练习题)
+### 1c (练习题)
 
 **题目**: c  $y = -x^{2} + 8x - 2$
 
 ---
 
-### 4 (练习题)
+### 1d (练习题)
 
 **题目**: d  $y = 3x^{2} - 12x + 4$
 
 ---
 
-### 5 (练习题)
+### 1e (练习题)
 
 **题目**: e  $y = -2x^{2} + 4x - 3$
 
 ---
 
-### 6 (练习题)
+### 1f (练习题)
 
 **题目**: f  $y = x^{2} + 3x - 1$
 
 ---
 
-### 7 (练习题)
+### 1g (练习题)
 
 **题目**: g y=-5x²+3x+4
 
 ---
 
-### 8 (练习题)
+### 1h (练习题)
 
 **题目**: h  $y = x^{3} - 12x - 1$
 
 ---
 
-### 9 (练习题)
+### 1i (练习题)
 
 **题目**: y=-x³+6x²+3
 
 ---
 
-### 10 (练习题)
+### 1j (练习题)
 
 **题目**: j  $y = x(x - 4)$
 
 ---
 
-### 11 (练习题)
+### 1k (练习题)
 
 **题目**: k  $y = (x - 5)(x + 5)$
 
 ---
 
-### 12 (练习题)
+### 1l (练习题)
 
 **题目**: y=x(2x-3)
 
 ---
 
-### 13 (练习题)
+### 1m (练习题)
 
 **题目**: m  $y = x(2x^{2} - 21x + 72)$
 
 ---
 
-### 14 (练习题)
+### 1n (练习题)
 
 **题目**: n  $y = x^{2}(3 - x)$
 
@@ -29221,8 +28835,18 @@ a  $y = x^{2} - 4x + 1$
 ### 3 (练习题)
 
 **题目**: 3 The height,  $h$  metres, of a ball above the ground is given by the formula  $h = 7t - 5t^2$  at time  $t$  seconds after the ball is thrown upwards.
-a Find dh dt
-b Find the greatest height of the ball above the ground.
+
+---
+
+### 3a (练习题)
+
+**题目**: a Find dh dt
+
+---
+
+### 3b (练习题)
+
+**题目**: b Find the greatest height of the ball above the ground.
 
 ---
 
@@ -29236,15 +28860,30 @@ b Find the greatest height of the ball above the ground.
 
 **题目**: 5 A manufacturer makes open-topped boxes by taking a  $2\mathrm{m} \times 1\mathrm{m}$  sheet of metal, cutting  $x\mathrm{m} \times x\mathrm{m}$  squares out of the corners and folding along the dotted lines shown in the diagram.
 ![image](images/c06cfd7d3c4a0f22adab212edeef1875c74dc560902460ad72c9f5c46d2e7256.jpg)
-a Show that the volume of the box produced is given by  $V = x(2 - 2x)(1 - 2x)$
-b Explain why  $x$  must be less than  $0.5\mathrm{m}$
-c Find the value of  $x$  that will give the maximum possible volume of the box.
 
 ![图片](../images/c06cfd7d3c4a0f22adab212edeef1875c74dc560902460ad72c9f5c46d2e7256.jpg)
 
 ---
 
-## Practicequestions
+### 5a (练习题)
+
+**题目**: a Show that the volume of the box produced is given by  $V = x(2 - 2x)(1 - 2x)$
+
+---
+
+### 5b (练习题)
+
+**题目**: b Explain why  $x$  must be less than  $0.5\mathrm{m}$
+
+---
+
+### 5c (练习题)
+
+**题目**: c Find the value of  $x$  that will give the maximum possible volume of the box.
+
+---
+
+## Practice questions
 
 ### 1 (练习题)
 
@@ -29335,7 +28974,7 @@ d  $y = -\frac{16}{x^2}$  [2]
 
 ---
 
-## 19
+## Chapter 19
 
 ### 1 (练习题)
 
@@ -29389,7 +29028,7 @@ a How many lines of symmetry are there in Sugata's design?
 
 ---
 
-## 19.1
+## 19.1 Symmetry in two dimensions
 
 ### 1 (练习题)
 
@@ -29432,18 +29071,6 @@ h Regular pentagon
 ### 2 (练习题)
 
 **题目**: 2 Sketch the following polygons and investigate to see how many lines of symmetry each one has. Copy and complete the table to summarise your results.
-[Table Row] <tr><td>Shape</td><td>Number of lines of symmetry</td></tr>
-[Table Row] <tr><td>Square</td><td></td></tr>
-[Table Row] <tr><td>Rectangle</td><td></td></tr>
-[Table Row] <tr><td>Equilateral triangle</td><td></td></tr>
-[Table Row] <tr><td>Isosceles triangle</td><td></td></tr>
-[Table Row] <tr><td>Scalene triangle</td><td></td></tr>
-[Table Row] <tr><td>Kite</td><td></td></tr>
-[Table Row] <tr><td>Parallelogram</td><td></td></tr>
-[Table Row] <tr><td>Rhombus</td><td></td></tr>
-[Table Row] <tr><td>Regular pentagon</td><td></td></tr>
-[Table Row] <tr><td>Regular hexagon</td><td></td></tr>
-[Table Row] <tr><td>Regular octagon</td><td></td></tr>
 
 ---
 
@@ -29488,7 +29115,7 @@ b Show the lines of symmetry on each shape using dotted lines.
 
 ---
 
-## 19.2
+## Exercise 19.2
 
 ### 1 (练习题)
 
@@ -29569,6 +29196,8 @@ c rotational symmetry of order 2 or more?
 
 ---
 
+## 19.2 Symmetry in three dimensions
+
 ### 1 (练习题)
 
 **题目**: 1 Here are two of the planes of symmetry in a cube:
@@ -29648,9 +29277,9 @@ A cube has nine possible planes of symmetry. Make sketches to show the other sev
 
 ---
 
-## 19.3
+## 19.3 Symmetry properties of circles
 
-### WORKED EXAMPLE 1 (例题)
+### 1 (例题)
 
 **题目**: WORKED EXAMPLE 1
 Chord AB is drawn in a circle with a radius of  $7\mathrm{cm}$  If the chord is  $3\mathrm{cm}$  from the centre of the circle, find the length of the chord correct to 2 decimal places.
@@ -29672,7 +29301,7 @@ $$
 
 ---
 
-### WORKED EXAMPLE 2 (例题)
+### 2 (例题)
 
 **题目**: WORKED EXAMPLE 2
 O is the centre of the circle, radius 11 cm.
@@ -29697,7 +29326,7 @@ $$
 
 ---
 
-### WORKED EXAMPLE 3 (例题)
+### 3 (例题)
 
 **题目**: WORKED EXAMPLE 3
 Find the lengths of  $x$  and  $y$  in this diagram correct to 2 decimal places where appropriate.
@@ -29718,7 +29347,7 @@ $$
 
 ---
 
-## 19.4
+## 19.4 Angle relationships in circles
 
 ### WORKED EXAMPLE 4 (例题)
 
@@ -29739,33 +29368,49 @@ $$
 
 ---
 
-## 19.3
+## 19.3 Symmetry properties of circles
 
 ### 1 (练习题)
 
 **题目**: 1 Calculate the length of the chord  $AB$  in each of the following circles. (In each case,  $X$  is the midpoint of  $AB$ .)
 a
 ![image](images/f575eada14df82f6595e117b00ee478b2f2bbb19e701b3ab68685f1ece9d13de.jpg)
-b
-![image](images/72ce6a1c27e098d2e544b920270587b78783cba3b567a22ae637eaf8071a3437.jpg)
-c
-![image](images/65e70bdfeb0be39a8ea98efda19eda42dffdad59a681124abf1a69304c8fbbb5.jpg)
 
 ![图片](../images/f575eada14df82f6595e117b00ee478b2f2bbb19e701b3ab68685f1ece9d13de.jpg)
 
+---
+
+## 19.4 Angle relationships in circles
+
+### 1 (练习题)
+
+**题目**: 1 Calculate the length of the chord  $AB$  in each of the following circles. (In each case,  $X$  is the midpoint of  $AB$ .)
+b
+![image](images/72ce6a1c27e098d2e544b920270587b78783cba3b567a22ae637eaf8071a3437.jpg)
+
 ![图片](../images/72ce6a1c27e098d2e544b920270587b78783cba3b567a22ae637eaf8071a3437.jpg)
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Calculate the length of the chord  $AB$  in each of the following circles. (In each case,  $X$  is the midpoint of  $AB$ .)
+c
+![image](images/65e70bdfeb0be39a8ea98efda19eda42dffdad59a681124abf1a69304c8fbbb5.jpg)
 
 ![图片](../images/65e70bdfeb0be39a8ea98efda19eda42dffdad59a681124abf1a69304c8fbbb5.jpg)
 
 ---
 
-### 2 (练习题)
+## 19.3 Symmetry properties of circles
+
+### 4 (练习题)
 
 **题目**: 2  $P$  is a point inside a circle whose centre is  $O$ . Describe how to draw the chord that has  $P$  as its midpoint
 
 ---
 
-### 3 (练习题)
+### 5 (练习题)
 
 **题目**: 3 In the diagram,  $AB$  and  $AD$  are tangents to the circle.  $ABC$  is a straight line. Calculate the size of angle  $x$ .
 ![image](images/99c16797d0d8cc8799c5ee154ff467b1ccc315976ed77ff6dfd67a210bbc80d4.jpg)
@@ -29774,13 +29419,13 @@ c
 
 ---
 
-### 4 (练习题)
+### 6 (练习题)
 
 **题目**: 4 A circle with a radius of  $8.4\mathrm{cm}$  has a chord  $5\mathrm{cm}$  from its centre. Calculate the length of the chord correct to 2 decimal places.
 
 ---
 
-### 5 (练习题)
+### 7 (练习题)
 
 **题目**: 5 In this diagram, find the length of  $AO$  and the area of quadrilateral  $AOCB$ .  $BA$  and  $BC$  are tangents to the circle.
 ![image](images/1f9fcd001f28c4b985cedfa88a4d957199442642e6d66f9b041cbfbfaf939ffb.jpg)
@@ -29789,7 +29434,7 @@ c
 
 ---
 
-### 6 (练习题)
+### 8 (练习题)
 
 **题目**: 6 A straight line cuts two concentric circles at  $A,B,C$  and  $D$  (in that order). Prove that  $AB = CD$
 ![image](images/fbd1f58d5f6eb80127fa0585d8e09c10335318ee76f64618ec3aa5ac2c4358e2.jpg)
@@ -29798,7 +29443,7 @@ c
 
 ---
 
-## 19.4
+## 19.4 Angle relationships in circles
 
 ### 7 (练习题)
 
@@ -29806,36 +29451,6 @@ c
 ![a](images/7a2aa56d94a97ad95a1c08cc82b40a57bbd020954d3b288639791e8bd7bcda2c.jpg)
 
 ![图片](../images/7a2aa56d94a97ad95a1c08cc82b40a57bbd020954d3b288639791e8bd7bcda2c.jpg)
-
----
-
-### 1 (练习题)
-
-**题目**: 1 Calculate the length of the chord  $AB$  in each of the following circles. (In each case,  $X$  is the midpoint of  $AB$ .)
-a
-![image](images/f575eada14df82f6595e117b00ee478b2f2bbb19e701b3ab68685f1ece9d13de.jpg)
-
-![图片](../images/f575eada14df82f6595e117b00ee478b2f2bbb19e701b3ab68685f1ece9d13de.jpg)
-
----
-
-### 1 (练习题)
-
-**题目**: 1 Calculate the length of the chord  $AB$  in each of the following circles. (In each case,  $X$  is the midpoint of  $AB$ .)
-b
-![image](images/72ce6a1c27e098d2e544b920270587b78783cba3b567a22ae637eaf8071a3437.jpg)
-
-![图片](../images/72ce6a1c27e098d2e544b920270587b78783cba3b567a22ae637eaf8071a3437.jpg)
-
----
-
-### 1 (练习题)
-
-**题目**: 1 Calculate the length of the chord  $AB$  in each of the following circles. (In each case,  $X$  is the midpoint of  $AB$ .)
-c
-![image](images/65e70bdfeb0be39a8ea98efda19eda42dffdad59a681124abf1a69304c8fbbb5.jpg)
-
-![图片](../images/65e70bdfeb0be39a8ea98efda19eda42dffdad59a681124abf1a69304c8fbbb5.jpg)
 
 ---
 
@@ -29854,15 +29469,6 @@ c
 ![C](images/75abbff46f15a32ec97251b92ddbc3c6f6c7429773e199526794cd672960342b.jpg)
 
 ![图片](../images/75abbff46f15a32ec97251b92ddbc3c6f6c7429773e199526794cd672960342b.jpg)
-
----
-
-### 18653 (练习题)
-
-**题目**: Mahindra makes badges by sticking an equilateral triangle onto a circular disc as shown. If the triangle has sides of  $15\mathrm{cm}$  find the diameter of the circular disc.
-![image](images/cf9c6ef982ddc4a9b2c6e9c999e990c32d905c5b185ed5c4af3f73748ded164d.jpg)
-
-![图片](../images/cf9c6ef982ddc4a9b2c6e9c999e990c32d905c5b185ed5c4af3f73748ded164d.jpg)
 
 ---
 
@@ -29954,7 +29560,7 @@ angle ADC.
 
 ---
 
-## 19.7
+## Exercise 19.7
 
 ### 1 (练习题)
 
@@ -30043,12 +29649,11 @@ $$
 
 ---
 
-## Alternatesegmenttheorem
+## WORKED EXAMPLE 6
 
 ### Worked Example 6 (例题)
 
-**题目**: WORKED EXAMPLE 6
-Prove that  $x = a$
+**题目**: Prove that  $x = a$
 ![image](images/b5079792dce2810f6652e5505edd08c388e28e7b4a6ec15c7f2adddf517c72f0.jpg)
 
 ![图片](../images/b5079792dce2810f6652e5505edd08c388e28e7b4a6ec15c7f2adddf517c72f0.jpg)
@@ -30066,7 +29671,7 @@ $$
 
 ---
 
-## 19.8
+## Exercise 19.8
 
 ### 1 (练习题)
 
@@ -30119,7 +29724,7 @@ $$
 
 ---
 
-## 7
+## WORKED EXAMPLE 7
 
 ### 7 (例题)
 
@@ -30181,7 +29786,7 @@ d Use the angle between a diameter and a tangent to show that  $x = y$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -30320,13 +29925,7 @@ ii Explain your answer fully. [1]
 
 ---
 
-## 20
-
-### 20.1 (练习题)
-
-**题目**: Histograms and cumulative frequency diagrams
-
----
+## >Chapter 20
 
 ### 1 (练习题)
 
@@ -30378,7 +29977,7 @@ Next draw the axes. You will need to decide on a suitable scale for both the hor
 
 ---
 
-## 20.1
+## Exercise 20.1
 
 ### 1 (练习题)
 
@@ -30478,7 +30077,7 @@ i Reconstruct this frequency table. Round frequencies to the nearest whole numbe
 
 ---
 
-## 20.2
+## 20.2 Cumulative frequency
 
 ### b (练习题)
 
@@ -30555,22 +30154,17 @@ a Is it easy to see how many vehicles travelled above or below the speed limit? 
 ### 7c (练习题)
 
 **题目**: c The traffic superintendent wants to know exactly how many vehicles travel below or above the speed limit.
+i Reconstruct this frequency table. Round frequencies to the nearest whole number.
 
 ---
 
-### 7ci (练习题)
-
-**题目**: i Reconstruct this frequency table. Round frequencies to the nearest whole number.
-
----
-
-### 7cii (练习题)
+### 7d (练习题)
 
 **题目**: How many vehicles were below the minimum speed limit?
 
 ---
 
-### 7d (练习题)
+### 7e (练习题)
 
 **题目**: d What percentage of vehicles in this sample were exceeding the maximum speed limit?
 
@@ -30697,16 +30291,16 @@ The examination marks of 300 students are summarised in the table.
 TIP
 You must plot the cumulative frequency at the upper end point of the class interval. Do not confuse this section with the midpoint calculations you use to estimate the mean in frequency tables.
 ![image](images/85d554c7a3caa73120777e81d7740d1a8d793d2982921df013a5f6f7716d4e1f.jpg)
-WORKED EXAMPLE 3 CONTINUED
-a Draw a cumulative frequency table.
-b Construct a cumulative frequency graph to show this data.
-c Calculate an estimate for the median mark.
 
 ![图片](../images/85d554c7a3caa73120777e81d7740d1a8d793d2982921df013a5f6f7716d4e1f.jpg)
 
 ![图片](../images/9aa4cf0e73dd1672dec2331c8111884b1e70be385d002039afa13c909f24a7e7.jpg)
 
-**解答**: [Table Row] <tr><td>Mark</td><td>Frequency</td><td>Cumulative frequency</td></tr>
+**解答**: WORKED EXAMPLE 3 CONTINUED
+a Draw a cumulative frequency table.
+b Construct a cumulative frequency graph to show this data.
+c Calculate an estimate for the median mark.
+[Table Row] <tr><td>Mark</td><td>Frequency</td><td>Cumulative frequency</td></tr>
 [Table Row] <tr><td>1-10</td><td>3</td><td>3</td></tr>
 [Table Row] <tr><td>11-20</td><td>7</td><td>10</td></tr>
 [Table Row] <tr><td>21-30</td><td>13</td><td>23</td></tr>
@@ -30741,9 +30335,11 @@ e the number of students who took between 40 minutes and one hour to get to scho
 
 ![图片](../images/7f49721d0976427b2f205678b7b03b1b8ca6f88556fec7e21c5abe2466c99f51.jpg)
 
+**解答**: Answers
+
 ---
 
-## 3
+## WORKED EXAMPLE 3 CONTINUED
 
 ### 3 (例题)
 
@@ -30773,11 +30369,10 @@ The median mark is 58.
 
 ---
 
-## 5
-
 ### 5 (例题)
 
-**题目**: Twenty bean seeds were planted for a biology experiment. The heights of the plants were measured after three weeks and recorded in the table.
+**题目**: WORKED EXAMPLE 5
+Twenty bean seeds were planted for a biology experiment. The heights of the plants were measured after three weeks and recorded in the table.
 [Table Row] <tr><td>Heights (hcm)</td><td>0 &lt; h ≤ 3</td><td>3 &lt; h ≤ 6</td><td>6 &lt; h ≤ 9</td><td>9 &lt; h ≤ 12</td></tr>
 [Table Row] <tr><td>Frequency</td><td>2</td><td>5</td><td>10</td><td>3</td></tr>
 a Find an estimate for the mean height.
@@ -30799,7 +30394,7 @@ $\frac{20}{2} = 10$  so the median height is the 10th value. Median height  $= 7
 
 ---
 
-## 20.2
+## Exercise 20.2
 
 ### 1 (练习题)
 
@@ -30847,7 +30442,7 @@ c How many children had a mass of  $45\mathrm{kg}$  or more?
 
 ---
 
-## 20.3
+## Exercise 20.3
 
 ### 1 (练习题)
 
@@ -30877,9 +30472,9 @@ b What mark would you need to get to be above the 90th percentile on each paper?
 
 ---
 
-## 6
+## WORKED EXAMPLE 6
 
-### WORKED EXAMPLE 6 (例题)
+### 6 (例题)
 
 **题目**: The percentage scored by 1000 students on an exam is shown on this cumulative frequency curve.
 ![image](images/2f2ff39eb4153e5cfd5b20b689f7c618c3034eb72a2907afd4b0ac60157f7375.jpg)
@@ -30894,8 +30489,7 @@ d the interquartile range.
 
 ![图片](../images/c5d71b7ed23f17019f7b51b6be97adf639aca59de296b13ec1c93762e630cea1.jpg)
 
-**解答**: WORKED EXAMPLE 7 CONTINUED
-Answers
+**解答**: Answers
 n=1000
 So the position of  $Q_{2}$  on the vertical axis is  $\frac{n}{2} = \frac{1000}{2} = 500$ .
 Draw the lines on the graph.
@@ -30913,9 +30507,9 @@ $$
 
 ---
 
-## 7
+## WORKED EXAMPLE 7
 
-### WORKED EXAMPLE 7 (例题)
+### 7 (例题)
 
 **题目**: The cumulative frequency curve shows the test results of 200 candidates who have applied for an internship at a media company. Only those who score above the 80th percentile will be invited for an interview. What is the lowest score that can be obtained to be offered an interview?
 ![image](images/43ba5d9dffc6d0125298f766d42b6dd91aa2562143fc2418e26e6ab4f66611ff.jpg)
@@ -30929,7 +30523,7 @@ Only those candidates who scored above 35 marks on the test will be invited for 
 
 ---
 
-## 20.3
+## Exercise 20.3
 
 ### 3 (练习题)
 
@@ -30965,7 +30559,7 @@ d The speed limit on this stretch of road is  $120\mathrm{km / h}$  . What perce
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -31023,7 +30617,7 @@ e Use your curve to estimate the percentage of people taking part who were aged 
 
 ---
 
-## Pastpaperquestions
+## Past paper questions
 
 ### 1 (练习题)
 
@@ -31136,8 +30730,6 @@ a Sue has one tea and one cake. Calculate how much she pays.
 [Table Row] <tr><td>Monday</td><td>08 30 to 16 00</td></tr>
 
 ---
-
-## KEYWORDS
 
 ### a (练习题)
 
@@ -31509,7 +31101,43 @@ $$
 
 ---
 
-## 21
+### Monday's (练习题)
+
+**题目**: Monday's 5 by 5 tablecloth has just 1 vertical line of symmetry.
+Design some tablecloths of other odd by odd sizes with just 1 line of symmetry.
+Check you agree that a 7 by 7 tablecloth can have at most 28 colours.
+Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Monday's rule?
+
+---
+
+### Tuesday's (练习题)
+
+**题目**: Tuesday's 5 by 5 tablecloth has rotational symmetry of order 4, and no lines of symmetry.
+Design some tablecloths of other odd by odd sizes with rotational symmetry of order 4, and no lines of symmetry.
+Check you agree that a 7 by 7 tablecloth can have at most 13 colours.
+Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Tuesday's rule?
+
+---
+
+### Wednesday's (练习题)
+
+**题目**: Wednesday's 5 by 5 tablecloth has 2 lines of symmetry (horizontal and vertical), and rotational symmetry of order 2.
+Design some tablecloths of other odd by odd sizes with 2 lines of symmetry, and rotational symmetry of order 2.
+Check you agree that a 7 by 7 tablecloth can have at most 16 colours.
+Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Wednesday's rule?
+
+---
+
+### Thursday's (练习题)
+
+**题目**: Thursday's 5 by 5 tablecloth has 2 (diagonal) lines of symmetry and rotational symmetry of order 2.
+Design some tablecloths of other odd by odd sizes with 2 (diagonal) lines of symmetry and rotational symmetry of order 2.
+Check you agree that a 7 by 7 tablecloth can have at most 16 colours.
+Can you find a way of working out the maximum number of different colours that can be used on an  $n$  by  $n$  tablecloth (where  $n$  is odd), following Thursday's rule?
+
+---
+
+## >Chapter 21
 
 ### 1 (练习题)
 
@@ -31556,7 +31184,7 @@ b What rule connects quantity  $y$  and quantity  $x$  in this proportion?
 
 ---
 
-## 21.1
+## 21.1 Working with ratio
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -31594,8 +31222,7 @@ Concrete  $= 1 + 2 + 4 = 7$ $\therefore$  cement  $= \frac{1}{7}$
 
 ### 1 (练习题)
 
-**题目**: Exercise 21.1
-1 Write each of the following as a ratio:
+**题目**: 1 Write each of the following as a ratio:
 a nine children to nine adults
 b one litre to five litres
 c 25 minutes to 3 minutes
@@ -31670,7 +31297,7 @@ a 25 litres to 50 litres
 
 ---
 
-## 21.2
+## Exercise 21.2
 
 ### 1 (练习题)
 
@@ -31706,12 +31333,11 @@ e If Mr Smith's wages are  $\frac{5}{8}$  of Mr Jones' wages, then the ratio of 
 
 ---
 
-## 3
+## WORKED EXAMPLE 3
 
 ### WORKED EXAMPLE 3 (例题)
 
-**题目**: WORKED EXAMPLE 3
-For each of the following ratios find the missing value.
+**题目**: For each of the following ratios find the missing value.
 a  $1:4 = x:20$
 b  $4:9 = 24:y$
 
@@ -31769,7 +31395,7 @@ $$
 
 ---
 
-## 21.2
+## Exercise 21.2
 
 ### 4 (练习题)
 
@@ -31804,7 +31430,41 @@ b How much would you need from the red tube if you used  $10\mathrm{ml}$  from t
 
 ---
 
-## 21.3
+### WORKED EXAMPLE 4 (例题)
+
+**题目**: WORKED EXAMPLE 4
+Share $24 between Jess and Anne in the ratio 3:5.
+
+**解答**: Answer
+Method 1
+$$
+3 + 5 = 8
+$$
+There are 8 parts in the ratio.
+$$
+2 4 + 8 = 3
+$$
+This is the value of 1 part.
+$$
+J e s g e t s \mathbb {9}
+$$
+Jess gets 3 parts:  $3 \times 3 = 9$
+$$
+\text {A n n e g e t s} \$ 15
+$$
+Anne gets 5 parts:  $5 \times 3 = 15$
+Method 2
+$$
+3 + 5 = 8
+$$
+There are 8 parts in the ratio.
+Jess gets  $\frac{3}{8}$  of  $24 = \frac{3}{8} \times 24 = \frac{9}{8}$
+Express each part as a fraction of the total parts and multiply by the quantity.
+Anne gets 5/8 of $24 = 5/8 × 24 = $15
+
+---
+
+## Exercise 21.3
 
 ### 1 (练习题)
 
@@ -31834,7 +31494,10 @@ h 2300 in the ratio 1:2:7.
 
 ### 3 (练习题)
 
-**题目**: 3 Jo shares 45 marbles with Ahmed in the ratio 3:2. How many marbles does each person get?
+**题目**: ![image](images/558978f162712cbaa86bdcb72ef1552de25637b518a3d4465b18aba7b246fbb2.jpg)
+3 Jo shares 45 marbles with Ahmed in the ratio 3:2. How many marbles does each person get?
+
+![图片](../images/558978f162712cbaa86bdcb72ef1552de25637b518a3d4465b18aba7b246fbb2.jpg)
 
 ---
 
@@ -31888,42 +31551,7 @@ b Find the ratio volume: surface area for a sphere of radius  $r$ , giving your 
 
 ---
 
-## 4
-
-### WORKED EXAMPLE 4 (例题)
-
-**题目**: Share $24 between Jess and Anne in the ratio 3:5.
-
-**解答**: Answer
-Method 1
-$$
-3 + 5 = 8
-$$
-There are 8 parts in the ratio.
-$$
-2 4 + 8 = 3
-$$
-This is the value of 1 part.
-$$
-J e s g e t s \mathbb {9}
-$$
-Jess gets 3 parts:  $3 \times 3 = 9$
-$$
-\text {A n n e g e t s} \$ 15
-$$
-Anne gets 5 parts:  $5 \times 3 = 15$
-Method 2
-$$
-3 + 5 = 8
-$$
-There are 8 parts in the ratio.
-Jess gets  $\frac{3}{8}$  of  $24 = \frac{3}{8} \times 24 = \frac{9}{8}$
-Express each part as a fraction of the total parts and multiply by the quantity.
-Anne gets 5/8 of $24 = 5/8 × 24 = $15
-
----
-
-## 21.2
+## 21.2 Ratio and scale
 
 ### WORKED EXAMPLE 5 (例题)
 
@@ -32019,7 +31647,7 @@ Write the ratios as fractions.
 
 ---
 
-## 21.4
+## Exercise 21.4
 
 ### 1 (练习题)
 
@@ -32117,9 +31745,9 @@ e Calculate the cost of tiling the bathroom floor if the tiles cost  $25.99 per 
 
 ---
 
-## 2
+## [Table Row] <tr><td colspan="2">WORKED EXAMPLE 10</td></tr>
 
-### WORKED EXAMPLE 10 (例题)
+### 10 (例题)
 
 **题目**: [Table Row] <tr><td colspan="2">A biology book shows a diagram of a flea drawn to a scale of 12:1. If the flea in the diagram is 25 mm long, how long is the real flea? Give your answer correct to 2 decimal places.</td></tr>
 
@@ -32133,7 +31761,7 @@ e Calculate the cost of tiling the bathroom floor if the tiles cost  $25.99 per 
 
 ---
 
-## 21.3
+## 21.3 Rates
 
 ### WORKED EXAMPLE 11 (例题)
 
@@ -32146,6 +31774,32 @@ e Calculate the cost of tiling the bathroom floor if the tiles cost  $25.99 per 
 $= 41$  people/km²
 Divide by 12 to get a rate per unit.
 Don't forget to write the units.
+
+---
+
+### 1 (练习题)
+
+**题目**: 1 Work in pairs to answer these questions about population density.
+a Which are the most and least densely populated areas in the world?
+b Suggest why some places are densely populated while others are not.
+c Why do social scientists usually look at population distribution as well as population density when they study different populations?
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 In biology, scientists often state that where conditions for an organism are favourable, the population density will be high, and that where conditions are unfavourable, the population density will be low because organisms will die out or move away.
+a Find an environmental example to support this hypothesis.
+b Do you think this hypothesis is true for human populations? Explain your answer, giving examples.
+
+---
+
+### 3 (练习题)
+
+**题目**: 3 How is population density data useful in the following areas?
+a Ecology
+b Epidemiology
+c Infrastructure planning
 
 ---
 
@@ -32205,7 +31859,7 @@ $$
 
 ---
 
-## 21.5
+## Exercise 21.5
 
 ### 1 (练习题)
 
@@ -32297,7 +31951,7 @@ b How long would it take him to run  $420\mathrm{m}$  if he could run it at this
 
 ---
 
-## 21.4
+## 21.4 Kinematic graphs
 
 ### WORKED EXAMPLE 15 (例题)
 
@@ -32323,7 +31977,7 @@ d He runs  $1.5\mathrm{km}$  in 10 minutes, an average speed  $150\mathrm{m / mi
 
 ---
 
-## Distance-timegraphs
+## Distance-time graphs
 
 ### WORKED EXAMPLE 15 (例题)
 
@@ -32416,7 +32070,7 @@ INVESTIGATION CONTINUED
 
 ---
 
-## 21.7
+## Exercise 21.7
 
 ### 2 (练习题)
 
@@ -32493,7 +32147,7 @@ c Distance travelled  $=$  area under graph
 
 ---
 
-## 21.8
+## Exercise 21.8
 
 ### 1 (练习题)
 
@@ -32539,12 +32193,11 @@ c Calculate the average speed for the whole journey.
 
 ---
 
-## 17
+## WORKED EXAMPLE 17
 
 ### WORKED EXAMPLE 17 (例题)
 
-**题目**: WORKED EXAMPLE 17
-The diagram shows the distance-time graph for a short car journey. The greatest speed reached is  $60\mathrm{km / h}$  . The acceleration in the first two minutes and the deceleration in the last two minutes are constant.
+**题目**: The diagram shows the distance-time graph for a short car journey. The greatest speed reached is  $60\mathrm{km / h}$  . The acceleration in the first two minutes and the deceleration in the last two minutes are constant.
 ![image](images/4b1eb55c866f6abac8aaab2f9c4e0ec7324d89f08ea8c4ae7df6e34af7cc9d29.jpg)
 a Draw the speed-time graph of this journey.
 b Calculate the average speed, in km/h, for the journey.
@@ -32568,7 +32221,7 @@ Calculate to give answer in km/h.
 
 ---
 
-## 21.9
+## Exercise 21.9
 
 ### 1 (练习题)
 
@@ -32596,37 +32249,7 @@ b What equation describes this relationship?
 
 ---
 
-## 18
-
-### WORKED EXAMPLE 18 (例题)
-
-**题目**: Five bottles of perfume cost $200. What would 11 bottles cost?
-
-**解答**: Answer
-Unitary method
-5 bottles cost $200
-1 bottle costs  $200 + 5 =$ 40
-11 bottles cost \(11 \times \\)40 = \\(440$
-WORKED EXAMPLE 18 CONTINUED
-You can also solve this problem using the ratio method.
-$$
-\frac {5}{2 0 0} = \frac {1 1}{x}
-$$
-Write out each part as a fraction.
-$$
-\frac {2 0 0}{5} = \frac {x}{1 1}
-$$
-Take the reciprocal of both ratios (tum them upside down) to make it easier to solve the equation.
-$$
-\frac {2 0 0 \times 1 1}{5} = x
-$$
-$$
-x = \$ 440
-$$
-
----
-
-## 21.10
+## Exercise 21.10
 
 ### 1 (练习题)
 
@@ -32686,9 +32309,9 @@ b How much fuel will the car use to travel  $190\mathrm{km}$  at the same rate?
 
 ---
 
-## APPLYYOURSKILLSCONTINUED
+## APPLY YOUR SKILLS CONTINUED
 
-### APPLY YOUR SKILLS CONTINUED (练习题)
+### 1 (练习题)
 
 **题目**: This graph shows the directly proportional relationship between lengths in metres (metric) and lengths in feet (imperial).
 ![image](images/89b2e2e09be5bc55b37756898574bcea5ffdb99e8d839e5852a404cdb7a8c590.jpg)
@@ -32705,7 +32328,38 @@ d A driveway was originally 18 feet long. It was resurfaced and extended to be o
 
 ---
 
-## 21.11
+## Inverse proportion
+
+### 1 (例题)
+
+**题目**: WORKED EXAMPLE 18
+Five bottles of perfume cost $200. What would 11 bottles cost?
+
+**解答**: Answer
+Unitary method
+5 bottles cost $200
+1 bottle costs  $200 + 5 =$ 40
+11 bottles cost \(11 \times \\)40 = \\(440$
+WORKED EXAMPLE 18 CONTINUED
+You can also solve this problem using the ratio method.
+$$
+\frac {5}{2 0 0} = \frac {1 1}{x}
+$$
+Write out each part as a fraction.
+$$
+\frac {2 0 0}{5} = \frac {x}{1 1}
+$$
+Take the reciprocal of both ratios (tum them upside down) to make it easier to solve the equation.
+$$
+\frac {2 0 0 \times 1 1}{5} = x
+$$
+$$
+x = \$ 440
+$$
+
+---
+
+## Exercise 21.11
 
 ### 1 (练习题)
 
@@ -32747,7 +32401,7 @@ b
 
 ---
 
-## Directproportion
+## Direct proportion
 
 ### WORKED EXAMPLE 21 (例题)
 
@@ -32774,7 +32428,7 @@ $$
 
 ---
 
-## 21
+## WORKED EXAMPLE 21
 
 ### 22 (例题)
 
@@ -32791,7 +32445,7 @@ $$
 
 ---
 
-## Directproportion
+## Direct proportion
 
 ### WORKED EXAMPLE 23 (例题)
 
@@ -32860,8 +32514,7 @@ $$
 
 ### 1 (练习题)
 
-**题目**: Exercise 21.12
-1  $y = kx$  .When  $y = 24$ $x = 16$  .Calculate:
+**题目**: 1  $y = kx$  .When  $y = 24$ $x = 16$  .Calculate:
 a the value of  $k$
 b  $y$  when  $x = 10$
 $x$  when  $y = 12$
@@ -32930,7 +32583,7 @@ b Calculate  $p$  when  $F$  is 13.5
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -32994,7 +32647,7 @@ a Calculate the greatest speed, in km/h, that the train reached. [1]
 
 ---
 
-## 22
+## Chapter 22
 
 ### 7 (练习题)
 
@@ -33099,7 +32752,7 @@ c How long is the cable when the total cost is $26.55?
 
 ---
 
-## 22.1
+## 22.1 Setting up equations to solve problems
 
 ### 1 (练习题)
 
@@ -33220,7 +32873,7 @@ b Calculate the flying time in minutes when the oil platform is  $120\mathrm{km}
 
 ---
 
-### 1 (例题)
+### 例1 (例题)
 
 **题目**: WORKED EXAMPLE 1
 My mother was 26 years old when I was born. Now, she is three times as old as I am. What are our ages now?
@@ -33238,14 +32891,14 @@ My age now is 13. My mother's age now is 39.
 
 ---
 
-### 2 (例题)
+### 例2 (例题)
 
 **题目**: WORKED EXAMPLE 2
 The longest sides of a parallelogram are five times longer than its shorter sides. If it has a perimeter of  $9.6\mathrm{m}$ , what are the lengths of the long and short sides?
 
 ---
 
-## 22.2
+## Exercise 22.2
 
 ### 1 (练习题)
 
@@ -33307,6 +32960,8 @@ The longest sides of a parallelogram are five times longer than its shorter side
 
 ---
 
+## 22.2 Using and rearranging formulae
+
 ### WORKED EXAMPLE 3 (例题)
 
 **题目**: WORKED EXAMPLE 3
@@ -33330,7 +32985,7 @@ So the pairs of integers are 6, 7 and -7, -6.
 
 ---
 
-## 4
+## WORKED EXAMPLE 4
 
 ### WORKED EXAMPLE 4 (例题)
 
@@ -33351,81 +33006,7 @@ This means  $x$  must be 3.
 
 ---
 
-## 22.2
-
-### WORKED EXAMPLE 4 (例题)
-
-**题目**: WORKED EXAMPLE 4
-The length of a rectangle is  $2\mathrm{cm}$  greater than its width. The area of the rectangle is  $15\mathrm{cm}$ . Find its perimeter.
-Answer
-![image](images/c77054437f47229412c8d8dec25f216b20cc2423871f07a1943518389589d59e.jpg)
-Always draw a diagram to show the information and to help you visualise the situation.
-The area is the length  $\times$  width, so
-
-![图片](../images/c77054437f47229412c8d8dec25f216b20cc2423871f07a1943518389589d59e.jpg)
-
-**解答**: $$
-\begin{array}{l} x (x + 2) = 1 5 \\ \Rightarrow x ^ {2} + 2 x = 1 5 \\ \Rightarrow x ^ {2} + 2 x - 1 5 = 0 \\ \Rightarrow (x + 5) (x - 3) = 0 \\ \Rightarrow x = - 5 \text {o r} x = 3 \\ \end{array}
-$$
-$x$  is the width of the rectangle,
-so it cannot be a negative number.
-This means  $x$  must be 3.
-The dimensions of the rectangle are
-$$
-3 \mathrm {c m} \times 5 \mathrm {c m}.
-$$
-Its perimeter  $= 3 + 5 + 3 + 5 = 16\mathrm{cm}$
-Use  $x$  to represent the width of the rectangle. This means that the length will be  $x + 2$
-
----
-
-### WORKED EXAMPLE 5 (例题)
-
-**题目**: WORKED EXAMPLE 5
-A right-angled triangle has height  $h$  cm and base  $b$  cm. The hypotenuse of the triangle has length  $\sqrt{13}$  cm. If the area of the triangle is  $3$  cm² find the possible values for  $b$  and  $h$ .
-Answer
-Use the formula for the area of a triangle:
-$$
-\begin{array}{l} \frac {1}{2} b h = 3 \\ \Rightarrow b h = 6 \\ \Rightarrow h = \frac {6}{b} \tag {1} \\ \end{array}
-$$
-Now use Pythagoras' theorem and the fact that the hypotenuse has length  $\sqrt{13}$  cm:
-$$
-b ^ {2} + h ^ {2} = 1 3 \tag {2}
-$$
-Substitute [1] into [2]:
-$$
-\begin{array}{l} b ^ {2} + \left(\frac {6}{b}\right) ^ {2} = 1 3 \\ \Rightarrow b ^ {2} + \frac {3 6}{b ^ {2}} = 1 3 \\ \end{array}
-$$
-
-**解答**: WORKED EXAMPLE 5 CONTINUED
-Solve the equation to find the values of  $b$  and substitute into (1) to find the values of  $h$ :
-$$
-\begin{array}{l} (b ^ {2}) ^ {2} + 3 6 = 1 3 b ^ {2} \\ \Rightarrow (b ^ {2}) ^ {2} - 1 3 (b ^ {2}) + 3 6 = 0 \\ \Rightarrow \quad (b ^ {2} - 9) (b ^ {2} - 4) = 0 \\ \Rightarrow \quad b = 3 \text {o r} 2 \\ \Rightarrow \quad h = 2 \text {o r} 3 \\ \end{array}
-$$
-
----
-
-### WORKED EXAMPLE 6 (例题)
-
-**题目**: WORKED EXAMPLE 6
-Solve for  $h$  if  $A = 2\pi r(r + h)$
-Answer
-
-**解答**: $$
-\begin{array}{l} A = 2 \pi r (r + h) \\ A = 2 \pi r ^ {2} + 2 \pi r h \\ A - 2 \pi r ^ {2} = 2 \pi r h \\ \end{array}
-$$
-Expand to remove the brackets.
-Subtract to isolate the term with  $h$  in it.
-$$
-\frac {(A - 2 \pi r ^ {2})}{2 \pi r} = h
-$$
-Divide to get rid of  $2\pi r$  on the right-hand side.
-$$
-h = \frac {(A - 2 \pi r ^ {2})}{2 \pi r}
-$$
-Express the formula in terms of  $h$ .
-
----
+## Exercise 22.3
 
 ### 1 (练习题)
 
@@ -33533,6 +33114,84 @@ The diagram shows an open-topped cylinder with radius  $r$  cm and height  $12$ 
 
 ---
 
+## 22.2 Using and rearranging formulae
+
+### WORKED EXAMPLE 4 (例题)
+
+**题目**: WORKED EXAMPLE 4
+The length of a rectangle is  $2\mathrm{cm}$  greater than its width. The area of the rectangle is  $15\mathrm{cm}$ . Find its perimeter.
+Answer
+![image](images/c77054437f47229412c8d8dec25f216b20cc2423871f07a1943518389589d59e.jpg)
+Always draw a diagram to show the information and to help you visualise the situation.
+The area is the length  $\times$  width, so
+
+![图片](../images/c77054437f47229412c8d8dec25f216b20cc2423871f07a1943518389589d59e.jpg)
+
+**解答**: $$
+\begin{array}{l} x (x + 2) = 1 5 \\ \Rightarrow x ^ {2} + 2 x = 1 5 \\ \Rightarrow x ^ {2} + 2 x - 1 5 = 0 \\ \Rightarrow (x + 5) (x - 3) = 0 \\ \Rightarrow x = - 5 \text {o r} x = 3 \\ \end{array}
+$$
+$x$  is the width of the rectangle,
+so it cannot be a negative number.
+This means  $x$  must be 3.
+The dimensions of the rectangle are
+$$
+3 \mathrm {c m} \times 5 \mathrm {c m}.
+$$
+Its perimeter  $= 3 + 5 + 3 + 5 = 16\mathrm{cm}$
+Use  $x$  to represent the width of the rectangle. This means that the length will be  $x + 2$
+
+---
+
+### WORKED EXAMPLE 5 (例题)
+
+**题目**: WORKED EXAMPLE 5
+A right-angled triangle has height  $h$  cm and base  $b$  cm. The hypotenuse of the triangle has length  $\sqrt{13}$  cm. If the area of the triangle is  $3$  cm² find the possible values for  $b$  and  $h$ .
+Answer
+Use the formula for the area of a triangle:
+$$
+\begin{array}{l} \frac {1}{2} b h = 3 \\ \Rightarrow b h = 6 \\ \Rightarrow h = \frac {6}{b} \tag {1} \\ \end{array}
+$$
+Now use Pythagoras' theorem and the fact that the hypotenuse has length  $\sqrt{13}$  cm:
+$$
+b ^ {2} + h ^ {2} = 1 3 \tag {2}
+$$
+Substitute [1] into [2]:
+$$
+\begin{array}{l} b ^ {2} + \left(\frac {6}{b}\right) ^ {2} = 1 3 \\ \Rightarrow b ^ {2} + \frac {3 6}{b ^ {2}} = 1 3 \\ \end{array}
+$$
+TIP
+Where possible, make one unknown the subject of the equation, so that it can be substituted into any later equation.
+WORKED EXAMPLE 5 CONTINUED
+Solve the equation to find the values of  $b$  and substitute into (1) to find the values of  $h$ :
+
+**解答**: $$
+\begin{array}{l} (b ^ {2}) ^ {2} + 3 6 = 1 3 b ^ {2} \\ \Rightarrow (b ^ {2}) ^ {2} - 1 3 (b ^ {2}) + 3 6 = 0 \\ \Rightarrow \quad (b ^ {2} - 9) (b ^ {2} - 4) = 0 \\ \Rightarrow \quad b = 3 \text {o r} 2 \\ \Rightarrow \quad h = 2 \text {o r} 3 \\ \end{array}
+$$
+
+---
+
+### WORKED EXAMPLE 6 (例题)
+
+**题目**: WORKED EXAMPLE 6
+Solve for  $h$  if  $A = 2\pi r(r + h)$
+Answer
+
+**解答**: $$
+\begin{array}{l} A = 2 \pi r (r + h) \\ A = 2 \pi r ^ {2} + 2 \pi r h \\ A - 2 \pi r ^ {2} = 2 \pi r h \\ \end{array}
+$$
+Expand to remove the brackets.
+Subtract to isolate the term with  $h$  in it.
+$$
+\frac {(A - 2 \pi r ^ {2})}{2 \pi r} = h
+$$
+Divide to get rid of  $2\pi r$  on the right-hand side.
+$$
+h = \frac {(A - 2 \pi r ^ {2})}{2 \pi r}
+$$
+Express the formula in terms of  $h$ .
+
+---
+
 ### 14 (练习题)
 
 **题目**: 14 The cube of a number is 152 more than the cube of another number that is 2 smaller. What are the two possible numbers for which this is true?
@@ -33579,12 +33238,6 @@ Multiply each side by  $\pi$ .
 $$
 A = \pi r ^ {2}
 $$
-
----
-
-### Exercise 22.4 (练习题)
-
-**题目**: Exercise 22.4
 
 ---
 
@@ -33815,7 +33468,7 @@ V=πr²h (h)
 
 ---
 
-## 22.5
+## 22.3 Functions and function notation
 
 ### 1 (练习题)
 
@@ -33854,28 +33507,23 @@ a  $x + a = ax + b$
 
 ---
 
-### 1 (练习题)
+### 2 (练习题)
 
 **题目**: 2 Einstein developed the formula  $E = mc^2$  when he worked on relativity. Express this formula in terms of  $c$ .
 
 ---
 
-### 2 (练习题)
+### 3 (练习题)
 
 **题目**: 3 Pythagoras' theorem can expressed as  $a^2 + b^2 = c^2$ . Express this in terms of  $a$ .
 
 ---
 
-### 3 (练习题)
+### 4 (练习题)
 
 **题目**: 4 In each of these formulae, make  $y$  the subject.
 a
-
----
-
-### 4 (练习题)
-
-**题目**: b  $x = \frac{y + c}{3}$
+b  $x = \frac{y + c}{3}$
 
 ---
 
@@ -33891,25 +33539,23 @@ a
 
 ---
 
-### 7 (练习题)
+### 5 (练习题)
 
 **题目**: 5 Given that  $y = \frac{a}{a + 2}$ , express this formula in terms of  $a$ .
 
 ---
 
-### 8 (练习题)
+### 6 (练习题)
 
 **题目**: 6 A circle sector has an area  $(A)$  of  $\frac{1}{2} r^2\theta$ . Rearrange the formula to find the radius in terms of  $A$  and  $\theta$ .
 
 ---
 
-### 9 (练习题)
+### 7 (练习题)
 
 **题目**: 7 Given that  $\frac{y}{x} = \frac{kx}{z^2}$ , express this formula in terms of  $x$ .
 
 ---
-
-## 22.3
 
 ### 8 (练习题)
 
@@ -33919,15 +33565,11 @@ b Show how you could rearrange the formula to find  $\nu$
 
 ---
 
-## 22.5
-
 ### 9 (练习题)
 
 **题目**: b Show how you could rearrange the formula to find  $\nu$
 
 ---
-
-## 22.3
 
 ### 9 (练习题)
 
@@ -33937,15 +33579,11 @@ b Rearrange the formula to make  $r$  the subject.
 
 ---
 
-## 22.5
-
-### 11 (练习题)
+### 10 (练习题)
 
 **题目**: b Rearrange the formula to make  $r$  the subject.
 
 ---
-
-## 22.3
 
 ### 10 (练习题)
 
@@ -33956,21 +33594,17 @@ c Express the formula  $A = \frac{\pi d^2}{4}$  in a way that would allow you to
 
 ---
 
-## 22.5
-
-### 13 (练习题)
+### 11 (练习题)
 
 **题目**: b Use the formula  $A = \pi r^2$  to find the area of the same circle.
 
 ---
 
-### 14 (练习题)
+### 12 (练习题)
 
 **题目**: c Express the formula  $A = \frac{\pi d^2}{4}$  in a way that would allow you to find the diameter of the circle when the area is known.
 
 ---
-
-## 22.3
 
 ### 11 (练习题)
 
@@ -33981,15 +33615,13 @@ c Calculate the amount of sealant you would need to cover a tank that is 2.3 met
 
 ---
 
-## 22.5
-
-### 16 (练习题)
+### 12 (练习题)
 
 **题目**: b 1 litre of sealant covers 6 square metres of surface. Modify the surface area formula you found in (a) to work out how many litres of sealant are needed for the tank.
 
 ---
 
-### 17 (练习题)
+### 13 (练习题)
 
 **题目**: c Calculate the amount of sealant you would need to cover a tank that is 2.3 metres high with a radius of 1.7 metres.
 
@@ -34021,8 +33653,6 @@ Collect like terms.
 Factorise.
 
 ---
-
-## 22.3
 
 ### 1 (练习题)
 
@@ -34110,7 +33740,7 @@ $$
 
 ---
 
-## 11
+## WORKED EXAMPLE 11
 
 ### WORKED EXAMPLE 14 (例题)
 
@@ -34148,7 +33778,7 @@ $$
 
 ---
 
-## 22.6
+## Exercise 22.6
 
 ### 1 (练习题)
 
@@ -34185,8 +33815,6 @@ c f(-3)
 d f(0.25)
 
 ---
-
-## KEYWORDS
 
 ### 4 (练习题)
 
@@ -34301,7 +33929,7 @@ c  $ff(-1) = f[f(-1)] = f[1 + 2] = f[3] = 9 - 6 = 3$
 
 ---
 
-## 22.7
+## Exercise 22.7
 
 ### 1 (练习题)
 
@@ -34401,9 +34029,9 @@ d gg(-2)
 
 ---
 
-## Inversefunctions
+## Inverse functions
 
-### WORKED EXAMPLE 17 (例题)
+### 17 (例题)
 
 **题目**: WORKED EXAMPLE 17
 Find the inverse of  $f(x) = 3x - 4$ .
@@ -34412,13 +34040,10 @@ Find the inverse of  $f(x) = 3x - 4$ .
 Using method 1, the flow diagram, you get:  $f \colon$  input  $\rightarrow \boxed{\times 3} \rightarrow \boxed{-4} \rightarrow$  output
 Reversing the diagram gives:  $f^{-1}$ : output  $\leftarrow \boxed{+3} \leftarrow \boxed{+4} \leftarrow \text{input}$
 Let  $x$  be the input to  $f^{-1}:\frac{x + 4}{3}\gets \boxed{+3}\gets \boxed{+4}\gets x$
-$$
-S _ {0}, f ^ {- 1} (x) = \frac {x + 4}{3}
-$$
 
 ---
 
-### WORKED EXAMPLE 18 (例题)
+### 18 (例题)
 
 **题目**: WORKED EXAMPLE 18
 Given  $g(x) = 5 - 2x$  find  $g^{-1}(x)$
@@ -34433,7 +34058,7 @@ $$
 
 ---
 
-### WORKED EXAMPLE 19 (例题)
+### 19 (例题)
 
 **题目**: WORKED EXAMPLE 19
 Find the inverse of the function  $f(x) = 3x - 4$ .
@@ -34456,7 +34081,7 @@ This is usually written in terms of  $x$  so,  $f^{-1}(x) = \frac{x + 4}{3}$
 
 ---
 
-### WORKED EXAMPLE 20 (例题)
+### 20 (例题)
 
 **题目**: WORKED EXAMPLE 20
 Given  $g(x) = 5 - 2x$ , find  $g^{-1}(x)$ .
@@ -34636,7 +34261,10 @@ This is usually written in terms of  $x$  so,  $g^{-1}(x) = \frac{5 - x}{2}$
 
 ### c (练习题)
 
-**题目**: f(x) = 3x + 2
+**题目**: $$
+\mathbf {g} (x) = \frac {x}{2} + 3
+$$
+f(x) = 3x + 2
 
 ---
 
@@ -34694,7 +34322,7 @@ This is usually written in terms of  $x$  so,  $g^{-1}(x) = \frac{5 - x}{2}$
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -34810,12 +34438,85 @@ c Find  $\mathbf{f}\mathbf{f}^{-1}(4)$  [1]
 
 ---
 
-## 23
+## Chapter 23
 
 ### 14 (练习题)
 
 **题目**: 14  $f(x) = \frac{5}{2x - 1}$
 Solve the equation  $\mathrm{f}(x) = -2$  [4]
+
+---
+
+### 11 (练习题)
+
+**题目**: 11  $f(x) = 3x^{2} - 3x - 4$  and  $g(x) = 4 - 3x$
+a State the value of  $f(-2)$  [1]
+
+---
+
+### 11b (练习题)
+
+**题目**: b Solve the equation  $f(x) = -3$  [3]
+
+---
+
+### 11c (练习题)
+
+**题目**: c Solve the equation  $\mathrm{f}(x) = 0$ , giving your answer correct to 2 decimal places. [3]
+
+---
+
+### 11d (练习题)
+
+**题目**: d Solve the equation  $\mathbf{g}(\mathbf{x}) = 2\mathbf{g}(\mathbf{x}) - 1$  [3]
+
+---
+
+### 11e (练习题)
+
+**题目**: e Find  $\mathfrak{g}^{-1}(x)$  [2]
+
+---
+
+### 11f (练习题)
+
+**题目**: Find and simplify  $\operatorname {fg}(x) - 4\operatorname {gf}(x)$  [4]
+
+---
+
+### 11g (练习题)
+
+**题目**: g Solve  $\mathbf{gg}(x) = 17$  [4]
+
+---
+
+### 11h (练习题)
+
+**题目**: h Find and simplify  $\mathbf{ff}(x) - (\mathbf{f}(x))^2$  [4]
+
+---
+
+### 12b (练习题)
+
+**题目**: b Write down  $\mathsf{f}^{-1}(\mathsf{x})$  [1]
+
+---
+
+### 12c (练习题)
+
+**题目**: c Find ffff(x). [3]
+
+---
+
+### 13b (练习题)
+
+**题目**: b Find  $f^{-1}(x)$  [1]
+
+---
+
+### 13c (练习题)
+
+**题目**: c Find  $\mathbf{f}\mathbf{f}^{-1}(4)$  [1]
 
 ---
 
@@ -34863,32 +34564,7 @@ c Draw your own sketch to show the vectors  $MN = \begin{pmatrix} -3 \\ -2 \end{
 
 ---
 
-## 23.1
-
-### 1 (练习题)
-
-**题目**: 1 Copy the shapes and the mirror lines onto squared paper. Draw the image of each object.
-![a](images/8c8c676cad4a9cec7862c0801b34d55939e2e8acdc7001a1e415ad61607f55f8.jpg)
-![b](images/9cdfff936a8c23ec9bc73b56fd032bb0271449a77718458ad035abf3104485b7.jpg)
-![C](images/7f1601e14c627c53ede6d2dc145785626b7134b2ddcc669360528f4ddb2f4b4e.jpg)
-
-![图片](../images/8c8c676cad4a9cec7862c0801b34d55939e2e8acdc7001a1e415ad61607f55f8.jpg)
-
-![图片](../images/9cdfff936a8c23ec9bc73b56fd032bb0271449a77718458ad035abf3104485b7.jpg)
-
-![图片](../images/7f1601e14c627c53ede6d2dc145785626b7134b2ddcc669360528f4ddb2f4b4e.jpg)
-
----
-
-### 2 (练习题)
-
-**题目**: 2 Copy the axes and shapes onto squared paper.
-For each diagram:
-draw the mirror line.
-
----
-
-## KEYWORDS
+## 23.1 Simple plane transformations
 
 ### WORKED EXAMPLE 1 (例题)
 
@@ -34945,7 +34621,30 @@ b The  $x$  -axis  $(y = 0)$  is the mirror line.
 
 ---
 
-## 23.1
+### 1 (练习题)
+
+**题目**: 1 Copy the shapes and the mirror lines onto squared paper. Draw the image of each object.
+![a](images/8c8c676cad4a9cec7862c0801b34d55939e2e8acdc7001a1e415ad61607f55f8.jpg)
+![b](images/9cdfff936a8c23ec9bc73b56fd032bb0271449a77718458ad035abf3104485b7.jpg)
+![C](images/7f1601e14c627c53ede6d2dc145785626b7134b2ddcc669360528f4ddb2f4b4e.jpg)
+
+![图片](../images/8c8c676cad4a9cec7862c0801b34d55939e2e8acdc7001a1e415ad61607f55f8.jpg)
+
+![图片](../images/9cdfff936a8c23ec9bc73b56fd032bb0271449a77718458ad035abf3104485b7.jpg)
+
+![图片](../images/7f1601e14c627c53ede6d2dc145785626b7134b2ddcc669360528f4ddb2f4b4e.jpg)
+
+---
+
+### 2 (练习题)
+
+**题目**: 2 Copy the axes and shapes onto squared paper.
+For each diagram:
+draw the mirror line.
+
+---
+
+## Exercise 23.1
 
 ### 2 (练习题)
 
@@ -35000,7 +34699,7 @@ Reflect triangle  $DEF$  in the line  $y = 1$  Label the image  $D^{\prime \prim
 
 ---
 
-## 23.2
+## Exercise 23.2
 
 ### 1 (练习题)
 
@@ -35045,7 +34744,7 @@ Centre of rotation  $(-1,0)$ ; angle of rotation  $180^{\circ}$ .
 
 ---
 
-## 4
+## WORKED EXAMPLE 4
 
 ### WORKED EXAMPLE 4 (例题)
 
@@ -35063,7 +34762,7 @@ b point  $A$  (label the image  $A^{\prime \prime}B^{\prime \prime}C^{\prime \pr
 
 ---
 
-## 23.2
+## Exercise 23.2
 
 ### 4 (练习题)
 
@@ -35078,7 +34777,7 @@ c  $180^{\circ}$  clockwise
 
 ---
 
-## 23.3
+## Exercise 23.3
 
 ### 1 (练习题)
 
@@ -35258,7 +34957,7 @@ Plot the point and draw and label the enlargement.
 
 ---
 
-## 23.4
+## Exercise 23.4
 
 ### 4 (练习题)
 
@@ -35316,7 +35015,7 @@ b Explain mathematically what you would do to fill in the next row of the patter
 
 ---
 
-## 23.2
+## 23.2 Further transformations
 
 ### WORKED EXAMPLE 8 (例题)
 
@@ -35382,7 +35081,7 @@ c What single transformation maps  $\mathsf{P}'$  onto  $\mathsf{P}''$ ?
 
 ---
 
-## 23.5
+## Exercise 23.5
 
 ### 1 (练习题)
 
@@ -35478,7 +35177,7 @@ b  $A^{\prime \prime}B^{\prime \prime}C^{\prime \prime}$
 
 ---
 
-## 23.3
+## 23.3 Vectors
 
 ### 10 (练习题)
 
@@ -35492,7 +35191,7 @@ b  $A^{\prime \prime}B^{\prime \prime}C^{\prime \prime}$
 
 ---
 
-### WORKED EXAMPLE 12 (例题)
+### 12 (例题)
 
 **题目**: WORKED EXAMPLE 12
 Express  $\overrightarrow{RS}$  and  $\overrightarrow{LM}$  as column vectors.
@@ -35512,7 +35211,7 @@ Translation from  $L$  to  $M$  is three units right and two down.
 
 ---
 
-### WORKED EXAMPLE 13 (例题)
+### 13 (例题)
 
 **题目**: WORKED EXAMPLE 13
 Draw the column vectors  $\binom{1}{3}$  and  $\binom{-2}{-4}$ .
@@ -35630,29 +35329,17 @@ $$
 
 ---
 
-## Equalvectors
+## Equal vectors
 
 ### 1 (练习题)
 
 **题目**: 1 If  $a = \left( \begin{array}{l}3\\ -7 \end{array} \right)$  calculate:
-
----
-
-### c (练习题)
-
-**题目**: c -2a
-
----
-
-### 3 a 4 (练习题)
-
-**题目**: 3 a 4
-
----
-
-### f (练习题)
-
-**题目**: f 1.5a
+a 3a
+b
+c -2a
+d -a
+3 a 4
+f 1.5a
 
 ---
 
@@ -35686,36 +35373,14 @@ $$
 ### 3 (练习题)
 
 **题目**: 3 If  $\mathbf{a} = \begin{pmatrix} -1 \\ -4 \end{pmatrix}$  and  $\mathbf{b} = \begin{pmatrix} 3 \\ 7 \end{pmatrix}$  calculate:
-
----
-
-### a (练习题)
-
-**题目**: a -2a
-
----
-
-### d (练习题)
-
-**题目**: d -3a 4
-
----
-
-### e (练习题)
-
-**题目**: e -1.5a
-
----
-
-### f (练习题)
-
-**题目**: f -12b
-
----
-
-### 5 b 9 (练习题)
-
-**题目**: 5 b 9
+a -2a
+b 3b
+3 2b
+d -3a 4
+e -1.5a
+f -12b
+3 a
+5 b 9
 
 ---
 
@@ -35737,7 +35402,7 @@ $\overrightarrow{AD} + \overrightarrow{DB} + \overrightarrow{BC} = \overrightarr
 
 ---
 
-## Subtractingvectors
+## Subtracting vectors
 
 ### WORKED EXAMPLE 18 (例题)
 
@@ -35847,8 +35512,6 @@ MN
 
 ---
 
-## SELFASSESSMENT
-
 ### 5 (练习题)
 
 **题目**: 5 In triangle  $XYZ,\overrightarrow{XY} = \mathbf{x}$  and  $\overrightarrow{YZ} = \mathbf{y}$  and  $WZ = \frac{1}{4} (XZ)$  Find in terms of  $\mathbf{x}$  and  $\mathbf{y}$
@@ -35864,8 +35527,6 @@ c YW
 
 ---
 
-## Subtractingvectors
-
 ### 6 (练习题)
 
 **题目**: 6 In the diagram,  $BCE$  and  $ACD$  are straight lines.
@@ -35873,8 +35534,6 @@ $\overrightarrow{AB} = 2\mathbf{a}$  and  $\overrightarrow{BC} = 3\mathbf{b}$ . 
 a
 
 ---
-
-## SELFASSESSMENT
 
 ### 6 (练习题)
 
@@ -35890,7 +35549,7 @@ d ED
 
 ---
 
-### 21 (例题)
+### WORKED EXAMPLE 21 (例题)
 
 **题目**: WORKED EXAMPLE 21
 Find the magnitude of the vector  $\overrightarrow{AB} = \begin{pmatrix} 3 \\ -4 \end{pmatrix}$ .
@@ -35919,7 +35578,7 @@ $$
 
 ---
 
-### 22 (例题)
+### WORKED EXAMPLE 22 (例题)
 
 **题目**: WORKED EXAMPLE 22
 $$
@@ -35933,7 +35592,7 @@ $$
 
 ---
 
-### 23 (例题)
+### WORKED EXAMPLE 23 (例题)
 
 **题目**: WORKED EXAMPLE 23
 The position vector of  $A$  is  $\binom{3}{2}$  and the
@@ -35962,7 +35621,7 @@ $$
 
 ---
 
-### 24 (例题)
+### WORKED EXAMPLE 24 (例题)
 
 **题目**: WORKED EXAMPLE 24
 If  $A$  is point  $(-1, -2)$  and  $B$  is  $(5, 6)$ , find  $|\overrightarrow{AB}|$ .
@@ -35974,7 +35633,7 @@ $$
 
 ---
 
-### 1 (练习题)
+### Exercise 23.9 (练习题)
 
 **题目**: Exercise 23.9
 1 Calculate the magnitude of each vector. Give your answers to 2 decimal places where necessary.
@@ -35984,7 +35643,7 @@ $$
 
 ---
 
-## Positionvectors
+## Position vectors
 
 ### 2 (练习题)
 
@@ -36198,7 +35857,7 @@ NC
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -36317,7 +35976,7 @@ b AD [1]
 
 ---
 
-## 24
+## Chapter 24
 
 ### 1 (练习题)
 
@@ -36351,22 +36010,19 @@ b How would you work out each one from a Venn diagram?
 
 ---
 
-## 24.2
-
 ### WORKED EXAMPLE 1 (例题)
 
 **题目**: WORKED EXAMPLE 1
 When you toss a coin you can either get heads or tails. Draw a tree diagram to show the possible outcomes for tossing a coin three times. Use H for heads and T for tails.
-![Answer](images/087d47dc622d105cf2df18efb782423822f93e5f00cfcd3b023618d2b68ede39.jpg)
+
+![图片](../images/087d47dc622d105cf2df18efb782423822f93e5f00cfcd3b023618d2b68ede39.jpg)
+
+**解答**: ![Answer](images/087d47dc622d105cf2df18efb782423822f93e5f00cfcd3b023618d2b68ede39.jpg)
 Draw a dot for the first toss.
 Draw and label two branches, one H and one T.
 Repeat this at the end of each branch for the second and third coin toss.
 
-![图片](../images/087d47dc622d105cf2df18efb782423822f93e5f00cfcd3b023618d2b68ede39.jpg)
-
 ---
-
-## 24
 
 ### 1 (练习题)
 
@@ -36388,7 +36044,20 @@ c What is the probability of getting the letter combination BD?
 
 ---
 
-## 24.2
+## 24.2 Calculating probability from tree diagrams
+
+### WORKED EXAMPLE 1 (例题)
+
+**题目**: WORKED EXAMPLE 1
+When you toss a coin you can either get heads or tails. Draw a tree diagram to show the possible outcomes for tossing a coin three times. Use H for heads and T for tails.
+![Answer](images/087d47dc622d105cf2df18efb782423822f93e5f00cfcd3b023618d2b68ede39.jpg)
+Draw a dot for the first toss.
+Draw and label two branches, one H and one T.
+Repeat this at the end of each branch for the second and third coin toss.
+
+![图片](../images/087d47dc622d105cf2df18efb782423822f93e5f00cfcd3b023618d2b68ede39.jpg)
+
+---
 
 ### WORKED EXAMPLE 2 (例题)
 
@@ -36469,6 +36138,8 @@ ii both beads are white.
 
 ---
 
+## Exercise 24.2
+
 ### 4 (练习题)
 
 **题目**: 4 This tree diagram shows the probability of getting heads and tails when a biased coin is tossed twice.
@@ -36479,8 +36150,11 @@ b two tails
 c tails on the first toss and heads on the second toss
 d only one tail
 at least one tail.
+![image](images/5065d7f9d073c559f3988790d36debbc2ad2f7f1dfa7bb72499e3fde97acab14.jpg)
 
 ![图片](../images/b4adde15e7482bb23208c86d67810a58bd35027818a33e2501851bf8f9fb584c.jpg)
+
+![图片](../images/5065d7f9d073c559f3988790d36debbc2ad2f7f1dfa7bb72499e3fde97acab14.jpg)
 
 ---
 
@@ -36566,7 +36240,7 @@ a After you have drawn the diagram, calculate the probability.
 
 ---
 
-## 24.3
+## Exercise 24.3
 
 ### 1 (练习题)
 
@@ -36657,7 +36331,7 @@ A cat that likes Fluffy is chosen at random. What is the probability that this c
 
 ---
 
-## 5
+## WORKED EXAMPLE 5
 
 ### WORKED EXAMPLE 5 (例题)
 
@@ -36679,7 +36353,7 @@ iii  $P(\text{not} B, M \text{or} E) = \frac{4}{30} = \frac{2}{15}$
 
 ---
 
-## 24.4
+## 24.4 Conditional probability
 
 ### 7 (练习题)
 
@@ -36715,7 +36389,7 @@ c Determine P(B and C).
 
 ---
 
-### WORKED EXAMPLE 6 (例题)
+### 6 (例题)
 
 **题目**: WORKED EXAMPLE 6
 A bag contains 21 balls. There are 12 blue balls and 9 green balls. Without looking, two balls are removed one after the other, without replacing them.
@@ -36732,7 +36406,8 @@ ii at least one of the balls is green?
 
 ![图片](../images/029b80aafdc73f0495fbf5f84cc25cec9752273c69afe892ef6a344f0ca5d45c.jpg)
 
-**解答**: a
+**解答**: Answers
+a
 ![image](images/6aa0575155729f060daa331057f5fb154e912d8e498d9bd38546fa88b5caabf6.jpg)
 This is an example of conditional probability. You cannot choose the same ball twice, so for the second set of branches there are only 20 balls left. If the first ball is blue, there are only 11 blue balls left but still 9 green balls. If the first ball is green, there are only 8 green balls left, but still 12 blue. In each case the numerator of one branch has changed but the numerators still add up to the value of the denominator (as this has also changed).
 12 11 11 b i 21 20 35
@@ -36744,7 +36419,7 @@ c
 
 ---
 
-## Dependentevents
+## Dependent events
 
 ### WORKED EXAMPLE 7 (例题)
 
@@ -36773,8 +36448,6 @@ $$
 = \frac {1 8}{2 0} = \frac {9}{1 0}
 $$
 d P(Not L given T has happened) = P(L' and T) = 18/36 = 1/2
-TIP
-$P(T$  given that  $L$  has happened) is dependent on students already using a laptop, so the probability is calculated using the total number of students who use a laptop not the total number of students.  $n(T$  and  $L$  is the number of students in the intersection of the two sets.
 
 ---
 
@@ -36812,8 +36485,6 @@ This time you need to look at the Grade 10 values.
 c P(Grade 11 given they use a tablet) =  $\frac{320}{650} = \frac{32}{65}$
 You know the student uses a tablet so use the values in the tablet column.
 650 students use a tablet and 320 are in Grade 11.
-TIP
-Conditional probability involves finding something using something that you know already. So for  $P(A$  given that  $B$  has happened),  $A$  is the event of interest, and  $B$  is the event that we assume has occurred.
 
 ---
 
@@ -36829,7 +36500,7 @@ iv both cards are hearts given that the first card is a heart.
 
 ---
 
-## 24.4
+## Exercise 24.4
 
 ### 2 (练习题)
 
@@ -36958,7 +36629,7 @@ d If Mahmoud goes windsurfing, the probability that he has to wait for a strong 
 
 ---
 
-## Practicequestions
+## Practice questions
 
 ### 1 (练习题)
 
@@ -37042,8 +36713,6 @@ c Solve the equation,  $3n^{2} - 17n - 28 = 0$  , and hence find the probability
 
 ---
 
-## Pastpaperquestions
-
 ### 1 (练习题)
 
 **题目**: 1
@@ -37068,6 +36737,8 @@ $M = \{x\colon x$  is a multiple of 3}
 老
 
 ---
+
+## Past paper questions
 
 ### 2 (练习题)
 
@@ -37134,7 +36805,7 @@ Give a reason for your answer.
 
 ---
 
-## 0580
+## Cambridge IGCSE Mathematics (0580) Paper 31 Q6, June 2021
 
 ### 6 (练习题)
 
@@ -37174,6 +36845,8 @@ Calculate the amount received from the ticket sales as a percentage of the $4500
 
 ---
 
+## Cambridge IGCSE Mathematics (0580) Paper 31 Q1, June 2020
+
 ### 1 (练习题)
 
 **题目**: ![6](images/669f261d309e70181d3f47733142477c3e2e48c83b89bbfec2b94392d673ca29.jpg)
@@ -37190,6 +36863,8 @@ On the grid, draw the image of shape  $B$  after a reflection in the line  $y = 
 
 ---
 
+## Cambridge IGCSE Mathematics (0580) Paper 31 Q7, June 2019
+
 ### 7 (练习题)
 
 **题目**: 7 Work out.
@@ -37200,6 +36875,8 @@ b 3(-4 7
 
 ---
 
+## Cambridge IGCSE Mathematics (0580) Paper 11 Q9, June 2021
+
 ### 8 (练习题)
 
 **题目**: 8  $y$  is directly proportional to the square root of  $(x - 3)$
@@ -37208,6 +36885,8 @@ Find  $y$  when  $x = 39$ .
 [3]
 
 ---
+
+## Cambridge IGCSE Mathematics (0580) Paper 21 Q14, June 2021
 
 ### 14 (练习题)
 
@@ -37225,6 +36904,8 @@ b On the grid, draw the image of triangle  $A$  after a translation by the vecto
 
 ---
 
+## Cambridge IGCSE Mathematics (0580) Paper 21 Q10, June 2021
+
 ### 10 (练习题)
 
 **题目**: 10
@@ -37236,6 +36917,8 @@ Find  $\overrightarrow{OS}$ , in terms of a and b, in its simplest form.
 ![图片](../images/cf17da053f7a5dce6310beceaa62ee8db16c7a7acb3551de559c4b83d36fc7d1.jpg)
 
 ---
+
+## Cambridge IGCSE Mathematics (0580) Paper 21 Q18, June 2021
 
 ### 11 (练习题)
 
@@ -37262,6 +36945,8 @@ Find the probability that both cards show an even number.
 
 ---
 
+## Cambridge IGCSE Mathematics (0580) Paper 21 Q11, June 2019
+
 ### 12 (练习题)
 
 **题目**: 12 a  $f(x) = 4x + 3\quad g(x) = 5x - 4$
@@ -37276,6 +36961,8 @@ Find  $\mathbf{h}^{-1}(x)$
 
 ---
 
+## Cambridge IGCSE Mathematics (0580) Paper 21 Q14, June 2020
+
 ### 13 (练习题)
 
 **题目**: 13  $m$  is inversely proportional to the square of  $(p - 1)$
@@ -37285,9 +36972,7 @@ Find  $m$  when  $p = 6$
 
 ---
 
-## KEYWORDS
-
-### 14a i (练习题)
+### 14 a i (练习题)
 
 **题目**: 14 a i m=（5 7
 Find 3m.
@@ -37295,7 +36980,7 @@ Find 3m.
 
 ---
 
-### 12 (练习题)
+### 11 (练习题)
 
 **题目**: The diagram shows five cards.
 Two of the cards are taken at random, without replacement.
@@ -37304,7 +36989,7 @@ Find the probability that both cards show an even number.
 
 ---
 
-### 12b (练习题)
+### 12 b (练习题)
 
 **题目**: b h(x) = 5x-1 3
 Find  $\mathbf{h}^{-1}(x)$
@@ -37312,7 +36997,7 @@ Find  $\mathbf{h}^{-1}(x)$
 
 ---
 
-### 14a ii (练习题)
+### 14 (练习题)
 
 **题目**: Find  $\left|\overrightarrow{\nu w}\right|$
 $- b$
@@ -37329,7 +37014,7 @@ Find  $\overrightarrow{OE}$ , in terms of  $\mathbf{p}$  and  $\mathbf{q}$ , in 
 
 ---
 
-### 15a (练习题)
+### 15 a (练习题)
 
 **题目**: 15 a In 2018, Gretal earned $32 000.
 She paid tax of  $24\%$  on these earnings.
@@ -37338,7 +37023,7 @@ Work out the amount she paid in tax in 2018.
 
 ---
 
-### 15a ii (练习题)
+### 15 (练习题)
 
 **题目**: In 2019, Gretals's earnings increased by  $7\%$ .
 Work out her earnings in 2019.
@@ -37346,7 +37031,7 @@ Work out her earnings in 2019.
 
 ---
 
-### 15b (练习题)
+### 15 b (练习题)
 
 **题目**: b Gretal invests $5000 at a rate of 2% per year compound interest.
 Calculate the value of her investment at the end of 3 years.
@@ -37354,7 +37039,7 @@ Calculate the value of her investment at the end of 3 years.
 
 ---
 
-### 15c (练习题)
+### 15 c (练习题)
 
 **题目**: c One month, Gretal spent a total of $360 on presents.
 She spent  $\frac{1}{5}$  of this total on presents for her parents.
@@ -37365,7 +37050,7 @@ Calculate the percentage of the $360 that she spent on presents for her sisters.
 
 ---
 
-### 15d (练习题)
+### 15 d (练习题)
 
 **题目**: d Arjun earned $36515 in 2019.
 This was an increase of  $9\%$  on his earnings in 2018.
@@ -37374,7 +37059,7 @@ Work out his earnings in 2018.
 
 ---
 
-### 15e (练习题)
+### 15 e (练习题)
 
 **题目**: e Arjun and Gretal each pay rent.
 In 2018, the ration of the amount each paid in rent was Arjun:Gretal  $= 5:7$
@@ -37397,7 +37082,7 @@ a Find the acceleration, in  $\mathrm{m / s^2}$  of the train during the first 5
 
 ---
 
-### 16b (练习题)
+### 16 b (练习题)
 
 **题目**: b After 180 seconds, the train decelerates at a constant rate of  $1944\mathrm{km} / \mathrm{h}^2$
 Show that the train decelerates for 60 seconds until it stops.
@@ -37405,7 +37090,7 @@ Show that the train decelerates for 60 seconds until it stops.
 
 ---
 
-### 16c (练习题)
+### 16 c (练习题)
 
 **题目**: c Complete the speed-time graph.
 [Using Figure 5 in the Unit 6 Past Paper Questions Resource Sheet.]
@@ -37413,14 +37098,14 @@ Show that the train decelerates for 60 seconds until it stops.
 
 ---
 
-### 16d (练习题)
+### 16 d (练习题)
 
 **题目**: d Calculate the average speed of the train for the whole journey.
 [4]
 
 ---
 
-### 17a (练习题)
+### 17 a (练习题)
 
 **题目**: 17 a On the Venn diagram, shade the region  $P^{\prime}\cup Q$
 [Using Figure 6 in the Unit 6 Past Paper Questions Resource Sheet.]
@@ -37431,7 +37116,7 @@ Show that the train decelerates for 60 seconds until it stops.
 
 ---
 
-### 17b (练习题)
+### 17 b (练习题)
 
 **题目**: b There are 50 students in a group.
 34 have a mobile phone  $(M)$
@@ -37447,7 +37132,7 @@ Complete the Venn diagram to show this information.
 
 ---
 
-### 17c i (练习题)
+### 17 c i (练习题)
 
 **题目**: c The Venn diagram shows the number of students in a group of 30 who have brothers  $(B)$ , sisters  $(S)$  or cousins  $(C)$ .
 ![image](images/80f71c5b2001c88ddbda577e73f6a46ac920d91f8ec7142feb9467deea6b128c.jpg)
@@ -37458,28 +37143,28 @@ i Write down the number of students who have brothers.
 
 ---
 
-### 17c ii (练习题)
+### 17 c ii (练习题)
 
 **题目**: ii Write down the number of students who have cousins but do not have sisters.
 [1]
 
 ---
 
-### 17c iii (练习题)
+### 17ciii (练习题)
 
 **题目**: iii Find  $\mathfrak{n}(B\cup S\cup C)'$
 [1]
 
 ---
 
-### 17c iv (练习题)
+### 17civ (练习题)
 
 **题目**: iv Use set notation to describe the set of students who have both cousins and sisters but do not have brothers.
 [1]
 
 ---
 
-### 17c v (练习题)
+### 17cv (练习题)
 
 **题目**: One student is picked at random from the 30 students.
 [1]
@@ -37487,7 +37172,7 @@ Find the probability that this student has cousins.
 
 ---
 
-### 17c vi (练习题)
+### 17cvi (练习题)
 
 **题目**: vi Two students are picked at random from the students who have cousins.
 [3]
@@ -37495,7 +37180,7 @@ Calculate the probability that both these students have brothers.
 
 ---
 
-### 17c vii (练习题)
+### 17cvii (练习题)
 
 **题目**: vii One student is picked at random from the 30 students.
 [3]
@@ -37506,7 +37191,7 @@ Explain why event  $A$  and event  $B$  are equally likely.
 
 ---
 
-### 18a i (练习题)
+### 18a (练习题)
 
 **题目**: 18 a  $s = ut + \frac{1}{2} at^2$
 i Find  $s$  when  $t = 26.5$ ,  $u = 104.3$  and  $a = -2.2$ .
@@ -37515,14 +37200,14 @@ Give your answer in standard form, correct to 4 significant figures.
 
 ---
 
-### 18a ii (练习题)
+### 18aii (练习题)
 
 **题目**: ii Rearrange the formula to write  $a$  in terms of  $u, t$  and  $s$ .
 [3]
 
 ---
 
-### 18b i (练习题)
+### 18b (练习题)
 
 **题目**: b
 ![image](images/d6f10f2013cc765e314d0b0ccaab2b25ea70f76546360bee79c8eaff847e87a8.jpg)
@@ -37537,21 +37222,21 @@ i Show that  $x^{2} + 2x - 63 = 0$
 
 ---
 
-### 18b ii (练习题)
+### 18bii (练习题)
 
 **题目**: ii Factorise  $x^{2} + 2x - 63$
 [2]
 
 ---
 
-### 18b iii (练习题)
+### 18biii (练习题)
 
 **题目**: iii Solve the equation  $x^{2} + 2x - 63 = 0$  to find the difference between the perimeters of the two rectangles.
 [2]
 
 ---
 
-### 19a (练习题)
+### 19 (练习题)
 
 **题目**: ![image](images/ce1aa50d43756a0ab771e8fa28e2eff83f267eacc3da4b0be39778b293aa6943.jpg)
 The diagram shows the positions of three points  $A, B$  and  $C$  in a field.
@@ -37580,7 +37265,7 @@ ii  $B$  from  $C$
 
 ---
 
-### 19c ii (练习题)
+### 19ci (练习题)
 
 **题目**: ii  $B$  from  $C$
 [2]
@@ -37602,7 +37287,7 @@ Calculate his average running speed in kilometres per hour.
 
 ---
 
-### 20a (练习题)
+### 20 (练习题)
 
 **题目**: 20  $f(x) = 7x - 2$ $\mathbf{g}(x) = x^{2} + 1$ $\mathbf{h}(x) = 3^{x}$
 a Find gh(2).
@@ -37632,7 +37317,7 @@ Find the values of  $a, b$  and  $c$ .
 
 ---
 
-### 21a i (练习题)
+### 21 (练习题)
 
 **题目**: 21 The heights,  $h$  metres, of the 120 boys in an athletics club are recorded.
 The table shows information about the heights of the boys.
@@ -37643,7 +37328,7 @@ a i Write down the modal class.
 
 ---
 
-### 21a ii (练习题)
+### 21aii (练习题)
 
 **题目**: ii Calculate an estimate of the mean height.
 

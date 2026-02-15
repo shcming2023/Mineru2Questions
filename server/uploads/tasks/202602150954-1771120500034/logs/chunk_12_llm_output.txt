@@ -1,78 +1,44 @@
 <chapter><title>877</title>
-<qa_pair><label>b</label><type>exercise</type><question>840</question>
+<qa_pair><label>b -1.7 +□=8.3</label><type>exercise</type><question>840</question>
 <solution></solution></qa_pair>
-<qa_pair><label>c</label><type>exercise</type><question>841</question>
+<qa_pair><label>c -7+□=-21</label><type>exercise</type><question>841</question>
 <solution></solution></qa_pair>
-<qa_pair><label>d</label><type>exercise</type><question>842</question>
+<qa_pair><label>d 8-□=11</label><type>exercise</type><question>842</question>
 <solution></solution></qa_pair>
-<qa_pair><label>e</label><type>exercise</type><question>843</question>
+<qa_pair><label>e  $4 - \\square = 6.7$</label><type>exercise</type><question>843</question>
 <solution></solution></qa_pair>
-<qa_pair><label>f</label><type>exercise</type><question>844</question>
+<qa_pair><label>f -8-□=-13</label><type>exercise</type><question>844</question>
 <solution></solution></qa_pair>
-<qa_pair><label>g</label><type>exercise</type><question>845</question>
+<qa_pair><label>g  $12\\div \\square = -2$</label><type>exercise</type><question>845</question>
 <solution></solution></qa_pair>
-<qa_pair><label>h</label><type>exercise</type><question>846</question>
+<qa_pair><label>h -18÷□=3</label><type>exercise</type><question>846</question>
 <solution></solution></qa_pair>
-<qa_pair><label>i</label><type>exercise</type><question>847</question>
+<qa_pair><label>i  $\\square -3 = -9$</label><type>exercise</type><question>847</question>
 <solution></solution></qa_pair>
-<qa_pair><label>j</label><type>exercise</type><question>848</question>
+<qa_pair><label>j -3x□=12</label><type>exercise</type><question>848</question>
 <solution></solution></qa_pair>
-<qa_pair><label>k</label><type>exercise</type><question>849</question>
+<qa_pair><label>k  $\\square \\times 4 = -16$</label><type>exercise</type><question>849</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1</label><type>exercise</type><question>850</question>
+<qa_pair><label>1  $\\square \\times -4 = 20$</label><type>exercise</type><question>850</question>
 <solution></solution></qa_pair>
-<qa_pair><label>4</label><type>exercise</type><question>852,853,854</question>
-<solution></solution></qa_pair>
-<qa_pair><label>4b</label><type>exercise</type><question>855</question>
-<solution></solution></qa_pair>
-<qa_pair><label>4c</label><type>exercise</type><question>856</question>
-<solution></solution></qa_pair>
-<qa_pair><label>4d</label><type>exercise</type><question>857</question>
-<solution></solution></qa_pair>
-<qa_pair><label>4e</label><type>exercise</type><question>858</question>
+<qa_pair><label>4</label><type>exercise</type><question>852,853,854,855,856,857,858</question>
 <solution></solution></qa_pair>
 <qa_pair><label>5</label><type>exercise</type><question>859</question>
 <solution></solution></qa_pair>
-<qa_pair><label>6</label><type>exercise</type><question>860</question>
-<solution></solution></qa_pair>
-<qa_pair><label>6a</label><type>exercise</type><question>861</question>
-<solution></solution></qa_pair>
-<qa_pair><label>6b</label><type>exercise</type><question>862</question>
-<solution></solution></qa_pair>
-<qa_pair><label>6c</label><type>exercise</type><question>863</question>
+<qa_pair><label>6</label><type>exercise</type><question>860,861,862,863</question>
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>864</question>
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>868</question>
 <solution></solution></qa_pair>
-<qa_pair><label>9</label><type>exercise</type><question>869</question>
+<qa_pair><label>9</label><type>exercise</type><question>869,870,871,872,873</question>
 <solution></solution></qa_pair>
-<qa_pair><label>9a</label><type>exercise</type><question>870</question>
-<solution></solution></qa_pair>
-<qa_pair><label>9b</label><type>exercise</type><question>871</question>
-<solution></solution></qa_pair>
-<qa_pair><label>9c</label><type>exercise</type><question>872</question>
-<solution></solution></qa_pair>
-<qa_pair><label>9d</label><type>exercise</type><question>873</question>
-<solution></solution></qa_pair>
-<qa_pair><label>10</label><type>exercise</type><question>874</question>
-<solution></solution></qa_pair>
-<qa_pair><label>10a</label><type>exercise</type><question>875</question>
-<solution></solution></qa_pair>
-<qa_pair><label>10b</label><type>exercise</type><question>876</question>
+<qa_pair><label>10</label><type>exercise</type><question>874,875,876</question>
 <solution></solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>900,901,902,903,904,905</question>
 <solution>906,907,908,909,910,911,912,913,914</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>918,919,920,921</question>
 <solution>922,923,924,925,926,927,928,929,930,931,932</solution></qa_pair>
-<qa_pair><label>Exercise 1.12</label><type>exercise</type><question>933,934,935</question>
-<solution></solution></qa_pair>
-<qa_pair><label>1a</label><type>exercise</type><question>936</question>
-<solution></solution></qa_pair>
-<qa_pair><label>1b</label><type>exercise</type><question>937</question>
-<solution></solution></qa_pair>
-<qa_pair><label>1c</label><type>exercise</type><question>938</question>
-<solution></solution></qa_pair>
-<qa_pair><label>1d</label><type>exercise</type><question>939</question>
+<qa_pair><label>1</label><type>exercise</type><question>933,934,935,936,937,938,939</question>
 <solution></solution></qa_pair>
 </chapter>
