@@ -14,7 +14,7 @@
 <qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>21902,21903,21904</question>
 <solution>21905,21906,21907,21908,21909,21910,21911,21912,21913</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>21914,21915,21916</question>
-<solution>21917,21918,21919,21920,21921,21922,21923,21924</solution></qa_pair>
+<solution>21917,21918,21919,21920,21921,21922,21923,21924,21925,21928</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>21930,21931,21932,21933,21934</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>21935,21936,21937</question>

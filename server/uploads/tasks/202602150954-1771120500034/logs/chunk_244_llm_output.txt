@@ -1,7 +1,7 @@
 <chapter><title>17135</title>
 <qa_pair><label>1</label><type>exercise</type><question>17136,17137,17138,17139,17140,17141,17142,17143,17144,17145,17146,17147</question>
 <solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>17152,17153,17154,17155,17156,17157,17158,17160</question>
+<qa_pair><label>2</label><type>exercise</type><question>17152,17153,17154,17155,17156,17157,17158</question>
 <solution></solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 1</label><type>example</type><question>17167,17168,17169,17170,17171,17172,17173,17174</question>
 <solution>17175,17176,17177,17178,17179</solution></qa_pair>

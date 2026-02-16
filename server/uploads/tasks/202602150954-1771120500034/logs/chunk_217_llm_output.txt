@@ -8,3 +8,15 @@
 <qa_pair><label>4</label><type>exercise</type><question>15279,15280,15281,15282,15283,15284,15285,15286,15287,15288,15289</question>
 <solution></solution></qa_pair>
 </chapter>
+<chapter><title>15196</title>
+<qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>15196,15197,15198,15199,15200,15201</question>
+<solution>15202,15203,15204,15205,15206</solution></qa_pair>
+</chapter>
+<chapter><title>15207</title>
+<qa_pair><label>WORKED EXAMPLE 9 CONTINUED</label><type>example</type><question>15207,15208,15209,15210,15211</question>
+<solution></solution></qa_pair>
+</chapter>
+<chapter><title>15212</title>
+<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>15212,15213,15214,15215,15216</question>
+<solution>15217,15218,15219,15220,15221,15222,15223,15224,15225,15226,15227</solution></qa_pair>
+</chapter>

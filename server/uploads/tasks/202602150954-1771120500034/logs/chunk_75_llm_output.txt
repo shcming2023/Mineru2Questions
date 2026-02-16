@@ -1,33 +1,25 @@
 <chapter><title>5268</title>
-<qa_pair><label>a</label><type>exercise</type><question>5250,5251,5252,5253,5254,5255,5256</question>
+<qa_pair><label>1</label><type>exercise</type><question>5271</question>
 <solution></solution></qa_pair>
-<qa_pair><label>b</label><type>exercise</type><question>5257,5258,5259,5260</question>
+<qa_pair><label>2</label><type>exercise</type><question>5272</question>
 <solution></solution></qa_pair>
-<qa_pair><label>c</label><type>exercise</type><question>5261,5262,5263,5264</question>
+<qa_pair><label>3</label><type>exercise</type><question>5273</question>
 <solution></solution></qa_pair>
-<qa_pair><label>d</label><type>exercise</type><question>5265,5266,5267</question>
+<qa_pair><label>4</label><type>exercise</type><question>5274</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1a</label><type>exercise</type><question>5271</question>
+<qa_pair><label>5</label><type>exercise</type><question>5275</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1b</label><type>exercise</type><question>5272</question>
+<qa_pair><label>6</label><type>exercise</type><question>5276</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1c</label><type>exercise</type><question>5273</question>
+<qa_pair><label>7</label><type>exercise</type><question>5277</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1d</label><type>exercise</type><question>5274</question>
+<qa_pair><label>8</label><type>exercise</type><question>5278</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1e</label><type>exercise</type><question>5275</question>
+<qa_pair><label>1</label><type>exercise</type><question>5280</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1f</label><type>exercise</type><question>5276</question>
+<qa_pair><label>2</label><type>exercise</type><question>5281</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1g</label><type>exercise</type><question>5277</question>
-<solution></solution></qa_pair>
-<qa_pair><label>1h</label><type>exercise</type><question>5278</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2a</label><type>exercise</type><question>5280</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2b</label><type>exercise</type><question>5281</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2c</label><type>exercise</type><question>5282</question>
+<qa_pair><label>3</label><type>exercise</type><question>5282</question>
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>5283</question>
 <solution></solution></qa_pair>
@@ -41,8 +33,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>5288</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>5293,5294</question>
-<solution>5295,5296,5297,5298,5299,5300,5301,5302</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>5306</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>5307</question>
@@ -55,10 +45,20 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>5314</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>5318,5319,5320,5321</question>
+</chapter>
+<chapter><title>5293</title>
+<qa_pair><label>13</label><type>example</type><question>5294</question>
+<solution>5295,5296,5297,5298,5299,5300,5301,5302</solution></qa_pair>
+</chapter>
+<chapter><title>5318</title>
+<qa_pair><label>14</label><type>example</type><question>5319,5320,5321</question>
 <solution>5322,5323,5324,5325,5326,5327,5328,5329,5330,5331,5332</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>5335,5336</question>
+</chapter>
+<chapter><title>5335</title>
+<qa_pair><label>15</label><type>example</type><question>5336</question>
 <solution>5337,5338,5339,5340,5341,5342,5343,5344</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 16</label><type>example</type><question>5345,5346</question>
+</chapter>
+<chapter><title>5345</title>
+<qa_pair><label>16</label><type>example</type><question>5346</question>
 <solution>5347,5348,5349</solution></qa_pair>
 </chapter>

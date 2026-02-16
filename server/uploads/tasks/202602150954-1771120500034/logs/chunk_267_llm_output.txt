@@ -11,6 +11,6 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>18732</title>
-<qa_pair><label>Worked Example 6</label><type>example</type><question>18733,18738</question>
+<qa_pair><label>Worked Example 6</label><type>example</type><question>18732,18733,18738</question>
 <solution>18734,18735,18736,18737</solution></qa_pair>
 </chapter>

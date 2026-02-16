@@ -14,9 +14,9 @@
 <qa_pair><label>7</label><type>exercise</type><question>15153</question>
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>example</type><question>15179,15180,15181,15182,15183</question>
-<solution>15185,15186,15187,15188,15189,15190,15191,15192,15193,15194,15195</solution></qa_pair>
+<solution>15185,15186,15187,15188,15189,15190,15191</solution></qa_pair>
 <qa_pair><label>9</label><type>example</type><question>15196,15197,15198,15199,15200,15201</question>
-<solution>15202,15203,15204,15205,15206,15207,15208,15209,15210,15211</solution></qa_pair>
+<solution>15202,15203,15204,15205,15206,15207,15208,15209</solution></qa_pair>
 <qa_pair><label>10</label><type>example</type><question>15212,15213,15214,15215,15216</question>
 <solution>15217,15218,15219</solution></qa_pair>
 </chapter>

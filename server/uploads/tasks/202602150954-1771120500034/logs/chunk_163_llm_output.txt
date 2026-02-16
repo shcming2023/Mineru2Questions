@@ -5,8 +5,8 @@
 <solution>11453,11454,11455,11456,11457,11458</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>11496,11497,11498</question>
 <solution>11499,11500,11501,11502</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>11507,11508</question>
-<solution>11509</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>11507,11508,11509</question>
+<solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>11465,11466,11467,11468,11469,11470</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>11473,11474,11475,11476,11477,11478</question>

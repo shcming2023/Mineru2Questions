@@ -53,7 +53,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>24</label><type>exercise</type><question>923</question>
 <solution></solution></qa_pair>
-<qa_pair><label>25</label><type>exercise</type><question>924,925</question>
+<qa_pair><label>25</label><type>exercise</type><question>924</question>
 <solution></solution></qa_pair>
 <qa_pair><label>26</label><type>exercise</type><question>927,928,929,930,931,932,933</question>
 <solution></solution></qa_pair>

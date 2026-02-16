@@ -1,4 +1,18 @@
-<chapter><title>1326</title>
+<chapter><title>1260</title>
+<qa_pair><label>Try It!</label><type>exercise</type><question>1271,1272</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Convince Me!</label><type>exercise</type><question>1273</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 2</label><type>example</type><question>1274,1275,1276,1277,1278</question>
+<solution></solution></qa_pair>
+<qa_pair><label>ASSESS</label><type>exercise</type><question>1282,1283,1284,1285,1286,1287,1288,1289,1290</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Try It!</label><type>exercise</type><question>1291,1292</question>
+<solution></solution></qa_pair>
+<qa_pair><label>EXAMPLE 3</label><type>example</type><question>1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303</question>
+<solution></solution></qa_pair>
+<qa_pair><label>Try It!</label><type>exercise</type><question>1306,1307,1308,1309</question>
+<solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1316</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>1317</question>

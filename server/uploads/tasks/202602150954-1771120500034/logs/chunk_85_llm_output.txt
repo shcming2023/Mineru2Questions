@@ -1,8 +1,6 @@
 <chapter><title>5976</title>
 <qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>5985,5986,5987,5988,5989,5990,5991,5992</question>
-<solution>5994,5995,5996,5997,5998,5999,6000,6001,6002,6003,6004,6005,6006,6007,6008,6009,6010</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 3 CONTINUED</label><type>example</type><question>6017,6018,6019,6020,6021,6023</question>
-<solution>6022,6024,6025,6026</solution></qa_pair>
+<solution>5994,5995,5996,5997,5998,5999,6000,6001,6002,6003,6004,6005,6006,6007,6008,6009,6010,6017,6018,6019,6020,6021,6022,6023,6024,6025,6026</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>6028,6029,6030,6031,6032,6033,6034,6035,6036,6037,6038,6039,6040</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>6041,6042,6043,6044,6045,6046,6047,6048,6049</question>

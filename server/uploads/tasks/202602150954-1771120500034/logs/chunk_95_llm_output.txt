@@ -13,8 +13,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>9</label><type>exercise</type><question>6669,6670</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>6702</title>
 <qa_pair><label>1</label><type>exercise</type><question>6703,6704,6705,6706</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>6707,6708,6709</question>

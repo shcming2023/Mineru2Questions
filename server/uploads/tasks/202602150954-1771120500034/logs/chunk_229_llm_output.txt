@@ -23,9 +23,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>11iii</label><type>exercise</type><question>16055</question>
 <solution></solution></qa_pair>
-<qa_pair><label>11d</label><type>exercise</type><question>16056,16057,16058,16059</question>
+<qa_pair><label>11</label><type>exercise</type><question>16056,16057,16058,16059</question>
 <solution></solution></qa_pair>
-<qa_pair><label>11dii</label><type>exercise</type><question>16060</question>
+<qa_pair><label>11ii</label><type>exercise</type><question>16060</question>
 <solution></solution></qa_pair>
 <qa_pair><label>12</label><type>exercise</type><question>16061</question>
 <solution></solution></qa_pair>

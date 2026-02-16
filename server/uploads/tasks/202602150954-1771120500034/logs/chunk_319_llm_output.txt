@@ -35,9 +35,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>5b</label><type>exercise</type><question>22375</question>
 <solution></solution></qa_pair>
-<qa_pair><label>6</label><type>exercise</type><question>22379</question>
+<qa_pair><label>6</label><type>exercise</type><question>22379,22381</question>
 <solution></solution></qa_pair>
-<qa_pair><label>7</label><type>exercise</type><question>22380,22381,22382</question>
+<qa_pair><label>7</label><type>exercise</type><question>22380,22382</question>
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>22383,22384</question>
 <solution></solution></qa_pair>
@@ -45,7 +45,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>8b</label><type>exercise</type><question>22386</question>
 <solution></solution></qa_pair>
-<qa_pair><label>8c</label><type>exercise</type><question>22387</question>
+<qa_pair><label>8c</label><type>exercise</type><question>22387,22388</question>
 <solution></solution></qa_pair>
 <qa_pair><label>9</label><type>exercise</type><question>22389,22390,22391,22392,22393</question>
 <solution></solution></qa_pair>
@@ -73,6 +73,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>12a</label><type>exercise</type><question>22406</question>
 <solution></solution></qa_pair>
+<qa_pair><label>12b</label><type>exercise</type><question>22407</question>
+<solution></solution></qa_pair>
 <qa_pair><label>13</label><type>exercise</type><question>22408,22409,22410</question>
 <solution></solution></qa_pair>
 <qa_pair><label>13a</label><type>exercise</type><question>22412</question>
@@ -85,6 +87,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>13aiv</label><type>exercise</type><question>22419,22420</question>
 <solution></solution></qa_pair>
-<qa_pair><label>13b</label><type>exercise</type><question>22421</question>
+<qa_pair><label>13b</label><type>exercise</type><question>22421,22411</question>
 <solution></solution></qa_pair>
-</chapter>
+<qa_pair><label>1</label><type>exercise</type><question>22425</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>22426</question>
+<solution></solution></qa_pair></chapter>

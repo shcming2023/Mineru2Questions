@@ -41,6 +41,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>Convince Me!</label><type>exercise</type><question>303,304,305,306</question>
 <solution></solution></qa_pair>
-<qa_pair><label>Classify √3</label><type>exercise</type><question>307,308,309</question>
+<qa_pair><label>Classify</label><type>exercise</type><question>307,308,309</question>
 <solution></solution></qa_pair>
 </chapter>

@@ -91,9 +91,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>11</label><type>exercise</type><question>1470</question>
 <solution></solution></qa_pair>
-<qa_pair><label>12</label><type>exercise</type><question>1471</question>
-<solution></solution></qa_pair>
-<qa_pair><label>13</label><type>exercise</type><question>1472</question>
+<qa_pair><label>12</label><type>exercise</type><question>1472</question>
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>1473,1474</question>
 <solution></solution></qa_pair>

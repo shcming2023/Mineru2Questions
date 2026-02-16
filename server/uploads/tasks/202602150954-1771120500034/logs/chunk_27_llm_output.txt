@@ -17,26 +17,29 @@
 <qa_pair><label>16</label><type>exercise</type><question>1913</question><solution></solution></qa_pair>
 <qa_pair><label>17</label><type>exercise</type><question>1914</question><solution></solution></qa_pair>
 <qa_pair><label>18</label><type>exercise</type><question>1915</question><solution></solution></qa_pair>
-<qa_pair><label>19</label><type>exercise</type><question>1916,1917</question><solution></solution></qa_pair>
-<qa_pair><label>20</label><type>exercise</type><question>1918</question><solution></solution></qa_pair>
-<qa_pair><label>21</label><type>exercise</type><question>1919</question><solution></solution></qa_pair>
-<qa_pair><label>22</label><type>exercise</type><question>1920</question><solution></solution></qa_pair>
-<qa_pair><label>23</label><type>exercise</type><question>1921</question><solution></solution></qa_pair>
-<qa_pair><label>24</label><type>exercise</type><question>1922</question><solution></solution></qa_pair>
-<qa_pair><label>25</label><type>exercise</type><question>1923,1924</question><solution></solution></qa_pair>
-<qa_pair><label>26</label><type>exercise</type><question>1925</question><solution></solution></qa_pair>
-<qa_pair><label>27</label><type>exercise</type><question>1926</question><solution></solution></qa_pair>
-<qa_pair><label>28</label><type>exercise</type><question>1927</question><solution></solution></qa_pair>
-<qa_pair><label>29</label><type>exercise</type><question>1928</question><solution></solution></qa_pair>
-<qa_pair><label>30</label><type>exercise</type><question>1929</question><solution></solution></qa_pair>
-<qa_pair><label>31</label><type>exercise</type><question>1930</question><solution></solution></qa_pair>
-<qa_pair><label>32</label><type>exercise</type><question>1933,1934</question><solution></solution></qa_pair>
-<qa_pair><label>33</label><type>exercise</type><question>1935</question><solution></solution></qa_pair>
-<qa_pair><label>34</label><type>exercise</type><question>1936</question><solution></solution></qa_pair>
-<qa_pair><label>35</label><type>exercise</type><question>1937,1938</question><solution></solution></qa_pair>
-<qa_pair><label>36</label><type>exercise</type><question>1939</question><solution></solution></qa_pair>
-<qa_pair><label>37</label><type>exercise</type><question>1940</question><solution></solution></qa_pair>
-<qa_pair><label>38</label><type>exercise</type><question>1941,1942</question><solution></solution></qa_pair>
-<qa_pair><label>39</label><type>exercise</type><question>1943</question><solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>1952,1953,1954,1955,1956</question><solution>1957,1958,1959,1960,1961,1962,1963,1966,1967,1968,1969,1970,1971,1972,1973,1974,1975,1976,1977,1978,1979,1980,1981,1982,1983,1984,1985</solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>1916,1917</question><solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>1918</question><solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>1919</question><solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>1920</question><solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>1921</question><solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>1922</question><solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>1923,1924</question><solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>1925</question><solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>1926</question><solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>1927</question><solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>1928</question><solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>1929</question><solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>1930</question><solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>1933,1934</question><solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>1935</question><solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>1936</question><solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>1937,1938</question><solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>1939</question><solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>1940</question><solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>1941,1942</question><solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>1943</question><solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>1952,1953,1954</question><solution>1958,1959,1960,1961,1962,1963</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 3 CONTINUED b</label><type>example</type><question>1967</question><solution>1968,1971,1972,1973,1974,1975</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 3 CONTINUED c</label><type>example</type><question>1969</question><solution>1970,1976,1977,1978,1979</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 3 CONTINUED d</label><type>example</type><question>1981</question><solution>1980,1982,1983,1984,1985</solution></qa_pair>
 </chapter>

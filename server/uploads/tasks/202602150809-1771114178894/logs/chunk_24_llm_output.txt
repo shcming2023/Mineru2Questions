@@ -1,8 +1,8 @@
 <chapter><title>1681</title>
 <qa_pair><label>4</label><type>exercise</type><question>1680</question>
 <solution></solution></qa_pair>
-<qa_pair><label>Example</label><type>example</type><question>1686,1687</question>
-<solution></solution></qa_pair>
+<qa_pair><label>Example</label><type>example</type><question>1686</question>
+<solution>1687</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1690</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>1691</question>

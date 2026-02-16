@@ -15,13 +15,13 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>788</question>
 <solution></solution></qa_pair>
-<qa_pair><label>MID-TOPIC PERFORMANCE TASK</label><type>exercise</type><question>791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806</question>
+<qa_pair><label>Mid-Topic Performance Task</label><type>exercise</type><question>791,792,793,794,795,796,797,798,799,800,801,802,803,804,805,806</question>
 <solution></solution></qa_pair>
-<qa_pair><label>Solve & Discuss It!</label><type>exercise</type><question>808,809,810,812,813,814,815</question>
+<qa_pair><label>Solve & Discuss It!</label><type>exercise</type><question>808,809,810,811,812,813,814,815</question>
 <solution></solution></qa_pair>
 <qa_pair><label>EXAMPLE 1</label><type>example</type><question>829,830,831,833,834,835,836,837,838,839,840,841,842</question>
 <solution>843,844,845</solution></qa_pair>
-<qa_pair><label>Try It!</label><type>exercise</type><question>843,844</question>
+<qa_pair><label>Try It!</label><type>exercise</type><question>844</question>
 <solution></solution></qa_pair>
 <qa_pair><label>EXAMPLE 3</label><type>example</type><question>854,855,856,857,858,859,860</question>
 <solution></solution></qa_pair>

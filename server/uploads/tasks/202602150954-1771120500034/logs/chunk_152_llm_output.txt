@@ -15,8 +15,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>10720</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>10688,10689,10690,10691</question>
-<solution>10692,10693,10694,10695,10696,10697,10698,10699,10700,10701,10702,10703</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>10731,10732,10733,10734,10735</question>
+</chapter>
+<chapter><title>10731</title>
+<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>10732,10733,10734,10735</question>
 <solution>10736,10737,10738,10739</solution></qa_pair>
 </chapter>

@@ -10,7 +10,7 @@
 <qa_pair><label>5</label><type>exercise</type><question>3368</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>3369</title>
-<qa_pair><label>例3</label><type>example</type><question>3311,3312,3314,3315,3316,3317</question>
+<chapter><title>3311</title>
+<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>3312,3314,3315,3316,3317</question>
 <solution>3318,3319,3320,3321,3322,3323,3324</solution></qa_pair>
 </chapter>

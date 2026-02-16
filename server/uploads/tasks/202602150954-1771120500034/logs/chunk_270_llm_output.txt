@@ -1,5 +1,5 @@
 <chapter><title>18926</title>
-<qa_pair><label>9</label><type>exercise</type><question>18906,18907,18908,18909,18910,18911</question>
+<qa_pair><label>9</label><type>exercise</type><question>18906,18907,18908,18909,18910</question>
 <solution></solution></qa_pair>
 <qa_pair><label>10</label><type>exercise</type><question>18912,18913,18914,18915,18916,18917,18918</question>
 <solution></solution></qa_pair>

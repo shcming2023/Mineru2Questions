@@ -1,6 +1,6 @@
 # 提取的题目
 
-**总数**: 380
+**总数**: 373
 
 ---
 
@@ -41,62 +41,6 @@
 **题目**: 6. -0.222222...
 
 ---
-
-## Go Online
-
-### EXAMPLE 1 (例题)
-
-**题目**: EXAMPLE 1
-![image](images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
-Write Repeating Decimals as Fractions
-Scan for Multimedia
-![image](images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
-The Sluggers baseball team ended the season with the highest win percentage in their division. What is the Slugger's winning percentage written as a fraction?
-Statistics are often rounded. Here, the decimal 0.555... or 0.5 is rounded to the thousandths place.
-![image](images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
-Locate 0.555... on a number line.
-The decimal number 0.555... is between 0.5 and 0.6; so it is between  $\frac{1}{2}$ , or  $\frac{5}{10}$ , and  $\frac{6}{10}$ .
-![image](images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
-Reasoning How do you know that the repeating decimal 0.555... can be written as a fraction?
-Write the repeating decimal as a fraction.
-Assign a variable to represent the repeating decimal.
-Let  $x = 0.5$
-$$
-1 0 \cdot x = 1 0 \cdot 0. \overline {{5}}
-$$
-$$
-1 0 x = 5. \overline {{5}}
-$$
-$$
-1 0 x - x = 5. \overline {{5}} - 0. \overline {{5}}
-$$
-$$
-9 x = 5
-$$
-$$
-\frac {9 x}{9} = \frac {5}{9}
-$$
-$$
-x = \frac {5}{9}
-$$
-The Sluggers won  $\frac{5}{9}$  of their games.
-Because 0.5 has 1 repeating digit, multiply each side of the equation by  $10^{1}$ , or 10.
-Subtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x = 0.5$ , you can subtract  $x$  from one side and 0.5 from the other side.
-![image](images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
-
-![图片](../images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
-
-![图片](../images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
-
-![图片](../images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
-
-![图片](../images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
-
-![图片](../images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
-
----
-
-## Review What You Know!
 
 ### 7 (练习题)
 
@@ -194,40 +138,66 @@ Subtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x =
 
 ---
 
-### 134 (练习题)
+## Lesson 1-1
 
-**题目**: Jaylon has a wrench labeled 0.1875 inch and bolts labeled in fractions of an inch. Which size bolt will fit best with the wrench? Explain.
-![image](images/e470b90fda68577eea7cba68644ea1ce8d8115055ca40c521fdfc424d049844e.jpg)
-Reasoning How can you write these numbers in the same form?
+### EXAMPLE 1 (例题)
 
-![图片](../images/e470b90fda68577eea7cba68644ea1ce8d8115055ca40c521fdfc424d049844e.jpg)
+**题目**: EXAMPLE 1
+![image](images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
+Write Repeating Decimals as Fractions
+Scan for Multimedia
+![image](images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
+The Sluggers baseball team ended the season with the highest win percentage in their division. What is the Slugger's winning percentage written as a fraction?
+Statistics are often rounded. Here, the decimal 0.555... or 0.5 is rounded to the thousandths place.
+![image](images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
+Locate 0.555... on a number line.
+The decimal number 0.555... is between 0.5 and 0.6; so it is between  $\frac{1}{2}$ , or  $\frac{5}{10}$ , and  $\frac{6}{10}$ .
+![image](images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
+Reasoning How do you know that the repeating decimal 0.555... can be written as a fraction?
+Write the repeating decimal as a fraction.
+Assign a variable to represent the repeating decimal.
+Let  $x = 0.5$
+$$
+1 0 \cdot x = 1 0 \cdot 0. \overline {{5}}
+$$
+$$
+1 0 x = 5. \overline {{5}}
+$$
+$$
+1 0 x - x = 5. \overline {{5}} - 0. \overline {{5}}
+$$
+$$
+9 x = 5
+$$
+$$
+\frac {9 x}{9} = \frac {5}{9}
+$$
+$$
+x = \frac {5}{9}
+$$
+The Sluggers won  $\frac{5}{9}$  of their games.
+Because 0.5 has 1 repeating digit, multiply each side of the equation by  $10^{1}$ , or 10.
+Subtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x = 0.5$ , you can subtract  $x$  from one side and 0.5 from the other side.
+![image](images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
 
----
+![图片](../images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)
 
-## Go Online
+![图片](../images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)
 
-### Try It! (练习题)
+![图片](../images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)
 
-**题目**: Try It!
+![图片](../images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)
+
+![图片](../images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)
+
+**解答**: Try It!
 In another baseball division, one team had a winning percentage of 0.444.... What fraction of their games did this team win?
 The team won of their games.
-
----
-
-### Convince Me! (练习题)
-
-**题目**: Convince Me! How do you know what power of ten to multiply by in the second step at the right?
+Convince Me! How do you know what power of ten to multiply by in the second step at the right?
 Let  $x = 0.\overline{4}$
 $$
 \begin{array}{l} \boxed { \begin{array}{r l} \end{array} } \cdot x = \boxed { \begin{array}{r l} \end{array} } \cdot 0. \overline {{4}} \\ \boxed { \begin{array}{c} \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = \\ - x = \boxed {0. 4} \\ \boxed { \begin{array}{c} \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline \hline 0. 5 m ^ {2} = 1. 0 m ^ {2} = 1. 5 m ^ {2} = 2. 0 m ^ {2} = 3. 0 m ^ {2} = 4. 0 m ^ {2} = 5. 0 m ^ {2} = 6. 0 m ^ {2} = 7. 0 m ^ {2} = 8. 0 m ^ {2} = 9. 0 m ^ {2} = 1 0. 0 m ^ {2} = 1 1. 0 m ^ {2} = 1 2. 0 m ^ {2} = 1 3. 0 m ^ {2} = 1 4. 0 m ^ {2} = 1 5. 0 m ^ {2} = 1 6. 0 m ^ {2} = 1 7. 0 m ^ {2} = 1 8. 0 m ^ {2} = 1 9. 0 m ^ {2} = 2 0. 0 m ^ {2} = 2 1. 0 m ^ {2} = 2 2. 0 m ^ {2} = 2 3. 0 m ^ {2} = 2 4. 0 m ^ {2} = 2 5. 0 m ^ {2} = 2 6. 0 m ^ {2} = 2 7. 0 m ^ {2} = 2 8. 0 m ^ {2} = 2 9. 0 m ^ {2} = 3 0. 0 m ^ {2}} \\ x = \boxed {} \\ \end{array}
 $$
-
----
-
-### Try It! (练习题)
-
-**题目**: Try It!
-Write the repeating decimal 0.6333... as a fraction.
 
 ---
 
@@ -257,19 +227,14 @@ Use Structure How do you know that subtracting  $x$  from one side of the equati
 
 ![图片](../images/bcbfdb36477078e9bd653877b58697cf96f51b6d3fa339af105ece2771af48c7.jpg)
 
----
-
-### Try It! (练习题)
-
-**题目**: Try It!
+**解答**: Try It!
 Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
-### Do You Understand? (练习题)
+### 1 (练习题)
 
-**题目**: Do You Understand?
-1. Essential Question How can you write repeating decimals as fractions?
+**题目**: 1. Essential Question How can you write repeating decimals as fractions?
 
 ---
 
@@ -285,14 +250,11 @@ Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
-### Do You Know How? (练习题)
+### 4 (练习题)
 
-**题目**: Do You Know How?
-4. A survey reported that  $63.63\%$  of moviegoers prefer action films. This percent represents a repeating decimal. Write it as a fraction.
+**题目**: 4. A survey reported that  $63.63\%$  of moviegoers prefer action films. This percent represents a repeating decimal. Write it as a fraction.
 
 ---
-
-## Practice & Problem Solving
 
 ### 5 (练习题)
 
@@ -303,62 +265,11 @@ Write the repeating decimal 4.1363636... as a fraction.
 
 ---
 
-## Go Online
-
 ### 6 (练习题)
 
-**题目**: ![image](images/14b58496c9a45ab9100ccca295ae75a04d87a24f2db7c1dd946957abf0a31eb3.jpg)
-6. Write 2.3181818... as a mixed number.
-
-![图片](../images/14b58496c9a45ab9100ccca295ae75a04d87a24f2db7c1dd946957abf0a31eb3.jpg)
+**题目**: 6. Write 2.3181818... as a mixed number.
 
 ---
-
-### Practice & Problem Solving (练习题)
-
-**题目**: Practice & Problem Solving
-![image](images/aaffbc4728358b87ff54b43eb67fd1730024412b1a4717bfd17fdddc6912e159.jpg)
-Scan for Multimedia
-![image](images/0c0e7d892aed94add6b5ea367ce76045951b2f209cd15ce290bacaa282370a68.jpg)
-Leveled Practice In 7 and 8, write the decimal as a fraction or mixed number.
-7. Write the number 0.21212121... as a fraction.
-
-![图片](../images/aaffbc4728358b87ff54b43eb67fd1730024412b1a4717bfd17fdddc6912e159.jpg)
-
-![图片](../images/0c0e7d892aed94add6b5ea367ce76045951b2f209cd15ce290bacaa282370a68.jpg)
-
----
-
-### 8 (练习题)
-
-**题目**: ![image](images/1ba353945c35400b72347220a08f74a847c89134edc44ee1b1518d923c11fa47.jpg)
-8. Write 3.7 as a mixed number.
-
-![图片](../images/1ba353945c35400b72347220a08f74a847c89134edc44ee1b1518d923c11fa47.jpg)
-
----
-
-### 9 (练习题)
-
-**题目**: ![image](images/12377b77a0340e4163832e2b13f16781349fc8fc3b6e9b111c18bf002c26205c.jpg)
-9. Write the number shown on the scale as a fraction.
-![image](images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
-
-![图片](../images/12377b77a0340e4163832e2b13f16781349fc8fc3b6e9b111c18bf002c26205c.jpg)
-
-![图片](../images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
-
----
-
-### 10 (练习题)
-
-**题目**: 10. Tomas asked 15 students whether summer break should be longer. He used his calculator to divide the number of students who said yes by the total number of students. His calculator showed the result as 0.9333....
-a. Write this number as a fraction.
-b. How many students said that summer break should be longer?
-
----
-
-## Practice & Problem Solving
 
 ### 7 (练习题)
 
@@ -377,6 +288,31 @@ b. How many students said that summer break should be longer?
 ![图片](../images/12377b77a0340e4163832e2b13f16781349fc8fc3b6e9b111c18bf002c26205c.jpg)
 
 ---
+
+### 9 (练习题)
+
+**题目**: 9. Write the number shown on the scale as a fraction.
+![image](images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
+
+![图片](../images/8484fbc9c00f768f86f1abebb51616f2facf2dc2f6375b0c7a0c6df79d85b512.jpg)
+
+---
+
+### 10 (练习题)
+
+**题目**: 10. Tomas asked 15 students whether summer break should be longer. He used his calculator to divide the number of students who said yes by the total number of students. His calculator showed the result as 0.9333....
+a. Write this number as a fraction.
+b. How many students said that summer break should be longer?
+
+---
+
+### 11 (练习题)
+
+**题目**: Write 0.8 as a fraction.
+
+---
+
+## Practice & Problem Solving
 
 ### 11 (练习题)
 
@@ -460,14 +396,11 @@ $⑤$  17.17090
 
 ---
 
-## Focus on math practices
-
 ### EXAMPLE 1 (例题)
 
 **题目**: EXAMPLE 1
 ![image](images/615cd73e2e5522f40aa0451a2a8a2f9d98ca68deedbb4cd598265a0745200bd9.jpg)
 Identify Irrational Numbers
-Scan for Multimedia
 ![image](images/f3459e9dbd0b69f824ed885927944ba793c0cad4f1177d9755bf976d8a7e837b.jpg)
 The Venn diagram shows the relationships among rational numbers.
 How would you classify the number 0.24758326...?
@@ -493,11 +426,10 @@ The number 0.24758326... is irrational because the decimal expansion is nonrepea
 
 **解答**: The decimal expansion does not terminate or repeat, so it cannot be written as a ratio of two integers.
 The number 0.24758326... is not a rational number.
+Numbers that are not rational are called irrational. An irrational number is a number that cannot be written in the form  $\frac{a}{b}$ , where  $a$  and  $b$  are integers and  $b \neq 0$ .
 The number 0.24758326... is irrational because the decimal expansion is nonrepeating and nonterminating.
 
 ---
-
-## Practice & Problem Solving
 
 ### Try It! (练习题)
 
@@ -520,7 +452,7 @@ Explain.
 
 ---
 
-### Classify √3 (练习题)
+### Classify (练习题)
 
 **题目**: Classify  $\sqrt{3}$
 $\sqrt{3}$  means "the nonnegative square root of 3."
@@ -729,8 +661,6 @@ F None of the above
 
 ---
 
-## compare and order rational and irrational numbers.
-
 ### EXAMPLE 1 (例题)
 
 **题目**: EXAMPLE 1
@@ -761,7 +691,16 @@ The length of the diagonal,  $\sqrt{74}$ , is about 8.6 feet. Darcy does not hav
 
 ![图片](../images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg)
 
+![图片](../images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)
+
+**解答**: Try It!
+Between which two whole numbers is  $\sqrt{12}$ ?
+![image](images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)
+Convince Me! Which of the two numbers is a better estimate for  $\sqrt{12}$ ? Explain.
+
 ---
+
+## compare and order rational and irrational numbers.
 
 ### Try It! (练习题)
 
@@ -993,8 +932,7 @@ To the nearest tenth of an inch
 
 ### Solve & Discuss It! (练习题)
 
-**题目**: Solve & Discuss It!
-Matt and his dad are building a tree house. They buy enough flooring material to cover an area of 36 square feet. What are all possible dimensions of the floor?
+**题目**: Matt and his dad are building a tree house. They buy enough flooring material to cover an area of 36 square feet. What are all possible dimensions of the floor?
 ![image](images/6692aa1c6d5269deaa974d3343983f05c0eabb9a11d421a83e7e5c67584d0332.jpg)
 ![image](images/186d5e6fb772a7c9a9cef799a57c00d78e6f39243324d95300b881b57c35e680.jpg)
 
@@ -1009,7 +947,6 @@ Matt and his dad are building a tree house. They buy enough flooring material to
 **题目**: EXAMPLE 1
 ![image](images/87b4f1d47e61e2a25a3d20b2378f37a776ae1ec242f6b7d6512f6d2e909b2382.jpg)
 Evaluate Cube Roots to Solve Problems
-Scan for Multimedia
 ![image](images/871a2fbf4ad870e594b9f0582a9bfb93486bc4bd04696bfda938a7d6d49813b2.jpg)
 Leah is building a bird house for purple martins, birds that prefer cube-shaped birdhouses. What are the dimensions of each square piece of wood Leah needs to build the 216 cubic-inch birdhouse?
 Reasoning What do you know about the length, width, and height of the birdhouse?
@@ -1057,7 +994,6 @@ Convince Me! How can you find the cube root of 64?
 Evaluate Perfect Squares and Perfect Cubes
 ![image](images/efef7f4f1aad0bf8f2ec41bcebd58581e3f67ca536054c3d260f8b99acd7dfd9.jpg)
 ![image](images/ae9c677ba2dd437b428332722fad832a7ff5ef9c320d809cafa2fcdb389b5237.jpg)
-ACTIVITY
 ![image](images/77f64561cd6df555291de0ffa23fb32246a05a46ad27e0a7c335695399dd17a1.jpg)
 
 ![图片](../images/b9bbdc37c1625c9aac16616a67ac9aa23980b73b6e84b29854658692c5c3b98f.jpg)
@@ -1093,71 +1029,6 @@ Evaluate.
 
 ---
 
-## EXAMPLE 2
-
-### A (练习题)
-
-**题目**: Evaluate.
-A.  $\sqrt[3]{64}$
-$$
-\begin{array}{l} \sqrt [ 3 ]{6 4} = \sqrt [ 3 ]{4 \cdot 4 \cdot 4} \\ = \sqrt [ 3 ]{4 ^ {3}} \\ = 4 \\ \end{array}
-$$
-
----
-
-### B (练习题)
-
-**题目**: B.  $\sqrt{100}$
-$$
-\begin{array}{l} \sqrt {1 0 0} = \sqrt {1 0 \cdot 1 0} \\ = \sqrt {1 0 ^ {2}} \\ = 1 0 \\ \end{array}
-$$
-
----
-
-### C (练习题)
-
-**题目**: C.  $\sqrt{49}$
-$$
-\begin{array}{l} \sqrt {4 9} = \sqrt {7 \cdot 7} \\ = \sqrt {7 ^ {2}} \\ = 7 \\ \end{array}
-$$
-
----
-
-### D (练习题)
-
-**题目**: D.  $\sqrt[3]{8}$
-$$
-\begin{array}{l} \sqrt [ 3 ]{8} = \sqrt [ 3 ]{2 \cdot 2 \cdot 2} \\ = \sqrt [ 3 ]{2 ^ {3}} \\ = 2 \\ \end{array}
-$$
-
----
-
-### a (练习题)
-
-**题目**: Try It!
-Evaluate.
-a.  $\sqrt[3]{27}$
-
----
-
-### b (练习题)
-
-**题目**: b.  $\sqrt{25}$
-
----
-
-### c (练习题)
-
-**题目**: c.  $\sqrt{81}$
-
----
-
-### d (练习题)
-
-**题目**: d.  $\sqrt[3]{1}$
-
----
-
 ### EXAMPLE 3 (例题)
 
 **题目**: EXAMPLE 3
@@ -1177,16 +1048,7 @@ Each side of the bulletin board measures 12 inches. Sean will need to cut a 12-i
 
 ---
 
-### Try It! (练习题)
-
-**题目**: Try It!
-Emily wants to buy a tablecloth to cover a square card table. She knows the tabletop has an area of 9 square feet. What are the minimum dimensions of the tablecloth Emily needs?
-Emily should buy a tablecloth that measures at least feet by feet.
-$$
-\begin{array}{l} \sqrt {9} = \sqrt {\square \cdot \square} \\ = \sqrt {\square} ^ {2} \\ = \square \\ \end{array}
-$$
-
----
+## Do You Understand?
 
 ### 1 (练习题)
 
@@ -1205,6 +1067,8 @@ $$
 **题目**: 3. Critique Reasoning A cube-shaped box has a volume of 27 cubic inches. Bethany says each side of the cube measures 9 inches because  $9 \times 3 = 27$ . Is Bethany correct? Explain your reasoning.
 
 ---
+
+## Do You Know How?
 
 ### 4 (练习题)
 
@@ -1226,6 +1090,8 @@ $$
 **题目**: 6. Julio cubes a number and then takes the cube root of the result. He ends up with 20. What number did Julio start with?
 
 ---
+
+## Practice & Problem Solving
 
 ### 7 (练习题)
 
@@ -1259,7 +1125,7 @@ Side length Side length
 
 ---
 
-## EXAMPLE 2
+## Practice & Problem Solving
 
 ### 9 (练习题)
 
@@ -1318,6 +1184,8 @@ Side length Side length
 
 ---
 
+## Assessment Practice
+
 ### 17 (练习题)
 
 **题目**: 17. Which expression has the greatest value? 8.EE.1.2
@@ -1341,15 +1209,32 @@ Will the block fit in the square hole? Explain.
 
 ---
 
+## Solve & Discuss It!
+
+### Solve & Discuss It! (练习题)
+
+**题目**: Solve & Discuss It!
+![image](images/364a92650bbfaa039d4bb729df87ca422fefb92c9ca6eb0c2fc07fa7ad79d49a.jpg)
+
+![图片](../images/364a92650bbfaa039d4bb729df87ca422fefb92c9ca6eb0c2fc07fa7ad79d49a.jpg)
+
+---
+
 ## Lesson 1-5
 
-### ACTIVITY (练习题)
+### 662 (练习题)
 
 **题目**: Janine can use up to 150 one-inch blocks to build a solid, cube-shaped model. What are the dimensions of the
 possible models that she can build? How many blocks would Janine use for each model? Explain.
 ![image](images/3baa1ec3ac2d9eb3233d4a0fe610ecd9a5ee09e197828f7b7dbb9b7eb4ebc30a.jpg)
 
 ![图片](../images/3baa1ec3ac2d9eb3233d4a0fe610ecd9a5ee09e197828f7b7dbb9b7eb4ebc30a.jpg)
+
+---
+
+### 679 (练习题)
+
+**题目**: Reasoning Janine wants to build a model using  $\frac{1}{2}$ -inch cubes. How many  $\frac{1}{2}$ -inch cubes would she use to build a solid, cube-shaped model with side lengths of 4 inches? Show your work.
 
 ---
 
@@ -1411,7 +1296,7 @@ Each side of the square measures meters.
 
 ---
 
-### EXAMPLE 2 (例题)
+### Kyle (例题)
 
 **题目**: Kyle has a large, cube-shaped terrarium for his iguana. He wants to cover the opening with a square screen. What are the dimensions,  $s,$  for the screen?
 $$
@@ -1636,7 +1521,7 @@ D  $\frac{7}{30}$
 
 ## Assessment Practice
 
-### MID-TOPIC PERFORMANCE TASK (练习题)
+### Mid-Topic Performance Task (练习题)
 
 **题目**: MID-TOPIC PERFORMANCE TASK
 Six members of the math club are forming two teams for a contest. The teams will be determined by having each student draw a number from a box.
@@ -1662,6 +1547,7 @@ Who will be the captain of the Lions? Show your work.
 **题目**: Solve & Discuss It!
 ![image](images/d3bb9931026a93e09cce44f9b271f4956bce0a19544544d2c4c634c3add89882.jpg)
 ![image](images/7338816da64eb7a4051a3dfca2bdadfb9eb086f3cf2e9671272cc295eeb9efbc.jpg)
+ACTIVITY
 One band's streaming video concert to benefit a global charity costs $1.00 to view.
 The first day, the concert got 2,187 views. The second day, it got about three times as many views. On the third day, it got 3 times as many views as on the second day. If the trend continues, how much money will the band raise on Day 7?
 ![image](images/9f8bbea84798df23b16b9c65472514df6d6fb55291810b9834929f7c5de08633.jpg)
@@ -1713,8 +1599,7 @@ Convince Me! Explain why the Product of Powers Property makes mathematical sense
 
 ### Try It! (练习题)
 
-**题目**: Try It!
-The local zoo welcomed a newborn African elephant that weighed  $3^{4}$  kg. It is expected that at adulthood, the newborn elephant will weigh approximately  $3^{4}$  times as much as its birth weight. What expression represents the expected adult weight of the newborn elephant?
+**题目**: The local zoo welcomed a newborn African elephant that weighed  $3^{4}$  kg. It is expected that at adulthood, the newborn elephant will weigh approximately  $3^{4}$  times as much as its birth weight. What expression represents the expected adult weight of the newborn elephant?
 
 ---
 
@@ -1942,9 +1827,6 @@ $2^{2} \cdot 2^{9}$
 ### 25 (练习题)
 
 **题目**: 25. Higher Order Thinking Use a property of exponents to write  $(3b)^{5}$  as a product of powers.
-![image](images/40628b14def6c213057a1d694b4c2e9ee083d67538c8da44487794ec90daec6a.jpg)
-
-![图片](../images/40628b14def6c213057a1d694b4c2e9ee083d67538c8da44487794ec90daec6a.jpg)
 
 ---
 
@@ -2084,6 +1966,7 @@ Expressions with Negative Exponents
 ### 5 (练习题)
 
 **题目**: 5. a. Write  $7^{-6}$  using a positive exponent.
+b. Rewrite  $\frac{1}{10^{-3}}$  using a positive exponent.
 
 ---
 
@@ -2224,6 +2107,33 @@ $$
 
 ---
 
+## Lesson 1-7
+
+### EXAMPLE 3 (例题)
+
+**题目**: EXAMPLE 3
+![image](images/3fe5a33a2c263b12bd08ddafc8beced3c1b66974f8a5626f113128a15e05f817.jpg)
+Expressions with Negative Exponents
+Write the expression  $\frac{1}{7^{-3}}$  with a positive exponent.
+$$
+\frac {1}{7 ^ {- 3}} = \frac {1}{\frac {1}{7 ^ {3}}}
+$$
+Use the Negative Exponent Property.
+$$
+= 1 \cdot \frac {7 ^ {3}}{1}
+$$
+Multiply by the reciprocal of the denominator.
+$$
+= 7 ^ {3}
+$$
+![image](images/7c63871d3012ef696bf85a3b98d8b8fef15b9362c5a0363065e1a9de6d6ffb53.jpg)
+
+![图片](../images/3fe5a33a2c263b12bd08ddafc8beced3c1b66974f8a5626f113128a15e05f817.jpg)
+
+![图片](../images/7c63871d3012ef696bf85a3b98d8b8fef15b9362c5a0363065e1a9de6d6ffb53.jpg)
+
+---
+
 ## Lesson 1-8
 
 ### 20 (练习题)
@@ -2309,7 +2219,6 @@ There are zeros in the rounded number. The estimated speed of light
 is  $\times 10$  meters per second.
 $3\times 10 > 3\times 10$  so the speed of light is faster than the speed of sound.
 Convince Me! Country A has a population of 1,238,682,005 and Country B has a population of 1,106,487,394. How would you compare these populations?
-322 rounded to the greatest place value
 
 ---
 
@@ -2517,7 +2426,6 @@ The two numbers represent the same distance.
 **解答**: Try It!
 The height of Angel Falls, the tallest waterfall in the world, is 3,212 feet. How do you write this number in scientific notation?
 ![image](images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg)
-Convince Me! Why do very large numbers have positive exponents when written in scientific notation? Explain.
 
 ---
 
@@ -2557,7 +2465,106 @@ Count the number of digits before the decimal point to determine the power of 10
 
 ---
 
-## Practice & Problem Solving
+## Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.
+
+### Try It! (练习题)
+
+**题目**: The height of Angel Falls, the tallest waterfall in the world, is 3,212 feet. How do you write this number in scientific notation?
+![image](images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg)
+
+![图片](../images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg)
+
+---
+
+### Convince Me! (练习题)
+
+**题目**: Convince Me! Why do very large numbers have positive exponents when written in scientific notation? Explain.
+
+---
+
+### EXAMPLE 2 (例题)
+
+**题目**: EXAMPLE 2
+![image](images/e6ddb421c0d74fa32fba4f300478619e7cf9f56203a5725ca586a0173ae78292.jpg)
+Write Small Numbers in Scientific Notation
+![image](images/4ac13dcdfe2bb6271dc7c316f4756594a63a11c123ae57ed44631b6a74eb4133.jpg)
+![image](images/c118654a3e3a027f8d68c155932cf9aae991605c154d400949695ba382fec12e.jpg)
+
+![图片](../images/e6ddb421c0d74fa32fba4f300478619e7cf9f56203a5725ca586a0173ae78292.jpg)
+
+![图片](../images/4ac13dcdfe2bb6271dc7c316f4756594a63a11c123ae57ed44631b6a74eb4133.jpg)
+
+![图片](../images/c118654a3e3a027f8d68c155932cf9aae991605c154d400949695ba382fec12e.jpg)
+
+---
+
+### ASSESS (练习题)
+
+**题目**: What is the width of a red blood cell written in scientific notation?
+Write the number as the product of two factors.
+Place the decimal after the first nonzero digit.
+Count the number of digits before the decimal point to determine the power of 10.
+![image](images/f434c3906b3735bb8a85ab1d22d699941aca8902e9a5336956342f3be6d93db2.jpg)
+![image](images/dc09aae652f7e8bdce3a218ff986b5d4ffdb0ace05669eb629b0f5478a694d2d.jpg)
+The width of the red blood cell, expressed in scientific notation, is  $7.03 \times 10^{-6}$  meter.
+![image](images/ec98b4fbeafc480b6cd9099279ec7603b43cf33dbc1b198080accca5333198dd.jpg)
+![image](images/45e53245c5b36a9513d4a3523f1facb4cf7c08eebc3d79a5c4a557af6dc06796.jpg)
+
+![图片](../images/f434c3906b3735bb8a85ab1d22d699941aca8902e9a5336956342f3be6d93db2.jpg)
+
+![图片](../images/dc09aae652f7e8bdce3a218ff986b5d4ffdb0ace05669eb629b0f5478a694d2d.jpg)
+
+![图片](../images/ec98b4fbeafc480b6cd9099279ec7603b43cf33dbc1b198080accca5333198dd.jpg)
+
+![图片](../images/45e53245c5b36a9513d4a3523f1facb4cf7c08eebc3d79a5c4a557af6dc06796.jpg)
+
+---
+
+### Try It! (练习题)
+
+**题目**: Try It!
+A common mechanical pencil lead measures about 0.005 meter in diameter. How can you express this measurement using scientific notation?
+
+---
+
+### EXAMPLE 3 (例题)
+
+**题目**: EXAMPLE 3
+![image](images/b714529dc9076fc5a004114b35e2e11e836a149f32d91f7fd503dcc6ee0119f8.jpg)
+Convert Scientific Notation to Standard Form
+A. Kelly used a calculator to multiply large numbers. How can she write the number on her calculator screen in standard form?
+$$
+3. 5 \times 1 0 ^ {1 5} = 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0
+$$
+The exponent is positive so move the decimal point to the right.
+B. How can Charlie write the number on the calculator screen in standard form?
+$$
+8 \times 1 0 ^ {- 9} = 0. \overbrace {0 . 0 0 0 0 0 0 0 8} ^ {1 0 ^ {- 9}}
+$$
+The exponent is negative so move the decimal point to the left.
+![image](images/33ce741d4da6bee985eb39a46c31aa1ab4224f8ad94e46138d11174a433bec49.jpg)
+![image](images/773a7a73a0772333ec366b1f5f3200fdcffb47a63e9e561f43023d19f9ca0c2a.jpg)
+
+![图片](../images/b714529dc9076fc5a004114b35e2e11e836a149f32d91f7fd503dcc6ee0119f8.jpg)
+
+![图片](../images/33ce741d4da6bee985eb39a46c31aa1ab4224f8ad94e46138d11174a433bec49.jpg)
+
+![图片](../images/773a7a73a0772333ec366b1f5f3200fdcffb47a63e9e561f43023d19f9ca0c2a.jpg)
+
+---
+
+### Try It! (练习题)
+
+**题目**: Try It!
+Write the numbers in standard form.
+$$
+a. 9. 2 2 5 \times 1 0 ^ {1 8}
+$$
+$$
+\mathrm {b .} 6. 3 \times 1 0 ^ {- 8}
+$$
+
+---
 
 ### 1 (练习题)
 
@@ -2681,7 +2688,7 @@ b. Express the number in standard form.
 
 ---
 
-## Practice & Problem Solving
+## Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.
 
 ### 18 (练习题)
 
@@ -2866,28 +2873,18 @@ Express this number in standard form.
 ### 36 (练习题)
 
 **题目**: ![image](images/83c8096696f14692b5f088d6bc47344c73ecca86a7471d79a015c6e2fe3d275b.jpg)
-
-![图片](../images/83c8096696f14692b5f088d6bc47344c73ecca86a7471d79a015c6e2fe3d275b.jpg)
-
----
-
-### 37 (练习题)
-
-**题目**: Solve & Discuss It!
+Solve & Discuss It!
 ![image](images/473476b4d75343b932004bc35097882fdb60b2a32b7e5fcdb169daa2c508922f.jpg)
 ![image](images/946041b96d508457d9b3695d37528e49ba6b4bea23969bff39e798404890ea8b.jpg)
+ACTIVITY
+The homecoming committee wants to fly an aerial banner over the football game. The banner is 1,280 inches long and 780 inches tall. How many different ways can the area of the banner be expressed?
+![image](images/794bf308f0f1f036bb90a9bf081311eed254604609ef6ef5d0eb88a825e7e4fc.jpg)
+
+![图片](../images/83c8096696f14692b5f088d6bc47344c73ecca86a7471d79a015c6e2fe3d275b.jpg)
 
 ![图片](../images/473476b4d75343b932004bc35097882fdb60b2a32b7e5fcdb169daa2c508922f.jpg)
 
 ![图片](../images/946041b96d508457d9b3695d37528e49ba6b4bea23969bff39e798404890ea8b.jpg)
-
----
-
-### 38 (练习题)
-
-**题目**: ACTIVITY
-The homecoming committee wants to fly an aerial banner over the football game. The banner is 1,280 inches long and 780 inches tall. How many different ways can the area of the banner be expressed?
-![image](images/794bf308f0f1f036bb90a9bf081311eed254604609ef6ef5d0eb88a825e7e4fc.jpg)
 
 ![图片](../images/794bf308f0f1f036bb90a9bf081311eed254604609ef6ef5d0eb88a825e7e4fc.jpg)
 
@@ -3040,9 +3037,6 @@ There are  $1 \times 10^{14}$  good bacteria in the human body. There are  $2.6 
 ### 5 (练习题)
 
 **题目**: 5. The distance from Earth to the Moon is approximately  $1.2 \times 10^{9}$  feet. The Apollo 11 spacecraft was approximately 360 feet long. About how many spacecraft of that length would fit end to end from Earth to the Moon? Express your answer in scientific notation.
-![image](images/ddfe60438d1e48bb1416206b05c393c21ae9bd519d92a86964491d8ba1bb5bd2.jpg)
-
-![图片](../images/ddfe60438d1e48bb1416206b05c393c21ae9bd519d92a86964491d8ba1bb5bd2.jpg)
 
 ---
 
@@ -3154,7 +3148,9 @@ $(5.43\times 10^{8}) - (2.33\times 10^{8})$
 
 ---
 
-### Example (例题)
+## LESSON 1-1 Rational Numbers as Decimals
+
+### 例 (例题)
 
 **题目**: Example
 Write 1.0505... as a mixed number.
@@ -3188,7 +3184,7 @@ $$
 
 ---
 
-## Concepts and Skills Review
+## LESSON 1-2 Understand Irrational Numbers
 
 ### Example (例题)
 
@@ -3253,6 +3249,8 @@ $$
 $$
 
 ---
+
+## LESSON 1-4 Evaluate Square Roots and Cube Roots
 
 ### Example (例题)
 
@@ -3321,6 +3319,8 @@ $$
 
 ---
 
+## LESSON 1-6 Use Properties of Integer Exponents
+
 ### Example (例题)
 
 **题目**: Example
@@ -3330,8 +3330,6 @@ $$
 $$
 
 ---
-
-## Practice
 
 ### 1 (练习题)
 
@@ -3357,8 +3355,6 @@ $$
 
 ---
 
-## Example
-
 ### Example (例题)
 
 **题目**: Evaluate the expression for  $x = 2$  and  $y = 4$ .
@@ -3367,8 +3363,6 @@ $$
 $$
 
 ---
-
-## Practice
 
 ### 1 (练习题)
 
@@ -3394,7 +3388,7 @@ $$
 
 ---
 
-## Example
+## LESSON 1-8 Use Powers of 10 to Estimate Quantities
 
 ### Example (例题)
 
@@ -3408,8 +3402,6 @@ $$
 **解答**: Keisha is about  $2 \times 10^{6}$  minutes old.
 
 ---
-
-## Practice
 
 ### 1 (练习题)
 
@@ -3429,8 +3421,6 @@ $$
 
 ---
 
-## Example
-
 ### Example (例题)
 
 **题目**: Write 65,700,000 in scientific notation.
@@ -3438,8 +3428,6 @@ First, place the decimal point to the right of the first nonzero digit.
 Then, count the number of digits to the right of the decimal point to determine the power of 10. 65,700,000 in scientific notation is  $6.57 \times 10^{7}$ .
 
 ---
-
-## Practice
 
 ### 1 (练习题)
 
@@ -3465,7 +3453,7 @@ Then, count the number of digits to the right of the decimal point to determine 
 
 ---
 
-## Example
+## LESSON 1-10 Operations with Numbers in Scientific Notation
 
 ### Example (例题)
 
@@ -3475,8 +3463,6 @@ $$
 $$
 
 ---
-
-## Practice
 
 ### 1 (练习题)
 
@@ -3501,8 +3487,6 @@ $$
 **题目**: 4. The population of Town A is  $1.26 \times 10^{5}$  people. The population of Town B is  $2.8 \times 10^{4}$  people. How many times greater is the population of Town A than the population of Town B?
 
 ---
-
-## Crisscrossed
 
 ### A (练习题)
 
@@ -3551,8 +3535,6 @@ $$
 **题目**: M  $-3.09 + x = -0.7$
 
 ---
-
-## LESSON 1-10 Operations with Numbers in Scientific Notation
 
 ### N (练习题)
 

@@ -16,7 +16,3 @@
 <qa_pair><label>8</label><type>exercise</type><question>6803,6804,6805,6806,6807,6808</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>6815</title>
-<qa_pair><label>Chapter 8</label><type>exercise</type><question>6816</question>
-<solution></solution></qa_pair>
-</chapter>

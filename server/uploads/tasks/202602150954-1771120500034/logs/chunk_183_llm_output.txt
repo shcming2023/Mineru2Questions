@@ -1,17 +1,17 @@
 <chapter><title>12858</title>
-<qa_pair><label>13a</label><type>exercise</type><question>12810</question>
+<qa_pair><label>13 a</label><type>exercise</type><question>12810</question>
 <solution></solution></qa_pair>
-<qa_pair><label>13b</label><type>exercise</type><question>12811,12812,12813,12814</question>
+<qa_pair><label>13 b</label><type>exercise</type><question>12811,12812,12813,12814</question>
 <solution></solution></qa_pair>
-<qa_pair><label>13c</label><type>exercise</type><question>12817,12818,12819,12820</question>
+<qa_pair><label>13 c</label><type>exercise</type><question>12817,12818,12819,12820</question>
 <solution></solution></qa_pair>
-<qa_pair><label>14a</label><type>exercise</type><question>12823,12824,12825,12826</question>
+<qa_pair><label>14 a</label><type>exercise</type><question>12823,12824,12825,12826</question>
 <solution></solution></qa_pair>
-<qa_pair><label>14b</label><type>exercise</type><question>12828,12829</question>
+<qa_pair><label>14 b</label><type>exercise</type><question>12828,12829</question>
 <solution></solution></qa_pair>
-<qa_pair><label>14bii</label><type>exercise</type><question>12831</question>
+<qa_pair><label>14 b ii</label><type>exercise</type><question>12831</question>
 <solution></solution></qa_pair>
-<qa_pair><label>14c</label><type>exercise</type><question>12833</question>
+<qa_pair><label>14 c</label><type>exercise</type><question>12833</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>12873</question>
 <solution></solution></qa_pair>

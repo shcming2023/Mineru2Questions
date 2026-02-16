@@ -6,11 +6,9 @@
 <qa_pair><label>3</label><type>exercise</type><question>20441,20442,20443,20444,20445</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>20389</title>
-<qa_pair><label>WORKED EXAMPLE 16</label><type>example</type><question>20390,20391,20392,20393,20394</question>
+<chapter><title>20446</title>
+<qa_pair><label>16</label><type>example</type><question>20389,20390,20391,20392,20393,20394</question>
 <solution>20395,20396,20397,20398,20399,20400,20401</solution></qa_pair>
-</chapter>
-<chapter><title>20407</title>
-<qa_pair><label>WORKED EXAMPLE 17</label><type>example</type><question>20408,20409,20410,20411</question>
+<qa_pair><label>17</label><type>example</type><question>20407,20408,20409,20410,20411</question>
 <solution>20412,20413,20414,20415,20416,20417,20418,20419,20420,20421</solution></qa_pair>
 </chapter>

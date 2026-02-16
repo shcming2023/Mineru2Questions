@@ -17,6 +17,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>5</label><type>exercise</type><question>16685</question>
 <solution></solution></qa_pair>
-<qa_pair><label>6</label><type>exercise</type><question>16686,16687,16688,16689</question>
+<qa_pair><label>6</label><type>exercise</type><question>16686</question>
 <solution></solution></qa_pair>
 </chapter>

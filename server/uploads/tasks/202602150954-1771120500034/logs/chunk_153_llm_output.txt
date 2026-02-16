@@ -5,8 +5,8 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>10779</title>
-<qa_pair><label>9</label><type>example</type><question>10780,10781</question>
+<qa_pair><label>9</label><type>example</type><question>10779,10780,10781</question>
 <solution>10782,10783,10784,10785,10786,10787,10788,10789</solution></qa_pair>
-<qa_pair><label>10</label><type>example</type><question>10791,10792</question>
+<qa_pair><label>10</label><type>example</type><question>10790,10791,10792</question>
 <solution>10793,10794,10795,10796,10797,10798,10799</solution></qa_pair>
 </chapter>

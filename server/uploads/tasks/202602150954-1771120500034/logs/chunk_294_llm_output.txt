@@ -9,7 +9,7 @@
 <solution>20626,20627,20628,20629,20630,20631,20632,20633,20634,20635,20636,20637,20638,20639,20640</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 25</label><type>example</type><question>20641,20642</question>
 <solution>20643,20644,20645,20646,20647</solution></qa_pair>
-<qa_pair><label>1</label><type>exercise</type><question>20649,20650,20651,20652</question>
+<qa_pair><label>1</label><type>exercise</type><question>20648,20649,20650,20651,20652</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>20653,20654,20655</question>
 <solution></solution></qa_pair>

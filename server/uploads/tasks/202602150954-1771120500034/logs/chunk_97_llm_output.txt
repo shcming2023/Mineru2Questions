@@ -11,8 +11,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>6834</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1</label><type>example</type><question>6860,6861,6862</question>
+<qa_pair><label>WORKED EXAMPLE 1</label><type>example</type><question>6860,6861,6862</question>
 <solution>6863,6864,6865</solution></qa_pair>
-<qa_pair><label>2</label><type>example</type><question>6885,6886,6887,6888,6889</question>
+<qa_pair><label>WORKED EXAMPLE 2</label><type>example</type><question>6885,6886,6887,6888,6889</question>
 <solution></solution></qa_pair>
 </chapter>

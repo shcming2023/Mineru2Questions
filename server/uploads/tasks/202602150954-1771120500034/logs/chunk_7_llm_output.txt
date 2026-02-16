@@ -5,8 +5,10 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>530</title>
-<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>530,531,532,533,534</question>
-<solution>535,536,537,538,539,540,541,542,543,544</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 2</label><type>example</type><question>505,506</question>
+<solution>507,508,509,510,511,512,513</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>530,531,532,533</question>
+<solution>534,535,536,537,538,539,540,541,542,543,544</solution></qa_pair>
 </chapter>
 <chapter><title>547</title>
 <qa_pair><label>1</label><type>exercise</type><question>548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563</question>
@@ -19,6 +21,6 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>585</title>
-<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>587,588,589</question>
-<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>587,588</question>
+<solution>589</solution></qa_pair>
 </chapter>

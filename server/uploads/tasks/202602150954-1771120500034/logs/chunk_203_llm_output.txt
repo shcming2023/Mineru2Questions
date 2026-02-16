@@ -59,6 +59,8 @@
 <solution>14223,14224,14225,14226,14227</solution></qa_pair>
 <qa_pair><label>2</label><type>example</type><question>14228,14229,14230</question>
 <solution>14231,14232,14233,14234,14235,14236,14237,14238</solution></qa_pair>
-<qa_pair><label>3</label><type>example</type><question>14287,14288,14289,14290</question>
-<solution>14291,14292,14293,14294,14295,14296,14297,14298,14299,14300,14301,14302,14303,14304,14305,14306,14307</solution></qa_pair>
+<qa_pair><label>18</label><type>example</type><question>14287,14288,14289,14290</question>
+<solution>14291,14292,14293,14294,14295,14296,14297,14298,14299,14300</solution></qa_pair>
+<qa_pair><label>18</label><type>example</type><question>14301,14302</question>
+<solution>14303,14304,14305,14306,14307</solution></qa_pair>
 </chapter>

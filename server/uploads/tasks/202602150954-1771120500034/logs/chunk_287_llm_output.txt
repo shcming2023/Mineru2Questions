@@ -18,9 +18,9 @@
 <qa_pair><label>3</label><type>exercise</type><question>20151,20152,20153,20154</question>
 <solution></solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>20166,20167</question>
-<solution>20168,20169,20170,20171,20172,20173</solution></qa_pair>
+<solution>20168,20169,20170,20171,20172</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>20178,20179</question>
-<solution>20180,20181,20182,20183,20184,20185</solution></qa_pair>
+<solution>20180,20181,20182,20183,20184</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>20186,20187</question>
 <solution>20188,20189</solution></qa_pair>
 </chapter>
