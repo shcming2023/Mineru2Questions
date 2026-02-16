@@ -256,16 +256,21 @@ export async function extractQuestions(
         if (chapterPath) preTitle = chapterPath;
       }
     }
-    const llmIsValid = llmTitle && llmTitle.trim().length > 0 && isTitleValid(llmTitle);
-    const preIsValid = preTitle && isTitleValid(preTitle);
-    if (llmIsValid && preIsValid) {
-      q.chapter_title = (llmTitle as string).length >= (preTitle as string).length ? (llmTitle as string) : (preTitle as string);
+    const llmIsValid =
+      typeof llmTitle === "string" &&
+      llmTitle.trim().length > 0 &&
+      isTitleValid(llmTitle);
+    const preIsValid =
+      typeof preTitle === "string" &&
+      preTitle.trim().length > 0 &&
+      isTitleValid(preTitle);
+
+    if (preIsValid) {
+      q.chapter_title = preTitle as string;
     } else if (llmIsValid) {
       q.chapter_title = llmTitle as string;
-    } else if (preIsValid) {
-      q.chapter_title = preTitle as string;
     } else {
-      q.chapter_title = '';
+      q.chapter_title = "";
     }
   }
 
@@ -354,7 +359,14 @@ function getSanityConfig(): SanityConfig {
 type TitleValidationConfig = { enabled: boolean; noisePatterns: string[]; structuralPatterns?: string[] };
 function getTitleValidationConfig(): TitleValidationConfig {
   const cfgPath = path.join(process.cwd(), 'config', 'title_validation.json');
-  const fallback: TitleValidationConfig = { enabled: true, noisePatterns: [] };
+  const fallback: TitleValidationConfig = {
+    enabled: true,
+    noisePatterns: [
+      'Practice & Problem Solving',
+      'Focus on math practices',
+      'Estimate Very Large Quantities',
+    ],
+  };
   return readJsonConfig<TitleValidationConfig>(cfgPath, fallback);
 }
 

@@ -939,6 +939,7 @@ export async function preprocessChapters(
   const validation = validateChapterEntries(finalEntries, blocks);
   if (!validation.ok) {
     console.warn(`[ChapterValidation] ${validation.error}`);
+    fs.writeFileSync(path.join(debugDir, 'chapter_flat_map.json'), JSON.stringify([], null, 2));
     return {
       flatMap: [],
       blocks,

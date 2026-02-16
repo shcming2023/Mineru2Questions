@@ -78,6 +78,10 @@ interface DispatchDecision {
   tocPages?: number[];     // 检测到的 TOC 页面
 }
 
+function fixOCRSpacing(text: string): string {
+  return text.replace(/(\d)([A-Z])/g, '$1 $2');
+}
+
 // ============================================================
 // 轨道一：TOC 驱动的纯代码章节定位
 // ============================================================
@@ -261,6 +265,8 @@ function extractTOCEntries(blocks: FlatBlock[], tocPages: number[]): TOCEntry[] 
 
     // 清理标题中的前导编号和点号
     title = title.replace(/\.{2,}$/, '').trim();
+
+    title = fixOCRSpacing(title);
 
     // 跳过太短或太长的标题
     if (title.length < 2 || title.length > 120) continue;
