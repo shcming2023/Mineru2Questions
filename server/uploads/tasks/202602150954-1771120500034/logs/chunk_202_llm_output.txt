@@ -49,12 +49,6 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>14206</title>
-<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>14145,14146</question>
-<solution>14147,14148,14149,14150</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>14151,14152,14153</question>
-<solution>14154,14155</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>14182,14183,14184</question>
-<solution>14185,14186,14187,14188,14189,14190,14191,14192</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 16</label><type>example</type><question>14221,14222</question>
 <solution>14223,14224,14225,14226,14227</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 17</label><type>example</type><question>14228,14229,14230</question>

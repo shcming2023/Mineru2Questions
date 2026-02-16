@@ -22,11 +22,7 @@
 <qa_pair><label>5</label><type>exercise</type><question>9391</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>9316</title>
-<qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>9317,9318</question>
-<solution>9319,9320,9321,9322,9323,9324</solution></qa_pair>
-</chapter>
 <chapter><title>9407</title>
-<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>9408,9409</question>
+<qa_pair><label>8</label><type>example</type><question>9408,9409</question>
 <solution></solution></qa_pair>
 </chapter>

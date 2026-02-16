@@ -9,7 +9,7 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>18811</title>
-<qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>18812,18813</question>
+<qa_pair><label>7</label><type>example</type><question>18812,18813</question>
 <solution>18814,18815,18816,18817,18818,18819,18820,18821</solution></qa_pair>
 </chapter>
 <chapter><title>18760</title>

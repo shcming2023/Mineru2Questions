@@ -7,8 +7,8 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>3637</title>
-<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>3586,3587,3589,3590,3597,3598,3605,3606</question>
-<solution>3591,3592,3593,3594,3595,3596,3599,3600,3601,3602,3603,3604,3607,3608,3609,3610,3611,3612,3613</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>3586,3587,3589,3590</question>
+<solution>3591,3592,3593,3594,3595,3596,3597,3598,3599,3600,3601,3602,3603,3604,3605,3606,3607,3608,3609,3610,3611,3612,3613</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>3655,3656</question>
 <solution>3657,3658,3659,3660,3661,3662,3663,3664,3665,3666,3667</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>3668,3669</question>

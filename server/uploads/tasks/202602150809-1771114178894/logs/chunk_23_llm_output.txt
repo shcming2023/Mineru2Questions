@@ -1,4 +1,4 @@
-<chapter><title>1611</title>
+<chapter><title>1625</title>
 <qa_pair><label>5</label><type>exercise</type><question>1610</question>
 <solution></solution></qa_pair>
 <qa_pair><label>Example</label><type>example</type><question>1614,1615,1616</question>
@@ -13,6 +13,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>5</label><type>exercise</type><question>1624</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>1657</title>
 <qa_pair><label>Example</label><type>example</type><question>1637,1638</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1641</question>
@@ -23,6 +25,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>1644</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>1657</title>
 <qa_pair><label>Example</label><type>example</type><question>1648,1649</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1652</question>
@@ -33,6 +37,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>1656</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>1657</title>
 <qa_pair><label>Example</label><type>example</type><question>1661,1662,1663,1664</question>
 <solution>1665</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1667</question>
@@ -41,6 +47,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>1669</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>1681</title>
 <qa_pair><label>Example</label><type>example</type><question>1673,1674,1675</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1677</question>
@@ -51,6 +59,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>1680</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>1681</title>
 <qa_pair><label>Example</label><type>example</type><question>1686,1687</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1690</question>
@@ -61,6 +71,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>1693</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>1694</title>
 <qa_pair><label>A</label><type>exercise</type><question>1702</question>
 <solution></solution></qa_pair>
 <qa_pair><label>B</label><type>exercise</type><question>1703</question>

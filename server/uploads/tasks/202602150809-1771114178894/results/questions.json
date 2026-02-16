@@ -1,5 +1,5 @@
 {
-  "total": 373,
+  "total": 372,
   "questions": [
     {
       "label": "1",
@@ -292,7 +292,7 @@
       "type": "example",
       "chapter_title": "Lesson 1-1",
       "question": "EXAMPLE 1\n![image](images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg)\nWrite Repeating Decimals as Fractions\nScan for Multimedia\n![image](images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg)\nThe Sluggers baseball team ended the season with the highest win percentage in their division. What is the Slugger's winning percentage written as a fraction?\nStatistics are often rounded. Here, the decimal 0.555... or 0.5 is rounded to the thousandths place.\n![image](images/e695708c7ab9a22c89da7c958b07f8b86b65c22d86e042d4d01df153d70a6ba1.jpg)\nLocate 0.555... on a number line.\nThe decimal number 0.555... is between 0.5 and 0.6; so it is between  $\\frac{1}{2}$ , or  $\\frac{5}{10}$ , and  $\\frac{6}{10}$ .\n![image](images/ea64c0211801082ec8c97c2460481b51daa2fc4bade1529bd09f3e098ddf2a11.jpg)\nReasoning How do you know that the repeating decimal 0.555... can be written as a fraction?\nWrite the repeating decimal as a fraction.\nAssign a variable to represent the repeating decimal.\nLet  $x = 0.5$\n$$\n1 0 \\cdot x = 1 0 \\cdot 0. \\overline {{5}}\n$$\n$$\n1 0 x = 5. \\overline {{5}}\n$$\n$$\n1 0 x - x = 5. \\overline {{5}} - 0. \\overline {{5}}\n$$\n$$\n9 x = 5\n$$\n$$\n\\frac {9 x}{9} = \\frac {5}{9}\n$$\n$$\nx = \\frac {5}{9}\n$$\nThe Sluggers won  $\\frac{5}{9}$  of their games.\nBecause 0.5 has 1 repeating digit, multiply each side of the equation by  $10^{1}$ , or 10.\nSubtract 0.5 from each side of the equation, then solve for  $x$ . Because  $x = 0.5$ , you can subtract  $x$  from one side and 0.5 from the other side.\n![image](images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg)",
-      "solution": "Try It!\nIn another baseball division, one team had a winning percentage of 0.444.... What fraction of their games did this team win?\nThe team won of their games.\nConvince Me! How do you know what power of ten to multiply by in the second step at the right?\nLet  $x = 0.\\overline{4}$\n$$\n\\begin{array}{l} \\boxed { \\begin{array}{r l} \\end{array} } \\cdot x = \\boxed { \\begin{array}{r l} \\end{array} } \\cdot 0. \\overline {{4}} \\\\ \\boxed { \\begin{array}{c} \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = \\\\ - x = \\boxed {0. 4} \\\\ \\boxed { \\begin{array}{c} \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline 0. 5 m ^ {2} = 1. 0 m ^ {2} = 1. 5 m ^ {2} = 2. 0 m ^ {2} = 3. 0 m ^ {2} = 4. 0 m ^ {2} = 5. 0 m ^ {2} = 6. 0 m ^ {2} = 7. 0 m ^ {2} = 8. 0 m ^ {2} = 9. 0 m ^ {2} = 1 0. 0 m ^ {2} = 1 1. 0 m ^ {2} = 1 2. 0 m ^ {2} = 1 3. 0 m ^ {2} = 1 4. 0 m ^ {2} = 1 5. 0 m ^ {2} = 1 6. 0 m ^ {2} = 1 7. 0 m ^ {2} = 1 8. 0 m ^ {2} = 1 9. 0 m ^ {2} = 2 0. 0 m ^ {2} = 2 1. 0 m ^ {2} = 2 2. 0 m ^ {2} = 2 3. 0 m ^ {2} = 2 4. 0 m ^ {2} = 2 5. 0 m ^ {2} = 2 6. 0 m ^ {2} = 2 7. 0 m ^ {2} = 2 8. 0 m ^ {2} = 2 9. 0 m ^ {2} = 3 0. 0 m ^ {2}} \\\\ x = \\boxed {} \\\\ \\end{array}\n$$",
+      "solution": "",
       "images": [
         "../images/e537da7f194be2a29efbdfabc35feabdf41af15709367cf3b6d03bc7adc7dbfe.jpg",
         "../images/e335f09ec41e5d0e8ff555ff83c94c5ab9fb171957268d5553b551b579fbe696.jpg",
@@ -301,9 +301,48 @@
         "../images/150f1c8c6b0c66c7fc4cbeab7d01e948fca9f55837ab6e59e4242c35de4c3130.jpg"
       ],
       "page_idx": 6,
-      "has_answer": true,
+      "has_answer": false,
       "questionIds": "149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173",
-      "solutionIds": "174,175,176,177,178,179",
+      "solutionIds": "",
+      "chapterTitleIds": "140"
+    },
+    {
+      "label": "Try It!",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-1",
+      "question": "Try It!\nIn another baseball division, one team had a winning percentage of 0.444.... What fraction of their games did this team win?\nThe team won of their games.",
+      "solution": "",
+      "images": [],
+      "page_idx": 6,
+      "has_answer": false,
+      "questionIds": "174,175,176",
+      "solutionIds": "",
+      "chapterTitleIds": "140"
+    },
+    {
+      "label": "Convince Me!",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-1",
+      "question": "Convince Me! How do you know what power of ten to multiply by in the second step at the right?\nLet  $x = 0.\\overline{4}$\n$$\n\\begin{array}{l} \\boxed { \\begin{array}{r l} \\end{array} } \\cdot x = \\boxed { \\begin{array}{r l} \\end{array} } \\cdot 0. \\overline {{4}} \\\\ \\boxed { \\begin{array}{c} \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = 0. 5 m ^ {2} = \\\\ - x = \\boxed {0. 4} \\\\ \\boxed { \\begin{array}{c} \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline \\hline 0. 5 m ^ {2} = 1. 0 m ^ {2} = 1. 5 m ^ {2} = 2. 0 m ^ {2} = 3. 0 m ^ {2} = 4. 0 m ^ {2} = 5. 0 m ^ {2} = 6. 0 m ^ {2} = 7. 0 m ^ {2} = 8. 0 m ^ {2} = 9. 0 m ^ {2} = 1 0. 0 m ^ {2} = 1 1. 0 m ^ {2} = 1 2. 0 m ^ {2} = 1 3. 0 m ^ {2} = 1 4. 0 m ^ {2} = 1 5. 0 m ^ {2} = 1 6. 0 m ^ {2} = 1 7. 0 m ^ {2} = 1 8. 0 m ^ {2} = 1 9. 0 m ^ {2} = 2 0. 0 m ^ {2} = 2 1. 0 m ^ {2} = 2 2. 0 m ^ {2} = 2 3. 0 m ^ {2} = 2 4. 0 m ^ {2} = 2 5. 0 m ^ {2} = 2 6. 0 m ^ {2} = 2 7. 0 m ^ {2} = 2 8. 0 m ^ {2} = 2 9. 0 m ^ {2} = 3 0. 0 m ^ {2}} \\\\ x = \\boxed {} \\\\ \\end{array}\n$$",
+      "solution": "",
+      "images": [],
+      "page_idx": 6,
+      "has_answer": false,
+      "questionIds": "177,178,179",
+      "solutionIds": "",
+      "chapterTitleIds": "140"
+    },
+    {
+      "label": "Try It!",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-1",
+      "question": "Try It!\nWrite the repeating decimal 0.6333... as a fraction.",
+      "solution": "",
+      "images": [],
+      "page_idx": 7,
+      "has_answer": false,
+      "questionIds": "193,194",
+      "solutionIds": "",
       "chapterTitleIds": "140"
     },
     {
@@ -311,15 +350,28 @@
       "type": "example",
       "chapter_title": "Lesson 1-1",
       "question": "EXAMPLE 3\n![image](images/59424fc1e1a049e5ba84affa8f6d83733ac203add5aec5249be7a6f12ae4264f.jpg)\nWrite Decimals with Multiple Repeating Digits as Fractions\nWrite 2.09 as a mixed number.\nLet  $x = 2.09$\n${100} \\cdot  x = {100} \\cdot  {2.09}$\n$$\n1 0 0 x - x = 2 0 9. \\overline {{0 9}} - 2. \\overline {{0 9}}\n$$\n$$\n9 9 x = 2 0 7\n$$\n$$\nx = \\frac {2 0 7}{9 9} \\text {o r} 2 \\frac {1}{1 1}\n$$\nThe repeating decimal has 2 repeating digits, so multiply each side of the equation by  $10^{2}$ , or 100.\nSubtract  $x$  from one side of the equation and its equivalent 2.09 from the other side of the equation.\nUse Structure How do you know that subtracting  $x$  from one side of the equation and subtracting 2.09 from the other side results in an equivalent equation?\n![image](images/bcbfdb36477078e9bd653877b58697cf96f51b6d3fa339af105ece2771af48c7.jpg)",
-      "solution": "Try It!\nWrite the repeating decimal 4.1363636... as a fraction.",
+      "solution": "",
       "images": [
         "../images/59424fc1e1a049e5ba84affa8f6d83733ac203add5aec5249be7a6f12ae4264f.jpg",
         "../images/bcbfdb36477078e9bd653877b58697cf96f51b6d3fa339af105ece2771af48c7.jpg"
       ],
       "page_idx": 7,
-      "has_answer": true,
+      "has_answer": false,
       "questionIds": "195,196,197,198,199,200,201,202,203,204,205,206,207",
-      "solutionIds": "208,209",
+      "solutionIds": "",
+      "chapterTitleIds": "140"
+    },
+    {
+      "label": "Try It!",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-1",
+      "question": "Try It!\nWrite the repeating decimal 4.1363636... as a fraction.",
+      "solution": "",
+      "images": [],
+      "page_idx": 7,
+      "has_answer": false,
+      "questionIds": "208,209",
+      "solutionIds": "",
       "chapterTitleIds": "140"
     },
     {
@@ -387,18 +439,20 @@
       "has_answer": false,
       "questionIds": "222,223",
       "solutionIds": "",
-      "chapterTitleIds": "140"
+      "chapterTitleIds": "225"
     },
     {
       "label": "6",
       "type": "exercise",
       "chapter_title": "Lesson 1-1",
-      "question": "6. Write 2.3181818... as a mixed number.",
+      "question": "![image](images/14b58496c9a45ab9100ccca295ae75a04d87a24f2db7c1dd946957abf0a31eb3.jpg)\n6. Write 2.3181818... as a mixed number.",
       "solution": "",
-      "images": [],
+      "images": [
+        "../images/14b58496c9a45ab9100ccca295ae75a04d87a24f2db7c1dd946957abf0a31eb3.jpg"
+      ],
       "page_idx": 8,
       "has_answer": false,
-      "questionIds": "224",
+      "questionIds": "223,224",
       "solutionIds": "",
       "chapterTitleIds": "140"
     },
@@ -464,19 +518,6 @@
       "label": "11",
       "type": "exercise",
       "chapter_title": "Lesson 1-1",
-      "question": "Write 0.8 as a fraction.",
-      "solution": "",
-      "images": [],
-      "page_idx": 9,
-      "has_answer": false,
-      "questionIds": "239",
-      "solutionIds": "",
-      "chapterTitleIds": "140"
-    },
-    {
-      "label": "11",
-      "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
       "question": "11. Write 0.87 as a fraction.",
       "solution": "",
       "images": [],
@@ -489,7 +530,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "13. Write 1.48 as a mixed number.",
       "solution": "",
       "images": [],
@@ -502,7 +543,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "14. Write 0.6 as a fraction.",
       "solution": "",
       "images": [],
@@ -515,7 +556,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "15. A manufacturer determines that the cost of making a computer component is \\(2.161616. Write the cost as a fraction and as a mixed number.\n![image](images/6093d78080f838aafc536649257b23995f6c4001bcafc824fad9f84baf684bd7.jpg)",
       "solution": "",
       "images": [
@@ -530,7 +571,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "16. Reasoning When writing a repeating decimal as a fraction, does the number of repeating digits you use matter? Explain.",
       "solution": "",
       "images": [],
@@ -543,7 +584,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "17. Higher Order Thinking When writing a repeating decimal as a fraction, why does the fraction always have only 9s or 9s and 0s as digits in the denominator?\n![image](images/fd38a9af868d1d40a37a62067d01e82f9178e6b3f9d96d783fd829f23d391580.jpg)",
       "solution": "",
       "images": [
@@ -558,7 +599,7 @@
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "18. Which decimal is equivalent to  $\\frac{188}{11}$ ? 8.NS.1.1\nA  ${17.09}$\n$⑧$  17.009\n$\\odot$  17.1709\n$⑤$  17.17090",
       "solution": "",
       "images": [],
@@ -571,7 +612,7 @@
     {
       "label": "19",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-1",
       "question": "19. Which repeating decimal is equal to each fraction? 8.NS.1.1\n[Table Row] <tr><td></td><td>0.17</td><td>0.351</td></tr>\n[Table Row] <tr><td>348/990 = 58/165</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>316/900 = 79/225</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>351/999 = 13/37</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>16/90 = 8/45</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>17/99</td><td>□</td><td>□</td></tr>",
       "solution": "",
       "images": [],
@@ -584,7 +625,7 @@
     {
       "label": "A",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "A. Construct Arguments Is Nora or Sofia correct? Explain your reasoning.",
       "solution": "",
       "images": [],
@@ -597,7 +638,7 @@
     {
       "label": "B",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "B. Use Structure What is another nonterminating decimal number that can not be written as a fraction.",
       "solution": "",
       "images": [],
@@ -610,7 +651,7 @@
     {
       "label": "Focus",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "Construct Arguments Is 0.12112111211112... a rational number? Explain.",
       "solution": "",
       "images": [],
@@ -623,26 +664,27 @@
     {
       "label": "EXAMPLE 1",
       "type": "example",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "EXAMPLE 1\n![image](images/615cd73e2e5522f40aa0451a2a8a2f9d98ca68deedbb4cd598265a0745200bd9.jpg)\nIdentify Irrational Numbers\n![image](images/f3459e9dbd0b69f824ed885927944ba793c0cad4f1177d9755bf976d8a7e837b.jpg)\nThe Venn diagram shows the relationships among rational numbers.\nHow would you classify the number 0.24758326...?\nReasoning How can you use the definition of each number set to classify numbers?\n![image](images/97e8b41e0505e0146431b39d01f22fa48b80eeecac71843b5ad422f148f61a48.jpg)\n0.24758326...\nThe decimal expansion does not terminate or repeat, so it cannot be written as a ratio of two integers.\nThe number 0.24758326... is not a rational number.\nNumbers that are not rational are called irrational. An irrational number is a number that cannot be written in the form  $\\frac{a}{b}$ , where  $a$  and  $b$  are integers and  $b \\neq 0$ .\n![image](images/a4fee29f9b26c72c0680306f3120e8f43d26014c8a12b19f0b3a03f281602c51.jpg)\nThe number 0.24758326... is irrational because the decimal expansion is nonrepeating and nonterminating.\n![image](images/5f0db2a9fad796720cb6b19ac52d4257d2dbae0cdf825d0c4ee0816fba1f9d72.jpg)",
-      "solution": "The decimal expansion does not terminate or repeat, so it cannot be written as a ratio of two integers.\nThe number 0.24758326... is not a rational number.\nNumbers that are not rational are called irrational. An irrational number is a number that cannot be written in the form  $\\frac{a}{b}$ , where  $a$  and  $b$  are integers and  $b \\neq 0$ .\nThe number 0.24758326... is irrational because the decimal expansion is nonrepeating and nonterminating.",
+      "solution": "The decimal expansion does not terminate or repeat, so it cannot be written as a ratio of two integers.\nThe number 0.24758326... is not a rational number.\nNumbers that are not rational are called irrational. An irrational number is a number that cannot be written in the form  $\\frac{a}{b}$ , where  $a$  and  $b$  are integers and  $b \\neq 0$ .\nThe number 0.24758326... is irrational because the decimal expansion is nonrepeating and nonterminating.\n![image](images/5f0db2a9fad796720cb6b19ac52d4257d2dbae0cdf825d0c4ee0816fba1f9d72.jpg)",
       "images": [
         "../images/615cd73e2e5522f40aa0451a2a8a2f9d98ca68deedbb4cd598265a0745200bd9.jpg",
         "../images/f3459e9dbd0b69f824ed885927944ba793c0cad4f1177d9755bf976d8a7e837b.jpg",
         "../images/97e8b41e0505e0146431b39d01f22fa48b80eeecac71843b5ad422f148f61a48.jpg",
         "../images/a4fee29f9b26c72c0680306f3120e8f43d26014c8a12b19f0b3a03f281602c51.jpg",
+        "../images/5f0db2a9fad796720cb6b19ac52d4257d2dbae0cdf825d0c4ee0816fba1f9d72.jpg",
         "../images/5f0db2a9fad796720cb6b19ac52d4257d2dbae0cdf825d0c4ee0816fba1f9d72.jpg"
       ],
       "page_idx": 12,
       "has_answer": true,
       "questionIds": "282,283,284,286,287,288,289,290,291,292,293,294,295,296,297",
-      "solutionIds": "292,293,294,296",
+      "solutionIds": "292,293,294,296,297",
       "chapterTitleIds": "225"
     },
     {
       "label": "Try It!",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "Try It!\nClassify each number as rational or irrational.\n[Table Row] <tr><td>π</td><td>3.565565556...</td></tr>\n[Table Row] <tr><td>0.04053661...</td><td>-17</td></tr>\n[Table Row] <tr><td>0.76</td><td>3.275</td></tr>",
       "solution": "",
       "images": [],
@@ -655,7 +697,7 @@
     {
       "label": "Convince Me!",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "Convince Me! Construct Arguments Jen classifies the number\n4.567 as irrational because it does not repeat. Is Jen correct?\nExplain.\n![image](images/a59d43a3eebaf4a1d76caa414f52872fceb579a0350b0cdae7234ddd4f254d18.jpg)",
       "solution": "",
       "images": [
@@ -668,9 +710,9 @@
       "chapterTitleIds": "225"
     },
     {
-      "label": "Classify",
+      "label": "Classify √3",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-2",
       "question": "Classify  $\\sqrt{3}$\n$\\sqrt{3}$  means \"the nonnegative square root of 3.\"\nThe square root of a number is a number that when multiplied by itself equals the original number. The radical symbol  $\\sqrt{}$  is used to denote the nonnegative square root.",
       "solution": "",
       "images": [],
@@ -683,7 +725,7 @@
     {
       "label": "EXAMPLE 3",
       "type": "example",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "EXAMPLE 3\n![image](images/263b6c423d1ee291e2cc076ebc6794c1c56d3124168b5fc14672a4c944d6fc96.jpg)\nClassify Numbers as Rational or Irrational\nClassify each number as rational or irrational. Explain how you classified each number.\n-81,572\n√11\n5.636336333...\n√16",
       "solution": "-81,572 is an integer and can be written as the fraction  $\\frac{-81,572}{1}$  so it is rational.\nRational\n-81,572\n√16\nIrrational\n√11\n5.636336333...\n11 is not a perfect square, so  $\\sqrt{11}$  is irrational.\nThe number 16 is a perfect square, so  $\\sqrt{16} = 4$  is rational.\nThis decimal expansion does not repeat or terminate, so it is irrational.\n![image](images/f5b7f21df2fe2f11258b4edd279d08e6f66eb3bfbdf721abccec42775bd94a84.jpg)",
       "images": [
@@ -699,7 +741,7 @@
     {
       "label": "Try It!",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "Try It!\nClassify each number as rational or irrational and explain.\n2 3\n√25\n-0.75\n√2\n7,548,123",
       "solution": "",
       "images": [],
@@ -712,7 +754,7 @@
     {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "1. Essential Question How is an irrational number different from a rational number?",
       "solution": "",
       "images": [],
@@ -725,7 +767,7 @@
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "2. Reasoning How can you tell whether a square root of a whole number is rational or irrational?",
       "solution": "",
       "images": [],
@@ -738,7 +780,7 @@
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "3. Construct Arguments Could a number ever be both rational and irrational? Explain.",
       "solution": "",
       "images": [],
@@ -751,7 +793,7 @@
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "4. Is the number 65.4349224... rational or irrational? Explain.",
       "solution": "",
       "images": [],
@@ -764,7 +806,7 @@
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "5. Is the number  $\\sqrt{2,500}$  rational or irrational? Explain.",
       "solution": "",
       "images": [],
@@ -777,7 +819,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "6. Classify each number as rational or irrational.\n4.27 0.375 0.232342345... √62 -1\n[Table Row] <tr><td>Rational</td><td>Irrational</td></tr>\n[Table Row] <tr><td></td><td></td></tr>\n[Table Row] <tr><td></td><td></td></tr>\n[Table Row] <tr><td></td><td></td></tr>",
       "solution": "",
       "images": [],
@@ -790,7 +832,7 @@
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "7. Is 5.787787778... a rational or irrational number? Explain.",
       "solution": "",
       "images": [],
@@ -803,7 +845,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "8. Is  $\\sqrt{42}$  rational or irrational? Explain.",
       "solution": "",
       "images": [],
@@ -816,7 +858,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "9. A teacher places seven cards, lettered A-G, on a table. Which cards show irrational numbers?\n![image](images/13ed8c942b3457e6dc76b7d5d099c1c155442b4712eb3e7b84b8dbdcafae7822.jpg)",
       "solution": "",
       "images": [
@@ -831,7 +873,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "10. Circle the irrational number in the list below.\n7.27  $\\frac{5}{9}$ $\\sqrt{15}$ $\\sqrt{196}$",
       "solution": "",
       "images": [],
@@ -844,7 +886,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "11. Lisa writes the following list of numbers.\n5.737737773...，26,√45,-2,0,9\na. Which numbers are rational?\nb. Which numbers are irrational?",
       "solution": "",
       "images": [],
@@ -852,12 +894,38 @@
       "has_answer": false,
       "questionIds": "371,372,373,374",
       "solutionIds": "",
+      "chapterTitleIds": "413"
+    },
+    {
+      "label": "a",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-2",
+      "question": "a. Which numbers are rational?",
+      "solution": "",
+      "images": [],
+      "page_idx": 15,
+      "has_answer": false,
+      "questionIds": "373",
+      "solutionIds": "",
+      "chapterTitleIds": "280"
+    },
+    {
+      "label": "b",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-2",
+      "question": "b. Which numbers are irrational?",
+      "solution": "",
+      "images": [],
+      "page_idx": 15,
+      "has_answer": false,
+      "questionIds": "374",
+      "solutionIds": "",
       "chapterTitleIds": "280"
     },
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "12. Construct Arguments Deena says that 9.565565556... is a rational number because it has a repeating pattern. Do you agree? Explain.",
       "solution": "",
       "images": [],
@@ -870,7 +938,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "13. Is  $\\sqrt{1,815}$  rational? Explain.",
       "solution": "",
       "images": [],
@@ -883,7 +951,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "14. Is the decimal form of  $\\frac{13}{3}$  a rational number? Explain.",
       "solution": "",
       "images": [],
@@ -896,7 +964,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Focus on math practices",
+      "chapter_title": "Lesson 1-2",
       "question": "15. Write the side length of the square rug as a square root. Is the side length a rational or irrational number? Explain.\n![Area  $= {100}{\\mathrm{{ft}}}^{2}$](images/8d4a2941c0c47e802ea053ea4577f4436d1dcc411918f4c901e522bfd3b223df.jpg)",
       "solution": "",
       "images": [
@@ -911,7 +979,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Lesson 1-3",
+      "chapter_title": "Lesson 1-2",
       "question": "6. Classify each number as rational or irrational.\n4.27 0.375 0.232342345... √62 -1",
       "solution": "",
       "images": [],
@@ -924,7 +992,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Lesson 1-3",
+      "chapter_title": "Lesson 1-2",
       "question": "16. Reasoning The numbers 2.888... and 2.999... are both rational numbers. What is an irrational number that is between the two rational numbers?",
       "solution": "",
       "images": [],
@@ -937,7 +1005,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Lesson 1-3",
+      "chapter_title": "Lesson 1-2",
       "question": "17. Higher Order Thinking You are given the expressions  $\\sqrt{76 + n}$  and  $\\sqrt{2n + 26}$ . What is the smallest value of  $n$  that will make each number rational?\n![image](images/119fed8bcb63ae72afc1d595d301484a3bd5030167aaa0b8f510d9832b809d3a.jpg)",
       "solution": "",
       "images": [
@@ -952,7 +1020,7 @@
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Lesson 1-3",
+      "chapter_title": "Lesson 1-2",
       "question": "18. Which numbers are rational? 8.NS.1.1\n1. 1.111111...\nII. 1.567\nIII. 1.101101110...\nA II and III\nB III only\n$\\odot$  II only\nD I and II\nE I only\nF None of the above",
       "solution": "",
       "images": [],
@@ -965,7 +1033,7 @@
     {
       "label": "19",
       "type": "exercise",
-      "chapter_title": "Lesson 1-3",
+      "chapter_title": "Lesson 1-2",
       "question": "19. Determine whether the following numbers are rational or irrational. 8.NS.1.1\n[Table Row] <tr><td></td><td>Rational</td><td>Irrational</td></tr>\n[Table Row] <tr><td>8/5</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>π</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>0</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>√1</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>4.46466...</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>-6</td><td>□</td><td>□</td></tr>\n[Table Row] <tr><td>√2</td><td>□</td><td>□</td></tr>",
       "solution": "",
       "images": [],
@@ -980,26 +1048,25 @@
       "type": "example",
       "chapter_title": "Lesson 1-3",
       "question": "EXAMPLE 1\n![image](images/f398da4a2f96b853e83cdcba02db6b641e9ad8048daceb96cc5a0f60b3849ad1.jpg)\nApproximate an Irrational Number\nScan for Multimedia\n![image](images/aa4cd08b29d55ed8a67a6254c7e8021f265bab8dde5684ed243917b47cdfa111.jpg)\nDarcy wants to add the ribbon shown along the diagonal of the rectangular flag she is designing. Does Darcy have enough ribbon? Explain.\n![image](images/7031daac32afe78d1a98085f0e881ee0cdcd11a6fe5791cae7411100db7c0d7a.jpg)\nApproximate  $\\sqrt{74}$  using perfect squares.\nBecause 74 lies between the two consecutive perfect squares 64 and 81,  $\\sqrt{74}$  is located between  $\\sqrt{64}$  and  $\\sqrt{81}$ .\n![image](images/5b39c4819213ac6c47ba986653047df76c0ea0ce730f6770d989f22e99aa8142.jpg)\nFind a better approximation by squaring decimals between 8 and 9. Then compare.\nReasoning Which decimals can you use to find a better approximation?\n![image](images/b64ddbb367cea32cde2be57f075717a53fd1184427a68cfa924fab67726894b8.jpg)\nThe length of the diagonal,  $\\sqrt{74}$ , is about 8.6 feet. Darcy does not have enough ribbon.\n![image](images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg)",
-      "solution": "Try It!\nBetween which two whole numbers is  $\\sqrt{12}$ ?\n![image](images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)\nConvince Me! Which of the two numbers is a better estimate for  $\\sqrt{12}$ ? Explain.",
+      "solution": "",
       "images": [
         "../images/f398da4a2f96b853e83cdcba02db6b641e9ad8048daceb96cc5a0f60b3849ad1.jpg",
         "../images/aa4cd08b29d55ed8a67a6254c7e8021f265bab8dde5684ed243917b47cdfa111.jpg",
         "../images/7031daac32afe78d1a98085f0e881ee0cdcd11a6fe5791cae7411100db7c0d7a.jpg",
         "../images/5b39c4819213ac6c47ba986653047df76c0ea0ce730f6770d989f22e99aa8142.jpg",
         "../images/b64ddbb367cea32cde2be57f075717a53fd1184427a68cfa924fab67726894b8.jpg",
-        "../images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg",
-        "../images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg"
+        "../images/8781869419c0673c28bf25384dc6d3f21d2e6195b2f12cebf5b1ac19b29d299a.jpg"
       ],
       "page_idx": 18,
-      "has_answer": true,
+      "has_answer": false,
       "questionIds": "427,428,429,430,431,432,433,434,435,436,437,438,439,440,441",
-      "solutionIds": "442,443,444,445",
-      "chapterTitleIds": "413"
+      "solutionIds": "",
+      "chapterTitleIds": "420"
     },
     {
       "label": "Try It!",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "Try It!\nBetween which two whole numbers is  $\\sqrt{12}$ ?\n![image](images/b158c088b907f412259ce7bb6ff537cb38fc317cf393583743542b1a020fa9a0.jpg)\nConvince Me! Which of the two numbers is a better estimate for  $\\sqrt{12}$ ? Explain.",
       "solution": "",
       "images": [
@@ -1040,7 +1107,7 @@
     {
       "label": "EXAMPLE 3",
       "type": "example",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "EXAMPLE 3\n![image](images/416b88f8acc8fb6569a09326ca696c2b0cee18196d37b2be015964282219de1d.jpg)\nCompare and Order Rational and Irrational Numbers\nCompare and order the numbers below.\n$$\n\\pi^ {2}, 9 \\frac {1}{2}, 9. 8, 9. \\overline {{5}}, \\sqrt {9 4}\n$$\nSTEP 1 Use rational approximation to estimate the values of irrational numbers.\n$$\n\\begin{array}{l} \\pi^ {2} \\approx 3. 1 4 \\times 3. 1 4 \\approx 9. 8 5 9 6 \\\\ 9 \\frac {1}{2} = 9. 5 \\\\ 9. 8 \\\\ 9. \\overline {{5}} = 9. 5 5 5 5 \\dots \\\\ \\sqrt {9 4} \\approx 9. 7 \\\\ \\end{array}\n$$\nSTEP 2 Plot each approximation on a number line.\n![image](images/37dbacf5976e1ad484fd89f08c1f2288ebce5a91ca3faa801407c0bcd9334fa8.jpg)\n$$\n\\mathrm {S o}, 9 \\frac {1}{2} <   9. \\overline {{5}} <   \\sqrt {9 4} <   9. 8 <   \\pi^ {2}.\n$$\n![image](images/e51143eaaab3b7fecbfb86d23570bd13a1b6767596ef9ac247359209ab7fe840.jpg)",
       "solution": "",
       "images": [
@@ -1057,7 +1124,7 @@
     {
       "label": "Try It!",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "Try It!\nCompare and order the following numbers:\n$$\n\\sqrt {1 1}, 2 \\frac {1}{4}, - 2. 5, 3. \\overline {{6}}, - 3. 9 7 6 2 1 \\dots\n$$",
       "solution": "",
       "images": [],
@@ -1070,7 +1137,7 @@
     {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "1. Essential Question How can you compare and order rational and irrational numbers?",
       "solution": "",
       "images": [],
@@ -1083,7 +1150,7 @@
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "2. Reasoning The \"leech\" is a technical term for the slanted edge of a sail. Is the length of the leech shown closer to 5 meters or 6 meters? Explain.\n![image](images/d2e5525f556e7c6236ee1a427274f66c1c3d5477924fc8c7cd4f7420285d2878.jpg)",
       "solution": "",
       "images": [
@@ -1098,7 +1165,7 @@
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "3. Construct Arguments Which is a better approximation of  $\\sqrt{20}$ , 4.5 or 4.47? Explain.",
       "solution": "",
       "images": [],
@@ -1111,7 +1178,7 @@
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "4. Approximate  $\\sqrt{39}$  to the nearest whole number.",
       "solution": "",
       "images": [],
@@ -1124,7 +1191,7 @@
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "5. Approximate  $\\sqrt{18}$  to the nearest tenth and plot the number on a number line.\n![image](images/80a06a62ccfbbe718c6227b9beecaf48cc39d08c93bf06a1065a8119d4b00cfe.jpg)",
       "solution": "",
       "images": [
@@ -1139,7 +1206,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "6. Compare 5.7145... and  $\\sqrt{29}$ . Show your work.",
       "solution": "",
       "images": [],
@@ -1152,7 +1219,7 @@
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "7. Compare and order the following numbers:  $5.2, -5.6, 3\\frac{9}{10}, \\sqrt{21}$",
       "solution": "",
       "images": [],
@@ -1165,7 +1232,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "8. Leveled Practice Find the rational approximation of  $\\sqrt{15}$ .\na. Approximate using perfect squares.\n![image](images/ffe28935095db895e80c3bf9f98ec56a1aeb91a1f9a8b170a7b843771bd29f96.jpg)\nb. Locate and plot  $\\sqrt{15}$  on a number line. Find a better approximation using decimals.\n![image](images/f357fd47024562cb5749660db94c887baa1dcb78bc1586398fffd177a298e1d7.jpg)",
       "solution": "",
       "images": [
@@ -1181,7 +1248,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "9. Compare  $-1.96312\\ldots$  and  $-\\sqrt{5}$ . Show your work.",
       "solution": "",
       "images": [],
@@ -1194,7 +1261,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "10. Does  $\\frac{1}{6}, -3, \\sqrt{7}, -\\frac{6}{5}$ , or 4.5 come first when the numbers are listed from least to greatest? Explain.",
       "solution": "",
       "images": [],
@@ -1207,7 +1274,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "11. A museum director wants to hang the painting on a wall. To the nearest foot, how tall does the wall need to be?\n![image](images/77e660f7d6442ab106a67da41004f34ad61b8b1324caee3852fc4550bdfa6265.jpg)",
       "solution": "",
       "images": [
@@ -1222,7 +1289,7 @@
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "12. Dina has several small clay pots. She wants to display them in order of height, from shortest to tallest. What will be the order of the pots?\n![image](images/d62401c0eed87fe93d3a7f596dd43f12b72f2cadbaad12c1d2fe28dcecb8bf83.jpg)\n![image](images/f94c9d2bf6f55cedd62680df50c50b248d285739abca242455e19f7e069aff62.jpg)\n![image](images/9cfc62b01154cbaa5152e84a9c77886a79e68922cb86c75d3babf2e7183668d8.jpg)\n![image](images/1b1d064d0fac02a3ce29344ca4e59988dc519014d5800dff202e6ee54b6e3426.jpg)",
       "solution": "",
       "images": [
@@ -1240,7 +1307,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "13. Rosie is comparing  $\\sqrt{7}$  and 3.44444... . She says that  $\\sqrt{7} > 3.44444$  ... because  $\\sqrt{7} = 3.5$ .\na. What is the correct comparison?\nb. Critique Reasoning What mistake did Rosie likely make?",
       "solution": "",
       "images": [],
@@ -1253,7 +1320,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "14. Model with Math Approximate  $-\\sqrt{23}$  to the nearest tenth. Draw the point on the number line.\n![image](images/116c77f3b3759d9d15919173e3bf640dbe943cd482bd52211e6b5b9f5c20c3b9.jpg)",
       "solution": "",
       "images": [
@@ -1268,7 +1335,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "compare and order rational and irrational numbers.",
+      "chapter_title": "Lesson 1-3",
       "question": "15. Higher Order Thinking The length of a rectangle is twice the width. The area of the rectangle is 90 square units. Note that you can divide the rectangle into two squares.\na. Which irrational number represents the length of each side of the squares?\nb. Estimate the length and width of the rectangle.\nArea  $= 90$  square units\n![image](images/7788cedac5dbea60c7bc52ac538fe4ec36ab4b06e6408e76d65961c06e4bae9a.jpg)",
       "solution": "",
       "images": [
@@ -1283,7 +1350,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Lesson 1-4",
+      "chapter_title": "Lesson 1-3",
       "question": "16. Which list shows the numbers in order from least to greatest? 8.NS.1.2\nA  $-4, -\\frac{9}{4}, \\frac{1}{2}, 3.7, \\sqrt{5}$\nB  $-4, -\\frac{9}{4}, \\frac{1}{2}, \\sqrt{5}, 3.7$\nC  $-\\frac{9}{4},\\frac{1}{2},3.7,\\sqrt{5}, - 4$\n(2)  $\\sqrt{\\frac{9}{4}} - 4, \\frac{1}{2}, 3.7, \\sqrt{5}$",
       "solution": "",
       "images": [],
@@ -1296,7 +1363,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Lesson 1-4",
+      "chapter_title": "Lesson 1-3",
       "question": "17. The area of a square poster is 31 square inches. Find the length of one side of the poster. Explain. 8.EE.1.2\nPART A\nTo the nearest whole inch\nPART B\nTo the nearest tenth of an inch\n![image](images/c693b4179f29496ca3cd3ee9f9ea904f5cc2af1d534ca5a054880e9bedede64f.jpg)\n![image](images/1860387badca20ea6448de90e374ecde3f5782ad513fda3b2f1951b18fe59cb3.jpg)",
       "solution": "",
       "images": [
@@ -1312,8 +1379,8 @@
     {
       "label": "Solve & Discuss It!",
       "type": "exercise",
-      "chapter_title": "Lesson 1-4",
-      "question": "Matt and his dad are building a tree house. They buy enough flooring material to cover an area of 36 square feet. What are all possible dimensions of the floor?\n![image](images/6692aa1c6d5269deaa974d3343983f05c0eabb9a11d421a83e7e5c67584d0332.jpg)\n![image](images/186d5e6fb772a7c9a9cef799a57c00d78e6f39243324d95300b881b57c35e680.jpg)",
+      "chapter_title": "Lesson 1-3",
+      "question": "Solve & Discuss It!\nMatt and his dad are building a tree house. They buy enough flooring material to cover an area of 36 square feet. What are all possible dimensions of the floor?\n![image](images/6692aa1c6d5269deaa974d3343983f05c0eabb9a11d421a83e7e5c67584d0332.jpg)\n![image](images/186d5e6fb772a7c9a9cef799a57c00d78e6f39243324d95300b881b57c35e680.jpg)",
       "solution": "",
       "images": [
         "../images/6692aa1c6d5269deaa974d3343983f05c0eabb9a11d421a83e7e5c67584d0332.jpg",
@@ -1321,7 +1388,7 @@
       ],
       "page_idx": 23,
       "has_answer": false,
-      "questionIds": "530,531,532",
+      "questionIds": "529,530,531,532",
       "solutionIds": "",
       "chapterTitleIds": "535"
     },
@@ -1329,7 +1396,7 @@
       "label": "EXAMPLE 1",
       "type": "example",
       "chapter_title": "Lesson 1-4",
-      "question": "EXAMPLE 1\n![image](images/87b4f1d47e61e2a25a3d20b2378f37a776ae1ec242f6b7d6512f6d2e909b2382.jpg)\nEvaluate Cube Roots to Solve Problems\n![image](images/871a2fbf4ad870e594b9f0582a9bfb93486bc4bd04696bfda938a7d6d49813b2.jpg)\nLeah is building a bird house for purple martins, birds that prefer cube-shaped birdhouses. What are the dimensions of each square piece of wood Leah needs to build the 216 cubic-inch birdhouse?\nReasoning What do you know about the length, width, and height of the birdhouse?\n![image](images/3666e7377ec2a470e83ced4d2b69156a3ee774212d3594a1b771cbabedbbc079.jpg)\nDraw and label a cube to represent the birdhouse.\n![image](images/8a8c069e0e1d395d6599ee41f379fbed43404398082b709b61788e1a7c46955d.jpg)\n$$\n\\begin{array}{l} 2 1 6 = s \\cdot s \\cdot s \\\\ 2 1 6 = s ^ {3} \\\\ \\end{array}\n$$\nA number that is a cube of an integer is a perfect cube.\nThe number 216 is also a perfect cube.\nTo find the value of  $s$ , find the cube root of 216. The cube root of a number is a number whose cube is equal to that number.\nThe symbol  $\\sqrt[3]{\\cdot}$  means the cube root of a number.\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{2 1 6} = \\sqrt [ 3 ]{6 \\cdot 6 \\cdot 6} \\\\ = \\sqrt [ 3 ]{6 ^ {3}} \\\\ = 6 \\\\ \\end{array}\n$$\nTaking the cube root and cubing a number are inverse operations.\nThe dimensions of each square piece of wood are 6 inches by 6 inches.\n![image](images/0132d9a5449fe6d2483f4a11bb67bdbfa984505f2095ea2fd988a14fe19b34eb.jpg)",
+      "question": "EXAMPLE 1\n![image](images/87b4f1d47e61e2a25a3d20b2378f37a776ae1ec242f6b7d6512f6d2e909b2382.jpg)\nEvaluate Cube Roots to Solve Problems\nScan for Multimedia\n![image](images/871a2fbf4ad870e594b9f0582a9bfb93486bc4bd04696bfda938a7d6d49813b2.jpg)\nLeah is building a bird house for purple martins, birds that prefer cube-shaped birdhouses. What are the dimensions of each square piece of wood Leah needs to build the 216 cubic-inch birdhouse?\nReasoning What do you know about the length, width, and height of the birdhouse?\n![image](images/3666e7377ec2a470e83ced4d2b69156a3ee774212d3594a1b771cbabedbbc079.jpg)\nDraw and label a cube to represent the birdhouse.\n![image](images/8a8c069e0e1d395d6599ee41f379fbed43404398082b709b61788e1a7c46955d.jpg)\n$$\n\\begin{array}{l} 2 1 6 = s \\cdot s \\cdot s \\\\ 2 1 6 = s ^ {3} \\\\ \\end{array}\n$$\nA number that is a cube of an integer is a perfect cube.\nThe number 216 is also a perfect cube.\nTo find the value of  $s$ , find the cube root of 216. The cube root of a number is a number whose cube is equal to that number.\nThe symbol  $\\sqrt[3]{\\cdot}$  means the cube root of a number.\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{2 1 6} = \\sqrt [ 3 ]{6 \\cdot 6 \\cdot 6} \\\\ = \\sqrt [ 3 ]{6 ^ {3}} \\\\ = 6 \\\\ \\end{array}\n$$\nTaking the cube root and cubing a number are inverse operations.\nThe dimensions of each square piece of wood are 6 inches by 6 inches.\n![image](images/0132d9a5449fe6d2483f4a11bb67bdbfa984505f2095ea2fd988a14fe19b34eb.jpg)",
       "solution": "Try It!\nA cube-shaped art sculpture has a volume of 64 cubic feet. What is the length of each edge of the cube?\nThe length of each edge is feet.\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{\\square \\cdot \\square \\cdot \\square} \\\\ \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{\\square} ^ {3} \\\\ \\sqrt [ 3 ]{6 4} = \\boxed {} \\\\ \\end{array}\n$$\nConvince Me! How can you find the cube root of 64?",
       "images": [
         "../images/87b4f1d47e61e2a25a3d20b2378f37a776ae1ec242f6b7d6512f6d2e909b2382.jpg",
@@ -1340,7 +1407,7 @@
       ],
       "page_idx": 24,
       "has_answer": true,
-      "questionIds": "546,547,548,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564",
+      "questionIds": "546,547,548,549,550,551,552,553,554,555,556,557,558,559,560,561,562,563,564",
       "solutionIds": "565,566,567,568,569",
       "chapterTitleIds": "535"
     },
@@ -1348,8 +1415,8 @@
       "label": "EXAMPLE 2",
       "type": "example",
       "chapter_title": "Lesson 1-4",
-      "question": "EXAMPLE 2\n![image](images/b9bbdc37c1625c9aac16616a67ac9aa23980b73b6e84b29854658692c5c3b98f.jpg)\nEvaluate Perfect Squares and Perfect Cubes\n![image](images/efef7f4f1aad0bf8f2ec41bcebd58581e3f67ca536054c3d260f8b99acd7dfd9.jpg)\n![image](images/ae9c677ba2dd437b428332722fad832a7ff5ef9c320d809cafa2fcdb389b5237.jpg)\n![image](images/77f64561cd6df555291de0ffa23fb32246a05a46ad27e0a7c335695399dd17a1.jpg)",
-      "solution": "Evaluate.\nA.  $\\sqrt[3]{64}$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{4 \\cdot 4 \\cdot 4} \\\\ = \\sqrt [ 3 ]{4 ^ {3}} \\\\ = 4 \\\\ \\end{array}\n$$\nB.  $\\sqrt{100}$\n$$\n\\begin{array}{l} \\sqrt {1 0 0} = \\sqrt {1 0 \\cdot 1 0} \\\\ = \\sqrt {1 0 ^ {2}} \\\\ = 1 0 \\\\ \\end{array}\n$$\nC.  $\\sqrt{49}$\n$$\n\\begin{array}{l} \\sqrt {4 9} = \\sqrt {7 \\cdot 7} \\\\ = \\sqrt {7 ^ {2}} \\\\ = 7 \\\\ \\end{array}\n$$\nD.  $\\sqrt[3]{8}$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{8} = \\sqrt [ 3 ]{2 \\cdot 2 \\cdot 2} \\\\ = \\sqrt [ 3 ]{2 ^ {3}} \\\\ = 2 \\\\ \\end{array}\n$$\n![image](images/db4b17f22dd68be3b253884aade4bc63144b7fb046cf010c30df8904d4b60bf8.jpg)\nTry It!\nEvaluate.",
+      "question": "EXAMPLE 2\n![image](images/b9bbdc37c1625c9aac16616a67ac9aa23980b73b6e84b29854658692c5c3b98f.jpg)\nEvaluate Perfect Squares and Perfect Cubes\n![image](images/efef7f4f1aad0bf8f2ec41bcebd58581e3f67ca536054c3d260f8b99acd7dfd9.jpg)\n![image](images/ae9c677ba2dd437b428332722fad832a7ff5ef9c320d809cafa2fcdb389b5237.jpg)\nACTIVITY\n![image](images/77f64561cd6df555291de0ffa23fb32246a05a46ad27e0a7c335695399dd17a1.jpg)",
+      "solution": "ASSESS\nEvaluate.\nA.  $\\sqrt[3]{64}$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{4 \\cdot 4 \\cdot 4} \\\\ = \\sqrt [ 3 ]{4 ^ {3}} \\\\ = 4 \\\\ \\end{array}\n$$\nB.  $\\sqrt{100}$\n$$\n\\begin{array}{l} \\sqrt {1 0 0} = \\sqrt {1 0 \\cdot 1 0} \\\\ = \\sqrt {1 0 ^ {2}} \\\\ = 1 0 \\\\ \\end{array}\n$$\nC.  $\\sqrt{49}$\n$$\n\\begin{array}{l} \\sqrt {4 9} = \\sqrt {7 \\cdot 7} \\\\ = \\sqrt {7 ^ {2}} \\\\ = 7 \\\\ \\end{array}\n$$\nD.  $\\sqrt[3]{8}$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{8} = \\sqrt [ 3 ]{2 \\cdot 2 \\cdot 2} \\\\ = \\sqrt [ 3 ]{2 ^ {3}} \\\\ = 2 \\\\ \\end{array}\n$$\n![image](images/db4b17f22dd68be3b253884aade4bc63144b7fb046cf010c30df8904d4b60bf8.jpg)\nTry It!\nEvaluate.",
       "images": [
         "../images/b9bbdc37c1625c9aac16616a67ac9aa23980b73b6e84b29854658692c5c3b98f.jpg",
         "../images/efef7f4f1aad0bf8f2ec41bcebd58581e3f67ca536054c3d260f8b99acd7dfd9.jpg",
@@ -1359,9 +1426,61 @@
       ],
       "page_idx": 25,
       "has_answer": true,
-      "questionIds": "570,571,572,573,574,576",
-      "solutionIds": "578,579,580,581,582,583,584,585,586,587,588,589",
+      "questionIds": "570,571,572,573,574,575,576",
+      "solutionIds": "577,578,579,580,581,582,583,584,585,586,587,588,589",
       "chapterTitleIds": "535"
+    },
+    {
+      "label": "A",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-4",
+      "question": "A.  $\\sqrt[3]{64}$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{6 4} = \\sqrt [ 3 ]{4 \\cdot 4 \\cdot 4} \\\\ = \\sqrt [ 3 ]{4 ^ {3}} \\\\ = 4 \\\\ \\end{array}\n$$",
+      "solution": "",
+      "images": [],
+      "page_idx": 25,
+      "has_answer": false,
+      "questionIds": "579,580",
+      "solutionIds": "",
+      "chapterTitleIds": "578"
+    },
+    {
+      "label": "B",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-4",
+      "question": "B.  $\\sqrt{100}$\n$$\n\\begin{array}{l} \\sqrt {1 0 0} = \\sqrt {1 0 \\cdot 1 0} \\\\ = \\sqrt {1 0 ^ {2}} \\\\ = 1 0 \\\\ \\end{array}\n$$",
+      "solution": "",
+      "images": [],
+      "page_idx": 25,
+      "has_answer": false,
+      "questionIds": "581,582",
+      "solutionIds": "",
+      "chapterTitleIds": "578"
+    },
+    {
+      "label": "C",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-4",
+      "question": "C.  $\\sqrt{49}$\n$$\n\\begin{array}{l} \\sqrt {4 9} = \\sqrt {7 \\cdot 7} \\\\ = \\sqrt {7 ^ {2}} \\\\ = 7 \\\\ \\end{array}\n$$",
+      "solution": "",
+      "images": [],
+      "page_idx": 25,
+      "has_answer": false,
+      "questionIds": "583,584",
+      "solutionIds": "",
+      "chapterTitleIds": "578"
+    },
+    {
+      "label": "D",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-4",
+      "question": "D.  $\\sqrt[3]{8}$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{8} = \\sqrt [ 3 ]{2 \\cdot 2 \\cdot 2} \\\\ = \\sqrt [ 3 ]{2 ^ {3}} \\\\ = 2 \\\\ \\end{array}\n$$",
+      "solution": "",
+      "images": [],
+      "page_idx": 25,
+      "has_answer": false,
+      "questionIds": "585,586",
+      "solutionIds": "",
+      "chapterTitleIds": "578"
     },
     {
       "label": "EXAMPLE 3",
@@ -1382,7 +1501,7 @@
     {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Do You Understand?",
+      "chapter_title": "Lesson 1-4",
       "question": "1. Essential Question How do you evaluate cube roots and square roots?",
       "solution": "",
       "images": [],
@@ -1395,7 +1514,7 @@
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Do You Understand?",
+      "chapter_title": "Lesson 1-4",
       "question": "2. Generalize A certain number is both a perfect square and a perfect cube. Will its square root and its cube root always be different numbers? Explain.",
       "solution": "",
       "images": [],
@@ -1408,7 +1527,7 @@
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Do You Understand?",
+      "chapter_title": "Lesson 1-4",
       "question": "3. Critique Reasoning A cube-shaped box has a volume of 27 cubic inches. Bethany says each side of the cube measures 9 inches because  $9 \\times 3 = 27$ . Is Bethany correct? Explain your reasoning.",
       "solution": "",
       "images": [],
@@ -1421,7 +1540,7 @@
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Do You Know How?",
+      "chapter_title": "Lesson 1-4",
       "question": "4. A cube has a volume of 8 cubic inches. What is the length of each edge of the cube?",
       "solution": "",
       "images": [],
@@ -1434,7 +1553,7 @@
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Do You Know How?",
+      "chapter_title": "Lesson 1-4",
       "question": "5. Below is a model of the infeld of a baseball stadium. How long is each side of the infeld?\n![image](images/b548436ad125a0c82aed09f8906d446499f20e7b0664f680cd6f89b46b0ac630.jpg)",
       "solution": "",
       "images": [
@@ -1449,7 +1568,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Do You Know How?",
+      "chapter_title": "Lesson 1-4",
       "question": "6. Julio cubes a number and then takes the cube root of the result. He ends up with 20. What number did Julio start with?",
       "solution": "",
       "images": [],
@@ -1462,7 +1581,7 @@
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "Leveled Practice In 7 and 8, evaluate the cube root or square root.\n7. Relate the volume of the cube to the length of each edge.\n![image](images/a35e99c21fabec5263c87afa2b2ecae32b90a81e31344c7eea496b7d42d5ca70.jpg)\nEdge length Edge length Edge length\n![image](images/79f276bb609a138c09e524f278f944d448be1c14be8e3533123126ddb300751d.jpg)",
       "solution": "",
       "images": [
@@ -1478,7 +1597,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Lesson 1-5",
+      "chapter_title": "Lesson 1-4",
       "question": "![image](images/79f276bb609a138c09e524f278f944d448be1c14be8e3533123126ddb300751d.jpg)\n8. Relate the area of the square to the length of each side.\n![image](images/4bedf4935a7eacd2ac584210bb2f4cccb0ce8b99737b890cd826d32a720fc972.jpg)\nSide length Side length\n![image](images/9fb5eb62f4467e46c434f2cb2c5077983e9a33930dede4dc1fd0ebcf5b44abb1.jpg)",
       "solution": "",
       "images": [
@@ -1495,7 +1614,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "9. Would you classify the number 169 as a perfect square, a perfect cube, both, or neither? Explain.",
       "solution": "",
       "images": [],
@@ -1508,7 +1627,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "10. The volume of a cube is 512 cubic inches. What is the length of each side of the cube?",
       "solution": "",
       "images": [],
@@ -1521,7 +1640,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "11. A square technology chip has an area of 25 square centimeters. How long is each side of the chip?",
       "solution": "",
       "images": [],
@@ -1534,7 +1653,7 @@
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "12. Would you classify the number 200 as a perfect square, a perfect cube, both, or neither? Explain.",
       "solution": "",
       "images": [],
@@ -1547,7 +1666,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "13. A company is making building blocks. What is the length of each side of the block?\n![image](images/1e5caaf664f07acc254f0ec8db0f1d140db267abe03f496dec740246d1422f5c.jpg)",
       "solution": "",
       "images": [
@@ -1562,7 +1681,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "14. Mrs. Drew wants to build a square sandbox with an area of 121 square feet. What is the total length of wood Mrs. Drew needs to make the sides of the sandbox?",
       "solution": "",
       "images": [],
@@ -1575,7 +1694,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "15. Construct Arguments Diego says that if you cube the number 4 and then take the cube root of the result, you end up with 8. Is Diego correct? Explain.",
       "solution": "",
       "images": [],
@@ -1588,7 +1707,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-4",
       "question": "16. Higher Order Thinking Talia is packing a moving box. She has a square-framed poster with an area of 9 square feet. The cube-shaped box has a volume of 30 cubic feet. Will the poster lie flat in the box? Explain.\n![image](images/1d717f706bcd18dd39f1ebffb2c1b7883e6382e7abf1b25a457d5b4c41cd781a.jpg)\n![image](images/085d508373b230ff6b4e55650bf6fd04f5470f37c6a94d225cafac955b4d9b01.jpg)",
       "solution": "",
       "images": [
@@ -1604,7 +1723,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Assessment Practice",
+      "chapter_title": "Lesson 1-4",
       "question": "17. Which expression has the greatest value? 8.EE.1.2\nA  $\\sqrt{49} \\cdot 2$\nB  $\\sqrt{49} -\\sqrt{16}$\n$\\odot \\sqrt{25} +\\sqrt{16}$\nD  $\\sqrt{25} \\cdot 3$",
       "solution": "",
       "images": [],
@@ -1617,7 +1736,7 @@
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Assessment Practice",
+      "chapter_title": "Lesson 1-4",
       "question": "18. A toy has various shaped objects that a child can push through matching holes. The area of the square hole is 8 square centimeters. The volume of a cube-shaped block is 64 cubic centimeters. 8.EE.1.2\nPART A\nWhich edge length can you find? Explain.\nPART B\nWill the block fit in the square hole? Explain.\n![image](images/ab5b924fb211239571714e25aca83102124761aae6ab5ac1e034896e718dd05b.jpg)",
       "solution": "",
       "images": [
@@ -1632,7 +1751,7 @@
     {
       "label": "Solve & Discuss It!",
       "type": "exercise",
-      "chapter_title": "Solve & Discuss It!",
+      "chapter_title": "Lesson 1-4",
       "question": "Solve & Discuss It!\n![image](images/364a92650bbfaa039d4bb729df87ca422fefb92c9ca6eb0c2fc07fa7ad79d49a.jpg)",
       "solution": "",
       "images": [
@@ -1647,7 +1766,7 @@
     {
       "label": "662",
       "type": "exercise",
-      "chapter_title": "Lesson 1-5",
+      "chapter_title": "Lesson 1-4",
       "question": "Janine can use up to 150 one-inch blocks to build a solid, cube-shaped model. What are the dimensions of the\npossible models that she can build? How many blocks would Janine use for each model? Explain.\n![image](images/3baa1ec3ac2d9eb3233d4a0fe610ecd9a5ee09e197828f7b7dbb9b7eb4ebc30a.jpg)",
       "solution": "",
       "images": [
@@ -1721,8 +1840,8 @@
       "chapterTitleIds": "665"
     },
     {
-      "label": "Kyle",
-      "type": "example",
+      "label": "703",
+      "type": "exercise",
       "chapter_title": "Lesson 1-5",
       "question": "Kyle has a large, cube-shaped terrarium for his iguana. He wants to cover the opening with a square screen. What are the dimensions,  $s,$  for the screen?\n$$\n\\begin{array}{l} V = s ^ {3} \\\\ 3 4 3 = s ^ {3} \\\\ \\sqrt [ 3 ]{3 4 3} = \\sqrt [ 3 ]{s ^ {3}} \\\\ 7 = s \\\\ \\end{array}\n$$\nThe value of s is not  $\\pm \\sqrt[3]{343}$  because\n$$\n\\begin{array}{l} (- 7) ^ {3} = - 7 \\times - 7 \\times - 7 \\\\ = - 3 4 3. \\\\ \\end{array}\n$$\nEach edge of the terrarium is 7 feet, so the dimensions of the screen are 7 feet by 7 feet.\n![image](images/4437e88dc2492f3da215b6df088cdd105ee961a3c33e9afcee033c02d86278ef.jpg)\n![image](images/6a1f2fe39f93f62c9898fb369a767f9f1b516b21ec061607b01be5d69155403d.jpg)",
       "solution": "",
@@ -1768,7 +1887,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "8.  ${z}^{2} = 1$\n$$\n\\begin{array}{l} \\sqrt {\\square} = \\sqrt {\\square} \\\\ z = \\pm \\boxed {} \\\\ \\end{array}\n$$\nThe solutions are and",
       "solution": "",
       "images": [],
@@ -1781,7 +1900,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "9.  $a^3 = 216$\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{\\square} = \\sqrt [ 3 ]{\\square} \\\\ a = \\boxed {} \\\\ \\end{array}\n$$\n![image](images/fb57e5b64c4395d4772715f3a9b52ed2916658b6374b7ea8e470bfd9212c44cf.jpg)",
       "solution": "",
       "images": [
@@ -1796,7 +1915,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "10. Solve  $v^2 = 47$ .",
       "solution": "",
       "images": [],
@@ -1809,7 +1928,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "11. The area of a square photo is 9 square inches. How long is each side of the photo?",
       "solution": "",
       "images": [],
@@ -1822,7 +1941,7 @@
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "12. Solve the equation  $y^{2} = 81$ .",
       "solution": "",
       "images": [],
@@ -1835,7 +1954,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "13. Solve the equation  $w^3 = 1,000$ .",
       "solution": "",
       "images": [],
@@ -1848,7 +1967,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "14. The area of a square garden is shown. How long is each side of the garden?",
       "solution": "",
       "images": [],
@@ -1861,7 +1980,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "15. Solve  $b^{2} = 77$ .",
       "solution": "",
       "images": [],
@@ -1874,7 +1993,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "16. Find the value of  $c$  in the equation  $c^3 = 1,728$ .",
       "solution": "",
       "images": [],
@@ -1887,7 +2006,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "17. Solve the equation  $v^3 = 12$ .",
       "solution": "",
       "images": [],
@@ -1900,7 +2019,7 @@
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "18. Higher Order Thinking Explain why  $\\sqrt[3]{-\\frac{8}{27}}$  is  $-\\frac{2}{3}$ .",
       "solution": "",
       "images": [],
@@ -1913,7 +2032,7 @@
     {
       "label": "19",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "19. Critique Reasoning Manolo says that the solution of the equation  $g^2 = 36$  is  $g = 6$  because  $6 \\times 6 = 36$ . Is Manolo's reasoning complete? Explain.",
       "solution": "",
       "images": [],
@@ -1926,7 +2045,7 @@
     {
       "label": "20",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "20. Evaluate  $\\sqrt[3]{-512}$ .\na. Write your answer as an integer.\nb. Explain how you can check that your result is correct.",
       "solution": "",
       "images": [],
@@ -1939,7 +2058,7 @@
     {
       "label": "21",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "21. Yael has a square-shaped garage with 228 square feet of floor space. She plans to build an addition that will increase the floor space by  $50\\%$ . What will be the length, to the nearest tenth, of one side of the new garage?\n![image](images/0c9b7c65419b0584849281f5168ca8caf47a8607355c4f6fdc35c33ca491885c.jpg)\n![image](images/25217589073d7ffeeb20884c07aca6476c85642e7c2c8fe6a123dfd05d86e0e0.jpg)",
       "solution": "",
       "images": [
@@ -1955,7 +2074,7 @@
     {
       "label": "22",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "22. The Traverses are adding a new room to their house. The room will be a cube with a volume of 6,859 cubic feet. They are going to put in hardwood floors, which costs $10 per square foot. How much will the hardwood floors cost? 8.EE.1.2",
       "solution": "",
       "images": [],
@@ -1968,7 +2087,7 @@
     {
       "label": "23",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "23. While packing for their cross-country move, the Chen family uses a crate that has the shape of a cube. 8.EE.1.2\nPART A\nIf the crate has the volume  $V = 64$  cubic feet, what is the length of one edge?\nPART B\nThe Chens want to pack a large, framed painting. If the framed painting has the shape of a square with an area of 12 square feet, will the painting fit flat against a side of the crate? Explain.",
       "solution": "",
       "images": [],
@@ -1981,7 +2100,7 @@
     {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "1. Vocabulary How can you show that a number is a rational number? Lesson 1-2 8.NS.1.1",
       "solution": "",
       "images": [],
@@ -1994,7 +2113,7 @@
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "2. Which shows  $0.23$  as a fraction? Lesson 1-1 8.NS.1.1\nA  $\\frac{2}{33}$\n7 6\n23\nD  $\\frac{7}{30}$",
       "solution": "",
       "images": [],
@@ -2007,7 +2126,7 @@
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "3. Approximate  $\\sqrt{8}$  to the nearest hundredth. Show your work. Lesson 1-3 8.NS.1.2",
       "solution": "",
       "images": [],
@@ -2020,7 +2139,7 @@
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "4. Solve the equation  $m^2 = 14$ . Lesson 1-5 8.EE.1.2",
       "solution": "",
       "images": [],
@@ -2033,7 +2152,7 @@
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "5. A fish tank is in the shape of a cube. Its volume is  $125\\mathrm{ft}^3$ . What is the area of one face of the tank? Lessons 1-4 and 1-5 8.EE.1.2",
       "solution": "",
       "images": [],
@@ -2046,7 +2165,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-5",
       "question": "6. Write 1.12 as a mixed number. Show your work. Lesson 1-1 8.NS.1.1",
       "solution": "",
       "images": [],
@@ -2057,9 +2176,9 @@
       "chapterTitleIds": "745"
     },
     {
-      "label": "Mid-Topic Performance Task",
+      "label": "MID-TOPIC PERFORMANCE TASK",
       "type": "exercise",
-      "chapter_title": "Assessment Practice",
+      "chapter_title": "Lesson 1-5",
       "question": "MID-TOPIC PERFORMANCE TASK\nSix members of the math club are forming two teams for a contest. The teams will be determined by having each student draw a number from a box.\nPART A 8.NS.1.1\nThe table shows the results of the draw. The students who drew rational numbers will form the team called the Tigers. The students who drew irrational numbers will form the team called the Lions.\nList the members of each team.\n[Table Row] <tr><td>Student</td><td>Number Drawn</td></tr>\n[Table Row] <tr><td>Lydia</td><td>√38</td></tr>\n[Table Row] <tr><td>Marcy</td><td>6.34</td></tr>\n[Table Row] <tr><td>Caleb</td><td>√36</td></tr>\n[Table Row] <tr><td>Ryan</td><td>6.343443444...</td></tr>\n[Table Row] <tr><td>Anya</td><td>6.34</td></tr>\n[Table Row] <tr><td>Chan</td><td>√34</td></tr>\nPART B 8.NS.1.2\nThe student on each team who drew the greatest number will be the captain of that team. Who will be the captain of the Tigers? Show your work.\nPART C 8.NS.1.2\nWho will be the captain of the Lions? Show your work.",
       "solution": "",
       "images": [],
@@ -2072,8 +2191,8 @@
     {
       "label": "Solve & Discuss It!",
       "type": "exercise",
-      "chapter_title": "Assessment Practice",
-      "question": "Solve & Discuss It!\n![image](images/d3bb9931026a93e09cce44f9b271f4956bce0a19544544d2c4c634c3add89882.jpg)\n![image](images/7338816da64eb7a4051a3dfca2bdadfb9eb086f3cf2e9671272cc295eeb9efbc.jpg)\nACTIVITY\nOne band's streaming video concert to benefit a global charity costs $1.00 to view.\nThe first day, the concert got 2,187 views. The second day, it got about three times as many views. On the third day, it got 3 times as many views as on the second day. If the trend continues, how much money will the band raise on Day 7?\n![image](images/9f8bbea84798df23b16b9c65472514df6d6fb55291810b9834929f7c5de08633.jpg)\n![image](images/3baa511b8a14a7ca106438b4e8b92afd70af27fe60a7b4f10df15d8233845366.jpg)",
+      "chapter_title": "Lesson 1-5",
+      "question": "Solve & Discuss It!\n![image](images/d3bb9931026a93e09cce44f9b271f4956bce0a19544544d2c4c634c3add89882.jpg)\n![image](images/7338816da64eb7a4051a3dfca2bdadfb9eb086f3cf2e9671272cc295eeb9efbc.jpg)\nOne band's streaming video concert to benefit a global charity costs $1.00 to view.\nThe first day, the concert got 2,187 views. The second day, it got about three times as many views. On the third day, it got 3 times as many views as on the second day. If the trend continues, how much money will the band raise on Day 7?\n![image](images/9f8bbea84798df23b16b9c65472514df6d6fb55291810b9834929f7c5de08633.jpg)\n![image](images/3baa511b8a14a7ca106438b4e8b92afd70af27fe60a7b4f10df15d8233845366.jpg)",
       "solution": "",
       "images": [
         "../images/d3bb9931026a93e09cce44f9b271f4956bce0a19544544d2c4c634c3add89882.jpg",
@@ -2083,14 +2202,14 @@
       ],
       "page_idx": 37,
       "has_answer": false,
-      "questionIds": "808,809,810,811,812,813,814,815",
+      "questionIds": "808,809,810,812,813,814,815",
       "solutionIds": "",
       "chapterTitleIds": "772"
     },
     {
       "label": "EXAMPLE 1",
       "type": "example",
-      "chapter_title": "Assessment Practice",
+      "chapter_title": "Lesson 1-6",
       "question": "EXAMPLE 1\n![image](images/f070815418fd967a72a09e23b1bf47432d5aed8eccb30698be08a8bf8c7b7de1.jpg)\nMultiply Exponential Expressions: Same Base\n![image](images/e87dc6d43172285c5376ffb8a4a201146bd286916db943a6eadacd24e580db45.jpg)\nThe weight of a juvenile alligator is shown on the right. The adult alligator weighs about  $2^{6}$  times more than the juvenile. How can you determine the weight of the adult alligator?\nLook for Relationships How do the two weights relate?\n![image](images/c6a76fec7a3de14bad84c5cae4f5dddc0cf3bfc0bbc164fc61c43e86130d3fef.jpg)\nONE WAY Write the two expressions in expanded form.\n![image](images/6afcd2441e9e470f08808f7e9e2b7ca3192ed07be2e8c937ba00e49cd0f60a10.jpg)\nANOTHER WAY Use the Product of Powers Property.\n$$\n2 ^ {3} \\times 2 ^ {6} = 2 ^ {3 + 6} = 2 ^ {9}\n$$\nThe Product of Powers Property states that when multiplying two powers with the same base, add the exponents.\n![image](images/51eae58e94d5c8df0151037cd3296b488081a2b43c599125d5fcd5bfb4db60cc.jpg)",
       "solution": "Try It!\nThe local zoo welcomed a newborn African elephant that weighed  $3^{4}$  kg. It is expected that at adulthood, the newborn elephant will weigh approximately  $3^{4}$  times as much as its birth weight. What expression represents the expected adult weight of the newborn elephant?\nConvince Me! Explain why the Product of Powers Property makes mathematical sense.",
       "images": [
@@ -2109,20 +2228,20 @@
     {
       "label": "Try It!",
       "type": "exercise",
-      "chapter_title": "Assessment Practice",
-      "question": "The local zoo welcomed a newborn African elephant that weighed  $3^{4}$  kg. It is expected that at adulthood, the newborn elephant will weigh approximately  $3^{4}$  times as much as its birth weight. What expression represents the expected adult weight of the newborn elephant?",
+      "chapter_title": "Lesson 1-6",
+      "question": "Try It!\nThe local zoo welcomed a newborn African elephant that weighed  $3^{4}$  kg. It is expected that at adulthood, the newborn elephant will weigh approximately  $3^{4}$  times as much as its birth weight. What expression represents the expected adult weight of the newborn elephant?",
       "solution": "",
       "images": [],
       "page_idx": 38,
       "has_answer": false,
-      "questionIds": "844",
+      "questionIds": "843,844",
       "solutionIds": "",
       "chapterTitleIds": "772"
     },
     {
       "label": "EXAMPLE 3",
       "type": "example",
-      "chapter_title": "Assessment Practice",
+      "chapter_title": "Lesson 1-6",
       "question": "EXAMPLE 3\n![image](images/61c09ee855f3cf43c1e3d69e69ab6f7b878624a758ae2dc7ea01f34227065471.jpg)\nFind the Power of a Power\nWrite an equivalent expression for  $(5^{2})^{4}$\n$$\n\\begin{array}{l} (5 ^ {2}) ^ {4} = (5 ^ {2}) (5 ^ {2}) (5 ^ {2}) (5 ^ {2}) \\\\ 5 ^ {2} \\text {m u l t i p l i e d 4 t i m e s} \\\\ = 5 ^ {(2 + 2 + 2 + 2)} \\\\ = 5 ^ {8} \\\\ \\end{array}\n$$\nUse the Product of Powers Property to add the exponents.\nThe Power of Powers Property states that to find the power of a power, multiply the exponents.",
       "solution": "",
       "images": [
@@ -2137,7 +2256,7 @@
     {
       "label": "EXAMPLE 4",
       "type": "example",
-      "chapter_title": "Assessment Practice",
+      "chapter_title": "Lesson 1-6",
       "question": "EXAMPLE 4\n![image](images/3036361a7f802bf3ea3b061485069f1609a08178cce7dc031035256d54b91c48.jpg)\nDivide Exponential Expressions: Same Base\nWrite an equivalent expression for  $6^{5} \\div 6^{3}$ .\n$$\n6 ^ {5} \\div 6 ^ {3} = \\frac {6 ^ {5}}{6 ^ {3}}\n$$\nWrite as a fraction.\n$$\n6 \\text {m u l t i p l i e d} 5 \\text {t i m e s}\n$$\n$$\n= \\frac {6 \\times 6 \\times 6 \\times 6 \\times 6}{6 \\times 6 \\times 6}\n$$\n6 multiplied 3 times",
       "solution": "",
       "images": [
@@ -2150,9 +2269,24 @@
       "chapterTitleIds": "772"
     },
     {
+      "label": "EXAMPLE 4",
+      "type": "example",
+      "chapter_title": "Lesson 1-6",
+      "question": "EXAMPLE 4\n![image](images/3036361a7f802bf3ea3b061485069f1609a08178cce7dc031035256d54b91c48.jpg)\nDivide Exponential Expressions: Same Base\nWrite an equivalent expression for  $6^{5} \\div 6^{3}$ .",
+      "solution": "$$\n6 ^ {5} \\div 6 ^ {3} = \\frac {6 ^ {5}}{6 ^ {3}}\n$$\nWrite as a fraction.\n$$\n6 \\text {m u l t i p l i e d} 5 \\text {t i m e s}\n$$\n$$\n= \\frac {6 \\times 6 \\times 6 \\times 6 \\times 6}{6 \\times 6 \\times 6}\n$$\n6 multiplied 3 times\nRemember,  $\\frac{6}{6} = 1$ .\n$$\n\\begin{array}{l} = \\frac {6 \\times \\boxed {6 \\times 6 \\times 6} \\times 6}{\\boxed {6 \\times 6 \\times 6}} \\\\ = 6 \\times 6 \\text {o r} 6 ^ {2} \\\\ \\end{array}\n$$\nThe Quotient of Powers Property states that when dividing two exponential expressions with the same base, subtract the exponents.",
+      "images": [
+        "../images/3036361a7f802bf3ea3b061485069f1609a08178cce7dc031035256d54b91c48.jpg"
+      ],
+      "page_idx": 39,
+      "has_answer": true,
+      "questionIds": "861,862,863,864",
+      "solutionIds": "865,866,867,868,869,870,871,872",
+      "chapterTitleIds": ""
+    },
+    {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "1. Essential Question How do properties of integer exponents help you write equivalent expressions?",
       "solution": "",
       "images": [],
@@ -2160,12 +2294,12 @@
       "has_answer": false,
       "questionIds": "883",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "2. Look for Relationships If you are writing an equivalent expression for  $2^{3} \\cdot 2^{4}$ , how many times would you write 2 as a factor?",
       "solution": "",
       "images": [],
@@ -2173,12 +2307,12 @@
       "has_answer": false,
       "questionIds": "884",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "3. Construct Arguments Kristen wrote  $5^{8}$  as an expression equivalent to  $(5^{2})^{4}$ . Her math partner writes  $5^{6}$ . Who is correct?",
       "solution": "",
       "images": [],
@@ -2186,12 +2320,12 @@
       "has_answer": false,
       "questionIds": "885",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "4. Critique Reasoning Tyler says that an equivalent expression for  $2^{3} \\times 5^{3}$  is  $10^{9}$ . Is he correct? Explain.",
       "solution": "",
       "images": [],
@@ -2199,12 +2333,12 @@
       "has_answer": false,
       "questionIds": "886",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "5. Write an equivalent expression for  $7^{12} \\cdot 7^4$ .",
       "solution": "",
       "images": [],
@@ -2212,12 +2346,12 @@
       "has_answer": false,
       "questionIds": "888",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "6. Write an equivalent expression for  $(8^{2})^{4}$",
       "solution": "",
       "images": [],
@@ -2225,12 +2359,12 @@
       "has_answer": false,
       "questionIds": "889",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "![image](images/76cdd0a38de58e0a57a57c5624bc4fb4f0c6253081b37dcd2226312a38f70465.jpg)\nUsing exponents, write two equivalent expressions for the area of the rectangle.",
       "solution": "",
       "images": [
@@ -2240,12 +2374,12 @@
       "has_answer": false,
       "questionIds": "890,891",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "8. Write an equivalent expression for  $18^{9} \\div 18^{4}$ .",
       "solution": "",
       "images": [],
@@ -2253,12 +2387,12 @@
       "has_answer": false,
       "questionIds": "892",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "9.  ${2}^{8} \\cdot  {2}^{4}$\n$$\n\\begin{array}{l} 2 ^ {8} \\cdot 2 ^ {4} = 2 ^ {8} \\boxed {4} \\\\ = \\square \\square \\\\ \\end{array}\n$$",
       "solution": "",
       "images": [],
@@ -2266,12 +2400,12 @@
       "has_answer": false,
       "questionIds": "896,897",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "10.  $\\frac{8^7}{8^3}$ $\\frac{8^7}{8^3} = 8^7$  3  $= \\boxed { }$",
       "solution": "",
       "images": [],
@@ -2279,12 +2413,12 @@
       "has_answer": false,
       "questionIds": "898",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "11. (34)5\n$$\n\\begin{array}{r l} (3 ^ {4}) ^ {5} & = 3 ^ {4} \\boxed {} \\\\ & = \\boxed {} \\end{array}\n$$",
       "solution": "",
       "images": [],
@@ -2292,12 +2426,12 @@
       "has_answer": false,
       "questionIds": "899,900",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "12.  ${3}^{9} \\cdot  {2}^{9}$\n$$\n3 ^ {9} \\cdot 2 ^ {9} = \\left(\\square \\cdot \\square\\right) ^ {\\square}\n$$",
       "solution": "",
       "images": [],
@@ -2305,12 +2439,12 @@
       "has_answer": false,
       "questionIds": "901,902",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
-      "label": "13a",
+      "label": "13",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "13. a. How do you multiply powers that have the same base?",
       "solution": "",
       "images": [],
@@ -2318,51 +2452,12 @@
       "has_answer": false,
       "questionIds": "903",
       "solutionIds": "",
-      "chapterTitleIds": "893"
-    },
-    {
-      "label": "13b",
-      "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
-      "question": "b. How do you divide powers that have the same base?",
-      "solution": "",
-      "images": [],
-      "page_idx": 41,
-      "has_answer": false,
-      "questionIds": "904",
-      "solutionIds": "",
-      "chapterTitleIds": "893"
-    },
-    {
-      "label": "13c",
-      "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
-      "question": "c. How do you find the power of a power?",
-      "solution": "",
-      "images": [],
-      "page_idx": 41,
-      "has_answer": false,
-      "questionIds": "905",
-      "solutionIds": "",
-      "chapterTitleIds": "893"
-    },
-    {
-      "label": "13d",
-      "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
-      "question": "d. How do you multiply powers with different bases but the same exponent?",
-      "solution": "",
-      "images": [],
-      "page_idx": 41,
-      "has_answer": false,
-      "questionIds": "906",
-      "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "14. Which expressions are equivalent to  $2^{11}$ ? Select all that apply.\n23 12\n$2^{7}\\cdot 2^{4}$\n29 2\n$2^{2} \\cdot 2^{9}$",
       "solution": "",
       "images": [],
@@ -2370,12 +2465,12 @@
       "has_answer": false,
       "questionIds": "907,908,909,910,911",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "15.  $(4^{4})^{3}$",
       "solution": "",
       "images": [],
@@ -2383,12 +2478,12 @@
       "has_answer": false,
       "questionIds": "913",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "16.  $\\frac{3^{12}}{3^3}$",
       "solution": "",
       "images": [],
@@ -2396,12 +2491,12 @@
       "has_answer": false,
       "questionIds": "914",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "17.  ${4}^{5} \\cdot  {4}^{2}$",
       "solution": "",
       "images": [],
@@ -2409,12 +2504,12 @@
       "has_answer": false,
       "questionIds": "915",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "18.  $6^{4} \\cdot 2^{4}$",
       "solution": "",
       "images": [],
@@ -2422,12 +2517,12 @@
       "has_answer": false,
       "questionIds": "916",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "19",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "19. Critique Reasoning Alberto incorrectly stated that  $\\frac{5^7}{5^4} = 1^3$ . What was Alberto's error? Explain your reasoning and find the correct answer.",
       "solution": "",
       "images": [],
@@ -2435,12 +2530,12 @@
       "has_answer": false,
       "questionIds": "917",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "20",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "20. Is the expression  $8 \\times 8^5$  equivalent to  $(8 \\times 8)^5$ ? Explain.",
       "solution": "",
       "images": [],
@@ -2448,12 +2543,12 @@
       "has_answer": false,
       "questionIds": "919",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "21",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "21. Is the expression  $(3^{2})^{-3}$  equivalent to  $(3^{3})^{-2}$ ? Explain.",
       "solution": "",
       "images": [],
@@ -2461,12 +2556,12 @@
       "has_answer": false,
       "questionIds": "918",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "22",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "22. Is the expression  $3^{2} \\cdot 3^{-3}$  equivalent to  $3^{3} \\cdot 3^{-2}$ ? Explain.",
       "solution": "",
       "images": [],
@@ -2474,12 +2569,12 @@
       "has_answer": false,
       "questionIds": "920",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "23",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "23. Model with Math What is the width of the rectangle written as an exponential expression?\n![image](images/06f9a3fe5aa51b47d0b27999bd28420d4947b12bf94ee7ab33d75c3ee6ff419e.jpg)",
       "solution": "",
       "images": [
@@ -2489,12 +2584,12 @@
       "has_answer": false,
       "questionIds": "921,922",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "24",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "24. Simplify the expression  $\\left(\\left(\\frac{1}{2}\\right)^3\\right)^3$",
       "solution": "",
       "images": [],
@@ -2502,25 +2597,27 @@
       "has_answer": false,
       "questionIds": "923",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "25",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
-      "question": "25. Higher Order Thinking Use a property of exponents to write  $(3b)^{5}$  as a product of powers.",
+      "chapter_title": "Lesson 1-6",
+      "question": "25. Higher Order Thinking Use a property of exponents to write  $(3b)^{5}$  as a product of powers.\n![image](images/40628b14def6c213057a1d694b4c2e9ee083d67538c8da44487794ec90daec6a.jpg)",
       "solution": "",
-      "images": [],
+      "images": [
+        "../images/40628b14def6c213057a1d694b4c2e9ee083d67538c8da44487794ec90daec6a.jpg"
+      ],
       "page_idx": 42,
       "has_answer": false,
-      "questionIds": "924",
+      "questionIds": "924,925",
       "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "26",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-6",
       "question": "26. Select all the expressions equivalent to  $4^{5} \\cdot 4^{10}$ . 8.EE.1.1\n${4}^{5} + {4}^{10}$\n${4}^{3} \\cdot  {4}^{5}$\n${4}^{3} \\cdot  {4}^{12}$\n$4^{3} + 4^{12}$\n${4}^{18} - {4}^{3}$\n$4^{15}$",
       "solution": "",
       "images": [],
@@ -2528,40 +2625,12 @@
       "has_answer": false,
       "questionIds": "927,928,929,930,931,932,933",
       "solutionIds": "",
-      "chapterTitleIds": "893"
-    },
-    {
-      "label": "27A",
-      "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
-      "question": "27. Your teacher asks the class to evaluate the expression  $(2^{3})^{1}$ . Your classmate gives an incorrect answer of 16. 8.EE.1.1\nPART A Evaluate the expression.\n![image](images/0d4781a91ad9b76b245d621a0c9b37cd0f5a541839c6b0c24a8251d40009ab1b.jpg)",
-      "solution": "",
-      "images": [
-        "../images/0d4781a91ad9b76b245d621a0c9b37cd0f5a541839c6b0c24a8251d40009ab1b.jpg"
-      ],
-      "page_idx": 42,
-      "has_answer": false,
-      "questionIds": "934,935,936",
-      "solutionIds": "",
-      "chapterTitleIds": "893"
-    },
-    {
-      "label": "27B",
-      "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
-      "question": "PART B What was the likely error?\nA Your classmate divided the exponents.\nB Your classmate multiplied the exponents.",
-      "solution": "",
-      "images": [],
-      "page_idx": 42,
-      "has_answer": false,
-      "questionIds": "937,938,939",
-      "solutionIds": "",
-      "chapterTitleIds": "893"
+      "chapterTitleIds": ""
     },
     {
       "label": "27",
       "type": "exercise",
-      "chapter_title": "Lesson 1-7",
+      "chapter_title": "Lesson 1-6",
       "question": "27. Your teacher asks the class to evaluate the expression  $(2^{3})^{1}$ . Your classmate gives an incorrect answer of 16. 8.EE.1.1\nPART A Evaluate the expression.\n![image](images/0d4781a91ad9b76b245d621a0c9b37cd0f5a541839c6b0c24a8251d40009ab1b.jpg)\nPART B What was the likely error?\nA Your classmate divided the exponents.\nB Your classmate multiplied the exponents.\n$\\odot$  Your classmate added the exponents.\n$\\langle \\widehat{\\mathbb{C}}\\rangle$  Your classmate subtracted the exponents.",
       "solution": "",
       "images": [
@@ -2609,7 +2678,7 @@
     {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "1. Essential Question What do the Zero Exponent and Negative Exponent Properties mean?",
       "solution": "",
       "images": [],
@@ -2622,7 +2691,7 @@
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "2. Reasoning In the expression  $9^{-12}$ , what does the negative exponent mean?",
       "solution": "",
       "images": [],
@@ -2635,7 +2704,7 @@
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "3. Reasoning In the expression  $3(2^0)$ , what is the order of operations? Explain how you would evaluate the expression.",
       "solution": "",
       "images": [],
@@ -2648,7 +2717,7 @@
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "4. Simplify  $1,999,999^{0}$ .",
       "solution": "",
       "images": [],
@@ -2661,7 +2730,7 @@
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "5. a. Write  $7^{-6}$  using a positive exponent.\nb. Rewrite  $\\frac{1}{10^{-3}}$  using a positive exponent.",
       "solution": "",
       "images": [],
@@ -2674,7 +2743,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "6. Evaluate  $27x^{0}y^{-2}$  for  $x = 4$  and  $y = 3$",
       "solution": "",
       "images": [],
@@ -2687,7 +2756,7 @@
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "7.\n[Table Row] <tr><td>Exponent</td><td>Simplified</td></tr>\n[Table Row] <tr><td>44</td><td>256</td></tr>\n[Table Row] <tr><td>43</td><td></td></tr>\n[Table Row] <tr><td>42</td><td></td></tr>\n[Table Row] <tr><td>41</td><td></td></tr>\n[Table Row] <tr><td>40</td><td></td></tr>",
       "solution": "",
       "images": [],
@@ -2700,7 +2769,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "8.\n[Table Row] <tr><td>Exponent</td><td>Simplified</td></tr>\n[Table Row] <tr><td>(-2)4</td><td>16</td></tr>\n[Table Row] <tr><td>(-2)3</td><td>□</td></tr>\n[Table Row] <tr><td>(-2)2</td><td>□</td></tr>\n[Table Row] <tr><td>(-2)1</td><td>□</td></tr>\n[Table Row] <tr><td>(-2)0</td><td>□</td></tr>",
       "solution": "",
       "images": [],
@@ -2713,7 +2782,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "9. Given:  $(-3.2)^{0}$\na. Simplify the given expression.\nb. Write two expressions equivalent to the given expression. Explain why the three expressions are equivalent.",
       "solution": "",
       "images": [],
@@ -2726,7 +2795,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "10. Simplify each expression for  $x = 6$ .\na.  $12x^{0}(x^{-4})$\nb.  ${14}\\left( {x}^{-2}\\right)$",
       "solution": "",
       "images": [],
@@ -2739,7 +2808,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Lesson 1-8",
+      "chapter_title": "Lesson 1-7",
       "question": "In 11 and 12, compare the values using  $>, <$ , or  $=$ .\n![image](images/d9e7d56f178ff110f9c30a3cd50327d3b7645b17586beceadf5a6a32037babc5.jpg)\n![image](images/ae81cd613dcb2a3b81805c0d8f2f4616303859fb40c4b62d65c540c7bc7828f9.jpg)",
       "solution": "",
       "images": [
@@ -2755,7 +2824,7 @@
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "In 11 and 12, compare the values using  $>, <$ , or  $=$ .\n![image](images/ae81cd613dcb2a3b81805c0d8f2f4616303859fb40c4b62d65c540c7bc7828f9.jpg)",
       "solution": "",
       "images": [
@@ -2770,7 +2839,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Lesson 1-8",
+      "chapter_title": "Lesson 1-7",
       "question": "In 13 and 14, rewrite each expression using a positive exponent.\n13.  $9^{-4}$",
       "solution": "",
       "images": [],
@@ -2778,12 +2847,12 @@
       "has_answer": false,
       "questionIds": "1063,1064",
       "solutionIds": "",
-      "chapterTitleIds": "1102"
+      "chapterTitleIds": "1035"
     },
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Lesson 1-8",
+      "chapter_title": "Lesson 1-7",
       "question": "In 13 and 14, rewrite each expression using a positive exponent.\n14.  $\\frac{1}{2^{-6}}$",
       "solution": "",
       "images": [],
@@ -2791,12 +2860,12 @@
       "has_answer": false,
       "questionIds": "1063,1065",
       "solutionIds": "",
-      "chapterTitleIds": "1102"
+      "chapterTitleIds": "1035"
     },
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "15. Given:  $9y^{0}$\na. Simplify the expression for  $y = 3$ .\nb. Construct Arguments Will the value of the given expression vary depending on  $y$ ? Explain.",
       "solution": "",
       "images": [],
@@ -2809,7 +2878,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "16. Simplify each expression for  $x = 4$ .\na.  $-5x^{-4}$\nb.  $7{x}^{-3}$",
       "solution": "",
       "images": [],
@@ -2822,7 +2891,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "17. Evaluate each pair of expressions.\na.  $(-3)^{-8}$  and  $-3^{-8}$\nb.  $(-3)^{-9}$  and  $-3^{-9}$",
       "solution": "",
       "images": [],
@@ -2835,7 +2904,7 @@
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "18. Be Precise To win a math game, Lamar has to pick a card with an expression that has a value greater than 1. The card Lamar chooses reads  $\\left(\\frac{1}{2}\\right)^{-4}$ . Does Lamar win the game? Explain.\n![image](images/0e5ba7d3e77852207ad9486e417d68e8a328f3faa8016ddb5e99a2a014a20d4a.jpg)",
       "solution": "",
       "images": [
@@ -2850,7 +2919,7 @@
     {
       "label": "19",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "19. Simplify the expression. Assume that  $x$  is nonzero. Your answer should have only positive exponents.\n$$\nx ^ {- 1 0} \\cdot x ^ {6}\n$$",
       "solution": "",
       "images": [],
@@ -2863,7 +2932,7 @@
     {
       "label": "20",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-7",
       "question": "20. Higher Order Thinking",
       "solution": "",
       "images": [],
@@ -2892,7 +2961,7 @@
     {
       "label": "20",
       "type": "exercise",
-      "chapter_title": "Lesson 1-8",
+      "chapter_title": "Lesson 1-7",
       "question": "20. Higher Order Thinking\na. Is the value of the expression  $\\left(\\frac{1}{4^{-3}}\\right)^{-2}$  greater than 1, equal to 1, or less than 1?\nb. If the value of the expression is greater than 1, show how you can change one sign to make the value less than 1. If the value is less than 1, show how you can change one sign to make the value greater than 1. If the value is equal to 1, show how you can make one change to make the value not equal to 1.\n![image](images/8a0f6ea46f9c01a595b7a20ca17b4332f3f152e493428f4a4bdaec6018d49359.jpg)",
       "solution": "",
       "images": [
@@ -2907,7 +2976,7 @@
     {
       "label": "21",
       "type": "exercise",
-      "chapter_title": "Lesson 1-8",
+      "chapter_title": "Lesson 1-7",
       "question": "21. Which expressions are equal to  $5^{-3}$ ? Select all that apply. 8.EE.1.1\n125\n${125}^{-1}$\n53\n1 5\n1 125",
       "solution": "",
       "images": [],
@@ -2920,7 +2989,7 @@
     {
       "label": "22",
       "type": "exercise",
-      "chapter_title": "Lesson 1-8",
+      "chapter_title": "Lesson 1-7",
       "question": "22. Which expressions have a value less than 1 when  $x = 4$ ? Select all that apply. 8.EE.1.1\n3 0\n$\\frac{{x}^{0}}{{3}^{2}}$\n1 6-x\n1 10\n$3x^{-4}$\n![image](images/2612b2fc23248891647b3eb923eec6f1c822715028bd24bed322e5ed7d2dad83.jpg)",
       "solution": "",
       "images": [
@@ -2954,7 +3023,7 @@
     {
       "label": "EXAMPLE 3",
       "type": "example",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "EXAMPLE 3\nFind How Many Times as Much\nHow does the Gross Domestic Product (GDP) of Canada compare to that of the United States?\nSTEP 1 Write each GDP as a single digit times a power of 10.\nCanada: 1,785,387,000,000,000  $\\approx$  2,000,000,000,000,000\n$$\n= 2 \\times 1 0 ^ {1 5}\n$$\nUSA: 17,348,075,000,000,000 ≈ 20,000,000,000,000,000\n$$\n= 2 \\times 1 0 ^ {1 6}\n$$\nCount the zeros to determine the power of 10.\nSTEP 2 Compare the two estimates.\n$$\n(2 \\times 1 0 ^ {1 6}) > (2 \\times 1 0 ^ {1 5})\n$$\nThe U.S. GDP is about 10 times greater than that of Canada.\n![image](images/294300c8b9b083b8833514453799c44e3f304d0b027e4f57b22642674c8f41d9.jpg)",
       "solution": "",
       "images": [
@@ -2969,7 +3038,7 @@
     {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "1. Essential Question When would you use powers of 10 to estimate a quantity?",
       "solution": "",
       "images": [],
@@ -2982,7 +3051,7 @@
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "2. Construct Arguments Kim writes an estimate for the number 0.00436 as  $4 \\times 10^{3}$ . Explain why this cannot be correct.",
       "solution": "",
       "images": [],
@@ -2995,7 +3064,7 @@
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "3. Be Precise Raquel estimated 304,900,000,000 as  $3 \\times 10^{8}$ . What error did she make?",
       "solution": "",
       "images": [],
@@ -3008,7 +3077,7 @@
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "4. Use a single digit times a power of 10 to estimate the height of Mt. Everest to the nearest ten thousand feet.\n![image](images/c63267058af516e9ad31ca208c9f60decf15b9242a664932dfefc3619b43c3bf.jpg)\nMt. Everest is 29,035 feet tall.",
       "solution": "",
       "images": [
@@ -3023,7 +3092,7 @@
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "5. A scientist records the mass of a proton as 0.0000000000000000000016726231 gram. Use a single digit times a power of 10 to estimate the mass.",
       "solution": "",
       "images": [],
@@ -3036,7 +3105,7 @@
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "6. The tanks at the Georgia Aquarium hold approximately  $8.4 \\times 10^{6}$  gallons of water. The tanks at the Audubon Aquarium of the Americas hold about 400,000 gallons of water. Use a single digit times a power of 10 to estimate how many times greater the amount of water is at the Georgia Aquarium.",
       "solution": "",
       "images": [],
@@ -3049,7 +3118,7 @@
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "7. A city has a population of 2,549,786 people. Estimate this population to the nearest million. Express your answer as the product of a single digit and a power of 10.\nRounded to the nearest million, the population is about\nWritten as the product of a single digit and a power of ten, this number is  $\\times 10$ .",
       "solution": "",
       "images": [],
@@ -3062,7 +3131,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "8. Use a single digit times a power of 10 to estimate the number 0.00002468.\nRounded to the nearest hundred thousandth, the number is about\nWritten as a single digit times a power of ten, the estimate is  $\\times 10$ .",
       "solution": "",
       "images": [],
@@ -3075,7 +3144,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "9. The approximate circumferences of Earth and Saturn are shown. How many times greater is the circumference of Saturn than the circumference of Earth?\nThe circumference of Saturn is  $\\times 10\\mathrm{km}$\nSaturn's circumference is about times greater than the circumference of Earth.\n![image](images/f384ff4dcf0ad9686855d121e7ea9b44aa44d3882eebc2d6992ffdadfda342da.jpg)",
       "solution": "",
       "images": [
@@ -3090,7 +3159,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "10. Estimate 0.037854921 to the nearest hundredth. Express your answer as a single digit times a power of ten.",
       "solution": "",
       "images": [],
@@ -3103,7 +3172,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "11. Compare the numbers  $6 \\times 10^{-6}$  and  $2 \\times 10^{-8}$ .\na. Which number has the greater value?\nb. Which number has the lesser value?\nc. How many times greater is the greater number?",
       "solution": "",
       "images": [],
@@ -3116,7 +3185,7 @@
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "12. Taylor made \\(43,785 last year. Use a single digit times a power of ten to express this value rounded to the nearest ten thousand.",
       "solution": "",
       "images": [],
@@ -3129,7 +3198,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "13. The length of plant cell A is  $8 \\times 10^{-5}$  meter. The length of plant cell B is 0.000004 meter. How many times greater is plant cell A's length than plant cell B's length?",
       "solution": "",
       "images": [],
@@ -3142,7 +3211,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "14. Critique Reasoning The diameter of one species of bacteria is shown. Bonnie approximates this measure as  $3 \\times 10^{-11}$  meter. Is she correct? Explain.\n![image](images/4566a4f69290b74304265610bc0fce9b0babf4528c7483e03d23e18f29bf240c.jpg)",
       "solution": "",
       "images": [
@@ -3157,7 +3226,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Estimate Very Large Quantities",
+      "chapter_title": "Lesson 1-8",
       "question": "15. The populations of Cities A and B are  $2.6 \\times 10^{5}$  and 1,560,000, respectively. The population of City C is twice the population of City B.\nThe population of City C is how many times the population of City A?\n![image](images/5caf9dd9bb51e84145d069785085a0073b6cae0324603ccbe8897be3d4f06235.jpg)",
       "solution": "",
       "images": [
@@ -3172,7 +3241,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Lesson 1-9",
+      "chapter_title": "Lesson 1-8",
       "question": "16. Earth is approximately  $5 \\times 10^{9}$  years old. For which of these ages could this be an approximation? 8.EE.1.3\nA 4,762,100,000 years\nB 48,000,000,000 years\n$\\odot$ $4.45 \\times 10^{9}$  years\nD  $4.249999999 \\times 10^{9}$  years",
       "solution": "",
       "images": [],
@@ -3185,15 +3254,13 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Lesson 1-9",
-      "question": "17. PART A\nExpress 0.00000298 as a single digit times a power of ten rounded to the nearest ten millionth. 8.EE.1.3\nPART B\nExplain how negative powers of 10 make small numbers to write and compare. 8.EE.1.3\n![image](images/c4fa3f3c7487183a38eca8fdd7aec24c6744902be25de3f0b024371ed64668cb.jpg)",
+      "chapter_title": "Lesson 1-8",
+      "question": "17. PART A\nExpress 0.00000298 as a single digit times a power of ten rounded to the nearest ten millionth. 8.EE.1.3\nPART B\nExplain how negative powers of 10 make small numbers to write and compare. 8.EE.1.3",
       "solution": "",
-      "images": [
-        "../images/c4fa3f3c7487183a38eca8fdd7aec24c6744902be25de3f0b024371ed64668cb.jpg"
-      ],
+      "images": [],
       "page_idx": 54,
       "has_answer": false,
-      "questionIds": "1225,1226,1227,1228,1229",
+      "questionIds": "1225,1226,1227,1228",
       "solutionIds": "",
       "chapterTitleIds": "1236"
     },
@@ -3202,7 +3269,7 @@
       "type": "example",
       "chapter_title": "Lesson 1-9",
       "question": "EXAMPLE 1\n![image](images/1301514218f336be22acd6d2283c4b69f09e535a1b5f4c077dcca495e9a4354e.jpg)\nWrite Large Numbers in Scientific Notation\nScan for multimedia\n![image](images/32bb7af4dbee9161d2dc5f36dcd37404d200d4a0e57f005c1c9cd2e2fc8c5c7b.jpg)\nLouisa is researching the approximate distance between Earth and the Sun. Her father told her that the distance is  $9.296 \\times 10^{7}$  miles. In an astronomy book, she found the following.\nWhich distance is correct?\n![image](images/178a13e72b9213fb3ea05fae9376b8fe89b66c2a59d684f10b38dc007f59be9a.jpg)\n92,960,000 miles\nLouisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.\n$$\n9. 2 9 6 \\times 1 0 ^ {7}\n$$\nThe first factor is always a number greater than or equal to 1 and less than 10.\nThe second factor is always a power of 10.\nWrite the number in standard form in scientific notation.\nPlace the decimal point after the first nonzero digit.\n![image](images/5e26ce8c26f905eb8cb54f0fbef0df968a09052298d5a9ad1c8ab5f349d7ccb8.jpg)\nCount the number of digits after the decimal point to determine the power of 10.\nThe two numbers represent the same distance.\n![image](images/cd05721c75b3d3d6a116f0c2e040fee04acf90e88ca6f1d9d127909abfc40334.jpg)",
-      "solution": "Try It!\nThe height of Angel Falls, the tallest waterfall in the world, is 3,212 feet. How do you write this number in scientific notation?\n![image](images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg)",
+      "solution": "Try It!\nThe height of Angel Falls, the tallest waterfall in the world, is 3,212 feet. How do you write this number in scientific notation?\n![image](images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg)\nConvince Me! Why do very large numbers have positive exponents when written in scientific notation? Explain.",
       "images": [
         "../images/1301514218f336be22acd6d2283c4b69f09e535a1b5f4c077dcca495e9a4354e.jpg",
         "../images/32bb7af4dbee9161d2dc5f36dcd37404d200d4a0e57f005c1c9cd2e2fc8c5c7b.jpg",
@@ -3214,7 +3281,7 @@
       "page_idx": 56,
       "has_answer": true,
       "questionIds": "1251,1252,1253,1254,1255,1256,1257,1258,1259,1260,1261,1262,1263,1264,1265,1266,1267,1268,1269",
-      "solutionIds": "1270,1271,1272",
+      "solutionIds": "1270,1271,1272,1273",
       "chapterTitleIds": "1236"
     },
     {
@@ -3239,115 +3306,9 @@
       "chapterTitleIds": "1236"
     },
     {
-      "label": "Try It!",
-      "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "The height of Angel Falls, the tallest waterfall in the world, is 3,212 feet. How do you write this number in scientific notation?\n![image](images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg)",
-      "solution": "",
-      "images": [
-        "../images/db7e4ef35680846e6d80b997c659ad36eba00e29c3286ffc9d5ce9a681ebec62.jpg"
-      ],
-      "page_idx": 56,
-      "has_answer": false,
-      "questionIds": "1271,1272",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
-      "label": "Convince Me!",
-      "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "Convince Me! Why do very large numbers have positive exponents when written in scientific notation? Explain.",
-      "solution": "",
-      "images": [],
-      "page_idx": 56,
-      "has_answer": false,
-      "questionIds": "1273",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
-      "label": "EXAMPLE 2",
-      "type": "example",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "EXAMPLE 2\n![image](images/e6ddb421c0d74fa32fba4f300478619e7cf9f56203a5725ca586a0173ae78292.jpg)\nWrite Small Numbers in Scientific Notation\n![image](images/4ac13dcdfe2bb6271dc7c316f4756594a63a11c123ae57ed44631b6a74eb4133.jpg)\n![image](images/c118654a3e3a027f8d68c155932cf9aae991605c154d400949695ba382fec12e.jpg)",
-      "solution": "",
-      "images": [
-        "../images/e6ddb421c0d74fa32fba4f300478619e7cf9f56203a5725ca586a0173ae78292.jpg",
-        "../images/4ac13dcdfe2bb6271dc7c316f4756594a63a11c123ae57ed44631b6a74eb4133.jpg",
-        "../images/c118654a3e3a027f8d68c155932cf9aae991605c154d400949695ba382fec12e.jpg"
-      ],
-      "page_idx": 57,
-      "has_answer": false,
-      "questionIds": "1274,1275,1276,1277,1278",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
-      "label": "ASSESS",
-      "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "What is the width of a red blood cell written in scientific notation?\nWrite the number as the product of two factors.\nPlace the decimal after the first nonzero digit.\nCount the number of digits before the decimal point to determine the power of 10.\n![image](images/f434c3906b3735bb8a85ab1d22d699941aca8902e9a5336956342f3be6d93db2.jpg)\n![image](images/dc09aae652f7e8bdce3a218ff986b5d4ffdb0ace05669eb629b0f5478a694d2d.jpg)\nThe width of the red blood cell, expressed in scientific notation, is  $7.03 \\times 10^{-6}$  meter.\n![image](images/ec98b4fbeafc480b6cd9099279ec7603b43cf33dbc1b198080accca5333198dd.jpg)\n![image](images/45e53245c5b36a9513d4a3523f1facb4cf7c08eebc3d79a5c4a557af6dc06796.jpg)",
-      "solution": "",
-      "images": [
-        "../images/f434c3906b3735bb8a85ab1d22d699941aca8902e9a5336956342f3be6d93db2.jpg",
-        "../images/dc09aae652f7e8bdce3a218ff986b5d4ffdb0ace05669eb629b0f5478a694d2d.jpg",
-        "../images/ec98b4fbeafc480b6cd9099279ec7603b43cf33dbc1b198080accca5333198dd.jpg",
-        "../images/45e53245c5b36a9513d4a3523f1facb4cf7c08eebc3d79a5c4a557af6dc06796.jpg"
-      ],
-      "page_idx": 57,
-      "has_answer": false,
-      "questionIds": "1282,1283,1284,1285,1286,1287,1288,1289,1290",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
-      "label": "Try It!",
-      "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "Try It!\nA common mechanical pencil lead measures about 0.005 meter in diameter. How can you express this measurement using scientific notation?",
-      "solution": "",
-      "images": [],
-      "page_idx": 57,
-      "has_answer": false,
-      "questionIds": "1291,1292",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
-      "label": "EXAMPLE 3",
-      "type": "example",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "EXAMPLE 3\n![image](images/b714529dc9076fc5a004114b35e2e11e836a149f32d91f7fd503dcc6ee0119f8.jpg)\nConvert Scientific Notation to Standard Form\nA. Kelly used a calculator to multiply large numbers. How can she write the number on her calculator screen in standard form?\n$$\n3. 5 \\times 1 0 ^ {1 5} = 3, 5 0 0, 0 0 0, 0 0 0, 0 0 0, 0 0 0\n$$\nThe exponent is positive so move the decimal point to the right.\nB. How can Charlie write the number on the calculator screen in standard form?\n$$\n8 \\times 1 0 ^ {- 9} = 0. \\overbrace {0 . 0 0 0 0 0 0 0 8} ^ {1 0 ^ {- 9}}\n$$\nThe exponent is negative so move the decimal point to the left.\n![image](images/33ce741d4da6bee985eb39a46c31aa1ab4224f8ad94e46138d11174a433bec49.jpg)\n![image](images/773a7a73a0772333ec366b1f5f3200fdcffb47a63e9e561f43023d19f9ca0c2a.jpg)",
-      "solution": "",
-      "images": [
-        "../images/b714529dc9076fc5a004114b35e2e11e836a149f32d91f7fd503dcc6ee0119f8.jpg",
-        "../images/33ce741d4da6bee985eb39a46c31aa1ab4224f8ad94e46138d11174a433bec49.jpg",
-        "../images/773a7a73a0772333ec366b1f5f3200fdcffb47a63e9e561f43023d19f9ca0c2a.jpg"
-      ],
-      "page_idx": 57,
-      "has_answer": false,
-      "questionIds": "1293,1294,1295,1296,1297,1298,1299,1300,1301,1302,1303",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
-      "label": "Try It!",
-      "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "Try It!\nWrite the numbers in standard form.\n$$\na. 9. 2 2 5 \\times 1 0 ^ {1 8}\n$$\n$$\n\\mathrm {b .} 6. 3 \\times 1 0 ^ {- 8}\n$$",
-      "solution": "",
-      "images": [],
-      "page_idx": 57,
-      "has_answer": false,
-      "questionIds": "1306,1307,1308,1309",
-      "solutionIds": "",
-      "chapterTitleIds": "1260"
-    },
-    {
       "label": "1",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "1. Essential Question What is scientific notation and why is it used?",
       "solution": "",
       "images": [],
@@ -3355,12 +3316,12 @@
       "has_answer": false,
       "questionIds": "1316",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "2",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "2. Critique Reasoning Taylor states that 2,800,000 in scientific notation is  $2.8 \\times 10^{-6}$  because the number has six places to the right of the 2. Is Taylor's reasoning correct?",
       "solution": "",
       "images": [],
@@ -3368,12 +3329,12 @@
       "has_answer": false,
       "questionIds": "1317",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "3",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "3. Construct Arguments Sam will write 0.000032 in scientific notation. Sam thinks that the exponent of 10 will be positive. Do you agree? Construct an argument to support your response.",
       "solution": "",
       "images": [],
@@ -3381,12 +3342,12 @@
       "has_answer": false,
       "questionIds": "1318",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "4",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "4. Express 586,400,000 in scientific notation.",
       "solution": "",
       "images": [],
@@ -3394,12 +3355,12 @@
       "has_answer": false,
       "questionIds": "1320",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "5",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "5. The genetic information of almost every living thing is stored in a tiny strand called DNA. Human DNA is  $3.4 \\times 10^{-8}$  meter long. Write the length in standard form.\n![image](images/d3766bf47e84fca2b15e9ab337a2eac3e2889fa4a5c5ae127768360dea06fb1b.jpg)",
       "solution": "",
       "images": [
@@ -3409,12 +3370,12 @@
       "has_answer": false,
       "questionIds": "1321,1322",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "6",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "6. The largest virus known to man is the Megavirus, which measures 0.00000044 meter across. Express this number in scientific notation.",
       "solution": "",
       "images": [],
@@ -3422,12 +3383,12 @@
       "has_answer": false,
       "questionIds": "1323",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "7",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "7. How would you write the number displayed on the calculator screen in standard form?\n![image](images/f8247cb065cc4b1608f6046201b851041518a962ff6fffe08f6d3e5e7c6343f6.jpg)",
       "solution": "",
       "images": [
@@ -3437,12 +3398,12 @@
       "has_answer": false,
       "questionIds": "1324,1325",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "8. The Sun is  $1.5 \\times 10^{8}$  kilometers from Earth.\n$1.5 \\times 10^{8}$  is written as in standard form.",
       "solution": "",
       "images": [],
@@ -3450,12 +3411,12 @@
       "has_answer": false,
       "questionIds": "1329,1330",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "9. Brenna wants an easier way to write 0.000000000000000587.\n0.0000000000000000587 is written as  $\\times 10$  in scientific notation.",
       "solution": "",
       "images": [],
@@ -3463,12 +3424,12 @@
       "has_answer": false,
       "questionIds": "1331,1332",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "10. Is  $23 \\times 10^{-8}$  written in scientific notation? Justify your response.",
       "solution": "",
       "images": [],
@@ -3476,12 +3437,12 @@
       "has_answer": false,
       "questionIds": "1333",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "11. Is  $8.6 \\times 10^{7}$  written in scientific notation? Justify your response.",
       "solution": "",
       "images": [],
@@ -3489,12 +3450,12 @@
       "has_answer": false,
       "questionIds": "1334",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "12. Simone evaluates an expression using her calculator. The calculator display is shown at the right. Express the number in standard form.\n![image](images/9eaf6fcec04241deaa1457ec5ae4c34357215f08849f8afdf21a44e8925b0cae.jpg)",
       "solution": "",
       "images": [
@@ -3504,12 +3465,12 @@
       "has_answer": false,
       "questionIds": "1335,1336",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "13. Express the number 0.00001038 in scientific notation.",
       "solution": "",
       "images": [],
@@ -3517,12 +3478,12 @@
       "has_answer": false,
       "questionIds": "1337",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "14. Express the number 80,000 in scientific notation.",
       "solution": "",
       "images": [],
@@ -3530,12 +3491,12 @@
       "has_answer": false,
       "questionIds": "1338",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "15. Peter evaluates an expression using his calculator. The calculator display is shown at the right. Express the number in standard form.\n![image](images/df332c2843d1ab0334780b0ed7b08b8cce78708173865a4123b90f23f1913baf.jpg)",
       "solution": "",
       "images": [
@@ -3545,12 +3506,12 @@
       "has_answer": false,
       "questionIds": "1339,1340",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
-      "label": "16",
+      "label": "9",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "16. a. What should you do first to write  $5.871 \\times 10^{-7}$  in standard form?\nb. Express the number in standard form.",
       "solution": "",
       "images": [],
@@ -3558,27 +3519,38 @@
       "has_answer": false,
       "questionIds": "1341,1342",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1404"
     },
     {
-      "label": "11",
+      "label": "16b",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "17. Express  $2.58 \\times 10^{-2}$  in standard form.\n![image](images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg)",
+      "chapter_title": "Lesson 1-9",
+      "question": "b. Express the number in standard form.",
       "solution": "",
-      "images": [
-        "../images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg"
-      ],
+      "images": [],
       "page_idx": 60,
       "has_answer": false,
-      "questionIds": "1344,1345",
+      "questionIds": "1342",
       "solutionIds": "",
-      "chapterTitleIds": "1404"
+      "chapterTitleIds": "1326"
+    },
+    {
+      "label": "17",
+      "type": "exercise",
+      "chapter_title": "Lesson 1-9",
+      "question": "17. Express  $2.58 \\times 10^{-2}$  in standard form.",
+      "solution": "",
+      "images": [],
+      "page_idx": 60,
+      "has_answer": false,
+      "questionIds": "1344",
+      "solutionIds": "",
+      "chapterTitleIds": "1326"
     },
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "18. At a certain point, the Grand Canyon is approximately 1,600,000 centimeters across. Express this number in scientific notation.",
       "solution": "",
       "images": [],
@@ -3586,25 +3558,27 @@
       "has_answer": false,
       "questionIds": "1343",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
-      "label": "19",
+      "label": "12",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "19. The length of a bacterial cell is  $5.2 \\times 10^{-6}$  meter. Express the length of the cell in standard form.",
+      "chapter_title": "Lesson 1-9",
+      "question": "![image](images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg)\n19. The length of a bacterial cell is  $5.2 \\times 10^{-6}$  meter. Express the length of the cell in standard form.",
       "solution": "",
-      "images": [],
+      "images": [
+        "../images/c8dabbe4c77348bcf513672adacd87ff90585973e773102abaf96b4a3f2894df.jpg"
+      ],
       "page_idx": 60,
       "has_answer": false,
-      "questionIds": "1346",
+      "questionIds": "1345,1346",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1404"
     },
     {
       "label": "20",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "20. Higher Order Thinking Express the distance 4,300,000 meters using scientific notation in meters, and then in millimeters.\n![image](images/e04b8468a67a21e56d38aad5f0064409bc62ebdb3628475f6fe56c7af6e53c61.jpg)",
       "solution": "",
       "images": [
@@ -3614,25 +3588,27 @@
       "has_answer": false,
       "questionIds": "1347,1348",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
-      "label": "21",
+      "label": "14",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
-      "question": "21. Which of the following numbers are written in scientific notation? 8.EE.1.3\n${12} \\times  {10}^{6}$\n12\n${6.89} \\times  {10}^{6}$\n6.89\n0.4\n$4 \\times  {10}^{-1}$",
+      "chapter_title": "Lesson 1-9",
+      "question": "![image](images/e04b8468a67a21e56d38aad5f0064409bc62ebdb3628475f6fe56c7af6e53c61.jpg)\nAssessment Practice\n21. Which of the following numbers are written in scientific notation? 8.EE.1.3\n${12} \\times  {10}^{6}$\n12\n${6.89} \\times  {10}^{6}$\n6.89\n0.4\n$4 \\times  {10}^{-1}$",
       "solution": "",
-      "images": [],
+      "images": [
+        "../images/e04b8468a67a21e56d38aad5f0064409bc62ebdb3628475f6fe56c7af6e53c61.jpg"
+      ],
       "page_idx": 60,
       "has_answer": false,
-      "questionIds": "1350,1351,1352,1353,1354,1355,1356",
+      "questionIds": "1348,1349,1350,1351,1352,1353,1354,1355,1356",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1404"
     },
     {
       "label": "22",
       "type": "exercise",
-      "chapter_title": "Louisa's father used scientific notation to express the approximate distance because the distance is so great. Numbers in scientific notation have two factors.",
+      "chapter_title": "Lesson 1-9",
       "question": "22. Jean's calculator display shows the number to the right. 8.EE.1.4\nPART A\nExpress this number in scientific notation.",
       "solution": "",
       "images": [],
@@ -3640,12 +3616,12 @@
       "has_answer": false,
       "questionIds": "1357,1358,1359",
       "solutionIds": "",
-      "chapterTitleIds": "1260"
+      "chapterTitleIds": "1326"
     },
     {
-      "label": "16",
+      "label": "15",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "22. Jean's calculator display shows the number to the right. 8.EE.1.4\nPART A\nExpress this number in scientific notation.\n![image](images/0a4bba17d4540e260bb346a4870f6959093fd944ec2f11895f7f1d7c248b9645.jpg)\nPART B\nExpress this number in standard form.\n![image](images/2dd8a5d9c248222a3c4166808941682632f246df67fab518153d623fa5e08a7b.jpg)",
       "solution": "",
       "images": [
@@ -3659,22 +3635,24 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "18",
+      "label": "16",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "1. After watching the video, what is the first question that comes to mind?",
+      "chapter_title": "Lesson 1-9",
+      "question": "3- ACT MATH\n![image](images/19a9d35aa318ee8779f482bbfe25c2b96836fdbcc8db79608971ce752d0057f5.jpg)\nACT1\n1. After watching the video, what is the first question that comes to mind?",
       "solution": "",
-      "images": [],
+      "images": [
+        "../images/19a9d35aa318ee8779f482bbfe25c2b96836fdbcc8db79608971ce752d0057f5.jpg"
+      ],
       "page_idx": 61,
       "has_answer": false,
-      "questionIds": "1367",
+      "questionIds": "1364,1365,1366,1367",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
     {
-      "label": "19",
+      "label": "17",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "2. Write the Main Question you will answer.",
       "solution": "",
       "images": [],
@@ -3685,9 +3663,9 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "20",
+      "label": "18",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "3. Construct Arguments Predict an answer to this Main Question. Explain your prediction.",
       "solution": "",
       "images": [],
@@ -3698,9 +3676,9 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "21",
+      "label": "19",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "4. On the number line below, write a number that is too small to be the answer. Write a number that is too large.\n![image](images/e8b071976db9769e4e4ac8281bc25a1a4303c52704d443f01289b311ef841603.jpg)\n5. Plot your prediction on the same number line.",
       "solution": "",
       "images": [
@@ -3713,24 +3691,26 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "22",
+      "label": "20",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "3-Act Mathematical Modeling: Hard-Working Organs\n![image](images/44095844e9152f60be02577422d55b867fcbdcecee09a6b0839506ba3f975887.jpg)",
+      "chapter_title": "Lesson 1-9",
+      "question": "3-Act Mathematical Modeling: Hard-Working Organs\n![image](images/44095844e9152f60be02577422d55b867fcbdcecee09a6b0839506ba3f975887.jpg)\nGo Online | PearsonRealize.com\n![image](images/b2626da3225f9ba5c23d66a08f2db450631cf435db3e411443a16108e4e0d4f1.jpg)\nMAFS.K12.MP.4.1 Model with mathematics. Also MP.1.1, MP.3.1, MP.5.1\nMAFS.8.EE.1.1 Know and apply the properties of integer exponents to generate equivalent numerical expressions. Also 8.EE.1.3\n![image](images/f18d9a5eb205477dd92a691d5f505bbf6e8e32a32ea77616998c78159676d6ad.jpg)",
       "solution": "",
       "images": [
-        "../images/44095844e9152f60be02577422d55b867fcbdcecee09a6b0839506ba3f975887.jpg"
+        "../images/44095844e9152f60be02577422d55b867fcbdcecee09a6b0839506ba3f975887.jpg",
+        "../images/b2626da3225f9ba5c23d66a08f2db450631cf435db3e411443a16108e4e0d4f1.jpg",
+        "../images/f18d9a5eb205477dd92a691d5f505bbf6e8e32a32ea77616998c78159676d6ad.jpg"
       ],
       "page_idx": 61,
       "has_answer": false,
-      "questionIds": "1373,1374",
+      "questionIds": "1373,1374,1375,1376,1377,1378,1379",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
     {
-      "label": "23",
+      "label": "21",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "6. What information in this situation would be helpful to know? How would you use that information?",
       "solution": "",
       "images": [],
@@ -3741,37 +3721,24 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "24",
+      "label": "22",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "7. Use Appropriate Tools What tools can you use to get the information you need? Record the information as you find it.\n![image](images/e261d80ef19758e3cf6e04034376edc322e627738dd63ec6ac0ae06bb5cd46cc.jpg)",
+      "chapter_title": "Lesson 1-9",
+      "question": "7. Use Appropriate Tools What tools can you use to get the information you need? Record the information as you find it.\n![image](images/e261d80ef19758e3cf6e04034376edc322e627738dd63ec6ac0ae06bb5cd46cc.jpg)\n8. Model with Math Represent the situation using the mathematical content, concepts, and skills from this topic. Use your representation to answer the Main Question.",
       "solution": "",
       "images": [
         "../images/e261d80ef19758e3cf6e04034376edc322e627738dd63ec6ac0ae06bb5cd46cc.jpg"
       ],
       "page_idx": 62,
       "has_answer": false,
-      "questionIds": "1381,1382",
+      "questionIds": "1381,1382,1383",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
     {
-      "label": "25",
+      "label": "23",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "8. Model with Math Represent the situation using the mathematical content, concepts, and skills from this topic. Use your representation to answer the Main Question.",
-      "solution": "",
-      "images": [],
-      "page_idx": 62,
-      "has_answer": false,
-      "questionIds": "1383",
-      "solutionIds": "",
-      "chapterTitleIds": "1404"
-    },
-    {
-      "label": "26",
-      "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "9. What is your answer to the Main Question? Is it greater or less than your prediction? Explain why.\n![image](images/55db26184a30e06f027ab99887a0911efb1250496e36e7d592a6f30f9cef3907.jpg)",
       "solution": "",
       "images": [
@@ -3784,22 +3751,22 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "28",
+      "label": "24",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "10. Write the answer you saw in the video.",
+      "chapter_title": "Lesson 1-9",
+      "question": "ACT3\n10. Write the answer you saw in the video.",
       "solution": "",
       "images": [],
       "page_idx": 63,
       "has_answer": false,
-      "questionIds": "1387",
+      "questionIds": "1386,1387",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
     {
-      "label": "29",
+      "label": "25",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "11. Reasoning Does your answer match the answer in the video? If not, what are some reasons that would explain the difference?",
       "solution": "",
       "images": [],
@@ -3810,9 +3777,9 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "30",
+      "label": "26",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "12. Make Sense and Persevere Would you change your model now that you know the answer? Explain.\n![image](images/b8ee9d3413b5f498c89683ed63dda729b987a6f3812544c83a74bbdd2c0ecc6c.jpg)",
       "solution": "",
       "images": [
@@ -3825,35 +3792,22 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "31",
+      "label": "27",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "Reflect",
+      "chapter_title": "Lesson 1-9",
+      "question": "Reflect\n13. Model with Math Explain how you used a mathematical model to represent the situation. How did the model help you answer the Main Question?",
       "solution": "",
       "images": [],
       "page_idx": 64,
       "has_answer": false,
-      "questionIds": "1391",
+      "questionIds": "1391,1392",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
     {
-      "label": "32",
+      "label": "28",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "13. Model with Math Explain how you used a mathematical model to represent the situation. How did the model help you answer the Main Question?",
-      "solution": "",
-      "images": [],
-      "page_idx": 64,
-      "has_answer": false,
-      "questionIds": "1392",
-      "solutionIds": "",
-      "chapterTitleIds": "1404"
-    },
-    {
-      "label": "33",
-      "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "14. Generalize What pattern did you notice in your calculations? How did that pattern help you solve the problem?",
       "solution": "",
       "images": [],
@@ -3864,37 +3818,24 @@
       "chapterTitleIds": "1404"
     },
     {
-      "label": "34",
+      "label": "29",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "SEQUEL",
-      "solution": "",
-      "images": [],
-      "page_idx": 64,
-      "has_answer": false,
-      "questionIds": "1394",
-      "solutionIds": "",
-      "chapterTitleIds": "1404"
-    },
-    {
-      "label": "35",
-      "type": "exercise",
-      "chapter_title": "Lesson 1-10",
-      "question": "15. Use Structure How many times does a heart beat in a lifetime? Use your solution to the Main Question to help you solve.\n![image](images/02bd2b7d7bc42895b20f91339e4d933776826d58724c5d46ab6229a6487b1ce6.jpg)",
+      "chapter_title": "Lesson 1-9",
+      "question": "SEQUEL\n15. Use Structure How many times does a heart beat in a lifetime? Use your solution to the Main Question to help you solve.\n![image](images/02bd2b7d7bc42895b20f91339e4d933776826d58724c5d46ab6229a6487b1ce6.jpg)",
       "solution": "",
       "images": [
         "../images/02bd2b7d7bc42895b20f91339e4d933776826d58724c5d46ab6229a6487b1ce6.jpg"
       ],
       "page_idx": 64,
       "has_answer": false,
-      "questionIds": "1395,1396",
+      "questionIds": "1394,1395,1396",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
     {
-      "label": "36",
+      "label": "30",
       "type": "exercise",
-      "chapter_title": "Lesson 1-10",
+      "chapter_title": "Lesson 1-9",
       "question": "![image](images/83c8096696f14692b5f088d6bc47344c73ecca86a7471d79a015c6e2fe3d275b.jpg)\nSolve & Discuss It!\n![image](images/473476b4d75343b932004bc35097882fdb60b2a32b7e5fcdb169daa2c508922f.jpg)\n![image](images/946041b96d508457d9b3695d37528e49ba6b4bea23969bff39e798404890ea8b.jpg)\nACTIVITY\nThe homecoming committee wants to fly an aerial banner over the football game. The banner is 1,280 inches long and 780 inches tall. How many different ways can the area of the banner be expressed?\n![image](images/794bf308f0f1f036bb90a9bf081311eed254604609ef6ef5d0eb88a825e7e4fc.jpg)",
       "solution": "",
       "images": [
@@ -3943,8 +3884,8 @@
       "label": "EXAMPLE 2",
       "type": "example",
       "chapter_title": "Lesson 1-10",
-      "question": "EXAMPLE 2\n![image](images/59e4e119c568d93ed28abc6108eb7c3c994ac84d5ece93b080b0b0def270397e.jpg)\nMultiply Numbers in Scientific Notation\n![image](images/56c8c478f35ef5fa4ba5e030e15e4945197a215d9951dba5fd88303044593f7b.jpg)\n![ACTIVITY](images/982b174fa9e465c8057e72011645401203296f3c723740a6e731a2b77cd87074.jpg)\n![ASSESS](images/e0cdfb39073e61f6642bd523698f37ba08341fe3d2126e6e9bbec15876bfffd5.jpg)\nThe Confederation Bridge connects New Brunswick to Prince Edward Island. The main part of the bridge rests on piers that form 43 segments. What is the approximate length of the main part of the bridge? Express your answer in scientific notation.\nSTEP 1 Write an expression to represent the problem situation.\n$$\n\\begin{array}{l} (8. 2 \\times 1 0 ^ {2}) \\times 4 3 \\\\ = (8. 2 \\times 1 0 ^ {2}) \\times (4. 3 \\times 1 0 ^ {1}) \\\\ \\end{array}\n$$\nExpress both numbers in scientific notation.\nSTEP 2 Multiply.",
-      "solution": "$$\n\\begin{array}{l} (8. 2 \\times 1 0 ^ {2}) \\times (4. 3 \\times 1 0 ^ {1}) \\\\ = (8. 2 \\times 4. 3) \\times (1 0 ^ {2} \\times 1 0 ^ {1}) \\\\ = 3 5. 2 6 \\times (1 0) ^ {2 + 1} \\\\ = 3 5. 2 6 \\times 1 0 ^ {3} \\\\ = 3. 5 2 6 \\times 1 0 ^ {4} \\\\ \\end{array}\n$$\nRemember: The Product of Powers Property states that when multiplying powers with the same base, you add the exponents.\nThe first factor must be less than 10 and greater than or equal to 1.\nThe length of the main part of the bridge is approximately  $3.5 \\times 10^{4}$  feet.\n![image](images/8c341ee7893054d85764c66cba60914ba9f171a0560fff1a2502f1084d39fac0.jpg)",
+      "question": "EXAMPLE 2\n![image](images/59e4e119c568d93ed28abc6108eb7c3c994ac84d5ece93b080b0b0def270397e.jpg)\nMultiply Numbers in Scientific Notation\n![image](images/56c8c478f35ef5fa4ba5e030e15e4945197a215d9951dba5fd88303044593f7b.jpg)\n![ACTIVITY](images/982b174fa9e465c8057e72011645401203296f3c723740a6e731a2b77cd87074.jpg)\n![ASSESS](images/e0cdfb39073e61f6642bd523698f37ba08341fe3d2126e6e9bbec15876bfffd5.jpg)\nThe Confederation Bridge connects New Brunswick to Prince Edward Island. The main part of the bridge rests on piers that form 43 segments. What is the approximate length of the main part of the bridge? Express your answer in scientific notation.\nSTEP 1 Write an expression to represent the problem situation.\n$$\n\\begin{array}{l} (8. 2 \\times 1 0 ^ {2}) \\times 4 3 \\\\ = (8. 2 \\times 1 0 ^ {2}) \\times (4. 3 \\times 1 0 ^ {1}) \\\\ \\end{array}\n$$",
+      "solution": "Express both numbers in scientific notation.\nSTEP 2 Multiply.\n$$\n\\begin{array}{l} (8. 2 \\times 1 0 ^ {2}) \\times (4. 3 \\times 1 0 ^ {1}) \\\\ = (8. 2 \\times 4. 3) \\times (1 0 ^ {2} \\times 1 0 ^ {1}) \\\\ = 3 5. 2 6 \\times (1 0) ^ {2 + 1} \\\\ = 3 5. 2 6 \\times 1 0 ^ {3} \\\\ = 3. 5 2 6 \\times 1 0 ^ {4} \\\\ \\end{array}\n$$\nRemember: The Product of Powers Property states that when multiplying powers with the same base, you add the exponents.\nThe first factor must be less than 10 and greater than or equal to 1.\nThe length of the main part of the bridge is approximately  $3.5 \\times 10^{4}$  feet.\n![image](images/8c341ee7893054d85764c66cba60914ba9f171a0560fff1a2502f1084d39fac0.jpg)",
       "images": [
         "../images/59e4e119c568d93ed28abc6108eb7c3c994ac84d5ece93b080b0b0def270397e.jpg",
         "../images/56c8c478f35ef5fa4ba5e030e15e4945197a215d9951dba5fd88303044593f7b.jpg",
@@ -3954,24 +3895,24 @@
       ],
       "page_idx": 67,
       "has_answer": true,
-      "questionIds": "1441,1442,1443,1444,1445,1446,1447,1448,1449,1450,1451",
-      "solutionIds": "1452,1453,1454,1455,1456",
+      "questionIds": "1441,1442,1443,1444,1445,1446,1447,1448,1449",
+      "solutionIds": "1450,1451,1452,1453,1454,1455,1456",
       "chapterTitleIds": "1404"
     },
     {
       "label": "EXAMPLE 3",
       "type": "example",
       "chapter_title": "Lesson 1-10",
-      "question": "EXAMPLE 3\n![image](images/a6252f29793a3c209e5eb18f201fbf8f82df11aa9bef9974fc83e48a6b0c0bf5.jpg)\nDivide Numbers in Scientific Notation\nA queen ant lays  $1.83 \\times 10^{6}$  eggs over a period of 30 days.\nAssuming she lays the same number of eggs each day, about how many eggs does she lay in one day? Express your answer in scientific notation.\nFirst, write 30 in scientific notation:  $3.0 \\times 10^{1}$\nThen, divide.\n$$\n(1. 8 3 \\times 1 0 ^ {6}) \\div (3. 0 \\times 1 0 ^ {1})\n$$\n$$\n\\frac {1 . 8 3 \\times 1 0 ^ {6}}{3 . 0 \\times 1 0 ^ {1}}\n$$\n$$\n\\frac {1 . 8 3}{3 . 0} \\times \\frac {1 0 ^ {6}}{1 0 ^ {1}}\n$$\n$$\n(1. 8 3 \\div 3. 0) \\times (1 0 ^ {6} \\div 1 0 ^ {1})\n$$\n$$\n0. 6 1 \\times 1 0 ^ {5}\n$$\n$$\n6. 1 \\times 1 0 ^ {4}\n$$\nThe Quotient of Powers Property states that when dividing powers with the same base, you subtract the exponents.\nThe queen ant lays about  $6.1 \\times 10^{4}$  eggs per day.",
-      "solution": "![image](images/76be83845c8975a7b5799d0d03bb54c628db8ebf69cf926928cb39645f3a7239.jpg)",
+      "question": "EXAMPLE 3\n![image](images/a6252f29793a3c209e5eb18f201fbf8f82df11aa9bef9974fc83e48a6b0c0bf5.jpg)\nDivide Numbers in Scientific Notation\nA queen ant lays  $1.83 \\times 10^{6}$  eggs over a period of 30 days.\nAssuming she lays the same number of eggs each day, about how many eggs does she lay in one day? Express your answer in scientific notation.\nFirst, write 30 in scientific notation:  $3.0 \\times 10^{1}$\nThen, divide.\n$$\n(1. 8 3 \\times 1 0 ^ {6}) \\div (3. 0 \\times 1 0 ^ {1})\n$$\n$$\n\\frac {1 . 8 3 \\times 1 0 ^ {6}}{3 . 0 \\times 1 0 ^ {1}}\n$$\n$$\n\\frac {1 . 8 3}{3 . 0} \\times \\frac {1 0 ^ {6}}{1 0 ^ {1}}\n$$\n$$\n(1. 8 3 \\div 3. 0) \\times (1 0 ^ {6} \\div 1 0 ^ {1})\n$$\n$$\n0. 6 1 \\times 1 0 ^ {5}\n$$\n$$\n6. 1 \\times 1 0 ^ {4}\n$$",
+      "solution": "The Quotient of Powers Property states that when dividing powers with the same base, you subtract the exponents.\nThe queen ant lays about  $6.1 \\times 10^{4}$  eggs per day.\n![image](images/76be83845c8975a7b5799d0d03bb54c628db8ebf69cf926928cb39645f3a7239.jpg)",
       "images": [
         "../images/a6252f29793a3c209e5eb18f201fbf8f82df11aa9bef9974fc83e48a6b0c0bf5.jpg",
         "../images/76be83845c8975a7b5799d0d03bb54c628db8ebf69cf926928cb39645f3a7239.jpg"
       ],
       "page_idx": 67,
       "has_answer": true,
-      "questionIds": "1457,1458,1459,1460,1461,1462,1463,1464,1465,1466,1467,1468,1469,1470,1471",
-      "solutionIds": "1472",
+      "questionIds": "1457,1458,1459,1460,1461,1462,1463,1464,1465,1466,1467,1468,1469",
+      "solutionIds": "1470,1471,1472",
       "chapterTitleIds": "1404"
     },
     {
@@ -4043,12 +3984,14 @@
       "label": "5",
       "type": "exercise",
       "chapter_title": "Lesson 1-10",
-      "question": "5. The distance from Earth to the Moon is approximately  $1.2 \\times 10^{9}$  feet. The Apollo 11 spacecraft was approximately 360 feet long. About how many spacecraft of that length would fit end to end from Earth to the Moon? Express your answer in scientific notation.",
+      "question": "5. The distance from Earth to the Moon is approximately  $1.2 \\times 10^{9}$  feet. The Apollo 11 spacecraft was approximately 360 feet long. About how many spacecraft of that length would fit end to end from Earth to the Moon? Express your answer in scientific notation.\n![image](images/ddfe60438d1e48bb1416206b05c393c21ae9bd519d92a86964491d8ba1bb5bd2.jpg)",
       "solution": "",
-      "images": [],
+      "images": [
+        "../images/ddfe60438d1e48bb1416206b05c393c21ae9bd519d92a86964491d8ba1bb5bd2.jpg"
+      ],
       "page_idx": 68,
       "has_answer": false,
-      "questionIds": "1489",
+      "questionIds": "1489,1490",
       "solutionIds": "",
       "chapterTitleIds": "1404"
     },
@@ -4081,7 +4024,7 @@
     {
       "label": "8",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "8.  $(3.76\\times 10^{5}) + (7.44\\times 10^{5})$",
       "solution": "",
       "images": [],
@@ -4094,7 +4037,7 @@
     {
       "label": "9",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "9. What is the value of  $n$  in the equation  $1.9 \\times 10^{7} = (1 \\times 10^{5})(1.9 \\times 10^{n})$ ?",
       "solution": "",
       "images": [],
@@ -4107,7 +4050,7 @@
     {
       "label": "10",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "10. Find  $(5.3\\times 10^{3}) - (8\\times 10^{2})$  Express your answer in scientific notation.",
       "solution": "",
       "images": [],
@@ -4120,7 +4063,7 @@
     {
       "label": "11",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "11. What is the mass of 30,000 molecules? Express your answer in scientific notation.\n![image](images/1c98f3610a26d320b085037e972408e8aa1a7406dbe6962eedb9a40cd51b878d.jpg)\nMass of one molecule of oxygen  $= 5.3\\times 10^{-23}$  gram",
       "solution": "",
       "images": [
@@ -4135,7 +4078,7 @@
     {
       "label": "12",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "12. Critique Reasoning Your friend says that the product of  $4.8 \\times 10^{8}$  and  $2 \\times 10^{-3}$  is  $9.6 \\times 10^{-5}$ . Is this answer correct? Explain.",
       "solution": "",
       "images": [],
@@ -4148,7 +4091,7 @@
     {
       "label": "13",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "13. Find  $\\frac{7.2 \\times 10^{-8}}{3 \\times 10^{-2}}$ . Write your answer in scientific notation.",
       "solution": "",
       "images": [],
@@ -4161,7 +4104,7 @@
     {
       "label": "14",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "14. A certain star is  $4.3 \\times 10^{2}$  light years from Earth. One light year is about  $5.9 \\times 10^{12}$  miles. How far from Earth (in miles) is the star? Express your answer in scientific notation.",
       "solution": "",
       "images": [],
@@ -4174,7 +4117,7 @@
     {
       "label": "15",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "15. The total consumption of fruit juice in a particular country in 2006 was about  $2.28 \\times 10^{9}$  gallons. The population of that country that year was  $3 \\times 10^{8}$ . What was the average number of gallons consumed per person in the country in 2006?",
       "solution": "",
       "images": [],
@@ -4187,7 +4130,7 @@
     {
       "label": "16",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "16. The greatest distance between the Sun and Jupiter is about  $8.166 \\times 10^{8}$  kilometers. The greatest distance between the Sun and Saturn is about  $1.515 \\times 10^{9}$  kilometers. What is the difference between these two distances?",
       "solution": "",
       "images": [],
@@ -4200,7 +4143,7 @@
     {
       "label": "17",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "17. What was the approximate number of pounds of garbage produced per person in the country in one year? Express your answer in scientific notation.\n![image](images/eb7cb206272df7c9da6691f723929f76aed03e8166609f37a5f7bc92f3c9e541.jpg)\nGarbage generated in country:  $6.958 \\times 10^{10}$  pounds Population of country:  $4.57 \\times 10^{6}$  people",
       "solution": "",
       "images": [
@@ -4215,7 +4158,7 @@
     {
       "label": "18",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "18. Higher Order Thinking\na. What is the value of  $n$  in the equation  $1.5 \\times 10^{12} = (5 \\times 10^5)(3 \\times 10^n)$ ?\nb. Explain why the exponent on the left side of the equation is not equal to the sum of the exponents on the right side.",
       "solution": "",
       "images": [],
@@ -4228,7 +4171,7 @@
     {
       "label": "19",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "19. Find  $(2.2 \\times 10^{5}) \\div (4.4 \\times 10^{-3})$ . When you regroup the factors, what do you notice about the quotient of the decimal factors? How does this affect the exponent of the quotient? 8.EE.1.4",
       "solution": "",
       "images": [],
@@ -4241,26 +4184,13 @@
     {
       "label": "20",
       "type": "exercise",
-      "chapter_title": "Practice & Problem Solving",
+      "chapter_title": "Lesson 1-10",
       "question": "20. Which expression has the least value? 8.EE.1.4\n(A)  $(4.7 \\times 10^{4}) + (8 \\times 10^{4})$\n(7.08 × 10³) + (2.21 × 10³)\n$(5.43\\times 10^{8}) - (2.33\\times 10^{8})$\n(9.35 × 10^6) - (6.7 × 10^6)",
       "solution": "",
       "images": [],
       "page_idx": 70,
       "has_answer": false,
       "questionIds": "1522,1523,1524,1525,1526",
-      "solutionIds": "",
-      "chapterTitleIds": "1494"
-    },
-    {
-      "label": "例",
-      "type": "example",
-      "chapter_title": "LESSON 1-1 Rational Numbers as Decimals",
-      "question": "Example\nWrite 1.0505... as a mixed number.\n$$\n\\begin{array}{l} x = 1. \\overline {{0 5}} \\\\ 1 0 0 \\cdot x = 1 0 0 \\cdot 1. \\overline {{0 5}} \\\\ 1 0 0 x = 1 0 5. \\overline {{0 5}} \\\\ 1 0 0 x - x = 1 0 5. \\overline {{0 5}} - 1. \\overline {{0 5}} \\\\ 9 9 x = 1 0 4 \\\\ x = \\frac {1 0 4}{9 9} \\text {o r} 1 \\frac {5}{9 9} \\\\ \\end{array}\n$$",
-      "solution": "",
-      "images": [],
-      "page_idx": 72,
-      "has_answer": false,
-      "questionIds": "1558,1559,1560",
       "solutionIds": "",
       "chapterTitleIds": "1494"
     },
@@ -4319,6 +4249,32 @@
     {
       "label": "Example",
       "type": "example",
+      "chapter_title": "LESSON 1-1 Rational Numbers as Decimals",
+      "question": "Write 1.0505... as a mixed number.\n$$\n\\begin{array}{l} x = 1. \\overline {{0 5}} \\\\ 1 0 0 \\cdot x = 1 0 0 \\cdot 1. \\overline {{0 5}} \\\\ 1 0 0 x = 1 0 5. \\overline {{0 5}} \\\\ 1 0 0 x - x = 1 0 5. \\overline {{0 5}} - 1. \\overline {{0 5}} \\\\ 9 9 x = 1 0 4 \\\\ x = \\frac {1 0 4}{9 9} \\text {o r} 1 \\frac {5}{9 9} \\\\ \\end{array}\n$$",
+      "solution": "",
+      "images": [],
+      "page_idx": 72,
+      "has_answer": false,
+      "questionIds": "1559,1560",
+      "solutionIds": "",
+      "chapterTitleIds": "1558"
+    },
+    {
+      "label": "Example",
+      "type": "example",
+      "chapter_title": "LESSON 1-1 Rational Numbers as Decimals",
+      "question": "Example\nWrite 1.0505... as a mixed number.",
+      "solution": "$$\n\\begin{array}{l} x = 1. \\overline {{0 5}} \\\\ 1 0 0 \\cdot x = 1 0 0 \\cdot 1. \\overline {{0 5}} \\\\ 1 0 0 x = 1 0 5. \\overline {{0 5}} \\\\ 1 0 0 x - x = 1 0 5. \\overline {{0 5}} - 1. \\overline {{0 5}} \\\\ 9 9 x = 1 0 4 \\\\ x = \\frac {1 0 4}{9 9} \\text {o r} 1 \\frac {5}{9 9} \\\\ \\end{array}\n$$",
+      "images": [],
+      "page_idx": 72,
+      "has_answer": true,
+      "questionIds": "1558,1559",
+      "solutionIds": "1560",
+      "chapterTitleIds": "1554"
+    },
+    {
+      "label": "Example",
+      "type": "example",
       "chapter_title": "LESSON 1-2 Understand Irrational Numbers",
       "question": "Example\nClassify  $-\\sqrt{50}$  as rational or irrational.",
       "solution": "The number  $-\\sqrt{50}$  is irrational because 50 is not the square of any integer.",
@@ -4359,15 +4315,15 @@
       "label": "Example",
       "type": "example",
       "chapter_title": "LESSON 1-2 Understand Irrational Numbers",
-      "question": "Example\nCompare and order the following numbers.  \nLocate each number on a number line.\n$$\n7. \\overline {{8}}, 7 \\frac {4}{5}, \\sqrt {5 6}\n$$\nWrite each number in decimal form.\n$$\n\\begin{array}{l} 7. \\overline {{8}} = 7. 8 8 8 8 \\dots \\\\ 7 \\frac {4}{5} = 7. 8 \\\\ \\sqrt {5 6} \\approx 7. 5 \\\\ \\end{array}\n$$\n![image](images/4d12a6f5b66101d037d9e1fc06e4fdfb0c79efb9039d5f631b28028f86e27104.jpg)\n$$\n\\mathrm {S o}, \\sqrt {5 6} <   7 \\frac {4}{5} <   7. \\overline {{8}}.\n$$",
-      "solution": "",
+      "question": "Example\nCompare and order the following numbers.  \nLocate each number on a number line.\n$$\n7. \\overline {{8}}, 7 \\frac {4}{5}, \\sqrt {5 6}\n$$",
+      "solution": "Write each number in decimal form.\n$$\n\\begin{array}{l} 7. \\overline {{8}} = 7. 8 8 8 8 \\dots \\\\ 7 \\frac {4}{5} = 7. 8 \\\\ \\sqrt {5 6} \\approx 7. 5 \\\\ \\end{array}\n$$\n![image](images/4d12a6f5b66101d037d9e1fc06e4fdfb0c79efb9039d5f631b28028f86e27104.jpg)\n$$\n\\mathrm {S o}, \\sqrt {5 6} <   7 \\frac {4}{5} <   7. \\overline {{8}}.\n$$",
       "images": [
         "../images/4d12a6f5b66101d037d9e1fc06e4fdfb0c79efb9039d5f631b28028f86e27104.jpg"
       ],
       "page_idx": 73,
-      "has_answer": false,
-      "questionIds": "1585,1586,1587,1588,1589,1590,1591",
-      "solutionIds": "",
+      "has_answer": true,
+      "questionIds": "1585,1586,1587",
+      "solutionIds": "1588,1589,1590,1591",
       "chapterTitleIds": "1554"
     },
     {
@@ -4400,13 +4356,13 @@
       "label": "Example",
       "type": "example",
       "chapter_title": "LESSON 1-4 Evaluate Square Roots and Cube Roots",
-      "question": "Example\nA monument has a cube shape with a volume of 729 cubic meters. What is the length of each edge of the monument?\n$$\n\\begin{array}{l} \\sqrt [ 3 ]{7 2 9} = \\sqrt [ 3 ]{9 \\cdot 9 \\cdot 9} \\\\ = \\sqrt [ 3 ]{9 ^ {3}} \\\\ = 9 \\\\ \\end{array}\n$$",
-      "solution": "So, the length of each edge is 9 meters.",
+      "question": "Example\nA monument has a cube shape with a volume of 729 cubic meters. What is the length of each edge of the monument?",
+      "solution": "$$\n\\begin{array}{l} \\sqrt [ 3 ]{7 2 9} = \\sqrt [ 3 ]{9 \\cdot 9 \\cdot 9} \\\\ = \\sqrt [ 3 ]{9 ^ {3}} \\\\ = 9 \\\\ \\end{array}\n$$\nSo, the length of each edge is 9 meters.",
       "images": [],
       "page_idx": 73,
       "has_answer": true,
-      "questionIds": "1600,1601,1602",
-      "solutionIds": "1603",
+      "questionIds": "1600,1601",
+      "solutionIds": "1602,1603",
       "chapterTitleIds": "1554"
     },
     {
@@ -4439,13 +4395,13 @@
       "label": "Example",
       "type": "example",
       "chapter_title": "LESSON 1-4 Evaluate Square Roots and Cube Roots",
-      "question": "Example\nMattie wants to build a square deck to make a kiddie play area of 144 square feet. What will be the length of each side of the deck?\nUse the formula  $A = s^2$  to find each side length.\n$$\n\\begin{array}{l} 1 4 4 = s ^ {2} \\\\ \\sqrt {1 4 4} = \\sqrt {s ^ {2}} \\\\ \\pm 1 2 = s \\\\ \\end{array}\n$$",
-      "solution": "Length cannot be negative, so the length of each side of the deck will be 12 feet.",
+      "question": "Example\nMattie wants to build a square deck to make a kiddie play area of 144 square feet. What will be the length of each side of the deck?\nUse the formula  $A = s^2$  to find each side length.",
+      "solution": "$$\n\\begin{array}{l} 1 4 4 = s ^ {2} \\\\ \\sqrt {1 4 4} = \\sqrt {s ^ {2}} \\\\ \\pm 1 2 = s \\\\ \\end{array}\n$$\nLength cannot be negative, so the length of each side of the deck will be 12 feet.",
       "images": [],
       "page_idx": 74,
       "has_answer": true,
-      "questionIds": "1613,1614,1615,1616",
-      "solutionIds": "1617",
+      "questionIds": "1613,1614,1615",
+      "solutionIds": "1616,1617",
       "chapterTitleIds": "1554"
     },
     {
@@ -4517,14 +4473,27 @@
       "label": "Example",
       "type": "example",
       "chapter_title": "LESSON 1-6 Use Properties of Integer Exponents",
-      "question": "Example\nWrite an equivalent expression for  $(4^{3})^{2}$\n$$\n(4 ^ {3}) ^ {2} = (4 ^ {3}) (4 ^ {3})\n$$",
+      "question": "Example\nWrite an equivalent expression for  $(4^{3})^{2}$",
+      "solution": "$$\n(4 ^ {3}) ^ {2} = (4 ^ {3}) (4 ^ {3})\n$$",
+      "images": [],
+      "page_idx": 74,
+      "has_answer": true,
+      "questionIds": "1636,1637",
+      "solutionIds": "1638",
+      "chapterTitleIds": "1554"
+    },
+    {
+      "label": "Example",
+      "type": "example",
+      "chapter_title": "LESSON 1-6 Use Properties of Integer Exponents",
+      "question": "Write an equivalent expression for  $(4^{3})^{2}$\n$$\n(4 ^ {3}) ^ {2} = (4 ^ {3}) (4 ^ {3})\n$$",
       "solution": "",
       "images": [],
       "page_idx": 74,
       "has_answer": false,
-      "questionIds": "1636,1637,1638",
+      "questionIds": "1637,1638",
       "solutionIds": "",
-      "chapterTitleIds": "1554"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "1",
@@ -4537,7 +4506,7 @@
       "has_answer": false,
       "questionIds": "1641",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "2",
@@ -4550,7 +4519,7 @@
       "has_answer": false,
       "questionIds": "1642",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "3",
@@ -4563,7 +4532,7 @@
       "has_answer": false,
       "questionIds": "1643",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "4",
@@ -4576,7 +4545,7 @@
       "has_answer": false,
       "questionIds": "1644",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "Example",
@@ -4589,7 +4558,7 @@
       "has_answer": false,
       "questionIds": "1648,1649",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "1",
@@ -4602,7 +4571,7 @@
       "has_answer": false,
       "questionIds": "1652",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "2",
@@ -4615,7 +4584,7 @@
       "has_answer": false,
       "questionIds": "1653",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "3",
@@ -4628,7 +4597,7 @@
       "has_answer": false,
       "questionIds": "1655",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "4",
@@ -4641,7 +4610,7 @@
       "has_answer": false,
       "questionIds": "1656",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "Example",
@@ -4654,7 +4623,7 @@
       "has_answer": true,
       "questionIds": "1661,1662,1663,1664",
       "solutionIds": "1665",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "1",
@@ -4667,7 +4636,7 @@
       "has_answer": false,
       "questionIds": "1667",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "2",
@@ -4680,7 +4649,7 @@
       "has_answer": false,
       "questionIds": "1668",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "3",
@@ -4693,7 +4662,7 @@
       "has_answer": false,
       "questionIds": "1669",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1657"
     },
     {
       "label": "Example",
@@ -4706,7 +4675,7 @@
       "has_answer": false,
       "questionIds": "1673,1674,1675",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "1",
@@ -4719,7 +4688,7 @@
       "has_answer": false,
       "questionIds": "1677",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "2",
@@ -4732,7 +4701,7 @@
       "has_answer": false,
       "questionIds": "1678",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "3",
@@ -4745,7 +4714,7 @@
       "has_answer": false,
       "questionIds": "1679",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "4",
@@ -4758,7 +4727,7 @@
       "has_answer": false,
       "questionIds": "1680",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "Example",
@@ -4771,7 +4740,7 @@
       "has_answer": false,
       "questionIds": "1686,1687",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "1",
@@ -4784,7 +4753,7 @@
       "has_answer": false,
       "questionIds": "1690",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "2",
@@ -4797,7 +4766,7 @@
       "has_answer": false,
       "questionIds": "1691",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "3",
@@ -4810,7 +4779,7 @@
       "has_answer": false,
       "questionIds": "1692",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "4",
@@ -4823,7 +4792,7 @@
       "has_answer": false,
       "questionIds": "1693",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1681"
     },
     {
       "label": "A",
@@ -4836,7 +4805,7 @@
       "has_answer": false,
       "questionIds": "1702",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "B",
@@ -4849,7 +4818,7 @@
       "has_answer": false,
       "questionIds": "1703",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "C",
@@ -4862,7 +4831,7 @@
       "has_answer": false,
       "questionIds": "1704",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "D",
@@ -4875,7 +4844,7 @@
       "has_answer": false,
       "questionIds": "1705",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "F",
@@ -4888,7 +4857,7 @@
       "has_answer": false,
       "questionIds": "1706",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "J",
@@ -4901,7 +4870,7 @@
       "has_answer": false,
       "questionIds": "1707",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "L",
@@ -4914,7 +4883,7 @@
       "has_answer": false,
       "questionIds": "1708",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "M",
@@ -4927,7 +4896,7 @@
       "has_answer": false,
       "questionIds": "1709",
       "solutionIds": "",
-      "chapterTitleIds": "1611"
+      "chapterTitleIds": "1694"
     },
     {
       "label": "N",
@@ -4939,6 +4908,19 @@
       "page_idx": 77,
       "has_answer": false,
       "questionIds": "1710",
+      "solutionIds": "",
+      "chapterTitleIds": "1681"
+    },
+    {
+      "label": "1711",
+      "type": "exercise",
+      "chapter_title": "LESSON 1-10 Operations with Numbers in Scientific Notation",
+      "question": "$x - {3.5} =  - {3.1}$",
+      "solution": "",
+      "images": [],
+      "page_idx": 77,
+      "has_answer": false,
+      "questionIds": "1711",
       "solutionIds": "",
       "chapterTitleIds": "1681"
     },

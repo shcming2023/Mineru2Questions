@@ -7,7 +7,7 @@
 <solution>22245,22246,22247,22248,22249,22250,22251,22252,22253</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 20</label><type>example</type><question>22254,22255</question>
 <solution>22256,22257,22258</solution></qa_pair>
-<qa_pair><label>4</label><type>exercise</type><question>22260,22261,22262,22263</question>
+<qa_pair><label>4.1</label><type>exercise</type><question>22260,22261,22262,22263</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>22264</question>
 <solution></solution></qa_pair>

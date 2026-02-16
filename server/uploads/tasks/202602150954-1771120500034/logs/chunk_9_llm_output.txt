@@ -15,28 +15,14 @@
 <solution>679,680,681,682,683,684,685,686,687,688,691,692,693,694,695,696,697,698,699,700</solution></qa_pair>
 </chapter>
 <chapter><title>703</title>
-<qa_pair><label>1</label><type>exercise</type><question>704,705</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>706</question>
-<solution></solution></qa_pair>
-<qa_pair><label>3</label><type>exercise</type><question>707</question>
-<solution></solution></qa_pair>
-<qa_pair><label>4</label><type>exercise</type><question>708</question>
-<solution></solution></qa_pair>
-<qa_pair><label>5</label><type>exercise</type><question>709</question>
-<solution></solution></qa_pair>
-<qa_pair><label>6</label><type>exercise</type><question>710</question>
-<solution></solution></qa_pair>
-<qa_pair><label>7</label><type>exercise</type><question>711</question>
-<solution></solution></qa_pair>
-<qa_pair><label>8</label><type>exercise</type><question>712</question>
-<solution></solution></qa_pair>
-<qa_pair><label>9</label><type>exercise</type><question>713</question>
-<solution></solution></qa_pair>
-<qa_pair><label>10</label><type>exercise</type><question>714</question>
+<qa_pair><label>1</label><type>exercise</type><question>704,705,706,707,708,709,710,711,712,713,714</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>719</title>
+<chapter><title>717</title>
 <qa_pair><label>Worked Example 6</label><type>example</type><question>719,720</question>
 <solution>721,722,723,724,725,726,727,728</solution></qa_pair>
+</chapter>
+<chapter><title>729</title>
+<qa_pair><label>Worked Example 7</label><type>example</type><question>729</question>
+<solution></solution></qa_pair>
 </chapter>

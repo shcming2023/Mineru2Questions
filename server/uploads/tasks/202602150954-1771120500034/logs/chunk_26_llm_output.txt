@@ -2,7 +2,7 @@
 <qa_pair><label>WORKED EXAMPLE 1</label><type>example</type><question>1847,1848,1849,1850,1851,1852</question>
 <solution>1853,1854,1855,1856,1857</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 2</label><type>example</type><question>1867,1868,1869,1870,1871,1872</question>
-<solution>1873,1874,1875,1876,1879,1880,1881,1882,1883,1884,1885,1886,1887,1888,1889,1890,1891,1892,1893,1894,1895</solution></qa_pair>
+<solution>1873,1874,1875,1876,1877,1878,1879,1880,1881,1882,1883,1884,1885,1886,1887,1888,1889,1890,1891,1892,1893,1894,1895</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1897</question>
 <solution></solution></qa_pair>
 <qa_pair><label>1a</label><type>exercise</type><question>1898</question>

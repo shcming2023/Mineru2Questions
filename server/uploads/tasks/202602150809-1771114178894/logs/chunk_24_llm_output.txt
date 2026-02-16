@@ -29,7 +29,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>N</label><type>exercise</type><question>1710</question>
 <solution></solution></qa_pair>
-<qa_pair><label></label><type>exercise</type><question>1711</question>
+<qa_pair><label>1711</label><type>exercise</type><question>1711</question>
 <solution></solution></qa_pair>
 <qa_pair><label>T</label><type>exercise</type><question>1712</question>
 <solution></solution></qa_pair>

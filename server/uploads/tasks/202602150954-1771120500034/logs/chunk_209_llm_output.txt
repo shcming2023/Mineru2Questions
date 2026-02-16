@@ -59,7 +59,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>27</label><type>exercise</type><question>14697</question>
 <solution></solution></qa_pair>
-<qa_pair><label>28</label><type>exercise</type><question>14698,14699</question>
+<qa_pair><label>28</label><type>exercise</type><question>14699</question>
 <solution></solution></qa_pair>
 <qa_pair><label>29</label><type>exercise</type><question>14700</question>
 <solution></solution></qa_pair>

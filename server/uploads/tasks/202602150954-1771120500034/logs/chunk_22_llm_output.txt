@@ -9,12 +9,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>5</label><type>exercise</type><question>1598,1599,1600,1601,1602,1603,1604</question>
 <solution></solution></qa_pair>
-</chapter>
-<chapter><title>1609</title>
-<qa_pair><label>17</label><type>example</type><question>1610,1611,1612</question>
+<qa_pair><label>WORKED EXAMPLE 17</label><type>example</type><question>1609,1610,1611,1612</question>
 <solution>1613,1614,1615,1616,1617,1618,1619,1620,1621,1622,1623,1624,1625</solution></qa_pair>
-</chapter>
-<chapter><title>1627</title>
 <qa_pair><label>1</label><type>exercise</type><question>1628,1629,1630,1631,1632,1633,1634,1635,1636,1637,1638,1639</question>
 <solution></solution></qa_pair>
 </chapter>

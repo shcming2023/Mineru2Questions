@@ -9,6 +9,4 @@
 <solution></solution></qa_pair>
 <qa_pair><label>9</label><type>exercise</type><question>19092,19093,19094,19095,19096,19097,19098,19099</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 2</label><type>example</type><question>19138,19139</question>
-<solution></solution></qa_pair>
 </chapter>

@@ -51,7 +51,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>12958,12959,12960,12961</question>
 <solution></solution></qa_pair>
-<qa_pair><label>7</label><type>exercise</type><question>12962,12963,12964,12965,12966,12967</question>
+<qa_pair><label>7</label><type>exercise</type><question>12962,12963,12964,12965,12966,12967,12968</question>
 <solution></solution></qa_pair>
 <qa_pair><label>8</label><type>exercise</type><question>12972,12973,12974,12975,12976,12977,12978</question>
 <solution></solution></qa_pair>

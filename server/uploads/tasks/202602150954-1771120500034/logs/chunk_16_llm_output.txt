@@ -13,6 +13,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>1180,1181,1182,1183,1184,1185,1186,1187,1188</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 11</label><type>example</type><question>1209,1210,1211,1212</question>
+<qa_pair><label>11</label><type>example</type><question>1209,1210,1211,1212</question>
 <solution>1213,1214,1215,1216,1217,1218,1219</solution></qa_pair>
 </chapter>

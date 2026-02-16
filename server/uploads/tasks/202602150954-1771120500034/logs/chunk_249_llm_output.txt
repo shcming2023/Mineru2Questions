@@ -1,5 +1,5 @@
 <chapter><title>17481</title>
-<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>17492,17493,17494,17495,17496</question>
+<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>17491,17492,17493,17494,17495,17496</question>
 <solution>17500,17501,17502,17503,17504,17505,17506,17507,17508,17509,17510,17511,17512</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>17517,17518,17519,17520,17521</question>
 <solution></solution></qa_pair>

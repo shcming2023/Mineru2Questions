@@ -10,11 +10,7 @@
 <qa_pair><label>5</label><type>exercise</type><question>3719,3720,3721,3722</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>3655</title>
-<qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>3655,3656</question>
-<solution>3657,3658,3659,3660,3661,3662,3663,3664,3665,3666,3667</solution></qa_pair>
-</chapter>
-<chapter><title>3668</title>
-<qa_pair><label>WORKED EXAMPLE 10</label><type>example</type><question>3668,3669</question>
-<solution>3670,3671,3672,3673,3674,3675,3676,3677,3678</solution></qa_pair>
+<chapter><title>3727</title>
+<qa_pair><label>3.5</label><type>exercise</type><question>3732,3733,3734,3735,3736,3737,3738</question>
+<solution></solution></qa_pair>
 </chapter>

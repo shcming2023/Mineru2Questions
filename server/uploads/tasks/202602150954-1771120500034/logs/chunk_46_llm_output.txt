@@ -2,6 +2,12 @@
 <qa_pair><label>1</label><type>exercise</type><question>3263,3264,3265,3266,3267,3268,3269</question>
 <solution></solution></qa_pair>
 </chapter>
+<chapter><title>3270</title>
+<qa_pair><label>1</label><type>exercise</type><question>3272</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>3273</question>
+<solution></solution></qa_pair>
+</chapter>
 <chapter><title>3311</title>
 <qa_pair><label>3</label><type>example</type><question>3312,3314,3315,3316</question>
 <solution>3317</solution></qa_pair>

@@ -1,5 +1,5 @@
 <chapter><title>10570</title>
-<qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>10571,10572,10573,10574,10575</question>
+<qa_pair><label>6</label><type>example</type><question>10571,10572,10573,10574,10575</question>
 <solution>10577,10578,10579,10580,10581,10582,10583,10584</solution></qa_pair>
 </chapter>
 <chapter><title>10587</title>
@@ -126,4 +126,5 @@
 <qa_pair><label>61</label><type>exercise</type><question>10663,10667</question>
 <solution></solution></qa_pair>
 <qa_pair><label>62</label><type>exercise</type><question>10668,10669</question>
-<solution></solution></qa_pair></chapter>
+<solution></solution></qa_pair>
+</chapter>

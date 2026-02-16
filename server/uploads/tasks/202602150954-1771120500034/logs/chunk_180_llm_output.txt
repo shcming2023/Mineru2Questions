@@ -10,3 +10,7 @@
 <qa_pair><label>5</label><type>exercise</type><question>12686,12687,12688,12689,12690,12691</question>
 <solution></solution></qa_pair>
 </chapter>
+<chapter><title>12698</title>
+<qa_pair><label>1</label><type>exercise</type><question>12699</question>
+<solution></solution></qa_pair>
+</chapter>

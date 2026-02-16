@@ -13,10 +13,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>14963,14964,14965,14966,14967,14968,14969</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1</label><type>exercise</type><question>14973,14974,14975,14976,14977,14978,14979,14980,14981,14982</question>
-<solution></solution></qa_pair>
-<qa_pair><label>3</label><type>example</type><question>14998,14999,15000,15001</question>
+<qa_pair><label>1</label><type>example</type><question>14998,14999,15000,15001</question>
 <solution>15002,15003,15004,15005,15006</solution></qa_pair>
-<qa_pair><label>4</label><type>example</type><question>15007,15008,15009</question>
+<qa_pair><label>2</label><type>example</type><question>15007,15008,15009</question>
 <solution></solution></qa_pair>
 </chapter>

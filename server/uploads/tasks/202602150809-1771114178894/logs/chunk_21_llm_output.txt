@@ -39,8 +39,6 @@
 <solution></solution></qa_pair>
 <qa_pair><label>20</label><type>exercise</type><question>1522,1523,1524,1525,1526</question>
 <solution></solution></qa_pair>
-<qa_pair><label>例</label><type>example</type><question>1558,1559,1560</question>
-<solution></solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>1563</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>1564</question>
@@ -48,5 +46,9 @@
 <qa_pair><label>3</label><type>exercise</type><question>1565</question>
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>1566</question>
+<solution></solution></qa_pair>
+</chapter>
+<chapter><title>1558</title>
+<qa_pair><label>Example</label><type>example</type><question>1559,1560</question>
 <solution></solution></qa_pair>
 </chapter>

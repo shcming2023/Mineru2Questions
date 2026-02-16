@@ -17,7 +17,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>9</label><type>exercise</type><question>6989,6990,6991,6992,6993</question>
 <solution></solution></qa_pair>
-<qa_pair><label>1</label><type>exercise</type><question>6997,6998,6999,7000,7001</question>
+<qa_pair><label>1</label><type>exercise</type><question>6996,6997,6998,6999,7000,7001</question>
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>example</type><question>7017,7018,7019,7020,7021,7022</question>
 <solution>7023,7024,7025,7026,7027,7028,7029</solution></qa_pair>

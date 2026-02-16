@@ -38,8 +38,8 @@
 <qa_pair><label>7</label><type>exercise</type><question>1940</question><solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>1941,1942</question><solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>1943</question><solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>1952,1953,1954</question><solution>1958,1959,1960,1961,1962,1963</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 3 CONTINUED b</label><type>example</type><question>1967</question><solution>1968,1971,1972,1973,1974,1975</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 3 CONTINUED c</label><type>example</type><question>1969</question><solution>1970,1976,1977,1978,1979</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 3 CONTINUED d</label><type>example</type><question>1981</question><solution>1980,1982,1983,1984,1985</solution></qa_pair>
+<qa_pair><label>3</label><type>example</type><question>1952,1953,1954</question><solution>1957,1958,1959,1960,1961,1962,1963</solution></qa_pair>
+<qa_pair><label>3</label><type>example</type><question>1966,1967</question><solution>1968,1971,1972,1973,1974,1975</solution></qa_pair>
+<qa_pair><label>3</label><type>example</type><question>1969</question><solution>1970,1976,1977,1978,1979</solution></qa_pair>
+<qa_pair><label>3</label><type>example</type><question>1981</question><solution>1980,1982,1983,1984,1985</solution></qa_pair>
 </chapter>

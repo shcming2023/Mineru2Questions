@@ -10,7 +10,7 @@
 </chapter>
 <chapter><title>8634</title>
 <qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>8635,8636,8637,8638,8639,8640,8641</question>
-<solution>8643,8644,8645,8646,8647,8648,8649,8650,8651,8652,8653,8654,8655,8656,8657,8658,8659,8660</solution></qa_pair>
+<solution>8643,8644,8645,8646,8647,8648,8650,8651,8652,8653,8654,8655,8656,8657,8658,8659,8660</solution></qa_pair>
 </chapter>
 <chapter><title>8663</title>
 <qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>8664,8665,8666,8667,8668</question>

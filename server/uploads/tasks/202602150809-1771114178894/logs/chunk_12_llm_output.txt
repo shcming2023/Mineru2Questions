@@ -1,4 +1,8 @@
-<chapter><title>893</title>
+<chapter><title></title>
+<qa_pair><label>EXAMPLE 3</label><type>example</type><question>854,855,856,857</question>
+<solution>858,859,860</solution></qa_pair>
+<qa_pair><label>EXAMPLE 4</label><type>example</type><question>861,862,863,864</question>
+<solution>865,866,867,868,869,870,871,872</solution></qa_pair>
 <qa_pair><label>1</label><type>exercise</type><question>883</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>884</question>
@@ -23,13 +27,7 @@
 <solution></solution></qa_pair>
 <qa_pair><label>12</label><type>exercise</type><question>901,902</question>
 <solution></solution></qa_pair>
-<qa_pair><label>13a</label><type>exercise</type><question>903</question>
-<solution></solution></qa_pair>
-<qa_pair><label>13b</label><type>exercise</type><question>904</question>
-<solution></solution></qa_pair>
-<qa_pair><label>13c</label><type>exercise</type><question>905</question>
-<solution></solution></qa_pair>
-<qa_pair><label>13d</label><type>exercise</type><question>906</question>
+<qa_pair><label>13</label><type>exercise</type><question>903</question>
 <solution></solution></qa_pair>
 <qa_pair><label>14</label><type>exercise</type><question>907,908,909,910,911</question>
 <solution></solution></qa_pair>
@@ -53,12 +51,10 @@
 <solution></solution></qa_pair>
 <qa_pair><label>24</label><type>exercise</type><question>923</question>
 <solution></solution></qa_pair>
-<qa_pair><label>25</label><type>exercise</type><question>924</question>
+<qa_pair><label>25</label><type>exercise</type><question>924,925</question>
 <solution></solution></qa_pair>
 <qa_pair><label>26</label><type>exercise</type><question>927,928,929,930,931,932,933</question>
 <solution></solution></qa_pair>
-<qa_pair><label>27A</label><type>exercise</type><question>934,935,936</question>
-<solution></solution></qa_pair>
-<qa_pair><label>27B</label><type>exercise</type><question>937,938,939</question>
+<qa_pair><label>27</label><type>exercise</type><question>934,935,936,937,938,939</question>
 <solution></solution></qa_pair>
 </chapter>

@@ -13,7 +13,9 @@
 <solution></solution></qa_pair>
 <qa_pair><label>7</label><type>exercise</type><question>10274,10275</question>
 <solution></solution></qa_pair>
-<qa_pair><label>8</label><type>exercise</type><question>10276,10277,10278,10279,10280,10281</question>
+<qa_pair><label>8</label><type>exercise</type><question>10276,10277</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>10278,10279,10280,10281</question>
 <solution></solution></qa_pair>
 <qa_pair><label>10</label><type>exercise</type><question>10282</question>
 <solution></solution></qa_pair>

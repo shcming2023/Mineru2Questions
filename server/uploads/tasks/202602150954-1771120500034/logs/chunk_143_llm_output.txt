@@ -1,7 +1,3 @@
-<chapter><title>10021</title>
-<qa_pair><label>19</label><type>example</type><question>10021,10022,10023,10024,10025</question>
-<solution>10026,10027,10028,10029</solution></qa_pair>
-</chapter>
 <chapter><title>10030</title>
 <qa_pair><label>1</label><type>exercise</type><question>10031,10032,10033,10034,10035</question>
 <solution></solution></qa_pair>
@@ -15,10 +11,10 @@
 <solution></solution></qa_pair>
 </chapter>
 <chapter><title>10064</title>
-<qa_pair><label>20</label><type>example</type><question>10082,10083,10084,10085,10086,10087,10088,10089,10090</question>
+<qa_pair><label>WORKED EXAMPLE 19</label><type>example</type><question>10021,10022,10023,10024,10025</question>
+<solution>10026,10027,10028,10029</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 20</label><type>example</type><question>10082,10083,10084,10085,10086,10087,10088,10089,10090</question>
 <solution>10091,10092,10093,10094,10095,10096,10097,10098</solution></qa_pair>
-</chapter>
-<chapter><title>10099</title>
 <qa_pair><label>1</label><type>exercise</type><question>10100,10101,10102,10103,10104</question>
 <solution></solution></qa_pair>
 <qa_pair><label>2</label><type>exercise</type><question>10105,10106,10107,10108,10109</question>

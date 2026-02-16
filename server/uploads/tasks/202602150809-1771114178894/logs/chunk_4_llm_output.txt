@@ -31,7 +31,11 @@
 <solution></solution></qa_pair>
 <qa_pair><label>10</label><type>exercise</type><question>369,370</question>
 <solution></solution></qa_pair>
-<qa_pair><label>11</label><type>exercise</type><question>371,372,373,374</question>
+<qa_pair><label>11</label><type>exercise</type><question>371,372</question>
+<solution></solution></qa_pair>
+<qa_pair><label>a</label><type>exercise</type><question>373</question>
+<solution></solution></qa_pair>
+<qa_pair><label>b</label><type>exercise</type><question>374</question>
 <solution></solution></qa_pair>
 <qa_pair><label>12</label><type>exercise</type><question>375</question>
 <solution></solution></qa_pair>

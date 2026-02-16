@@ -11,8 +11,10 @@
 <solution></solution></qa_pair>
 <qa_pair><label>6</label><type>exercise</type><question>15663,15664</question>
 <solution></solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 17</label><type>example</type><question>15684,15685,15686,15687</question>
+</chapter>
+<chapter><title>15665</title>
+<qa_pair><label>17</label><type>example</type><question>15684,15685,15686,15687</question>
 <solution>15688,15689,15690,15691,15692,15693,15694,15695,15696</solution></qa_pair>
-<qa_pair><label>WORKED EXAMPLE 18</label><type>example</type><question>15702,15703,15704,15705,15706,15707</question>
+<qa_pair><label>18</label><type>example</type><question>15702,15703,15704,15705,15706,15707</question>
 <solution>15708,15709</solution></qa_pair>
 </chapter>

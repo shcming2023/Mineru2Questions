@@ -17,9 +17,9 @@
 <chapter><title>19951</title>
 <qa_pair><label>1</label><type>exercise</type><question>19952,19953,19954,19955,19956,19957,19958,19959,19960,19961</question>
 <solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>19962,19963</question>
+<qa_pair><label>2</label><type>exercise</type><question>19962</question>
 <solution></solution></qa_pair>
-<qa_pair><label>3</label><type>exercise</type><question>19964</question>
+<qa_pair><label>3</label><type>exercise</type><question>19963,19964</question>
 <solution></solution></qa_pair>
 <qa_pair><label>4</label><type>exercise</type><question>19965</question>
 <solution></solution></qa_pair>
@@ -35,4 +35,8 @@
 <solution></solution></qa_pair>
 <qa_pair><label>10</label><type>exercise</type><question>19976,19977</question>
 <solution></solution></qa_pair>
+</chapter>
+<chapter><title>19933</title>
+<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>19934</question>
+<solution>19935,19936,19937,19938,19939,19940,19941,19942,19943,19944,19945,19946,19947,19948,19949,19950</solution></qa_pair>
 </chapter>

@@ -50,7 +50,7 @@
 <qa_pair><label>25</label><type>exercise</type><question>17351,17352,17358</question>
 <solution></solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>17302,17303,17304</question>
-<solution>17305,17306,17307,17308,17309,17310,17311,17312,17313,17314,17315,17316,17317,17318,17319,17320,17321,17322</solution></qa_pair>
+<solution>17306,17307,17308,17309,17310,17311,17312,17313,17314,17315,17316,17317,17318,17319,17320,17321,17322</solution></qa_pair>
 <qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>17379,17380</question>
 <solution>17381,17382,17383,17384,17385,17386,17387,17388,17389</solution></qa_pair>
 </chapter>

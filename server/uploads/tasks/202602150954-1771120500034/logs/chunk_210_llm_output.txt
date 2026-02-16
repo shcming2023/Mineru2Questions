@@ -36,7 +36,3 @@
 <qa_pair><label>18</label><type>exercise</type><question>14784,14785</question>
 <solution></solution></qa_pair>
 </chapter>
-<chapter><title>14786</title>
-<qa_pair><label>GETTING STARTED</label><type>exercise</type><question>14799</question>
-<solution></solution></qa_pair>
-</chapter>

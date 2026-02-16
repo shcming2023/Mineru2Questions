@@ -17,8 +17,4 @@
 <solution></solution></qa_pair>
 <qa_pair><label>3</label><type>exercise</type><question>4489</question>
 <solution></solution></qa_pair>
-<qa_pair><label>REFLECTION</label><type>exercise</type><question>4493,4494,4495,4496,4497,4498</question>
-<solution></solution></qa_pair>
-<qa_pair><label>Pie charts</label><type>example</type><question>4499,4500,4501,4502,4503,4504,4505,4506,4507,4508,4509</question>
-<solution></solution></qa_pair>
 </chapter>
