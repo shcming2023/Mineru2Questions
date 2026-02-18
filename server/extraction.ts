@@ -265,10 +265,26 @@ export async function extractQuestions(
       preTitle.trim().length > 0 &&
       isTitleValid(preTitle);
 
-    if (preIsValid) {
+    const cfg = getTitleValidationConfig();
+    const structuralPatterns = cfg.structuralPatterns ?? [];
+    const preMatchesStructural = preIsValid && structuralPatterns.some(p => new RegExp(p).test(preTitle as string));
+    const llmMatchesStructural = llmIsValid && structuralPatterns.some(p => new RegExp(p).test(llmTitle as string));
+    const preHasPath = preIsValid && (preTitle as string).includes(' > ');
+
+    if (preIsValid && !llmIsValid) {
       q.chapter_title = preTitle as string;
-    } else if (llmIsValid) {
+    } else if (!preIsValid && llmIsValid) {
       q.chapter_title = llmTitle as string;
+    } else if (preIsValid && llmIsValid) {
+      if (preMatchesStructural && !llmMatchesStructural) {
+        q.chapter_title = preTitle as string;
+      } else if (!preMatchesStructural && llmMatchesStructural) {
+        q.chapter_title = llmTitle as string;
+      } else if (preHasPath) {
+        q.chapter_title = preTitle as string;
+      } else {
+        q.chapter_title = llmTitle as string;
+      }
     } else {
       q.chapter_title = "";
     }
@@ -377,8 +393,22 @@ function isTitleValid(title: string | undefined): boolean {
   const t = title.trim();
   if (!t) return false;
   if (cfg.noisePatterns && cfg.noisePatterns.some(k => t.includes(k))) return false;
-  if (cfg.structuralPatterns && cfg.structuralPatterns.length > 0) {
-    const ok = cfg.structuralPatterns.some(p => new RegExp(p).test(t));
+  const minLen = Number(process.env.CHAPTER_TITLE_MIN_LENGTH ?? 2);
+  const maxLen = Number(process.env.CHAPTER_TITLE_MAX_LENGTH ?? 120);
+  const maxWords = Number(process.env.CHAPTER_TITLE_MAX_WORDS ?? 16);
+  const maxDigitRatio = Number(process.env.CHAPTER_TITLE_MAX_DIGIT_RATIO ?? 0.5);
+  if (t.length < minLen || t.length > maxLen) return false;
+  const wordCount = t.split(/\s+/).filter(Boolean).length;
+  if (wordCount > maxWords) return false;
+  const digitCount = (t.match(/\d/g) ?? []).length;
+  const digitRatio = t.length > 0 ? digitCount / t.length : 0;
+  const structuralPatterns = cfg.structuralPatterns ?? [];
+  const isStructural = structuralPatterns.some(p => new RegExp(p).test(t));
+  if (digitRatio > maxDigitRatio && !isStructural) return false;
+  if (/^(simplify|solve|find|calculate|evaluate|show|prove|determine|given|use|draw|write|work\s+out)\b/i.test(t) && !isStructural) return false;
+  if (/[=<>$]|\\frac|\\sqrt|\\sum|\\int/.test(t) && !isStructural) return false;
+  if (structuralPatterns.length > 0) {
+    const ok = structuralPatterns.some(p => new RegExp(p).test(t));
     if (ok) return true;
   }
   return true;

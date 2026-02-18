@@ -329,6 +329,7 @@ export class QuestionParser {
     const idList = ids.split(',').map(id => parseInt(id.trim(), 10));
     const textParts: string[] = [];
     const images: string[] = [];
+    const maxEquationLength = Number(process.env.MAX_EQUATION_LENGTH ?? 4096);
 
     for (const id of idList) {
       const block = this.blocks.find(b => b.id === id);
@@ -345,8 +346,11 @@ export class QuestionParser {
         textParts.push(`![${caption}](${block.img_path})`);
         
       } else if (block.text) {
-        // 只要有 text 字段就提取，支持 text, equation, table row 等
-        textParts.push(block.text);
+        let text = block.text;
+        if (block.type === 'equation' && maxEquationLength > 0 && text.length > maxEquationLength) {
+          text = `${text.slice(0, maxEquationLength)}... [超长公式已截断]`;
+        }
+        textParts.push(text);
       }
     }
 

@@ -143,7 +143,9 @@ function formatFullText(blocks: FlatBlock[]): string {
     const truncated = cleanText.length > limit ? cleanText.substring(0, limit) + '...' : cleanText;
 
     // 4. 构建行
-    const typeTag = b.type === 'header' ? 'H' : (b.text_level === 1 ? 'T1' : '');
+    const typeTag = b.type === 'header'
+      ? 'H'
+      : (b.text_level !== null && b.text_level !== undefined ? `T${b.text_level}` : '');
     const tag = typeTag ? `${b.id}|p${b.page_idx}|${typeTag}` : `${b.id}|p${b.page_idx}`;
     lines.push(`[${tag}] ${truncated}`);
   }
@@ -236,6 +238,14 @@ function buildExtractionPrompt(fullText: string, totalBlocks: number, totalPages
 ## Task
 Analyze the FULL TEXT of an educational document and identify ALL structural chapter/section headings.
 Each line is a text block: [ID|pageNumber|optionalTypeTag] text
+optionalTypeTag may include:
+- T1/T2/T3: text_level hints from OCR (higher likelihood of headings)
+- H: explicit heading marker
+
+## High-Confidence Heading Signals
+- Lines tagged with T1/T2/T3 or H
+- Short, title-like lines (usually < 120 chars)
+- Lines with explicit structure markers (Chapter, Unit, Module, Part, 1.1, 2.3.4)
 
 ## CRITICAL: Table of Contents vs. Document Body
 The first few pages may contain a TABLE OF CONTENTS (listing chapter names with page numbers).
@@ -260,6 +270,8 @@ Table of contents signs (IGNORE these):
 - The actual Table of Contents list itself
 - Instructional labels: "Key points", "Tip", "Note", "Activity", "Exercise", "Q&A"
 - Problem type labels: "Question 1", "Section A", "Multiple Choice"
+- Question statements or solution steps (e.g., "Simplify...", "Show the steps...", equations)
+- Figure/table captions and diagram descriptions
 - Running headers/footers (often repeated at top/bottom of pages)
 
 ## Hierarchy (Map to logical levels)
@@ -452,7 +464,11 @@ function tryRepairJSON(raw: string): any {
   throw new Error('Failed to repair truncated JSON');
 }
 
-function parseLLMOutput(raw: string, validIds: Set<number>): { entries: DirectoryEntry[]; warnings: string[] } {
+function parseLLMOutput(
+  raw: string,
+  validIds: Set<number>,
+  indexToId?: number[]
+): { entries: DirectoryEntry[]; warnings: string[] } {
   const warnings: string[] = [];
 
   let parsed: any;
@@ -476,7 +492,13 @@ function parseLLMOutput(raw: string, validIds: Set<number>): { entries: Director
   const outputIdsList: number[] = rawEntries
     .map((e: any) => Array.isArray(e.id) ? e.id[0] : e.id)
     .filter((id: any) => typeof id === 'number') as number[];
-  if (outputIdsList.length > 0) {
+  if (outputIdsList.length > 0 && indexToId && indexToId.length > 0) {
+    const outOfRange = outputIdsList.filter(id => !validIds.has(id));
+    const looksLocal = outOfRange.length > 0 && outOfRange.every(id => id >= 0 && id < indexToId.length);
+    if (looksLocal) {
+      warnings.push('ID space drift detected: mapping local indices to global IDs.');
+    }
+  } else if (outputIdsList.length > 0) {
     const validIdsList = Array.from(validIds.values());
     const minValid = Math.min(...validIdsList);
     const maxOutput = Math.max(...outputIdsList);
@@ -494,18 +516,35 @@ function parseLLMOutput(raw: string, validIds: Set<number>): { entries: Director
   const entries: DirectoryEntry[] = [];
   let invalidCount = 0;
 
+  const mapId = (value: number): number | null => {
+    if (validIds.has(value)) return value;
+    if (indexToId && value >= 0 && value < indexToId.length) {
+      return indexToId[value];
+    }
+    return null;
+  };
+
   for (const item of rawEntries) {
     const id = item.id;
     if (typeof id === 'number') {
-      if (!validIds.has(id)) { invalidCount++; continue; }
+      const mapped = mapId(id);
+      if (mapped === null) { invalidCount++; continue; }
+      item.id = mapped;
     } else if (Array.isArray(id)) {
-      if (typeof id[0] !== 'number' || !validIds.has(id[0])) { invalidCount++; continue; }
+      const mappedIds: number[] = [];
+      for (const entryId of id) {
+        if (typeof entryId !== 'number') continue;
+        const mapped = mapId(entryId);
+        if (mapped !== null) mappedIds.push(mapped);
+      }
+      if (mappedIds.length === 0) { invalidCount++; continue; }
+      item.id = mappedIds;
     } else { invalidCount++; continue; }
 
     const level = item.level;
     if (typeof level !== 'number' || level < 1 || level > 3) continue;
 
-    entries.push({ id, level, title: (item.title ?? '').trim() });
+    entries.push({ id: item.id, level, title: (item.title ?? '').trim() });
   }
 
   if (invalidCount > 0) warnings.push(`${invalidCount} entries with invalid IDs removed`);
@@ -531,9 +570,12 @@ function postProcessCleanup(entries: DirectoryEntry[], blocks: FlatBlock[]): Dir
   const blockMap = new Map<number, FlatBlock>();
   for (const b of blocks) blockMap.set(b.id, b);
 
-  // 可配置的噪声模式
+  const minTitleLength = Number(process.env.CHAPTER_TITLE_MIN_LENGTH ?? 2);
+  const maxTitleLength = Number(process.env.CHAPTER_TITLE_MAX_LENGTH ?? 120);
+  const maxWords = Number(process.env.CHAPTER_TITLE_MAX_WORDS ?? 16);
+  const maxDigitRatio = Number(process.env.CHAPTER_TITLE_MAX_DIGIT_RATIO ?? 0.5);
+
   const noisePatterns = [
-    // 中文噪声
     /^要点归纳$/,
     /^疑难分析$/,
     /^基础训练$/,
@@ -543,29 +585,53 @@ function postProcessCleanup(entries: DirectoryEntry[], blocks: FlatBlock[]): Dir
     /^例题?\s*\d/,
     /^练习\s*\d/,
     /^习题\s*\d/,
-    
-    // English Noise Patterns (Conservative)
+
     /^Key\s+Points$/i,
     /^Tip$/i,
     /^Note$/i,
     /^Activity\s*\d*$/i,
     /^Exercise\s*\d*$/i,
+    /^Exercises\s*\d*$/i,
     /^Q\s*&\s*A$/i,
     /^Multiple\s+Choice$/i,
-    /^Section\s+[A-Z]$/i, // Section A, Section B usually part of exercises
+    /^Section\s+[A-Z]$/i,
     /^Question\s*\d+$/i,
+    /^Example\s*\d*/i,
+    /^Practice\s*(Test|Questions)?/i,
+    /^Past\s+paper\s+questions?/i,
   ];
+
+  const structuralTokens = /(chapter|unit|module|part|section|lesson|topic|appendix|glossary|index|review|summary|preface|introduction|foreword)/i;
+  const questionVerbPattern = /^(simplify|solve|find|calculate|evaluate|show|prove|determine|given|use|draw|write|work\s+out)\b/i;
+  const equationPattern = /[=<>$]|\\frac|\\sqrt|\\sum|\\int/;
 
   return entries.filter(e => {
     const pid = Array.isArray(e.id) ? e.id[0] : e.id;
-    const text = blockMap.get(pid)?.text ?? e.title;
+    const text = (blockMap.get(pid)?.text ?? e.title).trim();
     for (const p of noisePatterns) {
-      if (p.test(text.trim())) {
+      if (p.test(text)) {
         return false;
       }
     }
-    // 空文本条目
-    if (!text.trim() && !e.title.trim()) {
+    if (!text && !e.title.trim()) {
+      return false;
+    }
+    if (text.length < minTitleLength || text.length > maxTitleLength) {
+      return false;
+    }
+    const wordCount = text.split(/\s+/).filter(Boolean).length;
+    if (wordCount > maxWords) {
+      return false;
+    }
+    const digitCount = (text.match(/\d/g) ?? []).length;
+    const digitRatio = text.length > 0 ? digitCount / text.length : 0;
+    if (digitRatio > maxDigitRatio && !structuralTokens.test(text)) {
+      return false;
+    }
+    if (questionVerbPattern.test(text) && !structuralTokens.test(text)) {
+      return false;
+    }
+    if (equationPattern.test(text) && !structuralTokens.test(text)) {
       return false;
     }
     return true;
@@ -791,7 +857,8 @@ export async function preprocessChapters(
           // Debug: Write chunk response to file
           fs.writeFileSync(path.join(debugDir, `chapter_chunk_${idx + 1}_response_attempt${attempt}.json`), llmRaw);
           
-          const { entries, warnings } = parseLLMOutput(llmRaw, chunkValidIds);
+          const { entries, warnings } = parseLLMOutput(llmRaw, chunkValidIds, chunkBlocks.map(b => b.id));
+          for (const w of warnings) console.warn(`[ChapterPreprocess] [WARN] ${w}`);
           chunkEntries = entries;
           break;
         } catch (err: any) {
@@ -903,7 +970,8 @@ export async function preprocessChapters(
       for (let attempt = 1; attempt <= 2; attempt++) {
         try {
           const llmRaw = await callChapterLLM(chunkPrompt, llmConfig);
-          const { entries } = parseLLMOutput(llmRaw, chunkValidIds);
+          const { entries, warnings } = parseLLMOutput(llmRaw, chunkValidIds, chunkBlocks.map(b => b.id));
+          for (const w of warnings) console.warn(`[ChapterPreprocess] [WARN] ${w}`);
           
           if (entries.length >= relevantEntries.length * 0.5) { // 分块校验容忍度稍高
             chunkVerified = entries;
