@@ -1,0 +1,18 @@
+<chapter><title>11422</title>
+<qa_pair><label>WORKED EXAMPLE 1</label><type>example</type><question>11432,11433,11434,11435,11436,11437</question>
+<solution>11438,11439,11440,11441,11442,11443,11444,11445</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 2</label><type>example</type><question>11450,11451,11452</question>
+<solution>11453,11454,11455,11456,11457,11458</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 3</label><type>example</type><question>11496,11497,11498</question>
+<solution>11499,11500,11501,11502</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 4</label><type>example</type><question>11507,11508,11509</question>
+<solution></solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>11465,11466,11467,11468,11469,11470</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>11473,11474,11475,11476,11477,11478</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>11479,11480,11481,11482,11483,11484,11485,11486,11487</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>11488,11489,11490,11491,11492,11493</question>
+<solution></solution></qa_pair>
+</chapter>

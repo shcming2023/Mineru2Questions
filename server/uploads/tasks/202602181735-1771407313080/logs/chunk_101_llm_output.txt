@@ -1,0 +1,6 @@
+<chapter><title></title>
+<qa_pair><label>4</label><type>exercise</type><question>7071,7072,7073,7074,7075,7076,7077,7078,7079</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>7084,7085,7086,7087,7088,7089,7090,7091,7092,7093</question>
+<solution></solution></qa_pair>
+</chapter>

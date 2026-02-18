@@ -1,0 +1,26 @@
+<chapter><title>20129</title>
+<qa_pair><label>5</label><type>exercise</type><question>20090</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>20091</question>
+<solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>20093,20094</question>
+<solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>20095,20096,20097,20098,20099</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9</label><type>exercise</type><question>20101,20102,20103,20104,20105,20106,20107,20108,20109,20110,20111,20112,20113,20114</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 11</label><type>example</type><question>20132,20133</question>
+<solution>20134,20135,20136,20137,20138,20139</solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>20143,20144,20145,20146</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>20148,20149,20150</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>20151,20152,20153,20154</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>20166,20167</question>
+<solution>20168,20169,20170,20171,20172,20173</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>20178,20179</question>
+<solution>20180,20181,20182,20183,20184,20185</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>20186,20187</question>
+<solution>20188,20189</solution></qa_pair>
+</chapter>

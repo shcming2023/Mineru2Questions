@@ -1,0 +1,34 @@
+<chapter><title></title>
+<qa_pair><label>c</label><type>exercise</type><question>23310,23311,23312,23313,23314,23315</question>
+<solution></solution></qa_pair>
+<qa_pair><label>d</label><type>exercise</type><question>23316,23317,23318</question>
+<solution></solution></qa_pair>
+<qa_pair><label>e</label><type>exercise</type><question>23319,23320</question>
+<solution></solution></qa_pair>
+<qa_pair><label>20</label><type>exercise</type><question>23322,23323,23324</question>
+<solution></solution></qa_pair>
+<qa_pair><label>b</label><type>exercise</type><question>23325,23326</question>
+<solution></solution></qa_pair>
+<qa_pair><label>c</label><type>exercise</type><question>23327,23328,23329</question>
+<solution></solution></qa_pair>
+<qa_pair><label>d</label><type>exercise</type><question>23330,23331</question>
+<solution></solution></qa_pair>
+<qa_pair><label>21</label><type>exercise</type><question>23333,23334,23335,23336</question>
+<solution></solution></qa_pair>
+<qa_pair><label>a i</label><type>exercise</type><question>23337,23338</question>
+<solution></solution></qa_pair>
+<qa_pair><label>ii</label><type>exercise</type><question>23339,23340</question>
+<solution></solution></qa_pair>
+<qa_pair><label>One boy</label><type>exercise</type><question>23341,23342,23343</question>
+<solution></solution></qa_pair>
+<qa_pair><label>ii</label><type>exercise</type><question>23344,23345,23346</question>
+<solution></solution></qa_pair>
+<qa_pair><label>c i</label><type>exercise</type><question>23347,23348,23349,23350</question>
+<solution></solution></qa_pair>
+<qa_pair><label>ii</label><type>exercise</type><question>23351,23352,23353</question>
+<solution></solution></qa_pair>
+<qa_pair><label>d</label><type>exercise</type><question>23354,23355,23356</question>
+<solution></solution></qa_pair>
+<qa_pair><label>ii</label><type>exercise</type><question>23357,23358</question>
+<solution></solution></qa_pair>
+</chapter>
