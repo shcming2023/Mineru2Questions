@@ -1,4 +1,0 @@
-<chapter><title>13816</title>
-<qa_pair><label>1</label><type>exercise</type><question>13819</question>
-<solution></solution></qa_pair>
-</chapter>

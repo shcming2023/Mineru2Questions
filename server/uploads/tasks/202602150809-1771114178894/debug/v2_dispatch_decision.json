@@ -1,6 +1,0 @@
-{
-  "useTOC": false,
-  "usePattern": true,
-  "useLLM": true,
-  "reason": "无 TOC, 大文档 (78 pages), 使用 Pattern+LLM 双轨道（LLM 仅扫描间隙）"
-}

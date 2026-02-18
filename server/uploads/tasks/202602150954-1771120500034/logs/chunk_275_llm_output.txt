@@ -1,6 +1,0 @@
-<chapter><title>19337</title>
-<qa_pair><label>1</label><type>exercise</type><question>19338,19339,19340,19341,19342,19343,19344</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>19345,19346,19347,19348,19349</question>
-<solution></solution></qa_pair>
-</chapter>

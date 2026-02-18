@@ -1,0 +1,6 @@
+<chapter><title>2376</title>
+<qa_pair><label>WORKED EXAMPLE 9</label><type>example</type><question>2385,2386,2387,2388,2389,2390</question>
+<solution>2391,2392,2393,2394,2395,2396,2397,2398,2401,2402,2403,2404,2405</solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>2406,2407,2408</question>
+<solution></solution></qa_pair>
+</chapter>

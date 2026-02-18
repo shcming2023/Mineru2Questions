@@ -1,0 +1,64 @@
+<chapter><title>5075</title>
+<qa_pair><label>1</label><type>exercise</type><question>5077</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>5078</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>5079</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>5080</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>5081</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>5082</question>
+<solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>5083</question>
+<solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>5084</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9a</label><type>exercise</type><question>5085</question>
+<solution></solution></qa_pair>
+<qa_pair><label>9b</label><type>exercise</type><question>5086</question>
+<solution></solution></qa_pair>
+</chapter>
+<chapter><title>5113</title>
+<qa_pair><label>1</label><type>exercise</type><question>5115</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>5116</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>5117</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>5118</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>5119</question>
+<solution></solution></qa_pair>
+<qa_pair><label>6</label><type>exercise</type><question>5120</question>
+<solution></solution></qa_pair>
+<qa_pair><label>7</label><type>exercise</type><question>5121</question>
+<solution></solution></qa_pair>
+<qa_pair><label>8</label><type>exercise</type><question>5122</question>
+<solution></solution></qa_pair>
+</chapter>
+<chapter><title>5051</title>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>5051,5052,5053</question>
+<solution>5058,5059,5060,5061</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>5054</question>
+<solution>5062,5063,5064,5065</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>5055</question>
+<solution>5067,5068,5069,5070,5071</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 5</label><type>example</type><question>5056</question>
+<solution>5072,5073,5074</solution></qa_pair>
+</chapter>
+<chapter><title>5091</title>
+<qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>5091,5092,5093</question>
+<solution>5097,5098,5099,5100</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>5094</question>
+<solution>5104,5105,5106,5107</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 6</label><type>example</type><question>5095</question>
+<solution>5108,5109,5110,5111,5112</solution></qa_pair>
+</chapter>
+<chapter><title>5125</title>
+<qa_pair><label>WORKED EXAMPLE 7</label><type>example</type><question>5125,5126</question>
+<solution>5127,5128</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 8</label><type>example</type><question>5129,5130</question>
+<solution>5131,5132,5133</solution></qa_pair>
+</chapter>
