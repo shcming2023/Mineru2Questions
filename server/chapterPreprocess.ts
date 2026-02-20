@@ -133,11 +133,6 @@ function formatFullText(blocks: FlatBlock[]): string {
     // 3. 智能截断
     // 标题通常较短且可能有 text_level 标记
     // 即使没有标记，超过 100 字符的段落几乎不可能是标题
-    const isPotentialHeader = 
-      b.type === 'header' || 
-      (b.text_level !== null && b.text_level !== undefined) ||
-      cleanText.length < 100;
-
     // 标题保留更多上下文 (200)，正文适度截断 (200) 以保留上下文
     const limit = 200;
     const truncated = cleanText.length > limit ? cleanText.substring(0, limit) + '...' : cleanText;

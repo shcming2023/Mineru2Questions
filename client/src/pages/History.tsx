@@ -32,7 +32,7 @@ export default function History() {
   const { data: tasks, isLoading } = trpc.task.list.useQuery();
   
   const retryMutation = trpc.task.retry.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success("任务重试已启动", {
         description: "已创建新的重试任务并开始执行",
       });

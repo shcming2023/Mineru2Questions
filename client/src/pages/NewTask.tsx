@@ -41,7 +41,6 @@ export default function NewTask() {
   const [folderStructure, setFolderStructure] = useState<FolderStructure | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: string }>({});
   
   const { data: configs } = trpc.llmConfig.list.useQuery();
   const uploadFileMutation = trpc.upload.uploadFile.useMutation();
@@ -202,7 +201,6 @@ export default function NewTask() {
         setUploadProgress(Math.round((completed / filesToUpload.length) * 100));
       }
 
-      setUploadedFiles(uploaded);
       toast.success("文件上传完成");
       
       // 创建任务

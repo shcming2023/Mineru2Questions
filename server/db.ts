@@ -7,7 +7,7 @@ import {
   extractionTasks, InsertExtractionTask, ExtractionTask,
   pageProcessingLogs, InsertPageProcessingLog, PageProcessingLog,
   taskLogs, InsertTaskLog, TaskLog,
-  auditLogs, InsertAuditLog, AuditLog
+  auditLogs, InsertAuditLog
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 

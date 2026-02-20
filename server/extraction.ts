@@ -79,7 +79,6 @@ interface Chunk {
 
 const MAX_CHUNK_SIZE = 100;        // 每个 chunk 最多包含 100 个 block
 const OVERLAP_SIZE = 30;           // 重叠窗口大小，避免题目被切断 (Increased to 30 as per Test 3 report)
-const NEAR_DISTANCE_THRESHOLD = 50; // 近距离答案阈值（block 数量）
 
 // ============= 核心流水线函数 =============
 
@@ -823,6 +822,6 @@ export function cancelTask(taskId: number): void {
   console.warn(`[Task ${taskId}] cancelTask called (deprecated in v1.1)`);
 }
 
-export function isTaskPaused(taskId: number): boolean {
+export function isTaskPaused(_taskId: number): boolean {
   return false;
 }

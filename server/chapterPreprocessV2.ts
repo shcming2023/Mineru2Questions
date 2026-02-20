@@ -58,17 +58,6 @@ interface AnchorPoint {
   sources?: string[];      // 多轨道融合时的所有来源
 }
 
-/** 章节边界（最终输出的中间表示） */
-interface ChapterBoundary {
-  title: string;
-  level: number;
-  startBlockId: number;
-  endBlockId: number;      // exclusive
-  page: number;
-  confidence: number;
-  sources: string[];       // 哪些轨道贡献了这个结果
-}
-
 /** 调度器决策 */
 interface DispatchDecision {
   useTOC: boolean;
@@ -836,7 +825,6 @@ If no headings are found, respond: {"headings": []}`;
  */
 function dispatch(blocks: FlatBlock[], tocPages: number[]): DispatchDecision {
   const hasTOC = tocPages.length > 0;
-  const totalBlocks = blocks.length;
   const totalPages = Math.max(...blocks.map(b => b.page_idx ?? 0)) + 1;
 
   if (hasTOC) {
@@ -885,7 +873,7 @@ function mergeAnchors(allAnchors: AnchorPoint[]): AnchorPoint[] {
   }
 
   const merged: AnchorPoint[] = [];
-  for (const [blockId, group] of byBlock) {
+  for (const [, group] of byBlock) {
     if (group.length === 1) {
       merged.push(group[0]);
     } else {

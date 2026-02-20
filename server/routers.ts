@@ -20,7 +20,6 @@ import {
   createPageProcessingLogs,
   getPageProcessingLogsByTask,
   updatePageProcessingLog,
-  getPendingPageLogs,
   getFailedPageLogs,
   getTaskLogs
 } from "./db";
@@ -367,7 +366,7 @@ const taskRouter = router({
       currentPage: z.number(),
       estimatedTimeRemaining: z.number().optional()
     }))
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       await updateExtractionTask(input.id, {
         processedPages: input.processedPages,
         currentPage: input.currentPage,

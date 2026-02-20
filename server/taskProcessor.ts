@@ -17,7 +17,6 @@ import {
   getLLMConfigById,
   logTaskProgress
 } from './db';
-import { storageGet } from './storage';
 import {
   extractQuestions,
   exportToJSON,
@@ -25,7 +24,6 @@ import {
   LLMConfig
 } from './extraction';
 import {
-  preprocessChapters,
   ChapterLLMConfig,
   ChapterPreprocessResult
 } from './chapterPreprocess';
@@ -151,7 +149,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       taskDir, 
       config,
       chapterResult?.flatMap ?? null,
-      async (progress, message, stats) => {
+      async (_progress, message, stats) => {
         if (stats?.currentChunk && stats?.totalChunks) {
           lastProgress.currentChunk = stats.currentChunk;
           lastProgress.totalChunks = stats.totalChunks;

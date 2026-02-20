@@ -1,6 +1,0 @@
-<chapter><title>4820</title>
-<qa_pair><label>1</label><type>exercise</type><question>4841,4842,4843</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>4844,4845,4846</question>
-<solution></solution></qa_pair>
-</chapter>

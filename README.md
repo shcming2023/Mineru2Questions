@@ -60,12 +60,25 @@ npm install
 
 ### 2. 配置环境变量
 
-创建 `.env` 文件：
+复制 `config/.env.example` 到项目根目录 `.env`，将 `<REPLACE_ME>` 替换为真实值。
 
 ```env
-OPENAI_API_KEY=your_api_key_here
-OPENAI_API_URL=https://api.openai.com/v1/chat/completions
-OPENAI_MODEL_NAME=gpt-4
+VITE_APP_ID=<REPLACE_ME>
+VITE_OAUTH_PORTAL_URL=<REPLACE_ME>
+JWT_SECRET=<REPLACE_ME>
+DATABASE_URL=sqlite.db
+OAUTH_SERVER_URL=<REPLACE_ME>
+OWNER_OPEN_ID=<REPLACE_ME>
+BUILT_IN_FORGE_API_URL=https://forge.manus.im
+BUILT_IN_FORGE_API_KEY=<REPLACE_ME>
+VITE_ANALYTICS_ENDPOINT=
+VITE_ANALYTICS_WEBSITE_ID=
+OPENAI_API_KEY=<REPLACE_ME>
+OPENAI_BASE_URL=https://api.openai.com/v1
+LLM_API_URL=https://api.openai.com/v1
+LLM_API_KEY=<REPLACE_ME>
+PORT=3000
+NODE_ENV=development
 ```
 
 ### 3. 准备输入数据
@@ -110,8 +123,8 @@ uploads/tasks/<task_id>/results/
   - [x] 双重容错解析 (Strict/Lenient)
   - [x] LLM 注意力衰减检测
 - [x] **P2: 工程优化**
-  - [x] 引入单元测试脚本 (`verify_revisions.ts`)
-  - [x] 依赖锁定 (`package-lock.json`)
+  - [x] 引入单元测试 (`vitest`)
+  - [x] 依赖锁定 (`pnpm-lock.yaml`)
 
 ### 后续迭代 (v1.6+)
 
@@ -123,7 +136,7 @@ uploads/tasks/<task_id>/results/
 
 ## 参考文档
 
-- [算子对齐实施记录](docs/ALIGNMENT_IMPLEMENTATION_LOG.md)
+- [算子对齐实施记录](docs/2026-02-alignment/2026-02-12_alignment_v0_aligned.md)
 - [DataFlow 官方仓库](https://github.com/OpenDCAI/DataFlow)
 
 ---

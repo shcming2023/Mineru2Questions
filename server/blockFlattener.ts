@@ -17,7 +17,7 @@
  * @module blockFlattener
  */
 
-import { ContentBlock, ConvertedBlock } from './types';
+import { ConvertedBlock } from './types';
 
 /**
  * 扩展的展平 block 类型（包含章节预处理需要的额外字段）

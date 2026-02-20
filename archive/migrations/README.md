@@ -1,0 +1,12 @@
+| 文件 | 归档原因 | 归档日期 |
+| --- | --- | --- |
+| 0000_nebulous_sleeper.sql | 历史迁移，生产已不再依赖 | 2026-02-20 |
+| 0001_gigantic_moondragon.sql | 历史迁移，生产已不再依赖 | 2026-02-20 |
+| 0002_mature_ser_duncan.sql | 历史迁移，生产已不再依赖 | 2026-02-20 |
+| 0003_round_thunderball.sql | 历史迁移，生产已不再依赖 | 2026-02-20 |
+| 0004_worthless_iron_man.sql | 历史迁移，生产已不再依赖 | 2026-02-20 |
+| meta/0000_snapshot.json | 历史快照，生产已不再依赖 | 2026-02-20 |
+| meta/0001_snapshot.json | 历史快照，生产已不再依赖 | 2026-02-20 |
+| meta/0002_snapshot.json | 历史快照，生产已不再依赖 | 2026-02-20 |
+| meta/0003_snapshot.json | 历史快照，生产已不再依赖 | 2026-02-20 |
+| meta/0004_snapshot.json | 历史快照，生产已不再依赖 | 2026-02-20 |

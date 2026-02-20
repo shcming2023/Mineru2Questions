@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { trpc } from "@/lib/trpc";
-import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, CheckCircle, Info, AlertTriangle, Clock, Cpu, Zap, ChevronLeft, ChevronRight, History as HistoryIcon, GitCompare } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Download, Loader2, FileJson, FileText, RefreshCw, Terminal, AlertCircle, Info, AlertTriangle, Cpu, ChevronLeft, ChevronRight, History as HistoryIcon, GitCompare } from "lucide-react";
 import { useLocation, useParams } from "wouter";
 import { toast } from "sonner";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -39,7 +39,7 @@ export default function TaskDetail() {
   const [activeTab, setActiveTab] = useState<"status" | "logs" | "results" | "history">("status");
   const [autoScroll, setAutoScroll] = useState(true);
   const [resultPage, setResultPage] = useState(1);
-  const [resultPageSize, setResultPageSize] = useState(10);
+  const [resultPageSize] = useState(10);
   const [selectedTasks, setSelectedTasks] = useState<number[]>([]);
   const logsEndRef = useRef<HTMLDivElement>(null);
   
@@ -58,17 +58,12 @@ export default function TaskDetail() {
     { enabled: taskId > 0 }
   );
   
-  const { data: pageLogs } = trpc.task.getPageLogs.useQuery(
-    { taskId },
-    { enabled: taskId > 0 }
-  );
-  
   // 获取详细处理日志
   const { data: taskLogs, refetch: refetchLogs } = trpc.task.getLogs.useQuery(
     { taskId, limit: 200 },
     { 
       enabled: taskId > 0,
-      refetchInterval: (query) => {
+      refetchInterval: () => {
         return task?.status === "processing" ? 2000 : false;
       }
     }
