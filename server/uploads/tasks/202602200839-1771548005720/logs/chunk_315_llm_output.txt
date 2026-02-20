@@ -1,0 +1,44 @@
+<chapter><title>22053</title>
+<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>22068,22069,22070</question>
+<solution>22071,22072,22073,22074,22075</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>22076,22077,22078</question>
+<solution>22079,22080</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>22085,22086,22087</question>
+<solution>22088,22089,22090</solution></qa_pair>
+<qa_pair><label>1</label><type>exercise</type><question>22092,22093</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>22094</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2a</label><type>exercise</type><question>22095</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2b</label><type>exercise</type><question>22096</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2c</label><type>exercise</type><question>22097</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2d</label><type>exercise</type><question>22098</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2e</label><type>exercise</type><question>22099</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2f</label><type>exercise</type><question>22100</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2g</label><type>exercise</type><question>22101</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2h</label><type>exercise</type><question>22102</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2i</label><type>exercise</type><question>22103</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2j</label><type>exercise</type><question>22104</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2k</label><type>exercise</type><question>22105</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2l</label><type>exercise</type><question>22106</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>22107,22108,22109,22110,22111,22112</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>22113,22114,22115,22116,22117,22118,22119</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 15</label><type>example</type><question>22142,22143</question>
+<solution>22144,22145</solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 16</label><type>example</type><question>22146,22147</question>
+<solution>22148,22149</solution></qa_pair>
+</chapter>

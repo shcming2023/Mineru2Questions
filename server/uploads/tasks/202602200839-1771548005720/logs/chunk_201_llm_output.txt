@@ -1,0 +1,22 @@
+<chapter><title>14105</title>
+<qa_pair><label>1</label><type>exercise</type><question>14158</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>14159</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>14160</question>
+<solution></solution></qa_pair>
+<qa_pair><label>4</label><type>exercise</type><question>14161,14162,14163,14164,14165,14166,14167,14168</question>
+<solution></solution></qa_pair>
+<qa_pair><label>5</label><type>exercise</type><question>14169</question>
+<solution></solution></qa_pair>
+</chapter>
+<chapter><title>14126</title>
+<qa_pair><label>WORKED EXAMPLE 11</label><type>example</type><question>14127,14128,14129,14130,14131</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 12</label><type>example</type><question>14138,14139,14140,14141,14142,14143,14144</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 13</label><type>example</type><question>14145,14146,14147,14148,14149,14150</question>
+<solution></solution></qa_pair>
+<qa_pair><label>WORKED EXAMPLE 14</label><type>example</type><question>14151,14152,14153,14154,14155</question>
+<solution></solution></qa_pair>
+</chapter>

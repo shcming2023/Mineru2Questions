@@ -1,0 +1,8 @@
+<chapter><title>9790</title>
+<qa_pair><label>1</label><type>exercise</type><question>9792,9793,9794,9795,9796,9797,9798,9799,9800</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>9808,9809,9810,9811,9812,9813,9814,9815,9816,9817,9818,9819,9820</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>9821,9822,9823,9824,9825,9826,9827,9828,9829</question>
+<solution></solution></qa_pair>
+</chapter>

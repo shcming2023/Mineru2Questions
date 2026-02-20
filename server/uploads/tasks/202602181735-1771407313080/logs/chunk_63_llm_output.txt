@@ -1,8 +1,0 @@
-<chapter><title>4447</title>
-<qa_pair><label>1</label><type>exercise</type><question>4448,4449,4450,4451</question>
-<solution></solution></qa_pair>
-<qa_pair><label>2</label><type>exercise</type><question>4467,4468,4469,4470,4471,4472,4473</question>
-<solution></solution></qa_pair>
-<qa_pair><label>3</label><type>exercise</type><question>4474,4475,4476,4477,4478,4479,4480</question>
-<solution></solution></qa_pair>
-</chapter>
