@@ -81,7 +81,18 @@ The system will automatically retrieve the text using the IDs you provide.
 - Always enclose qa pairs in a <chapter>...</chapter> block.
 - If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
 - <title>TITLE_ID</title> should contain the ID of the chapter title block.
-- If there's no chapter title, use <title></title> (empty).
+- If you cannot find a clear chapter title block that applies to the questions in this chunk, use <title></title> (empty).
+- DO NOT invent chapter titles. DO NOT output text like "Practice questions" inside the title tag.
+
+Example:
+<chapter><title>10</title>  // Correct: ID of the block containing "一、选择题"
+<qa_pair>...</qa_pair>
+</chapter>
+
+Example (No Title Block):
+<chapter><title></title> // Correct: No applicable title block found
+<qa_pair>...</qa_pair>
+</chapter>
 
 ## ═══════════════════════════════════════════════════════════════
 ## Output Format

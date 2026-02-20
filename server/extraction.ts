@@ -397,20 +397,32 @@ function isTitleValid(title: string | undefined): boolean {
   const maxLen = Number(process.env.CHAPTER_TITLE_MAX_LENGTH ?? 120);
   const maxWords = Number(process.env.CHAPTER_TITLE_MAX_WORDS ?? 16);
   const maxDigitRatio = Number(process.env.CHAPTER_TITLE_MAX_DIGIT_RATIO ?? 0.5);
-  if (t.length < minLen || t.length > maxLen) return false;
-  const wordCount = t.split(/\s+/).filter(Boolean).length;
-  if (wordCount > maxWords) return false;
+
+  // A path-like title should have different validation rules
+  const isPath = t.includes(' > ');
+
+  if (!isPath) {
+    if (t.length < minLen || t.length > maxLen) return false;
+    const wordCount = t.split(/\s+/).filter(Boolean).length;
+    if (wordCount > maxWords) return false;
+  }
+
   const digitCount = (t.match(/\d/g) ?? []).length;
   const digitRatio = t.length > 0 ? digitCount / t.length : 0;
   const structuralPatterns = cfg.structuralPatterns ?? [];
   const isStructural = structuralPatterns.some(p => new RegExp(p).test(t));
+
   if (digitRatio > maxDigitRatio && !isStructural) return false;
   if (/^(simplify|solve|find|calculate|evaluate|show|prove|determine|given|use|draw|write|work\s+out)\b/i.test(t) && !isStructural) return false;
-  if (/[=<>$]|\\frac|\\sqrt|\\sum|\\int/.test(t) && !isStructural) return false;
+
+  // *** FIX: Only apply math symbol filter if it's NOT a path ***
+  if (!isPath && /[=<>$]|\\frac|\\sqrt|\\sum|\\int/.test(t) && !isStructural) return false;
+
   if (structuralPatterns.length > 0) {
     const ok = structuralPatterns.some(p => new RegExp(p).test(t));
     if (ok) return true;
   }
+
   return true;
 }
 /**
@@ -664,17 +676,9 @@ export function exportToMarkdown(questions: ExtractedQuestion[], outputPath: str
  * 3. 黑名单过滤：过滤无效标题
  */
 export function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQuestion[] {
-  let titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式", "基础训练", "拓展训练"];
-  try {
-    const cfgPath = path.join(process.cwd(), 'config', 'noise_titles.json');
-    if (fs.existsSync(cfgPath)) {
-      const content = fs.readFileSync(cfgPath, 'utf-8');
-      const arr = JSON.parse(content);
-      if (Array.isArray(arr) && arr.every(x => typeof x === 'string')) {
-        titleBlacklist = arr;
-      }
-    }
-  } catch {}
+  // 从配置文件加载黑名单，不使用硬编码
+  let titleBlacklist: string[] = [];
+
   try {
     const tvPath = path.join(process.cwd(), 'config', 'title_validation.json');
     if (fs.existsSync(tvPath)) {
@@ -684,7 +688,30 @@ export function cleanChapterTitles(questions: ExtractedQuestion[]): ExtractedQue
         titleBlacklist = obj.noisePatterns;
       }
     }
-  } catch {}
+  } catch (e) {
+    console.warn('[cleanChapterTitles] Failed to load title_validation.json:', e);
+  }
+
+  // 回退：尝试从 noise_titles.json 读取
+  if (titleBlacklist.length === 0) {
+    try {
+      const cfgPath = path.join(process.cwd(), 'config', 'noise_titles.json');
+      if (fs.existsSync(cfgPath)) {
+        const content = fs.readFileSync(cfgPath, 'utf-8');
+        const arr = JSON.parse(content);
+        if (Array.isArray(arr) && arr.every(x => typeof x === 'string')) {
+          titleBlacklist = arr;
+        }
+      }
+    } catch (e) {
+      console.warn('[cleanChapterTitles] Failed to load noise_titles.json:', e);
+    }
+  }
+
+  if (titleBlacklist.length === 0) {
+    console.warn('[cleanChapterTitles] No blacklist loaded, using default fallback');
+    titleBlacklist = ["选择题", "填空题", "判断题", "应用题", "计算题", "递等式", "竖式", "基础训练", "拓展训练"];
+  }
   
   // 1. 第一遍：题号连续性检测 (P1 #3)
   // 如果题号连续 (如 10->11) 但章节标题变化，且新标题可能是噪声（在黑名单中），则回退到上一个有效标题
