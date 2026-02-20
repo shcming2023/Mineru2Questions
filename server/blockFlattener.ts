@@ -77,17 +77,22 @@ export function flattenContentList(raw: RawBlock[]): FlatBlock[] {
     }
 
     // ── 3. 展平 list 块 ──
+    // 修复 P0-002: 对齐官方 MinerU2LLMInputOperator 的 list 展平逻辑
+    // 只展平 sub_type='text' 的列表;非文本列表作为整体 block 保留
     if (type === 'list' && Array.isArray(block.list_items) && block.list_items.length > 0) {
-      for (const itemText of block.list_items) {
-        blocks.push({
-          id: currentId++,
-          type: 'text',
-          text: (itemText ?? '').trim(),
-          page_idx: page,
-          text_level: null,
-        });
+      if (block.sub_type === 'text') {
+        for (const itemText of block.list_items) {
+          blocks.push({
+            id: currentId++,
+            type: 'text',
+            text: (itemText ?? '').trim(),
+            page_idx: page,
+            text_level: null,
+          });
+        }
+        continue;
       }
-      continue;
+      // 非文本列表(如图片列表)作为整体 block 保留,ID 保持连续
     }
 
     // ── 4. 展平 table 块 ──
@@ -161,10 +166,20 @@ export function flattenContentList(raw: RawBlock[]): FlatBlock[] {
 }
 
 /**
- * 将 FlatBlock 转换为 ConvertedBlock（去掉 text_level 字段）
- * 
+ * 将 FlatBlock 转换为 ConvertedBlock（去掉 text_level 和官方不需要的字段）
+ *
  * 用于 extraction.ts 中需要 ConvertedBlock 类型的场景。
+ *
+ * 对齐官方 MinerU2LLMInputOperator._convert_json():
+ * - 强制剔除 page_idx 字段,避免污染 LLM 上下文
+ * - 官方理由: 这个字段会污染 LLM 的上下文窗口,导致 token 浪费
+ * - bbox 字段在 RawBlock 中存在,但在展平时已被过滤,不会进入 FlatBlock
+ *
+ * @param flatBlocks - 展平后的 FlatBlock 数组
+ * @returns 转换后的 ConvertedBlock 数组
  */
 export function toConvertedBlocks(flatBlocks: FlatBlock[]): ConvertedBlock[] {
-  return flatBlocks.map(({ text_level, ...rest }) => rest);
+  // 修复 P0-001: 剔除 page_idx,对齐官方 MinerU2LLMInputOperator
+  // bbox 已在展平时被过滤,无需再次处理
+  return flatBlocks.map(({ text_level, page_idx, ...rest }) => rest);
 }

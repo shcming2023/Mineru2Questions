@@ -77,8 +77,12 @@ interface Chunk {
 
 // ============= 常量配置 =============
 
-const MAX_CHUNK_SIZE = 100;        // 每个 chunk 最多包含 100 个 block
-const OVERLAP_SIZE = 30;           // 重叠窗口大小，避免题目被切断 (Increased to 30 as per Test 3 report)
+// 修复 P0-003: 对齐官方 ChunkedPromptedGenerator 的 Token 预算切块策略
+// 官方使用 max_chunk_len=128000 作为 Token 长度上限
+// 本项目改为双模式切块: 优先按 Token 预算切块,Block 数量作为兜底
+const MAX_CHUNK_TOKEN_BUDGET = 100000; // Token 预算上限(为 system prompt 和 output 留出余量)
+const MAX_CHUNK_SIZE = 100;             // Block 数量兜底上限(防止单个 Block 过长)
+const OVERLAP_SIZE = 30;                // 重叠窗口大小，避免题目被切断 (Increased to 30 as per Test 3 report)
 
 // ============= 核心流水线函数 =============
 
@@ -311,7 +315,41 @@ function loadAndFormatBlocks(contentListPath: string): ConvertedBlock[] {
 }
 
 /**
+ * 估算单个 block 的 token 数量
+ *
+ * 修复 P0-003: 对齐官方 ChunkedPromptedGenerator 的 Token 预算切块策略
+ * 粗估算法:
+ * - image block: 固定 50 token (用于图片描述)
+ * - 中文字符: 约 1.5 token
+ * - 英文字符: 约 0.25 token
+ * - 其他字符: 约 0.25 token
+ *
+ * @param block - 待估算的 block
+ * @returns 估算的 token 数量
+ */
+function estimateTokens(block: ConvertedBlock): number {
+  if (block.type === 'image') {
+    return 50; // 图片固定计 50 token
+  }
+
+  const text = block.text || '';
+  const chineseChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+  const otherChars = text.length - chineseChars;
+
+  // 粗估: 中文字符 1.5 token, 其他字符 0.25 token
+  return Math.floor(chineseChars * 1.5 + otherChars * 0.25);
+}
+
+/**
  * 将 blocks 分块，带重叠窗口
+ *
+ * 修复 P0-003: 改为 Token 预算切块策略
+ * 优先按 Token 预算切块,Block 数量作为兜底上限
+ *
+ * @param blocks - 待分块的 block 数组
+ * @param maxSize - Block 数量兜底上限
+ * @param overlapSize - 重叠窗口大小
+ * @returns 分块后的 Chunk 数组
  */
 function splitIntoChunks(
   blocks: ConvertedBlock[],
@@ -321,29 +359,47 @@ function splitIntoChunks(
   const chunks: Chunk[] = [];
   let index = 0;
   let start = 0;
-  
+
   while (start < blocks.length) {
-    const end = Math.min(start + maxSize, blocks.length);
+    let currentTokens = 0;
+    let end = start;
+
+    // 按 Token 预算计算分块边界
+    while (end < blocks.length && currentTokens < MAX_CHUNK_TOKEN_BUDGET && (end - start) < maxSize) {
+      const blockTokens = estimateTokens(blocks[end]);
+      // 如果单个 block 就超过预算,强制加入(避免死循环)
+      if (currentTokens + blockTokens > MAX_CHUNK_TOKEN_BUDGET && end > start) {
+        break;
+      }
+      currentTokens += blockTokens;
+      end++;
+    }
+
+    // 确保 chunk 至少有一个 block
+    if (end === start) {
+      end = Math.min(start + 1, blocks.length);
+    }
+
     const chunkBlocks = blocks.slice(start, end);
-    
     chunks.push({
       index,
       blocks: chunkBlocks,
       startId: chunkBlocks[0].id,
       endId: chunkBlocks[chunkBlocks.length - 1].id
     });
-    
+
     index++;
-    
+
     // 如果已经处理到末尾，结束循环
     if (end === blocks.length) break;
-    
+
     start = end - overlapSize; // 重叠窗口
-    
+
     // 避免死循环（如果 overlapSize >= maxSize）
     if (start >= end) break;
   }
-  
+
+  console.log(`[splitIntoChunks] Created ${chunks.length} chunks with token budget ${MAX_CHUNK_TOKEN_BUDGET}`);
   return chunks;
 }
 

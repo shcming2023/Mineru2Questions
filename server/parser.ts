@@ -47,11 +47,16 @@ export class QuestionParser {
   private readonly blocks: ConvertedBlock[];
   private readonly imagePrefix: string;
   private readonly logDir?: string;
+  private readonly chunkStartId: number;
+  private readonly chunkEndId: number;
 
   constructor(blocks: ConvertedBlock[], imagePrefix: string, logDir?: string) {
     this.blocks = blocks;
     this.imagePrefix = imagePrefix;
     this.logDir = logDir;
+    // 修复 P1-002: 记录 chunk 边界,用于 ID 越界校验
+    this.chunkStartId = blocks.length > 0 ? blocks[0].id : 0;
+    this.chunkEndId = blocks.length > 0 ? blocks[blocks.length - 1].id : 0;
   }
 
   /**
@@ -300,6 +305,26 @@ export class QuestionParser {
   }
 
   /**
+   * 校验 ID 是否在 chunk 范围内
+   *
+   * 修复 P1-002: 增加 chunk 边界二次校验
+   * 检测 LLM 输出的越界 ID (F-003 ID 偏移问题)
+   *
+   * @param id - 待校验的 ID
+   * @returns true 表示在合法范围内,false 表示越界
+   */
+  private validateIdInChunkRange(id: number): boolean {
+    if (id < this.chunkStartId || id > this.chunkEndId) {
+      console.warn(
+        `[Parser] LLM hallucinated ID=${id} outside chunk range [${this.chunkStartId}, ${this.chunkEndId}]. ` +
+        `This is an F-003 ID offset issue. Skipping.`
+      );
+      return false;
+    }
+    return true;
+  }
+
+  /**
    * 根据 ID 序列从 blocks 中提取文本
    */
   private getTextFromIds(ids: string): string {
@@ -320,6 +345,12 @@ export class QuestionParser {
 
   /**
    * 根据 ID 序列从 blocks 中提取文本和图片
+   *
+   * 修复 P1-001: 补充对 table 类型的处理
+   * 官方 LLMOutputParser._id_to_text 也未显式处理 table,静默跳过
+   * 本项目增加日志记录,便于调试
+   *
+   * 修复 P1-002: 增加 chunk 边界 ID 越界校验,跳过越界 ID
    */
   private getTextAndImagesFromIds(ids: string): { text: string; images: string[] } {
     if (!ids || ids.trim() === '') {
@@ -332,6 +363,11 @@ export class QuestionParser {
     const maxEquationLength = Number(process.env.MAX_EQUATION_LENGTH ?? 4096);
 
     for (const id of idList) {
+      // 修复 P1-002: 校验 ID 是否在 chunk 范围内
+      if (!this.validateIdInChunkRange(id)) {
+        continue; // 跳过越界 ID
+      }
+
       const block = this.blocks.find(b => b.id === id);
       if (!block) continue;
 
@@ -339,12 +375,18 @@ export class QuestionParser {
         // 使用 path.join 拼接绝对路径（用于 images 数组）
         const imagePath = path.join(this.imagePrefix, block.img_path);
         images.push(imagePath);
-        
+
         // 在 question 文本中嵌入图片时使用原始相对路径，避免绝对路径泄露
         // block.img_path 已经是相对路径（如 "images/xxx.jpg"）
         const caption = block.image_caption || 'image';
         textParts.push(`![${caption}](${block.img_path})`);
-        
+
+      } else if (block.type === 'table' && block.text) {
+        // 修复 P1-001: 处理 table 类型
+        // 官方静默跳过,本项目记录警告并尝试回填文本
+        console.warn(`[Parser] Table block ${id} found in question. Including text content. Consider validating table extraction quality.`);
+        textParts.push(`[Table] ${block.text}`);
+
       } else if (block.text) {
         let text = block.text;
         if (block.type === 'equation' && maxEquationLength > 0 && text.length > maxEquationLength) {
