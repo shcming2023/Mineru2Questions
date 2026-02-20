@@ -29,9 +29,9 @@ export default function Home() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">数学题目提取器</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Mineru2Questions</h1>
           <p className="text-muted-foreground">
-            从MinerU解析的数学教材中自动提取题目
+            从MinerU解析的教育文档中自动提取题目（支持数学、语文、理化等多学科）
           </p>
         </div>
 
