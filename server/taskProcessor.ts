@@ -124,12 +124,10 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             `章节预处理V2完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
         } catch (err: any) {
           console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
-          await logTaskProgress(taskId, 'error', 'chapter_preprocess',
-            `章节预处理失败: ${err.message}`);
-          
-          // 严重错误（如上下文窗口超出），直接终止任务
-          await updateExtractionTask(taskId, { status: 'failed', errorMessage: `章节预处理失败: ${err.message}` });
-          throw err; 
+          await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
+            `章节预处理失败，将降级使用题目抽取阶段的章节信息: ${err.message}`);
+          // 优雅降级（原则四）：章节预处理失败时继续执行题目抽取，回退到抽取侧章节标题
+          chapterResult = null;
         }
       } else {
         await logTaskProgress(taskId, 'warn', 'chapter_preprocess',

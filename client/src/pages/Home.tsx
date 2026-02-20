@@ -29,9 +29,9 @@ export default function Home() {
     <DashboardLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">数学题目提取器</h1>
+          <h1 className="text-2xl font-bold tracking-tight">Mineru2Questions</h1>
           <p className="text-muted-foreground">
-            从MinerU解析的数学教材中自动提取题目
+            从MinerU解析的教育文档中自动提取题目
           </p>
         </div>
 
@@ -106,7 +106,7 @@ export default function Home() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                上传MinerU解析的教材文件夹,系统将自动识别并提取其中的数学题目。
+                上传MinerU解析后的教材文件夹,系统将自动识别并提取其中的题目（支持数学、语文、理化等多学科）。
               </p>
               <div className="space-y-2 text-sm">
                 <p className="font-medium">支持的文件结构:</p>
