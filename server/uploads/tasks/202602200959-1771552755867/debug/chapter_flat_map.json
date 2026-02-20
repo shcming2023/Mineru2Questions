@@ -1,0 +1,57 @@
+[
+  {
+    "id": 0,
+    "text": "第19章 实数",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 50,
+      "end": 65
+    },
+    "parent_id": null
+  },
+  {
+    "id": 1,
+    "text": "第20章 二次根式 … 38",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 65,
+      "end": 77
+    },
+    "parent_id": null
+  },
+  {
+    "id": 2,
+    "text": "第21章 一元二次方程 75",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 77,
+      "end": 100
+    },
+    "parent_id": null
+  },
+  {
+    "id": 3,
+    "text": "第22章 直角三角形 140",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 100,
+      "end": 1433
+    },
+    "parent_id": null
+  },
+  {
+    "id": 4,
+    "text": "第21章 一元二次方程",
+    "level": 1,
+    "page": 83,
+    "block_range": {
+      "start": 1433,
+      "end": 3470
+    },
+    "parent_id": null
+  }
+]

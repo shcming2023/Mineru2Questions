@@ -1,0 +1,47 @@
+[
+  {
+    "blockId": 50,
+    "page": 5,
+    "text": "第19章 实数",
+    "normalizedTitle": "第19章 实数",
+    "level": 1,
+    "confidence": 0.98,
+    "source": "pattern"
+  },
+  {
+    "blockId": 65,
+    "page": 5,
+    "text": "第20章 二次根式 … 38",
+    "normalizedTitle": "第20章 二次根式 … 38",
+    "level": 1,
+    "confidence": 0.98,
+    "source": "pattern"
+  },
+  {
+    "blockId": 77,
+    "page": 6,
+    "text": "第21章 一元二次方程 75",
+    "normalizedTitle": "第21章 一元二次方程 75",
+    "level": 1,
+    "confidence": 0.98,
+    "source": "pattern"
+  },
+  {
+    "blockId": 100,
+    "page": 7,
+    "text": "第22章 直角三角形 140",
+    "normalizedTitle": "第22章 直角三角形 140",
+    "level": 1,
+    "confidence": 0.98,
+    "source": "pattern"
+  },
+  {
+    "blockId": 1433,
+    "page": 83,
+    "text": "第21章 一元二次方程",
+    "normalizedTitle": "第21章 一元二次方程",
+    "level": 1,
+    "confidence": 0.98,
+    "source": "pattern"
+  }
+]
