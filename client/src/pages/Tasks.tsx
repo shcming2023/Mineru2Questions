@@ -81,7 +81,11 @@ export default function Tasks() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold tracking-tight">任务管理</h1>
-            <p className="text-muted-foreground">管理您的题目提取任务</p>
+            <p className="text-muted-foreground">全部任务的管理中心，支持创建、监控、暂停、重试和删除</p>
+            <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md mt-2">
+              <strong>页面定位：</strong>全部任务管理 • 
+              <a href="/history" className="text-blue-600 hover:underline">查看已完成归档</a>
+            </div>
           </div>
           <Button onClick={() => setLocation("/tasks/new")}>
             <Plus className="mr-2 h-4 w-4" />

@@ -51,10 +51,40 @@ export default function History() {
     retryMutation.mutate({ id: taskId });
   };
   
-  // 显示所有任务（包括处理中的，以便查看重试任务）
-  // 按照需求：提供任务族系视图，清晰展示同一输入物的所有执行历史
-  // 这里暂时还是列出列表，但我们应该允许用户看到所有状态的任务，或者至少是重试相关的
-  const historyTasks = tasks || [];
+  const handleDownload = async (taskId: number, taskName: string) => {
+    try {
+      const { result } = await utils.client.result.getDownloadLinks.query({ taskId });
+      
+      if (result && result.links && result.links.length > 0) {
+        // 下载所有可用的文件
+        for (const link of result.links) {
+          const a = document.createElement('a');
+          a.href = link.url;
+          a.download = link.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+        
+        toast.success("下载开始", {
+          description: `正在下载 ${taskName} 的结果文件`,
+        });
+      } else {
+        toast.error("下载失败", {
+          description: "没有可用的结果文件",
+        });
+      }
+    } catch (error) {
+      toast.error("下载失败", {
+        description: error instanceof Error ? error.message : "未知错误",
+      });
+    }
+  };
+  
+  // History页面差异化：仅显示已完成的任务（PRD v4.1要求）
+  // History = 已完成任务归档视图，侧重快速查看和下载结果
+  // Tasks = 全部任务管理中心，侧重操作管理
+  const historyTasks = (tasks || []).filter(task => task.status === 'completed');
 
   const formatDate = (date: Date | string) => {
     return new Date(date).toLocaleString();
@@ -73,7 +103,11 @@ export default function History() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">历史记录</h1>
-          <p className="text-muted-foreground">查看已完成的提取任务</p>
+          <p className="text-muted-foreground">已完成任务的归档视图，用于快速查看和下载结果</p>
+          <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-md">
+            <strong>页面定位：</strong>已完成任务归档 • 
+            <a href="/tasks" className="text-blue-600 hover:underline">查看全部任务管理</a>
+          </div>
         </div>
 
         {isLoading ? (
@@ -168,7 +202,11 @@ export default function History() {
                         </AlertDialog>
 
                         {task.status === "completed" && (
-                          <Button variant="outline" size="sm">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleDownload(task.id, task.name)}
+                          >
                             <Download className="mr-1 h-4 w-4" />
                             下载结果
                           </Button>

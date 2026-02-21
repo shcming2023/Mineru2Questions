@@ -24,8 +24,9 @@ import {
   getTaskLogs
 } from "./db";
 import { storagePut, storageGet } from "./storage";
-import { startTaskProcessing, pauseTaskProcessing, cancelTaskProcessing } from "./taskProcessor";
+import { startTaskProcessing, pauseTaskProcessing, cancelTaskProcessing, resumeTaskProcessing } from "./taskProcessor";
 import { taskService } from "./taskService";
+import { taskSignalManager } from "./taskSignalManager";
 
 // LLM配置路由
 const llmConfigRouter = router({
@@ -304,8 +305,35 @@ const taskRouter = router({
         throw new TRPCError({ code: "BAD_REQUEST", message: "只能暂停处理中的任务" });
       }
       
-      pauseTaskProcessing(input.id);
+      const success = taskSignalManager.pauseTask(input.id);
+      if (!success) {
+        throw new TRPCError({ code: "INTERNAL_ERROR", message: "无法发送暂停信号" });
+      }
+      
       await updateExtractionTask(input.id, { status: "paused" });
+      
+      return { success: true };
+    }),
+  
+  // 恢复任务
+  resume: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const task = await getExtractionTaskById(input.id, ctx.user.id);
+      if (!task) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "任务不存在" });
+      }
+      
+      if (task.status !== "paused") {
+        throw new TRPCError({ code: "BAD_REQUEST", message: "只能恢复暂停的任务" });
+      }
+      
+      const success = taskSignalManager.resumeTask(input.id);
+      if (!success) {
+        throw new TRPCError({ code: "INTERNAL_ERROR", message: "无法发送恢复信号" });
+      }
+      
+      await updateExtractionTask(input.id, { status: "processing" });
       
       return { success: true };
     }),

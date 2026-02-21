@@ -28,6 +28,12 @@ import {
   ChapterPreprocessResult,
   preprocessChapters
 } from './chapterPreprocess';
+import {
+  taskSignalManager,
+  checkTaskStatus,
+  waitForResume,
+  executeWithSignalCheck
+} from './taskSignalManager';
 
 /**
  * 启动任务处理
@@ -40,29 +46,60 @@ export function startTaskProcessing(taskId: number, userId: number): void {
 }
 
 /**
- * 暂停任务处理 (v1.1 暂不支持)
+ * 暂停任务处理
  */
 export function pauseTaskProcessing(taskId: number): void {
-  console.warn(`[Task ${taskId}] Pause requested but not implemented in v1.1 pipeline`);
+  const success = taskSignalManager.pauseTask(taskId);
+  if (success) {
+    console.log(`[Task ${taskId}] Pause signal sent`);
+  } else {
+    console.warn(`[Task ${taskId}] Failed to send pause signal - task not found`);
+  }
 }
 
 /**
- * 取消任务处理 (v1.1 暂不支持)
+ * 恢复任务处理
+ */
+export function resumeTaskProcessing(taskId: number): void {
+  const success = taskSignalManager.resumeTask(taskId);
+  if (success) {
+    console.log(`[Task ${taskId}] Resume signal sent`);
+  } else {
+    console.warn(`[Task ${taskId}] Failed to send resume signal - task not found`);
+  }
+}
+
+/**
+ * 取消任务处理
  */
 export function cancelTaskProcessing(taskId: number): void {
-  console.warn(`[Task ${taskId}] Cancel requested but not implemented in v1.1 pipeline`);
+  const success = taskSignalManager.cancelTask(taskId);
+  if (success) {
+    console.log(`[Task ${taskId}] Cancel signal sent`);
+  } else {
+    console.warn(`[Task ${taskId}] Failed to send cancel signal - task not found`);
+  }
 }
 
 /**
  * 处理单个提取任务
  */
 export async function processExtractionTask(taskId: number, userId: number): Promise<void> {
+  // 注册任务信号
+  taskSignalManager.registerTask(taskId);
+  
   try {
     // 1. 获取任务信息
-    const task = await getExtractionTaskById(taskId, userId);
-    if (!task) {
-      throw new Error(`Task ${taskId} not found`);
-    }
+    const task = await executeWithSignalCheck(
+      taskId,
+      async () => {
+        const taskInfo = await getExtractionTaskById(taskId, userId);
+        if (!taskInfo) {
+          throw new Error(`Task ${taskId} not found`);
+        }
+        return taskInfo;
+      }
+    );
     
     await updateExtractionTask(taskId, { status: 'processing' });
     await logTaskProgress(taskId, 'info', 'starting', 'Task processing started');
@@ -100,40 +137,52 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     // 4.5. 章节预处理（如果配置了长文本 LLM）
     let chapterResult: ChapterPreprocessResult | null = null;
     if (task.chapterConfigId) {
-      const chapterLlmConfig = await getLLMConfigById(task.chapterConfigId, userId);
-      if (chapterLlmConfig) {
-        await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理（零筛选全文推理 + 两轮 LLM 校验）...');
-        try {
-          const chapterConfig: ChapterLLMConfig = {
-            apiUrl: chapterLlmConfig.apiUrl,
-            apiKey: chapterLlmConfig.apiKey,
-            modelName: chapterLlmConfig.modelName,
-            timeout: (chapterLlmConfig.timeout || 120) * 1000,
-            contextWindow: chapterLlmConfig.contextWindow,
-          };
-          // 使用全文推理方案（preprocessChapters）
-          chapterResult = await preprocessChapters(
-            contentListPath,
-            taskDir,
-            chapterConfig,
-            async (msg) => {
-              await logTaskProgress(taskId, 'info', 'chapter_preprocess', msg);
+      await executeWithSignalCheck(
+        taskId,
+        async () => {
+          const chapterLlmConfig = await getLLMConfigById(task.chapterConfigId, userId);
+          if (chapterLlmConfig) {
+            await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理（零筛选全文推理 + 两轮 LLM 校验）...');
+            try {
+              const chapterConfig: ChapterLLMConfig = {
+                apiUrl: chapterLlmConfig.apiUrl,
+                apiKey: chapterLlmConfig.apiKey,
+                modelName: chapterLlmConfig.modelName,
+                timeout: (chapterLlmConfig.timeout || 120) * 1000,
+                contextWindow: chapterLlmConfig.contextWindow,
+              };
+              // 使用全文推理方案（preprocessChapters）
+              chapterResult = await preprocessChapters(
+                contentListPath,
+                taskDir,
+                chapterConfig,
+                async (msg) => {
+                  await executeWithSignalCheck(
+                    taskId,
+                    async () => logTaskProgress(taskId, 'info', 'chapter_preprocess', msg),
+                    async () => logTaskProgress(taskId, 'info', 'chapter_preprocess', '章节预处理已暂停'),
+                    async () => logTaskProgress(taskId, 'warn', 'chapter_preprocess', '章节预处理已取消')
+                  );
+                }
+              );
+              await logTaskProgress(taskId, 'info', 'chapter_preprocess',
+                `章节预处理完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
+            } catch (err: any) {
+              // v4.0 失败语义：章节预处理失败时任务直接失败，不降级
+              // 章节归属是本系统的核心价值，无章节信息的抽取结果不满足产品目标
+              console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
+              await logTaskProgress(taskId, 'error', 'chapter_preprocess',
+                `章节预处理失败，任务终止: ${err.message}`);
+              throw new Error(`章节预处理失败: ${err.message}`);
             }
-          );
-          await logTaskProgress(taskId, 'info', 'chapter_preprocess',
-            `章节预处理完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
-        } catch (err: any) {
-          // v4.0 失败语义：章节预处理失败时任务直接失败，不降级
-          // 章节归属是本系统的核心价值，无章节信息的抽取结果不满足产品目标
-          console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
-          await logTaskProgress(taskId, 'error', 'chapter_preprocess',
-            `章节预处理失败，任务终止: ${err.message}`);
-          throw new Error(`章节预处理失败: ${err.message}`);
-        }
-      } else {
-        await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
-          `章节预处理 LLM 配置 ${task.chapterConfigId} 未找到，跳过章节预处理`);
-      }
+          } else {
+            await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
+              `章节预处理 LLM 配置 ${task.chapterConfigId} 未找到，跳过章节预处理`);
+          }
+        },
+        async () => await logTaskProgress(taskId, 'info', 'chapter_preprocess', '章节预处理已暂停'),
+        async () => await logTaskProgress(taskId, 'warn', 'chapter_preprocess', '章节预处理已取消')
+      );
     } else {
       await logTaskProgress(taskId, 'info', 'chapter_preprocess', '未配置章节预处理 LLM，跳过章节预处理');
     }
@@ -149,34 +198,41 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
       config,
       chapterResult?.flatMap ?? null,
       async (_progress, message, stats) => {
-        if (stats?.currentChunk && stats?.totalChunks) {
-          lastProgress.currentChunk = stats.currentChunk;
-          lastProgress.totalChunks = stats.totalChunks;
-          if (stats.completedChunks !== undefined) {
-            lastProgress.completedChunks = stats.completedChunks;
-          }
-        }
-
-        await logTaskProgress(
+        await executeWithSignalCheck(
           taskId,
-          'info',
-          'processing',
-          message,
-          undefined,
-          stats?.currentChunk ? stats.currentChunk - 1 : undefined,
-          stats?.totalChunks
-        );
+          async () => {
+            if (stats?.currentChunk && stats?.totalChunks) {
+              lastProgress.currentChunk = stats.currentChunk;
+              lastProgress.totalChunks = stats.totalChunks;
+              if (stats.completedChunks !== undefined) {
+                lastProgress.completedChunks = stats.completedChunks;
+              }
+            }
 
-        if (stats?.totalChunks) {
-          // 优先使用 completedChunks 以确保进度单调递增
-          const processed = stats.completedChunks !== undefined ? stats.completedChunks : (stats.currentChunk || 0);
-          
-          await updateExtractionTask(taskId, {
-            processedPages: processed,
-            totalPages: stats.totalChunks,
-            currentPage: stats.currentChunk // currentPage 保持为当前正在处理的 Chunk ID
-          });
-        }
+            await logTaskProgress(
+              taskId,
+              'info',
+              'processing',
+              message,
+              undefined,
+              stats?.currentChunk ? stats.currentChunk - 1 : undefined,
+              stats?.totalChunks
+            );
+
+            if (stats?.totalChunks) {
+              // 优先使用 completedChunks 以确保进度单调递增
+              const processed = stats.completedChunks !== undefined ? stats.completedChunks : (stats.currentChunk || 0);
+              
+              await updateExtractionTask(taskId, {
+                processedPages: processed,
+                totalPages: stats.totalChunks,
+                currentPage: stats.currentChunk // currentPage 保持为当前正在处理的 Chunk ID
+              });
+            }
+          },
+          async () => await logTaskProgress(taskId, 'info', 'processing', '题目提取已暂停'),
+          async () => await logTaskProgress(taskId, 'warn', 'processing', '题目提取已取消')
+        );
       }
     );
     
@@ -212,17 +268,35 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     });
     
   } catch (error: any) {
+    // 检查是否是因为取消导致的错误
+    const wasCancelled = taskSignalManager.shouldCancel(taskId);
+    const wasPaused = taskSignalManager.shouldPause(taskId);
+    
     console.error(`[Task ${taskId}] Task failed:`, error);
     
+    // 根据信号设置状态
+    const finalStatus = wasCancelled ? 'failed' : 'failed';
+    const errorMessage = wasCancelled ? '任务被用户取消' : error.message;
+    
     await updateExtractionTask(taskId, {
-      status: 'failed',
-      errorMessage: error.message
+      status: finalStatus,
+      errorMessage: errorMessage
     });
     
-    await logTaskProgress(taskId, 'error', 'failed', `Task failed: ${error.message}`);
+    await logTaskProgress(taskId, 
+      wasCancelled ? 'warn' : 'error', 
+      'failed', 
+      `Task ${wasCancelled ? 'cancelled' : 'failed'}: ${errorMessage}`
+    );
+    
+    // 清理任务信号
+    taskSignalManager.unregisterTask(taskId);
     
     throw error;
   }
+  
+  // 清理任务信号
+  taskSignalManager.unregisterTask(taskId);
 }
 
 /**
