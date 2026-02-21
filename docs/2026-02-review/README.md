@@ -1,5 +1,7 @@
 # 文档目录
 
+> **评审系统提示**: 使用 [`docs/review_prompt_v4.0.md`](../review_prompt_v4.0.md) 中的提示词（PRD v4.0，2026-02-21）。
+
 | 文件 | 最后修改日期 | 责任人 | 当前状态 |
 | --- | --- | --- | --- |
 | 2026-02-09_review_v0_reviewed.md | 2026-02-09 | TBD | reviewed |
