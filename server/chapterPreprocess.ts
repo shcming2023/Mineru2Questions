@@ -696,7 +696,7 @@ function buildFlatMap(entries: DirectoryEntry[], blocks: FlatBlock[]): ChapterFl
   return result;
 }
 
-function validateChapterEntries(entries: DirectoryEntry[], blocks: FlatBlock[]): { ok: boolean; error?: string } {
+export function validateChapterEntries(entries: DirectoryEntry[], blocks: FlatBlock[]): { ok: boolean; error?: string } {
   const allIds = new Set(blocks.map(b => b.id));
   for (const entry of entries) {
     const ids = Array.isArray(entry.id) ? entry.id : [entry.id];
@@ -883,15 +883,9 @@ export async function preprocessChapters(
   }
 
   if (round1Entries.length === 0) {
-    console.warn('[ChapterPreprocess] 第一轮抽取失败，返回空结果');
-    return {
-      flatMap: [],
-      blocks,
-      coverageRate: 0,
-      totalEntries: 0,
-      round1Entries: 0,
-      round2Entries: 0,
-    };
+    const errMsg = '第一轮章节抽取失败：LLM 未能识别任何章节标题';
+    console.error(`[ChapterPreprocess] ${errMsg}`);
+    throw new Error(errMsg);
   }
 
   // ========== Step 3: 后处理清理 ==========
@@ -1001,16 +995,9 @@ export async function preprocessChapters(
   if (onProgress) await onProgress('章节预处理：构建目录树...');
   const validation = validateChapterEntries(finalEntries, blocks);
   if (!validation.ok) {
-    console.warn(`[ChapterValidation] ${validation.error}`);
-    fs.writeFileSync(path.join(debugDir, 'chapter_flat_map.json'), JSON.stringify([], null, 2));
-    return {
-      flatMap: [],
-      blocks,
-      coverageRate: 0,
-      totalEntries: 0,
-      round1Entries: round1Entries.length,
-      round2Entries: finalEntries.length,
-    };
+    const errMsg = `章节验证失败: ${validation.error}`;
+    console.error(`[ChapterValidation] ${errMsg}`);
+    throw new Error(errMsg);
   }
   const flatMap = buildFlatMap(finalEntries, blocks);
   console.log(`[ChapterPreprocess] flat_map: ${flatMap.length} entries`);

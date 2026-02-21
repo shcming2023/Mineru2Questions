@@ -25,9 +25,9 @@ import {
 } from './extraction';
 import {
   ChapterLLMConfig,
-  ChapterPreprocessResult
+  ChapterPreprocessResult,
+  preprocessChapters
 } from './chapterPreprocess';
-import { preprocessChaptersV2 } from './chapterPreprocessV2';
 
 /**
  * 启动任务处理
@@ -102,7 +102,7 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
     if (task.chapterConfigId) {
       const chapterLlmConfig = await getLLMConfigById(task.chapterConfigId, userId);
       if (chapterLlmConfig) {
-        await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理 V2（自适应三轨混合架构）...');
+        await logTaskProgress(taskId, 'info', 'chapter_preprocess', '开始章节预处理（零筛选全文推理 + 两轮 LLM 校验）...');
         try {
           const chapterConfig: ChapterLLMConfig = {
             apiUrl: chapterLlmConfig.apiUrl,
@@ -111,8 +111,8 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             timeout: (chapterLlmConfig.timeout || 120) * 1000,
             contextWindow: chapterLlmConfig.contextWindow,
           };
-          // 使用 V2 自适应三轨混合架构
-          chapterResult = await preprocessChaptersV2(
+          // 使用全文推理方案（preprocessChapters）
+          chapterResult = await preprocessChapters(
             contentListPath,
             taskDir,
             chapterConfig,
@@ -121,14 +121,14 @@ export async function processExtractionTask(taskId: number, userId: number): Pro
             }
           );
           await logTaskProgress(taskId, 'info', 'chapter_preprocess',
-            `章节预处理V2完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
+            `章节预处理完成: ${chapterResult.totalEntries} 个章节条目, 覆盖率 ${(chapterResult.coverageRate * 100).toFixed(1)}%`);
         } catch (err: any) {
+          // v4.0 失败语义：章节预处理失败时任务直接失败，不降级
+          // 章节归属是本系统的核心价值，无章节信息的抽取结果不满足产品目标
           console.error(`[Task ${taskId}] Chapter preprocess failed:`, err);
-          await logTaskProgress(taskId, 'warn', 'chapter_preprocess',
-            `章节预处理失败（将降级使用题目抽取阶段的章节信息）: ${err.message}`);
-          // 原则四：优雅降级 — 章节预处理失败时不终止任务，而是继续执行题目抽取阶段，
-          // 使用题目抽取 LLM 自行判断的章节标题作为回退。
-          chapterResult = null;
+          await logTaskProgress(taskId, 'error', 'chapter_preprocess',
+            `章节预处理失败，任务终止: ${err.message}`);
+          throw new Error(`章节预处理失败: ${err.message}`);
         }
       } else {
         await logTaskProgress(taskId, 'warn', 'chapter_preprocess',

@@ -286,7 +286,8 @@ export async function extractQuestions(
       } else if (preHasPath) {
         q.chapter_title = preTitle as string;
       } else {
-        q.chapter_title = llmTitle as string;
+        // PRD v4.0: 预处理结果优先于 LLM 自动抽取结果
+        q.chapter_title = preTitle as string;
       }
     } else {
       q.chapter_title = "";
