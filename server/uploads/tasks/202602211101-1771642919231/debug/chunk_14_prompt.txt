@@ -1,0 +1,720 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If you cannot find a clear chapter title block that applies to the questions in this chunk, use <title></title> (empty).
+- DO NOT invent chapter titles. DO NOT output text like "Practice questions" inside the title tag.
+
+Example:
+<chapter><title>10</title>  // Correct: ID of the block containing "一、选择题"
+<qa_pair>...</qa_pair>
+</chapter>
+
+Example (No Title Block):
+<chapter><title></title> // Correct: No applicable title block found
+<qa_pair>...</qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 980,
+    "type": "text",
+    "text": "(C)  $\\sqrt{9}$ ;"
+  },
+  {
+    "id": 981,
+    "type": "text",
+    "text": "(D)  $\\sqrt{24}$ ."
+  },
+  {
+    "id": 982,
+    "type": "text",
+    "text": "2. 若  $\\sqrt{x}$  与  $\\sqrt{5}$  是同类二次根式，则  $x$  可以是 （）"
+  },
+  {
+    "id": 983,
+    "type": "text",
+    "text": "(A)0.5;"
+  },
+  {
+    "id": 984,
+    "type": "text",
+    "text": "(B)50;"
+  },
+  {
+    "id": 985,
+    "type": "text",
+    "text": "(C)125;"
+  },
+  {
+    "id": 986,
+    "type": "text",
+    "text": "(D)25."
+  },
+  {
+    "id": 987,
+    "type": "text",
+    "text": "3. 下列根式与  $\\sqrt{xy}$  不是同类二次根式的是 （）"
+  },
+  {
+    "id": 988,
+    "type": "text",
+    "text": "(A)  $\\sqrt{\\frac{xy}{4}}$ ;"
+  },
+  {
+    "id": 989,
+    "type": "text",
+    "text": "(B)  $\\sqrt{x + y}$ ;"
+  },
+  {
+    "id": 990,
+    "type": "text",
+    "text": "(C)  $\\sqrt{\\frac{x}{y}}$ ;"
+  },
+  {
+    "id": 991,
+    "type": "text",
+    "text": "(D)  $\\frac{1}{\\sqrt{xy}}$"
+  },
+  {
+    "id": 992,
+    "type": "text",
+    "text": "4. 下列各式运算正确的是 （）"
+  },
+  {
+    "id": 993,
+    "type": "text",
+    "text": "(A)  $\\sqrt{x} + \\sqrt{2x} = \\sqrt{3x}$ ;"
+  },
+  {
+    "id": 994,
+    "type": "text",
+    "text": "(B)  $3\\sqrt{3} - 2\\sqrt{3} = 1$"
+  },
+  {
+    "id": 995,
+    "type": "text",
+    "text": "(C)  $\\sqrt{2} + \\sqrt{3} = \\sqrt{5}$ ;"
+  },
+  {
+    "id": 996,
+    "type": "text",
+    "text": "(D)  $a\\sqrt{x} - b\\sqrt{x} = (a - b)\\sqrt{x}$ ."
+  },
+  {
+    "id": 997,
+    "type": "text",
+    "text": "二、填空题"
+  },
+  {
+    "id": 998,
+    "type": "text",
+    "text": "5. 在  $\\sqrt{16}, \\frac{\\sqrt{72}}{2}, -\\sqrt{48}$  中，与  $\\sqrt{2}$  是同类二次根式的是"
+  },
+  {
+    "id": 999,
+    "type": "text",
+    "text": "6. 若最简二次根式  $\\sqrt{2x - 1}$  和  $3\\sqrt{3x - 4}$  是同类二次根式，则  $x =$"
+  },
+  {
+    "id": 1000,
+    "type": "text",
+    "text": "7. 合并同类二次根式:  $6\\sqrt{2} + \\frac{1}{5}\\sqrt{2} - 4\\sqrt{2} =$"
+  },
+  {
+    "id": 1001,
+    "type": "text",
+    "text": "8. 合并同类二次根式:  $2\\sqrt{12} - 3\\sqrt{48} =$  ________."
+  },
+  {
+    "id": 1002,
+    "type": "text",
+    "text": "9. 方程  $\\sqrt{12} + x = \\sqrt{27}$  的解为"
+  },
+  {
+    "id": 1003,
+    "type": "text",
+    "text": "10. 如果  $x = \\sqrt{2} - 1, y = 3\\sqrt{2} + 2$ ，那么  $y - 3x =$  ________."
+  },
+  {
+    "id": 1004,
+    "type": "text",
+    "text": "11. 计算:  $2\\sqrt{0.5} + \\sqrt{18} - \\frac{\\sqrt{8}}{2} =$"
+  },
+  {
+    "id": 1005,
+    "type": "text",
+    "text": "12. 已知二次根式  $\\sqrt{2x + 5}$  与  $\\sqrt{5}$  是同类二次根式，则满足条件的最小正整数  $x$  的值为"
+  },
+  {
+    "id": 1006,
+    "type": "text",
+    "text": "三、解答题"
+  },
+  {
+    "id": 1007,
+    "type": "text",
+    "text": "13. 试判断下列各组中的二次根式是不是同类二次根式："
+  },
+  {
+    "id": 1008,
+    "type": "text",
+    "text": "(1)  $\\sqrt{32}, \\sqrt{50}, 2\\sqrt{\\frac{1}{18}}$ ;"
+  },
+  {
+    "id": 1009,
+    "type": "text",
+    "text": "(2)  $\\sqrt{4x^3}, 2\\sqrt{2x}, \\sqrt{8x^2}$ ."
+  },
+  {
+    "id": 1010,
+    "type": "text",
+    "text": "14. 计算："
+  },
+  {
+    "id": 1011,
+    "type": "text",
+    "text": "(1)  $-\\frac{3}{4}\\sqrt{3} + \\frac{3}{5}\\sqrt{3} + \\frac{1}{2}\\sqrt{3} - \\frac{3}{10}\\sqrt{3}$ ;"
+  },
+  {
+    "id": 1012,
+    "type": "text",
+    "text": "(2)  $2\\sqrt{2x} - \\sqrt{2x} + \\frac{1}{3}\\sqrt{2x}$ ;"
+  },
+  {
+    "id": 1013,
+    "type": "text",
+    "text": "(3)  $4\\sqrt{\\frac{a}{2}} + 6a\\sqrt{\\frac{2}{a}} - \\sqrt{8a}$ ;"
+  },
+  {
+    "id": 1014,
+    "type": "text",
+    "text": "(4)  $\\frac{2}{3}\\sqrt{9x} -\\left[2x\\sqrt{\\frac{1}{x}} -6\\sqrt{\\frac{x}{4}}\\right].$"
+  },
+  {
+    "id": 1015,
+    "type": "text",
+    "text": "15. 已知  $a = \\sqrt{b - 25} - \\sqrt{25 - b} + 16$ ，求二次根式  $\\sqrt{ab}$  的值"
+  },
+  {
+    "id": 1016,
+    "type": "text",
+    "text": "16. 解不等式:  $\\sqrt{8} - 2x < \\sqrt{18}$ ."
+  },
+  {
+    "id": 1017,
+    "type": "image",
+    "img_path": "images/683b5c86290276f839964ce3731d0e0e66b28fb4d2d69a4d6f1f0b06283ccc0c.jpg"
+  },
+  {
+    "id": 1018,
+    "type": "text",
+    "text": "思维与拓展10"
+  },
+  {
+    "id": 1019,
+    "type": "text",
+    "text": "对于题目“化简并求值：  $\\frac{1}{a} +\\sqrt{\\frac{1}{a^2} + a^2 - 2}$  ，其中  $a = \\sqrt{2}$  .\"小杰与小丽两人的解答不同.小杰的解答是：  $\\frac{1}{a} +\\sqrt{\\frac{1}{a^2} + a^2 - 2} = \\frac{1}{a} +\\sqrt{\\left(\\frac{1}{a} - a\\right)^2} = \\frac{1}{a} +\\frac{1}{a} -a = \\frac{2}{a} -a = 0;$"
+  },
+  {
+    "id": 1020,
+    "type": "text",
+    "text": "小丽的解答是：  $\\frac{1}{a} +\\sqrt{\\frac{1}{a^2} + a^2 - 2} = \\frac{1}{a} +\\sqrt{\\left(a - \\frac{1}{a}\\right)^2} = \\frac{1}{a} +a - \\frac{1}{a} = a = \\sqrt{2}.$"
+  },
+  {
+    "id": 1021,
+    "type": "text",
+    "text": "谁的解答是正确的？为什么？"
+  },
+  {
+    "id": 1022,
+    "type": "text",
+    "text": "20.2 二次根式的运算(2)"
+  },
+  {
+    "id": 1023,
+    "type": "text",
+    "text": "一、选择题"
+  },
+  {
+    "id": 1024,
+    "type": "text",
+    "text": "1. 化简  $\\frac{\\sqrt{8}}{\\sqrt{2}}$  的结果是 （ ）"
+  },
+  {
+    "id": 1025,
+    "type": "text",
+    "text": "(A)2;"
+  },
+  {
+    "id": 1026,
+    "type": "text",
+    "text": "(B)  $2\\sqrt{2}$ ;"
+  },
+  {
+    "id": 1027,
+    "type": "text",
+    "text": "(C)  $-2\\sqrt{2}$ ;"
+  },
+  {
+    "id": 1028,
+    "type": "text",
+    "text": "(D)  $\\pm 2\\sqrt{2}$ ."
+  },
+  {
+    "id": 1029,
+    "type": "text",
+    "text": "2. 计算  $3 \\div \\sqrt{3} \\times \\frac{1}{\\sqrt{3}}$  的结果为 （）"
+  },
+  {
+    "id": 1030,
+    "type": "text",
+    "text": "(A)3;"
+  },
+  {
+    "id": 1031,
+    "type": "text",
+    "text": "(B)9;"
+  },
+  {
+    "id": 1032,
+    "type": "text",
+    "text": "(C)1;"
+  },
+  {
+    "id": 1033,
+    "type": "text",
+    "text": "(D)  $3\\sqrt{3}$ ."
+  },
+  {
+    "id": 1034,
+    "type": "text",
+    "text": "3. 把  $a \\sqrt{-\\frac{1}{a}}$  根号外的字母放入根号内，得 （）"
+  },
+  {
+    "id": 1035,
+    "type": "text",
+    "text": "(A)  $\\sqrt{-a}$ ;"
+  },
+  {
+    "id": 1036,
+    "type": "text",
+    "text": "(B)  $-\\sqrt{-a}$ ;"
+  },
+  {
+    "id": 1037,
+    "type": "text",
+    "text": "(C)  $-\\sqrt{a}$ ;"
+  },
+  {
+    "id": 1038,
+    "type": "text",
+    "text": "(D)  $\\sqrt{a}$ ."
+  },
+  {
+    "id": 1039,
+    "type": "text",
+    "text": "4. 下列各式成立的是 （）"
+  },
+  {
+    "id": 1040,
+    "type": "text",
+    "text": "(A)  $\\sqrt{a} \\cdot \\sqrt{b} = \\sqrt{ab}$ ;"
+  },
+  {
+    "id": 1041,
+    "type": "text",
+    "text": "(B)  $\\sqrt{ab} = \\sqrt{a} \\cdot \\sqrt{b}$ ;"
+  },
+  {
+    "id": 1042,
+    "type": "text",
+    "text": "(C)  $\\sqrt{\\frac{a}{b}} = \\frac{\\sqrt{a}}{\\sqrt{b}}$ ;"
+  },
+  {
+    "id": 1043,
+    "type": "text",
+    "text": "$\\left(\\mathrm{D}\\right)\\frac{\\sqrt{a}}{\\sqrt{b}} = \\sqrt{\\frac{b}{a}}.$"
+  },
+  {
+    "id": 1044,
+    "type": "text",
+    "text": "二、填空题"
+  },
+  {
+    "id": 1045,
+    "type": "text",
+    "text": "5. 计算:  $\\sqrt{7} \\times \\sqrt{14} = \\_\\_\\_\\_\\_\\_\\_\\_\\_; 2\\sqrt{5} \\times 3\\sqrt{15} = \\_\\_\\_\\_\\_\\_\\_\\_\\_.$"
+  },
+  {
+    "id": 1046,
+    "type": "text",
+    "text": "6. 计算:  $\\sqrt{0.2} \\times \\sqrt{1.8} = \\_$ $\\sqrt{\\frac{8}{3}} \\times \\sqrt{\\frac{1}{6}} = \\_$ ."
+  },
+  {
+    "id": 1047,
+    "type": "text",
+    "text": "7. 计算:  $\\sqrt{6x} \\cdot \\sqrt{2x} = \\_$  ;  $16\\sqrt{a^3b} \\div \\sqrt{2a} = \\_$ ."
+  },
+  {
+    "id": 1048,
+    "type": "text",
+    "text": "8. 计算:  $\\sqrt{3} \\times \\frac{1}{2}\\sqrt{6} = \\_$ ;  $\\sqrt{3} \\div \\frac{1}{2}\\sqrt{6} = \\_$ ."
+  },
+  {
+    "id": 1049,
+    "type": "text",
+    "text": "9. 计算："
+  },
+  {
+    "id": 1050,
+    "type": "text",
+    "text": "(1)  $\\sqrt{50} -\\sqrt{98} =$"
+  },
+  {
+    "id": 1051,
+    "type": "text",
+    "text": "(2)  $\\sqrt{50} - \\sqrt{\\frac{1}{2}} + \\sqrt{18} = \\_$"
+  },
+  {
+    "id": 1052,
+    "type": "text",
+    "text": "(3)  $\\sqrt{2m^3} + \\sqrt{8m} - \\sqrt{2mn^2}$  ( $n < 0$ ) ="
+  },
+  {
+    "id": 1053,
+    "type": "text",
+    "text": "10. 解方程:  $\\sqrt{\\frac{3}{2}} = \\sqrt{\\frac{27}{8}} + x + \\sqrt{\\frac{75}{2}}$ , 得  $x =$"
+  },
+  {
+    "id": 1054,
+    "type": "text",
+    "text": "11. 要使  $\\frac{\\sqrt{2x + 1}}{\\sqrt{1 - x}} = \\sqrt{\\frac{2x + 1}{1 - x}}$  成立, 则  $x$  的取值范围是"
+  },
+  {
+    "id": 1055,
+    "type": "text",
+    "text": "12. 在  $\\triangle ABC$  中,  $BC$  边上的高  $h = 6\\sqrt{3} \\mathrm{~cm}$ , 它的面积恰好等于边长为  $3\\sqrt{2} \\mathrm{~cm}$  的正方形的面积, 则  $BC$  的长为"
+  },
+  {
+    "id": 1056,
+    "type": "text",
+    "text": "三、解答题"
+  },
+  {
+    "id": 1057,
+    "type": "text",
+    "text": "13. 计算："
+  },
+  {
+    "id": 1058,
+    "type": "text",
+    "text": "(1)  $\\sqrt{12} \\times \\sqrt{15} \\times \\sqrt{20}$ ;"
+  },
+  {
+    "id": 1059,
+    "type": "text",
+    "text": "(2)  $3\\sqrt{18} \\times \\frac{1}{6}\\sqrt{3} \\div 2\\sqrt{6}$ ;"
+  },
+  {
+    "id": 1060,
+    "type": "text",
+    "text": "(3)  $\\sqrt{\\frac{2x}{y}} \\times \\sqrt{\\frac{6y}{25x}}$ ;"
+  },
+  {
+    "id": 1061,
+    "type": "text",
+    "text": "(4)  $\\sqrt{x^3y} \\div \\sqrt{\\frac{5}{xy^2}}$ ;"
+  },
+  {
+    "id": 1062,
+    "type": "text",
+    "text": "(5)  $\\left[-\\sqrt{\\frac{2}{3x}}\\right] \\times \\sqrt{8x^3} \\div (-\\sqrt{6x})$ ;"
+  },
+  {
+    "id": 1063,
+    "type": "text",
+    "text": "(6)  $3\\sqrt{\\frac{b}{x}} \\div \\left[-2\\sqrt{\\frac{b}{a}}\\right] \\cdot \\sqrt{\\frac{x}{a}}.$"
+  },
+  {
+    "id": 1064,
+    "type": "text",
+    "text": "14. 若  $x, y$  为实数，且  $y = \\frac{\\sqrt{x^2 - 4} + \\sqrt{4 - x^2} + 1}{x + 2}$ ，求  $\\sqrt{x + y} \\cdot \\sqrt{x - y}$  的值"
+  },
+  {
+    "id": 1065,
+    "type": "text",
+    "text": "20.2 二次根式的运算(3)"
+  },
+  {
+    "id": 1066,
+    "type": "text",
+    "text": "一、选择题"
+  },
+  {
+    "id": 1067,
+    "type": "text",
+    "text": "1. 根式  $\\frac{1}{2\\sqrt{ab}}$  分母有理化后，得 （ ）"
+  },
+  {
+    "id": 1068,
+    "type": "text",
+    "text": "(A)  $\\frac{\\sqrt{2ab}}{2ab}$ ;"
+  },
+  {
+    "id": 1069,
+    "type": "text",
+    "text": "(B)  $\\frac{\\sqrt{2ab}}{4ab}$ ;"
+  },
+  {
+    "id": 1070,
+    "type": "text",
+    "text": "(C)  $\\frac{\\sqrt{ab}}{2ab}$ ;"
+  },
+  {
+    "id": 1071,
+    "type": "text",
+    "text": "$\\mathrm{(D)}\\frac{\\sqrt{ab}}{4ab}.$"
+  },
+  {
+    "id": 1072,
+    "type": "text",
+    "text": "2. 将式子  $-\\frac{2}{\\sqrt{x + y}}$  分母有理化，分子、分母应同时乘 （ ）"
+  },
+  {
+    "id": 1073,
+    "type": "text",
+    "text": "(A)  $\\sqrt{x} +\\sqrt{y}$"
+  },
+  {
+    "id": 1074,
+    "type": "text",
+    "text": "(B)  $\\sqrt{x} -\\sqrt{y}$"
+  },
+  {
+    "id": 1075,
+    "type": "text",
+    "text": "(C)  $\\sqrt{x + y}$ ;"
+  },
+  {
+    "id": 1076,
+    "type": "text",
+    "text": "(D)  $\\sqrt{x - y}$ ."
+  },
+  {
+    "id": 1077,
+    "type": "text",
+    "text": "3. 将式子  $\\frac{2}{\\sqrt{99}}$  分母有理化，简单的方法是分子、分母同时乘 （）"
+  },
+  {
+    "id": 1078,
+    "type": "text",
+    "text": "(A)  $\\sqrt{99}$ ;"
+  },
+  {
+    "id": 1079,
+    "type": "text",
+    "text": "(B)  $\\sqrt{33}$ ;"
+  }
+]
+```

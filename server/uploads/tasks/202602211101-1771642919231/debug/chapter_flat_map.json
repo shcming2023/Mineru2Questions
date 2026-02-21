@@ -1,0 +1,1135 @@
+[
+  {
+    "id": 0,
+    "text": "中学生世界",
+    "level": 1,
+    "page": 0,
+    "block_range": {
+      "start": 0,
+      "end": 1
+    },
+    "parent_id": null
+  },
+  {
+    "id": 1,
+    "text": "八年级数学第一学期（上）",
+    "level": 1,
+    "page": 0,
+    "block_range": {
+      "start": 1,
+      "end": 3
+    },
+    "parent_id": null
+  },
+  {
+    "id": 3,
+    "text": "《中学生世界》编写组编",
+    "level": 1,
+    "page": 0,
+    "block_range": {
+      "start": 3,
+      "end": 10
+    },
+    "parent_id": null
+  },
+  {
+    "id": 10,
+    "text": "中学生世界．八年级数学 第一学期 上/《中学生世界》编写组编. --南京：南京大学出版社，2024.5(2025.5重印)ISBN978-7-305-27951",
+    "level": 1,
+    "page": 3,
+    "block_range": {
+      "start": 10,
+      "end": 15
+    },
+    "parent_id": null
+  },
+  {
+    "id": 15,
+    "text": "ZHONGXUESHENG SHJIE BANIANJI SHUXUE DIYXUEQI SHANG",
+    "level": 1,
+    "page": 3,
+    "block_range": {
+      "start": 15,
+      "end": 18
+    },
+    "parent_id": null
+  },
+  {
+    "id": 18,
+    "text": "责任编辑 季红 编辑热线 025-83621412",
+    "level": 1,
+    "page": 3,
+    "block_range": {
+      "start": 18,
+      "end": 31
+    },
+    "parent_id": null
+  },
+  {
+    "id": 31,
+    "text": "本期导读 1",
+    "level": 1,
+    "page": 4,
+    "block_range": {
+      "start": 31,
+      "end": 32
+    },
+    "parent_id": null
+  },
+  {
+    "id": 32,
+    "text": "第19章 实数",
+    "level": 1,
+    "page": 4,
+    "block_range": {
+      "start": 32,
+      "end": 33
+    },
+    "parent_id": null
+  },
+  {
+    "id": 33,
+    "text": "19.1 算术平方根(1) 2",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 33,
+      "end": 34
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 34,
+    "text": "19.1 平方根(2) 4",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 34,
+      "end": 35
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 35,
+    "text": "19.1 立方根(3) 6",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 35,
+      "end": 37
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 37,
+    "text": "19.2 有理数的小数形式(1) 10",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 37,
+      "end": 38
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 38,
+    "text": "19.2 无理数(2) 12",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 38,
+      "end": 39
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 39,
+    "text": "19.2 实数与数轴(3) 14",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 39,
+      "end": 40
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 40,
+    "text": "19.2 实数的绝对值和大小比较(4) 16",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 40,
+      "end": 41
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 41,
+    "text": "19.2 实数的运算(5) 18",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 41,
+      "end": 42
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 42,
+    "text": "19.2 科学记数法(6) 20",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 42,
+      "end": 44
+    },
+    "parent_id": 32
+  },
+  {
+    "id": 44,
+    "text": "第19章 复习(1) 24",
+    "level": 1,
+    "page": 4,
+    "block_range": {
+      "start": 44,
+      "end": 45
+    },
+    "parent_id": null
+  },
+  {
+    "id": 45,
+    "text": "第19章 复习(2) 26",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 45,
+      "end": 46
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 46,
+    "text": "挑战压轴题19 28",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 46,
+      "end": 47
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 47,
+    "text": "第20章 二次根式",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 47,
+      "end": 48
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 48,
+    "text": "20.1 二次根式及其性质(1) 30",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 48,
+      "end": 49
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 49,
+    "text": "20.1 二次根式及其性质(2) 32",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 49,
+      "end": 51
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 51,
+    "text": "20.2 二次根式的运算(1) 36",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 51,
+      "end": 52
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 52,
+    "text": "20.2 二次根式的运算(2) 38",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 52,
+      "end": 53
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 53,
+    "text": "20.2 二次根式的运算(3) 40",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 53,
+      "end": 54
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 54,
+    "text": "20.2 二次根式的运算(4) 42",
+    "level": 2,
+    "page": 4,
+    "block_range": {
+      "start": 54,
+      "end": 56
+    },
+    "parent_id": 44
+  },
+  {
+    "id": 56,
+    "text": "第20章 复习(1) 46",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 56,
+      "end": 57
+    },
+    "parent_id": null
+  },
+  {
+    "id": 57,
+    "text": "第20章 复习(2) 48",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 57,
+      "end": 58
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 58,
+    "text": "挑战压轴题20 50",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 58,
+      "end": 59
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 59,
+    "text": "第21章 一元二次方程",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 59,
+      "end": 60
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 60,
+    "text": "21.1 一元二次方程 52",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 60,
+      "end": 61
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 61,
+    "text": "21.2 一元二次方程的解法(1) 54",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 61,
+      "end": 62
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 62,
+    "text": "21.2 一元二次方程的解法(2) 56",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 62,
+      "end": 63
+    },
+    "parent_id": 56
+  },
+  {
+    "id": 63,
+    "text": "21.2 一元二次方程的解法(3) 58",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 63,
+      "end": 64
+    },
+    "parent_id": null
+  },
+  {
+    "id": 64,
+    "text": "21.2 一元二次方程的解法(4) 60",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 64,
+      "end": 66
+    },
+    "parent_id": 63
+  },
+  {
+    "id": 66,
+    "text": "名校考题精选",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 66,
+      "end": 67
+    },
+    "parent_id": null
+  },
+  {
+    "id": 67,
+    "text": "名校考题精选(1) 64",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 67,
+      "end": 68
+    },
+    "parent_id": 66
+  },
+  {
+    "id": 68,
+    "text": "名校考题精选(2) 66",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 68,
+      "end": 69
+    },
+    "parent_id": 66
+  },
+  {
+    "id": 69,
+    "text": "各区考题精选",
+    "level": 2,
+    "page": 5,
+    "block_range": {
+      "start": 69,
+      "end": 70
+    },
+    "parent_id": 66
+  },
+  {
+    "id": 70,
+    "text": "各区考题精选(1) 68",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 70,
+      "end": 71
+    },
+    "parent_id": null
+  },
+  {
+    "id": 71,
+    "text": "各区考题精选(2) 71",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 71,
+      "end": 72
+    },
+    "parent_id": null
+  },
+  {
+    "id": 72,
+    "text": "各区考题精选(3) 74",
+    "level": 1,
+    "page": 5,
+    "block_range": {
+      "start": 72,
+      "end": 73
+    },
+    "parent_id": null
+  },
+  {
+    "id": 73,
+    "text": "本期导读",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 73,
+      "end": 74
+    },
+    "parent_id": null
+  },
+  {
+    "id": 74,
+    "text": "本学期将学习如下内容：",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 74,
+      "end": 75
+    },
+    "parent_id": null
+  },
+  {
+    "id": 75,
+    "text": "第19章 实数",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 75,
+      "end": 76
+    },
+    "parent_id": null
+  },
+  {
+    "id": 76,
+    "text": "第20章 二次根式",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 76,
+      "end": 77
+    },
+    "parent_id": null
+  },
+  {
+    "id": 77,
+    "text": "第21章 一元二次方程",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 77,
+      "end": 78
+    },
+    "parent_id": null
+  },
+  {
+    "id": 78,
+    "text": "第22章 直角三角形",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 78,
+      "end": 81
+    },
+    "parent_id": null
+  },
+  {
+    "id": 81,
+    "text": "前面已经学了一元一次方程, 知道应用一元一次方程可以解决许多实际问题, 在第 21 章, 我们将进一步研究一元二次方程 (即未知数次数是 2 的方程), 有了它",
+    "level": 1,
+    "page": 6,
+    "block_range": {
+      "start": 81,
+      "end": 83
+    },
+    "parent_id": null
+  },
+  {
+    "id": 83,
+    "text": "数学伴着我们成长，数学伴着我们进步，数学伴着我们成功，让我们在学习数学的过程中，体会、感受数学的神奇与美妙！",
+    "level": 2,
+    "page": 6,
+    "block_range": {
+      "start": 83,
+      "end": 84
+    },
+    "parent_id": 81
+  },
+  {
+    "id": 84,
+    "text": "第19章 实数",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 84,
+      "end": 85
+    },
+    "parent_id": 81
+  },
+  {
+    "id": 85,
+    "text": "19.1 算术平方根(1)",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 85,
+      "end": 92
+    },
+    "parent_id": 81
+  },
+  {
+    "id": 92,
+    "text": "2.下列说法正确的是 （）",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 92,
+      "end": 94
+    },
+    "parent_id": 81
+  },
+  {
+    "id": 94,
+    "text": "(B)算术平方根等于它本身的数只有1；",
+    "level": 1,
+    "page": 7,
+    "block_range": {
+      "start": 94,
+      "end": 95
+    },
+    "parent_id": null
+  },
+  {
+    "id": 95,
+    "text": "(C)只有正数才有算术平方根；",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 95,
+      "end": 100
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 100,
+    "text": "(C)4;",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 100,
+      "end": 103
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 103,
+    "text": "(A)9;",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 103,
+      "end": 105
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 105,
+    "text": "(C)3;",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 105,
+      "end": 119
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 119,
+    "text": "11. 填空：",
+    "level": 2,
+    "page": 7,
+    "block_range": {
+      "start": 119,
+      "end": 126
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 126,
+    "text": "13. 求下列各数的算术平方根：",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 126,
+      "end": 127
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 127,
+    "text": "(1)36;",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 127,
+      "end": 129
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 129,
+    "text": "(3)0.16;",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 129,
+      "end": 131
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 131,
+    "text": "14. 化简：",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 131,
+      "end": 136
+    },
+    "parent_id": 94
+  },
+  {
+    "id": 136,
+    "text": "15. 化简下列各式：",
+    "level": 1,
+    "page": 8,
+    "block_range": {
+      "start": 136,
+      "end": 138
+    },
+    "parent_id": null
+  },
+  {
+    "id": 138,
+    "text": "通过化简结果，你发现了什么规律？试用文字表达出来",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 138,
+      "end": 139
+    },
+    "parent_id": 136
+  },
+  {
+    "id": 139,
+    "text": "16. 计算：",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 139,
+      "end": 143
+    },
+    "parent_id": 136
+  },
+  {
+    "id": 143,
+    "text": "观察计算的结果，用你发现的规律，求出：",
+    "level": 2,
+    "page": 8,
+    "block_range": {
+      "start": 143,
+      "end": 145
+    },
+    "parent_id": 136
+  },
+  {
+    "id": 145,
+    "text": "19.1 平方根(2)",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 145,
+      "end": 147
+    },
+    "parent_id": 136
+  },
+  {
+    "id": 147,
+    "text": "1. 下列说法正确的是 （）",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 147,
+      "end": 148
+    },
+    "parent_id": 136
+  },
+  {
+    "id": 148,
+    "text": "(A)只有正数有平方根；",
+    "level": 1,
+    "page": 9,
+    "block_range": {
+      "start": 148,
+      "end": 149
+    },
+    "parent_id": null
+  },
+  {
+    "id": 149,
+    "text": "(B)一个有理数的平方根有两个，它们互为相反数；",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 149,
+      "end": 150
+    },
+    "parent_id": 148
+  },
+  {
+    "id": 150,
+    "text": "(C)3是9的一个平方根，9的平方根是土3；",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 150,
+      "end": 151
+    },
+    "parent_id": 148
+  },
+  {
+    "id": 151,
+    "text": "(D)正数的算术平方根一定比它本身小.",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 151,
+      "end": 152
+    },
+    "parent_id": 148
+  },
+  {
+    "id": 152,
+    "text": "2.3的平方根是 （）",
+    "level": 1,
+    "page": 9,
+    "block_range": {
+      "start": 152,
+      "end": 156
+    },
+    "parent_id": null
+  },
+  {
+    "id": 156,
+    "text": "(D)9.",
+    "level": 1,
+    "page": 9,
+    "block_range": {
+      "start": 156,
+      "end": 157
+    },
+    "parent_id": null
+  },
+  {
+    "id": 157,
+    "text": "3. 下列结论正确的是 （）",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 157,
+      "end": 158
+    },
+    "parent_id": 156
+  },
+  {
+    "id": 158,
+    "text": "(A)4 的平方根是 2;",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 158,
+      "end": 160
+    },
+    "parent_id": 156
+  },
+  {
+    "id": 160,
+    "text": "(C)2是4的平方根；",
+    "level": 1,
+    "page": 9,
+    "block_range": {
+      "start": 160,
+      "end": 162
+    },
+    "parent_id": null
+  },
+  {
+    "id": 162,
+    "text": "4.下列各组数中，相等的是 （）",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 162,
+      "end": 171
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 171,
+    "text": "8. 若一个数的平方根等于它的本身，则这个数是",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 171,
+      "end": 172
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 172,
+    "text": "9. 2026 的两个平方根之和等于 ,乘积等于",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 172,
+      "end": 175
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 175,
+    "text": "11. 求下列各数的平方根：（注意书写的规范性）",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 175,
+      "end": 177
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 177,
+    "text": "(2)0.04;",
+    "level": 2,
+    "page": 9,
+    "block_range": {
+      "start": 177,
+      "end": 180
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 180,
+    "text": "12. 化简：",
+    "level": 2,
+    "page": 10,
+    "block_range": {
+      "start": 180,
+      "end": 188
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 188,
+    "text": "14. 已知一个大正方形内的两个小正方形，面积如图所示，求大正方形的面积",
+    "level": 2,
+    "page": 10,
+    "block_range": {
+      "start": 188,
+      "end": 191
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 191,
+    "text": "名校考题精选(1)",
+    "level": 2,
+    "page": 10,
+    "block_range": {
+      "start": 191,
+      "end": 192
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 192,
+    "text": "思维与拓展1",
+    "level": 2,
+    "page": 10,
+    "block_range": {
+      "start": 192,
+      "end": 194
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 194,
+    "text": "19.1 立方根(3)",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 194,
+      "end": 196
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 196,
+    "text": "1.8的立方根是 （）",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 196,
+      "end": 197
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 197,
+    "text": "(A)2;",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 197,
+      "end": 198
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 198,
+    "text": "(B)-2;",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 198,
+      "end": 199
+    },
+    "parent_id": 160
+  },
+  {
+    "id": 199,
+    "text": "(C)4;",
+    "level": 1,
+    "page": 11,
+    "block_range": {
+      "start": 199,
+      "end": 200
+    },
+    "parent_id": null
+  },
+  {
+    "id": 200,
+    "text": "(D)-4.",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 200,
+      "end": 201
+    },
+    "parent_id": 199
+  },
+  {
+    "id": 201,
+    "text": "2. 下列等式不成立的是 （）",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 201,
+      "end": 206
+    },
+    "parent_id": 199
+  },
+  {
+    "id": 206,
+    "text": "3. 立方根等于它本身的数是 （）",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 206,
+      "end": 207
+    },
+    "parent_id": 199
+  },
+  {
+    "id": 207,
+    "text": "(A)1;",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 207,
+      "end": 208
+    },
+    "parent_id": 199
+  },
+  {
+    "id": 208,
+    "text": "(B)-1;",
+    "level": 1,
+    "page": 11,
+    "block_range": {
+      "start": 208,
+      "end": 209
+    },
+    "parent_id": null
+  },
+  {
+    "id": 209,
+    "text": "(C)0;",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 209,
+      "end": 210
+    },
+    "parent_id": 208
+  },
+  {
+    "id": 210,
+    "text": "(D)以上都是.",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 210,
+      "end": 216
+    },
+    "parent_id": 208
+  },
+  {
+    "id": 216,
+    "text": "8. 若一个数的平方根与其立方根相同，则这个数是",
+    "level": 2,
+    "page": 11,
+    "block_range": {
+      "start": 216,
+      "end": 219
+    },
+    "parent_id": 208
+  },
+  {
+    "id": 219,
+    "text": "11. 一8的立方根与16的算术平方根的和是",
+    "level": 1,
+    "page": 11,
+    "block_range": {
+      "start": 219,
+      "end": 222
+    },
+    "parent_id": null
+  },
+  {
+    "id": 222,
+    "text": "13. 求下列各数的立方根：",
+    "level": 1,
+    "page": 11,
+    "block_range": {
+      "start": 222,
+      "end": 1935
+    },
+    "parent_id": null
+  }
+]

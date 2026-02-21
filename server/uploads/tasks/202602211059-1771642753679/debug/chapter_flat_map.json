@@ -1,0 +1,57 @@
+[
+  {
+    "id": 0,
+    "text": "2025 The First Semester G4 Final Test",
+    "level": 1,
+    "page": 0,
+    "block_range": {
+      "start": 0,
+      "end": 14
+    },
+    "parent_id": null
+  },
+  {
+    "id": 14,
+    "text": "II. Count and write the angles in the figure: (12’)",
+    "level": 2,
+    "page": 0,
+    "block_range": {
+      "start": 14,
+      "end": 20
+    },
+    "parent_id": 0
+  },
+  {
+    "id": 20,
+    "text": "III.Fill in the blanks (2’/40’)",
+    "level": 2,
+    "page": 0,
+    "block_range": {
+      "start": 20,
+      "end": 39
+    },
+    "parent_id": 0
+  },
+  {
+    "id": 39,
+    "text": "IV.Solve the problems (21’)",
+    "level": 2,
+    "page": 1,
+    "block_range": {
+      "start": 39,
+      "end": 55
+    },
+    "parent_id": 0
+  },
+  {
+    "id": 55,
+    "text": "V. Application problems. (5′/15′)",
+    "level": 2,
+    "page": 2,
+    "block_range": {
+      "start": 55,
+      "end": 58
+    },
+    "parent_id": 0
+  }
+]

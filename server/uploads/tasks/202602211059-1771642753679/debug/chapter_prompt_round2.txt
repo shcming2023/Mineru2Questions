@@ -1,0 +1,116 @@
+You are a document structure analyst. A previous analysis of an educational document produced the directory tree below. Your job is to VERIFY and CORRECT it.
+
+## Previous Result (may have errors)
+[
+  {
+    "id": 0,
+    "level": 1,
+    "title": "2025 The First Semester G4 Final Test"
+  },
+  {
+    "id": 14,
+    "level": 2,
+    "title": "II. Count and write the angles in the figure: (12’)"
+  },
+  {
+    "id": 20,
+    "level": 2,
+    "title": "III.Fill in the blanks (2’/40’)"
+  },
+  {
+    "id": 39,
+    "level": 2,
+    "title": "IV.Solve the problems (21’)"
+  },
+  {
+    "id": 55,
+    "level": 2,
+    "title": "V. Application problems. (5′/15′)"
+  }
+]
+
+## Common Errors to Check and Fix
+1. **Missing headings**: Check that ALL numbered sub-sections are included. Check for missing "Front Matter" or "Back Matter".
+2. **False positives**: Instructional labels like "Key points", "Exercises", "Questions" are NOT structural headings — remove them.
+3. **Missing parent**: If sections like "22.1", "22.2" exist but "Chapter 22" (or "Unit X") is missing, find and add it.
+4. **Fragmented titles**: Merge adjacent title fragments (e.g., "Chapter" + "1") into one entry.
+5. **Level errors**: Ensure correct hierarchy: Unit (L1) -> Chapter (L2) -> Section (L3). If no Units, then Chapter (L1).
+6. **Table of contents entries**: Only remove entries that are explicitly part of a "Contents" list (with page numbers at the end). DO NOT remove "Introduction" or "Unit" pages.
+
+## Instructions
+- Review the previous result against the full document text below
+- Fix any of the above errors
+- Output the CORRECTED directory in the same JSON format
+- Keep entries in LOGICAL document order (not necessarily ascending ID)
+
+## Output Format
+Return ONLY valid JSON:
+{
+  "directory": [
+    {"id": <number or [n1, n2]>, "level": <1|2|3>, "title": "<heading text>"},
+    ...
+  ]
+}
+
+---
+
+Document: 58 blocks, 3 pages.
+
+[0|p0|T1] 2025 The First Semester G4 Final Test
+[1|p0] I. Calculations. Use laws of calculations to solve if applicable, and write down which law(s) you used. (2’/12’)
+[2|p0] 1. 423 + 156 + 577 + 244
+[3|p0] 4. 216 139 + 216 + 216 60
+[4|p0] Law:
+[5|p0] Law:
+[6|p0] 2. 25 (8 + 40)
+[7|p0] 5. 398 173 + 102
+[8|p0] Law:
+[9|p0] Law:
+[10|p0] 3. 125 88 2
+[11|p0] 6. 12 97 + 36
+[12|p0] Law:
+[13|p0] Law:
+[14|p0|T1] II. Count and write the angles in the figure: (12’)
+[15|p0] 7. Acute angles:
+[16|p0] 8. Obtuse angles:
+[17|p0] 9. Right angles:
+[18|p0] 10. Total angles:
+[19|p0] [Image]
+[20|p0|T1] III.Fill in the blanks (2’/40’)
+[21|p0] 11. There are ( ) line segments which are denoted as ( ). There are ( ) rays and ( ) lines.
+[22|p0] [Image]
+[23|p0] 12. Recall the clock face and imagine the angle formed by the hour hand and the minute hand.
+[24|p0] a. At 03:00, the angle formed by the hour hand and the minute hand measures ( ) degrees and it is a/an ( ) angle.
+[25|p0] b. At 18:00, the angle formed on the clock measures ( ) degrees and it is a/an ( ) angle.
+[26|p0] 13. As shown in the figure, the length of the rectangle is 6cm, the width is 4cm, so the radius of circle is ( ) mm.
+[27|p0] [Image]
+[28|p0] 14. As shown in the figure, Kate drew two circles with the same size in a rectangle. The length of this rectangle is 2dm. So the radius of each circle is ( ) cm.
+[29|p0] 座位号 班级 学号 姓名
+[30|p0] 密 .封 .线
+[31|p1] [Image]
+[32|p1] 15. Look at each of the fidget spinners and decide if they have rotational symmetry. If so, next to each image write how many orders of rotational symmetry each fidget spinner has.
+[33|p1] [Image]
+[34|p1] 16. The figures below are formed using set squares. Calculate and find out how many degrees they each are.
+[35|p1] [Image]
+[36|p1] [Equation]
+[37|p1] 17. The distance between any point on a circle and its center is called the of the circle.
+[38|p1] 18. In a straight angle, if one acute angle is [EQ] , then the other obtuse angle is
+[39|p1] IV.Solve the problems (21’)
+[40|p1] 19. For questions below, measure each angle.(2’/6’)
+[41|p1] [Image]
+[42|p1] [Image]
+[43|p1] 20. Draw and label. (2’/4’)
+[44|p1] a. line MN
+[45|p1] b. ray PO
+[46|p1] 21. In each figure, draw the angle with one side given. (2’/4)
+[47|p1] [Image]
+[48|p2] 22. Read the instructions and draw the line segment and the circle. (2’/4’)
+[49|p2] a. Draw a line segment AB with a length of 2 cm.
+[50|p2] b. Draw a circle with a radius of 1 cm using point A, which is one of the endpoints of the line segment AB that you just drew.
+[51|p2] two hours ahead of the original plan. How many containers must be unloaded per hour now?
+[52|p2] 26. A store received a delivery of 1125 kg of pineapples. After 20 baskets of pineapples were sold, there were 185 kg of pineapples remaining. If each basket came with the same weight, how many kilogr...
+[53|p2] 23. In the figure, given that [EQ] is a right angle and [EQ] , find ∠AOB. (3’)
+[54|p2] [Image]
+[55|p2|T1] V. Application problems. (5′/15′)
+[56|p2] 24. The distance between Place A and Place B is 720 kilometres. A car has travelled 240 kilometres in three hours. At this speed, in how many hours will it reach Place B?
+[57|p2] 25. A shipment of 120 containers of goods has reached a dock. It was supposed to unload 12 containers of the goods per hour. Due to an emergency, the shipment must be unloaded

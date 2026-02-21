@@ -1,0 +1,720 @@
+You are an expert in extracting questions from educational materials. You are given a JSON array containing content blocks from a textbook page. Each block has an "id" field.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 1: ID-ONLY OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+**You MUST output ONLY block IDs (comma-separated numbers), NOT the actual text content.**
+
+✅ CORRECT: <question>10,11,12</question>
+❌ WRONG: <question>What is the square root of 16?</question>
+
+The system will automatically retrieve the text using the IDs you provide.
+
+## ═══════════════════════════════════════════════════════════════
+## CRITICAL RULE 2: INCLUDE ALL CONSECUTIVE BLOCKS (ESPECIALLY IMAGES)
+## ═══════════════════════════════════════════════════════════════
+
+**When a question spans multiple consecutive blocks, you MUST include ALL IDs in sequence.**
+**DO NOT skip any block, especially image blocks (type='image') and equation blocks (type='equation').**
+
+✅ CORRECT: <question>45,46,47,48</question>  <!-- includes text + image + text -->
+❌ WRONG: <question>45,47,48</question>       <!-- FATAL ERROR: MISSING image block 46 -->
+
+### Why This Matters:
+- Many questions contain embedded images or diagrams that are essential to understanding the problem.
+- Skipping an image block will result in an incomplete, unusable question.
+- The system relies on YOU to identify the correct sequence of IDs.
+
+### How to Identify Consecutive Blocks:
+1. Look at the "id" field: consecutive IDs like 45, 46, 47, 48 likely belong together.
+2. Check the "type" field: 
+   - type="text": regular text content
+   - type="image": figure, diagram, or photo
+   - type="equation": mathematical formula
+   - type="table_row": IGNORE these blocks (do not include in questions)
+3. If a text block is followed by an image, then more text, they are likely part of the same question.
+
+## ═══════════════════════════════════════════════════════════════
+## Your Tasks:
+## ═══════════════════════════════════════════════════════════════
+
+1. **Identify chapter/section titles** and output their block IDs in <title>...</title>.
+2. **Identify question types**:
+   - **Examples** (例题): labeled with "例", "例1", "例①", "Example 1", etc. → <type>example</type>
+   - **Exercises** (练习题): labeled with "1.", "①", "习题3", "Exercise 2", etc. → <type>exercise</type>
+3. **Identify math problems** and output their block IDs in <question>...</question>.
+4. **For examples ONLY**: If a solution immediately follows (within ~5 blocks), output its IDs in <solution>...</solution>.
+5. **ONE QUESTION PER <qa_pair>**: Never merge multiple questions into a single <qa_pair> block.
+
+## ═══════════════════════════════════════════════════════════════
+## Question Numbering Recognition
+## ═══════════════════════════════════════════════════════════════
+
+- Circled numbers ①②③④⑤⑥⑦⑧⑨⑩ are INDEPENDENT questions. Each starts a NEW <qa_pair>.
+- Arabic numbers like 1. 2. 3. or 1) 2) 3) are also INDEPENDENT questions.
+- ONLY (1)(2)(3) or (a)(b)(c) WITHIN a question are sub-questions that belong together.
+- **PROHIBITION**: If the input chunk contains visible questions (starting with "1.", "Example 1", etc.), you are **PROHIBITED** from outputting <empty></empty>. You MUST extract them.
+
+## ═══════════════════════════════════════════════════════════════
+## Chapter/Section Titles
+## ═══════════════════════════════════════════════════════════════
+
+- Always enclose qa pairs in a <chapter>...</chapter> block.
+- If the chunk contains content from multiple chapters or sections, you MUST output multiple <chapter> blocks, each with its own <title>.
+- <title>TITLE_ID</title> should contain the ID of the chapter title block.
+- If you cannot find a clear chapter title block that applies to the questions in this chunk, use <title></title> (empty).
+- DO NOT invent chapter titles. DO NOT output text like "Practice questions" inside the title tag.
+
+Example:
+<chapter><title>10</title>  // Correct: ID of the block containing "一、选择题"
+<qa_pair>...</qa_pair>
+</chapter>
+
+Example (No Title Block):
+<chapter><title></title> // Correct: No applicable title block found
+<qa_pair>...</qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Output Format
+## ═══════════════════════════════════════════════════════════════
+
+If no qualifying content is found (and NO questions are visible in text):
+<empty></empty>
+
+Otherwise:
+<chapter><title>TITLE_ID</title>
+<qa_pair><label>LABEL</label><type>TYPE</type><question>QUESTION_IDS</question>
+<solution>SOLUTION_IDS</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 1: Exercise Question with Image
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 10, "type": "text", "text": "一、选择题"},
+  {"id": 11, "type": "text", "text": "① 如图, 直线 l 与正五边形 ABCDE 的两边 AB, AE 分别交于点 M, N,"},
+  {"id": 12, "type": "image", "img_path": "images/fig1.jpg"},
+  {"id": 13, "type": "text", "text": "则 ∠1 + ∠2 的度数是多少?"},
+  {"id": 14, "type": "table_row", "text": "<tr><td>...</td></tr>"}
+]
+
+✅ CORRECT Output:
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,12,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (missing image ID 12):
+<chapter><title>10</title>
+<qa_pair><label>1</label><type>exercise</type><question>11,13</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 2: Example Question with Near-Distance Solution
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 20, "type": "text", "text": "例① 计算 √16 的算术平方根."},
+  {"id": 21, "type": "text", "text": "解: √16 = 4, 4 的算术平方根是 2,"},
+  {"id": 22, "type": "text", "text": "所以 √16 的算术平方根是 2."}
+]
+
+✅ CORRECT Output:
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>20</question>
+<solution>21,22</solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (free text instead of IDs):
+<chapter><title></title>
+<qa_pair><label>例1</label><type>example</type><question>计算 √16 的算术平方根.</question>
+<solution>√16 = 4, 4 的算术平方根是 2, 所以 √16 的算术平方根是 2.</solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 3: Multiple Separate Questions
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 30, "type": "text", "text": "二、填空题"},
+  {"id": 31, "type": "text", "text": "① √9 = ___"},
+  {"id": 32, "type": "text", "text": "② √25 = ___"},
+  {"id": 33, "type": "text", "text": "③ √49 = ___"}
+]
+
+✅ CORRECT Output (3 separate qa_pairs):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31</question>
+<solution></solution></qa_pair>
+<qa_pair><label>2</label><type>exercise</type><question>32</question>
+<solution></solution></qa_pair>
+<qa_pair><label>3</label><type>exercise</type><question>33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (merging multiple questions):
+<chapter><title>30</title>
+<qa_pair><label>1</label><type>exercise</type><question>31,32,33</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Example 4: Complex Question with Multiple Images and Equations
+## ═══════════════════════════════════════════════════════════════
+
+Input blocks:
+[
+  {"id": 40, "type": "text", "text": "① 如图所示,"},
+  {"id": 41, "type": "image", "img_path": "images/fig2.jpg"},
+  {"id": 42, "type": "text", "text": "已知"},
+  {"id": 43, "type": "equation", "latex": "a^2 + b^2 = c^2"},
+  {"id": 44, "type": "text", "text": "求 c 的值."}
+]
+
+✅ CORRECT Output (includes ALL consecutive IDs):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,41,42,43,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+❌ WRONG Output (skipping image and equation):
+<chapter><title></title>
+<qa_pair><label>1</label><type>exercise</type><question>40,42,44</question>
+<solution></solution></qa_pair>
+</chapter>
+
+## ═══════════════════════════════════════════════════════════════
+## Special Cases
+## ═══════════════════════════════════════════════════════════════
+
+- **Definition text** without a problem number is NOT a problem - do not extract it.
+- **Incomplete problems** that continue to the next chunk should be omitted.
+- **Preserve original labels** like "例1", "习题3", "①" in the <label> field.
+- **For exercises**: Leave <solution> empty (we don't extract far-distance answers).
+- **For examples**: Only extract solution if it immediately follows the question (within ~5 blocks).
+
+## ═══════════════════════════════════════════════════════════════
+## Final Reminder: CHECK YOUR OUTPUT
+## ═══════════════════════════════════════════════════════════════
+
+Before submitting your output, verify:
+1. ✅ All <question> and <solution> fields contain ONLY IDs (comma-separated numbers)
+2. ✅ No image blocks are skipped in the ID sequence
+3. ✅ Each independent question has its own <qa_pair> block
+4. ✅ <type> is correctly set to "example" or "exercise"
+5. ✅ <label> preserves the original question number
+
+Please now process the provided JSON and output your result following these rules strictly.
+
+## Input JSON:
+```json
+[
+  {
+    "id": 1540,
+    "type": "text",
+    "text": "(B)  $a = 1, b = 2, c = 3$ ;"
+  },
+  {
+    "id": 1541,
+    "type": "text",
+    "text": "(C)  $a = 2, b = 1, c = -3$ ;"
+  },
+  {
+    "id": 1542,
+    "type": "text",
+    "text": "(D)  $a = 2, b = -3, c = 1$ ."
+  },
+  {
+    "id": 1543,
+    "type": "text",
+    "text": "2. 已知方程  $x^{2} - 6x - 1 = 0$  ，其中  $b^{2} - 4ac$  的值是 （）"
+  },
+  {
+    "id": 1544,
+    "type": "text",
+    "text": "(A)10;"
+  },
+  {
+    "id": 1545,
+    "type": "text",
+    "text": "(B)32;"
+  },
+  {
+    "id": 1546,
+    "type": "text",
+    "text": "(C)40;"
+  },
+  {
+    "id": 1547,
+    "type": "text",
+    "text": "(D)-40."
+  },
+  {
+    "id": 1548,
+    "type": "text",
+    "text": "3. 已知方程  $ax^2 + bx + c = 0 (a \\neq 0)$ ，下列说法正确的是 （）"
+  },
+  {
+    "id": 1549,
+    "type": "text",
+    "text": "(A)当  $a,b,c$  都是正数时方程一定有解；"
+  },
+  {
+    "id": 1550,
+    "type": "text",
+    "text": "(B)当  $a,b,c$  中有两个为负数时方程一定有解；"
+  },
+  {
+    "id": 1551,
+    "type": "text",
+    "text": "(C)当  $a, c$  同号时方程一定有解；"
+  },
+  {
+    "id": 1552,
+    "type": "text",
+    "text": "(D)当  $a, c$  异号时方程一定有解."
+  },
+  {
+    "id": 1553,
+    "type": "text",
+    "text": "4. 一元二次方程  $x^{2} - px - q = 0(q > 0)$  的两个根是 （）"
+  },
+  {
+    "id": 1554,
+    "type": "text",
+    "text": "(A)  $\\frac{p \\pm \\sqrt{p^2 - 4q}}{2}$ ;"
+  },
+  {
+    "id": 1555,
+    "type": "text",
+    "text": "（B）  $\\frac{-p\\pm\\sqrt{p^2 - 4q}}{2}$"
+  },
+  {
+    "id": 1556,
+    "type": "text",
+    "text": "(C)  $\\frac{p \\pm \\sqrt{p^2 + 4q}}{2}$ ;"
+  },
+  {
+    "id": 1557,
+    "type": "text",
+    "text": "（D）  $\\frac{-p\\pm\\sqrt{p^2 + 4q}}{2}$"
+  },
+  {
+    "id": 1558,
+    "type": "text",
+    "text": "5. 下列说法正确的是 （）"
+  },
+  {
+    "id": 1559,
+    "type": "text",
+    "text": "(A)一元二次方程的一般式是  $ax^2 +bx + c$"
+  },
+  {
+    "id": 1560,
+    "type": "text",
+    "text": "(B) 一元二次方程  $ax^2 + bx + c = 0$  的根是  $x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$ ;"
+  },
+  {
+    "id": 1561,
+    "type": "text",
+    "text": "(C)方程  $x^{2} - 3 = 2x$  中， $a = 1, b = 2, c = -3$"
+  },
+  {
+    "id": 1562,
+    "type": "text",
+    "text": "(D)方程  $2x^{2} - 4x + 1 = 0$  的解为  $x_{1} = \\frac{2 + \\sqrt{2}}{2}, x_{2} = \\frac{2 - \\sqrt{2}}{2}$ ."
+  },
+  {
+    "id": 1563,
+    "type": "text",
+    "text": "二、填空题"
+  },
+  {
+    "id": 1564,
+    "type": "text",
+    "text": "6. 已知一元二次方程  $x^{2} + 2\\sqrt{5} x = 2$ ，化为一般式后，其中  $a = \\_$ ， $b = \\_$ ， $c = \\_$"
+  },
+  {
+    "id": 1565,
+    "type": "text",
+    "text": "7. 把下列方程中  $b^{2} - 4ac$  的值写在括号内："
+  },
+  {
+    "id": 1566,
+    "type": "text",
+    "text": "(1)  $x^{2} + 2 = 2\\sqrt{2} x$  （"
+  },
+  {
+    "id": 1567,
+    "type": "text",
+    "text": "(2)  $\\sqrt{3} x^{2} = \\sqrt{6} x + 2\\sqrt{3}$"
+  },
+  {
+    "id": 1568,
+    "type": "text",
+    "text": "8. 方程  $x^{2} + 4x + 3 = 0$  的根是"
+  },
+  {
+    "id": 1569,
+    "type": "text",
+    "text": "9. 在横线上填写适当的数或式子，使下列用公式法解一元二次方程的过程完整"
+  },
+  {
+    "id": 1570,
+    "type": "text",
+    "text": "(1)  $2x^{2} - 3x - 1 = 0$"
+  },
+  {
+    "id": 1571,
+    "type": "text",
+    "text": "(2)  $2x^{2} + 3 = -3\\sqrt{3} x$"
+  },
+  {
+    "id": 1572,
+    "type": "text",
+    "text": "解：  $a = \\_ ,b = \\_ ,c = \\_ .$"
+  },
+  {
+    "id": 1573,
+    "type": "text",
+    "text": "解：移项，得  $2x^{2} = 0$"
+  },
+  {
+    "id": 1574,
+    "type": "equation",
+    "text": "$$\nb ^ {2} - 4 a c = \\underline {{}}.\n$$"
+  },
+  {
+    "id": 1575,
+    "type": "equation",
+    "text": "$$\na = \\_ \\_ \\_ \\_ \\_ , b = \\_ \\_ \\_ \\_ \\_ , c = \\_ \\_ \\_ \\_\n$$"
+  },
+  {
+    "id": 1576,
+    "type": "equation",
+    "text": "$$\nx = \\frac {- b \\pm \\sqrt {b ^ {2} - 4 a c}}{2 a} = \\underline {{\\quad}}.\n$$"
+  },
+  {
+    "id": 1577,
+    "type": "equation",
+    "text": "$$\nb ^ {2} - 4 a c = \\underline {{\\quad}}.\n$$"
+  },
+  {
+    "id": 1578,
+    "type": "equation",
+    "text": "$$\n\\therefore x _ {1} = \\_ \\_ , x _ {2} = \\_ \\_ .\n$$"
+  },
+  {
+    "id": 1579,
+    "type": "equation",
+    "text": "$$\nx = \\underline {{\\quad}}.\n$$"
+  },
+  {
+    "id": 1580,
+    "type": "equation",
+    "text": "$$\n\\therefore x _ {1} = \\_ \\_ \\_ \\_ \\_ \\_ , x _ {2} = \\_ \\_ \\_ \\_ \\_\n$$"
+  },
+  {
+    "id": 1581,
+    "type": "text",
+    "text": "三、解答题"
+  },
+  {
+    "id": 1582,
+    "type": "text",
+    "text": "(6)  $(x - \\sqrt{2})^2 + 4\\sqrt{2} x = 0.$"
+  },
+  {
+    "id": 1583,
+    "type": "text",
+    "text": "10. 解方程："
+  },
+  {
+    "id": 1584,
+    "type": "text",
+    "text": "(1)  $x^{2} + 3x + 1 = 0$"
+  },
+  {
+    "id": 1585,
+    "type": "text",
+    "text": "(2)  $\\frac{1}{2} x - 1 = 2x^2$ ;"
+  },
+  {
+    "id": 1586,
+    "type": "text",
+    "text": "(3)  $\\frac{x^2 - 2}{3} + \\frac{x}{2} = x$ ;"
+  },
+  {
+    "id": 1587,
+    "type": "text",
+    "text": "(4)  $x^{2} + 2 = 2\\sqrt{2} x;$"
+  },
+  {
+    "id": 1588,
+    "type": "text",
+    "text": "(5)  $-3x^{2} - 2x + 2 = 0$ ;"
+  },
+  {
+    "id": 1589,
+    "type": "text",
+    "text": "11. 用公式法解关于  $x$  的方程:  $x^{2} - x = a^{2}$ ."
+  },
+  {
+    "id": 1590,
+    "type": "image",
+    "img_path": "images/f400520589f1c40445ee3a93a9fd30fc5da77334abb1b3830cb64e01b5f9bed4.jpg"
+  },
+  {
+    "id": 1591,
+    "type": "text",
+    "text": "思维与拓展 15"
+  },
+  {
+    "id": 1592,
+    "type": "text",
+    "text": "已知一元二次方程  $\\frac{9}{4} ax^2 - 5x + a = 0 (a \\neq 0)$  有两个相等的实数根，求此方程的解."
+  },
+  {
+    "id": 1593,
+    "type": "text",
+    "text": "习题21.1-21.2"
+  },
+  {
+    "id": 1594,
+    "type": "text",
+    "text": "一、选择题"
+  },
+  {
+    "id": 1595,
+    "type": "text",
+    "text": "1. 下列选项中是关于  $x$  的一元二次方程的是 （）"
+  },
+  {
+    "id": 1596,
+    "type": "text",
+    "text": "(A)  $3x^{2} - x + 5$"
+  },
+  {
+    "id": 1597,
+    "type": "text",
+    "text": "(B)  $2x^{2} + \\frac{3}{x} - 1 = 0$ ;"
+  },
+  {
+    "id": 1598,
+    "type": "text",
+    "text": "(C)  $x^{2} + 6 = (x - 1)(x + 4)$ ;"
+  },
+  {
+    "id": 1599,
+    "type": "text",
+    "text": "(D)  $x^{2} - 4x = 5.$"
+  },
+  {
+    "id": 1600,
+    "type": "text",
+    "text": "2.方程  $(x - 3)(x + 1) = x - 3$  的根是 （）"
+  },
+  {
+    "id": 1601,
+    "type": "text",
+    "text": "(A)  $x = 0$"
+  },
+  {
+    "id": 1602,
+    "type": "text",
+    "text": "(B)  $x = 3$"
+  },
+  {
+    "id": 1603,
+    "type": "text",
+    "text": "(C)  $x = 3$  或  $x = -1$"
+  },
+  {
+    "id": 1604,
+    "type": "text",
+    "text": "(D)  $x = 3$  或  $x = 0$"
+  },
+  {
+    "id": 1605,
+    "type": "text",
+    "text": "3.方程  $x^{2} + (\\sqrt{2} +\\sqrt{3})x + \\sqrt{6} = 0$  的根是 （）"
+  },
+  {
+    "id": 1606,
+    "type": "text",
+    "text": "(A)  $x_{1} = 1, x_{2} = \\sqrt{6}$ ;"
+  },
+  {
+    "id": 1607,
+    "type": "text",
+    "text": "(B)  $x_{1} = -1, x_{2} = -\\sqrt{6}$ ;"
+  },
+  {
+    "id": 1608,
+    "type": "text",
+    "text": "(C)  $x_{1} = \\sqrt{2}, x_{2} = \\sqrt{3}$ ;"
+  },
+  {
+    "id": 1609,
+    "type": "text",
+    "text": "(D)  $x_{1} = -\\sqrt{2}, x_{2} = -\\sqrt{3}$ ."
+  },
+  {
+    "id": 1610,
+    "type": "text",
+    "text": "4. 已知关于  $x$  的一元二次方程  $(m - \\sqrt{2})x^{2} + 3x + m^{2} - 2 = 0$  的一个根为 0, 则  $m$  的值为 ( )"
+  },
+  {
+    "id": 1611,
+    "type": "text",
+    "text": "(A)  $\\sqrt{2}$ ;"
+  },
+  {
+    "id": 1612,
+    "type": "text",
+    "text": "(B)  $-\\sqrt{2}$ ;"
+  },
+  {
+    "id": 1613,
+    "type": "text",
+    "text": "(C)  $\\pm \\sqrt{2}$ ;"
+  },
+  {
+    "id": 1614,
+    "type": "text",
+    "text": "(D)不能确定."
+  },
+  {
+    "id": 1615,
+    "type": "text",
+    "text": "二、填空题"
+  },
+  {
+    "id": 1616,
+    "type": "text",
+    "text": "5. 若关于  $x$  的方程  $ax^2 - 2m - 3 = x(2 - x)$  是一元二次方程，则  $a$  的取值范围是"
+  },
+  {
+    "id": 1617,
+    "type": "text",
+    "text": "6. 已知关于  $x$  的方程  $x^{2} + 3x + k = 0$  的一个根是1, 则  $k$  的值是"
+  },
+  {
+    "id": 1618,
+    "type": "text",
+    "text": "7.  $(x - 2)^{2} - 2 + x = 0$  用 法解，得  $x_{1} = \\_ ,x_{2} = \\_ .$"
+  },
+  {
+    "id": 1619,
+    "type": "text",
+    "text": "8.  $x^{2} - 2x = 399$  用 法解，得  $x_{1} = \\_ ,x_{2} = \\_ .$"
+  },
+  {
+    "id": 1620,
+    "type": "text",
+    "text": "9. 方程  $(x - \\sqrt{3})^2 = 2$  的根是"
+  },
+  {
+    "id": 1621,
+    "type": "text",
+    "text": "10. 方程  $x(x - 1) = 0$  的根是"
+  },
+  {
+    "id": 1622,
+    "type": "text",
+    "text": "11. 方程  $(1 + x)^{2} - 16 = 0$  的根是"
+  },
+  {
+    "id": 1623,
+    "type": "text",
+    "text": "12. 已知方程  $(x + a)(x - 3) = 0$  和方程  $x^{2} - 2x - 3 = 0$  的根相同，则  $a =$"
+  },
+  {
+    "id": 1624,
+    "type": "text",
+    "text": "三、解答题"
+  },
+  {
+    "id": 1625,
+    "type": "text",
+    "text": "13. 用适当的方法解下列方程："
+  },
+  {
+    "id": 1626,
+    "type": "text",
+    "text": "(1)  $(2x - 1)^{2} - 9 = 0$"
+  },
+  {
+    "id": 1627,
+    "type": "text",
+    "text": "(2)  $(x - 1)^{2} + 2x(1 - x) = 0$"
+  },
+  {
+    "id": 1628,
+    "type": "text",
+    "text": "(3)  $x^{2} - 4x - 3 = 0$"
+  },
+  {
+    "id": 1629,
+    "type": "text",
+    "text": "(4)  $(x - 7)(x + 3) + (x - 1)(x + 5) = 38$"
+  },
+  {
+    "id": 1630,
+    "type": "text",
+    "text": "(5)  $x(x + 2) - 7(x - 1) = 2(x + 2)$ ;"
+  },
+  {
+    "id": 1631,
+    "type": "text",
+    "text": "(6)  $x^{2} + 7ax = 4ax(a$  为常数)."
+  },
+  {
+    "id": 1632,
+    "type": "text",
+    "text": "14. 已知关于  $x$  的一元二次方程  $(2a + 3)x^{2} + a^{2}x + 2a = 0$  的一个实数根是 2, 求  $a$  的值及方程的另一个根."
+  },
+  {
+    "id": 1633,
+    "type": "text",
+    "text": "15. 若  $a$  是方程  $x^{2} - x - 1 = 0$  的一个根, 求代数式  $a^{3} - 2a + 3$  的值."
+  },
+  {
+    "id": 1634,
+    "type": "image",
+    "img_path": "images/d6da33113aa164a1b8a31b31169d5bdc6411f65a60024e3f50fe1343ce4f6c20.jpg"
+  },
+  {
+    "id": 1635,
+    "type": "text",
+    "text": "思维与拓展 16"
+  },
+  {
+    "id": 1636,
+    "type": "text",
+    "text": "设方程  $x^{2} - |2x - 1| - 4 = 0$  ，求该方程所有根的和"
+  },
+  {
+    "id": 1637,
+    "type": "text",
+    "text": "名校考题精选"
+  },
+  {
+    "id": 1638,
+    "type": "text",
+    "text": "名校考题精选(1)"
+  },
+  {
+    "id": 1639,
+    "type": "text",
+    "text": "一、选择题"
+  }
+]
+```
