@@ -50,7 +50,7 @@ export interface ChapterFlatEntry {
 }
 
 /** LLM 输出中的目录条目 */
-interface DirectoryEntry {
+export interface DirectoryEntry {
   id: number | number[];
   level: number;
   title: string;
@@ -537,7 +537,7 @@ function parseLLMOutput(
     } else { invalidCount++; continue; }
 
     const level = item.level;
-    if (typeof level !== 'number' || level < 1 || level > 3) continue;
+    if (typeof level !== 'number' || level < 1 || level > 4) continue;
 
     entries.push({ id: item.id, level, title: (item.title ?? '').trim() });
   }
@@ -594,6 +594,22 @@ function postProcessCleanup(entries: DirectoryEntry[], blocks: FlatBlock[]): Dir
     /^Example\s*\d*/i,
     /^Practice\s*(Test|Questions)?/i,
     /^Past\s+paper\s+questions?/i,
+
+    // ─── 版权页 / 出版信息（中文教材常见前言噪声）─────────────────────
+    /^ISBN\s/i,                            // ISBN 978-7-...
+    /^定价\s*[\d.]/,                       // 定价 27.50元
+    /^(开本|版次|印张|字数|印刷)[\s\d]/,   // 开本880..., 版次2024年..., 印刷 安徽...
+    /^出版发行/,                           // 出版发行 南京大学出版社
+    /^(社址|书名|编\s*者)/,                // 社址南京市..., 书名 ..., 编 者 ...
+    /^(邮编|热线|电话)\s*\d/,             // 邮编210093, 热线025-...
+    /^(网\s*址|官方微[博信]|销售咨询)/,    // 网 址 http://..., 官方微博 ..., 销售咨询热线
+    /版权所有/,                            // *版权所有，侵权必究
+    /凡购买/,                              // *凡购买南大版图书...
+    /CIP数据|\(CIP\)/,                     // CIP数据核字... / 図書在版編目(CIP)データ
+    /^\s*[■◆●▪]/,                         // ■快乐学习... 等宣传语（方块/实心圆引导符）
+    /^目\s*录$/,                           // 目 录（目录页标题）
+    /^\[Image\]$/,                         // [Image]（纯图片块无文字）
+    /^图书销售/,                           // 图书销售部门联系调换
   ];
 
   const structuralTokens = /(chapter|unit|module|part|section|lesson|topic|appendix|glossary|index|review|summary|preface|introduction|foreword)/i;
