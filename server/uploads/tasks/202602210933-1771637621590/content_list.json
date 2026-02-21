@@ -1,0 +1,674 @@
+[
+    {
+        "type": "text",
+        "text": "2025 The First Semester G4 Final Test ",
+        "text_level": 1,
+        "bbox": [
+            115,
+            90,
+            450,
+            122
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "I. Calculations. Use laws of calculations to solve if applicable, and write down which law(s) you used. (2’/12’) ",
+        "bbox": [
+            78,
+            169,
+            486,
+            227
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1. 423 + 156 + 577 + 244 ",
+        "bbox": [
+            85,
+            263,
+            196,
+            280
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "4. 216 139 + 216 + 216 60 ",
+        "bbox": [
+            283,
+            263,
+            413,
+            280
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Law: ",
+        "bbox": [
+            98,
+            394,
+            236,
+            412
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Law: ",
+        "bbox": [
+            295,
+            394,
+            432,
+            413
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "2. 25  (8 + 40) ",
+        "bbox": [
+            86,
+            427,
+            156,
+            443
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "5. 398 173 + 102 ",
+        "bbox": [
+            283,
+            426,
+            366,
+            443
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Law: ",
+        "bbox": [
+            98,
+            557,
+            236,
+            576
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Law: ",
+        "bbox": [
+            295,
+            557,
+            432,
+            575
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "3. 125 88 2 ",
+        "bbox": [
+            86,
+            590,
+            154,
+            606
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "6. 12 97 + 36 ",
+        "bbox": [
+            283,
+            590,
+            351,
+            607
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Law: ",
+        "bbox": [
+            98,
+            721,
+            236,
+            739
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Law: ",
+        "bbox": [
+            295,
+            721,
+            432,
+            738
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "II. Count and write the angles in the figure: (12’) ",
+        "text_level": 1,
+        "bbox": [
+            98,
+            780,
+            397,
+            805
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "7. Acute angles: ",
+            "8. Obtuse angles: ",
+            "9. Right angles: "
+        ],
+        "bbox": [
+            86,
+            835,
+            225,
+            926
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "10. Total angles: ",
+        "bbox": [
+            494,
+            94,
+            630,
+            113
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/0ed7db6c7c9643d8858b6c7179fd24781964b5a88b33d35240591f331dad8ba4.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            519,
+            128,
+            666,
+            244
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "III.Fill in the blanks (2’/40’) ",
+        "text_level": 1,
+        "bbox": [
+            510,
+            295,
+            679,
+            322
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "11. There are ( ) line segments which are denoted as ( ). There are ( ) rays and ( ) lines. ",
+        "bbox": [
+            493,
+            358,
+            898,
+            400
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/c48b5e052e32d7932a36007d4bddaaf29089313e8439e60ef224935c931a5d1f.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            520,
+            436,
+            667,
+            477
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "12. Recall the clock face and imagine the angle formed by the hour hand and the minute hand. ",
+        "bbox": [
+            493,
+            519,
+            898,
+            557
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "list",
+        "sub_type": "text",
+        "list_items": [
+            "a. At 03:00, the angle formed by the hour hand and the minute hand measures ( ) degrees and it is a/an ( ) angle. ",
+            "b. At 18:00, the angle formed on the clock measures ( ) degrees and it is a/an ( ) angle. "
+        ],
+        "bbox": [
+            517,
+            582,
+            898,
+            678
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "13. As shown in the figure, the length of the rectangle is 6cm, the width is 4cm, so the radius of circle is ( ) mm. ",
+        "bbox": [
+            493,
+            700,
+            898,
+            740
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/b9b36fdebc09a7aee0ead2d8c4102fc1d51081cd1a07cdeb5e822123ebf41f4c.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            511,
+            748,
+            640,
+            858
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "14. As shown in the figure, Kate drew two circles with the same size in a rectangle. The length of this rectangle is 2dm. So the radius of each circle is ( ) cm. ",
+        "bbox": [
+            493,
+            886,
+            898,
+            926
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "aside_text",
+        "text": "座位号 班级 学号 姓名",
+        "bbox": [
+            0,
+            195,
+            17,
+            926
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "aside_text",
+        "text": "密 .封 .线",
+        "bbox": [
+            42,
+            286,
+            54,
+            827
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "page_number",
+        "text": "第1 页",
+        "bbox": [
+            473,
+            948,
+            503,
+            966
+        ],
+        "page_idx": 0
+    },
+    {
+        "type": "image",
+        "img_path": "images/84fc619fd690e8a631ab998b4d3ec593b4107f5c5a5bb5e12dafe6b3f29dc537.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            113,
+            99,
+            263,
+            213
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "15. Look at each of the fidget spinners and decide if they have rotational symmetry. If so, next to each image write how many orders of rotational symmetry each fidget spinner has. ",
+        "bbox": [
+            80,
+            238,
+            487,
+            299
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/bb66234269b630e6a17a02028ae58e8baf88566b3ecc6af022d754d51614341c.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            105,
+            303,
+            439,
+            435
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "16. The figures below are formed using set squares. Calculate and find out how many degrees they each are. ",
+        "bbox": [
+            80,
+            458,
+            486,
+            500
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/1952c5f5a2baf8fe7e69c0e488101393965e8f7df0688d1b8621288936331802.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            117,
+            510,
+            489,
+            637
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\angle 1 = \\_ \\_ \\_ \\_ \\_ \\_ , \\angle 2 = \\_ \\_ \\_ \\_ \\_ \\_ , \\angle 3 = \\_ \\_ \\_ \\_ \\_ \\_ , \\angle 4 = \\_ \\_ \\_ \\_ \\_\n$$",
+        "text_format": "latex",
+        "bbox": [
+            98,
+            701,
+            423,
+            720
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "17. The distance between any point on a circle and its center is called the of the circle. ",
+        "bbox": [
+            80,
+            731,
+            485,
+            773
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "18. In a straight angle, if one acute angle is $1 1 ^ { \\circ }$ , then the other obtuse angle is ",
+        "bbox": [
+            80,
+            785,
+            485,
+            824
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "IV.Solve the problems (21’) ",
+        "bbox": [
+            98,
+            858,
+            260,
+            883
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "19. For questions below, measure each angle.(2’/6’) ",
+        "bbox": [
+            80,
+            907,
+            311,
+            928
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/3c944e1207c0938c6d54ea99a98fc7969866859cd2032363bb85b0b1f7541967.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            552,
+            147,
+            736,
+            265
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/373524bb600f8a382ad2385926ce72c681602e87da3f77ba64313fb9966df288.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            753,
+            120,
+            831,
+            158
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "20. Draw and label. (2’/4’) ",
+        "bbox": [
+            493,
+            322,
+            618,
+            344
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "a. line MN ",
+        "bbox": [
+            519,
+            379,
+            571,
+            398
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "b. ray PO ",
+        "bbox": [
+            715,
+            379,
+            763,
+            398
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "21. In each figure, draw the angle with one side given. (2’/4) ",
+        "bbox": [
+            493,
+            572,
+            767,
+            592
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "image",
+        "img_path": "images/0007f4fc95e3fe6097ff9890369218a97512e010d48c7294d2a811e3d5bfb501.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            530,
+            603,
+            808,
+            902
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "page_number",
+        "text": "第2 页",
+        "bbox": [
+            474,
+            948,
+            503,
+            966
+        ],
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "22. Read the instructions and draw the line segment and the circle. (2’/4’) ",
+        "bbox": [
+            80,
+            94,
+            415,
+            115
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "a. Draw a line segment AB with a length of 2 cm. ",
+        "bbox": [
+            106,
+            131,
+            332,
+            149
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "b. Draw a circle with a radius of 1 cm using point A, which is one of the endpoints of the line segment AB that you just drew. ",
+        "bbox": [
+            105,
+            267,
+            486,
+            308
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "two hours ahead of the original plan. How many containers must be unloaded per hour now? ",
+        "bbox": [
+            509,
+            96,
+            898,
+            134
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "26. A store received a delivery of 1125 kg of pineapples. After 20 baskets of pineapples were sold, there were 185 kg of pineapples remaining. If each basket came with the same weight, how many kilograms did each basket weigh? ",
+        "bbox": [
+            493,
+            232,
+            898,
+            295
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "23. In the figure, given that $\\angle B O C$ is a right angle and $\\angle C O D = 1 5 ^ { \\circ }$ , find ∠AOB. (3’) ",
+        "bbox": [
+            80,
+            432,
+            455,
+            451
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/40c8999c76936ec0c77b916aa83516c87e33ca365bade9ac1285b3dcceb1342a.jpg",
+        "image_caption": [],
+        "image_footnote": [],
+        "bbox": [
+            118,
+            470,
+            240,
+            569
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "V. Application problems. (5′/15′) ",
+        "text_level": 1,
+        "bbox": [
+            98,
+            693,
+            299,
+            717
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "24. The distance between Place A and Place B is 720 kilometres. A car has travelled 240 kilometres in three hours. At this speed, in how many hours will it reach Place B? ",
+        "bbox": [
+            80,
+            747,
+            486,
+            788
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "25. A shipment of 120 containers of goods has reached a dock. It was supposed to unload 12 containers of the goods per hour. Due to an emergency, the shipment must be unloaded ",
+        "bbox": [
+            80,
+            886,
+            485,
+            926
+        ],
+        "page_idx": 2
+    },
+    {
+        "type": "page_number",
+        "text": "第3 页",
+        "bbox": [
+            473,
+            948,
+            503,
+            966
+        ],
+        "page_idx": 2
+    }
+]

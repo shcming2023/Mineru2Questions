@@ -1,0 +1,141 @@
+You are a document structure analyst specializing in educational textbooks.
+
+## Task
+Analyze the FULL TEXT of an educational document and identify ALL structural chapter/section headings.
+Each line is a text block: [ID|pageNumber|optionalTypeTag] text
+optionalTypeTag may include:
+- T1/T2/T3: text_level hints from OCR (higher likelihood of headings)
+- H: explicit heading marker
+
+## High-Confidence Heading Signals
+- Lines tagged with T1/T2/T3 or H
+- Short, title-like lines (usually < 120 chars)
+- Lines with explicit structure markers (Chapter, Unit, Module, Part, 1.1, 2.3.4)
+
+## CRITICAL: Table of Contents vs. Document Body
+The first few pages may contain a TABLE OF CONTENTS (listing chapter names with page numbers).
+You MUST IGNORE the actual Table of Contents lists.
+HOWEVER, do NOT ignore "Front Matter" sections (like Introduction, Preface) or "Unit" title pages that appear before the main chapters.
+
+Table of contents signs (IGNORE these):
+- Pages explicitly labeled "Contents" or "Table of Contents"
+- Lists of titles followed by page numbers (e.g., "1.1 ... 5", "Chapter 2 ... 12")
+- Dense lists of headings on a single page
+
+## What ARE Structural Headings (INCLUDE)
+- **Front Matter**: Introduction, Preface, How to use this book, Acknowledgements, etc.
+- **Back Matter**: Glossary, Index, Answers, etc.
+- **Organization Containers**: Units, Modules, Parts, Themes (e.g., "Unit 1", "Module A")
+- **Chapters**: (e.g., "Chapter 1", "1 Review of number concepts")
+- **Sections**: (e.g., "1.1 Different types of numbers")
+- **Sub-sections**: (e.g., "1.1.1", "Case Study")
+- **Assessments**: "Past paper questions", "Project", "Review", "Summary"
+
+## What Are NOT Headings (MUST EXCLUDE)
+- The actual Table of Contents list itself
+- Instructional labels: "Key points", "Tip", "Note", "Activity", "Exercise", "Q&A"
+- Problem type labels: "Question 1", "Section A", "Multiple Choice"
+- Question statements or solution steps (e.g., "Simplify...", "Show the steps...", equations)
+- Figure/table captions and diagram descriptions
+- Running headers/footers (often repeated at top/bottom of pages)
+
+## Hierarchy (Map to logical levels)
+        - **Level 1**: Top-level containers.
+          - Front Matter / Back Matter categories (e.g., "Front Matter", "Back Matter")
+          - Units / Parts / Modules / Themes (e.g., "Unit 1", "Part A")
+          - Standalone Chapters if no Units exist
+        - **Level 2**: Main content divisions.
+          - Chapters (if inside a Unit)
+          - Sections (if inside a standalone Chapter)
+          - Specific Front/Back Matter sections (e.g., "Introduction", "Foreword", "Glossary")
+        - **Level 3**: Sub-divisions.
+          - Sections (if inside a Unit->Chapter)
+          - Sub-sections
+          - Specific items like "1.1 Understanding units"
+        - **Level 4**: Deep sub-divisions (if needed).
+          - Sub-sections (e.g., "1.1.1")
+
+        ## Fragmented Titles
+If a heading is split across consecutive blocks (e.g., block 100="Chapter" + block 101="1"), merge them: output id as [100, 101].
+
+## Completeness
+- Include EVERY structural heading from the very beginning (Introduction) to the very end (Index).
+- Do not skip "Unit" pages.
+
+## Output Format
+Return ONLY valid JSON:
+{
+  "directory": [
+    {"id": <number or [n1, n2]>, "level": <1|2|3>, "title": "<heading text>"},
+    ...
+  ]
+}
+Array MUST be in the LOGICAL order of the document.
+
+## CRITICAL RULE: RETURN ORIGINAL IDs
+The block IDs you see (e.g., [12479|p394|T1]) are GLOBAL IDs. You MUST return these exact IDs. DO NOT generate your own sequential IDs starting from 0.
+- CORRECT: {"id": 12479, ...}
+- WRONG: {"id": 0, ...} (when the block shown was [12479|...])
+
+---
+
+Document: 58 blocks, 3 pages.
+
+[0|p0|T1] 2025 The First Semester G4 Final Test
+[1|p0] I. Calculations. Use laws of calculations to solve if applicable, and write down which law(s) you used. (2’/12’)
+[2|p0] 1. 423 + 156 + 577 + 244
+[3|p0] 4. 216 139 + 216 + 216 60
+[4|p0] Law:
+[5|p0] Law:
+[6|p0] 2. 25 (8 + 40)
+[7|p0] 5. 398 173 + 102
+[8|p0] Law:
+[9|p0] Law:
+[10|p0] 3. 125 88 2
+[11|p0] 6. 12 97 + 36
+[12|p0] Law:
+[13|p0] Law:
+[14|p0|T1] II. Count and write the angles in the figure: (12’)
+[15|p0] 7. Acute angles:
+[16|p0] 8. Obtuse angles:
+[17|p0] 9. Right angles:
+[18|p0] 10. Total angles:
+[19|p0] [Image]
+[20|p0|T1] III.Fill in the blanks (2’/40’)
+[21|p0] 11. There are ( ) line segments which are denoted as ( ). There are ( ) rays and ( ) lines.
+[22|p0] [Image]
+[23|p0] 12. Recall the clock face and imagine the angle formed by the hour hand and the minute hand.
+[24|p0] a. At 03:00, the angle formed by the hour hand and the minute hand measures ( ) degrees and it is a/an ( ) angle.
+[25|p0] b. At 18:00, the angle formed on the clock measures ( ) degrees and it is a/an ( ) angle.
+[26|p0] 13. As shown in the figure, the length of the rectangle is 6cm, the width is 4cm, so the radius of circle is ( ) mm.
+[27|p0] [Image]
+[28|p0] 14. As shown in the figure, Kate drew two circles with the same size in a rectangle. The length of this rectangle is 2dm. So the radius of each circle is ( ) cm.
+[29|p0] 座位号 班级 学号 姓名
+[30|p0] 密 .封 .线
+[31|p1] [Image]
+[32|p1] 15. Look at each of the fidget spinners and decide if they have rotational symmetry. If so, next to each image write how many orders of rotational symmetry each fidget spinner has.
+[33|p1] [Image]
+[34|p1] 16. The figures below are formed using set squares. Calculate and find out how many degrees they each are.
+[35|p1] [Image]
+[36|p1] [Equation]
+[37|p1] 17. The distance between any point on a circle and its center is called the of the circle.
+[38|p1] 18. In a straight angle, if one acute angle is [EQ] , then the other obtuse angle is
+[39|p1] IV.Solve the problems (21’)
+[40|p1] 19. For questions below, measure each angle.(2’/6’)
+[41|p1] [Image]
+[42|p1] [Image]
+[43|p1] 20. Draw and label. (2’/4’)
+[44|p1] a. line MN
+[45|p1] b. ray PO
+[46|p1] 21. In each figure, draw the angle with one side given. (2’/4)
+[47|p1] [Image]
+[48|p2] 22. Read the instructions and draw the line segment and the circle. (2’/4’)
+[49|p2] a. Draw a line segment AB with a length of 2 cm.
+[50|p2] b. Draw a circle with a radius of 1 cm using point A, which is one of the endpoints of the line segment AB that you just drew.
+[51|p2] two hours ahead of the original plan. How many containers must be unloaded per hour now?
+[52|p2] 26. A store received a delivery of 1125 kg of pineapples. After 20 baskets of pineapples were sold, there were 185 kg of pineapples remaining. If each basket came with the same weight, how many kilogr...
+[53|p2] 23. In the figure, given that [EQ] is a right angle and [EQ] , find ∠AOB. (3’)
+[54|p2] [Image]
+[55|p2|T1] V. Application problems. (5′/15′)
+[56|p2] 24. The distance between Place A and Place B is 720 kilometres. A car has travelled 240 kilometres in three hours. At this speed, in how many hours will it reach Place B?
+[57|p2] 25. A shipment of 120 containers of goods has reached a dock. It was supposed to unload 12 containers of the goods per hour. Due to an emergency, the shipment must be unloaded
